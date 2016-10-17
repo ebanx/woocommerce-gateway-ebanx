@@ -40,4 +40,8 @@ curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin
 
 composer install
 
+DISPLAY=:1 xvfb-run java -jar data/selenium-server-standalone-2.53.0.jar &
+sleep 5
+phpunit tests/
+
 exit
