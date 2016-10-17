@@ -1,1 +1,4 @@
 wordpress/
+travis/vendor/*
+.DS_Store*
+.idea
