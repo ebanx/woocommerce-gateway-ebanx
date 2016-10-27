@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<phpunit bootstrap="test/bootstrap.php" colors="true" verbose="true">
+    <testsuites>
+        <testsuite name="EBANX PHP library test suite">
+            <directory>test</directory>
+        </testsuite>
+    </testsuites>
+    <logging>
+        <log type="coverage-clover" target="build/logs/clover.xml"/>
+    </logging>
+</phpunit>

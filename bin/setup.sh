@@ -3,11 +3,12 @@
 set -e
 
 function install_packages() {
-    apt-get update
-    apt-get upgrade
+    apt-get update -y
+    apt-get upgrade -y
 
     echo INSTALL UTILS
 
+    apt-get install -qq -y lsof
     apt-get install -qq -y wget
     apt-get install -qq -y bzip2
     apt-get install -qq -y xvfb
