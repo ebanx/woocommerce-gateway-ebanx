@@ -98,12 +98,14 @@ abstract class WC_Ebanx_Gateway extends WC_Payment_Gateway {
 
                 $request = \Ebanx\Ebanx::doRequest($data);
 
+                // TODO: Remove this
                 echo json_encode(array(
                     'request'=>$request,
                     'post'=>$_POST,
                     'order'=>$order,
                     'data'=>$data
                 ));
+
                 $this->process_response($request, $order); // TODO: What make when response_Error called?
             } else {
                 $order->payment_complete();
@@ -127,6 +129,7 @@ abstract class WC_Ebanx_Gateway extends WC_Payment_Gateway {
     protected function save_order_meta_fields($id, $request) {} // TODO: abstract
 
     protected function process_response_error($request, $order) {
+        throw new Exception($request->status_message);
         // TODO: What make here?
 //        $message = $request->status_message;
 //        $order->update_status( 'failed', __( 'Pagar.me: The transaction was rejected by the card company or by fraud.', 'woocommerce-pagarme' ) );
