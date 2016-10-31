@@ -1,6 +1,6 @@
 <?php
 /**
- * Ebanx.com Oxxo gateway
+ * Ebanx.com Servipag gateway
  *
  * @package WooCommerce_Ebanx/Gateway
  */
@@ -10,11 +10,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * WC_Ebanx_Oxxo_Gateway class.
+ * WC_Ebanx_Servipag_Gateway class.
  *
  * @extends WC_Payment_Gateway
  */
-class WC_Ebanx_Oxxo_Gateway extends WC_Ebanx_Gateway {
+class WC_Ebanx_Servipag_Gateway extends WC_Ebanx_Gateway {
 
 	/**
 	 * Constructor for the gateway.
@@ -22,11 +22,11 @@ class WC_Ebanx_Oxxo_Gateway extends WC_Ebanx_Gateway {
 	public function __construct() {
         parent::__construct();
 
-		$this->id                   = 'ebanx-oxxo';
-		$this->icon                 = apply_filters( 'wc_ebanx_oxxo_icon', false );
+		$this->id                   = 'ebanx-servipag';
+		$this->icon                 = apply_filters( 'wc_ebanx_servipag_icon', false );
 		$this->has_fields           = true;
-		$this->method_title         = __( 'EBANX - Oxxo', 'woocommerce-ebanx' );
-		$this->method_description   = __( 'Accept oxxo payments using EBANX.', 'woocommerce-ebanx' );
+		$this->method_title         = __( 'EBANX - Servipag', 'woocommerce-ebanx' );
+		$this->method_description   = __( 'Accept servipag payments using EBANX.', 'woocommerce-ebanx' );
 		$this->view_transaction_url = 'https://dashboard.ebanx.com/#/transactions/%s';
 
 		$this->init_form_fields();
@@ -53,7 +53,7 @@ class WC_Ebanx_Oxxo_Gateway extends WC_Ebanx_Gateway {
      * @return bool
      */
     public function is_available() {
-        return parent::is_available() && (strtolower(wc_get_base_location()['country']) == WC_Ebanx_Gateway_Utils::COUNTRY_MEXICO);
+        return parent::is_available() && (strtolower(wc_get_base_location()['country']) == WC_Ebanx_Gateway_Utils::COUNTRY_CHILE);
     }
 
     /**
@@ -72,7 +72,7 @@ class WC_Ebanx_Oxxo_Gateway extends WC_Ebanx_Gateway {
 			'enabled' => array(
 				'title'   => __( 'Enable/Disable', 'woocommerce-ebanx' ),
 				'type'    => 'checkbox',
-				'label'   => __( 'Enable EBANX Oxxo', 'woocommerce-ebanx' ),
+				'label'   => __( 'Enable EBANX Servipag', 'woocommerce-ebanx' ),
 				'default' => 'no',
 			),
 			'title' => array(
@@ -80,14 +80,14 @@ class WC_Ebanx_Oxxo_Gateway extends WC_Ebanx_Gateway {
 				'type'        => 'text',
 				'description' => __( 'This controls the title which the user sees during checkout.', 'woocommerce-ebanx' ),
 				'desc_tip'    => true,
-				'default'     => __( 'Oxxo', 'woocommerce-ebanx' ),
+				'default'     => __( 'Servipag', 'woocommerce-ebanx' ),
 			),
 			'description' => array(
 				'title'       => __( 'Description', 'woocommerce-ebanx' ),
 				'type'        => 'textarea',
 				'description' => __( 'This controls the description which the user sees during checkout.', 'woocommerce-ebanx' ),
 				'desc_tip'    => true,
-				'default'     => __( 'Pay with Oxxo', 'woocommerce-ebanx' ),
+				'default'     => __( 'Pay with Servipag', 'woocommerce-ebanx' ),
 			),
 			'integration' => array(
 				'title'       => __( 'Integration Settings', 'woocommerce-ebanx' ),
@@ -126,7 +126,7 @@ class WC_Ebanx_Oxxo_Gateway extends WC_Ebanx_Gateway {
         $cart_total = $this->get_order_total();
 
         wc_get_template(
-            'oxxo/payment-form.php',
+            'servipag/payment-form.php',
             array(),
             'woocommerce/ebanx/',
             WC_Ebanx::get_templates_path()
@@ -144,7 +144,7 @@ class WC_Ebanx_Oxxo_Gateway extends WC_Ebanx_Gateway {
 
 		if ( isset( $data['installments'] ) && in_array( $order->get_status(), array( 'processing', 'on-hold' ), true ) ) {
 			wc_get_template(
-				'oxxo/payment-instructions.php',
+				'servipag/payment-instructions.php',
 				array(),
 				'woocommerce/ebanx/',
 				WC_Ebanx::get_templates_path()
@@ -153,15 +153,15 @@ class WC_Ebanx_Oxxo_Gateway extends WC_Ebanx_Gateway {
 	}
 
 	protected function request_data($order) {
-	    /*TODO: ? if (empty($_POST['ebanx_oxxo_rfc'])) {
-	        throw new Exception("Missing rfc.");
+	    /*TODO: ? if (empty($_POST['ebanx_servipag_rut'])) {
+	        throw new Exception("Missing rut.");
         }*/
 
         $data = parent::request_data($order);
 
-        $data['payment']['country'] = strtolower(wc_get_base_location()['country']); // TODO: ? MX ? or Billing ?
-        $data['payment']['currency_code'] = WC_Ebanx_Gateway_Utils::CURRENCY_CODE_MXN; // TODO: is_available by currency too?
-        $data['payment']['payment_type_code'] = 'oxxo';
+        $data['payment']['country'] = strtolower(wc_get_base_location()['country']); // TODO: ? CL ? or Billing ?
+        $data['payment']['currency_code'] = WC_Ebanx_Gateway_Utils::CURRENCY_CODE_CLP; // TODO: is_available by currency too?
+        $data['payment']['payment_type_code'] = 'servipag';
 
         return $data;
     }
