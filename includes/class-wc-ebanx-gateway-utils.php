@@ -10,6 +10,8 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 abstract class WC_Ebanx_Gateway_Utils {
     const COUNTRY_BRAZIL = 'br';
+    const COUNTRY_MEXICO = 'mx';
+    const COUNTRY_CHILE  = 'cl';
 
     const CURRENCY_CODE_BRL = 'BRL';
     const CURRENCY_CODE_USD = 'USD';
