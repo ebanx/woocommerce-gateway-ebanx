@@ -85,6 +85,7 @@ if ( ! class_exists( 'WC_Ebanx' ) ) :
 			include_once dirname( __FILE__ ) . '/includes/class-wc-ebanx-banking-ticket-gateway.php';
 			include_once dirname( __FILE__ ) . '/includes/class-wc-ebanx-credit-card-gateway.php';
             include_once dirname( __FILE__ ) . '/includes/class-wc-ebanx-oxxo-gateway.php';
+            include_once dirname(__FILE__) . '/includes/class-wc-ebanx-servipag-gateway.php';
 		}
 
 		/**
@@ -114,6 +115,7 @@ if ( ! class_exists( 'WC_Ebanx' ) ) :
 			$methods[] = 'WC_Ebanx_Banking_Ticket_Gateway';
 			$methods[] = 'WC_Ebanx_Credit_Card_Gateway';
             $methods[] = 'WC_Ebanx_Oxxo_Gateway';
+            $methods[] = 'WC_Ebanx_Servipag_Gateway';
 
 			return $methods;
 		}
@@ -131,12 +133,15 @@ if ( ! class_exists( 'WC_Ebanx' ) ) :
 			$banking_ticket = 'wc_ebanx_banking_ticket_gateway';
 			$credit_card    = 'wc_ebanx_credit_card_gateway';
             $oxxo           = 'wc_ebanx_oxxo_gateway';
+            $servipag     = 'wc_ebanx_servipag_gateway';
 
 			$plugin_links[] = '<a href="' . esc_url( admin_url( 'admin.php?page=wc-settings&tab=checkout&section=' . $banking_ticket ) ) . '">' . __( 'Bank Slip Settings', 'woocommerce-ebanx' ) . '</a>';
 
 			$plugin_links[] = '<a href="' . esc_url( admin_url( 'admin.php?page=wc-settings&tab=checkout&section=' . $credit_card ) ) . '">' . __( 'Credit Card Settings', 'woocommerce-ebanx' ) . '</a>';
 
             $plugin_links[] = '<a href="' . esc_url( admin_url( 'admin.php?page=wc-settings&tab=checkout&section=' . $oxxo ) ) . '">' . __( 'Oxxo Settings', 'woocommerce-ebanx' ) . '</a>';
+
+            $plugin_links[] = '<a href="' . esc_url( admin_url( 'admin.php?page=wc-settings&tab=checkout&section=' . $servipag ) ) . '">' . __( 'Servipag Settings', 'woocommerce-ebanx' ) . '</a>';
 
 			return array_merge( $plugin_links, $links );
 		}
@@ -176,6 +181,16 @@ if ( ! class_exists( 'WC_Ebanx' ) ) :
                         'debug'          => $old_options['debug'],
                     );
 
+                    // Servipag options.
+                    $servipag = array(
+                        'enabled'        => $old_options['enabled'],
+                        'title'          => 'Servipag',
+                        'description'    => '',
+                        'api_key'        => $old_options['api_key'],
+                        'encryption_key' => $old_options['encryption_key'],
+                        'debug'          => $old_options['debug'],
+                    );
+
 					// Credit card options.
 					$credit_card = array(
 						'enabled'              => $old_options['enabled'],
@@ -194,6 +209,7 @@ if ( ! class_exists( 'WC_Ebanx' ) ) :
 					update_option( 'woocommerce_ebanx-banking-ticket_settings', $banking_ticket );
 					update_option( 'woocommerce_ebanx-credit-card_settings', $credit_card );
                     update_option( 'woocommerce_ebanx-oxxo_settings', $oxxo );
+                    update_option( 'woocommerce_ebanx-servipag_settings', $servipag );
 
 					delete_option( 'woocommerce_ebanx_settings' );
 				}
