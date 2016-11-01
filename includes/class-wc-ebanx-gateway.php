@@ -6,38 +6,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-/**
- * WC_Ebanx_Gateway class.
- *
- * @extends WC_Payment_Gateway
- */
 abstract class WC_Ebanx_Gateway extends WC_Payment_Gateway {
 
-    /**
-     * Constructor for the gateway.
-     */
-    public function __construct() {
-        // TODO make debug option
-        /*$this->debug = $this->get_option( 'debug' );
-        if ( 'yes' === $this->debug ) {
-            $this->log = new WC_Logger();
-        }*/
-    }
-
-    /**
-     * Admin page.
-     */
     public function admin_options() {
         include dirname( __FILE__ ) . '/admin/views/html-admin-page.php';
     }
 
-    /**
-     * Check if the gateway is available to take payments.
-     *
-     * @return bool
-     */
     public function is_available() {
-        /*TODO: Make this by country rule ? and .. && $this->api->using_supported_currency()*/
         return parent::is_available() && ! empty( $this->api_key ) && ! empty( $this->encryption_key );
     }
 
@@ -72,13 +47,6 @@ abstract class WC_Ebanx_Gateway extends WC_Payment_Gateway {
         return $data;
     }
 
-    /**
-     * Process the payment.
-     *
-     * @param int $order_id Order ID.
-     *
-     * @return array Redirect data.
-     */
     public function process_payment( $order_id ) {
         try {
             $order = wc_get_order( $order_id );
@@ -163,16 +131,5 @@ abstract class WC_Ebanx_Gateway extends WC_Payment_Gateway {
         }
 
         $this->save_order_meta_fields($order->id, $request);
-    }
-
-//    TODO: abstract ? public function thankyou_page( $order_id ) {}
-
-//    TODO: abstract ? public function email_instructions( $order, $sent_to_admin, $plain_text = false ) {
-
-    /**
-     * IPN handler.
-     */
-    public function ipn_handler() {
-//        $this->api->ipn_handler();
     }
 }
