@@ -62,6 +62,7 @@ jQuery( function( $ ) {
 
 		onSubmit: function( e ) {
 			if ( wc_ebanx_form.isEBANXChosen() && ! wc_ebanx_form.hasToken() ) {
+
 				e.preventDefault();
 				wc_ebanx_form.block();
 
