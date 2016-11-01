@@ -1,27 +1,12 @@
 <?php
-/**
- * Ebanx.com Credit Card gateway
- *
- * @package WooCommerce_Ebanx/Gateway
- */
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-/**
- * WC_Ebanx_Credit_Card_Gateway class.
- *
- * @extends WC_Payment_Gateway
- */
 class WC_Ebanx_Credit_Card_Gateway extends WC_Ebanx_Gateway {
 
-	/**
-	 * Constructor for the gateway.
-	 */
 	public function __construct() {
-        parent::__construct();
-
 		$this->id                   = 'ebanx-credit-card';
 		$this->icon                 = apply_filters( 'wc_ebanx_credit_card_icon', false );
 		$this->has_fields           = true;
@@ -45,21 +30,17 @@ class WC_Ebanx_Credit_Card_Gateway extends WC_Ebanx_Gateway {
 		$this->smallest_installment = $this->get_option( 'smallest_installment' );
 		$this->interest_rate        = $this->get_option( 'interest_rate', '0' );
 		$this->free_installments    = $this->get_option( 'free_installments', '1' );
-		// TODO: $this->debug                = $this->get_option( 'debug' );
+        $this->debug                = $this->get_option( 'debug' );
 
-		// Actions.
+        if ( 'yes' === $this->debug ) {
+            $this->log = new WC_Logger();
+        }
+
 		add_action( 'woocommerce_update_options_payment_gateways_' . $this->id, array( $this, 'process_admin_options' ) );
 		add_action( 'wp_enqueue_scripts', array( $this, 'checkout_scripts' ) );
 		add_action( 'woocommerce_thankyou_' . $this->id, array( $this, 'thankyou_page' ) );
-
-        // TODO: Make ??
-		// add_action( 'woocommerce_email_after_order_table', array( $this, 'email_instructions' ), 10, 3 );
-		// add_action( 'woocommerce_api_wc_ebanx_credit_card_gateway', array( $this, 'ipn_handler' ) );
 	}
 
-	/**
-	 * Settings fields.
-	 */
 	public function init_form_fields() {
 		$this->form_fields = array(
 			'enabled' => array(
@@ -67,20 +48,6 @@ class WC_Ebanx_Credit_Card_Gateway extends WC_Ebanx_Gateway {
 				'type'    => 'checkbox',
 				'label'   => __( 'Enable EBANX Credit Card', 'woocommerce-ebanx' ),
 				'default' => 'no',
-			),
-			'title' => array(
-				'title'       => __( 'Title', 'woocommerce-ebanx' ),
-				'type'        => 'text',
-				'description' => __( 'This controls the title which the user sees during checkout.', 'woocommerce-ebanx' ),
-				'desc_tip'    => true,
-				'default'     => __( 'Credit Card', 'woocommerce-ebanx' ),
-			),
-			'description' => array(
-				'title'       => __( 'Description', 'woocommerce-ebanx' ),
-				'type'        => 'textarea',
-				'description' => __( 'This controls the description which the user sees during checkout.', 'woocommerce-ebanx' ),
-				'desc_tip'    => true,
-				'default'     => __( 'Pay with Credit Card', 'woocommerce-ebanx' ),
 			),
 			'integration' => array(
 				'title'       => __( 'Integration Settings', 'woocommerce-ebanx' ),
@@ -105,19 +72,6 @@ class WC_Ebanx_Credit_Card_Gateway extends WC_Ebanx_Gateway {
 					'required' => 'required',
 				),
 			),
-			'checkout' => array(
-				'title'       => __( 'Checkout EBANX', 'woocommerce-ebanx' ),
-				'type'        => 'checkbox',
-				'label'       => __( 'Enable checkout EBANX', 'woocommerce-ebanx' ),
-				'default'     => 'no',
-				'desc_tip'    => true,
-				'description' => __( "When enabled opens a EBANX modal window to receive the customer's credit card information.", 'woocommerce-ebanx' ),
-			),
-			'installments' => array(
-				'title'       => __( 'Installments', 'woocommerce-ebanx' ),
-				'type'        => 'title',
-				'description' => '',
-			),
 			'max_installment' => array(
 				'title'       => __( 'Number of Installment', 'woocommerce-ebanx' ),
 				'type'        => 'select',
@@ -140,62 +94,21 @@ class WC_Ebanx_Credit_Card_Gateway extends WC_Ebanx_Gateway {
 					'12' => '12',
 				),
 			),
-			'smallest_installment' => array(
-				'title'       => __( 'Smallest Installment', 'woocommerce-ebanx' ),
-				'type'        => 'text',
-				'description' => __( 'Please enter with the value of smallest installment, Note: it not can be less than 5.', 'woocommerce-ebanx' ),
-				'desc_tip'    => true,
-				'default'     => '5',
-			),
-			'interest_rate' => array(
-				'title'       => __( 'Interest rate', 'woocommerce-ebanx' ),
-				'type'        => 'text',
-				'description' => __( 'Please enter with the interest rate amount. Note: use 0 to not charge interest.', 'woocommerce-ebanx' ),
-				'desc_tip'    => true,
-				'default'     => '0',
-			),
-			'free_installments' => array(
-				'title'       => __( 'Free Installments', 'woocommerce-ebanx' ),
-				'type'        => 'select',
-				'class'       => 'wc-enhanced-select',
-				'default'     => '1',
-				'description' => __( 'Number of installments with interest free.', 'woocommerce-ebanx' ),
-				'desc_tip'    => true,
-				'options'     => array(
-					'0'  => _x( 'None', 'no free installments', 'woocommerce-ebanx' ),
-					'1'  => '1',
-					'2'  => '2',
-					'3'  => '3',
-					'4'  => '4',
-					'5'  => '5',
-					'6'  => '6',
-					'7'  => '7',
-					'8'  => '8',
-					'9'  => '9',
-					'10' => '10',
-					'11' => '11',
-					'12' => '12',
-				),
-			),
 			'testing' => array(
 				'title'       => __( 'Gateway Testing', 'woocommerce-ebanx' ),
 				'type'        => 'title',
 				'description' => '',
 			),
-            /* TODO:
 			'debug' => array(
 				'title'       => __( 'Debug Log', 'woocommerce-ebanx' ),
 				'type'        => 'checkbox',
 				'label'       => __( 'Enable logging', 'woocommerce-ebanx' ),
 				'default'     => 'no',
 				'description' => sprintf( __( 'Log EBANX events, such as API requests. You can check the log in %s', 'woocommerce-ebanx' ), '<a href="' . esc_url( admin_url( 'admin.php?page=wc-status&tab=logs&log_file=' . esc_attr( $this->id ) . '-' . sanitize_file_name( wp_hash( $this->id ) ) . '.log' ) ) . '">' . __( 'System Status &gt; Logs', 'woocommerce-ebanx' ) . '</a>' ),
-			),*/
+			),
 		);
 	}
 
-	/**
-	 * Checkout scripts.
-	 */
     public function checkout_scripts() {
         if ( is_checkout() ) {
             wp_enqueue_script( 'wc-credit-card-form' );
@@ -230,9 +143,6 @@ class WC_Ebanx_Credit_Card_Gateway extends WC_Ebanx_Gateway {
         }
     }
 
-	/**
-	 * Payment fields.
-	 */
 	public function payment_fields() {
 		if ( $description = $this->get_description() ) {
 			echo wp_kses_post( wpautop( wptexturize( $description ) ) );
@@ -262,11 +172,6 @@ class WC_Ebanx_Credit_Card_Gateway extends WC_Ebanx_Gateway {
 		}
 	}
 
-	/**
-	 * Thank You page message.
-	 *
-	 * @param int $order_id Order ID.
-	 */
 	public function thankyou_page( $order_id ) {
 		$order = wc_get_order( $order_id );
 		$data  = get_post_meta( $order_id, '_wc_ebanx_transaction_data', true );
@@ -320,35 +225,4 @@ class WC_Ebanx_Credit_Card_Gateway extends WC_Ebanx_Gateway {
             update_post_meta( $id, __( 'Anti Fraud Score', 'woocommerce-pagarme' ), sanitize_text_field( $data['antifraud_score'] ) );
         }*/
     }
-
-	/**
-	 * Add content to the WC emails.
-	 *
-	 * @param  object $order         Order object.
-	 * @param  bool   $sent_to_admin Send to admin.
-	 * @param  bool   $plain_text    Plain text or HTML.
-	 *
-	 * @return string                Payment instructions.
-	 */
-	/*public function email_instructions( $order, $sent_to_admin, $plain_text = false ) {
-		if ( $sent_to_admin || ! in_array( $order->get_status(), array( 'processing', 'on-hold' ), true ) || $this->id !== $order->payment_method ) {
-			return;
-		}
-
-		$data = get_post_meta( $order->id, '_wc_ebanx_transaction_data', true );
-
-		if ( isset( $data['installments'] ) ) {
-			$email_type = $plain_text ? 'plain' : 'html';
-
-			wc_get_template(
-				'credit-card/emails/' . $email_type . '-instructions.php',
-				array(
-					'card_brand'   => $data['card_brand'],
-					'installments' => $data['installments'],
-				),
-				'woocommerce/ebanx/',
-				WC_Ebanx::get_templates_path()
-			);
-		}
-	}*/
 }
