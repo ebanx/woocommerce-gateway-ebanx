@@ -17,12 +17,12 @@ abstract class WC_Ebanx_Gateway extends WC_Payment_Gateway {
     }
 
     protected function request_data($order) {
-        $data = [
+        $data = array(
             'mode' => 'full',
             'operation' => 'request',
             'payment' => array(
                 'country' => $_POST['billing_country'], // TODO: Dynamic from config or this?
-                'currency_code' => 'USD', // TODO: Dynamic
+                'currency_code' => WC_Ebanx_Gateway_Utils::CURRENCY_CODE_USD, // TODO: Dynamic
                 "name" => $_POST['billing_first_name']." ".$_POST['billing_last_name'],
 		        "email" => $_POST['billing_email'],
                 "phone_number" => $_POST['billing_phone'],
@@ -30,7 +30,7 @@ abstract class WC_Ebanx_Gateway extends WC_Payment_Gateway {
                 'order_number' => $order->id,
                 'merchant_payment_code' => $order->id . '-' . md5(rand(123123, 9999999))
             )
-        ];
+        );
 
         if(trim(strtolower($_POST['billing_country']))==WC_Ebanx_Gateway_Utils::COUNTRY_BRAZIL) {
             $data['payment'] = array_merge($data['payment'], array(
@@ -79,12 +79,8 @@ abstract class WC_Ebanx_Gateway extends WC_Payment_Gateway {
                 $order->payment_complete();
             }
 
-            WC()->cart->empty_cart();
+            return finaly($order);
 
-            return array(
-                'result'   => 'success',
-                'redirect' => $this->get_return_url( $order )
-            );
         } catch (Exception $e) {
             // TODO: How make this ?
             wc_add_notice( $e->getMessage(), 'error' );
@@ -92,6 +88,15 @@ abstract class WC_Ebanx_Gateway extends WC_Payment_Gateway {
             WC_EBANX::log( sprintf( __( 'Error: %s', 'woocommerce-ebanx' ), $e->getMessage() ) );
             return;
         }
+    }
+
+    protected function finaly($order, array $data = array()) {
+      WC()->cart->empty_cart();
+
+      return $data || array(
+          'result'   => 'success',
+          'redirect' => $this->get_return_url( $order )
+      );
     }
 
     protected function save_order_meta_fields($id, $request) {} // TODO: abstract
