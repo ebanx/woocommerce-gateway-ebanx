@@ -79,6 +79,13 @@ class WC_Ebanx_Servipag_Gateway extends WC_Ebanx_Gateway {
                 'type'        => 'title',
                 'description' => '',
             ),
+            'testmode' => array(
+                'type'          => 'checkbox',
+                'title'         => __( 'Test Mode', 'woocommerce-ebanx' ),
+                'description'   => __( 'Use the test mode on EBANX dashboard to verify everything works before going live.', 'woocommerce-ebanx' ),
+                'label'         => __( 'Turn on testing', 'woocommerce-ebanx' ),
+                'default'       => 'no'
+            ),
             'debug' => array(
                 'title'       => __( 'Debug Log', 'woocommerce-ebanx' ),
                 'type'        => 'checkbox',
