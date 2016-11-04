@@ -20,4 +20,8 @@ abstract class WC_Ebanx_Gateway_Utils {
     const CURRENCY_CODE_MXN = 'MXN';
     const CURRENCY_CODE_COP = 'COP';
     const CURRENCY_CODE_CLP = 'CLP';
+
+    static $BANKS_TEF_ALLOWED = array(
+      self::COUNTRY_BRAZIL => array('bancodobrasil', 'itau', 'bradesco', 'banrisul')
+    );
 }

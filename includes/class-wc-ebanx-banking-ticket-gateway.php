@@ -18,8 +18,8 @@ class WC_Ebanx_Banking_Ticket_Gateway extends WC_Ebanx_Gateway {
 
 		$this->init_settings();
 
-		$this->title          = $this->get_option( 'title' );
-		$this->description    = $this->get_option( 'description' );
+		$this->title          = 'Banking Ticket';
+		$this->description    = 'Pay with EBANX Baking Ticket';
 		$this->api_key        = $this->get_option( 'api_key' );
 		$this->encryption_key = $this->get_option( 'encryption_key' );
         $this->debug          = $this->get_option( 'debug' );
