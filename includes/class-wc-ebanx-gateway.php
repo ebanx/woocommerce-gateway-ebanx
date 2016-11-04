@@ -91,7 +91,7 @@ abstract class WC_Ebanx_Gateway extends WC_Payment_Gateway {
             return;
         }
     }
-
+    
     protected function finaly($data) {
       WC()->cart->empty_cart();
 
