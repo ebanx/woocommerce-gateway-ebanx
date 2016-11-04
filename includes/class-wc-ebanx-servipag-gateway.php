@@ -18,8 +18,8 @@ class WC_Ebanx_Servipag_Gateway extends WC_Ebanx_Gateway {
 
 		$this->init_settings();
 
-		$this->title          = $this->get_option( 'title' );
-		$this->description    = $this->get_option( 'description' );
+		$this->title          = 'ServiPag';
+    $this->description    = 'ServiPag description';
 		$this->api_key        = $this->get_option( 'api_key' );
 		$this->encryption_key = $this->get_option( 'encryption_key' );
         $this->debug          = $this->get_option( 'debug' );
@@ -125,8 +125,6 @@ class WC_Ebanx_Servipag_Gateway extends WC_Ebanx_Gateway {
 
         $data = parent::request_data($order);
 
-        $data['payment']['country'] = strtolower(wc_get_base_location()['country']); // TODO: ? CL ? or Billing ?
-        $data['payment']['currency_code'] = WC_Ebanx_Gateway_Utils::CURRENCY_CODE_CLP; // TODO: is_available by currency too?
         $data['payment']['payment_type_code'] = 'servipag';
 
         return $data;

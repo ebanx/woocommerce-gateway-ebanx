@@ -21,8 +21,8 @@ class WC_Ebanx_Credit_Card_Gateway extends WC_Ebanx_Gateway {
 		$this->init_settings();
 
 		// Define user set variables.
-		$this->title                = $this->get_option( 'title' );
-		$this->description          = $this->get_option( 'description' );
+		$this->title                = 'Credit Card';
+    $this->description          = 'Credit Card description';
 		$this->api_key              = $this->get_option( 'api_key' );
 		$this->encryption_key       = $this->get_option( 'encryption_key' );
 		$this->checkout             = $this->get_option( 'checkout' );
