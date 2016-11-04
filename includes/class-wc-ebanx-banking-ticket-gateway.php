@@ -79,7 +79,7 @@ class WC_Ebanx_Banking_Ticket_Gateway extends WC_Ebanx_Gateway {
 	}
 
     public function is_available() {
-        return parent::is_available() && isset($_POST['country']) && (strtolower($_POST['country']) == WC_Ebanx_Gateway_Utils::COUNTRY_BRAZIL);
+        return parent::is_available() && strtolower(WC()->customer->get_shipping_country()) == WC_Ebanx_Gateway_Utils::COUNTRY_BRAZIL;
     }
 
 	public function payment_fields() {
