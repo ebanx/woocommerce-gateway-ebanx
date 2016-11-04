@@ -79,7 +79,10 @@ abstract class WC_Ebanx_Gateway extends WC_Payment_Gateway {
                 $order->payment_complete();
             }
 
-            return finaly($order);
+            return $this->finaly(array(
+                'result'   => 'success',
+                'redirect' => $this->get_return_url( $order )
+            ));
 
         } catch (Exception $e) {
             // TODO: How make this ?
@@ -90,13 +93,10 @@ abstract class WC_Ebanx_Gateway extends WC_Payment_Gateway {
         }
     }
 
-    protected function finaly($order, array $data = array()) {
+    protected function finaly($data) {
       WC()->cart->empty_cart();
 
-      return $data || array(
-          'result'   => 'success',
-          'redirect' => $this->get_return_url( $order )
-      );
+      return $data;
     }
 
     protected function save_order_meta_fields($id, $request) {} // TODO: abstract
