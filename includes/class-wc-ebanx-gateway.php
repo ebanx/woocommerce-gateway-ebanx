@@ -54,20 +54,19 @@ abstract class WC_Ebanx_Gateway extends WC_Payment_Gateway {
             if ( $order->get_total() > 0 ) {
                 $data = $this->request_data($order);
 
-                $options = get_option( 'woocommerce_ebanx_settings' );
-                // TODO: $integrationKey = 'yes' === $options['testmode'] ? $options['test_secret_key'] : $options['secret_key'];
+                $config = [
+                    'integrationKey' => 'yes' === $this->settings['testmode'] ? $this->settings['encryption_key'] : $this->settings['api_key'],
+                    'testMode'       => ('yes' === $this->settings['testmode'])
+                ];
 
-                \Ebanx\Config::set([
-                    'integrationKey' => $this->get_option( 'api_key' ),
-                    'testMode'       => true // TODO 'yes' === $options['testmode']
-                ]);
-
-                \Ebanx\Config::setDirectMode(true); //TODO: Option on admin ?
+                \Ebanx\Config::set($config);
+                \Ebanx\Config::setDirectMode(true);
 
                 $request = \Ebanx\Ebanx::doRequest($data);
 
                 // TODO: Remove this
                 echo json_encode(array(
+                    'config'=>$config,
                     'request'=>$request,
                     'post'=>$_POST,
                     'order'=>$order,
