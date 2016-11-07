@@ -7,7 +7,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 class WC_Ebanx_Tef_Gateway extends WC_Ebanx_Gateway {
 
 	public function __construct() {
-		$this->id                   = 'ebanx-tef';
+        parent::__construct();
+
+        $this->id                   = 'ebanx-tef';
 		$this->icon                 = apply_filters( 'wc_ebanx_tef_icon', false );
 		$this->has_fields           = true;
 		$this->method_title         = __( 'EBANX - TEF', 'woocommerce-ebanx' );
@@ -16,10 +18,8 @@ class WC_Ebanx_Tef_Gateway extends WC_Ebanx_Gateway {
 
 		$this->init_form_fields();
 
-		$this->init_settings();
-
 		$this->title          = 'TEF';
-    $this->description    = 'TEF description';
+        $this->description    = 'TEF description';
 		$this->api_key        = $this->get_option( 'api_key' );
 		$this->encryption_key = $this->get_option( 'encryption_key' );
         $this->debug          = $this->get_option( 'debug' );
@@ -162,36 +162,5 @@ class WC_Ebanx_Tef_Gateway extends WC_Ebanx_Gateway {
       'result' => 'success',
       'redirect' => $this->tef_url
     ));
-  }
-
-  public function process_hook($hash) {
-    $order = get_post_meta(10);
-
-    print_r($order);
-    exit;
-
-    $data = parent::process_hook($hash);
-
-
-    update_post_meta( 10, '_ebanx_payment_hash', $hash );
-
-    $order = new WP_Meta_Query(array(
-      array(
-        'key' => '_ebanx_payment_hash',
-        'value' => $hash,
-        'compare' => '='
-      )
-    ));
-
-    print_r();
-    exit;
-
-    // TODO: ?
-    // if ($data->status != "SUCCESS")
-    if ($data->payment->status !== 'CO') {
-
-    }
-
-    exit;
   }
 }

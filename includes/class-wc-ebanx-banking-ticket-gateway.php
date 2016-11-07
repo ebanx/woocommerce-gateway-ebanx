@@ -7,6 +7,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 class WC_Ebanx_Banking_Ticket_Gateway extends WC_Ebanx_Gateway {
 
 	public function __construct() {
+        parent::__construct();
+
 		$this->id                   = 'ebanx-banking-ticket';
 		$this->icon                 = apply_filters( 'wc_ebanx_banking_ticket_icon', false );
 		$this->has_fields           = true;
@@ -15,8 +17,6 @@ class WC_Ebanx_Banking_Ticket_Gateway extends WC_Ebanx_Gateway {
 		$this->view_transaction_url = 'https://dashboard.ebanx.com/#/transactions/%s';
 
 		$this->init_form_fields();
-
-		$this->init_settings();
 
 		$this->title          = 'Banking Ticket';
 		$this->description    = 'Pay with EBANX Baking Ticket';
