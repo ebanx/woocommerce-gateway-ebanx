@@ -7,6 +7,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 class WC_Ebanx_Servipag_Gateway extends WC_Ebanx_Gateway {
 
 	public function __construct() {
+        parent::__construct();
+
 		$this->id                   = 'ebanx-servipag';
 		$this->icon                 = apply_filters( 'wc_ebanx_servipag_icon', false );
 		$this->has_fields           = true;
@@ -16,10 +18,8 @@ class WC_Ebanx_Servipag_Gateway extends WC_Ebanx_Gateway {
 
 		$this->init_form_fields();
 
-		$this->init_settings();
-
 		$this->title          = 'ServiPag';
-    $this->description    = 'ServiPag description';
+        $this->description    = 'ServiPag description';
 		$this->api_key        = $this->get_option( 'api_key' );
 		$this->encryption_key = $this->get_option( 'encryption_key' );
         $this->debug          = $this->get_option( 'debug' );
