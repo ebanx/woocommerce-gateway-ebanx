@@ -91,7 +91,7 @@ abstract class WC_Ebanx_Gateway extends WC_Payment_Gateway {
             return;
         }
     }
-    
+
     protected function finaly($data) {
       WC()->cart->empty_cart();
 
@@ -135,5 +135,20 @@ abstract class WC_Ebanx_Gateway extends WC_Payment_Gateway {
         }
 
         $this->save_order_meta_fields($order->id, $request);
+    }
+
+    protected function process_hook($hash) {
+      $config = [
+          'integrationKey' => 'yes' === $this->settings['testmode'] ? $this->settings['encryption_key'] : $this->settings['api_key'],
+          'testMode'       => ('yes' === $this->settings['testmode'])
+      ];
+
+      \Ebanx\Config::set($config);
+
+      // TODO: Do caught exceptions
+
+      return \Ebanx\Ebanx::doQuery(array(
+        'hash' => $hash
+      ));
     }
 }
