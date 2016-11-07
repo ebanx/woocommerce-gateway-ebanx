@@ -8,6 +8,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 abstract class WC_Ebanx_Gateway extends WC_Payment_Gateway {
 
+    public function __construct() {
+        $this->init_settings();
+    }
+
     public function admin_options() {
         include dirname( __FILE__ ) . '/admin/views/html-admin-page.php';
     }
@@ -137,18 +141,46 @@ abstract class WC_Ebanx_Gateway extends WC_Payment_Gateway {
         $this->save_order_meta_fields($order->id, $request);
     }
 
-    protected function process_hook($hash) {
-      $config = [
-          'integrationKey' => 'yes' === $this->settings['testmode'] ? $this->settings['encryption_key'] : $this->settings['api_key'],
-          'testMode'       => ('yes' === $this->settings['testmode'])
-      ];
+    public final function process_hook($hash) {
+        $config = [
+            'integrationKey' => 'yes' === $this->settings['testmode'] ? $this->settings['encryption_key'] : $this->settings['api_key'],
+            'testMode'       => ('yes' === $this->settings['testmode'])
+        ];
 
-      \Ebanx\Config::set($config);
+        \Ebanx\Config::set($config);
 
-      // TODO: Do caught exceptions
+        $data = \Ebanx\Ebanx::doQuery(array(
+            'hash' => $hash
+        ));
 
-      return \Ebanx\Ebanx::doQuery(array(
-        'hash' => $hash
-      ));
+        $order = reset(get_posts(array(
+            'meta_query' => array(
+                array(
+                'key' => '_ebanx_payment_hash',
+                'value' => $hash
+                )
+            ),
+            'post_type' => 'shop_order'
+        )));
+
+        $order = new WC_Order($order->ID);
+
+        // TODO: if (empty($order)) {}
+        // TODO: if ($data->status != "SUCCESS")
+
+        switch (strtoupper($data->payment->status)) {
+            case 'CO':
+                $order->update_status('completed');
+            break;
+            case 'CA':
+                $order->update_status('cancelled');
+            break;
+            case 'PE':
+                $order->update_status('pending');
+            break;
+            case 'OP':
+                $order->update_status('processing');
+            break;
+        }
     }
 }

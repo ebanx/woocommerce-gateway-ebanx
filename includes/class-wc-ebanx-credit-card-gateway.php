@@ -7,6 +7,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 class WC_Ebanx_Credit_Card_Gateway extends WC_Ebanx_Gateway {
 
 	public function __construct() {
+        parent::__construct();
+
 		$this->id                   = 'ebanx-credit-card';
 		$this->icon                 = apply_filters( 'wc_ebanx_credit_card_icon', false );
 		$this->has_fields           = true;
@@ -16,9 +18,6 @@ class WC_Ebanx_Credit_Card_Gateway extends WC_Ebanx_Gateway {
 
 		// Load the form fields.
 		$this->init_form_fields();
-
-		// Load the settings.
-		$this->init_settings();
 
 		// Define user set variables.
 		$this->title                = 'Credit Card';
