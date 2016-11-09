@@ -36,7 +36,7 @@ abstract class WC_Ebanx_Gateway extends WC_Payment_Gateway {
             )
         );
 
-        if(trim(strtolower($_POST['billing_country']))==WC_Ebanx_Gateway_Utils::COUNTRY_BRAZIL) {
+        if(trim(strtolower(WC()->customer->get_shipping_country())) === WC_Ebanx_Gateway_Utils::COUNTRY_BRAZIL) {
             $data['payment'] = array_merge($data['payment'], array(
                 'document' => '519.168.571-75', // TODO get from ?
                 'birth_date' => '03/11/1992', // TODO get from ?
@@ -49,6 +49,21 @@ abstract class WC_Ebanx_Gateway extends WC_Payment_Gateway {
         }
 
         return $data;
+    }
+
+    protected function getTransactionAddress($attr='') {
+        if (empty($_POST['billing_country'])&&empty(WC()->customer->get_shipping_country()))
+            throw new Exception("Missing address country.");
+
+        $this->address[country] = trim(strtolower($_POST['billing_country']));
+
+        if (empty($this->address[country]))
+            $this->address[country] = trim(strtolower(WC()->customer->get_shipping_country()));
+
+        if ($attr !== '' && !empty($this->address[$attr]))
+            return $this->address[$attr];
+
+        return $this->address;
     }
 
     public function process_payment( $order_id ) {
