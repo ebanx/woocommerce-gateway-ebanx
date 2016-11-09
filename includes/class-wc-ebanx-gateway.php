@@ -74,7 +74,7 @@ abstract class WC_Ebanx_Gateway extends WC_Payment_Gateway {
                 $data = $this->request_data($order);
 
                 $config = [
-                    'integrationKey' => 'yes' === $this->settings['testmode'] ? $this->settings['encryption_key'] : $this->settings['api_key'],
+                    'integrationKey' => $this->settings['api_key'],
                     'testMode'       => ('yes' === $this->settings['testmode'])
                 ];
 
@@ -158,7 +158,7 @@ abstract class WC_Ebanx_Gateway extends WC_Payment_Gateway {
 
     public final function process_hook($hash) {
         $config = [
-            'integrationKey' => 'yes' === $this->settings['testmode'] ? $this->settings['encryption_key'] : $this->settings['api_key'],
+            'integrationKey' => $this->settings['api_key'],
             'testMode'       => ('yes' === $this->settings['testmode'])
         ];
 
