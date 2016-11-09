@@ -32,7 +32,7 @@ class WC_Ebanx_Tef_Gateway extends WC_Ebanx_Gateway {
 	}
 
     public function is_available() {
-        return parent::is_available() && (strtolower(WC()->customer->get_shipping_country()) == WC_Ebanx_Gateway_Utils::COUNTRY_BRAZIL);
+        return parent::is_available() && ($this->getTransactionAddress('country') == WC_Ebanx_Gateway_Utils::COUNTRY_BRAZIL);
     }
 
     /**
