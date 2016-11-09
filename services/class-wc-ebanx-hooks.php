@@ -1,4 +1,5 @@
 <?php
+
 class WC_Ebanx_Hooks {
 
 	public static function init(){
