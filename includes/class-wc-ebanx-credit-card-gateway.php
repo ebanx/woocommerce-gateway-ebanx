@@ -118,13 +118,15 @@ class WC_Ebanx_Credit_Card_Gateway extends WC_Ebanx_Gateway {
     public function checkout_scripts() {
         if ( is_checkout() ) {
             wp_enqueue_script( 'wc-credit-card-form' );
-            wp_enqueue_script('ebanx', 'http://downloads.ebanx.com/poc-checkout/src/ebanx-new.js', '', '1.0', true);
+            // Using // to avoid conflicts between http and https protocols
+            wp_enqueue_script('ebanx', '//downloads.ebanx.com/poc-checkout/src/ebanx.js', '', '1.0', true);
             wp_enqueue_script('woocommerce_ebanx', plugins_url('assets/js/credit-card.js', WC_Ebanx::DIR), array('jquery-payment', 'ebanx'), WC_Ebanx::VERSION, true);
 
             $ebanx_params = array(
-                'key' => $this->encryption_key,
+                'key' => $this->settings['encryption_key'],
                 'i18n_terms' => __('Please accept the terms and conditions first', 'woocommerce-gateway-ebanx'),
                 'i18n_required_fields' => __('Please fill in required checkout fields first', 'woocommerce-gateway-ebanx'),
+                'mode' => ($this->settings['testmode'] === 'yes') ? 'test' : 'production'
             );
 
             // If we're on the pay page we need to pass ebanx.js the address of the order.
@@ -134,14 +136,14 @@ class WC_Ebanx_Credit_Card_Gateway extends WC_Ebanx_Gateway {
                 $order = wc_get_order($order_id);
 
                 if ($order->id === $order_id && $order->order_key === $order_key) {
-                    $ebanx_params['billing_first_name'] = $order->billing_first_name;
-                    $ebanx_params['billing_last_name'] = $order->billing_last_name;
-                    $ebanx_params['billing_address_1'] = $order->billing_address_1;
-                    $ebanx_params['billing_address_2'] = $order->billing_address_2;
-                    $ebanx_params['billing_state'] = $order->billing_state;
-                    $ebanx_params['billing_city'] = $order->billing_city;
-                    $ebanx_params['billing_postcode'] = $order->billing_postcode;
-                    $ebanx_params['billing_country'] = $order->billing_country;
+                  $ebanx_params['billing_first_name'] = $order->billing_first_name;
+                  $ebanx_params['billing_last_name'] = $order->billing_last_name;
+                  $ebanx_params['billing_address_1'] = $order->billing_address_1;
+                  $ebanx_params['billing_address_2'] = $order->billing_address_2;
+                  $ebanx_params['billing_state'] = $order->billing_state;
+                  $ebanx_params['billing_city'] = $order->billing_city;
+                  $ebanx_params['billing_postcode'] = $order->billing_postcode;
+                  $ebanx_params['billing_country'] = $order->billing_country;
                 }
             }
 
