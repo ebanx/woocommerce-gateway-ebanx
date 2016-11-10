@@ -232,20 +232,10 @@ class WC_Ebanx_Credit_Card_Gateway extends WC_Ebanx_Gateway {
         parent::process_response($request, $order);
     }
 
-    protected function save_order_meta_fields( $id, $request ) {
-        // TODO: Make this?
-        /*
-        if ( ! empty( $data['card_brand'] ) ) {
-            update_post_meta( $id, __( 'Credit Card', 'woocommerce-pagarme' ), $this->get_card_brand_name( sanitize_text_field( $data['card_brand'] ) ) );
-        }
-        if ( ! empty( $data['installments'] ) ) {
-            update_post_meta( $id, __( 'Installments', 'woocommerce-pagarme' ), sanitize_text_field( $data['installments'] ) );
-        }
-        if ( ! empty( $data['amount'] ) ) {
-            update_post_meta( $id, __( 'Total paid', 'woocommerce-pagarme' ), number_format( intval( $data['amount'] ) / 100, wc_get_price_decimals(), wc_get_price_decimal_separator(), wc_get_price_thousand_separator() ) );
-        }
-        if ( ! empty( $data['antifraud_score'] ) ) {
-            update_post_meta( $id, __( 'Anti Fraud Score', 'woocommerce-pagarme' ), sanitize_text_field( $data['antifraud_score'] ) );
-        }*/
+    protected function save_order_meta_fields( $order, $request ) {
+				parent::save_order_meta_fields($order, $request);
+        
+        update_post_meta($order->id, 'Brand Name', $request->payment->payment_type_code);
+        update_post_meta($order->id, 'Number of Instalments', $request->payment->instalments);
     }
 }
