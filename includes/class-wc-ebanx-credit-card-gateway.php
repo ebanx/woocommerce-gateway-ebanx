@@ -25,11 +25,8 @@ class WC_Ebanx_Credit_Card_Gateway extends WC_Ebanx_Gateway {
 		$this->api_key              = $this->get_option( 'api_key' );
 		$this->encryption_key       = $this->get_option( 'encryption_key' );
 		$this->checkout             = $this->get_option( 'checkout' );
-		$this->max_installment      = $this->get_option( 'max_installment' );
-		$this->smallest_installment = $this->get_option( 'smallest_installment' );
-		$this->interest_rate        = $this->get_option( 'interest_rate', '0' );
-		$this->free_installments    = $this->get_option( 'free_installments', '1' );
-        $this->debug                = $this->get_option( 'debug' );
+		$this->max_installment      = $this->get_option( 'max_installment', '12' );
+    $this->debug                = $this->get_option( 'debug' );
 
         if ( 'yes' === $this->debug ) {
             $this->log = new WC_Logger();
@@ -160,15 +157,12 @@ class WC_Ebanx_Credit_Card_Gateway extends WC_Ebanx_Gateway {
 		$cart_total = $this->get_order_total();
 
 		if ( 'no' === $this->checkout ) {
-			$installments = 1; // TODO: see $this->api->get_installments( $cart_total );
 
 			wc_get_template(
 				'credit-card/payment-form.php',
 				array(
 					'cart_total'           => $cart_total,
-					'max_installment'      => $this->max_installment,
-					'smallest_installment' => 1, // TODO: see $this->api->get_smallest_installment(),
-					'installments'         => $installments,
+					'max_installment'      => $this->max_installment
 				),
 				'woocommerce/ebanx/',
 				WC_Ebanx::get_templates_path()
@@ -202,17 +196,31 @@ class WC_Ebanx_Credit_Card_Gateway extends WC_Ebanx_Gateway {
 	    if (empty($_POST['ebanx_token'])) {
 	        throw new Exception("Missing token.");
         }
-
+        
         if (empty($_POST['ebanx_device_fingerprint'])) {
             throw new Exception("Missing Device fingerprint.");
         }
-
+        
         $data = parent::request_data($order);
+        
+        if(
+          trim(strtolower(WC()->customer->get_shipping_country())) === WC_Ebanx_Gateway_Utils::COUNTRY_BRAZIL ||
+          trim(strtolower(WC()->customer->get_shipping_country())) === WC_Ebanx_Gateway_Utils::COUNTRY_MEXICO
+        ) {
+          if (empty($_POST['ebanx_billing_installments'])) {
+            throw new Exception('Please, provide a number of instalments.');
+          }
+          
+          $data['payment']['instalments'] = $_POST['ebanx_billing_installments'];
+        }
+        
         $data['device_id'] = $_POST['ebanx_device_fingerprint'];
+
         $data['payment']['payment_type_code'] = 'visa'; // TODO: Dynamic
         $data['payment']['creditcard'] = array(
             'token' => $_POST['ebanx_token'] // TODO: get from ?
         );
+        
         return $data;
     }
 
