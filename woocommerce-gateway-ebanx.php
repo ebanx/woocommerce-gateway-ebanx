@@ -82,6 +82,7 @@ if ( ! class_exists( 'WC_Ebanx' ) ) :
       include_once dirname( __FILE__ ) . '/services/class-wc-ebanx-hooks.php';
             include_once dirname( __FILE__ ) . '/includes/class-wc-ebanx-gateway-utils.php';
 			include_once dirname( __FILE__ ) . '/includes/class-wc-ebanx-gateway.php';
+            include_once dirname( __FILE__ ) . '/includes/class-wc-ebanx-redirect-gateway.php';
 			include_once dirname( __FILE__ ) . '/includes/class-wc-ebanx-my-account.php';
 			include_once dirname( __FILE__ ) . '/includes/class-wc-ebanx-banking-ticket-gateway.php';
 			include_once dirname( __FILE__ ) . '/includes/class-wc-ebanx-credit-card-gateway.php';
