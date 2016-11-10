@@ -42,7 +42,7 @@ composer install
 
 DISPLAY=:1 xvfb-run java -jar data/selenium-server-standalone-2.53.0.jar &
 sleep 5
-phpunit tests/
+phpunit --bootstrap tests/bootstrap.php tests/test/
 
 kill -9 $(lsof -ti tcp:4444)
 
