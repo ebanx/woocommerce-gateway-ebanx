@@ -6,7 +6,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 abstract class WC_Ebanx_Redirect_Gateway extends WC_Ebanx_Gateway {
     protected $redirect_url;
-    protected final function process_response($request, $order) {
+
+    protected function process_response($request, $order) {
         if ($request->status == 'ERROR'|| !$request->redirect_url) {
             return $this->process_response_error($request, $order);
         }
