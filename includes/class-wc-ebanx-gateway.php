@@ -97,7 +97,7 @@ abstract class WC_Ebanx_Gateway extends WC_Payment_Gateway {
                 $order->payment_complete();
             }
 
-            return $this->finaly(array(
+            return $this->dispatch(array(
                 'result'   => 'success',
                 'redirect' => $this->get_return_url( $order )
             ));
@@ -111,7 +111,7 @@ abstract class WC_Ebanx_Gateway extends WC_Payment_Gateway {
         }
     }
 
-    protected function finaly($data) {
+    protected function dispatch($data) {
       WC()->cart->empty_cart();
 
       return $data;

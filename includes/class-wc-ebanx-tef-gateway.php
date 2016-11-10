@@ -4,7 +4,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-class WC_Ebanx_Tef_Gateway extends WC_Ebanx_Gateway {
+class WC_Ebanx_Tef_Gateway extends WC_Ebanx_Redirect_Gateway  {
 
 	public function __construct() {
         parent::__construct();
@@ -146,21 +146,4 @@ class WC_Ebanx_Tef_Gateway extends WC_Ebanx_Gateway {
     protected function save_order_meta_fields( $id, $request ) {
         // TODO: Make this?
     }
-
-  public function process_response($request, $order) {
-    if ($request->status == 'ERROR'|| !$request->redirect_url) {
-      return $this->process_response_error($request, $order);
-    }
-
-    update_post_meta( $order->id, '_ebanx_payment_hash', $request->payment->hash );
-
-    $this->tef_url = $request->redirect_url;
-  }
-
-  protected function finaly($data) {
-    return parent::finaly(array(
-      'result' => 'success',
-      'redirect' => $this->tef_url
-    ));
-  }
 }
