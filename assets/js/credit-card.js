@@ -75,41 +75,19 @@ jQuery( function($) {
 				var card     = $( '#ebanx-card-number' ).val();
 				var cvc        = $( '#ebanx-card-cvc' ).val();
 				var expires    = $( '#ebanx-card-expiry' ).payment( 'cardExpiryVal' );
-				var first_name = $( '#billing_first_name' ).length ? $( '#billing_first_name' ).val() : wc_ebanx_params.billing_first_name;
-				var last_name  = $( '#billing_last_name' ).length ? $( '#billing_last_name' ).val() : wc_ebanx_params.billing_last_name;
         var card_name  = $('#ebanx-card-holder-name').val();
-				var address    = {};
-				var data       = {
-					"payment_type_code": "visa",
-					"country": "br",
-					"creditcard": {
-						"card_number": parseInt(card.replace(/ /g,'')),
-						"card_name": card_name,
-						"card_due_date": (parseInt( expires['month'] ) || 0) + '/' + (parseInt( expires['year'] ) || 0),
-						"card_cvv": parseInt(cvc),
-						country: 'br' // TODO: dynamic ?????
-					}
+				var country = $('#billing_country').val().toLowerCase();
+				var creditcard = {
+					"card_number": parseInt(card.replace(/ /g,'')),
+					"card_name": card_name,
+					"card_due_date": (parseInt( expires['month'] ) || 0) + '/' + (parseInt( expires['year'] ) || 0),
+					"card_cvv": parseInt(cvc),
+					country: country
 				};
-
-				if ( jQuery('#billing_address_1').length > 0 ) {
-					data.address_line1   = $( '#billing_address_1' ).val();
-					data.address_line2   = $( '#billing_address_2' ).val();
-					data.address_state   = $( '#billing_state' ).val();
-					data.address_city    = $( '#billing_city' ).val();
-					data.address_zip     = $( '#billing_postcode' ).val();
-					data.address_country = $( '#billing_country' ).val();
-				} else if ( data.address_line1 ) {
-					data.address_line1   = wc_ebanx_params.billing_address_1;
-					data.address_line2   = wc_ebanx_params.billing_address_2;
-					data.address_state   = wc_ebanx_params.billing_state;
-					data.address_city    = wc_ebanx_params.billing_city;
-					data.address_zip     = wc_ebanx_params.billing_postcode;
-					data.address_country = wc_ebanx_params.billing_country;
-				}
 
 				EBANX.deviceFingerprint(function (session_id) {
 					$('#ebanx_device_fingerprint').val(session_id);
-					Ebanx.card.createToken(data.creditcard, wc_ebanx_form.onEBANXReponse);
+					Ebanx.card.createToken(creditcard, wc_ebanx_form.onEBANXReponse);
 				});
 			}
 		},

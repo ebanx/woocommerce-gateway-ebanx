@@ -30,7 +30,7 @@ abstract class WC_Ebanx_Gateway extends WC_Payment_Gateway {
                 "name" => $_POST['billing_first_name']." ".$_POST['billing_last_name'],
 		        "email" => $_POST['billing_email'],
                 "phone_number" => $_POST['billing_phone'],
-                'amount_total' => $order->get_total() / 100,
+                'amount_total' => $order->get_total(),
                 'order_number' => $order->id,
                 'merchant_payment_code' => $order->id . '-' . md5(rand(123123, 9999999))
             )
