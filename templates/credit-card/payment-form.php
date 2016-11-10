@@ -12,6 +12,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 ?>
 
+<!-- finger print, see: https://github.com/ebanx/device-fingerprint -->
+<input type="hidden" name="ebanx_device_fingerprint" id="ebanx_device_fingerprint">
+
 <fieldset id="ebanx-credit-cart-form">
 	<p class="form-row form-row-first">
 		<label for="ebanx-card-holder-name"><?php esc_html_e( 'Card Holder Name', 'woocommerce-ebanx' ); ?><span class="required">*</span></label>
