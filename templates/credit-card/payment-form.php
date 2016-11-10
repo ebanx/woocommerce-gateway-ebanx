@@ -34,21 +34,18 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<input id="ebanx-card-cvc" class="input-text wc-credit-card-form-card-cvc" type="text" autocomplete="off" placeholder="<?php esc_html_e( 'CVC', 'woocommerce-ebanx' ); ?>" style="font-size: 1.5em; padding: 8px;" />
 	</p>
 	<div class="clear"></div>
-	<?php if ( apply_filters( 'wc_ebanx_allow_credit_card_installments', 1 < $max_installment ) ) : ?>
+  
+  <!-- Installments -->
+	<?php if ( $max_installment > 0 ) : ?>
 		<p class="form-row form-row-wide">
 			<label for="ebanx-card-installments"><?php esc_html_e( 'Installments', 'woocommerce-ebanx' ); ?> <span class="required">*</span></label>
-			<select name="ebanx_installments" id="ebanx-installments" style="font-size: 1.5em; padding: 8px; width: 100%;">
-				<?php
-				foreach ( $installments as $number => $installment ) :
-					if ( 1 !== $number && $smallest_installment > $installment['installment_amount'] ) {
-						break;
-					}
-
-					$interest           = ( ( $cart_total * 100 ) < $installment['amount'] ) ? sprintf( __( '(total of %s)', 'woocommerce-ebanx' ), strip_tags( wc_price( $installment['amount'] / 100 ) ) ) : __( '(interest-free)', 'woocommerce-ebanx' );
-					$installment_amount = strip_tags( wc_price( $installment['installment_amount'] / 100 ) );
+      <select name="ebanx_billing_installments" id="ebanx-installments">
+				<?php for ($number = 1; $number <= $max_installment; ++$number):
+          // TODO: It will increase taxes?
+					$installment_amount = strip_tags( wc_price( $cart_total / ($number) ) );
 				?>
-				<option value="<?php echo absint( $installment['installment'] ); ?>"><?php printf( esc_html__( '%1$dx of %2$s %3$s', 'woocommerce-ebanx' ), absint( $installment['installment'] ), esc_html( $installment_amount ), esc_html( $interest ) ); ?></option>
-				<?php endforeach; ?>
+				  <option value="<?php echo $number ?>"><?php printf( esc_html__( '%1$dx of %2$s', 'woocommerce-ebanx' ), absint( $number ), esc_html( $installment_amount )); ?></option>
+        <?php endfor; ?>
 			</select>
 		</p>
 	<?php endif; ?>
