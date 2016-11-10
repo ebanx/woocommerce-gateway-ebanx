@@ -26,6 +26,10 @@ abstract class WC_Ebanx_Gateway_Utils {
       self::COUNTRY_BRAZIL => array('bancodobrasil', 'itau', 'bradesco', 'banrisul')
     );
 
+    static $TYPES_SAFETYPAY_ALLOWED = array(
+        'cash', 'online'
+    );
+
     static public function isTef($paymentTypeCode) {
       return in_array(strtolower($paymentTypeCode), call_user_func_array('array_merge', self::$BANKS_TEF_ALLOWED));
     }
