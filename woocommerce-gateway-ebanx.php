@@ -83,6 +83,7 @@ if ( ! class_exists( 'WC_Ebanx' ) ) :
             include_once dirname( __FILE__ ) . '/includes/class-wc-ebanx-gateway-utils.php';
 			include_once dirname( __FILE__ ) . '/includes/class-wc-ebanx-gateway.php';
             include_once dirname( __FILE__ ) . '/includes/class-wc-ebanx-redirect-gateway.php';
+            include_once dirname( __FILE__ ) . '/includes/class-wc-ebanx-pagoefectivo-gateway.php';
 			include_once dirname( __FILE__ ) . '/includes/class-wc-ebanx-my-account.php';
 			include_once dirname( __FILE__ ) . '/includes/class-wc-ebanx-banking-ticket-gateway.php';
 			include_once dirname( __FILE__ ) . '/includes/class-wc-ebanx-credit-card-gateway.php';
@@ -120,6 +121,7 @@ if ( ! class_exists( 'WC_Ebanx' ) ) :
             $methods[] = 'WC_Ebanx_Oxxo_Gateway';
             $methods[] = 'WC_Ebanx_Servipag_Gateway';
 			$methods[] = 'WC_Ebanx_Tef_Gateway';
+            $methods[] = 'WC_Ebanx_Pagoefectivo_Gateway';
 
 			return $methods;
 		}
@@ -139,6 +141,7 @@ if ( ! class_exists( 'WC_Ebanx' ) ) :
             $oxxo           = 'wc_ebanx_oxxo_gateway';
             $servipag     	= 'wc_ebanx_servipag_gateway';
 			$tef 			= 'wc_ebanx_tef_gateway';
+            $pagoefectivo 	= 'wc_ebanx_pagoefectivo_gateway';
 
 			$plugin_links[] = '<a href="' . esc_url( admin_url( 'admin.php?page=wc-settings&tab=checkout&section=' . $banking_ticket ) ) . '">' . __( 'Bank Slip Settings', 'woocommerce-ebanx' ) . '</a>';
 
@@ -150,6 +153,8 @@ if ( ! class_exists( 'WC_Ebanx' ) ) :
 
 			$plugin_links[] = '<a href="' . esc_url( admin_url( 'admin.php?page=wc-settings&tab=checkout&section=' . $tef ) ) . '">' . __( 'TEF Settings', 'woocommerce-ebanx' ) . '</a>';
 
+            $plugin_links[] = '<a href="' . esc_url( admin_url( 'admin.php?page=wc-settings&tab=checkout&section=' . $pagoefectivo ) ) . '">' . __( 'Pagoefectivo Settings', 'woocommerce-ebanx' ) . '</a>';
+
 			return array_merge( $plugin_links, $links );
 		}
 
@@ -157,6 +162,7 @@ if ( ! class_exists( 'WC_Ebanx' ) ) :
 		 * WooCommerce fallback notice.
 		 */
 		public function woocommerce_missing_notice() {
+            // TODO: Others notice here
 			include dirname( __FILE__ ) . '/includes/admin/views/html-notice-missing-woocommerce.php';
 		}
 
@@ -213,21 +219,32 @@ if ( ! class_exists( 'WC_Ebanx' ) ) :
 						'debug'                => $old_options['debug'],
 					);
 
-					// Tef options.
-          $tef = array(
-            'enabled'        => $old_options['enabled'],
-            'title'          => 'TEF',
-            'description'    => '',
-            'api_key'        => $old_options['api_key'],
-            'encryption_key' => $old_options['encryption_key'],
-            'debug'          => $old_options['debug'],
-          );
+                    // Tef options.
+                    $tef = array(
+                        'enabled'        => $old_options['enabled'],
+                        'title'          => 'TEF',
+                        'description'    => '',
+                        'api_key'        => $old_options['api_key'],
+                        'encryption_key' => $old_options['encryption_key'],
+                        'debug'          => $old_options['debug'],
+                    );
+
+                    // Pagoefectivo options.
+                    $pagoefectivo = array(
+                        'enabled'        => $old_options['enabled'],
+                        'title'          => 'Pagoefectivo',
+                        'description'    => '',
+                        'api_key'        => $old_options['api_key'],
+                        'encryption_key' => $old_options['encryption_key'],
+                        'debug'          => $old_options['debug'],
+                    );
 
 					update_option( 'woocommerce_ebanx-banking-ticket_settings', $banking_ticket );
 					update_option( 'woocommerce_ebanx-credit-card_settings', $credit_card );
                     update_option( 'woocommerce_ebanx-oxxo_settings', $oxxo );
                     update_option( 'woocommerce_ebanx-servipag_settings', $servipag );
 					update_option( 'woocommerce_ebanx-tef_settings', $tef );
+                    update_option( 'woocommerce_ebanx-pagoefectivo_settings', $pagoefectivo );
 
 					delete_option( 'woocommerce_ebanx_settings' );
 				}
