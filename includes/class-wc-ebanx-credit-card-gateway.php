@@ -119,6 +119,7 @@ class WC_Ebanx_Credit_Card_Gateway extends WC_Ebanx_Gateway {
         if ( is_checkout() ) {
             wp_enqueue_script( 'wc-credit-card-form' );
             // Using // to avoid conflicts between http and https protocols
+            wp_enqueue_script('ebanx_fingerprint', '//downloads.ebanx.com/poc-checkout/src/device-fingerprint.js', '', '1.0', true);
             wp_enqueue_script('ebanx', '//downloads.ebanx.com/poc-checkout/src/ebanx.js', '', '1.0', true);
             wp_enqueue_script('woocommerce_ebanx', plugins_url('assets/js/credit-card.js', WC_Ebanx::DIR), array('jquery-payment', 'ebanx'), WC_Ebanx::VERSION, true);
 
@@ -201,7 +202,13 @@ class WC_Ebanx_Credit_Card_Gateway extends WC_Ebanx_Gateway {
 	    if (empty($_POST['ebanx_token'])) {
 	        throw new Exception("Missing token.");
         }
+
+        if (empty($_POST['ebanx_device_fingerprint'])) {
+            throw new Exception("Missing Device fingerprint.");
+        }
+
         $data = parent::request_data($order);
+        $data['device_id'] = $_POST['ebanx_device_fingerprint'];
         $data['payment']['payment_type_code'] = 'visa'; // TODO: Dynamic
         $data['payment']['creditcard'] = array(
             'token' => $_POST['ebanx_token'] // TODO: get from ?

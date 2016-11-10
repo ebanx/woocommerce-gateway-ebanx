@@ -107,7 +107,10 @@ jQuery( function($) {
 					data.address_country = wc_ebanx_params.billing_country;
 				}
 
-				Ebanx.card.createToken(data.creditcard, wc_ebanx_form.onEBANXReponse);
+				EBANX.deviceFingerprint(function (session_id) {
+					$('#ebanx_device_fingerprint').val(session_id);
+					Ebanx.card.createToken(data.creditcard, wc_ebanx_form.onEBANXReponse);
+				});
 			}
 		},
 
