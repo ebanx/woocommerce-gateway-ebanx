@@ -117,7 +117,11 @@ abstract class WC_Ebanx_Gateway extends WC_Payment_Gateway {
       return $data;
     }
 
-    protected function save_order_meta_fields($id, $request) {} // TODO: abstract
+    protected function save_order_meta_fields($order, $request) {
+      // General
+      // TODO: Hash, payment_type_code if possible
+      update_post_meta( $order->id, '_ebanx_payment_hash', $request->payment->hash );
+    }
 
     protected function process_response_error($request, $order) {
         throw new Exception($request->status_message);
@@ -146,14 +150,12 @@ abstract class WC_Ebanx_Gateway extends WC_Payment_Gateway {
 
         WC_EBANX::log( $message );
 
-        update_post_meta( $order->id, '_ebanx_payment_hash', $request->payment->hash );
-
         if ($request->payment->pre_approved) {
             $order->add_order_note( __( 'EBANX: Transaction paid.', 'woocommerce-ebanx' ) );
             $order->payment_complete( $request->hash );
         }
 
-        $this->save_order_meta_fields($order->id, $request);
+        $this->save_order_meta_fields($order, $request);
     }
 
     public final function process_hook($hash) {
@@ -197,5 +199,7 @@ abstract class WC_Ebanx_Gateway extends WC_Payment_Gateway {
                 $order->update_status('processing');
             break;
         }
+        
+        // TODO: How to call process response to finish the transaction and save meta fields?
     }
 }
