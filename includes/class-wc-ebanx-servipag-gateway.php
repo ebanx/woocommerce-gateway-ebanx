@@ -137,7 +137,7 @@ class WC_Ebanx_Servipag_Gateway extends WC_Ebanx_Gateway {
         return $data;
     }
 
-    protected function save_order_meta_fields( $id, $request ) {
-        // TODO: Make this?
+    protected function save_order_meta_fields( $order, $request ) {
+      // TODO: What are the fields necessaries by this payment method?
     }
 }
