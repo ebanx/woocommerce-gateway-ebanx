@@ -177,15 +177,15 @@ class WC_Ebanx_Credit_Card_Gateway extends WC_Ebanx_Gateway {
 
 	public function thankyou_page( $order_id ) {
 		$order = wc_get_order( $order_id );
-		$data  = get_post_meta( $order_id, '_wc_ebanx_transaction_data', true );
-
-		if ( isset( $data['installments'] ) && in_array( $order->get_status(), array( 'processing', 'on-hold' ), true ) ) {
+		$data  = array(
+			'instalments' => get_post_meta( $order_id, 'Number of Instalments', true ),
+			'card_brand' => get_post_meta($order_id, 'Brand Name', true)
+		);
+    
+		if ( isset( $data['instalments'] ) && in_array( $order->get_status(), array( 'processing', 'on-hold' ), true ) ) {
 			wc_get_template(
 				'credit-card/payment-instructions.php',
-				array(
-					'card_brand'   => $data['card_brand'],
-					'installments' => $data['installments'],
-				),
+				$data,
 				'woocommerce/ebanx/',
 				WC_Ebanx::get_templates_path()
 			);
