@@ -38,7 +38,7 @@ abstract class WC_Ebanx_Gateway extends WC_Payment_Gateway {
 
         if(trim(strtolower(WC()->customer->get_shipping_country())) === WC_Ebanx_Gateway_Utils::COUNTRY_BRAZIL) {
             $data['payment'] = array_merge($data['payment'], array(
-                'document' => '519.168.571-75', // TODO get from ?
+                'document' => '07834442902', // TODO get from ?
                 'birth_date' => '03/11/1992', // TODO get from ?
                 'zipcode' => $_POST['billing_postcode'],
                 'address' => $_POST['billing_address_1'],
@@ -121,6 +121,7 @@ abstract class WC_Ebanx_Gateway extends WC_Payment_Gateway {
       // General
       // TODO: Hash, payment_type_code if possible
       update_post_meta( $order->id, '_ebanx_payment_hash', $request->payment->hash );
+      update_post_meta( $order->id, 'Payment\'s Hash', $request->payment->hash );
     }
 
     protected function process_response_error($request, $order) {
