@@ -8,15 +8,44 @@ use Ebanx\Woocommerce\Page\Ecommerce\ResultSearch\ProductPage;
 
 class EcommerceOperator extends BaseOperator {
     public function checkoutProduct($product) {
+        return $this->addProductToCart($product)
+            ->proceedToCheckout()
+            ->assertSingleProductPresent($product)
+        ;
+    }
+
+    public function addProductToCart($product) {
+        return $this
+            ->searchProduct($product)
+            ->openProduct($product)
+            ->addToCart()
+            ->openCart()
+        ;
+    }
+
+    public function searchProduct($product) {
         $this->homePage()
             ->open()
             ->searchProduct($product)
         ;
-        $this->productResultPage()
-            ->assertProductFound($product)
-            ->openProduct($product)
-            ->addToCart()
-            ->openCart()
+
+        return $this->productResultPage()
+            ->assertProductFound($product);
+    }
+
+    public function buyProduct($product, array $customerData) {
+        return $this
+            ->checkoutProduct($product)
+            ->fillCustomerData($customerData)
+        ;
+    }
+
+    public function buyProductPayWithCreditCard($product, array $checkoutData) {
+        return $this
+            ->buyProduct($product, $checkoutData[customer])
+            ->fillCreditCard($checkoutData[payment_data])
+            ->placeOrder()
+            ->assertCheckoutPaidSuccess()
         ;
     }
 
