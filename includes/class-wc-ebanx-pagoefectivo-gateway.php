@@ -131,6 +131,8 @@ class WC_Ebanx_Pagoefectivo_Gateway extends WC_Ebanx_Redirect_Gateway  {
     }
 		
 		protected function save_order_meta_fields( $order, $request ) {
+			parent::save_order_meta_fields($order, $request);
+			
       // TODO: What are the fields necessaries by this payment method?
     }
 }

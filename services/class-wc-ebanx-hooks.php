@@ -10,7 +10,7 @@ class WC_Ebanx_Hooks {
         if (
             isset($_GET['ebanx']) &&
             isset($_GET['payment_type_code']) &&
-            isset($_GET['hash']) && WC_Ebanx_Gateway_Utils::isTef($_GET['payment_type_code'])
+            isset($_GET['hash'])
         ) {
             $ebanx = new WC_Ebanx_Tef_Gateway();
             $ebanx->process_hook($_GET['hash']);
