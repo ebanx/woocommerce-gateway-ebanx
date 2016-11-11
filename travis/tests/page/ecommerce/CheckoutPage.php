@@ -61,6 +61,12 @@ class CheckoutPage extends BasePage {
         return $this;
     }
 
+    public function fillBankingTicket() {
+        $this->choosePaymentMethod('banking-ticket');
+
+        return $this;
+    }
+
     public function fillCreditCard($data) {
         $this->choosePaymentMethod('credit-card');
 
