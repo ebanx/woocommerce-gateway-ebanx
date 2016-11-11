@@ -40,4 +40,9 @@ class CheckoutTest extends  BaseTest {
         $ecommerceOperator = new EcommerceOperator($this);
         $ecommerceOperator->buyProductPayWithCreditCard($this->mock[product], $this->mock[checkoutData]);
     }
+
+    public function testBuyProductPayWithBankingTicket() {
+        $ecommerceOperator = new EcommerceOperator($this);
+        $ecommerceOperator->buyProductPayWithBankingTicket($this->mock[product], $this->mock[checkoutData]);
+    }
 }

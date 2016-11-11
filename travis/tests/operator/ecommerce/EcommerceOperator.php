@@ -49,6 +49,15 @@ class EcommerceOperator extends BaseOperator {
         ;
     }
 
+    public function buyProductPayWithBankingTicket($product, array $checkoutData) {
+        return $this
+            ->buyProduct($product, $checkoutData[customer])
+            ->fillBankingTicket()
+            ->placeOrder()
+            ->assertCheckoutPaidSuccess()
+        ;
+    }
+
     public function homePage() {
         return new HomePage($this->baseTest);
     }
