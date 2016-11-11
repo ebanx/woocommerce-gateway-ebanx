@@ -119,17 +119,17 @@ class WC_Ebanx_Banking_Ticket_Gateway extends WC_Ebanx_Gateway {
 
 	public function thankyou_page( $order_id ) {
 		$order = wc_get_order( $order_id );
-		$data  = get_post_meta( $order_id, '_wc_ebanx_transaction_data', true );
+		$data  = array(
+      'url' => get_post_meta( $order_id, 'Banking Ticket URL', true ),
+      'barcode' => get_post_meta( $order_id, 'Banking Ticket Barcode', true ),
+      'due_date' => get_post_meta( $order_id, 'Due Date', true )
+    );
 
-		if ( isset( $data['boleto_url'] ) && in_array( $order->get_status(), array( 'processing', 'on-hold' ), true ) ) {
-			wc_get_template(
-				'banking-ticket/payment-instructions.php',
-				array(
-					'url' => $data['boleto_url'],
-				),
-				'woocommerce/ebanx/',
-				WC_Ebanx::get_templates_path()
-			);
-		}
+		wc_get_template(
+			'banking-ticket/payment-instructions.php',
+			$data,
+			'woocommerce/ebanx/',
+			WC_Ebanx::get_templates_path()
+		);
 	}
 }
