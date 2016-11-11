@@ -2,6 +2,13 @@
 
 set -e
 
+PROFILE=~/.bashrc
+
+apt-get install nano
+echo 'alias plugin="cd /var/www/html/wp-content/plugins/woocommerce-gateway-ebanx"' >> $PROFILE
+echo 'export TERM=xterm' >> $PROFILE
+source $PROFILE
+
 echo INSTALL WP CLI
 
 cd /var/www/html/wp-content
