@@ -109,12 +109,12 @@ class WC_Ebanx_Banking_Ticket_Gateway extends WC_Ebanx_Gateway {
         return $data;
     }
 
-    protected function save_order_meta_fields( $id, $request ) {
-        // TODO: Make this?
-        return;
-        /*if ( ! empty( $data['boleto_url'] ) ) {
-            update_post_meta( $id, __( 'Banking Ticket URL', 'woocommerce-pagarme' ), sanitize_text_field( $data['boleto_url'] ) );
-        }*/
+    protected function save_order_meta_fields( $order, $request ) {
+        parent::save_order_meta_fields($order, $request);
+        
+        update_post_meta($order->id, 'Payment\'s Due Date', $request->payment->due_date);
+        update_post_meta($order->id, 'Banking Ticket URL', $request->payment->boleto_url);
+        update_post_meta($order->id, 'Banking Ticket Barcode', $request->payment->boleto_barcode);
     }
 
 	public function thankyou_page( $order_id ) {
