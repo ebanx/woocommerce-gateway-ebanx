@@ -235,7 +235,7 @@ class WC_Ebanx_Credit_Card_Gateway extends WC_Ebanx_Gateway {
     protected function save_order_meta_fields( $order, $request ) {
 				parent::save_order_meta_fields($order, $request);
         
-        update_post_meta($order->id, 'Brand Name', $request->payment->payment_type_code);
+        update_post_meta($order->id, 'Card\'s Brand Name', $request->payment->payment_type_code);
         update_post_meta($order->id, 'Number of Instalments', $request->payment->instalments);
     }
 }
