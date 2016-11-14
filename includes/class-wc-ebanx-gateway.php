@@ -1,4 +1,3 @@
-
 <?php
 
 require 'ebanx-php/src/autoload.php';
@@ -13,6 +12,35 @@ abstract class WC_Ebanx_Gateway extends WC_Payment_Gateway
     public function __construct()
     {
         $this->init_settings();
+
+        add_action('wp_enqueue_scripts', array($this, 'checkout_scripts'));
+
+        add_filter('woocommerce_checkout_fields', function ($fields) {
+            $fields['billing']['ebanx_billing_brazil_street_number'] = array(
+                'type' => 'text',
+                'label' => 'Street Number',
+                'required' => true
+            );
+            $fields['billing']['ebanx_billing_brazil_birth_date'] = array(
+                'type' => 'text',
+                'label' => 'Birth Date',
+                'required' => true
+            );
+            $fields['billing']['ebanx_billing_brazil_document'] = array(
+                'type' => 'text',
+                'label' => 'Document',
+                'required' => true
+            );
+            return $fields;
+        });
+    }
+
+    public function checkout_scripts()
+    {
+        if (is_checkout())
+        {
+            wp_enqueue_script('woocommerce_ebanx_checkout_fields', plugins_url('assets/js/checkout-fields.js', WC_Ebanx::DIR));
+        }
     }
 
     public function admin_options()
@@ -43,12 +71,23 @@ abstract class WC_Ebanx_Gateway extends WC_Payment_Gateway
         );
 
         if (trim(strtolower(WC()->customer->get_shipping_country())) === WC_Ebanx_Gateway_Utils::COUNTRY_BRAZIL) {
+            if (empty($_POST['ebanx_billing_brazil_document'])||
+                empty($_POST['ebanx_billing_brazil_birth_date'])||
+                empty($_POST['billing_postcode'])||
+                empty($_POST['billing_address_1'])||
+                empty($_POST['ebanx_billing_brazil_street_number'])||
+                empty($_POST['billing_city'])||
+                empty($_POST['billing_state'])
+            ) {
+                throw new Exception("Missing fields to checkout.");
+            }
+
             $data['payment'] = array_merge($data['payment'], array(
-                'document'      => '07834442902', // TODO get from ?
-                'birth_date'    => '03/11/1992', // TODO get from ?
+                'document'      => $_POST['ebanx_billing_brazil_document'],
+                'birth_date'    => $_POST['ebanx_billing_brazil_birth_date'],
                 'zipcode'       => $_POST['billing_postcode'],
                 'address'       => $_POST['billing_address_1'],
-                'street_number' => 123, // TODO get from ?
+                'street_number' => $_POST['ebanx_billing_brazil_street_number'],
                 'city'          => $_POST['billing_city'],
                 'state'         => $_POST['billing_state'],
             ));
@@ -63,10 +102,10 @@ abstract class WC_Ebanx_Gateway extends WC_Payment_Gateway
             throw new Exception("Missing address country.");
         }
 
-        $this->address[country] = trim(strtolower($_POST['billing_country']));
+        $this->address['country'] = trim(strtolower($_POST['billing_country']));
 
-        if (empty($this->address[country])) {
-            $this->address[country] = trim(strtolower(WC()->customer->get_shipping_country()));
+        if (empty($this->address['country'])) {
+            $this->address['country'] = trim(strtolower(WC()->customer->get_shipping_country()));
         }
 
         if ($attr !== '' && !empty($this->address[$attr])) {
