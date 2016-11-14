@@ -49,7 +49,7 @@ composer install
 
 echo SNIFFER
 ./vendor/bin/phpcs --config-set default_standard PSR2
-./vendor/bin/phpcs --standard=ruleset.xml --severity=3 -s --extensions=php --ignore=*/assets/*,*/travis/*,*/bin/*,*/languages/*,*/templates/* ../woocommerce-gateway-ebanx.php
+./vendor/bin/phpcs --standard=ruleset.xml --severity=3 -s --extensions=php --ignore=*/assets/*,*/travis/*,*/bin/*,*/languages/*,*/templates/*,*/includes/admin/*,*/includes/ebanx-php/* ../
 
 DISPLAY=:1 xvfb-run java -jar data/selenium-server-standalone-2.53.0.jar &
 sleep 5
