@@ -13,16 +13,17 @@
  * @package WooCommerce_Ebanx
  */
 
-if (! defined('ABSPATH')) {
+if (!defined('ABSPATH')) {
     exit;
 }
 
-if (! class_exists('WC_Ebanx')) :
+if (!class_exists('WC_Ebanx')) {
 
     /**
      * WooCommerce WC_Ebanx main class.
      */
-    class WC_Ebanx {
+    class WC_Ebanx
+    {
 
         /**
          * Plugin version.
@@ -45,7 +46,8 @@ if (! class_exists('WC_Ebanx')) :
         /**
          * Initialize the plugin public actions.
          */
-        private function __construct() {
+        private function __construct()
+        {
             // Load plugin text domain.
             add_action('init', array($this, 'load_plugin_textdomain'));
 
@@ -66,7 +68,8 @@ if (! class_exists('WC_Ebanx')) :
          *
          * @return object A single instance of this class.
          */
-        public static function get_instance() {
+        public static function get_instance()
+        {
             // If the single instance hasn't been set, set it now.
             if (null === self::$instance) {
                 self::$instance = new self;
@@ -78,7 +81,8 @@ if (! class_exists('WC_Ebanx')) :
         /**
          * Includes.
          */
-        private function includes() {
+        private function includes()
+        {
             include_once dirname(__FILE__) . '/services/class-wc-ebanx-hooks.php';
             include_once dirname(__FILE__) . '/includes/class-wc-ebanx-gateway-utils.php';
             include_once dirname(__FILE__) . '/includes/class-wc-ebanx-gateway.php';
@@ -97,7 +101,8 @@ if (! class_exists('WC_Ebanx')) :
         /**
          * Load the plugin text domain for translation.
          */
-        public function load_plugin_textdomain() {
+        public function load_plugin_textdomain()
+        {
             load_plugin_textdomain('woocommerce-ebanx', false, dirname(plugin_basename(__FILE__)) . '/languages/');
         }
 
@@ -106,7 +111,8 @@ if (! class_exists('WC_Ebanx')) :
          *
          * @return string
          */
-        public static function get_templates_path() {
+        public static function get_templates_path()
+        {
             return plugin_dir_path(__FILE__) . 'templates/';
         }
 
@@ -117,7 +123,8 @@ if (! class_exists('WC_Ebanx')) :
          *
          * @return array
          */
-        public function add_gateway($methods) {
+        public function add_gateway($methods)
+        {
             $methods[] = 'WC_Ebanx_Banking_Ticket_Gateway';
             $methods[] = 'WC_Ebanx_Credit_Card_Gateway';
             $methods[] = 'WC_Ebanx_Oxxo_Gateway';
@@ -137,7 +144,8 @@ if (! class_exists('WC_Ebanx')) :
          *
          * @return array
          */
-        public function plugin_action_links($links) {
+        public function plugin_action_links($links)
+        {
             $plugin_links = array();
 
             $banking_ticket = 'wc_ebanx_banking_ticket_gateway';
@@ -171,7 +179,8 @@ if (! class_exists('WC_Ebanx')) :
         /**
          * WooCommerce fallback notice.
          */
-        public function woocommerce_missing_notice() {
+        public function woocommerce_missing_notice()
+        {
             // TODO: Others notice here
             include dirname(__FILE__) . '/includes/admin/views/html-notice-missing-woocommerce.php';
         }
@@ -181,7 +190,8 @@ if (! class_exists('WC_Ebanx')) :
          *
          * @since 2.0.0
          */
-        private function upgrade() {
+        private function upgrade()
+        {
             if (is_admin()) {
                 if ($old_options = get_option('woocommerce_ebanx_settings')) {
                     // Banking ticket options.
@@ -191,7 +201,7 @@ if (! class_exists('WC_Ebanx')) :
                         'description'    => '',
                         'api_key'        => $old_options['api_key'],
                         'encryption_key' => $old_options['encryption_key'],
-                        'debug'          => $old_options['debug'],);
+                        'debug'          => $old_options['debug']);
 
                     // Oxxo options.
                     $oxxo = array(
@@ -200,7 +210,7 @@ if (! class_exists('WC_Ebanx')) :
                         'description'    => '',
                         'api_key'        => $old_options['api_key'],
                         'encryption_key' => $old_options['encryption_key'],
-                        'debug'          => $old_options['debug'],);
+                        'debug'          => $old_options['debug']);
 
                     // Servipag options.
                     $servipag = array(
@@ -209,7 +219,7 @@ if (! class_exists('WC_Ebanx')) :
                         'description'    => '',
                         'api_key'        => $old_options['api_key'],
                         'encryption_key' => $old_options['encryption_key'],
-                        'debug'          => $old_options['debug'],);
+                        'debug'          => $old_options['debug']);
 
                     // Credit card options.
                     $credit_card = array(
@@ -223,7 +233,7 @@ if (! class_exists('WC_Ebanx')) :
                         'smallest_installment' => $old_options['smallest_installment'],
                         'interest_rate'        => $old_options['interest_rate'],
                         'free_installments'    => $old_options['free_installments'],
-                        'debug'                => $old_options['debug'],);
+                        'debug'                => $old_options['debug']);
 
                     // Tef options.
                     $tef = array(
@@ -232,7 +242,7 @@ if (! class_exists('WC_Ebanx')) :
                         'description'    => '',
                         'api_key'        => $old_options['api_key'],
                         'encryption_key' => $old_options['encryption_key'],
-                        'debug'          => $old_options['debug'],);
+                        'debug'          => $old_options['debug']);
 
                     // Pagoefectivo options.
                     $pagoefectivo = array(
@@ -241,7 +251,7 @@ if (! class_exists('WC_Ebanx')) :
                         'description'    => '',
                         'api_key'        => $old_options['api_key'],
                         'encryption_key' => $old_options['encryption_key'],
-                        'debug'          => $old_options['debug'],);
+                        'debug'          => $old_options['debug']);
 
                     // Safetypay options.
                     $safetypay = array(
@@ -250,7 +260,7 @@ if (! class_exists('WC_Ebanx')) :
                         'description'    => '',
                         'api_key'        => $old_options['api_key'],
                         'encryption_key' => $old_options['encryption_key'],
-                        'debug'          => $old_options['debug'],);
+                        'debug'          => $old_options['debug']);
 
                     // EFT options.
                     $eft = array(
@@ -259,7 +269,7 @@ if (! class_exists('WC_Ebanx')) :
                         'description'    => '',
                         'api_key'        => $old_options['api_key'],
                         'encryption_key' => $old_options['encryption_key'],
-                        'debug'          => $old_options['debug'],);
+                        'debug'          => $old_options['debug']);
 
                     update_option('woocommerce_ebanx-banking-ticket_settings', $banking_ticket);
                     update_option('woocommerce_ebanx-credit-card_settings', $credit_card);
@@ -275,7 +285,8 @@ if (! class_exists('WC_Ebanx')) :
             }
         }
 
-        public static function log($message) {
+        public static function log($message)
+        {
             if (empty(self::$log)) {
                 self::$log = new WC_Logger();
             }
@@ -289,4 +300,4 @@ if (! class_exists('WC_Ebanx')) :
     }
 
     add_action('plugins_loaded', array('WC_Ebanx', 'get_instance'));
-endif;
+}
