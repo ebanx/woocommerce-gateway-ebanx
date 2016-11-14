@@ -2,6 +2,13 @@
 
 set -e
 
+PROFILE=~/.bashrc
+
+apt-get install nano
+echo 'alias plugin="cd /var/www/html/wp-content/plugins/woocommerce-gateway-ebanx"' >> $PROFILE
+echo 'export TERM=xterm' >> $PROFILE
+source $PROFILE
+
 echo INSTALL WP CLI
 
 cd /var/www/html/wp-content
@@ -40,9 +47,13 @@ curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin
 
 composer install
 
+echo SNIFFER
+./vendor/bin/phpcs --config-set default_standard PSR2
+./vendor/bin/phpcs --standard=ruleset.xml --severity=3 -s --extensions=php --ignore=*/assets/*,*/travis/*,*/bin/*,*/languages/*,*/templates/* ../woocommerce-gateway-ebanx.php
+
 DISPLAY=:1 xvfb-run java -jar data/selenium-server-standalone-2.53.0.jar &
 sleep 5
-phpunit tests/
+phpunit --bootstrap tests/bootstrap.php tests/test/
 
 kill -9 $(lsof -ti tcp:4444)
 
