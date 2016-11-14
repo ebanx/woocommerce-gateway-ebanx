@@ -9,5 +9,6 @@
         <exclude name="PSR1.Classes.ClassDeclaration.MissingNamespace"/>
         <exclude name="PSR1.Files.SideEffects.FoundWithSymbols"/>
         <exclude name="Generic.Files.LineEndings.InvalidEOLChar"/>
+        <exclude name="Squiz.ControlStructures.ControlSignature.SpaceAfterCloseParenthesis"/>
     </rule>
 </ruleset>
