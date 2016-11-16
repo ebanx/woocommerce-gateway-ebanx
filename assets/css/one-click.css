@@ -1,0 +1,24 @@
+.ebanx-one-click-wrapper:after,
+.ebanx-one-click-wrapper:before {
+    content: '';
+    display: table;
+}
+.ebanx-one-click-wrapper:after {
+    clear: both;
+}
+.ebanx-one-click-wrapper {
+    margin: 15px 0;
+}
+.ebanx-one-click-button:before {
+    content: '';
+    width: 24px;
+    height: 24px;
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 10px;
+    background: url('../img/button-icon.png' ) center center no-repeat;
+}
+.ebanx-one-click-button .button-label {
+    display: inline-block;
+    vertical-align: middle;
+}

@@ -104,6 +104,21 @@ final class WC_Ebanx_Global_Gateway extends WC_Payment_Gateway
                 'type'  => 'checkbox',
                 'label' => __('Enable one-click.', 'woocommerce-ebanx'),
             ),
+            'enable_instant_payment' => array(
+                'type'        => 'checkbox',
+                'title'       => __('instant payment', 'woocommerce-ebanx'),
+                'description' => __('Enable instant payment.', 'woocommerce-ebanx'),
+                'label'       => __('Enable instant payment', 'woocommerce-ebanx'),
+                'default'     => 'no',
+                'custom_attributes' => array('required' => 'required')
+            ),
+            'instant_payment_label_button' => array(
+                'title'             => __('Instant payment label button', 'woocommerce-ebanx'),
+                'type'              => 'text',
+                'description'       => __('Label to instant payment button', 'woocommerce-ebanx'),
+                'default'           => 'Instant payment',
+                'custom_attributes' => array('required' => 'required')
+            ),
             'credit_card_instalments' => array(
                 'title'       => __('Number of Installment', 'woocommerce-ebanx'),
                 'type'        => 'select',
