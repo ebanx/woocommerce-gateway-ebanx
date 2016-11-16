@@ -29,6 +29,12 @@ class CheckoutPage extends BasePage {
         $this->cityField()->value($customerData[city]);
 
         $this->stateSelectFill($customerData[state]);
+        
+        $this->streeNumberField()->value($customerData[streetNumber]);
+        
+        $this->birthDateField()->value($customerData[birthDate]);
+        
+        $this->documentField()->value($customerData[documentField]);
 
         $this->baseTest->waitUntil(function() use ($customerData) {
             return $this->stateSelect()->value() === $customerData[state];
@@ -38,11 +44,11 @@ class CheckoutPage extends BasePage {
     }
 
     public function assertCheckoutPaidSuccess() {
-        $this->baseTest->waitUntil(function() {
+        $paid = $this->baseTest->waitUntil(function() {
             return $this->orderReceivedMessage()->displayed() && $this->orderReceivedMessage()->text() === "Order Received";
         }, 5000);
 
-        return $this;
+        $this->baseTest->assertEquals(true, $paid);
     }
 
     public function choosePaymentMethod($method) {
@@ -117,6 +123,18 @@ class CheckoutPage extends BasePage {
 
     private function phoneField() {
         return $this->baseTest->byCssSelector("#billing_phone");
+    }
+    
+    private function streeNumberField() {
+        return $this->baseTest->byCssSelector("#ebanx_billing_brazil_street_number");
+    }
+    
+    private function birthDateField() {
+        return $this->baseTest->byCssSelector("#ebanx_billing_brazil_birth_date");
+    }
+    
+    private function documentField() {
+        return $this->baseTest->byCssSelector("#ebanx_billing_brazil_document");
     }
 
     private function countrySelectFill($country) {
