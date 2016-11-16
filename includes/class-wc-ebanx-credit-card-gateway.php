@@ -10,12 +10,6 @@ class WC_Ebanx_Credit_Card_Gateway extends WC_Ebanx_Gateway
     {
         $this->id           = 'ebanx-credit-card';
         $this->method_title = __('EBANX - Credit Card', 'woocommerce-ebanx');
-
-        // Define user set variables.
-        $this->title       = __('Credit Card');
-        $this->description = __('Credit Card description');
-
-        parent::__construct();
     }
 
     public function checkout_scripts()
