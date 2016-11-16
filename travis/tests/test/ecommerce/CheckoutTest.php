@@ -32,7 +32,10 @@ class CheckoutTest extends  BaseTest {
             country   => StaticData::$COUNTRIES[BR],
             postcode  => $this->faker->postcode,
             lastName  => $this->faker->lastName,
-            firstName => $this->faker->firstName
+            firstName => $this->faker->firstName,
+            streetNumber => '222',
+            birthDate => '30/11/1992',
+            document => '078.344.429-02'
         );
     }
 
