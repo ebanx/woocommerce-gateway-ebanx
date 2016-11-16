@@ -238,6 +238,7 @@ if (!class_exists('WC_Ebanx')) {
             include_once(self::INCLUDES_DIR . 'class-wc-ebanx-servipag-gateway.php');
             include_once(self::INCLUDES_DIR . 'class-wc-ebanx-tef-gateway.php');
             include_once(self::INCLUDES_DIR . 'class-wc-ebanx-eft-gateway.php');
+            include_once(self::INCLUDES_DIR . 'class-wc-ebanx-one-click.php');
             include_once(self::SERVICES_DIR . 'class-wc-ebanx-hooks.php');
             include_once(self::SERVICES_DIR . 'class-wc-ebanx-refunds.php');
         }
