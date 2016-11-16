@@ -36,7 +36,11 @@ jQuery( function($) {
 		},
 
 		hasToken: function() {
-			return 0 < $( 'input.ebanx_token' ).length;
+			return 0 < $( 'input#ebanx_token' ).length;
+		},
+    
+		hasDeviceFingerprint: function() {
+			return 0 < $( 'input#ebanx_device_fingerprint' ).length;
 		},
 
 		block: function() {
@@ -65,7 +69,7 @@ jQuery( function($) {
     },
 
 		onSubmit: function (e) {
-			if (wc_ebanx_form.isEbanxPaymentMethod() && !wc_ebanx_form.hasToken()) {
+			if (wc_ebanx_form.isEbanxPaymentMethod() && (!wc_ebanx_form.hasToken() || !wc_ebanx_form.hasDeviceFingerprint())) {
 				e.preventDefault();
         e.stopPropagation();
         e.stopImmediatePropagation();
@@ -85,10 +89,7 @@ jQuery( function($) {
 					country: country
 				};
 
-				EBANX.deviceFingerprint(function (session_id) {
-					$('#ebanx_device_fingerprint').val(session_id);
-					Ebanx.card.createToken(creditcard, wc_ebanx_form.onEBANXReponse);
-				});
+				Ebanx.card.createToken(creditcard, wc_ebanx_form.onEBANXReponse);
 			}
 		},
 
@@ -103,9 +104,14 @@ jQuery( function($) {
 				// token contains id, last4, and card type
 				var token = response.data.token;
 
-				// insert the token into the form so it gets submitted to the server
-				wc_ebanx_form.form.append( "<input type='hidden' class='ebanx_token' name='ebanx_token' value='" + token + "'/>" );
-				wc_ebanx_form.form.submit();
+				// insert the token into the form so it gets submitted to the server and generate the device fingerprint
+				EBANX.deviceFingerprint(function (session_id) {
+					wc_ebanx_form.form.append( '<input type="hidden" class="ebanx_token" name="ebanx_token" id="ebanx_token" value="' + token + '"/>' );
+					wc_ebanx_form.form.append( '<input type="hidden" class="ebanx_device_fingerprint" name="ebanx_device_fingerprint" id="ebanx_device_fingerprint" value="' + session_id + '">' );
+            
+					wc_ebanx_form.form.submit();
+				});
+				
 			}
 		}
 	};
