@@ -31,7 +31,7 @@ class WC_Ebanx_Banking_Ticket_Gateway extends WC_Ebanx_Gateway
         }
 
         add_action('woocommerce_update_options_payment_gateways_' . $this->id, array($this, 'process_admin_options'));
-        add_action('woocommerce_thankyou_' . $this->id, array($this, 'thankyou_page'));
+        add_action('woocommerce_thankyou_' . $this->id, __CLASS__ . '::thankyou_page');
     }
 
     public function init_form_fields()
@@ -124,20 +124,21 @@ class WC_Ebanx_Banking_Ticket_Gateway extends WC_Ebanx_Gateway
         update_post_meta($order->id, 'Banking Ticket Barcode', $request->payment->boleto_barcode);
     }
 
-    public function thankyou_page($order_id)
+    public static function thankyou_page($order)
     {
-        $order = wc_get_order($order_id);
-        $data  = array(
-            'url'      => get_post_meta($order_id, 'Banking Ticket URL', true),
-            'barcode'  => get_post_meta($order_id, 'Banking Ticket Barcode', true),
-            'due_date' => get_post_meta($order_id, 'Due Date', true),
-        );
-
-        wc_get_template(
-            'banking-ticket/payment-instructions.php',
-            $data,
-            'woocommerce/ebanx/',
-            WC_Ebanx::get_templates_path()
-        );
+        if (in_array($order->get_status(), array('pending', 'on-hold'))) {
+          $data  = array(
+              'url'      => get_post_meta($order->id, 'Banking Ticket URL', true),
+              'barcode'  => get_post_meta($order->id, 'Banking Ticket Barcode', true),
+              'due_date' => get_post_meta($order->id, 'Due Date', true),
+          );
+          
+          wc_get_template(
+              'banking-ticket/payment-instructions.php',
+              $data,
+              'woocommerce/ebanx/',
+              WC_Ebanx::get_templates_path()
+          );
+        }
     }
 }

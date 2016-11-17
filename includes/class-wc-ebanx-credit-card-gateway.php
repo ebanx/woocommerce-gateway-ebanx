@@ -35,7 +35,7 @@ class WC_Ebanx_Credit_Card_Gateway extends WC_Ebanx_Gateway
         }
 
         add_action('woocommerce_update_options_payment_gateways_' . $this->id, array($this, 'process_admin_options'));
-        add_action('woocommerce_thankyou_' . $this->id, array($this, 'thankyou_page'));
+        add_action('woocommerce_thankyou_' . $this->id, __CLASS__ . '::thankyou_page');
     }
 
     public function init_form_fields()
@@ -180,15 +180,14 @@ class WC_Ebanx_Credit_Card_Gateway extends WC_Ebanx_Gateway
         }
     }
 
-    public function thankyou_page($order_id)
+    public static function thankyou_page($order)
     {
-        $order = wc_get_order($order_id);
         $data  = array(
-            'instalments' => get_post_meta($order_id, 'Number of Instalments', true),
-            'card_brand'  => get_post_meta($order_id, 'Brand Name', true),
+            'instalments' => get_post_meta($order->id, 'Number of Instalments', true),
+            'card_brand'  => get_post_meta($order->id, 'Card\'s Brand Name', true),
         );
 
-        if (isset($data['instalments']) && in_array($order->get_status(), array('processing', 'on-hold'), true)) {
+        if (isset($data['instalments'])) {
             wc_get_template(
                 'credit-card/payment-instructions.php',
                 $data,

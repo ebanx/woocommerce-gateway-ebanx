@@ -168,7 +168,7 @@ abstract class WC_Ebanx_Gateway extends WC_Payment_Gateway
     }
 
     protected function save_order_meta_fields($order, $request)
-    {
+    {   
         // General
         // TODO: Hash, payment_type_code if possible
         update_post_meta($order->id, '_ebanx_payment_hash', $request->payment->hash);
