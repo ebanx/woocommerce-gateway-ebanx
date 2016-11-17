@@ -42,7 +42,8 @@ class EcommerceOperator extends BaseOperator {
 
     public function buyProductPayWithCreditCard($product, array $checkoutData) {
         return $this
-            ->buyProduct($product, $checkoutData[customer])
+            ->checkoutProduct($product)
+            ->fillCustomerDataToBrazil($checkoutData[customer])
             ->fillCreditCard($checkoutData[payment_data])
             ->placeOrder()
             ->assertCheckoutPaidSuccess()
@@ -51,7 +52,8 @@ class EcommerceOperator extends BaseOperator {
 
     public function buyProductPayWithBankingTicket($product, array $checkoutData) {
         return $this
-            ->buyProduct($product, $checkoutData[customer])
+            ->checkoutProduct($product)
+            ->fillCustomerDataToBrazil($checkoutData[customer])
             ->fillBankingTicket()
             ->placeOrder()
             ->assertCheckoutPaidSuccess()

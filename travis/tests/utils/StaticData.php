@@ -3,6 +3,20 @@
 namespace Ebanx\Woocommerce\Utils;
 
 class StaticData {
+    static $CITIES = array(
+        'BR' => array(
+            'PR' => array(
+                'CTBA' => 'Curitiba'
+            )
+        )
+    );
+
+    static $STATES = array(
+        'BR' => array(
+            'PR' => 'Paraná'
+        )
+    );
+
     static $COUNTRIES = array(
         'AX' => "Åland Islands",
         'AF' => "Afghanistan",

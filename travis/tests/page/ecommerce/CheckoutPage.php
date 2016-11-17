@@ -3,11 +3,23 @@
 namespace Ebanx\Woocommerce\Page\Ecommerce;
 
 use Ebanx\Woocommerce\Page\BasePage;
-use EBANX\Woocommerce\Utils\StaticData;
+use Ebanx\Woocommerce\Utils\StaticData;
 
 class CheckoutPage extends BasePage {
     public function assertSingleProductPresent($product) {
         $this->baseTest->assertRegExp("/^$product/", $this->baseTest->byCssSelector('td.product-name')->text());
+
+        return $this;
+    }
+
+    public function fillCustomerDataToBrazil(array $customerData) {
+        $customerData[country] = StaticData::$COUNTRIES[BR];
+
+        $this->fillCustomerData($customerData);
+
+        $this->documentField()->value($customerData[document]);
+        $this->birthDateField()->value($customerData[birthDate]);
+        $this->streeNumberField()->value($customerData[streetNumber]);
 
         return $this;
     }
@@ -21,28 +33,38 @@ class CheckoutPage extends BasePage {
 
         $this->countrySelectFill($customerData[country]);
 
-        $this->baseTest->waitUntil(function() use ($customerData) {
-            return $this->countrySelect()->value()===array_flip(StaticData::$COUNTRIES)[$customerData[country]];
+        $country = $this->baseTest->waitUntil(function() use ($customerData) {
+            return $this->countrySelect()->value() === array_flip(StaticData::$COUNTRIES)[$customerData[country]];
         }, 3000);
 
-        $this->addressField()->value($customerData[address]);
+        $this->baseTest->assertEquals(true, $country);
+
+        $this->baseTest->execute(array(
+            script => "jQuery('#billing_address_1').val('".trim(str_replace(PHP_EOL, ' ', $customerData[address]))."');",
+            args => array()
+        ));
+
         $this->cityField()->value($customerData[city]);
 
         $this->stateSelectFill($customerData[state]);
 
-        $this->baseTest->waitUntil(function() use ($customerData) {
-            return $this->stateSelect()->value() === $customerData[state];
+        $state = $this->baseTest->waitUntil(function() use ($customerData) {
+            return $this->stateSelect()->value() === array_flip(StaticData::$STATES[array_flip(StaticData::$COUNTRIES)[$customerData[country]]])[$customerData[state]];
         }, 3000);
+
+        $this->baseTest->assertEquals(true, $state);
 
         return $this;
     }
 
     public function assertCheckoutPaidSuccess() {
-        $this->baseTest->waitUntil(function() {
-            return $this->orderReceivedMessage()->displayed() && $this->orderReceivedMessage()->text() === "Order Received";
-        }, 5000);
+        sleep(15);
 
-        return $this;
+        $this->baseTest->assertEquals(
+            true,
+            (boolean) ($this->orderReceivedMessage()->displayed() && $this->orderReceivedMessage()->text() === "Order Received"),
+            json_encode($this->checkoutErrors())
+        );
     }
 
     public function choosePaymentMethod($method) {
@@ -77,9 +99,17 @@ class CheckoutPage extends BasePage {
             holderName => $this->baseTest->byCssSelector("#ebanx-card-holder-name")
         );
 
+        $this->baseTest->execute(array(
+            script => "jQuery(\"#ebanx-card-number\").val(\"$data[number]\");",
+            args => array()
+        ));
+
+        $this->baseTest->execute(array(
+            script => "jQuery(\"#ebanx-card-expiry\").val(\"$data[expiry]\");",
+            args => array()
+        ));
+
         $creditCardFields[holderName]->value($data[holderName]);
-        $creditCardFields[number]->value($data[number]);
-        $creditCardFields[expiry]->value($data[expiry]);
         $creditCardFields[cvc]->value($data[cvc]);
 
         return $this;
@@ -91,16 +121,25 @@ class CheckoutPage extends BasePage {
         return $this;
     }
 
+    private function placeOrderButton() {
+        return $this->baseTest->byCssSelector("#place_order");
+    }
+
+    private function checkoutErrors() {
+        return array_map(function($element){
+            return $element->text();
+        }, array_merge(
+            $this->errorMessagesList(),
+            $this->errorMessagesParagraphs()
+        ));
+    }
+
     private function orderReceivedMessage() {
         return $this->baseTest->byCssSelector(".entry-title");
     }
 
     private function paymentMethodRadio($method) {
         return $this->baseTest->byCssSelector("#payment_method_ebanx-$method");
-    }
-
-    private function placeOrderButton() {
-        return $this->baseTest->byCssSelector("#place_order");
     }
 
     private function firstNameField() {
@@ -117,6 +156,18 @@ class CheckoutPage extends BasePage {
 
     private function phoneField() {
         return $this->baseTest->byCssSelector("#billing_phone");
+    }
+    
+    private function streeNumberField() {
+        return $this->baseTest->byCssSelector("#ebanx_billing_brazil_street_number");
+    }
+    
+    private function birthDateField() {
+        return $this->baseTest->byCssSelector("#ebanx_billing_brazil_birth_date");
+    }
+    
+    private function documentField() {
+        return $this->baseTest->byCssSelector("#ebanx_billing_brazil_document");
     }
 
     private function countrySelectFill($country) {
@@ -139,8 +190,12 @@ class CheckoutPage extends BasePage {
         ));
     }
 
-    private function addressField() {
-        return $this->baseTest->byCssSelector("#billing_address_1");
+    private function errorMessagesList() {
+        return $this->baseTest->elements($this->baseTest->using('css selector')->value('.woocommerce-error li'));
+    }
+
+    private function errorMessagesParagraphs() {
+        return $this->baseTest->elements($this->baseTest->using('css selector')->value('p.woocommerce-error'));
     }
 
     private function countrySelect() {

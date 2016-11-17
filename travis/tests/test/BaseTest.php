@@ -8,6 +8,8 @@ class BaseTest extends \PHPUnit_Extensions_Selenium2TestCase {
     protected $faker;
 
     protected function setUp() {
+        date_default_timezone_set('Brazil/East');
+
         $this->faker = Faker\Factory::create('pt_BR');
 
         $this->setHost('localhost');
