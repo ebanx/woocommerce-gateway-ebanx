@@ -35,28 +35,34 @@ class WC_Ebanx_My_Account
     public function my_orders_banking_ticket_link($actions, $order)
     {
         if ($order->payment_method === 'ebanx-banking-ticket' && in_array($order->get_status(), array('pending', 'on-hold'))) {
-          $url = get_post_meta($order->id, 'Banking Ticket URL', true);
-          
-          if (!empty($url)) {
-            $actions[] = array(
-              'url' => $url,
-              'name' => __('View Banking Ticket', 'woocommerce-ebanx'),
-              
-            );
-          }
+            $url = get_post_meta($order->id, 'Banking Ticket URL', true);
+
+            if (!empty($url)) {
+                $actions[] = array(
+                    'url'  => $url,
+                    'name' => __('View Banking Ticket', 'woocommerce-ebanx'),
+                );
+            }
         }
 
         return $actions;
     }
-    
-    public function order_details($order) {
+
+    /**
+     * Call thankyou page on order details page in my Account
+     *
+     * @param  object $order The order object
+     * @return void
+     */
+    public function order_details($order)
+    {
         switch ($order->payment_method) {
-          case 'ebanx-credit-card':
-            WC_Ebanx_Credit_Card_Gateway::thankyou_page($order);
-            break;
-          case 'ebanx-banking-ticket':
-            WC_Ebanx_Banking_Ticket_Gateway::thankyou_page($order);
-            break;
+            case 'ebanx-credit-card':
+                WC_Ebanx_Credit_Card_Gateway::thankyou_page($order);
+                break;
+            case 'ebanx-banking-ticket':
+                WC_Ebanx_Banking_Ticket_Gateway::thankyou_page($order);
+                break;
         }
     }
 }
