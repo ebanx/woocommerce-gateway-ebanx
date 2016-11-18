@@ -91,6 +91,7 @@ if (!class_exists('WC_Ebanx')) {
             include_once dirname(__FILE__) . '/includes/class-wc-ebanx-safetypay-gateway.php';
             include_once dirname(__FILE__) . '/includes/class-wc-ebanx-my-account.php';
             include_once dirname(__FILE__) . '/includes/class-wc-ebanx-banking-ticket-gateway.php';
+            include_once dirname(__FILE__) . '/includes/class-wc-ebanx-ebanx-gateway.php';
             include_once dirname(__FILE__) . '/includes/class-wc-ebanx-credit-card-gateway.php';
             include_once dirname(__FILE__) . '/includes/class-wc-ebanx-oxxo-gateway.php';
             include_once dirname(__FILE__) . '/includes/class-wc-ebanx-servipag-gateway.php';
@@ -125,6 +126,7 @@ if (!class_exists('WC_Ebanx')) {
          */
         public function add_gateway($methods)
         {
+            $methods[] = 'WC_Ebanx_Ebanx_Gateway';
             $methods[] = 'WC_Ebanx_Banking_Ticket_Gateway';
             $methods[] = 'WC_Ebanx_Credit_Card_Gateway';
             $methods[] = 'WC_Ebanx_Oxxo_Gateway';
@@ -148,6 +150,7 @@ if (!class_exists('WC_Ebanx')) {
         {
             $plugin_links = array();
 
+            $ebanx_global   = 'wc_ebanx_ebanx_gateway';
             $banking_ticket = 'wc_ebanx_banking_ticket_gateway';
             $credit_card    = 'wc_ebanx_credit_card_gateway';
             $oxxo           = 'wc_ebanx_oxxo_gateway';
@@ -157,7 +160,9 @@ if (!class_exists('WC_Ebanx')) {
             $pagoefectivo   = 'wc_ebanx_pagoefectivo_gateway';
             $safetypay      = 'wc_ebanx_safetypay_gateway';
 
-            $plugin_links[] = '<a href="' . esc_url(admin_url('admin.php?page=wc-settings&tab=checkout&section=' . $banking_ticket)) . '">' . __('Bank Slip Settings', 'woocommerce-ebanx') . '</a>';
+            $plugin_links[] = '<a href="' . esc_url(admin_url('admin.php?page=wc-settings&tab=checkout&section=' . $ebanx_global)) . '">' . __('Ebanx Settings', 'woocommerce-ebanx') . '</a>';
+            
+            $plugin_links[] = '<a href="' . esc_url(admin_url('admin.php?page=wc-settings&tab=checkout&section=' . $banking_ticket)) . '">' . __('Banking Ticket Settings', 'woocommerce-ebanx') . '</a>';
 
             $plugin_links[] = '<a href="' . esc_url(admin_url('admin.php?page=wc-settings&tab=checkout&section=' . $credit_card)) . '">' . __('Credit Card Settings', 'woocommerce-ebanx') . '</a>';
 
