@@ -156,6 +156,7 @@ class WC_Ebanx_Credit_Card_Gateway extends WC_Ebanx_Gateway
         update_post_meta($order->id, 'Number of Instalments', $request->payment->instalments);
     }
 
+<<<<<<< f3738405362a9aa6ee5c800dc7e26ee5fb9972d7
     protected function save_user_meta_fields($order)
     {
         parent::save_user_meta_fields($order);
@@ -182,6 +183,13 @@ class WC_Ebanx_Credit_Card_Gateway extends WC_Ebanx_Gateway
             $cards[] = $card;
 
             update_user_meta($this->userId, '__ebanx_credit_card_token', $cards);
+=======
+    protected function save_user_meta_fields($order) {
+        parent::save_user_meta_fields($order);
+
+        if($this->userId) {
+            update_user_meta($this->userId, '__ebanx_credit_card_token', $_POST['ebanx_token']);
+>>>>>>> continue
         }
     }
 }
