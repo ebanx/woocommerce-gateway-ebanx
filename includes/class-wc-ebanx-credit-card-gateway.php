@@ -163,22 +163,20 @@ class WC_Ebanx_Credit_Card_Gateway extends WC_Ebanx_Gateway
 
         $cart_total = $this->get_order_total();
 
-        if ('no' === $this->checkout) {
-            wc_get_template(
-                'credit-card/payment-form.php',
-                array(
-                    'cart_total'      => $cart_total,
-                    'max_installment' => $this->max_installment,
-                ),
-                'woocommerce/ebanx/',
-                WC_Ebanx::get_templates_path()
-            );
-        } else {
-            echo '<div id="ebanx-checkout-params" ';
-            echo 'data-total="' . esc_attr($cart_total * 100) . '" ';
-            echo 'data-max_installment="' . esc_attr(apply_filters('wc_ebanx_checkout_credit_card_max_installments', 1/* TODO: $this->api->get_max_installment( $cart_total )*/)) . '"';
-            echo '></div>';
-        }
+        $cards = array_filter((array) get_user_meta($this->userId, '__ebanx_credit_card_token', true), function($card) {
+           return !empty($card->brand) && !empty($card->token) && !empty($card->masked_number); // TODO: Implement token due date
+        });
+
+        wc_get_template(
+            'credit-card/payment-form.php',
+            array(
+                'cards'           => (array) $cards,
+                'cart_total'      => $cart_total,
+                'max_installment' => $this->max_installment,
+            ),
+            'woocommerce/ebanx/',
+            WC_Ebanx::get_templates_path()
+        );
     }
 
     public static function thankyou_page($order)
@@ -200,8 +198,8 @@ class WC_Ebanx_Credit_Card_Gateway extends WC_Ebanx_Gateway
 
     protected function request_data($order)
     {
-        if (empty($_POST['ebanx_token'])) {
-            throw new Exception("Missing token.");
+        if (empty($_POST['ebanx_token']) || empty($_POST['ebanx_masked_card_number']) || empty($_POST['ebanx_brand'])) {
+            throw new Exception("Missing ebanx card params.");
         }
 
         if (empty($_POST['ebanx_device_fingerprint'])) {
@@ -222,9 +220,9 @@ class WC_Ebanx_Credit_Card_Gateway extends WC_Ebanx_Gateway
 
         $data['device_id'] = $_POST['ebanx_device_fingerprint'];
 
-        $data['payment']['payment_type_code'] = 'visa'; // TODO: Dynamic
+        $data['payment']['payment_type_code'] = $_POST['ebanx_brand'];
         $data['payment']['creditcard']        = array(
-            'token' => $_POST['ebanx_token'], // TODO: get from ?
+            'token' => $_POST['ebanx_token']
         );
 
         return $data;
@@ -245,5 +243,33 @@ class WC_Ebanx_Credit_Card_Gateway extends WC_Ebanx_Gateway
 
         update_post_meta($order->id, 'Card\'s Brand Name', $request->payment->payment_type_code);
         update_post_meta($order->id, 'Number of Instalments', $request->payment->instalments);
+    }
+
+    protected function save_user_meta_fields($order) {
+        parent::save_user_meta_fields($order);
+
+        if($this->userId) {
+            $cards = get_user_meta($this->userId, '__ebanx_credit_card_token', true);
+            $cards = !empty($cards) ? $cards : [];
+
+            $card = new \stdClass();
+
+            $card->brand = $_POST['ebanx_brand'];
+            $card->token = $_POST['ebanx_token'];
+            $card->masked_number = $_POST['ebanx_masked_card_number'];
+
+            foreach ($cards as $cd) {
+                if ($cd->masked_number == $card->masked_number && $cd->brand == $card->brand) {
+                    $cd->token = $card->token;
+                    unset($card);
+                }
+            }
+
+            // TODO: Implement token due date
+
+            $cards[] = $card;
+
+            update_user_meta($this->userId, '__ebanx_credit_card_token', $cards);
+        }
     }
 }

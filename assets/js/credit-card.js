@@ -79,8 +79,11 @@ jQuery( function($) {
 				var card     = $( '#ebanx-card-number' ).val();
 				var cvc        = $( '#ebanx-card-cvc' ).val();
 				var expires    = $( '#ebanx-card-expiry' ).payment( 'cardExpiryVal' );
-        var card_name  = $('#ebanx-card-holder-name').val();
+				var card_name  = $('#ebanx-card-holder-name').val();
 				var country = $('#billing_country').val().toLowerCase();
+
+				var cardUse = $('input[name="ebanx-credit-card-use"]:checked');
+
 				var creditcard = {
 					"card_number": parseInt(card.replace(/ /g,'')),
 					"card_name": card_name,
@@ -89,7 +92,25 @@ jQuery( function($) {
 					country: country
 				};
 
-				Ebanx.card.createToken(creditcard, wc_ebanx_form.onEBANXReponse);
+				if (cardUse && cardUse.val() !== 'new') {
+					creditcard.token = cardUse.val();
+					creditcard.card_cvv = $(cardUse).siblings(".ebanx-container-credit-card").find("#ebanx-card-cvc-use").val();
+					creditcard.brand = $(cardUse).siblings(".ebanx-container-credit-card").find("#ebanx-card-brand-use").val();
+					creditcard.masked_number = $(cardUse).siblings(".ebanx-container-credit-card").find("#ebanx-card-masked-number-use").val();
+
+					var response = {
+						data: {
+							status: 'SUCCESS',
+							token: creditcard.token,
+							cvv: creditcard.card_cvv,
+							payment_type_code: creditcard.brand,
+							masked_card_number: creditcard.masked_number
+						}
+					};
+					wc_ebanx_form.onEBANXReponse(response);
+				} else {
+					Ebanx.card.createToken(creditcard, wc_ebanx_form.onEBANXReponse);
+				}
 			}
 		},
 
@@ -97,17 +118,23 @@ jQuery( function($) {
 			$( '.woocommerce-error, .ebanx_token' ).remove();
 		},
 
+		toggleCardUse: function() {
+			$(document).on('click', 'div.payment_method_ebanx-credit-card .input-radio[name=ebanx-credit-card-use]', function(){
+				$(".ebanx-container-credit-card").hide();
+				$(this).siblings(".ebanx-container-credit-card").slideToggle();
+			});
+		},
+
 		onEBANXReponse: function(response ) {
 			if ( response.data && (response.data.status == 'ERROR' || !response.data.token)) {
 				$( document ).trigger( 'ebanxError', { response: response } );
 			} else {
-				// token contains id, last4, and card type
-				var token = response.data.token;
-
 				// insert the token into the form so it gets submitted to the server and generate the device fingerprint
 				EBANX.deviceFingerprint(function (session_id) {
-					wc_ebanx_form.form.append( '<input type="hidden" class="ebanx_token" name="ebanx_token" id="ebanx_token" value="' + token + '"/>' );
-					wc_ebanx_form.form.append( '<input type="hidden" class="ebanx_device_fingerprint" name="ebanx_device_fingerprint" id="ebanx_device_fingerprint" value="' + session_id + '">' );
+					wc_ebanx_form.form.append( '<input type="hidden" name="ebanx_token" id="ebanx_token" value="' + response.data.token + '"/>' );
+					wc_ebanx_form.form.append( '<input type="hidden" name="ebanx_brand" id="ebanx_brand" value="' + response.data.payment_type_code + '"/>' );
+					wc_ebanx_form.form.append( '<input type="hidden" name="ebanx_masked_card_number" id="ebanx_masked_card_number" value="' + response.data.masked_card_number + '"/>' );
+					wc_ebanx_form.form.append( '<input type="hidden" name="ebanx_device_fingerprint" id="ebanx_device_fingerprint" value="' + session_id + '">' );
             
 					wc_ebanx_form.form.submit();
 				});
@@ -117,4 +144,6 @@ jQuery( function($) {
 	};
 
 	wc_ebanx_form.init( $( "form.checkout, form#order_review, form#add_payment_method, form.woocommerce-checkout" ) );
+
+	wc_ebanx_form.toggleCardUse();
 } );
