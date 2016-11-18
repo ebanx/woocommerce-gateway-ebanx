@@ -61,7 +61,7 @@ class WC_Ebanx_One_Click
         if( is_admin()
             || ! isset( $_GET['_ebanx_one_click_action'] ) || $_GET['_ebanx_one_click_action'] != $this->orderAction
             || ! isset( $_GET['_ebanx_nonce'] ) || ! wp_verify_nonce( $_GET['_ebanx_nonce'], $this->orderAction )
-            || ! $this->customerCan()
+            || ! $this->customerCan() || ! $this->customerHasEbanxRequiredData()
         ){
             return;
         }
@@ -183,6 +183,8 @@ class WC_Ebanx_One_Click
             $order->set_total( WC()->cart->tax_total, 'tax' );
             $order->set_total( WC()->cart->shipping_tax_total, 'shipping_tax' );
             $order->set_total( WC()->cart->total );
+
+            $this->gateway->process_payment($order->id);
 
             $wpdb->query( 'COMMIT' );
 
@@ -335,6 +337,23 @@ class WC_Ebanx_One_Click
         } else {
             add_action('woocommerce_after_add_to_cart_button', array($this, 'print_button'));
         }
+    }
+
+    protected function customerHasEbanxRequiredData() {
+        $_POST['ebanx_token'] = get_user_meta($this->userId, '__ebanx_credit_card_token', true);
+        $_POST['ebanx_billing_brazil_document'] = get_user_meta($this->userId, '__ebanx_billing_brazil_document', true);
+        $_POST['ebanx_billing_brazil_birth_date'] = get_user_meta($this->userId, '__ebanx_billing_brazil_birth_date', true);
+        $_POST['ebanx_billing_brazil_street_number'] = get_user_meta($this->userId, '__ebanx_billing_brazil_street_number', true);
+
+        if (empty($_POST['ebanx_token']) ||
+            empty($_POST['ebanx_billing_brazil_document']) ||
+            empty($_POST['ebanx_billing_brazil_birth_date']) ||
+            empty($_POST['ebanx_billing_brazil_street_number'])
+        ) {
+            return false;
+        }
+
+        return true;
     }
 
     public function customerCan()
