@@ -35,6 +35,14 @@ abstract class WC_Ebanx_Gateway extends WC_Payment_Gateway
             );
             return $fields;
         });
+        
+        $this->configs = new WC_Ebanx_Ebanx_Gateway();
+        
+        $this->is_sandbox = $this->configs->settings['sandbox_enabled'] === 'yes';
+        
+        $this->secret_key = $this->is_sandbox ? $this->configs->settings['sandbox_secret_key'] : $this->configs->settings['production_secret_key'];
+    
+        $this->api_key = $this->is_sandbox ? $this->configs->settings['sandbox_api_key'] : $this->configs->settings['production_api_key'];
     }
 
     public function checkout_scripts()
@@ -126,8 +134,8 @@ abstract class WC_Ebanx_Gateway extends WC_Payment_Gateway
                 $data = $this->request_data($order);
 
                 $config = [
-                    'integrationKey' => $this->settings['api_key'],
-                    'testMode'       => ('yes' === $this->settings['testmode']),
+                    'integrationKey' => $this->secret_key,
+                    'testMode'       => $this->is_sandbox,
                 ];
 
                 \Ebanx\Config::set($config);
@@ -229,8 +237,8 @@ abstract class WC_Ebanx_Gateway extends WC_Payment_Gateway
     final public function process_hook($hash)
     {
         $config = [
-            'integrationKey' => $this->settings['api_key'],
-            'testMode'       => ('yes' === $this->settings['testmode']),
+            'integrationKey' => $this->api_key,
+            'testMode'       => $this->is_sandbox,
         ];
 
         \Ebanx\Config::set($config);
