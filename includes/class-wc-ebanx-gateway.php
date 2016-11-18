@@ -11,6 +11,8 @@ abstract class WC_Ebanx_Gateway extends WC_Payment_Gateway
 
     public function __construct()
     {
+        $this->userId = get_current_user_id();
+
         $this->init_settings();
 
         add_action('wp_enqueue_scripts', array($this, 'checkout_scripts'));
@@ -173,6 +175,8 @@ abstract class WC_Ebanx_Gateway extends WC_Payment_Gateway
         // TODO: Hash, payment_type_code if possible
         update_post_meta($order->id, '_ebanx_payment_hash', $request->payment->hash);
         update_post_meta($order->id, 'Payment\'s Hash', $request->payment->hash);
+
+        $this->save_user_meta_fields($order);
     }
 
     protected function process_response_error($request, $order)
@@ -210,6 +214,16 @@ abstract class WC_Ebanx_Gateway extends WC_Payment_Gateway
         }
 
         $this->save_order_meta_fields($order, $request);
+    }
+
+    protected function save_user_meta_fields($order) {
+        if($this->userId) {
+            if (trim(strtolower($order->get_address()['country'])) === WC_Ebanx_Gateway_Utils::COUNTRY_BRAZIL) {
+                update_user_meta($this->userId, '__ebanx_billing_brazil_document', $_POST['ebanx_billing_brazil_document']);
+                update_user_meta($this->userId, '__ebanx_billing_brazil_birth_date', $_POST['ebanx_billing_brazil_birth_date']);
+                update_user_meta($this->userId, '__ebanx_billing_brazil_street_number', $_POST['ebanx_billing_brazil_street_number']);
+            }
+        }
     }
 
     final public function process_hook($hash)
