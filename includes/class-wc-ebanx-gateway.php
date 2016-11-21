@@ -12,9 +12,23 @@ abstract class WC_Ebanx_Gateway extends WC_Payment_Gateway
     public function __construct()
     {
         $this->userId = get_current_user_id();
-
-        $this->init_settings();
-
+        
+        $this->configs = new WC_Ebanx_Ebanx_Gateway();
+        
+        $this->enabled = $this->configs->settings[$this->id];
+        
+        $this->is_sandbox = $this->configs->settings['sandbox_enabled'] === 'yes';
+        
+        $this->private_key = $this->is_sandbox ? $this->configs->settings['sandbox_private_key'] : $this->configs->settings['production_private_key'];
+    
+        $this->public_key = $this->is_sandbox ? $this->configs->settings['sandbox_public_key'] : $this->configs->settings['production_public_key'];
+        
+        $this->view_transaction_url = 'https://dashboard.ebanx.com/#/transactions/%s';
+        
+        if ($this->configs->settings['debug_enabled'] === 'yes') {
+          $this->log = new WC_Logger();
+        }
+        
         add_action('wp_enqueue_scripts', array($this, 'checkout_scripts'));
 
         add_filter('woocommerce_checkout_fields', function ($fields) {
@@ -35,14 +49,6 @@ abstract class WC_Ebanx_Gateway extends WC_Payment_Gateway
             );
             return $fields;
         });
-        
-        $this->configs = new WC_Ebanx_Ebanx_Gateway();
-        
-        $this->is_sandbox = $this->configs->settings['sandbox_enabled'] === 'yes';
-        
-        $this->secret_key = $this->is_sandbox ? $this->configs->settings['sandbox_secret_key'] : $this->configs->settings['production_secret_key'];
-    
-        $this->api_key = $this->is_sandbox ? $this->configs->settings['sandbox_api_key'] : $this->configs->settings['production_api_key'];
     }
 
     public function checkout_scripts()
@@ -60,7 +66,7 @@ abstract class WC_Ebanx_Gateway extends WC_Payment_Gateway
 
     public function is_available()
     {
-        return parent::is_available() && !empty($this->api_key) && !empty($this->encryption_key);
+        return parent::is_available() && !empty($this->public_key) && !empty($this->private_key);
     }
 
     protected function request_data($order)
@@ -134,7 +140,7 @@ abstract class WC_Ebanx_Gateway extends WC_Payment_Gateway
                 $data = $this->request_data($order);
 
                 $config = [
-                    'integrationKey' => $this->secret_key,
+                    'integrationKey' => $this->private_key,
                     'testMode'       => $this->is_sandbox,
                 ];
 
