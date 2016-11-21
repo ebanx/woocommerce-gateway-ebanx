@@ -4,29 +4,16 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-class WC_Ebanx_Ebanx_Gateway extends WC_Ebanx_Gateway
+final class WC_Ebanx_Ebanx_Gateway extends WC_Payment_Gateway
 {
 
     public function __construct()
     {
         $this->id                   = 'ebanx-ebanx';
-        $this->icon                 = apply_filters('wc_ebanx_ebanx_icon', false);
-        $this->has_fields           = true;
         $this->method_title         = __('EBANX', 'woocommerce-ebanx');
-        $this->method_description   = __('Global Gateway', 'woocommerce-ebanx');
-        $this->view_transaction_url = 'https://dashboard.ebanx.com/#/transactions/%s';
-
+        
         $this->init_form_fields();
-
-        $this->title          = 'EBANX';
-        $this->description    = 'Global Settings';
-        $this->api_key        = $this->get_option('api_key');
-        $this->encryption_key = $this->get_option('encryption_key');
-        $this->debug          = $this->get_option('debug');
-
-        if ('yes' === $this->debug) {
-            $this->log = new WC_Logger();
-        }
+        $this->init_settings();
         
         add_action('woocommerce_update_options_payment_gateways_' . $this->id, array($this, 'process_admin_options'));
         
@@ -54,26 +41,26 @@ class WC_Ebanx_Ebanx_Gateway extends WC_Ebanx_Gateway
               'title' => __('Keys'),
               'type' => 'title'
             ),
-              'production_api_key' => array(
-                'title' => __('Production API Key', 'woocommerce-ebanx'),
+              'production_public_key' => array(
+                'title' => __('Production Public Key', 'woocommerce-ebanx'),
                 'description' => __('The key that will be used for read your informations.', 'woocommerce-ebanx'),
                 'desc_tip'    => true,
                 'type' => 'text'
               ),
-              'production_secret_key' => array(
-                'title' => __('Production Secret Key', 'woocommerce-ebanx'),
+              'production_private_key' => array(
+                'title' => __('Production Private Key', 'woocommerce-ebanx'),
                 'description' => __('Your secret and unique key to create payments only sandbox mode.', 'woocommerce-ebanx'),
                 'desc_tip'    => true,
                 'type' => 'text'
               ),
-              'sandbox_api_key' => array(
-                'title' => __('Sandbox API Key', 'woocommerce-ebanx'),
+              'sandbox_public_key' => array(
+                'title' => __('Sandbox Public Key', 'woocommerce-ebanx'),
                 'description' => __('The key that will be used for read your informations only sandbox mode.', 'woocommerce-ebanx'),
                 'desc_tip'    => true,
                 'type' => 'text'
               ),
-              'sandbox_secret_key' => array(
-                'title' => __('Sandbox Secret Key', 'woocommerce-ebanx'),
+              'sandbox_private_key' => array(
+                'title' => __('Sandbox Private Key', 'woocommerce-ebanx'),
                 'description' => __('Your secret and unique key to create payments.', 'woocommerce-ebanx'),
                 'desc_tip'    => true,
                 'type' => 'text'
@@ -106,7 +93,7 @@ class WC_Ebanx_Ebanx_Gateway extends WC_Ebanx_Gateway
               'title' => __('Credit Card' , 'woocommerce-ebanx'),
               'type' => 'title',
             ),
-              'credit_card_enabled' => array(
+              'ebanx-credit-card' => array(
                 'title' => __('Enable/Disabled', 'woocommerce-ebanx'),
                 'type' => 'checkbox',
                 'label' => __('Check to enable EBANX Credit Card', 'woocommerce-ebanx')
@@ -136,7 +123,7 @@ class WC_Ebanx_Ebanx_Gateway extends WC_Ebanx_Gateway
               'title' => __('Banking Ticket'),
               'type' => 'title'
             ),
-              'banking_ticket_enabled' => array(
+              'ebanx-banking-ticket' => array(
                 'title' => __('Enable/Disabled', 'woocommerce-ebanx'),
                 'type' => 'checkbox',
                 'label' => __('Check to enable EBANX Banking Ticket', 'woocommerce-ebanx')
@@ -151,7 +138,7 @@ class WC_Ebanx_Ebanx_Gateway extends WC_Ebanx_Gateway
               'title' => __('Oxxo'),
               'type' => 'title'
             ),
-              'oxxo_enabled' => array(
+              'ebanx-oxxo' => array(
                 'title' => __('Enable/Disabled', 'woocommerce-ebanx'),
                 'type' => 'checkbox',
                 'label' => __('Check to enable EBANX Oxxo', 'woocommerce-ebanx')
@@ -160,7 +147,7 @@ class WC_Ebanx_Ebanx_Gateway extends WC_Ebanx_Gateway
               'title' => __('Servipag'),
               'type' => 'title'
             ),
-              'servipag_enabled' => array(
+              'ebanx-servipag' => array(
                 'title' => __('Enable/Disabled', 'woocommerce-ebanx'),
                 'type' => 'checkbox',
                 'label' => __('Check to enable EBANX Servipag', 'woocommerce-ebanx')
@@ -169,7 +156,7 @@ class WC_Ebanx_Ebanx_Gateway extends WC_Ebanx_Gateway
               'title' => __('PagoEfectivo'),
               'type' => 'title'
             ),
-              'pago_efectivo_enabled' => array(
+              'ebanx-pagoefectivo' => array(
                 'title' => __('Enable/Disabled', 'woocommerce-ebanx'),
                 'type' => 'checkbox',
                 'label' => __('Check to enable EBANX PagoEfectivo', 'woocommerce-ebanx')
@@ -178,7 +165,7 @@ class WC_Ebanx_Ebanx_Gateway extends WC_Ebanx_Gateway
               'title' => __('SafetyPay'),
               'type' => 'title'
             ),
-              'safetypay_enabled' => array(
+              'ebanx-safetypay' => array(
                 'title' => __('Enable/Disabled', 'woocommerce-ebanx'),
                 'type' => 'checkbox',
                 'label' => __('Check to enable EBANX SafetyPay', 'woocommerce-ebanx')
@@ -187,7 +174,7 @@ class WC_Ebanx_Ebanx_Gateway extends WC_Ebanx_Gateway
               'title' => __('TEF Brazil'),
               'type' => 'title'
             ),
-              'tef_enabled' => array(
+              'ebanx-tef' => array(
                 'title' => __('Enable/Disabled', 'woocommerce-ebanx'),
                 'type' => 'checkbox',
                 'label' => __('Check to enable EBANX TEF Brazil', 'woocommerce-ebanx')
@@ -196,7 +183,7 @@ class WC_Ebanx_Ebanx_Gateway extends WC_Ebanx_Gateway
               'title' => __('EFT'),
               'type' => 'title'
             ),
-              'eft_enabled' => array(
+              'ebanx-eft' => array(
                 'title' => __('Enable/Disabled', 'woocommerce-ebanx'),
                 'type' => 'checkbox',
                 'label' => __('Check to enable EBANX EFT', 'woocommerce-ebanx')

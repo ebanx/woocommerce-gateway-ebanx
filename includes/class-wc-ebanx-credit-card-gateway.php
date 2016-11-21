@@ -6,33 +6,16 @@ if (!defined('ABSPATH')) {
 
 class WC_Ebanx_Credit_Card_Gateway extends WC_Ebanx_Gateway
 {
-
     public function __construct()
     {
-        parent::__construct();
-
         $this->id                   = 'ebanx-credit-card';
-        $this->icon                 = apply_filters('wc_ebanx_credit_card_icon', false);
-        $this->has_fields           = true;
         $this->method_title         = __('EBANX - Credit Card', 'woocommerce-ebanx');
-        $this->method_description   = __('Accept credit card payments using EBANX.', 'woocommerce-ebanx');
-        $this->view_transaction_url = 'https://dashboard.ebanx.com/#/transactions/%s';
-
+        
         // Define user set variables.
-        $this->title           = 'Credit Card';
-        $this->description     = 'Credit Card description';
-        $this->api_key         = $this->get_option('api_key');
-        $this->encryption_key  = $this->get_option('encryption_key');
-        $this->checkout        = $this->get_option('checkout');
-        $this->max_installment = $this->get_option('max_installment', '12');
-        $this->debug           = $this->get_option('debug');
-
-        if ('yes' === $this->debug) {
-            $this->log = new WC_Logger();
-        }
-
-        add_action('woocommerce_update_options_payment_gateways_' . $this->id, array($this, 'process_admin_options'));
-        add_action('woocommerce_thankyou_' . $this->id, __CLASS__ . '::thankyou_page');
+        $this->title           = __('Credit Card');
+        $this->description     = __('Credit Card description');
+        
+        parent::__construct();
     }
 
     public function checkout_scripts()
@@ -74,6 +57,11 @@ class WC_Ebanx_Credit_Card_Gateway extends WC_Ebanx_Gateway
 
             wp_localize_script('woocommerce_ebanx', 'wc_ebanx_params', apply_filters('wc_ebanx_params', $ebanx_params));
         }
+    }
+    
+    public function is_available()
+    {
+      return parent::is_available() && in_array($this->getTransactionAddress('country'), WC_Ebanx_Gateway_Utils::CREDIT_CARD_COUNTRIES);
     }
 
     public function payment_fields()
