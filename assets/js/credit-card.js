@@ -82,17 +82,18 @@ jQuery( function($) {
 				var card_name  = $('#ebanx-card-holder-name').val();
 				var country = $('#billing_country').val().toLowerCase();
 
+				Ebanx.config.setCountry(country);
+
 				var cardUse = $('input[name="ebanx-credit-card-use"]:checked');
 
 				var creditcard = {
 					"card_number": parseInt(card.replace(/ /g,'')),
 					"card_name": card_name,
 					"card_due_date": (parseInt( expires['month'] ) || 0) + '/' + (parseInt( expires['year'] ) || 0),
-					"card_cvv": parseInt(cvc),
-					country: country
+					"card_cvv": parseInt(cvc)
 				};
 
-				if (cardUse && cardUse.val() !== 'new') {
+				if (cardUse && cardUse.val() && cardUse.val() !== 'new') {
 					creditcard.token = cardUse.val();
 					creditcard.card_cvv = $(cardUse).siblings(".ebanx-container-credit-card").find("#ebanx-card-cvc-use").val();
 					creditcard.brand = $(cardUse).siblings(".ebanx-container-credit-card").find("#ebanx-card-brand-use").val();
@@ -129,16 +130,13 @@ jQuery( function($) {
 			if ( response.data && (response.data.status == 'ERROR' || !response.data.token)) {
 				$( document ).trigger( 'ebanxError', { response: response } );
 			} else {
-				// insert the token into the form so it gets submitted to the server and generate the device fingerprint
-				EBANX.deviceFingerprint(function (session_id) {
-					wc_ebanx_form.form.append( '<input type="hidden" name="ebanx_token" id="ebanx_token" value="' + response.data.token + '"/>' );
-					wc_ebanx_form.form.append( '<input type="hidden" name="ebanx_brand" id="ebanx_brand" value="' + response.data.payment_type_code + '"/>' );
-					wc_ebanx_form.form.append( '<input type="hidden" name="ebanx_masked_card_number" id="ebanx_masked_card_number" value="' + response.data.masked_card_number + '"/>' );
-					wc_ebanx_form.form.append( '<input type="hidden" name="ebanx_device_fingerprint" id="ebanx_device_fingerprint" value="' + session_id + '">' );
-            
-					wc_ebanx_form.form.submit();
-				});
-				
+				wc_ebanx_form.form.append( '<input type="hidden" name="ebanx_token" id="ebanx_token" value="' + response.data.token + '"/>' );
+				wc_ebanx_form.form.append( '<input type="hidden" name="ebanx_brand" id="ebanx_brand" value="' + response.data.payment_type_code + '"/>' );
+				wc_ebanx_form.form.append( '<input type="hidden" name="ebanx_masked_card_number" id="ebanx_masked_card_number" value="' + response.data.masked_card_number + '"/>' );
+
+				wc_ebanx_form.form.append( '<input type="hidden" name="ebanx_device_fingerprint" id="ebanx_device_fingerprint" value="' + response.data.deviceId + '">' );
+
+				wc_ebanx_form.form.submit();
 			}
 		}
 	};
