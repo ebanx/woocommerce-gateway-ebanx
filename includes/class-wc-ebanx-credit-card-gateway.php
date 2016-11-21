@@ -169,6 +169,7 @@ class WC_Ebanx_Credit_Card_Gateway extends WC_Ebanx_Gateway
         wc_get_template(
             'credit-card/payment-form.php',
             array(
+                '__'              => WC_Ebanx_Gateway_Utils::$LOCALES[$this->getTransactionAddress('country')],
                 'cards'           => (array) $cards,
                 'cart_total'      => $cart_total,
                 'max_installment' => $this->max_installment,

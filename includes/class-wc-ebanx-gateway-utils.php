@@ -28,6 +28,11 @@ abstract class WC_Ebanx_Gateway_Utils
         self::COUNTRY_BRAZIL => array('bancodobrasil', 'itau', 'bradesco', 'banrisul'),
     );
 
+    public static $LOCALES = array(
+        self::COUNTRY_BRAZIL => 'pt_BR',
+        self::COUNTRY_MEXICO => 'es'
+    );
+
     public static $BANKS_EFT_ALLOWED = array(
         self::COUNTRY_COLOMBIA => array(
             'banco_agrario',

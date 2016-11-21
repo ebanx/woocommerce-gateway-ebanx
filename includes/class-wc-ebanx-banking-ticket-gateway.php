@@ -20,8 +20,8 @@ class WC_Ebanx_Banking_Ticket_Gateway extends WC_Ebanx_Gateway
 
         $this->init_form_fields();
 
-        $this->title          = 'Banking Ticket';
-        $this->description    = 'Pay with EBANX Baking Ticket';
+        $this->title          = 'Boleto';
+        $this->description    = 'Pague com Boleto - EBANX';
         $this->api_key        = $this->get_option('api_key');
         $this->encryption_key = $this->get_option('encryption_key');
         $this->debug          = $this->get_option('debug');
@@ -91,20 +91,6 @@ class WC_Ebanx_Banking_Ticket_Gateway extends WC_Ebanx_Gateway
     public function is_available()
     {
         return parent::is_available() && strtolower(WC()->customer->get_shipping_country()) == WC_Ebanx_Gateway_Utils::COUNTRY_BRAZIL;
-    }
-
-    public function payment_fields()
-    {
-        if ($description = $this->get_description()) {
-            echo wp_kses_post(wpautop(wptexturize($description)));
-        }
-
-        wc_get_template(
-            'banking-ticket/checkout-instructions.php',
-            array(),
-            'woocommerce/ebanx/',
-            WC_Ebanx::get_templates_path()
-        );
     }
 
     protected function request_data($order)
