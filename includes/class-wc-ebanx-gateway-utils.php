@@ -23,6 +23,19 @@ abstract class WC_Ebanx_Gateway_Utils
     const CURRENCY_CODE_MXN = 'MXN';
     const CURRENCY_CODE_COP = 'COP';
     const CURRENCY_CODE_CLP = 'CLP';
+    
+    const ALL_COUNTRIES = array(
+      self::COUNTRY_BRAZIL,
+      self::COUNTRY_COLOMBIA,
+      self::COUNTRY_MEXICO,
+      self::COUNTRY_PERU,
+      self::COUNTRY_CHILE
+    );
+    
+    const CREDIT_CARD_COUNTRIES = array(
+      self::COUNTRY_BRAZIL,
+      self::COUNTRY_MEXICO
+    );
 
     public static $BANKS_TEF_ALLOWED = array(
         self::COUNTRY_BRAZIL => array('bancodobrasil', 'itau', 'bradesco', 'banrisul'),

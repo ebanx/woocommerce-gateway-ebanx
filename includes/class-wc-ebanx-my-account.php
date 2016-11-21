@@ -58,10 +58,28 @@ class WC_Ebanx_My_Account
     {
         switch ($order->payment_method) {
             case 'ebanx-credit-card':
-                WC_Ebanx_Credit_Card_Gateway::thankyou_page($order);
+                WC_Ebanx_Credit_Card_Gateway::thankyou_page($order->id);
                 break;
             case 'ebanx-banking-ticket':
-                WC_Ebanx_Banking_Ticket_Gateway::thankyou_page($order);
+                WC_Ebanx_Banking_Ticket_Gateway::thankyou_page($order->id);
+                break;
+            case 'ebanx-eft':
+                WC_Ebanx_Eft_Gateway::thankyou_page($order->id);
+                break;
+            case 'ebanx-oxxo':
+                WC_Ebanx_Oxxo_Gateway::thankyou_page($order->id);
+                break;
+            case 'ebanx-pagoefectivo':
+                WC_Ebanx_Pagoefectivo_Gateway::thankyou_page($order->id);
+                break;
+            case 'ebanx-safetypay':
+                WC_Ebanx_Safetypay_Gateway::thankyou_page($order->id);
+                break;
+            case 'ebanx-servipag':
+                WC_Ebanx_Servipag_Gateway::thankyou_page($order->id);
+                break;
+            case 'ebanx-tef':
+                WC_Ebanx_Tef_Gateway::thankyou_page($order->id);
                 break;
         }
     }
