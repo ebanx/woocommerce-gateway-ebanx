@@ -17,6 +17,9 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
+define('WC_EBANX_MIN_PHP_VER', '5.3.0');
+define('WC_EBANX_MIN_WC_VER', '2.5.0');
+
 if (!class_exists('WC_Ebanx')) {
 
     /**
@@ -43,15 +46,17 @@ if (!class_exists('WC_Ebanx')) {
 
         private static $log;
 
+        public $notices = array();
+
         /**
          * Initialize the plugin public actions.
          */
         private function __construct()
         {
-            // Load plugin text domain.
-            add_action('init', array($this, 'load_plugin_textdomain'));
+            add_action('admin_init', array($this, 'check_environment'));
+            add_action('admin_notices', array($this, 'admin_notices'), 15);
+            add_action('plugins_loaded', array($this, 'init'));
 
-            // Checks with WooCommerce is installed.
             if (class_exists('WC_Payment_Gateway')) {
                 $this->includes();
 
@@ -60,6 +65,55 @@ if (!class_exists('WC_Ebanx')) {
             } else {
                 add_action('admin_notices', array($this, 'woocommerce_missing_notice'));
             }
+        }
+
+        public function init()
+        {
+            if (self::get_environment_warning()) {
+                return;
+            }
+        }
+
+        public function admin_notices()
+        {
+            foreach((array) $this->notices as $notice_key => $notice) {
+                echo "<div class='" . esc_attr($notice['class']) . "'><p>";
+                echo wp_kses($notice['message'], array('a' => array('href' => array())));
+                echo "</p></div>";
+            }
+        }
+
+        protected function add_admin_notice($slug, $class, $message)
+        {
+            $this->notices[$slug] = array(
+                'class'   => $class,
+                'message' => $message);
+        }
+
+        public function check_environment()
+        {
+            $environment_warning = self::get_environment_warning();
+            if ($environment_warning && is_plugin_active(plugin_basename(__FILE__))) {
+                $this->add_admin_notice('bad_environment', 'error', $environment_warning);
+            }
+        }
+
+        public static function get_environment_warning() {
+            if (version_compare(phpversion(), WC_EBANX_MIN_PHP_VER, '<')) {
+                $message = __('WooCommerce Ebanx - The minimum PHP version required for this plugin is %1$s. You are running %2$s.', 'woocommerce-gateway-ebanx', 'woocommerce-gateway-ebanx');
+                return sprintf($message, WC_EBANX_MIN_PHP_VER, phpversion());
+            }
+            if (!defined('WC_VERSION')) {
+                return __('WooCommerce Ebanx requires WooCommerce to be activated to work.', 'woocommerce-gateway-ebanx');
+            }
+            if (version_compare(WC_VERSION, WC_EBANX_MIN_WC_VER, '<')) {
+                $message = __('WooCommerce Ebanx - The minimum WooCommerce version required for this plugin is %1$s. You are running %2$s.', 'woocommerce-gateway-ebanx', 'woocommerce-gateway-ebanx');
+                return sprintf($message, WC_EBANX_MIN_WC_VER, WC_VERSION);
+            }
+            if (!function_exists('curl_init')) {
+                return __('WooCommerce Ebanx - cURL is not installed.', 'woocommerce-gateway-ebanx');
+            }
+            return false;
         }
 
         /**
@@ -96,14 +150,6 @@ if (!class_exists('WC_Ebanx')) {
             include_once dirname(__FILE__) . '/includes/class-wc-ebanx-servipag-gateway.php';
             include_once dirname(__FILE__) . '/includes/class-wc-ebanx-tef-gateway.php';
             include_once dirname(__FILE__) . '/includes/class-wc-ebanx-eft-gateway.php';
-        }
-
-        /**
-         * Load the plugin text domain for translation.
-         */
-        public function load_plugin_textdomain()
-        {
-            load_plugin_textdomain('woocommerce-ebanx', false, dirname(plugin_basename(__FILE__)) . '/languages/');
         }
 
         /**
@@ -151,7 +197,7 @@ if (!class_exists('WC_Ebanx')) {
 
             $ebanx_global   = 'ebanx-global';
 
-            $plugin_links[] = '<a href="' . esc_url(admin_url('admin.php?page=wc-settings&tab=checkout&section=' . $ebanx_global)) . '">' . __('Ebanx Settings', 'woocommerce-ebanx') . '</a>';
+            $plugin_links[] = '<a href="' . esc_url(admin_url('admin.php?page=wc-settings&tab=checkout&section=' . $ebanx_global)) . '">' . __('Ebanx Settings', 'woocommerce-gateway-ebanx') . '</a>';
 
             return array_merge($plugin_links, $links);
         }
@@ -171,7 +217,7 @@ if (!class_exists('WC_Ebanx')) {
                 self::$log = new WC_Logger();
             }
 
-            self::$log->add('woocommerce-ebanx', $message);
+            self::$log->add('woocommerce-gateway-ebanx', $message);
 
             if (defined('WP_DEBUG') && WP_DEBUG) {
                 error_log($message);
