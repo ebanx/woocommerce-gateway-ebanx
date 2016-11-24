@@ -30,8 +30,8 @@ class WC_Ebanx_Credit_Card_Gateway extends WC_Ebanx_Gateway
             wp_enqueue_script('woocommerce_ebanx', plugins_url('assets/js/credit-card.js', WC_Ebanx::DIR), array('jquery-payment', 'ebanx'), WC_Ebanx::VERSION, true);
 
             $ebanx_params = array(
-                'key'                  => $this->public_key,
-                'mode'                 => $this->is_sandbox ? 'test' : 'production',
+                'key'  => $this->public_key,
+                'mode' => $this->is_sandbox ? 'test' : 'production',
             );
 
             // If we're on the pay page we need to pass ebanx.js the address of the order.
@@ -154,7 +154,7 @@ class WC_Ebanx_Credit_Card_Gateway extends WC_Ebanx_Gateway
     protected function save_user_meta_fields($order) {
         parent::save_user_meta_fields($order);
 
-        if($this->userId) {
+        if($this->userId && $this->configs->settings['enable_one_click'] === 'yes') {
             $cards = get_user_meta($this->userId, '__ebanx_credit_card_token', true);
             $cards = !empty($cards) ? $cards : [];
 
