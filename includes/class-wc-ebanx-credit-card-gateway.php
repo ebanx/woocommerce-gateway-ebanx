@@ -8,12 +8,12 @@ class WC_Ebanx_Credit_Card_Gateway extends WC_Ebanx_Gateway
 {
     public function __construct()
     {
-        $this->id                   = 'ebanx-credit-card';
-        $this->method_title         = __('EBANX - Credit Card', 'woocommerce-ebanx');
+        $this->id           = 'ebanx-credit-card';
+        $this->method_title = __('EBANX - Credit Card', 'woocommerce-ebanx');
 
         // Define user set variables.
-        $this->title           = __('Credit Card');
-        $this->description     = __('Credit Card description');
+        $this->title       = __('Credit Card');
+        $this->description = __('Credit Card description');
 
         parent::__construct();
     }
@@ -58,7 +58,7 @@ class WC_Ebanx_Credit_Card_Gateway extends WC_Ebanx_Gateway
 
     public function is_available()
     {
-      return parent::is_available() && in_array($this->getTransactionAddress('country'), WC_Ebanx_Gateway_Utils::CREDIT_CARD_COUNTRIES);
+        return parent::is_available() && in_array($this->getTransactionAddress('country'), WC_Ebanx_Gateway_Utils::CREDIT_CARD_COUNTRIES);
     }
 
     public function payment_fields()
@@ -69,8 +69,8 @@ class WC_Ebanx_Credit_Card_Gateway extends WC_Ebanx_Gateway
 
         $cart_total = $this->get_order_total();
 
-        $cards = array_filter((array) get_user_meta($this->userId, '__ebanx_credit_card_token', true), function($card) {
-           return !empty($card->brand) && !empty($card->token) && !empty($card->masked_number); // TODO: Implement token due date
+        $cards = array_filter((array) get_user_meta($this->userId, '__ebanx_credit_card_token', true), function ($card) {
+            return !empty($card->brand) && !empty($card->token) && !empty($card->masked_number); // TODO: Implement token due date
         });
 
         wc_get_template(
@@ -128,7 +128,7 @@ class WC_Ebanx_Credit_Card_Gateway extends WC_Ebanx_Gateway
 
         $data['payment']['payment_type_code'] = $_POST['ebanx_brand'];
         $data['payment']['creditcard']        = array(
-            'token' => $_POST['ebanx_token']
+            'token' => $_POST['ebanx_token'],
         );
 
         return $data;
@@ -151,17 +151,18 @@ class WC_Ebanx_Credit_Card_Gateway extends WC_Ebanx_Gateway
         update_post_meta($order->id, 'Number of Instalments', $request->payment->instalments);
     }
 
-    protected function save_user_meta_fields($order) {
+    protected function save_user_meta_fields($order)
+    {
         parent::save_user_meta_fields($order);
 
-        if($this->userId && $this->configs->settings['enable_one_click'] === 'yes') {
+        if ($this->userId && $this->configs->settings['enable_one_click'] === 'yes') {
             $cards = get_user_meta($this->userId, '__ebanx_credit_card_token', true);
             $cards = !empty($cards) ? $cards : [];
 
             $card = new \stdClass();
 
-            $card->brand = $_POST['ebanx_brand'];
-            $card->token = $_POST['ebanx_token'];
+            $card->brand         = $_POST['ebanx_brand'];
+            $card->token         = $_POST['ebanx_token'];
             $card->masked_number = $_POST['ebanx_masked_card_number'];
 
             foreach ($cards as $cd) {

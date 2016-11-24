@@ -9,11 +9,11 @@ class WC_Ebanx_Oxxo_Gateway extends WC_Ebanx_Gateway
 
     public function __construct()
     {
-        $this->id                   = 'ebanx-oxxo';
-        $this->method_title         = __('EBANX - Oxxo', 'woocommerce-ebanx');
+        $this->id           = 'ebanx-oxxo';
+        $this->method_title = __('EBANX - Oxxo', 'woocommerce-ebanx');
 
-        $this->title          = __('Oxxo');
-        $this->description    = __('Oxxo description');
+        $this->title       = __('Oxxo');
+        $this->description = __('Oxxo description');
 
         parent::__construct();
     }
