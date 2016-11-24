@@ -27,6 +27,7 @@ class WC_Ebanx_Credit_Card_Gateway extends WC_Ebanx_Gateway
             // Using // to avoid conflicts between http and https protocols
             wp_enqueue_script('ebanx_fingerprint', '//downloads.ebanx.com/poc-checkout/src/device-fingerprint.js', '', '1.0', true);
             wp_enqueue_script('ebanx', '//downloads.ebanx.com/poc-checkout/src/ebanx.js', '', '1.0', true);
+            wp_enqueue_script('woocommerce_ebanx_jquery_mask', plugins_url('assets/js/jquery-mask.js', WC_Ebanx::DIR), array());
             wp_enqueue_script('woocommerce_ebanx', plugins_url('assets/js/credit-card.js', WC_Ebanx::DIR), array('jquery-payment', 'ebanx'), WC_Ebanx::VERSION, true);
 
             $ebanx_params = array(
