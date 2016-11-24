@@ -12,23 +12,21 @@ abstract class WC_Ebanx_Gateway extends WC_Payment_Gateway
     public function __construct()
     {
         $this->userId = get_current_user_id();
-        
+
         $this->configs = new WC_Ebanx_Ebanx_Gateway();
-        
+
         $this->enabled = $this->configs->settings[$this->id];
-        
+
         $this->is_sandbox = $this->configs->settings['sandbox_enabled'] === 'yes';
-        
+
         $this->private_key = $this->is_sandbox ? $this->configs->settings['sandbox_private_key'] : $this->configs->settings['production_private_key'];
-    
+
         $this->public_key = $this->is_sandbox ? $this->configs->settings['sandbox_public_key'] : $this->configs->settings['production_public_key'];
-        
-        $this->view_transaction_url = 'https://dashboard.ebanx.com/#/transactions/%s';
         
         if ($this->configs->settings['debug_enabled'] === 'yes') {
           $this->log = new WC_Logger();
         }
-        
+
         add_action('wp_enqueue_scripts', array($this, 'checkout_scripts'));
 
         add_filter('woocommerce_checkout_fields', function ($fields) {
@@ -184,7 +182,7 @@ abstract class WC_Ebanx_Gateway extends WC_Payment_Gateway
     }
 
     protected function save_order_meta_fields($order, $request)
-    {   
+    {
         // General
         // TODO: Hash, payment_type_code if possible
         update_post_meta($order->id, '_ebanx_payment_hash', $request->payment->hash);
