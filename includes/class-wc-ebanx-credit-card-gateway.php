@@ -10,11 +10,11 @@ class WC_Ebanx_Credit_Card_Gateway extends WC_Ebanx_Gateway
     {
         $this->id                   = 'ebanx-credit-card';
         $this->method_title         = __('EBANX - Credit Card', 'woocommerce-ebanx');
-        
+
         // Define user set variables.
         $this->title           = __('Credit Card');
         $this->description     = __('Credit Card description');
-        
+
         parent::__construct();
     }
 
@@ -30,9 +30,7 @@ class WC_Ebanx_Credit_Card_Gateway extends WC_Ebanx_Gateway
             wp_enqueue_script('woocommerce_ebanx', plugins_url('assets/js/credit-card.js', WC_Ebanx::DIR), array('jquery-payment', 'ebanx'), WC_Ebanx::VERSION, true);
 
             $ebanx_params = array(
-                'key'                  => $this->secret_key,
-                'i18n_terms'           => __('Please accept the terms and conditions first', 'woocommerce-gateway-ebanx'),
-                'i18n_required_fields' => __('Please fill in required checkout fields first', 'woocommerce-gateway-ebanx'),
+                'key'                  => $this->public_key,
                 'mode'                 => $this->is_sandbox ? 'test' : 'production',
             );
 
@@ -57,7 +55,7 @@ class WC_Ebanx_Credit_Card_Gateway extends WC_Ebanx_Gateway
             wp_localize_script('woocommerce_ebanx', 'wc_ebanx_params', apply_filters('wc_ebanx_params', $ebanx_params));
         }
     }
-    
+
     public function is_available()
     {
       return parent::is_available() && in_array($this->getTransactionAddress('country'), WC_Ebanx_Gateway_Utils::CREDIT_CARD_COUNTRIES);
