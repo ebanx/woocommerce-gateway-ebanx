@@ -79,15 +79,17 @@ class WC_Ebanx_Credit_Card_Gateway extends WC_Ebanx_Gateway
             array(
                 'cards'           => (array) $cards,
                 'cart_total'      => $cart_total,
-                'max_installment' => $this->max_installment,
+                'max_installment' => $this->configs->settings['credit_card_instalments'],
             ),
             'woocommerce/ebanx/',
             WC_Ebanx::get_templates_path()
         );
     }
 
-    public static function thankyou_page($order)
+    public static function thankyou_page($order_id)
     {
+        $order = new WC_Order($order_id);
+
         $data = array(
             'instalments' => get_post_meta($order->id, 'Number of Instalments', true),
             'card_brand'  => get_post_meta($order->id, 'Card\'s Brand Name', true),
