@@ -13,7 +13,19 @@ abstract class WC_Ebanx_Gateway extends WC_Payment_Gateway
     {
         $this->userId = get_current_user_id();
 
-        $this->init_settings();
+        $this->configs = new WC_Ebanx_Global_Gateway();
+
+        $this->enabled = $this->configs->settings[$this->id];
+
+        $this->is_sandbox = $this->configs->settings['sandbox_enabled'] === 'yes';
+
+        $this->private_key = $this->is_sandbox ? $this->configs->settings['sandbox_private_key'] : $this->configs->settings['production_private_key'];
+
+        $this->public_key = $this->is_sandbox ? $this->configs->settings['sandbox_public_key'] : $this->configs->settings['production_public_key'];
+        
+        if ($this->configs->settings['debug_enabled'] === 'yes') {
+          $this->log = new WC_Logger();
+        }
 
         add_action('wp_enqueue_scripts', array($this, 'checkout_scripts'));
 
@@ -52,7 +64,7 @@ abstract class WC_Ebanx_Gateway extends WC_Payment_Gateway
 
     public function is_available()
     {
-        return parent::is_available() && !empty($this->api_key) && !empty($this->encryption_key);
+        return parent::is_available() && !empty($this->public_key) && !empty($this->private_key);
     }
 
     protected function request_data($order)
@@ -126,8 +138,8 @@ abstract class WC_Ebanx_Gateway extends WC_Payment_Gateway
                 $data = $this->request_data($order);
 
                 $config = [
-                    'integrationKey' => $this->settings['api_key'],
-                    'testMode'       => ('yes' === $this->settings['testmode']),
+                    'integrationKey' => $this->private_key,
+                    'testMode'       => $this->is_sandbox,
                 ];
 
                 \Ebanx\Config::set($config);
@@ -170,7 +182,7 @@ abstract class WC_Ebanx_Gateway extends WC_Payment_Gateway
     }
 
     protected function save_order_meta_fields($order, $request)
-    {   
+    {
         // General
         // TODO: Hash, payment_type_code if possible
         update_post_meta($order->id, '_ebanx_payment_hash', $request->payment->hash);
@@ -229,8 +241,8 @@ abstract class WC_Ebanx_Gateway extends WC_Payment_Gateway
     final public function process_hook($hash)
     {
         $config = [
-            'integrationKey' => $this->settings['api_key'],
-            'testMode'       => ('yes' === $this->settings['testmode']),
+            'integrationKey' => $this->api_key,
+            'testMode'       => $this->is_sandbox,
         ];
 
         \Ebanx\Config::set($config);
