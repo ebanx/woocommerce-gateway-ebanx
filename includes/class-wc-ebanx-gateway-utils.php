@@ -23,18 +23,18 @@ abstract class WC_Ebanx_Gateway_Utils
     const CURRENCY_CODE_MXN = 'MXN';
     const CURRENCY_CODE_COP = 'COP';
     const CURRENCY_CODE_CLP = 'CLP';
-    
+
     const ALL_COUNTRIES = array(
-      self::COUNTRY_BRAZIL,
-      self::COUNTRY_COLOMBIA,
-      self::COUNTRY_MEXICO,
-      self::COUNTRY_PERU,
-      self::COUNTRY_CHILE
+        self::COUNTRY_BRAZIL,
+        self::COUNTRY_COLOMBIA,
+        self::COUNTRY_MEXICO,
+        self::COUNTRY_PERU,
+        self::COUNTRY_CHILE,
     );
-    
+
     const CREDIT_CARD_COUNTRIES = array(
-      self::COUNTRY_BRAZIL,
-      self::COUNTRY_MEXICO
+        self::COUNTRY_BRAZIL,
+        self::COUNTRY_MEXICO,
     );
 
     public static $BANKS_TEF_ALLOWED = array(
@@ -68,9 +68,4 @@ abstract class WC_Ebanx_Gateway_Utils
     public static $TYPES_SAFETYPAY_ALLOWED = array(
         'cash', 'online',
     );
-
-    public static function isTef($paymentTypeCode)
-    {
-        return in_array(strtolower($paymentTypeCode), call_user_func_array('array_merge', self::$BANKS_TEF_ALLOWED));
-    }
 }

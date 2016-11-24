@@ -9,10 +9,10 @@ class WC_Ebanx_Safetypay_Gateway extends WC_Ebanx_Redirect_Gateway
 
     public function __construct()
     {
-        $this->id                   = 'ebanx-safetypay';
-        $this->method_title         = __('EBANX - Safetypay', 'woocommerce-ebanx');
+        $this->id           = 'ebanx-safetypay';
+        $this->method_title = __('EBANX - Safetypay', 'woocommerce-ebanx');
 
-        $this->title = __('SafetyPay');
+        $this->title       = __('SafetyPay');
         $this->description = __('SafetyPay Description');
 
         parent::__construct();
