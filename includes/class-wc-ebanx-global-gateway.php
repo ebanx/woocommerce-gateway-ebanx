@@ -92,13 +92,18 @@ final class WC_Ebanx_Global_Gateway extends WC_Payment_Gateway
                 'type' => 'checkbox',
                 'label' => __('Check to enable EBANX Credit Card', 'woocommerce-ebanx')
               ),
-              'credit_card_instalments' => array(
-                'title'       => __('Number of Installment', 'woocommerce-ebanx'),
-                'type'        => 'select',
-                'default'     => '12',
-                'description' => __('Maximum number of installments possible with payments by credit card.', 'woocommerce-ebanx'),
-                'desc_tip'    => true,
-                'options'     => array(
+                'enable_one_click' => array(
+                    'title' => __('One click', 'woocommerce-ebanx'),
+                    'type' => 'checkbox',
+                    'label' => __('Enable one-click.', 'woocommerce-ebanx'),
+                ),
+            'credit_card_instalments' => array(
+                  'title'       => __('Number of Installment', 'woocommerce-ebanx'),
+                  'type'        => 'select',
+                  'default'     => '12',
+                  'description' => __('Maximum number of installments possible with payments by credit card.', 'woocommerce-ebanx'),
+                  'desc_tip'    => true,
+                  'options'     => array(
                     '1'  => '1',
                     '2'  => '2',
                     '3'  => '3',
