@@ -11,21 +11,21 @@ final class WC_Ebanx_Ebanx_Gateway extends WC_Payment_Gateway
     {
         $this->id                   = 'ebanx-ebanx';
         $this->method_title         = __('EBANX', 'woocommerce-ebanx');
-        
+
         $this->init_form_fields();
         $this->init_settings();
-        
+
         add_action('woocommerce_update_options_payment_gateways_' . $this->id, array($this, 'process_admin_options'));
-        
+
         add_action('woocommerce_settings_start', array($this, 'disable_ebanx_gateways'));
     }
-    
+
     public function disable_ebanx_gateways() {
       echo "
         <script>
           jQuery(document).ready(function () {
             var subsub = jQuery('.subsubsub > li:contains(EBANX - )');
-            
+
             for (var i = 0, t = subsub.length; i < t; ++i) {
               subsub[i].remove();
             }
@@ -83,12 +83,6 @@ final class WC_Ebanx_Ebanx_Gateway extends WC_Payment_Gateway
               'title' => __('General Payment\'s Settings', 'woocommerce-ebanx'),
               'type' => 'title'
             ),
-              'soft_descriptor' => array(
-                'title' => __('Soft Descriptor', 'woocommerce-ebanx'),
-                'type' => 'text',
-                'description' => __('The description that will appears on customer\'s bill.', 'woocommerce-ebanx'),
-                'desc_tip' => true
-              ),
             'credit_card_title' => array(
               'title' => __('Credit Card' , 'woocommerce-ebanx'),
               'type' => 'title',
@@ -118,6 +112,12 @@ final class WC_Ebanx_Ebanx_Gateway extends WC_Payment_Gateway
                     '11' => '11',
                     '12' => '12',
                 ),
+              'soft_descriptor' => array(
+                'title' => __('Soft Descriptor', 'woocommerce-ebanx'),
+                'type' => 'text',
+                'description' => __('The description that will appears on customer\'s bill.', 'woocommerce-ebanx'),
+                'desc_tip' => true
+              ),
               ),
             'banking_ticket_title' => array(
               'title' => __('Banking Ticket'),
