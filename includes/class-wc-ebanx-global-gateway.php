@@ -4,12 +4,12 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-final class WC_Ebanx_Ebanx_Gateway extends WC_Payment_Gateway
+final class WC_Ebanx_Global_Gateway extends WC_Payment_Gateway
 {
 
     public function __construct()
     {
-        $this->id                   = 'ebanx-ebanx';
+        $this->id                   = 'ebanx-global';
         $this->method_title         = __('EBANX', 'woocommerce-ebanx');
 
         $this->init_form_fields();
@@ -112,12 +112,12 @@ final class WC_Ebanx_Ebanx_Gateway extends WC_Payment_Gateway
                     '11' => '11',
                     '12' => '12',
                 ),
+              ),
               'soft_descriptor' => array(
                 'title' => __('Soft Descriptor', 'woocommerce-ebanx'),
                 'type' => 'text',
                 'description' => __('The description that will appears on customer\'s bill.', 'woocommerce-ebanx'),
                 'desc_tip' => true
-              ),
               ),
             'banking_ticket_title' => array(
               'title' => __('Banking Ticket'),

@@ -13,7 +13,7 @@ abstract class WC_Ebanx_Gateway extends WC_Payment_Gateway
     {
         $this->userId = get_current_user_id();
 
-        $this->configs = new WC_Ebanx_Ebanx_Gateway();
+        $this->configs = new WC_Ebanx_Global_Gateway();
 
         $this->enabled = $this->configs->settings[$this->id];
 
