@@ -9,10 +9,10 @@ class WC_Ebanx_Tef_Gateway extends WC_Ebanx_Redirect_Gateway
 
     public function __construct()
     {
-        $this->id                   = 'ebanx-tef';
-        $this->method_title         = __('EBANX - TEF', 'woocommerce-ebanx');
+        $this->id           = 'ebanx-tef';
+        $this->method_title = __('EBANX - TEF', 'woocommerce-ebanx');
 
-        $this->title = __('TEF');
+        $this->title       = __('TEF');
         $this->description = __('TEF Description');
 
         parent::__construct();
