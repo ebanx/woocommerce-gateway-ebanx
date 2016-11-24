@@ -22,28 +22,28 @@ abstract class WC_Ebanx_Gateway extends WC_Payment_Gateway
         $this->private_key = $this->is_sandbox ? $this->configs->settings['sandbox_private_key'] : $this->configs->settings['production_private_key'];
 
         $this->public_key = $this->is_sandbox ? $this->configs->settings['sandbox_public_key'] : $this->configs->settings['production_public_key'];
-        
+
         if ($this->configs->settings['debug_enabled'] === 'yes') {
-          $this->log = new WC_Logger();
+            $this->log = new WC_Logger();
         }
 
         add_action('wp_enqueue_scripts', array($this, 'checkout_scripts'));
 
         add_filter('woocommerce_checkout_fields', function ($fields) {
             $fields['billing']['ebanx_billing_brazil_street_number'] = array(
-                'type' => 'text',
-                'label' => 'Street Number',
-                'required' => true
+                'type'     => 'text',
+                'label'    => 'Street Number',
+                'required' => true,
             );
             $fields['billing']['ebanx_billing_brazil_birth_date'] = array(
-                'type' => 'text',
-                'label' => 'Birth Date',
-                'required' => true
+                'type'     => 'text',
+                'label'    => 'Birth Date',
+                'required' => true,
             );
             $fields['billing']['ebanx_billing_brazil_document'] = array(
-                'type' => 'text',
-                'label' => 'Document',
-                'required' => true
+                'type'     => 'text',
+                'label'    => 'Document',
+                'required' => true,
             );
             return $fields;
         });
@@ -51,8 +51,7 @@ abstract class WC_Ebanx_Gateway extends WC_Payment_Gateway
 
     public function checkout_scripts()
     {
-        if (is_checkout())
-        {
+        if (is_checkout()) {
             wp_enqueue_script('woocommerce_ebanx_checkout_fields', plugins_url('assets/js/checkout-fields.js', WC_Ebanx::DIR));
         }
     }
@@ -85,12 +84,12 @@ abstract class WC_Ebanx_Gateway extends WC_Payment_Gateway
         );
 
         if (trim(strtolower(WC()->customer->get_shipping_country())) === WC_Ebanx_Gateway_Utils::COUNTRY_BRAZIL) {
-            if (empty($_POST['ebanx_billing_brazil_document'])||
-                empty($_POST['ebanx_billing_brazil_birth_date'])||
-                empty($_POST['billing_postcode'])||
-                empty($_POST['billing_address_1'])||
-                empty($_POST['ebanx_billing_brazil_street_number'])||
-                empty($_POST['billing_city'])||
+            if (empty($_POST['ebanx_billing_brazil_document']) ||
+                empty($_POST['ebanx_billing_brazil_birth_date']) ||
+                empty($_POST['billing_postcode']) ||
+                empty($_POST['billing_address_1']) ||
+                empty($_POST['ebanx_billing_brazil_street_number']) ||
+                empty($_POST['billing_city']) ||
                 empty($_POST['billing_state'])
             ) {
                 throw new Exception("Missing fields to checkout.");
@@ -228,8 +227,9 @@ abstract class WC_Ebanx_Gateway extends WC_Payment_Gateway
         $this->save_order_meta_fields($order, $request);
     }
 
-    protected function save_user_meta_fields($order) {
-        if($this->userId) {
+    protected function save_user_meta_fields($order)
+    {
+        if ($this->userId) {
             if (trim(strtolower($order->get_address()['country'])) === WC_Ebanx_Gateway_Utils::COUNTRY_BRAZIL) {
                 update_user_meta($this->userId, '__ebanx_billing_brazil_document', $_POST['ebanx_billing_brazil_document']);
                 update_user_meta($this->userId, '__ebanx_billing_brazil_birth_date', $_POST['ebanx_billing_brazil_birth_date']);

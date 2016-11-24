@@ -9,10 +9,10 @@ class WC_Ebanx_Eft_Gateway extends WC_Ebanx_Redirect_Gateway
 
     public function __construct()
     {
-        $this->id                   = 'ebanx-eft';
-        $this->method_title         = __('EBANX - EFT', 'woocommerce-ebanx');
+        $this->id           = 'ebanx-eft';
+        $this->method_title = __('EBANX - EFT', 'woocommerce-ebanx');
 
-        $this->title = __('EFT', 'woocommerce-ebanx');
+        $this->title       = __('EFT', 'woocommerce-ebanx');
         $this->description = __('EFT Description', 'woocommerce-ebanx');
 
         parent::__construct();
