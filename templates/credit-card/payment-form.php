@@ -23,6 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 						<input id="ebanx-card-cvc-use" class="input-text wc-credit-card-form-card-cvc" type="text" autocomplete="off" placeholder="<?php esc_html_e( 'CVC', 'woocommerce-ebanx' ); ?>" style="font-size: 1.5em; padding: 8px;" />
 						<input type="hidden" autocomplete="off" value="<?php echo $card->brand; ?>" id="ebanx-card-brand-use" />
 						<input type="hidden" autocomplete="off" value="<?php echo $card->masked_number; ?>" id="ebanx-card-masked-number-use" />
+						<?php include_once('installments.php'); ?>
 					</div>
 				</div>
 			</div>
