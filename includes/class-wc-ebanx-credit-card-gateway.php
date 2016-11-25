@@ -131,6 +131,7 @@ class WC_Ebanx_Credit_Card_Gateway extends WC_Ebanx_Gateway
 
         $data['payment']['payment_type_code'] = $_POST['ebanx_brand'];
         $data['payment']['creditcard']        = array(
+            'soft_descriptor' => $this->configs->settings['soft_descriptor'],
             'token' => $_POST['ebanx_token'],
         );
 
