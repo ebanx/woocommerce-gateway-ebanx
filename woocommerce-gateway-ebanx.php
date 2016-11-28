@@ -52,6 +52,10 @@ if (!class_exists('WC_Ebanx')) {
 
         public $notices = array();
 
+        private static $endpoint = 'ebanx-credit-cards';
+
+        private static $menu_name = 'EBANX - Credit Cards';
+
         /**
          * Initialize the plugin public actions.
          */
@@ -60,6 +64,16 @@ if (!class_exists('WC_Ebanx')) {
             add_action('admin_init', array($this, 'check_environment'));
             add_action('admin_notices', array($this, 'admin_notices'), 15);
             add_action('plugins_loaded', array($this, 'init'));
+
+            // My Account
+            add_action('init', array($this, 'my_account_endpoint'));
+            add_filter('query_vars', array($this, 'my_account_query_vars'), 0);
+            register_activation_hook(self::DIR, array($this, 'my_account_endpoint'));
+            register_deactivation_hook(self::DIR, array($this, 'my_account_endpoint'));
+
+            add_filter('woocommerce_account_menu_items', array($this, 'my_account_menus'));
+            add_filter('the_title', array($this, 'my_account_menus_title'));
+            add_action('woocommerce_account_' . self::$endpoint . '_endpoint', array($this, 'my_account_template'));
 
             if (class_exists('WC_Payment_Gateway')) {
                 $this->includes();
@@ -78,9 +92,79 @@ if (!class_exists('WC_Ebanx')) {
             }
         }
 
+        public function my_account_template()
+        {
+            if (isset($_POST['credit-card-delete']) && is_account_page()) {
+                // Find credit cards saved and delete the selected
+                $cards = get_user_meta(get_current_user_id(), '__ebanx_credit_card_token', true);
+
+                foreach ($cards as $k => $cd) {
+                    if (in_array($cd->masked_number, $_POST['credit-card-delete'])) {
+                        unset($cards[$k]);
+                    }
+                }
+
+                update_user_meta(get_current_user_id(), '__ebanx_credit_card_token', $cards);
+            }
+
+            $cards = array_filter((array) get_user_meta(get_current_user_id(), '__ebanx_credit_card_token', true), function ($card) {
+                return !empty($card->brand) && !empty($card->token) && !empty($card->masked_number); // TODO: Implement token due date
+            });
+
+            wc_get_template(
+                'my-account/ebanx-credit-cards.php',
+                array(
+                    'cards' => (array) $cards,
+                ),
+                'woocommerce/ebanx/',
+                WC_Ebanx::get_templates_path()
+            );
+        }
+
+        public function my_account_query_vars($vars)
+        {
+            $vars[] = self::$endpoint;
+
+            return $vars;
+        }
+
+        public function my_account_endpoint()
+        {
+            add_rewrite_endpoint(self::$endpoint, EP_ROOT | EP_PAGES);
+            flush_rewrite_rules();
+        }
+
+        public function my_account_menus_title($title)
+        {
+            global $wp_query;
+
+            $is_endpoint = isset($wp_query->query_vars[self::$endpoint]);
+
+            if ($is_endpoint && !is_admin() && is_main_query() && in_the_loop() && is_account_page()) {
+                $title = __(self::$menu_name, 'woocommerce-ebanx');
+                remove_filter('the_title', array($this, 'my_account_menus_title'));
+            }
+
+            return $title;
+        }
+
+        public function my_account_menus($menu)
+        {
+            // Remove the logout menu item.
+            $logout = $menu['customer-logout'];
+            unset($menu['customer-logout']);
+
+            $menu[self::$endpoint] = __(self::$menu_name, 'woocommerce-ebanx');
+
+            // Insert back the logout item.
+            $menu['customer-logout'] = $logout;
+
+            return $menu;
+        }
+
         public function admin_notices()
         {
-            foreach((array) $this->notices as $notice_key => $notice) {
+            foreach ((array) $this->notices as $notice_key => $notice) {
                 echo "<div class='" . esc_attr($notice['class']) . "'><p>";
                 echo wp_kses($notice['message'], array('a' => array('href' => array())));
                 echo "</p></div>";
@@ -102,7 +186,8 @@ if (!class_exists('WC_Ebanx')) {
             }
         }
 
-        public static function get_environment_warning() {
+        public static function get_environment_warning()
+        {
             if (version_compare(phpversion(), WC_EBANX_MIN_PHP_VER, '<')) {
                 $message = __('WooCommerce Ebanx - The minimum PHP version required for this plugin is %1$s. You are running %2$s.', 'woocommerce-gateway-ebanx', 'woocommerce-gateway-ebanx');
                 return sprintf($message, WC_EBANX_MIN_PHP_VER, phpversion());
@@ -200,7 +285,7 @@ if (!class_exists('WC_Ebanx')) {
         {
             $plugin_links = array();
 
-            $ebanx_global   = 'ebanx-global';
+            $ebanx_global = 'ebanx-global';
 
             $plugin_links[] = '<a href="' . esc_url(admin_url('admin.php?page=wc-settings&tab=checkout&section=' . $ebanx_global)) . '">' . __('Ebanx Settings', 'woocommerce-gateway-ebanx') . '</a>';
 

@@ -159,7 +159,7 @@ class WC_Ebanx_Credit_Card_Gateway extends WC_Ebanx_Gateway
     {
         parent::save_user_meta_fields($order);
 
-        if ($this->userId && $this->configs->settings['enable_one_click'] === 'yes') {
+        if ($this->userId && $this->configs->settings['enable_one_click'] === 'yes' && isset($_POST['ebanx-save-credit-card']) && $_POST['ebanx-save-credit-card'] === 'yes') {
             $cards = get_user_meta($this->userId, '__ebanx_credit_card_token', true);
             $cards = !empty($cards) ? $cards : [];
 
