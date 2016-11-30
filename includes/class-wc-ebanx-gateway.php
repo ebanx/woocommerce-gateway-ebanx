@@ -47,6 +47,11 @@ abstract class WC_Ebanx_Gateway extends WC_Payment_Gateway
             );
             return $fields;
         });
+
+        $this->supports = array(
+            // 'subscriptions',
+            'refunds'
+        );
     }
 
     public function checkout_scripts()
@@ -64,6 +69,49 @@ abstract class WC_Ebanx_Gateway extends WC_Payment_Gateway
     public function is_available()
     {
         return parent::is_available() && !empty($this->public_key) && !empty($this->private_key);
+    }
+
+    public function process_refund($order_id, $amount = null, $reason = '')
+    {
+        $order = wc_get_order($order_id);
+
+        $hash = get_post_meta($order->id, '_ebanx_payment_hash', true);
+
+        if (!$order || is_null($amount) || !$hash) {
+            return false;
+        }
+
+        $data = array(
+            'hash' => $hash,
+            'amount' => $amount,
+            'operation' => 'request',
+            'description' => $reason
+        );
+
+        $config = [
+            'integrationKey' => $this->private_key,
+            'testMode'       => $this->is_sandbox,
+        ];
+
+        \Ebanx\Config::set($config);
+
+        $request = \Ebanx\Ebanx::doRefund($data);
+
+        if ($request->status !== 'SUCCESS') {
+            return false;
+        }
+
+        $order->add_order_note(sprintf('Refund requested to EBANX %s - Refund ID: %s - Reason: %s', wc_price($amount), $request->refund->id, $reason));
+
+        $refunds = current(get_post_meta((int) $order_id, "_ebanx_payment_refunds"));
+
+        $request->refund->wc_refund = current($order->get_refunds());
+
+        $refunds[] = $request->refund;
+
+        update_post_meta($order->id, "_ebanx_payment_refunds", $refunds);
+
+        return true;
     }
 
     protected function request_data($order)
