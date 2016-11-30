@@ -37,6 +37,10 @@ if (!class_exists('WC_Ebanx')) {
 
         const DIR = __FILE__;
 
+        const INCLUDES_DIR = __DIR__ . DIRECTORY_SEPARATOR . 'includes' . DIRECTORY_SEPARATOR;
+
+        const SERVICES_DIR = __DIR__ . DIRECTORY_SEPARATOR . 'services' . DIRECTORY_SEPARATOR;
+
         /**
          * Instance of this class.
          *
@@ -136,20 +140,21 @@ if (!class_exists('WC_Ebanx')) {
          */
         private function includes()
         {
-            include_once dirname(__FILE__) . '/services/class-wc-ebanx-hooks.php';
-            include_once dirname(__FILE__) . '/includes/class-wc-ebanx-gateway-utils.php';
-            include_once dirname(__FILE__) . '/includes/class-wc-ebanx-gateway.php';
-            include_once dirname(__FILE__) . '/includes/class-wc-ebanx-redirect-gateway.php';
-            include_once dirname(__FILE__) . '/includes/class-wc-ebanx-pagoefectivo-gateway.php';
-            include_once dirname(__FILE__) . '/includes/class-wc-ebanx-safetypay-gateway.php';
-            include_once dirname(__FILE__) . '/includes/class-wc-ebanx-my-account.php';
-            include_once dirname(__FILE__) . '/includes/class-wc-ebanx-banking-ticket-gateway.php';
-            include_once dirname(__FILE__) . '/includes/class-wc-ebanx-global-gateway.php';
-            include_once dirname(__FILE__) . '/includes/class-wc-ebanx-credit-card-gateway.php';
-            include_once dirname(__FILE__) . '/includes/class-wc-ebanx-oxxo-gateway.php';
-            include_once dirname(__FILE__) . '/includes/class-wc-ebanx-servipag-gateway.php';
-            include_once dirname(__FILE__) . '/includes/class-wc-ebanx-tef-gateway.php';
-            include_once dirname(__FILE__) . '/includes/class-wc-ebanx-eft-gateway.php';
+            include_once(self::INCLUDES_DIR . 'class-wc-ebanx-gateway-utils.php');
+            include_once(self::INCLUDES_DIR . 'class-wc-ebanx-gateway.php');
+            include_once(self::INCLUDES_DIR . 'class-wc-ebanx-redirect-gateway.php');
+            include_once(self::INCLUDES_DIR . 'class-wc-ebanx-pagoefectivo-gateway.php');
+            include_once(self::INCLUDES_DIR . 'class-wc-ebanx-safetypay-gateway.php');
+            include_once(self::INCLUDES_DIR . 'class-wc-ebanx-my-account.php');
+            include_once(self::INCLUDES_DIR . 'class-wc-ebanx-banking-ticket-gateway.php');
+            include_once(self::INCLUDES_DIR . 'class-wc-ebanx-global-gateway.php');
+            include_once(self::INCLUDES_DIR . 'class-wc-ebanx-credit-card-gateway.php');
+            include_once(self::INCLUDES_DIR . 'class-wc-ebanx-oxxo-gateway.php');
+            include_once(self::INCLUDES_DIR . 'class-wc-ebanx-servipag-gateway.php');
+            include_once(self::INCLUDES_DIR . 'class-wc-ebanx-tef-gateway.php');
+            include_once(self::INCLUDES_DIR . 'class-wc-ebanx-eft-gateway.php');
+            include_once(self::SERVICES_DIR . 'class-wc-ebanx-hooks.php');
+            include_once(self::SERVICES_DIR . 'class-wc-ebanx-refunds.php');
         }
 
         /**
