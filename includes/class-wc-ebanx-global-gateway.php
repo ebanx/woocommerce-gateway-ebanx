@@ -93,6 +93,12 @@ final class WC_Ebanx_Global_Gateway extends WC_Payment_Gateway
                 'type'  => 'checkbox',
                 'label' => __('Check to enable EBANX Credit Card', 'woocommerce-ebanx'),
             ),
+            'credit_card_countries'       => array(
+                'title' => __('Countries', 'woocommerce-ebanx'),
+                'type'  => 'multiselect',
+                'label' => __('Choose countries', 'woocommerce-ebanx'),
+                'options' => WC_Ebanx_Gateway_Utils::CREDIT_CARD_COUNTRIES
+            ),
             'enable_one_click'        => array(
                 'title' => __('One click', 'woocommerce-ebanx'),
                 'type'  => 'checkbox',
