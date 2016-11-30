@@ -103,7 +103,10 @@ abstract class WC_Ebanx_Gateway extends WC_Payment_Gateway
 
         $order->add_order_note(sprintf('Refund requested to EBANX %s - Refund ID: %s - Reason: %s', wc_price($amount), $request->refund->id, $reason));
 
-        $refunds = (array) get_user_meta($order->id, '_ebanx_payment_refunds', true);
+        $refunds = current(get_post_meta((int) $order_id, "_ebanx_payment_refunds"));
+
+        $request->refund->wc_refund = current($order->get_refunds());
+
         $refunds[] = $request->refund;
 
         update_post_meta($order->id, "_ebanx_payment_refunds", $refunds);
