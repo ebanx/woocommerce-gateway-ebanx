@@ -33,8 +33,8 @@ abstract class WC_Ebanx_Gateway_Utils
     );
 
     const CREDIT_CARD_COUNTRIES = array(
-        self::COUNTRY_BRAZIL,
-        self::COUNTRY_MEXICO,
+        self::COUNTRY_BRAZIL => self::COUNTRY_BRAZIL,
+        self::COUNTRY_MEXICO => self::COUNTRY_MEXICO,
     );
 
     public static $BANKS_TEF_ALLOWED = array(

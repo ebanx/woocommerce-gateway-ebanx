@@ -59,7 +59,7 @@ class WC_Ebanx_Credit_Card_Gateway extends WC_Ebanx_Gateway
 
     public function is_available()
     {
-        return parent::is_available() && in_array($this->getTransactionAddress('country'), WC_Ebanx_Gateway_Utils::CREDIT_CARD_COUNTRIES);
+        return parent::is_available() && in_array($this->getTransactionAddress('country'), $this->configs->settings['credit_card_countries']);
     }
 
     public function payment_fields()
