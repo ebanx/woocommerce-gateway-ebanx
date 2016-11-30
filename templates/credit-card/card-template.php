@@ -12,12 +12,12 @@
     <input id="ebanx-card-expiry" class="input-text wc-credit-card-form-card-expiry" type="text" autocomplete="off" placeholder="<?php esc_html_e( 'MM / YY', 'woocommerce-ebanx' ); ?>" style="font-size: 1.5em; padding: 8px;" />
 </p>
 <p class="form-row form-row-last">
-    <label for="ebanx-card-cvc"><?php esc_html_e( 'Card Code', 'woocommerce-ebanx' ); ?> <span class="required">*</span></label>
-    <input id="ebanx-card-cvc" class="input-text wc-credit-card-form-card-cvc" type="text" autocomplete="off" placeholder="<?php esc_html_e( 'CVC', 'woocommerce-ebanx' ); ?>" style="font-size: 1.5em; padding: 8px;" />
+    <label for="ebanx-card-cvv"><?php esc_html_e( 'Card Code', 'woocommerce-ebanx' ); ?> <span class="required">*</span></label>
+    <input id="ebanx-card-cvv" class="input-text wc-credit-card-form-card-cvv" type="text" autocomplete="off" placeholder="<?php esc_html_e( 'CVV', 'woocommerce-ebanx' ); ?>" style="font-size: 1.5em; padding: 8px;" />
 </p>
 <div class="clear"></div>
 
-<?php include_once('installments.php'); ?>
+<?php include('installments.php'); ?>
 
 <p class="form-row form-row-last">
     <label for="ebanx-save-credit-card">

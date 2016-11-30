@@ -1,8 +1,8 @@
 <!-- Installments -->
 <?php if ( $max_installment > 0 ) : ?>
-    <p class="form-row form-row-wide">
+    <p class="form-row form-row-first">
         <label for="ebanx-card-installments"><?php esc_html_e( 'Installments', 'woocommerce-ebanx' ); ?> <span class="required">*</span></label>
-        <select name="ebanx_billing_installments" id="ebanx-installments">
+        <select class="ebanx-instalments">
             <?php for ($number = 1; $number <= $max_installment; ++$number):
                 $installment_amount = strip_tags( wc_price( $cart_total / ($number) ) );
                 ?>
