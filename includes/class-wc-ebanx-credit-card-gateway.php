@@ -117,22 +117,20 @@ class WC_Ebanx_Credit_Card_Gateway extends WC_Ebanx_Gateway
 
         $data = parent::request_data($order);
 
-        if (trim(strtolower(WC()->customer->get_shipping_country())) === WC_Ebanx_Gateway_Utils::COUNTRY_BRAZIL ||
-            trim(strtolower(WC()->customer->get_shipping_country())) === WC_Ebanx_Gateway_Utils::COUNTRY_MEXICO
-        ) {
-            if (empty($_POST['ebanx_billing_installments'])) {
+        if ( in_array(trim(strtolower(WC()->customer->get_shipping_country())), WC_Ebanx_Gateway_Utils::CREDIT_CARD_COUNTRIES) ) {
+            if (empty($_POST['ebanx_billing_instalments'])) {
                 throw new Exception('Please, provide a number of instalments.');
             }
 
-            $data['payment']['instalments'] = $_POST['ebanx_billing_installments'];
+            $data['payment']['instalments'] = $_POST['ebanx_billing_instalments'];
         }
 
         $data['device_id'] = $_POST['ebanx_device_fingerprint'];
 
         $data['payment']['payment_type_code'] = $_POST['ebanx_brand'];
         $data['payment']['creditcard']        = array(
-            'soft_descriptor' => $this->configs->settings['soft_descriptor'],
             'token' => $_POST['ebanx_token'],
+            'card_cvv' => $_POST['ebanx_billing_cvv']
         );
 
         return $data;

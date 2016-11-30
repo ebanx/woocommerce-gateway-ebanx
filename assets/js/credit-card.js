@@ -1,5 +1,4 @@
 /* global wc_ebanx_params */
-
 Ebanx.config.setMode(wc_ebanx_params.mode);
 Ebanx.config.setPublishableKey(wc_ebanx_params.key);
 
@@ -79,10 +78,11 @@ jQuery( function($) {
 				wc_ebanx_form.block();
 
 				var card      = $('#ebanx-card-number').val();
-				var cvc       = $('#ebanx-card-cvc').val();
+				var cvv       = $('#ebanx-card-cvv').val();
 				var expires   = $('#ebanx-card-expiry').payment('cardExpiryVal');
 				var card_name = $('#ebanx-card-holder-name').val();
 				var country   = $('#billing_country').val().toLowerCase();
+        var instalments = $('#ebanx-container-new-credit-card').find('.ebanx-instalments').val();
 
 				Ebanx.config.setCountry(country);
 
@@ -92,27 +92,38 @@ jQuery( function($) {
 					"card_number": parseInt(card.replace(/ /g,'')),
 					"card_name": card_name,
 					"card_due_date": (parseInt( expires['month'] ) || 0) + '/' + (parseInt( expires['year'] ) || 0),
-					"card_cvv": parseInt(cvc)
+					"card_cvv": parseInt(cvv),
+          "instalments": instalments
 				};
 
 				if (cardUse && cardUse.val() && cardUse.val() !== 'new') {
 					creditcard.token = cardUse.val();
-					creditcard.card_cvv = $(cardUse).parent().siblings('.ebanx-container-credit-card').find('.wc-credit-card-form-card-cvc').val();
+					creditcard.card_cvv = $(cardUse).parent().siblings('.ebanx-container-credit-card').find('.wc-credit-card-form-card-cvv').val();
 					creditcard.brand = $(cardUse).parent().siblings('.ebanx-container-credit-card').find('.ebanx-card-brand-use').val();
 					creditcard.masked_number = $(cardUse).parent().siblings('.ebanx-container-credit-card').find('.ebanx-card-masked-number-use').val();
+          creditcard.instalments = $(cardUse).parents('.form-row').find('.ebanx-instalments').val();
 
 					var response = {
 						data: {
 							status: 'SUCCESS',
 							token: creditcard.token,
-							cvv: creditcard.card_cvv,
+							card_cvv: creditcard.card_cvv,
 							payment_type_code: creditcard.brand,
-							masked_card_number: creditcard.masked_number
+							masked_card_number: creditcard.masked_number,
+              instalments: creditcard.instalments
 						}
 					};
 
+          console.log(response, 'response');
+
+          wc_ebanx_form.renderInstalments(creditcard.instalments);
+          wc_ebanx_form.renderCvv(creditcard.card_cvv);
+
 					wc_ebanx_form.onEBANXReponse(response);
 				} else {
+          wc_ebanx_form.renderInstalments(creditcard.instalments);
+          wc_ebanx_form.renderCvv(creditcard.card_cvv);
+
 					Ebanx.card.createToken(creditcard, wc_ebanx_form.onEBANXReponse);
 				}
 			}
@@ -138,18 +149,27 @@ jQuery( function($) {
 				wc_ebanx_form.form.append('<input type="hidden" name="ebanx_token" id="ebanx_token" value="' + response.data.token + '"/>');
 				wc_ebanx_form.form.append('<input type="hidden" name="ebanx_brand" id="ebanx_brand" value="' + response.data.payment_type_code + '"/>');
 				wc_ebanx_form.form.append('<input type="hidden" name="ebanx_masked_card_number" id="ebanx_masked_card_number" value="' + response.data.masked_card_number + '"/>');
-
 				wc_ebanx_form.form.append('<input type="hidden" name="ebanx_device_fingerprint" id="ebanx_device_fingerprint" value="' + response.data.deviceId + '">');
 
 				wc_ebanx_form.form.submit();
 			}
 		},
 
+    renderInstalments: function (instalments) {
+      wc_ebanx_form.form.append('<input type="hidden" name="ebanx_billing_instalments" id="ebanx_billing_instalments" value="' + instalments + '">');
+    },
+
+    renderCvv: function (cvv) {
+      wc_ebanx_form.form.append('<input type="hidden" name="ebanx_billing_cvv" id="ebanx_billing_cvv" value="' + cvv + '">');
+    },
+
     removeHiddenInputs: function () {
       $('#ebanx_token').remove();
       $('#ebanx_brand').remove();
       $('#ebanx_masked_card_number').remove();
       $('#ebanx_device_fingerprint').remove();
+      $('#ebanx_billing_instalments').remove();
+      $('#ebanx_billing_cvv').remove();
     }
 	};
 
