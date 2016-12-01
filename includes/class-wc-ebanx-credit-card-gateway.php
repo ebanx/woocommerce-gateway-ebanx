@@ -115,24 +115,26 @@ class WC_Ebanx_Credit_Card_Gateway extends WC_Ebanx_Gateway
             throw new Exception("Missing Device fingerprint.");
         }
 
+        if (empty($_POST['ebanx_billing_cvv'])) {
+            throw new Exception("Please provide the CVV of your Credit Card.");
+        }
+
         $data = parent::request_data($order);
 
-        if (trim(strtolower(WC()->customer->get_shipping_country())) === WC_Ebanx_Gateway_Utils::COUNTRY_BRAZIL ||
-            trim(strtolower(WC()->customer->get_shipping_country())) === WC_Ebanx_Gateway_Utils::COUNTRY_MEXICO
-        ) {
-            if (empty($_POST['ebanx_billing_installments'])) {
+        if (in_array(trim(strtolower(WC()->customer->get_shipping_country())), WC_Ebanx_Gateway_Utils::CREDIT_CARD_COUNTRIES)) {
+            if (empty($_POST['ebanx_billing_instalments'])) {
                 throw new Exception('Please, provide a number of instalments.');
             }
 
-            $data['payment']['instalments'] = $_POST['ebanx_billing_installments'];
+            $data['payment']['instalments'] = $_POST['ebanx_billing_instalments'];
         }
 
         $data['device_id'] = $_POST['ebanx_device_fingerprint'];
 
         $data['payment']['payment_type_code'] = $_POST['ebanx_brand'];
         $data['payment']['creditcard']        = array(
-            'soft_descriptor' => $this->configs->settings['soft_descriptor'],
-            'token' => $_POST['ebanx_token'],
+            'token'    => $_POST['ebanx_token'],
+            'card_cvv' => $_POST['ebanx_billing_cvv'],
         );
 
         return $data;
@@ -159,7 +161,7 @@ class WC_Ebanx_Credit_Card_Gateway extends WC_Ebanx_Gateway
     {
         parent::save_user_meta_fields($order);
 
-        if ($this->userId && $this->configs->settings['enable_one_click'] === 'yes') {
+        if ($this->userId && $this->configs->settings['enable_one_click'] === 'yes' && isset($_POST['ebanx-save-credit-card']) && $_POST['ebanx-save-credit-card'] === 'yes') {
             $cards = get_user_meta($this->userId, '__ebanx_credit_card_token', true);
             $cards = !empty($cards) ? $cards : [];
 
