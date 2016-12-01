@@ -1,5 +1,5 @@
 <!-- Installments -->
-<?php if ( $max_installment > 0 ) : ?>
+<?php if ($max_installment > 0) : ?>
     <p class="form-row form-row-first">
         <label for="ebanx-card-installments"><?php esc_html_e( 'Installments', 'woocommerce-ebanx' ); ?> <span class="required">*</span></label>
         <select class="ebanx-instalments">
