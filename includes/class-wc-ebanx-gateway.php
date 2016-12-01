@@ -52,6 +52,13 @@ abstract class WC_Ebanx_Gateway extends WC_Payment_Gateway
             // 'subscriptions',
             'refunds'
         );
+
+        $this->icon = $this->show_icon();
+    }
+
+    public function show_icon()
+    {
+        return plugins_url('/assets/images/' . $this->id . '.png', plugin_basename(dirname(__FILE__)));
     }
 
     public function checkout_scripts()

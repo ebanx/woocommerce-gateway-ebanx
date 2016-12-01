@@ -57,6 +57,11 @@ class WC_Ebanx_Credit_Card_Gateway extends WC_Ebanx_Gateway
         }
     }
 
+    public function show_icon()
+    {
+        return plugins_url('/assets/images/' . $this->id . '-' . $this->getTransactionAddress('country') . '.png', plugin_basename(dirname(__FILE__)));
+    }
+
     public function is_available()
     {
         return parent::is_available() && in_array($this->getTransactionAddress('country'), $this->configs->settings['credit_card_countries']);
