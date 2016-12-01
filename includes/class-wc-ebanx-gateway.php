@@ -164,16 +164,6 @@ abstract class WC_Ebanx_Gateway extends WC_Payment_Gateway
         return $data;
     }
 
-    protected function save_user_meta_fields($order) {
-        if($this->userId) {
-            if (trim(strtolower($order->get_address()['country'])) === WC_Ebanx_Gateway_Utils::COUNTRY_BRAZIL) {
-                update_user_meta($this->userId, '__ebanx_billing_brazil_document', $_POST['ebanx_billing_brazil_document']);
-                update_user_meta($this->userId, '__ebanx_billing_brazil_birth_date', $_POST['ebanx_billing_brazil_birth_date']);
-                update_user_meta($this->userId, '__ebanx_billing_brazil_street_number', $_POST['ebanx_billing_brazil_street_number']);
-            }
-        }
-    }
-
     protected function getTransactionAddress($attr = '')
     {
         if (empty($_POST['billing_country']) && empty(WC()->customer->get_shipping_country())) {
