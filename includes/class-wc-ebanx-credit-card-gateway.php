@@ -115,6 +115,10 @@ class WC_Ebanx_Credit_Card_Gateway extends WC_Ebanx_Gateway
             throw new Exception("Missing Device fingerprint.");
         }
 
+        if (empty($_POST['ebanx_billing_cvv'])) {
+            throw new Exception("Please provide the CVV of your Credit Card.");
+        }
+
         $data = parent::request_data($order);
 
         if ( in_array(trim(strtolower(WC()->customer->get_shipping_country())), WC_Ebanx_Gateway_Utils::CREDIT_CARD_COUNTRIES) ) {
