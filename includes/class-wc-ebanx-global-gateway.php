@@ -99,25 +99,23 @@ final class WC_Ebanx_Global_Gateway extends WC_Payment_Gateway
                 'label' => __('Choose countries', 'woocommerce-ebanx'),
                 'options' => WC_Ebanx_Gateway_Utils::CREDIT_CARD_COUNTRIES
             ),
-            'enable_one_click'        => array(
-                'title' => __('One click', 'woocommerce-ebanx'),
+            'enable_place_order' => array(
+                'title' => __('Place order', 'woocommerce-ebanx'),
                 'type'  => 'checkbox',
-                'label' => __('Enable one-click.', 'woocommerce-ebanx'),
+                'label' => __('Enable place order.', 'woocommerce-ebanx'),
             ),
-            'enable_instant_payment' => array(
+            'one_click' => array(
                 'type'        => 'checkbox',
-                'title'       => __('instant payment', 'woocommerce-ebanx'),
-                'description' => __('Enable instant payment.', 'woocommerce-ebanx'),
-                'label'       => __('Enable instant payment', 'woocommerce-ebanx'),
-                'default'     => 'no',
-                'custom_attributes' => array('required' => 'required')
+                'title'       => __('One click payment', 'woocommerce-ebanx'),
+                'description' => __('Enable one-click payment.', 'woocommerce-ebanx'),
+                'label'       => __('Enable one-click payment', 'woocommerce-ebanx'),
+                'default'     => 'no'
             ),
-            'instant_payment_label_button' => array(
-                'title'             => __('Instant payment label button', 'woocommerce-ebanx'),
+            'one_click_label_button' => array(
+                'title'             => __('one-click payment label button', 'woocommerce-ebanx'),
                 'type'              => 'text',
-                'description'       => __('Label to instant payment button', 'woocommerce-ebanx'),
-                'default'           => 'Instant payment',
-                'custom_attributes' => array('required' => 'required')
+                'description'       => __('Label to one-click payment button', 'woocommerce-ebanx'),
+                'default'           => 'one-click payment'
             ),
             'credit_card_instalments' => array(
                 'title'       => __('Number of Installment', 'woocommerce-ebanx'),
