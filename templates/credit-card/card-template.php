@@ -19,10 +19,12 @@
 
 <?php include 'installments.php';?>
 
-<p class="form-row form-row-last">
-    <label for="ebanx-save-credit-card">
-        <input id="ebanx-save-credit-card" name="ebanx-save-credit-card" class="input-text wc-credit-card-form-save" type="checkbox" style="width: auto; display: inline-block;" value="yes" checked />
-        <?php esc_html_e('Save this Credit Card on My Account for future orders', 'woocommerce-ebanx');?>
-    </label>
-</p>
+<?php if ($place_order_enabled) : ?>
+    <p class="form-row form-row-last">
+        <label for="ebanx-save-credit-card">
+            <input id="ebanx-save-credit-card" name="ebanx-save-credit-card" class="input-text wc-credit-card-form-save" type="checkbox" style="width: auto; display: inline-block;" value="yes" checked />
+            <?php esc_html_e('Save this Credit Card on My Account for future orders', 'woocommerce-ebanx');?>
+        </label>
+    </p>
+<?php endif; ?>
 <div class="clear"></div>
