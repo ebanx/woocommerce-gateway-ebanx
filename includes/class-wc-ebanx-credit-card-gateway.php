@@ -11,7 +11,6 @@ class WC_Ebanx_Credit_Card_Gateway extends WC_Ebanx_Gateway
         $this->id           = 'ebanx-credit-card';
         $this->method_title = __('EBANX - Credit Card', 'woocommerce-ebanx');
 
-        // Define user set variables.
         $this->title       = __('Credit Card');
         $this->description = __('Credit Card description');
 
@@ -85,6 +84,7 @@ class WC_Ebanx_Credit_Card_Gateway extends WC_Ebanx_Gateway
                 'cards'           => (array) $cards,
                 'cart_total'      => $cart_total,
                 'max_installment' => $this->configs->settings['credit_card_instalments'],
+                'place_order_enabled' => ($this->configs->settings['enableplace_order'] === 'yes'),
             ),
             'woocommerce/ebanx/',
             WC_Ebanx::get_templates_path()
@@ -116,7 +116,7 @@ class WC_Ebanx_Credit_Card_Gateway extends WC_Ebanx_Gateway
             throw new Exception("Missing ebanx card params.");
         }
 
-        if (empty($_POST['ebanx_device_fingerprint'])) {
+        if (empty($_POST['ebanx_is_one_click']) && empty($_POST['ebanx_device_fingerprint'])) {
             throw new Exception("Missing Device fingerprint.");
         }
 
@@ -134,7 +134,9 @@ class WC_Ebanx_Credit_Card_Gateway extends WC_Ebanx_Gateway
             $data['payment']['instalments'] = $_POST['ebanx_billing_instalments'];
         }
 
-        $data['device_id'] = $_POST['ebanx_device_fingerprint'];
+        if (!empty($_POST['ebanx_device_fingerprint'])) {
+            $data['device_id'] = $_POST['ebanx_device_fingerprint'];
+        }
 
         $data['payment']['payment_type_code'] = $_POST['ebanx_brand'];
         $data['payment']['creditcard']        = array(

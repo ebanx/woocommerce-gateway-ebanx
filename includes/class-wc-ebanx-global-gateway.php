@@ -99,10 +99,23 @@ final class WC_Ebanx_Global_Gateway extends WC_Payment_Gateway
                 'label' => __('Choose countries', 'woocommerce-ebanx'),
                 'options' => WC_Ebanx_Gateway_Utils::CREDIT_CARD_COUNTRIES
             ),
-            'enable_one_click'        => array(
-                'title' => __('One click', 'woocommerce-ebanx'),
+            'enable_place_order' => array(
+                'title' => __('Place order', 'woocommerce-ebanx'),
                 'type'  => 'checkbox',
-                'label' => __('Enable one-click.', 'woocommerce-ebanx'),
+                'label' => __('Enable place order.', 'woocommerce-ebanx'),
+            ),
+            'one_click' => array(
+                'type'        => 'checkbox',
+                'title'       => __('One click payment', 'woocommerce-ebanx'),
+                'description' => __('Enable one-click payment.', 'woocommerce-ebanx'),
+                'label'       => __('Enable one-click payment', 'woocommerce-ebanx'),
+                'default'     => 'no'
+            ),
+            'one_click_label_button' => array(
+                'title'             => __('one-click payment label button', 'woocommerce-ebanx'),
+                'type'              => 'text',
+                'description'       => __('Label to one-click payment button', 'woocommerce-ebanx'),
+                'default'           => 'one-click payment'
             ),
             'credit_card_instalments' => array(
                 'title'       => __('Number of Installment', 'woocommerce-ebanx'),

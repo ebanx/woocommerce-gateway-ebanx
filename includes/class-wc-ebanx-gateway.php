@@ -127,11 +127,11 @@ abstract class WC_Ebanx_Gateway extends WC_Payment_Gateway
             'mode'      => 'full',
             'operation' => 'request',
             'payment'   => array(
-                'country'               => $_POST['billing_country'], // TODO: Dynamic from config or this?
+                'country'               => $order->get_address()['country'],
                 'currency_code'         => WC_Ebanx_Gateway_Utils::CURRENCY_CODE_USD, // TODO: Dynamic
-                "name"                  => $_POST['billing_first_name'] . " " . $_POST['billing_last_name'],
-                "email"                 => $_POST['billing_email'],
-                "phone_number"          => $_POST['billing_phone'],
+                "name"                  => $order->get_address()['first_name'] . " " . $order->get_address()['last_name'],
+                "email"                 => $order->get_address()['email'],
+                "phone_number"          => $order->get_address()['phone'],
                 'amount_total'          => $order->get_total(),
                 'order_number'          => $order->id,
                 'merchant_payment_code' => $order->id . '-' . md5(rand(123123, 9999999)),
@@ -140,10 +140,8 @@ abstract class WC_Ebanx_Gateway extends WC_Payment_Gateway
 
         if (trim(strtolower(WC()->customer->get_shipping_country())) === WC_Ebanx_Gateway_Utils::COUNTRY_BRAZIL) {
             if (empty($_POST['ebanx_billing_brazil_document']) ||
-                empty($_POST['ebanx_billing_brazil_birth_date']) ||
                 empty($_POST['billing_postcode']) ||
                 empty($_POST['billing_address_1']) ||
-                empty($_POST['ebanx_billing_brazil_street_number']) ||
                 empty($_POST['billing_city']) ||
                 empty($_POST['billing_state'])
             ) {
@@ -152,12 +150,12 @@ abstract class WC_Ebanx_Gateway extends WC_Payment_Gateway
 
             $data['payment'] = array_merge($data['payment'], array(
                 'document'      => $_POST['ebanx_billing_brazil_document'],
-                'birth_date'    => $_POST['ebanx_billing_brazil_birth_date'],
-                'zipcode'       => $_POST['billing_postcode'],
-                'address'       => $_POST['billing_address_1'],
-                'street_number' => $_POST['ebanx_billing_brazil_street_number'],
-                'city'          => $_POST['billing_city'],
-                'state'         => $_POST['billing_state'],
+                'zipcode'       => $order->get_address()['postcode'],
+                'birth_date'    => '10/10/2010',
+                'street_number' => '123',
+                'address'       => $order->get_address()['address_1'],
+                'city'          => $order->get_address()['city'],
+                'state'         => $order->get_address()['state'],
             ));
         }
 
@@ -166,13 +164,17 @@ abstract class WC_Ebanx_Gateway extends WC_Payment_Gateway
 
     protected function getTransactionAddress($attr = '')
     {
+        if (empty(WC()->customer) || is_admin()) {
+            return false;
+        }
+
         if (empty($_POST['billing_country']) && empty(WC()->customer->get_shipping_country())) {
             throw new Exception("Missing address country.");
         }
 
-        $this->address['country'] = trim(strtolower($_POST['billing_country']));
-
-        if (empty($this->address['country'])) {
+        if (!empty($_POST['billing_country'])) {
+            $this->address['country'] = trim(strtolower($_POST['billing_country']));
+        } else {
             $this->address['country'] = trim(strtolower(WC()->customer->get_shipping_country()));
         }
 
@@ -276,7 +278,7 @@ abstract class WC_Ebanx_Gateway extends WC_Payment_Gateway
 
         if ($request->payment->pre_approved) {
             $order->add_order_note(__('EBANX: Transaction paid.', 'woocommerce-ebanx'));
-            $order->payment_complete($request->hash);
+            $order->payment_complete($request->payment->hash);
         }
 
         $this->save_order_meta_fields($order, $request);
@@ -287,8 +289,6 @@ abstract class WC_Ebanx_Gateway extends WC_Payment_Gateway
         if ($this->userId) {
             if (trim(strtolower($order->get_address()['country'])) === WC_Ebanx_Gateway_Utils::COUNTRY_BRAZIL) {
                 update_user_meta($this->userId, '__ebanx_billing_brazil_document', $_POST['ebanx_billing_brazil_document']);
-                update_user_meta($this->userId, '__ebanx_billing_brazil_birth_date', $_POST['ebanx_billing_brazil_birth_date']);
-                update_user_meta($this->userId, '__ebanx_billing_brazil_street_number', $_POST['ebanx_billing_brazil_street_number']);
             }
         }
     }
