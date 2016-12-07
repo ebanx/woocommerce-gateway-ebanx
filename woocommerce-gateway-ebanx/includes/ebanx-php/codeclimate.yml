@@ -1,0 +1,17 @@
+languages:
+  PHP: true
+exclude_paths:
+- examples/*
+- examples/bootstrap.php
+- examples/cancel.php
+- examples/capture.php
+- examples/checkout.php
+- examples/direct.php
+- examples/document_balance.php
+- examples/exchange.php
+- examples/get_bank_list.php
+- examples/print_html.php
+- examples/query.php
+- examples/refund.php
+- examples/refund_or_cancel.php
+- examples/zipcode.php

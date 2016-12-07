@@ -1,0 +1,8 @@
+{
+  "require-dev": {
+    "squizlabs/php_codesniffer": "2.*",
+    "fzaninotto/faker": "^1.6",
+    "phpunit/phpunit": "^5.6",
+    "phpunit/phpunit-selenium": "^3.0"
+  }
+}
