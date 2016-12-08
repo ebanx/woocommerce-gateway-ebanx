@@ -3,12 +3,12 @@
  * Plugin Name: WooCommerce Ebanx.com
  * Plugin URI: http://github.com/ebanx/woocommerce
  * Description: Gateway de pagamento Ebanx.com para WooCommerce.
- * Author: Woocommercer, Cristopher
+ * Author: EBANX
  * Author URI: https://ebanx.com/
  * Version: 1.0.0
  * License: GPLv2 or later
  * Text Domain: woocommerce-ebanx
- * Domain Path: /languages/
+ * Domain Path: /languages
  *
  * @package WooCommerce_Ebanx
  */
@@ -141,7 +141,7 @@ if (!class_exists('WC_Ebanx')) {
             $is_endpoint = isset($wp_query->query_vars[self::$endpoint]);
 
             if ($is_endpoint && !is_admin() && is_main_query() && in_the_loop() && is_account_page()) {
-                $title = __(self::$menu_name, 'woocommerce-ebanx');
+                $title = __(self::$menu_name, 'woocommerce-gateway-ebanx');
                 remove_filter('the_title', array($this, 'my_account_menus_title'));
             }
 
@@ -154,7 +154,7 @@ if (!class_exists('WC_Ebanx')) {
             $logout = $menu['customer-logout'];
             unset($menu['customer-logout']);
 
-            $menu[self::$endpoint] = __(self::$menu_name, 'woocommerce-ebanx');
+            $menu[self::$endpoint] = __(self::$menu_name, 'woocommerce-gateway-ebanx');
 
             // Insert back the logout item.
             $menu['customer-logout'] = $logout;
@@ -303,9 +303,7 @@ if (!class_exists('WC_Ebanx')) {
 
         public static function log($message)
         {
-            if (empty(self::$log)) {
-                self::$log = new WC_Logger();
-            }
+            if (empty(self::$log)) self::$log = new WC_Logger();
 
             self::$log->add('woocommerce-gateway-ebanx', $message);
 
