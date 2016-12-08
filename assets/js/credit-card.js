@@ -59,7 +59,7 @@ jQuery( function($) {
 		onError: function (e, res) {
       wc_ebanx_form.removeErrors();
 
-			$('#ebanx-credit-cart-form').prepend('<p class="woocommerce-error">' + res.response.error.message + '</p>');
+			$('#ebanx-credit-cart-form').prepend('<p class="woocommerce-error">' + (res.response.error.err.message || 'Some error happened. Please, verify the data of your credit card and try again.') + '</p>');
 			wc_ebanx_form.unblock();
 		},
 
@@ -113,8 +113,6 @@ jQuery( function($) {
               instalments: creditcard.instalments
 						}
 					};
-
-          console.log(response, 'response');
 
           wc_ebanx_form.renderInstalments(creditcard.instalments);
           wc_ebanx_form.renderCvv(creditcard.card_cvv);
