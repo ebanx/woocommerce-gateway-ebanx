@@ -9,7 +9,7 @@ class WC_Ebanx_Credit_Card_Gateway extends WC_Ebanx_Gateway
     public function __construct()
     {
         $this->id           = 'ebanx-credit-card';
-        $this->method_title = __('EBANX - Credit Card', 'woocommerce-ebanx');
+        $this->method_title = __('EBANX - Credit Card', 'woocommerce-gateway-ebanx');
 
         $this->title       = __('Credit Card');
         $this->description = __('Credit Card description');
@@ -113,22 +113,22 @@ class WC_Ebanx_Credit_Card_Gateway extends WC_Ebanx_Gateway
     protected function request_data($order)
     {
         if (empty($_POST['ebanx_token']) || empty($_POST['ebanx_masked_card_number']) || empty($_POST['ebanx_brand'])) {
-            throw new Exception("Missing ebanx card params.");
+            throw new Exception('MISSING-CARD-PARAMS');
         }
 
         if (empty($_POST['ebanx_is_one_click']) && empty($_POST['ebanx_device_fingerprint'])) {
-            throw new Exception("Missing Device fingerprint.");
+            throw new Exception('MISSING-DEVICE-FINGERPRINT');
         }
 
         if (empty($_POST['ebanx_billing_cvv'])) {
-            throw new Exception("Please provide the CVV of your Credit Card.");
+            throw new Exception('MISSING-CVV');
         }
 
         $data = parent::request_data($order);
 
         if (in_array(trim(strtolower(WC()->customer->get_shipping_country())), WC_Ebanx_Gateway_Utils::CREDIT_CARD_COUNTRIES)) {
             if (empty($_POST['ebanx_billing_instalments'])) {
-                throw new Exception('Please, provide a number of instalments.');
+                throw new Exception('MISSING-INSTALMENTS');
             }
 
             $data['payment']['instalments'] = $_POST['ebanx_billing_instalments'];

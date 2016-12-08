@@ -40,7 +40,7 @@ class WC_Ebanx_My_Account
             if (!empty($url)) {
                 $actions[] = array(
                     'url'  => $url,
-                    'name' => __('View Banking Ticket', 'woocommerce-ebanx'),
+                    'name' => __('View Banking Ticket', 'woocommerce-gateway-ebanx'),
                 );
             }
         }
