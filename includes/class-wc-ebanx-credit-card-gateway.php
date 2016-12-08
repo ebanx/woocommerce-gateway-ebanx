@@ -117,7 +117,7 @@ class WC_Ebanx_Credit_Card_Gateway extends WC_Ebanx_Gateway
         }
 
         if (empty($_POST['ebanx_is_one_click']) && empty($_POST['ebanx_device_fingerprint'])) {
-            throw new Exception("Missing Device fingerprint.");
+            throw new Exception('MISSING-DEVICE-FINGERPRINT');
         }
 
         if (empty($_POST['ebanx_billing_cvv'])) {
