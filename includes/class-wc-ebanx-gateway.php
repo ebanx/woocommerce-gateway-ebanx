@@ -165,9 +165,7 @@ abstract class WC_Ebanx_Gateway extends WC_Payment_Gateway
 
     protected function getTransactionAddress($attr = '')
     {
-        if (empty(WC()->customer) || is_admin()) {
-            return false;
-        }
+        if (empty(WC()->customer) || is_admin()) return false;
 
         if (empty($_POST['billing_country']) && empty(WC()->customer->get_shipping_country())) {
             throw new Exception('INVALID-BILLING-COUNTRY');
