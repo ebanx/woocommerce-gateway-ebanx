@@ -117,6 +117,11 @@ final class WC_Ebanx_Global_Gateway extends WC_Payment_Gateway
                 'description'       => __('Label to one-click payment button', 'woocommerce-ebanx'),
                 'default'           => 'one-click payment'
             ),
+            'enable_one_click'        => array(
+                'title' => __('One click', 'woocommerce-gateway-ebanx'),
+                'type'  => 'checkbox',
+                'label' => __('Enable one-click.', 'woocommerce-gateway-ebanx'),
+            ),
             'credit_card_instalments' => array(
                 'title'       => __('Number of Installment', 'woocommerce-gateway-ebanx'),
                 'type'        => 'select',

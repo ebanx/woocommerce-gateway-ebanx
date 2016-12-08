@@ -152,8 +152,7 @@ abstract class WC_Ebanx_Gateway extends WC_Payment_Gateway
             $data['payment'] = array_merge($data['payment'], array(
                 'document'      => $_POST['ebanx_billing_brazil_document'],
                 'zipcode'       => $order->get_address()['postcode'],
-                'birth_date'    => '10/10/2010',
-                'street_number' => '123',
+                'birth_date'    => $_POST['ebanx_billing_brazil_birth_date'],
                 'address'       => $order->get_address()['address_1'],
                 'street_number' => $street_number,
                 'city'          => $order->get_address()['city'],
