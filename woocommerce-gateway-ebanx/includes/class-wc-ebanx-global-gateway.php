@@ -97,7 +97,7 @@ final class WC_Ebanx_Global_Gateway extends WC_Payment_Gateway
                 'title' => __('Countries', 'woocommerce-ebanx'),
                 'type'  => 'multiselect',
                 'label' => __('Choose countries', 'woocommerce-ebanx'),
-                'options' => WC_Ebanx_Gateway_Utils::CREDIT_CARD_COUNTRIES
+                'options' => WC_Ebanx_Gateway_Utils::$CREDIT_CARD_COUNTRIES
             ),
             'enable_place_order' => array(
                 'title' => __('Place order', 'woocommerce-ebanx'),
