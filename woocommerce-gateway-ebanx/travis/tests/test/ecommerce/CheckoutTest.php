@@ -17,7 +17,7 @@ class CheckoutTest extends  BaseTest {
         parent::setUp();
 
         $this->mock[checkoutData][payment_data] = array (
-            cvc        => 123,
+            cvv        => 123,
             expiry     => "12 / 2222",
             number     => 4111111111111111,
             holderName => $this->faker->name
@@ -28,7 +28,7 @@ class CheckoutTest extends  BaseTest {
             email     => $this->faker->email,
             state     => StaticData::$STATES[BR][PR],
             phone     => $this->faker->phoneNumber,
-            address   => $this->faker->address,
+            address   => $this->faker->streetAddress,
             document  => $this->faker->cpf,
             postcode  => $this->faker->postcode,
             lastName  => $this->faker->lastName,
