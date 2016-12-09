@@ -293,10 +293,10 @@ abstract class WC_Ebanx_Gateway extends WC_Payment_Gateway
         }
     }
 
-    final public function process_hook($hash)
+    final public function process_hook($hash, $notificationType)
     {
         $config = [
-            'integrationKey' => $this->api_key,
+            'integrationKey' => $this->private_key,
             'testMode'       => $this->is_sandbox,
         ];
 
@@ -321,21 +321,48 @@ abstract class WC_Ebanx_Gateway extends WC_Payment_Gateway
         // TODO: if (empty($order)) {}
         // TODO: if ($data->status != "SUCCESS")
 
-        switch (strtoupper($data->payment->status)) {
-            case 'CO':
-                $order->update_status('completed');
-                break;
-            case 'CA':
-                $order->update_status('cancelled');
-                break;
-            case 'PE':
-                $order->update_status('pending');
-                break;
-            case 'OP':
-                $order->update_status('processing');
-                break;
-        }
+        switch (strtoupper($notificationType)) {
+            case 'REFUND':
+                $refunds = current(get_post_meta($order->id, "_ebanx_payment_refunds"));
 
-        // TODO: How to call process response to finish the transaction and save meta fields?
+                foreach ($refunds as $k => $ref) {
+                    foreach ($data->payment->refunds as $refund) {
+                        if ($ref->id == $refund->id) {
+                            if ($refund->status == 'CO' && $refunds[$k]->status != 'CO') {
+                                $order->add_order_note(sprintf('Refund confirmed to EBANX - Refund ID: %s', $refund->id));
+                            }
+                            if ($refund->status == 'CA' && $refunds[$k]->status != 'CA') {
+                                $order->add_order_note(sprintf('Refund canceled to EBANX - Refund ID: %s', $refund->id));
+                            }
+
+                            $refunds[$k]->status       = $refund->status; // status == co save note
+                            $refunds[$k]->cancel_date  = $refund->cancel_date;
+                            $refunds[$k]->request_date = $refund->request_date;
+                            $refunds[$k]->pending_date = $refund->pending_date;
+                            $refunds[$k]->confirm_date = $refund->confirm_date;
+                        }
+                    }
+                }
+
+                update_post_meta($order->id, "_ebanx_payment_refunds", $refunds);
+            break;
+            case 'UPDATE':
+                switch (strtoupper($data->payment->status)) {
+                    case 'CO':
+                        $order->update_status('completed');
+                        break;
+                    case 'CA':
+                        $order->update_status('cancelled');
+                        break;
+                    case 'PE':
+                        $order->update_status('pending');
+                        break;
+                    case 'OP':
+                        $order->update_status('processing');
+                        break;
+                }
+                // TODO: How to call process response to finish the transaction and save meta fields?
+            break;
+        };
     }
 }

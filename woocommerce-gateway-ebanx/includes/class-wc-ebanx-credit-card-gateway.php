@@ -84,7 +84,7 @@ class WC_Ebanx_Credit_Card_Gateway extends WC_Ebanx_Gateway
                 'cards'           => (array) $cards,
                 'cart_total'      => $cart_total,
                 'max_installment' => $this->configs->settings['credit_card_instalments'],
-                'place_order_enabled' => ($this->configs->settings['enableplace_order'] === 'yes'),
+                'place_order_enabled' => (isset($this->configs->settings['enableplace_order']) && $this->configs->settings['enableplace_order'] === 'yes'),
             ),
             'woocommerce/ebanx/',
             WC_Ebanx::get_templates_path()
@@ -126,7 +126,7 @@ class WC_Ebanx_Credit_Card_Gateway extends WC_Ebanx_Gateway
 
         $data = parent::request_data($order);
 
-        if (in_array(trim(strtolower(WC()->customer->get_shipping_country())), WC_Ebanx_Gateway_Utils::CREDIT_CARD_COUNTRIES)) {
+        if (in_array(trim(strtolower(WC()->customer->get_shipping_country())), WC_Ebanx_Gateway_Utils::$CREDIT_CARD_COUNTRIES)) {
             if (empty($_POST['ebanx_billing_instalments'])) {
                 throw new Exception('Please, provide a number of instalments.');
             }

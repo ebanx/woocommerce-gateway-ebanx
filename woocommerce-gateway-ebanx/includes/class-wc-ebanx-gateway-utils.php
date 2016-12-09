@@ -24,7 +24,7 @@ abstract class WC_Ebanx_Gateway_Utils
     const CURRENCY_CODE_COP = 'COP';
     const CURRENCY_CODE_CLP = 'CLP';
 
-    const ALL_COUNTRIES = array(
+    public static $ALL_COUNTRIES = array(
         self::COUNTRY_BRAZIL,
         self::COUNTRY_COLOMBIA,
         self::COUNTRY_MEXICO,
@@ -32,7 +32,7 @@ abstract class WC_Ebanx_Gateway_Utils
         self::COUNTRY_CHILE,
     );
 
-    const CREDIT_CARD_COUNTRIES = array(
+    public static $CREDIT_CARD_COUNTRIES = array(
         self::COUNTRY_BRAZIL => self::COUNTRY_BRAZIL,
         self::COUNTRY_MEXICO => self::COUNTRY_MEXICO,
     );
