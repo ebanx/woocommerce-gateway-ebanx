@@ -40,6 +40,16 @@ class EcommerceOperator extends BaseOperator {
         ;
     }
 
+    public function buyProductPayWithExistingCreditCard($product, array $checkoutData) {
+        return $this
+            ->checkoutProduct($product)
+            ->fillCustomerDataToBrazil($checkoutData[customer])
+            ->fillExistingCreditCard($checkoutData[payment_data])
+            ->placeOrder()
+            ->assertCheckoutPaidSuccess()
+        ;
+    }
+
     public function buyProductPayWithCreditCard($product, array $checkoutData) {
         return $this
             ->checkoutProduct($product)

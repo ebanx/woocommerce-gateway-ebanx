@@ -10,12 +10,18 @@ class ProductPage extends BasePage {
 
         return $this;
     }
+
     public function openCart() {
-        $this->baseTest->byLinkText('View Cart')->click();
+        $this->viewCartLink()->click();
 
         return $this->cartPage();
     }
+
     public function cartPage() {
         return new CartPage($this->baseTest);
+    }
+
+    protected function viewCartLink() {
+        return $this->baseTest->byLinkText('View Cart');
     }
 }

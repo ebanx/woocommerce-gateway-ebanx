@@ -17,8 +17,9 @@ if (!defined('ABSPATH')) {
 		<?php foreach ($cards as $card): ?>
 			<div class="form-row">
                 <label class="ebanx-credit-card-label">
-				    <input type="radio" class="input-radio" value="<?php echo $card->token; ?>" name="ebanx-credit-card-use" /> <?php echo $card->brand . " " . $card->masked_number; ?>
-                </label>
+					<input type="radio" class="input-radio <?php echo trim($card->brand . "-" . $card->masked_number); ?>" value="<?php echo $card->token; ?>" name="ebanx-credit-card-use" />
+					<?php echo trim($card->brand . " " . $card->masked_number); ?>
+				</label>
 				<div class="ebanx-container-credit-card" style="display: none;">
 					<div class="form-row">
 						<label for="ebanx-card-cvv"><?php esc_html_e('Card Code', 'woocommerce-ebanx');?> <span class="required">*</span></label>

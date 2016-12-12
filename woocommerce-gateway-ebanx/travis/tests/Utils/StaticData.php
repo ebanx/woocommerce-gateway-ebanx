@@ -3,6 +3,21 @@
 namespace Ebanx\Woocommerce\Utils;
 
 class StaticData {
+    static $ADMIN = array(
+        USER => array(
+            LOGIN    => 'ebanx',
+            PASSWORD => 'ebanx'
+        )
+    );
+
+    static $CARD = array(
+        CVV    => 123,
+        BRAND  => 'visa',
+        EXPIRY => '12 / 2222',
+        NUMBER => 4111111111111111,
+        MASKED_NUMBER => '411111xxxxxx1111'
+    );
+
     static $CITIES = array(
         'BR' => array(
             'PR' => array(

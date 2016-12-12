@@ -84,7 +84,7 @@ class WC_Ebanx_Credit_Card_Gateway extends WC_Ebanx_Gateway
                 'cards'           => (array) $cards,
                 'cart_total'      => $cart_total,
                 'max_installment' => $this->configs->settings['credit_card_instalments'],
-                'place_order_enabled' => (isset($this->configs->settings['enableplace_order']) && $this->configs->settings['enableplace_order'] === 'yes'),
+                'place_order_enabled' => (isset($this->configs->settings['enable_place_order']) && $this->configs->settings['enable_place_order'] === 'yes'),
             ),
             'woocommerce/ebanx/',
             WC_Ebanx::get_templates_path()
@@ -168,7 +168,7 @@ class WC_Ebanx_Credit_Card_Gateway extends WC_Ebanx_Gateway
     {
         parent::save_user_meta_fields($order);
 
-        if ($this->userId && $this->configs->settings['enable_one_click'] === 'yes' && isset($_POST['ebanx-save-credit-card']) && $_POST['ebanx-save-credit-card'] === 'yes') {
+        if ($this->userId && $this->configs->settings['enable_place_order'] === 'yes' && isset($_POST['ebanx-save-credit-card']) && $_POST['ebanx-save-credit-card'] === 'yes') {
             $cards = get_user_meta($this->userId, '__ebanx_credit_card_token', true);
             $cards = !empty($cards) ? $cards : [];
 
