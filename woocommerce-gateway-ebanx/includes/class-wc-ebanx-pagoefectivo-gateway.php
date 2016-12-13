@@ -16,6 +16,8 @@ class WC_Ebanx_Pagoefectivo_Gateway extends WC_Ebanx_Redirect_Gateway
         $this->description = __('Pagoefectivo description');
 
         parent::__construct();
+
+        $this->enabled = in_array($this->id, $this->configs->settings['peru_payment_methods']) ? 'yes' : false;
     }
 
     public function is_available()

@@ -16,6 +16,8 @@ class WC_Ebanx_Servipag_Gateway extends WC_Ebanx_Gateway
         $this->description = __('ServiPag Description');
 
         parent::__construct();
+
+        $this->enabled = in_array($this->id, $this->configs->settings['chile_payment_methods']) ? 'yes' : false;
     }
 
     public function is_available()

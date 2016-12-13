@@ -16,6 +16,8 @@ class WC_Ebanx_Tef_Gateway extends WC_Ebanx_Redirect_Gateway
         $this->description = __('TEF Description');
 
         parent::__construct();
+
+        $this->enabled = in_array($this->id, $this->configs->settings['brazil_payment_methods']) ? 'yes' : false;
     }
 
     public function is_available()

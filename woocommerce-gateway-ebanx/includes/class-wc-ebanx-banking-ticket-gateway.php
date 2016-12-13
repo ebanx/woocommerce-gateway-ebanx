@@ -16,6 +16,8 @@ class WC_Ebanx_Banking_Ticket_Gateway extends WC_Ebanx_Gateway
         $this->description = __('Pay with EBANX Baking Ticket');
 
         parent::__construct();
+
+        $this->enabled = in_array($this->id, $this->configs->settings['brazil_payment_methods']) ? 'yes' : false;
     }
 
     public function is_available()

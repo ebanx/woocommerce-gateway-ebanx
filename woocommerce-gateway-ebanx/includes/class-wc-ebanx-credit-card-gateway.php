@@ -31,7 +31,7 @@ class WC_Ebanx_Credit_Card_Gateway extends WC_Ebanx_Gateway
 
             $ebanx_params = array(
                 'key'  => $this->public_key,
-                'mode' => $this->is_sandbox ? 'test' : 'production',
+                'mode' => $this->is_test_mode ? 'test' : 'production',
             );
 
             // If we're on the pay page we need to pass ebanx.js the address of the order.
@@ -63,7 +63,10 @@ class WC_Ebanx_Credit_Card_Gateway extends WC_Ebanx_Gateway
 
     public function is_available()
     {
-        return parent::is_available() && in_array($this->getTransactionAddress('country'), $this->configs->settings['credit_card_countries']);
+        $this->method = ($this->getTransactionAddress('country') === WC_Ebanx_Gateway_Utils::COUNTRY_BRAZIL) ? 'brazil_payment_methods' : 'mexico_payment_methods';
+        $this->enabled = in_array($this->id, $this->configs->settings[$this->method]) ? 'yes' : false;
+
+        return parent::is_available() && in_array($this->getTransactionAddress('country'), WC_Ebanx_Gateway_Utils::$CREDIT_CARD_COUNTRIES);
     }
 
     public function payment_fields()
