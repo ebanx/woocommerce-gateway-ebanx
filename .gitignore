@@ -1,3 +1,4 @@
 .idea/
 wordpress/
 woocommerce-gateway-ebanx/travis/vendor/
+.DS_Store*
