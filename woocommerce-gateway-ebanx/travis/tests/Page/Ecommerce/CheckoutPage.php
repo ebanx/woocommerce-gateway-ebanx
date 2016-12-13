@@ -62,7 +62,7 @@ class CheckoutPage extends BasePage {
 
         $this->baseTest->assertEquals(
             true,
-            (boolean) ($this->orderReceivedMessage()->displayed() && $this->orderReceivedMessage()->text() === "Order Received"),
+            (boolean) ($this->orderReceivedMessage()->displayed() && strtoupper($this->orderReceivedMessage()->text()) === "ORDER RECEIVED"),
             json_encode($this->checkoutErrors())
         );
     }
@@ -93,7 +93,7 @@ class CheckoutPage extends BasePage {
         $this->choosePaymentMethod('credit-card');
 
         $creditCardFields = array(
-            cvc        => $this->baseTest->byCssSelector("#ebanx-card-cvc"),
+            cvv        => $this->baseTest->byCssSelector("#ebanx-card-cvv"),
             number     => $this->baseTest->byCssSelector("#ebanx-card-number"),
             expiry     => $this->baseTest->byCssSelector("#ebanx-card-expiry"),
             holderName => $this->baseTest->byCssSelector("#ebanx-card-holder-name")
@@ -110,7 +110,7 @@ class CheckoutPage extends BasePage {
         ));
 
         $creditCardFields[holderName]->value($data[holderName]);
-        $creditCardFields[cvc]->value($data[cvc]);
+        $creditCardFields[cvv]->value($data[cvv]);
 
         return $this;
     }

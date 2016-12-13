@@ -10,7 +10,7 @@ class WC_Ebanx_Safetypay_Gateway extends WC_Ebanx_Redirect_Gateway
     public function __construct()
     {
         $this->id           = 'ebanx-safetypay';
-        $this->method_title = __('EBANX - Safetypay', 'woocommerce-ebanx');
+        $this->method_title = __('EBANX - Safetypay', 'woocommerce-gateway-ebanx');
 
         $this->title       = __('SafetyPay');
         $this->description = __('SafetyPay Description');
@@ -75,7 +75,7 @@ class WC_Ebanx_Safetypay_Gateway extends WC_Ebanx_Redirect_Gateway
     protected function request_data($order)
     {
         if (!isset($_POST['safetypay']) || !in_array($_POST['safetypay'], WC_Ebanx_Gateway_Utils::$TYPES_SAFETYPAY_ALLOWED)) {
-            throw new Exception("Invalid safetypay type.");
+            throw new Exception('INVALID-SAFETYPAY-TYPE');
         }
 
         $data = parent::request_data($order);

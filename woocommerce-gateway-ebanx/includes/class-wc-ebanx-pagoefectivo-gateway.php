@@ -10,7 +10,7 @@ class WC_Ebanx_Pagoefectivo_Gateway extends WC_Ebanx_Redirect_Gateway
     public function __construct()
     {
         $this->id           = 'ebanx-pagoefectivo';
-        $this->method_title = __('EBANX - Pagoefectivo', 'woocommerce-ebanx');
+        $this->method_title = __('EBANX - Pagoefectivo', 'woocommerce-gateway-ebanx');
 
         $this->title       = __('Pagoefectivo');
         $this->description = __('Pagoefectivo description');

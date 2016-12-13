@@ -10,10 +10,10 @@ class WC_Ebanx_Eft_Gateway extends WC_Ebanx_Redirect_Gateway
     public function __construct()
     {
         $this->id           = 'ebanx-eft';
-        $this->method_title = __('EBANX - EFT', 'woocommerce-ebanx');
+        $this->method_title = __('EBANX - EFT', 'woocommerce-gateway-ebanx');
 
-        $this->title       = __('EFT', 'woocommerce-ebanx');
-        $this->description = __('EFT Description', 'woocommerce-ebanx');
+        $this->title       = __('EFT', 'woocommerce-gateway-ebanx');
+        $this->description = __('EFT Description', 'woocommerce-gateway-ebanx');
 
         parent::__construct();
 
@@ -73,7 +73,7 @@ class WC_Ebanx_Eft_Gateway extends WC_Ebanx_Redirect_Gateway
     protected function request_data($order)
     {
         if (!isset($_POST['eft']) || !in_array($_POST['eft'], WC_Ebanx_Gateway_Utils::$BANKS_EFT_ALLOWED[WC_Ebanx_Gateway_Utils::COUNTRY_COLOMBIA])) {
-            throw new Exception("Missing a bank name or bank is not valid.");
+            throw new Exception('MISSING-BANK-NAME');
         }
 
         $data = parent::request_data($order);

@@ -10,7 +10,7 @@ class WC_Ebanx_Tef_Gateway extends WC_Ebanx_Redirect_Gateway
     public function __construct()
     {
         $this->id           = 'ebanx-tef';
-        $this->method_title = __('EBANX - TEF', 'woocommerce-ebanx');
+        $this->method_title = __('EBANX - TEF', 'woocommerce-gateway-ebanx');
 
         $this->title       = __('TEF');
         $this->description = __('TEF Description');
@@ -73,7 +73,7 @@ class WC_Ebanx_Tef_Gateway extends WC_Ebanx_Redirect_Gateway
     protected function request_data($order)
     {
         if (!isset($_POST['tef']) || !in_array($_POST['tef'], WC_Ebanx_Gateway_Utils::$BANKS_TEF_ALLOWED[WC_Ebanx_Gateway_Utils::COUNTRY_BRAZIL])) {
-            throw new Exception("Missing a bank name or bank is not valid.");
+            throw new Exception('MISSING-BANK-NAME');
         }
 
         $data = parent::request_data($order);

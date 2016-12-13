@@ -184,7 +184,25 @@ final class WC_Ebanx_Global_Gateway extends WC_Payment_Gateway
                             '2'  => '2',
                             '3'  => '3'
                         ),
-                    )
+                    ),
+                'enable_place_order' => array(
+                    'title' => __('Place order', 'woocommerce-gateway-ebanx'),
+                    'type'  => 'checkbox',
+                    'label' => __('Enable place order.', 'woocommerce-gateway-ebanx'),
+                ),
+                'one_click' => array(
+                    'type'        => 'checkbox',
+                    'title'       => __('One click payment', 'woocommerce-gateway-ebanx'),
+                    'description' => __('Enable one-click payment.', 'woocommerce-gateway-ebanx'),
+                    'label'       => __('Enable one-click payment', 'woocommerce-gateway-ebanx'),
+                    'default'     => 'no'
+                ),
+                'one_click_label_button' => array(
+                    'title'             => __('one-click payment label button', 'woocommerce-gateway-ebanx'),
+                    'type'              => 'text',
+                    'description'       => __('Label to one-click payment button', 'woocommerce-gateway-ebanx'),
+                    'default'           => 'one-click payment'
+                )
         );
     }
 
