@@ -5,7 +5,7 @@ jQuery( function($) {
 	var ebanxBillingContainers = function() {
 		return jQuery('.woocommerce-checkout').find('p').each(function() {
 			if(this.id.match(/^ebanx_billing_.*$/)) {
-				jQuery(this).hide();
+				jQuery(this).hide().removeAttr("required");
 			}
 			return this;
 		});
@@ -20,14 +20,14 @@ jQuery( function($) {
 			case "br":
 				ebanxBillingContainers().each(function() {
 					if(this.id.match(/^ebanx_billing_brazil_.*$/)) {
-						jQuery(this).show();
+						jQuery(this).show().attr("required", true);
 					}
 				});
 			break;
 			case "mx":
 				ebanxBillingContainers().each(function() {
 					if(this.id.match(/^ebanx_billing_mexico_.*$/)) {
-						jQuery(this).show();
+						jQuery(this).show().attr("required", true);
 					}
 				});
 			break;
