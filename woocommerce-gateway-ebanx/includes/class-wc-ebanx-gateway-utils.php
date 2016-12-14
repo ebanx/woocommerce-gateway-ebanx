@@ -5,10 +5,10 @@ if (!defined('ABSPATH')) {
 }
 
 /**
- * WC_Ebanx_Gateway_Utils class.
+ * WC_EBANX_Gateway_Utils class.
  *
  */
-abstract class WC_Ebanx_Gateway_Utils
+abstract class WC_EBANX_Gateway_Utils
 {
     const COUNTRY_PERU     = 'pe';
     const COUNTRY_CHILE    = 'cl';

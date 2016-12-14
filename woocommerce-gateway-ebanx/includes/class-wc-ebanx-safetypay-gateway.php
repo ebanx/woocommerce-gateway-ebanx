@@ -4,7 +4,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-class WC_Ebanx_Safetypay_Gateway extends WC_Ebanx_Redirect_Gateway
+class WC_EBANX_Safetypay_Gateway extends WC_EBANX_Redirect_Gateway
 {
 
     public function __construct()
@@ -22,7 +22,7 @@ class WC_Ebanx_Safetypay_Gateway extends WC_Ebanx_Redirect_Gateway
 
     public function is_available()
     {
-        return parent::is_available() && ($this->getTransactionAddress('country') == WC_Ebanx_Gateway_Utils::COUNTRY_PERU);
+        return parent::is_available() && ($this->getTransactionAddress('country') == WC_EBANX_Gateway_Utils::COUNTRY_PERU);
     }
 
     /**
@@ -48,7 +48,7 @@ class WC_Ebanx_Safetypay_Gateway extends WC_Ebanx_Redirect_Gateway
                     'description' => $this->description,
                 ),
                 'woocommerce/ebanx/',
-                WC_Ebanx::get_templates_path()
+                WC_EBANX::get_templates_path()
             );
         }
     }
@@ -68,13 +68,13 @@ class WC_Ebanx_Safetypay_Gateway extends WC_Ebanx_Redirect_Gateway
                 'description' => $this->description,
             ),
             'woocommerce/ebanx/',
-            WC_Ebanx::get_templates_path()
+            WC_EBANX::get_templates_path()
         );
     }
 
     protected function request_data($order)
     {
-        if (!isset($_POST['safetypay']) || !in_array($_POST['safetypay'], WC_Ebanx_Gateway_Utils::$TYPES_SAFETYPAY_ALLOWED)) {
+        if (!isset($_POST['safetypay']) || !in_array($_POST['safetypay'], WC_EBANX_Gateway_Utils::$TYPES_SAFETYPAY_ALLOWED)) {
             throw new Exception('INVALID-SAFETYPAY-TYPE');
         }
 

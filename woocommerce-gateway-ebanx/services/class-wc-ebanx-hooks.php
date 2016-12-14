@@ -1,6 +1,6 @@
 <?php
 
-class WC_Ebanx_Hooks
+class WC_EBANX_Hooks
 {
 
     public static function init()
@@ -16,7 +16,7 @@ class WC_Ebanx_Hooks
         if (isset($_REQUEST['operation']) && $_REQUEST['operation'] == 'payment_status_change'
             && isset($_REQUEST['notification_type']) && isset($_REQUEST['hash_codes'])
         ) {
-            $ebanx = new WC_Ebanx_Tef_Gateway();
+            $ebanx = new WC_EBANX_Tef_Gateway();
             $ebanx->process_hook($_REQUEST['hash_codes'], $_REQUEST['notification_type']);
         }
 
@@ -24,4 +24,4 @@ class WC_Ebanx_Hooks
     }
 }
 
-WC_Ebanx_Hooks::init();
+WC_EBANX_Hooks::init();

@@ -4,7 +4,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-class WC_Ebanx_One_Click
+class WC_EBANX_One_Click
 {
     private
         $cards,
@@ -16,7 +16,7 @@ class WC_Ebanx_One_Click
     public function __construct()
     {
         $this->userId  = get_current_user_id();
-        $this->gateway = new WC_Ebanx_Credit_Card_Gateway();
+        $this->gateway = new WC_EBANX_Credit_Card_Gateway();
 
         add_action('wp_enqueue_scripts', array($this, 'enqueue_scripts'), 10);
         add_action('woocommerce_before_add_to_cart_form', array($this, 'add_button'));
@@ -70,7 +70,7 @@ class WC_Ebanx_One_Click
             || ! isset( $_GET['_ebanx_one_click_action'] ) || $_GET['_ebanx_one_click_action'] != $this->orderAction
             || ! isset( $_GET['_ebanx_nonce'] ) || ! wp_verify_nonce( $_GET['_ebanx_nonce'], $this->orderAction )
             || !isset($_GET['_ebanx_one_click_token']) || !isset($_GET['_ebanx_one_click_cvv']) || !isset($_GET['_ebanx_one_click_installments'])
-            || ! $this->customerCan() || ! $this->customerHasEbanxRequiredData()
+            || ! $this->customerCan() || ! $this->customerHasEBANXRequiredData()
         ){
             return;
         }
@@ -305,17 +305,17 @@ class WC_Ebanx_One_Click
     {
         wp_enqueue_script(
             'woocommerce_ebanx_one_click_script',
-            plugins_url('assets/js/one-click.js', WC_Ebanx::DIR),
+            plugins_url('assets/js/one-click.js', WC_EBANX::DIR),
             array(),
-            WC_Ebanx::VERSION, true
+            WC_EBANX::VERSION, true
         );
 
         // TODO: Solved apply css
         wp_enqueue_style(
             'woocommerce_ebanx_one_click_style',
-            plugins_url('assets/css/one-click.css', WC_Ebanx::DIR),
+            plugins_url('assets/css/one-click.css', WC_EBANX::DIR),
             array(),
-            WC_Ebanx::VERSION, true
+            WC_EBANX::VERSION, true
         );
 
         /* TODO: this?
@@ -350,7 +350,7 @@ class WC_Ebanx_One_Click
         }
     }
 
-    protected function customerHasEbanxRequiredData() {
+    protected function customerHasEBANXRequiredData() {
         $card = current(array_filter((array) get_user_meta($this->userId, '__ebanx_credit_card_token', true), function ($card) {
             return $card->token == $_GET['_ebanx_one_click_token'];
         }));
@@ -406,8 +406,8 @@ class WC_Ebanx_One_Click
             'label' => $this->gateway->configs->settings['one_click_label_button'],
         ));
 
-        wc_get_template('one-click.php', $args, '', WC_Ebanx::get_templates_path().'credit-card/');
+        wc_get_template('one-click.php', $args, '', WC_EBANX::get_templates_path().'credit-card/');
     }
 }
 
-new WC_Ebanx_One_Click();
+new WC_EBANX_One_Click();

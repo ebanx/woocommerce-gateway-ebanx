@@ -21,8 +21,6 @@ class CheckoutPage extends BasePage {
         $this->documentField()->value($customerData[document]);
         $this->birthDateField()->clear();
         $this->birthDateField()->value($customerData[birthDate]);
-        $this->streeNumberField()->clear();
-        $this->streeNumberField()->value($customerData[streetNumber]);
 
         return $this;
     }
@@ -72,7 +70,7 @@ class CheckoutPage extends BasePage {
         $this->baseTest->assertEquals(
             true,
             (boolean) ($this->orderReceivedMessage()->displayed() && strtoupper($this->orderReceivedMessage()->text()) === "ORDER RECEIVED"),
-            json_encode($this->checkoutErrors())
+            json_encode(array(errors => $this->checkoutErrors(), message => $this->orderReceivedMessage()->text()))
         );
     }
 
@@ -175,11 +173,7 @@ class CheckoutPage extends BasePage {
     private function phoneField() {
         return $this->baseTest->byCssSelector("#billing_phone");
     }
-    
-    private function streeNumberField() {
-        return $this->baseTest->byCssSelector("#ebanx_billing_brazil_street_number");
-    }
-    
+
     private function birthDateField() {
         return $this->baseTest->byCssSelector("#ebanx_billing_brazil_birth_date");
     }

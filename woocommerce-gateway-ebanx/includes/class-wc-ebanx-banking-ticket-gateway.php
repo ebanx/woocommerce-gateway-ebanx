@@ -4,7 +4,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-class WC_Ebanx_Banking_Ticket_Gateway extends WC_Ebanx_Gateway
+class WC_EBANX_Banking_Ticket_Gateway extends WC_EBANX_Gateway
 {
 
     public function __construct()
@@ -22,7 +22,7 @@ class WC_Ebanx_Banking_Ticket_Gateway extends WC_Ebanx_Gateway
 
     public function is_available()
     {
-        return parent::is_available() && $this->getTransactionAddress('country') == WC_Ebanx_Gateway_Utils::COUNTRY_BRAZIL;
+        return parent::is_available() && $this->getTransactionAddress('country') == WC_EBANX_Gateway_Utils::COUNTRY_BRAZIL;
     }
 
     public function payment_fields()
@@ -35,7 +35,7 @@ class WC_Ebanx_Banking_Ticket_Gateway extends WC_Ebanx_Gateway
             'banking-ticket/checkout-instructions.php',
             array(),
             'woocommerce/ebanx/',
-            WC_Ebanx::get_templates_path()
+            WC_EBANX::get_templates_path()
         );
     }
 
@@ -71,7 +71,7 @@ class WC_Ebanx_Banking_Ticket_Gateway extends WC_Ebanx_Gateway
                 'banking-ticket/payment-instructions.php',
                 $data,
                 'woocommerce/ebanx/',
-                WC_Ebanx::get_templates_path()
+                WC_EBANX::get_templates_path()
             );
         }
     }

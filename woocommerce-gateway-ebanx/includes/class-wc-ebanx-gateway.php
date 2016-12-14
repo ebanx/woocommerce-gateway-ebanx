@@ -6,14 +6,14 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-abstract class WC_Ebanx_Gateway extends WC_Payment_Gateway
+abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
 {
 
     public function __construct()
     {
         $this->userId = get_current_user_id();
 
-        $this->configs = new WC_Ebanx_Global_Gateway();
+        $this->configs = new WC_EBANX_Global_Gateway();
 
         $this->is_test_mode = $this->configs->settings['test_mode_enabled'] === 'yes';
 
@@ -55,7 +55,7 @@ abstract class WC_Ebanx_Gateway extends WC_Payment_Gateway
     public function checkout_scripts()
     {
         if (is_checkout()) {
-            wp_enqueue_script('woocommerce_ebanx_checkout_fields', plugins_url('assets/js/checkout-fields.js', WC_Ebanx::DIR));
+            wp_enqueue_script('woocommerce_ebanx_checkout_fields', plugins_url('assets/js/checkout-fields.js', WC_EBANX::DIR));
         }
     }
 
@@ -95,7 +95,7 @@ abstract class WC_Ebanx_Gateway extends WC_Payment_Gateway
 
         \Ebanx\Config::set($config);
 
-        $request = \Ebanx\Ebanx::doRefund($data);
+        $request = \Ebanx\EBANX::doRefund($data);
 
         if ($request->status !== 'SUCCESS') {
             return false;
@@ -121,7 +121,7 @@ abstract class WC_Ebanx_Gateway extends WC_Payment_Gateway
             'operation' => 'request',
             'payment'   => array(
                 'country'               => $order->get_address()['country'],
-                'currency_code'         => WC_Ebanx_Gateway_Utils::CURRENCY_CODE_USD, // TODO: Dynamic
+                'currency_code'         => WC_EBANX_Gateway_Utils::CURRENCY_CODE_USD, // TODO: Dynamic
                 "name"                  => $order->get_address()['first_name'] . " " . $order->get_address()['last_name'],
                 "email"                 => $order->get_address()['email'],
                 "phone_number"          => $order->get_address()['phone'],
@@ -131,7 +131,7 @@ abstract class WC_Ebanx_Gateway extends WC_Payment_Gateway
             ),
         );
 
-        if (trim(strtolower(WC()->customer->get_shipping_country())) === WC_Ebanx_Gateway_Utils::COUNTRY_BRAZIL) {
+        if (trim(strtolower(WC()->customer->get_shipping_country())) === WC_EBANX_Gateway_Utils::COUNTRY_BRAZIL) {
             if (empty($_POST['ebanx_billing_brazil_document']) ||
                 empty($_POST['billing_postcode']) ||
                 empty($_POST['billing_address_1']) ||
@@ -196,7 +196,7 @@ abstract class WC_Ebanx_Gateway extends WC_Payment_Gateway
                 \Ebanx\Config::set($config);
                 \Ebanx\Config::setDirectMode(true);
 
-                $request = \Ebanx\Ebanx::doRequest($data);
+                $request = \Ebanx\EBANX::doRequest($data);
 
                 $this->process_response($request, $order); // TODO: What make when response_Error called?
             } else {
@@ -377,7 +377,7 @@ abstract class WC_Ebanx_Gateway extends WC_Payment_Gateway
     protected function save_user_meta_fields($order)
     {
         if ($this->userId) {
-            if (trim(strtolower($order->get_address()['country'])) === WC_Ebanx_Gateway_Utils::COUNTRY_BRAZIL) {
+            if (trim(strtolower($order->get_address()['country'])) === WC_EBANX_Gateway_Utils::COUNTRY_BRAZIL) {
                 update_user_meta($this->userId, '__ebanx_billing_brazil_document', $_POST['ebanx_billing_brazil_document']);
                 update_user_meta($this->userId, '__ebanx_billing_brazil_birth_date', $_POST['ebanx_billing_brazil_birth_date']);
             }
@@ -393,7 +393,7 @@ abstract class WC_Ebanx_Gateway extends WC_Payment_Gateway
 
         \Ebanx\Config::set($config);
 
-        $data = \Ebanx\Ebanx::doQuery(array(
+        $data = \Ebanx\EBANX::doQuery(array(
             'hash' => $hash,
         ));
 

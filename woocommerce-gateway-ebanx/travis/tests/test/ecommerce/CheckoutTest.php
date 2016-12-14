@@ -39,8 +39,7 @@ class CheckoutTest extends  BaseTest {
             postcode  => $this->faker->postcode,
             lastName  => $this->faker->lastName,
             firstName => $this->faker->firstName,
-            birthDate => $this->faker->dateTimeThisCentury->format('d/m/Y'),
-            streetNumber => $this->faker->buildingNumber
+            birthDate => $this->faker->dateTimeThisCentury->format('d/m/Y')
         );
 
         // echo json_encode($this->mock);
