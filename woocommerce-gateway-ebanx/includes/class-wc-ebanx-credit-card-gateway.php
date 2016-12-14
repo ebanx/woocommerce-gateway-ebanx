@@ -66,7 +66,7 @@ class WC_Ebanx_Credit_Card_Gateway extends WC_Ebanx_Gateway
         $this->method = ($this->getTransactionAddress('country') === WC_Ebanx_Gateway_Utils::COUNTRY_BRAZIL) ? 'brazil_payment_methods' : 'mexico_payment_methods';
         $this->enabled = in_array($this->id, $this->configs->settings[$this->method]) ? 'yes' : false;
 
-        return parent::is_available() && in_array($this->getTransactionAddress('country'), WC_Ebanx_Gateway_Utils::$CREDIT_CARD_COUNTRIES);
+        return parent::is_available();
     }
 
     public function payment_fields()
