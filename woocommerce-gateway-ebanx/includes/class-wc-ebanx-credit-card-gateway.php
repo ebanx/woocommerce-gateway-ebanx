@@ -24,7 +24,7 @@ class WC_Ebanx_Credit_Card_Gateway extends WC_Ebanx_Gateway
         if (is_checkout()) {
             wp_enqueue_script('wc-credit-card-form');
             // Using // to avoid conflicts between http and https protocols
-            wp_enqueue_script('ebanx_fingerprint', '//downloads.ebanx.com/poc-checkout/src/device-fingerprint.js', '', '1.0', true);
+            wp_enqueue_script('ebanx_fingerprint', '//downloads.ebanx.com/poc-checkout/src/device-fingerprint.js', '', '1.0', true); // TODO: REMOVE THIS
             wp_enqueue_script('ebanx', '//downloads.ebanx.com/poc-checkout/src/ebanx.js', '', '1.0', true);
             wp_enqueue_script('woocommerce_ebanx_jquery_mask', plugins_url('assets/js/jquery-mask.js', WC_Ebanx::DIR), array());
             wp_enqueue_script('woocommerce_ebanx', plugins_url('assets/js/credit-card.js', WC_Ebanx::DIR), array('jquery-payment', 'ebanx'), WC_Ebanx::VERSION, true);
@@ -35,7 +35,7 @@ class WC_Ebanx_Credit_Card_Gateway extends WC_Ebanx_Gateway
             );
 
             // If we're on the pay page we need to pass ebanx.js the address of the order.
-            if (is_checkout_pay_page() && isset($_GET['order']) && isset($_GET['order_id'])) {
+            if (is_checkout_pay_page() && isset($_GET['order']) && isset($_GET['order_id'])) { // TODO: WE CAN REMOVE THIS?
                 $order_key = urldecode($_GET['order']);
                 $order_id  = absint($_GET['order_id']);
                 $order     = wc_get_order($order_id);
@@ -98,6 +98,7 @@ class WC_Ebanx_Credit_Card_Gateway extends WC_Ebanx_Gateway
         $data = array(
             'instalments' => get_post_meta($order->id, 'Number of Instalments', true),
             'card_brand'  => get_post_meta($order->id, 'Card\'s Brand Name', true),
+            // TODO: display masked number
         );
 
         if (isset($data['instalments'])) {
@@ -112,16 +113,16 @@ class WC_Ebanx_Credit_Card_Gateway extends WC_Ebanx_Gateway
 
     protected function request_data($order)
     {
-        if (empty($_POST['ebanx_token']) || empty($_POST['ebanx_masked_card_number']) || empty($_POST['ebanx_brand'])) {
+        if (empty($_POST['ebanx_token']) ||
+            empty($_POST['ebanx_masked_card_number']) ||
+            empty($_POST['ebanx_brand']) ||
+            empty($_POST['ebanx_billing_cvv'])
+        ) {
             throw new Exception('MISSING-CARD-PARAMS');
         }
 
         if (empty($_POST['ebanx_is_one_click']) && empty($_POST['ebanx_device_fingerprint'])) {
             throw new Exception('MISSING-DEVICE-FINGERPRINT');
-        }
-
-        if (empty($_POST['ebanx_billing_cvv'])) {
-            throw new Exception('MISSING-CVV');
         }
 
         $data = parent::request_data($order);
