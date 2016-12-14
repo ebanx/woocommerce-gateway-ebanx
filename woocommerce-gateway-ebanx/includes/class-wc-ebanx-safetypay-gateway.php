@@ -16,6 +16,8 @@ class WC_Ebanx_Safetypay_Gateway extends WC_Ebanx_Redirect_Gateway
         $this->description = __('SafetyPay Description');
 
         parent::__construct();
+
+        $this->enabled = in_array($this->id, $this->configs->settings['peru_payment_methods']) ? 'yes' : false;
     }
 
     public function is_available()

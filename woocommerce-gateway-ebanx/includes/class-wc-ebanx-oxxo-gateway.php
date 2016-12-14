@@ -16,6 +16,8 @@ class WC_Ebanx_Oxxo_Gateway extends WC_Ebanx_Gateway
         $this->description = __('Oxxo description');
 
         parent::__construct();
+
+        $this->enabled = in_array($this->id, $this->configs->settings['mexico_payment_methods']) ? 'yes' : false;
     }
 
     public function is_available()

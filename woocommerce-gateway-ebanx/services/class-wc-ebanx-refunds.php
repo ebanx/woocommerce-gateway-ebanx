@@ -37,7 +37,7 @@ class WC_Ebanx_Refunds
 
         $config = [
             'integrationKey' => $paymentMethod->private_key,
-            'testMode'       => $paymentMethod->is_sandbox,
+            'testMode'       => $paymentMethod->is_test_mode,
         ];
 
         \Ebanx\Config::set($config);
