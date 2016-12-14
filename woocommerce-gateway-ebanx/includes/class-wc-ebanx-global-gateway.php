@@ -84,6 +84,15 @@ final class WC_Ebanx_Global_Gateway extends WC_Payment_Gateway
                 'title' => __('General Payment\'s Settings', 'woocommerce-gateway-ebanx'),
                 'type'  => 'title',
             ),
+            'debit_card_title'       => array(
+                'title' => __('Debit Card', 'woocommerce-ebanx'),
+                'type'  => 'title',
+            ),
+            'ebanx-debit-card'       => array(
+                'title' => __('Enable/Disabled', 'woocommerce-ebanx'),
+                'type'  => 'checkbox',
+                'label' => __('Check to enable EBANX Debit Card', 'woocommerce-ebanx'),
+            ),
             'credit_card_title'       => array(
                 'title' => __('Credit Card', 'woocommerce-gateway-ebanx'),
                 'type'  => 'title',

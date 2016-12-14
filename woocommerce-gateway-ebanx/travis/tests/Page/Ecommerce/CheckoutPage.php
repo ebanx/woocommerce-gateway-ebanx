@@ -17,18 +17,26 @@ class CheckoutPage extends BasePage {
 
         $this->fillCustomerData($customerData);
 
+        $this->documentField()->clear();
         $this->documentField()->value($customerData[document]);
+        $this->birthDateField()->clear();
         $this->birthDateField()->value($customerData[birthDate]);
+        $this->streeNumberField()->clear();
         $this->streeNumberField()->value($customerData[streetNumber]);
 
         return $this;
     }
 
     public function fillCustomerData(array $customerData) {
+        $this->postCodeField()->clear();
         $this->postCodeField()->value($customerData[postcode]);
+        $this->firstNameField()->clear();
         $this->firstNameField()->value($customerData[firstName]);
+        $this->lastNameField()->clear();
         $this->lastNameField()->value($customerData[lastName]);
+        $this->emailField()->clear();
         $this->emailField()->value($customerData[email]);
+        $this->phoneField()->clear();
         $this->phoneField()->value($customerData[phone]);
 
         $this->countrySelectFill($customerData[country]);
@@ -44,6 +52,7 @@ class CheckoutPage extends BasePage {
             args => array()
         ));
 
+        $this->cityField()->clear();
         $this->cityField()->value($customerData[city]);
 
         $this->stateSelectFill($customerData[state]);
@@ -89,6 +98,13 @@ class CheckoutPage extends BasePage {
         return $this;
     }
 
+    public function fillExistingCreditCard($data) {
+        $this->existingCard($data)->click();
+        $this->existingCardCvvFill($data[cvv]);
+
+        return $this;
+    }
+
     public function fillCreditCard($data) {
         $this->choosePaymentMethod('credit-card');
 
@@ -109,7 +125,9 @@ class CheckoutPage extends BasePage {
             args => array()
         ));
 
+        $creditCardFields[holderName]->clear();
         $creditCardFields[holderName]->value($data[holderName]);
+        $creditCardFields[cvv]->clear();
         $creditCardFields[cvv]->value($data[cvv]);
 
         return $this;
@@ -180,6 +198,15 @@ class CheckoutPage extends BasePage {
         ));
     }
 
+    private function existingCardCvvFill($cvv) {
+        $this->baseTest->execute(array(
+            script => "
+                jQuery(jQuery('input[name=\"ebanx-credit-card-use\"]:checked')).parent().siblings('.ebanx-container-credit-card').find('.wc-credit-card-form-card-cvv').val($cvv);
+            ",
+            args => array()
+        ));
+    }
+
     private function stateSelectFill($state) {
         $this->baseTest->execute(array(
             script => "
@@ -188,6 +215,10 @@ class CheckoutPage extends BasePage {
             ",
             args => array()
         ));
+    }
+
+    private function existingCard(array $cardData) {
+        return $this->baseTest->byCssSelector(".{$cardData[brand]}-{$cardData[maskedNumber]}");
     }
 
     private function errorMessagesList() {
