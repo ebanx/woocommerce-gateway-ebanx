@@ -30,13 +30,11 @@ abstract class WC_Ebanx_Gateway extends WC_Payment_Gateway
         add_filter('woocommerce_checkout_fields', function ($fields) {
             $fields['billing']['ebanx_billing_brazil_birth_date'] = array(
                 'type'     => 'text',
-                'label'    => 'Birth Date',
-                'required' => true,
+                'label'    => 'Birth Date'
             );
             $fields['billing']['ebanx_billing_brazil_document'] = array(
                 'type'     => 'text',
-                'label'    => 'Document',
-                'required' => true,
+                'label'    => 'Document'
             );
             return $fields;
         });
@@ -70,7 +68,7 @@ abstract class WC_Ebanx_Gateway extends WC_Payment_Gateway
     {
         $this->language = $this->getTransactionAddress('country');
 
-        return parent::is_available() && !empty($this->public_key) && !empty($this->private_key);
+        return parent::is_available() && !empty($this->public_key) && !empty($this->private_key) && $this->enabled === 'yes';
     }
 
     public function process_refund($order_id, $amount = null, $reason = '')
@@ -142,21 +140,21 @@ abstract class WC_Ebanx_Gateway extends WC_Payment_Gateway
             ) {
                 throw new Exception('INVALID-FIELDS');
             }
-
-            $addresses = WC_Ebanx_Gateway_Utils::split_street($_POST['billing_address_1'] . ' ' . $_POST['billing_address_2']);
-
-            $street_number = empty($addresses['houseNumber']) ? 'S/N' : trim($addresses['houseNumber'] . ' ' . $addresses['additionToAddress2']);
-
-            $data['payment'] = array_merge($data['payment'], array(
-                'document'      => $_POST['ebanx_billing_brazil_document'],
-                'birth_date'    => $_POST['ebanx_billing_brazil_birth_date'],
-                'zipcode'       => $_POST['billing_postcode'],
-                'address'       => $_POST['billing_address_1'],
-                'street_number' => $street_number,
-                'city'          => $_POST['billing_city'],
-                'state'         => $_POST['billing_state'],
-            ));
         }
+
+        $addresses = WC_Ebanx_Gateway_Utils::split_street($_POST['billing_address_1'] . ' ' . $_POST['billing_address_2']);
+
+        $street_number = empty($addresses['houseNumber']) ? 'S/N' : trim($addresses['houseNumber'] . ' ' . $addresses['additionToAddress2']);
+
+        $data['payment'] = array_merge($data['payment'], array(
+            'document'      => $_POST['ebanx_billing_brazil_document'],
+            'birth_date'    => $_POST['ebanx_billing_brazil_birth_date'],
+            'zipcode'       => $_POST['billing_postcode'],
+            'address'       => $_POST['billing_address_1'],
+            'street_number' => $street_number,
+            'city'          => $_POST['billing_city'],
+            'state'         => $_POST['billing_state'],
+        ));
 
         return $data;
     }

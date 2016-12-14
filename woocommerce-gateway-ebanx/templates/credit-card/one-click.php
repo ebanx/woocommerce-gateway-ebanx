@@ -32,7 +32,7 @@ global $product;
                 <?php foreach ($cards as $card) : ?>
                     <input type="radio" class="input-radio ebanx-card-use" value="<?php echo $card->token; ?>" /> <?php echo $card->brand . " " . $card->masked_number; ?>
                 <?php endforeach; ?>
-                <input class="input-text" maxlength="3" name="ebanx_one_click_cvv" type="text" autocomplete="off" placeholder="CVV" required="required"/>
+                <input class="input-text" maxlength="3" name="ebanx_one_click_cvv" type="text" autocomplete="off" placeholder="CVV"/>
                 <?php include 'installments.php';?>
             </div>
             <div class="modal-footer">
