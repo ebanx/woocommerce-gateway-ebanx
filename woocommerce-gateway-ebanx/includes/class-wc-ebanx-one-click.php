@@ -334,11 +334,13 @@ class WC_Ebanx_One_Click
 
     public function add_button()
     {
-
         global $product;
 
-        if($product->product_type == 'external' || !$this->customerCan() ||
-            !$this->gateway->is_available() || $this->gateway->configs->settings['one_click'] !== 'yes'
+        if (
+            $product->product_type == 'external' ||
+            !$this->customerCan() ||
+            !$this->gateway->is_available() ||
+            $this->gateway->configs->settings['one_click'] !== 'yes'
         ) {
             return;
         }

@@ -29,9 +29,11 @@ global $product;
                 <h4 class="modal-title" id="myModalLabel">Choose card</h4>
             </div>
             <div class="modal-body">
-                <?php foreach ($cards as $card) : ?>
-                    <input type="radio" class="input-radio ebanx-card-use" value="<?php echo $card->token; ?>" /> <?php echo $card->brand . " " . $card->masked_number; ?>
-                <?php endforeach; ?>
+                <?php if ($cards): ?>
+                    <?php foreach ($cards as $card) : ?>
+                        <input type="radio" class="input-radio ebanx-card-use" value="<?php echo $card->token; ?>" /> <?php echo $card->brand . " " . $card->masked_number; ?>
+                    <?php endforeach; ?>
+                <?php endif ?>
                 <input class="input-text" maxlength="3" name="ebanx_one_click_cvv" type="text" autocomplete="off" placeholder="CVV"/>
                 <?php include 'installments.php';?>
             </div>
