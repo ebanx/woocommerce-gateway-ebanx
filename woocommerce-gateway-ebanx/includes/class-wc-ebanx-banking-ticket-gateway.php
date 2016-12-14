@@ -10,7 +10,7 @@ class WC_Ebanx_Banking_Ticket_Gateway extends WC_Ebanx_Gateway
     public function __construct()
     {
         $this->id           = 'ebanx-banking-ticket';
-        $this->method_title = __('EBANX - Banking Ticket', 'woocommerce-ebanx');
+        $this->method_title = __('EBANX - Banking Ticket', 'woocommerce-gateway-ebanx');
 
         $this->title       = __('Banking Ticket');
         $this->description = __('Pay with EBANX Baking Ticket');
