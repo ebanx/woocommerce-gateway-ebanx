@@ -46,7 +46,8 @@ final class WC_Ebanx_Global_Gateway extends WC_Payment_Gateway
                 'type' => 'checkbox',
                 'label' => __('Enable Test Mode', 'woocommerce-gateway-ebanx'),
                 'description' => __('Check to enable the test mode.'),
-                'desc_tip' => true
+                'desc_tip' => true,
+                'default' => 'yes'
             ),
             'sandbox_private_key'     => array(
                 'title'       => __('Secret Test Key', 'woocommerce-gateway-ebanx'),
