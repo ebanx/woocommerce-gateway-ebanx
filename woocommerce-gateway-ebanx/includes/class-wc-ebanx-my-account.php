@@ -81,6 +81,9 @@ class WC_Ebanx_My_Account
             case 'ebanx-tef':
                 WC_Ebanx_Tef_Gateway::thankyou_page($order->id);
                 break;
+            case 'ebanx-debit-card':
+                WC_Ebanx_Debit_Card_Gateway::thankyou_page($order->id);
+                break;
         }
     }
 }
