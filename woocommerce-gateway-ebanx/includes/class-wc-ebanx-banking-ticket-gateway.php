@@ -51,9 +51,9 @@ class WC_EBANX_Banking_Ticket_Gateway extends WC_EBANX_Gateway
     {
         parent::save_order_meta_fields($order, $request);
 
-        update_post_meta($order->id, 'Payment\'s Due Date', $request->payment->due_date);
-        update_post_meta($order->id, 'Banking Ticket URL', $request->payment->boleto_url);
-        update_post_meta($order->id, 'Banking Ticket Barcode', $request->payment->boleto_barcode);
+        update_post_meta($order->id, '_payment_due_date', $request->payment->due_date);
+        update_post_meta($order->id, '_boleto_url', $request->payment->boleto_url);
+        update_post_meta($order->id, '_boleto_barcode', $request->payment->boleto_barcode);
     }
 
     public static function thankyou_page($order_id)
