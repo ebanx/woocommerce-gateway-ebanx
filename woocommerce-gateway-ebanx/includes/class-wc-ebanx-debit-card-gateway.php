@@ -15,6 +15,8 @@ class WC_Ebanx_Debit_Card_Gateway extends WC_Ebanx_Gateway
         $this->description = __('Debit Card description');
 
         parent::__construct();
+
+        $this->enabled = in_array($this->id, $this->configs->settings['mexico_payment_methods']) ? 'yes' : false;
     }
 
     public function checkout_scripts()
