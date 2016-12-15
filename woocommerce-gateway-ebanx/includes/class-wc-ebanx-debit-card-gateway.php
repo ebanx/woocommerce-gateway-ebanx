@@ -27,7 +27,7 @@ class WC_Ebanx_Debit_Card_Gateway extends WC_Ebanx_Gateway
 
             $ebanx_params = array(
                 'key'  => $this->public_key,
-                'mode' => $this->is_sandbox ? 'test' : 'production',
+                'mode' => $this->is_test_mode ? 'test' : 'production',
             );
 
             wp_localize_script('woocommerce_ebanx', 'wc_ebanx_params', apply_filters('wc_ebanx_params', $ebanx_params));
