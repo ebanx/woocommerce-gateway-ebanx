@@ -4,7 +4,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-abstract class WC_Ebanx_Redirect_Gateway extends WC_Ebanx_Gateway
+abstract class WC_EBANX_Redirect_Gateway extends WC_EBANX_Gateway
 {
     protected $redirect_url;
 

@@ -1,8 +1,8 @@
 <?php
 /**
- * Plugin Name: WooCommerce Ebanx.com
+ * Plugin Name: WooCommerce EBANX.com
  * Plugin URI: http://github.com/ebanx/woocommerce
- * Description: Gateway de pagamento Ebanx.com para WooCommerce.
+ * Description: Gateway de pagamento ebanx.com para WooCommerce.
  * Author: EBANX
  * Author URI: https://ebanx.com/
  * Version: 1.0.0
@@ -10,7 +10,7 @@
  * Text Domain: woocommerce-ebanx
  * Domain Path: /languages
  *
- * @package WooCommerce_Ebanx
+ * @package WooCommerce_EBANX
  */
 
 if (!defined('ABSPATH')) {
@@ -22,12 +22,12 @@ define('WC_EBANX_MIN_WC_VER', '2.5.0');
 define('INCLUDES_DIR', __DIR__ . DIRECTORY_SEPARATOR . 'includes' . DIRECTORY_SEPARATOR);
 define('SERVICES_DIR', __DIR__ . DIRECTORY_SEPARATOR . 'services' . DIRECTORY_SEPARATOR);
 
-if (!class_exists('WC_Ebanx')) {
+if (!class_exists('WC_EBANX')) {
 
     /**
-     * WooCommerce WC_Ebanx main class.
+     * WooCommerce WC_EBANX main class.
      */
-    class WC_Ebanx
+    class WC_EBANX
     {
 
         /**
@@ -115,7 +115,7 @@ if (!class_exists('WC_Ebanx')) {
                     'cards' => (array) $cards,
                 ),
                 'woocommerce/ebanx/',
-                WC_Ebanx::get_templates_path()
+                WC_EBANX::get_templates_path()
             );
         }
 
@@ -187,18 +187,18 @@ if (!class_exists('WC_Ebanx')) {
         public static function get_environment_warning()
         {
             if (version_compare(phpversion(), WC_EBANX_MIN_PHP_VER, '<')) {
-                $message = __('WooCommerce Ebanx - The minimum PHP version required for this plugin is %1$s. You are running %2$s.', 'woocommerce-gateway-ebanx', 'woocommerce-gateway-ebanx');
+                $message = __('WooCommerce EBANX - The minimum PHP version required for this plugin is %1$s. You are running %2$s.', 'woocommerce-gateway-ebanx', 'woocommerce-gateway-ebanx');
                 return sprintf($message, WC_EBANX_MIN_PHP_VER, phpversion());
             }
             if (!defined('WC_VERSION')) {
-                return __('WooCommerce Ebanx requires WooCommerce to be activated to work.', 'woocommerce-gateway-ebanx');
+                return __('WooCommerce EBANX requires WooCommerce to be activated to work.', 'woocommerce-gateway-ebanx');
             }
             if (version_compare(WC_VERSION, WC_EBANX_MIN_WC_VER, '<')) {
-                $message = __('WooCommerce Ebanx - The minimum WooCommerce version required for this plugin is %1$s. You are running %2$s.', 'woocommerce-gateway-ebanx', 'woocommerce-gateway-ebanx');
+                $message = __('WooCommerce EBANX - The minimum WooCommerce version required for this plugin is %1$s. You are running %2$s.', 'woocommerce-gateway-ebanx', 'woocommerce-gateway-ebanx');
                 return sprintf($message, WC_EBANX_MIN_WC_VER, WC_VERSION);
             }
             if (!function_exists('curl_init')) {
-                return __('WooCommerce Ebanx - cURL is not installed.', 'woocommerce-gateway-ebanx');
+                return __('WooCommerce EBANX - cURL is not installed.', 'woocommerce-gateway-ebanx');
             }
             return false;
         }
@@ -261,16 +261,16 @@ if (!class_exists('WC_Ebanx')) {
          */
         public function add_gateway($methods)
         {
-            $methods[] = 'WC_Ebanx_Global_Gateway';
-            $methods[] = 'WC_Ebanx_Banking_Ticket_Gateway';
-            $methods[] = 'WC_Ebanx_Credit_Card_Gateway';
-            $methods[] = 'WC_Ebanx_Debit_Card_Gateway';
-            $methods[] = 'WC_Ebanx_Oxxo_Gateway';
-            $methods[] = 'WC_Ebanx_Servipag_Gateway';
-            $methods[] = 'WC_Ebanx_Tef_Gateway';
-            $methods[] = 'WC_Ebanx_Pagoefectivo_Gateway';
-            $methods[] = 'WC_Ebanx_Safetypay_Gateway';
-            $methods[] = 'WC_Ebanx_Eft_Gateway';
+            $methods[] = 'WC_EBANX_Global_Gateway';
+            $methods[] = 'WC_EBANX_Banking_Ticket_Gateway';
+            $methods[] = 'WC_EBANX_Credit_Card_Gateway';
+            $methods[] = 'WC_EBANX_Debit_Card_Gateway';
+            $methods[] = 'WC_EBANX_Oxxo_Gateway';
+            $methods[] = 'WC_EBANX_Servipag_Gateway';
+            $methods[] = 'WC_EBANX_Tef_Gateway';
+            $methods[] = 'WC_EBANX_Pagoefectivo_Gateway';
+            $methods[] = 'WC_EBANX_Safetypay_Gateway';
+            $methods[] = 'WC_EBANX_Eft_Gateway';
 
             return $methods;
         }
@@ -288,7 +288,7 @@ if (!class_exists('WC_Ebanx')) {
 
             $ebanx_global = 'ebanx-global';
 
-            $plugin_links[] = '<a href="' . esc_url(admin_url('admin.php?page=wc-settings&tab=checkout&section=' . $ebanx_global)) . '">' . __('Ebanx Settings', 'woocommerce-gateway-ebanx') . '</a>';
+            $plugin_links[] = '<a href="' . esc_url(admin_url('admin.php?page=wc-settings&tab=checkout&section=' . $ebanx_global)) . '">' . __('EBANX Settings', 'woocommerce-gateway-ebanx') . '</a>';
 
             return array_merge($plugin_links, $links);
         }
@@ -314,5 +314,5 @@ if (!class_exists('WC_Ebanx')) {
         }
     }
 
-    add_action('plugins_loaded', array('WC_Ebanx', 'get_instance'));
+    add_action('plugins_loaded', array('WC_EBANX', 'get_instance'));
 }

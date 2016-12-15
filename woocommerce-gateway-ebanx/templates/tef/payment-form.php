@@ -2,8 +2,8 @@
 /**
  * TEF - Checkout form.
  *
- * @author  Ebanx.com
- * @package WooCommerce_Ebanx/Templates
+ * @author  EBANX.com
+ * @package WooCommerce_EBANX/Templates
  * @version 2.0.0
  */
 

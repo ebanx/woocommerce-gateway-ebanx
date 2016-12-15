@@ -1,8 +1,8 @@
 <?php
 /**
- * Ebanx.com My Account actions
+ * EBANX.com My Account actions
  *
- * @package WooCommerce_Ebanx/Frontend
+ * @package WooCommerce_EBANX/Frontend
  */
 
 if (!defined('ABSPATH')) {
@@ -10,9 +10,9 @@ if (!defined('ABSPATH')) {
 }
 
 /**
- * WC_Ebanx_My_Account class.
+ * WC_EBANX_My_Account class.
  */
-class WC_Ebanx_My_Account
+class WC_EBANX_My_Account
 {
 
     /**
@@ -58,31 +58,31 @@ class WC_Ebanx_My_Account
     {
         switch ($order->payment_method) {
             case 'ebanx-credit-card':
-                WC_Ebanx_Credit_Card_Gateway::thankyou_page($order->id);
+                WC_EBANX_Credit_Card_Gateway::thankyou_page($order->id);
                 break;
             case 'ebanx-banking-ticket':
-                WC_Ebanx_Banking_Ticket_Gateway::thankyou_page($order->id);
+                WC_EBANX_Banking_Ticket_Gateway::thankyou_page($order->id);
                 break;
             case 'ebanx-eft':
-                WC_Ebanx_Eft_Gateway::thankyou_page($order->id);
+                WC_EBANX_Eft_Gateway::thankyou_page($order->id);
                 break;
             case 'ebanx-oxxo':
-                WC_Ebanx_Oxxo_Gateway::thankyou_page($order->id);
+                WC_EBANX_Oxxo_Gateway::thankyou_page($order->id);
                 break;
             case 'ebanx-pagoefectivo':
-                WC_Ebanx_Pagoefectivo_Gateway::thankyou_page($order->id);
+                WC_EBANX_Pagoefectivo_Gateway::thankyou_page($order->id);
                 break;
             case 'ebanx-safetypay':
-                WC_Ebanx_Safetypay_Gateway::thankyou_page($order->id);
+                WC_EBANX_Safetypay_Gateway::thankyou_page($order->id);
                 break;
             case 'ebanx-servipag':
-                WC_Ebanx_Servipag_Gateway::thankyou_page($order->id);
+                WC_EBANX_Servipag_Gateway::thankyou_page($order->id);
                 break;
             case 'ebanx-tef':
-                WC_Ebanx_Tef_Gateway::thankyou_page($order->id);
+                WC_EBANX_Tef_Gateway::thankyou_page($order->id);
                 break;
         }
     }
 }
 
-new WC_Ebanx_My_Account();
+new WC_EBANX_My_Account();

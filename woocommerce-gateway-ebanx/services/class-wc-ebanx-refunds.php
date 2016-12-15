@@ -1,6 +1,6 @@
 <?php
 
-class WC_Ebanx_Refunds
+class WC_EBANX_Refunds
 {
 
     public static function init()
@@ -42,7 +42,7 @@ class WC_Ebanx_Refunds
 
         \Ebanx\Config::set($config);
 
-        $request = \Ebanx\Ebanx::doRefund($data);
+        $request = \Ebanx\EBANX::doRefund($data);
 
         if ($request->status !== 'SUCCESS') {
             return false; // TODO: log this
@@ -58,4 +58,4 @@ class WC_Ebanx_Refunds
     }
 }
 
-WC_Ebanx_Refunds::init();
+WC_EBANX_Refunds::init();

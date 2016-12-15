@@ -4,7 +4,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-class WC_Ebanx_Credit_Card_Gateway extends WC_Ebanx_Gateway
+class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
 {
     public function __construct()
     {
@@ -26,8 +26,8 @@ class WC_Ebanx_Credit_Card_Gateway extends WC_Ebanx_Gateway
             // Using // to avoid conflicts between http and https protocols
             wp_enqueue_script('ebanx_fingerprint', '//downloads.ebanx.com/poc-checkout/src/device-fingerprint.js', '', '1.0', true); // TODO: REMOVE THIS
             wp_enqueue_script('ebanx', '//downloads.ebanx.com/poc-checkout/src/ebanx.js', '', '1.0', true);
-            wp_enqueue_script('woocommerce_ebanx_jquery_mask', plugins_url('assets/js/jquery-mask.js', WC_Ebanx::DIR), array());
-            wp_enqueue_script('woocommerce_ebanx', plugins_url('assets/js/credit-card.js', WC_Ebanx::DIR), array('jquery-payment', 'ebanx'), WC_Ebanx::VERSION, true);
+            wp_enqueue_script('woocommerce_ebanx_jquery_mask', plugins_url('assets/js/jquery-mask.js', WC_EBANX::DIR), array());
+            wp_enqueue_script('woocommerce_ebanx', plugins_url('assets/js/credit-card.js', WC_EBANX::DIR), array('jquery-payment', 'ebanx'), WC_EBANX::VERSION, true);
 
             $ebanx_params = array(
                 'key'  => $this->public_key,
@@ -90,7 +90,7 @@ class WC_Ebanx_Credit_Card_Gateway extends WC_Ebanx_Gateway
                 'place_order_enabled' => (isset($this->configs->settings['enable_place_order']) && $this->configs->settings['enable_place_order'] === 'yes'),
             ),
             'woocommerce/ebanx/',
-            WC_Ebanx::get_templates_path()
+            WC_EBANX::get_templates_path()
         );
     }
 
@@ -109,7 +109,7 @@ class WC_Ebanx_Credit_Card_Gateway extends WC_Ebanx_Gateway
                 'credit-card/payment-instructions.php',
                 $data,
                 'woocommerce/ebanx/',
-                WC_Ebanx::get_templates_path()
+                WC_EBANX::get_templates_path()
             );
         }
     }
@@ -130,7 +130,7 @@ class WC_Ebanx_Credit_Card_Gateway extends WC_Ebanx_Gateway
 
         $data = parent::request_data($order);
 
-        if (in_array(trim(strtolower(WC()->customer->get_shipping_country())), WC_Ebanx_Gateway_Utils::$CREDIT_CARD_COUNTRIES)) {
+        if (in_array(trim(strtolower(WC()->customer->get_shipping_country())), WC_EBANX_Gateway_Utils::$CREDIT_CARD_COUNTRIES)) {
             if (empty($_POST['ebanx_billing_instalments'])) {
                 throw new Exception('MISSING-INSTALMENTS');
             }

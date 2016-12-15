@@ -4,7 +4,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-class WC_Ebanx_Oxxo_Gateway extends WC_Ebanx_Gateway
+class WC_EBANX_Oxxo_Gateway extends WC_EBANX_Gateway
 {
 
     public function __construct()
@@ -22,7 +22,7 @@ class WC_Ebanx_Oxxo_Gateway extends WC_Ebanx_Gateway
 
     public function is_available()
     {
-        return parent::is_available() && ($this->getTransactionAddress('country') == WC_Ebanx_Gateway_Utils::COUNTRY_MEXICO);
+        return parent::is_available() && ($this->getTransactionAddress('country') == WC_EBANX_Gateway_Utils::COUNTRY_MEXICO);
     }
 
     /**
@@ -45,7 +45,7 @@ class WC_Ebanx_Oxxo_Gateway extends WC_Ebanx_Gateway
             'oxxo/payment-form.php',
             array(),
             'woocommerce/ebanx/',
-            WC_Ebanx::get_templates_path()
+            WC_EBANX::get_templates_path()
         );
     }
 
@@ -59,7 +59,7 @@ class WC_Ebanx_Oxxo_Gateway extends WC_Ebanx_Gateway
                 'oxxo/payment-instructions.php',
                 array(),
                 'woocommerce/ebanx/',
-                WC_Ebanx::get_templates_path()
+                WC_EBANX::get_templates_path()
             );
         }
     }

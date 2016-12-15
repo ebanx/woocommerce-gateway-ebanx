@@ -1,6 +1,6 @@
 /* global wc_ebanx_params */
-Ebanx.config.setMode(wc_ebanx_params.mode);
-Ebanx.config.setPublishableKey(wc_ebanx_params.key);
+EBANX.config.setMode(wc_ebanx_params.mode);
+EBANX.config.setPublishableKey(wc_ebanx_params.key);
 
 jQuery( function($) {
 	/**
@@ -30,7 +30,7 @@ jQuery( function($) {
 				);
 		},
 
-		isEbanxPaymentMethod: function () {
+		isEBANXPaymentMethod: function () {
 			return $('input[value=ebanx-credit-card]').is(':checked') && (!$('input[name="wc-ebanx-payment-token"]:checked').length || 'new' === $('input[name="wc-ebanx-payment-token"]:checked').val());
 		},
 
@@ -70,7 +70,7 @@ jQuery( function($) {
 		onSubmit: function (e) {
       wc_ebanx_form.removeHiddenInputs();
 
-			if (wc_ebanx_form.isEbanxPaymentMethod()) {
+			if (wc_ebanx_form.isEBANXPaymentMethod()) {
 				e.preventDefault();
         e.stopPropagation();
         e.stopImmediatePropagation();
@@ -84,7 +84,7 @@ jQuery( function($) {
 				var country   = $('#billing_country').val().toLowerCase();
         var instalments = $('#ebanx-container-new-credit-card').find('.ebanx-instalments').val();
 
-				Ebanx.config.setCountry(country);
+				EBANX.config.setCountry(country);
 
 				var cardUse = $('input[name="ebanx-credit-card-use"]:checked');
 
@@ -122,7 +122,7 @@ jQuery( function($) {
           wc_ebanx_form.renderInstalments(creditcard.instalments);
           wc_ebanx_form.renderCvv(creditcard.card_cvv);
 
-					Ebanx.card.createToken(creditcard, wc_ebanx_form.onEBANXReponse);
+					EBANX.card.createToken(creditcard, wc_ebanx_form.onEBANXReponse);
 				}
 			}
 		},
