@@ -1,8 +1,10 @@
-<p class="form-row form-row-first">
-    <label for="ebanx-card-holder-name"><?php esc_html_e('Card Holder Name', 'woocommerce-gateway-ebanx');?><span class="required">*</span></label>
-    <input id="ebanx-card-holder-name" class="input-text" type="text" autocomplete="off" style="font-size: 1.5em; padding: 8px;" />
-</p>
-<p class="form-row form-row-last">
+<?php if ($country != 'br') :?>
+    <p class="form-row form-row-first">
+        <label for="ebanx-card-holder-name"><?php esc_html_e('Card Holder Name', 'woocommerce-gateway-ebanx');?><span class="required">*</span></label>
+        <input id="ebanx-card-holder-name" class="input-text" type="text" autocomplete="off" style="font-size: 1.5em; padding: 8px;" />
+    </p>
+<?php endif; ?>
+<p class="form-row <?php echo ($country == 'br' ? '' : 'form-row-last'); ?>">
     <label for="ebanx-card-number"><?php esc_html_e('Card Number', 'woocommerce-gateway-ebanx');?> <span class="required">*</span></label>
     <input id="ebanx-card-number" class="input-text wc-credit-card-form-card-number" type="text" maxlength="20" autocomplete="off" placeholder="&bull;&bull;&bull;&bull; &bull;&bull;&bull;&bull; &bull;&bull;&bull;&bull; &bull;&bull;&bull;&bull;" style="font-size: 1.5em; padding: 8px;" />
 </p>
