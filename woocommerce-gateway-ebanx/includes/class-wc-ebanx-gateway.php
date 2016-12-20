@@ -32,7 +32,7 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
 
             $fields['billing']['ebanx_billing_brazil_birth_date'] = array(
                 'type'  => 'text',
-                'label' => 'Birth Date',
+                'label' => 'Data de Nascimento',
             );
             $fields['billing']['ebanx_billing_brazil_document'] = array(
                 'type'     => 'text',
