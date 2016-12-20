@@ -227,6 +227,7 @@ if (!class_exists('WC_EBANX')) {
             include_once(INCLUDES_DIR . 'class-wc-ebanx-gateway.php');
             include_once(INCLUDES_DIR . 'class-wc-ebanx-redirect-gateway.php');
             include_once(INCLUDES_DIR . 'class-wc-ebanx-pagoefectivo-gateway.php');
+            include_once(INCLUDES_DIR . 'class-wc-ebanx-account-gateway.php');
             include_once(INCLUDES_DIR . 'class-wc-ebanx-safetypay-gateway.php');
             include_once(INCLUDES_DIR . 'class-wc-ebanx-my-account.php');
             include_once(INCLUDES_DIR . 'class-wc-ebanx-banking-ticket-gateway.php');
@@ -270,6 +271,7 @@ if (!class_exists('WC_EBANX')) {
             $methods[] = 'WC_EBANX_Pagoefectivo_Gateway';
             $methods[] = 'WC_EBANX_Safetypay_Gateway';
             $methods[] = 'WC_EBANX_Eft_Gateway';
+            $methods[] = 'WC_EBANX_Account_Gateway';
 
             return $methods;
         }
