@@ -128,7 +128,17 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
                 'amount_total'          => $order->get_total(),
                 'order_number'          => $order->id,
                 'merchant_payment_code' => $order->id . '-' . md5(rand(123123, 9999999)),
-            ),
+                'items' => array_map(function($prd) {
+                    $p = new \stdClass();
+
+                    $p->name = $prd['name'];
+                    $p->unit_price = $prd['line_subtotal'];
+                    $p->quantity = $prd['qty'];
+                    $p->type = $prd['type'];
+
+                    return $p;
+                }, $order->get_items()),
+            )
         );
 
         if (trim(strtolower(WC()->customer->get_shipping_country())) === WC_EBANX_Gateway_Utils::COUNTRY_BRAZIL) {
