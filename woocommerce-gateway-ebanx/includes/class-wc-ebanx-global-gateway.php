@@ -169,7 +169,7 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway
                 'type'    => 'checkbox',
                 'title'   => __('Capture', 'woocommerce-gateway-ebanx'),
                 'label'   => __('Capture the payment immediatly.', 'woocommerce-gateway-ebanx'),
-                'default' => 'no',
+                'default' => 'yes',
             ),
             'cash_options_title'        => array(
                 'title' => __('Cash', 'woocommerce-gateway-ebanx'),

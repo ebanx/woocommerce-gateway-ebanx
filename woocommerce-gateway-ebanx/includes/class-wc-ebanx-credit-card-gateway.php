@@ -146,6 +146,7 @@ class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
         $data['payment']['creditcard']        = array(
             'token'    => $_POST['ebanx_token'],
             'card_cvv' => $_POST['ebanx_billing_cvv'],
+            'auto_capture' => ($this->configs->settings['capture_enabled'] === 'yes'),
         );
 
         return $data;
