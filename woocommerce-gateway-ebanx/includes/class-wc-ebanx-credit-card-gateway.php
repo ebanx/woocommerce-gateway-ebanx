@@ -86,6 +86,7 @@ class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
             array(
                 'cards'           => (array) $cards,
                 'cart_total'      => $cart_total,
+                'country'         => $this->getTransactionAddress('country'),
                 'max_installment' => $this->configs->settings['credit_card_instalments'],
                 'place_order_enabled' => (isset($this->configs->settings['enable_place_order']) && $this->configs->settings['enable_place_order'] === 'yes'),
             ),
