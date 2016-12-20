@@ -239,7 +239,6 @@ if (!class_exists('WC_EBANX')) {
             include_once(INCLUDES_DIR . 'class-wc-ebanx-eft-gateway.php');
             include_once(INCLUDES_DIR . 'class-wc-ebanx-one-click.php');
             include_once(SERVICES_DIR . 'class-wc-ebanx-hooks.php');
-            include_once(SERVICES_DIR . 'class-wc-ebanx-refunds.php');
         }
 
         /**
