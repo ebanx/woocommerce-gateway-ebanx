@@ -26,8 +26,6 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
         }
 
         add_action('wp_enqueue_scripts', array($this, 'checkout_scripts'));
-        add_action('woocommerce_checkout_update_order_meta', array($this, 'save_extra_checkout_fields'), 10, 2);
-        // add_action('woocommerce_checkout_after_customer_details', array($this, 'show_extra_fields'));
 
         add_filter('woocommerce_checkout_fields', function ($fields) {
             $cpf = get_post_meta($this->userId, '_ebanx_billing_brazil_document');
@@ -51,14 +49,6 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
         );
 
         $this->icon = $this->show_icon();
-    }
-
-
-    public function save_extra_checkout_fields($order_id, $posted)
-    {
-        if ($this->userId && isset($posted['ebanx_billing_brazil_document'])) {
-            update_post_meta($this->userId, '_ebanx_billing_brazil_document', sanitize_text_field($posted['ebanx_billing_brazil_document']));
-        }
     }
 
     public function show_icon()
@@ -359,10 +349,12 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
 
     protected function save_order_meta_fields($order, $request)
     {
-        // General
-        // TODO: Hash, payment_type_code if possible
         update_post_meta($order->id, '_ebanx_payment_hash', $request->payment->hash);
         update_post_meta($order->id, 'Payment\'s Hash', $request->payment->hash);
+
+        if ($this->userId && isset($_POST['ebanx_billing_brazil_document'])) {
+            update_post_meta($this->userId, '_ebanx_billing_brazil_document', sanitize_text_field($_POST['ebanx_billing_brazil_document']));
+        }
 
         $this->save_user_meta_fields($order);
     }
