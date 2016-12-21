@@ -25,7 +25,7 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
             $this->log = new WC_Logger();
         }
 
-        add_action('wp_enqueue_scripts', array($this, 'checkout_scripts'));
+        add_action('wp_enqueue_scripts', array($this, 'checkout_assets'), 100);
 
         add_filter('woocommerce_checkout_fields', function ($fields) {
             $cpf = get_user_meta($this->userId, '__ebanx_billing_brazil_document');
@@ -67,13 +67,16 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
         return plugins_url('/assets/images/' . $this->id . '.png', plugin_basename(dirname(__FILE__)));
     }
 
-    public function checkout_scripts()
+    public function checkout_assets()
     {
         if (is_checkout()) {
             wp_enqueue_script('woocommerce_ebanx_checkout_fields', plugins_url('assets/js/checkout-fields.js', WC_EBANX::DIR));
+            wp_enqueue_style(
+                'woocommerce_ebanx_paying_via_ebanx_style',
+                plugins_url('assets/css/paying-via-ebanx.css', WC_EBANX::DIR)
+            );
         }
     }
-
     public function admin_options()
     {
         include dirname(__FILE__) . '/admin/views/html-admin-page.php';

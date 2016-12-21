@@ -20,9 +20,9 @@ class WC_Ebanx_Debit_Card_Gateway extends WC_Ebanx_Gateway
         $this->enabled = in_array($this->id, $this->configs->settings['mexico_payment_methods']) ? 'yes' : false;
     }
 
-    public function checkout_scripts()
+    public function checkout_assets()
     {
-        parent::checkout_scripts();
+        parent::checkout_assets();
 
         if (is_checkout()) {
             wp_enqueue_script('wc-debit-card-form');

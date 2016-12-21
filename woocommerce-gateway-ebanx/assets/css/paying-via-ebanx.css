@@ -1,0 +1,16 @@
+.wc_payment_method[class*="ebanx"] div.payment_box {
+  position: relative;
+}
+
+.wc_payment_method[class*="ebanx"] div.payment_box:after {
+  content: '';
+  position: absolute;
+  top: 1em;
+  right: 1em;
+
+  width: 133px;
+  height: 22px;
+  display: block;
+
+  background: url(../images/ebanx-paying.png) no-repeat 0 0;
+}

@@ -51,9 +51,9 @@ class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
         }
     }
 
-    public function checkout_scripts()
+    public function checkout_assets()
     {
-        parent::checkout_scripts();
+        parent::checkout_assets();
 
         if (is_checkout()) {
             wp_enqueue_script('wc-credit-card-form');

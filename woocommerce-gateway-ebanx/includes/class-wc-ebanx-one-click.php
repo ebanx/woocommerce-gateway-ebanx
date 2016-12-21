@@ -307,7 +307,8 @@ class WC_EBANX_One_Click
             'woocommerce_ebanx_one_click_script',
             plugins_url('assets/js/one-click.js', WC_EBANX::DIR),
             array(),
-            WC_EBANX::VERSION, true
+            WC_EBANX::VERSION,
+            true
         );
 
         // TODO: Solved apply css
@@ -315,21 +316,9 @@ class WC_EBANX_One_Click
             'woocommerce_ebanx_one_click_style',
             plugins_url('assets/css/one-click.css', WC_EBANX::DIR),
             array(),
-            WC_EBANX::VERSION, true
+            WC_EBANX::VERSION,
+            true
         );
-
-        /* TODO: this?
-          $custom_css = "
-                .ebanx-button {
-                    background-color: " . get_option( 'ebanx-button-background' ) . " !important;
-                    color: " . get_option( 'ebanx-button-text' ) . " !important;
-                }
-                .ebanx-button:hover {
-                    background-color: " . get_option( 'ebanx-button-background-hover' ) . " !important;
-                    color: " . get_option( 'ebanx-button-text-hover' ) . " !important;
-                }";
-
-        wp_add_inline_style( 'ebanx-style', $custom_css );*/
     }
 
     public function add_button()

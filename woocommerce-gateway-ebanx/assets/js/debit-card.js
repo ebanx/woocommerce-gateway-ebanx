@@ -1,6 +1,6 @@
 /* global wc_ebanx_params */
-Ebanx.config.setMode(wc_ebanx_params.mode);
-Ebanx.config.setPublishableKey(wc_ebanx_params.key);
+EBANX.config.setMode(wc_ebanx_params.mode);
+EBANX.config.setPublishableKey(wc_ebanx_params.key);
 
 // TODO: Create abstract card js to use on debit and debit ?
 
@@ -20,7 +20,7 @@ jQuery( function($) {
 				);
 		},
 
-		isEbanxPaymentMethod: function () {
+		isEBANXPaymentMethod: function () {
 			return $('input[value=ebanx-debit-card]').is(':checked');
 		},
 
@@ -56,7 +56,7 @@ jQuery( function($) {
 		onSubmit: function (e) {
       		wc_ebanx_form.removeHiddenInputs();
 
-			if (wc_ebanx_form.isEbanxPaymentMethod()) {
+			if (wc_ebanx_form.isEBANXPaymentMethod()) {
 				e.preventDefault();
 				e.stopPropagation();
 				e.stopImmediatePropagation();
@@ -69,7 +69,7 @@ jQuery( function($) {
 				var card_name = $('#ebanx-debit-card-holder-name').val();
 				var country   = $('#billing_country').val().toLowerCase();
 
-				Ebanx.config.setCountry(country);
+				EBANX.config.setCountry(country);
 
 				var debitcard = {
 					"card_number": parseInt(card.replace(/ /g,'')),
@@ -80,7 +80,7 @@ jQuery( function($) {
 
 				wc_ebanx_form.renderCvv(debitcard.card_cvv);
 
-				Ebanx.card.createToken(debitcard, wc_ebanx_form.onEBANXReponse);
+				EBANX.card.createToken(debitcard, wc_ebanx_form.onEBANXReponse);
 			}
 		},
 
