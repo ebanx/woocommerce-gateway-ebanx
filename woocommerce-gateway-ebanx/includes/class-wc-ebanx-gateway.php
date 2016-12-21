@@ -379,7 +379,7 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
 
         WC_Ebanx::log($message);
 
-        if ($request->payment->pre_approved) {
+        if ($request->payment->pre_approved && $request->payment->status == 'CO') {
             $order->add_order_note(__('EBANX: Transaction paid.', 'woocommerce-gateway-ebanx'));
             $order->payment_complete($request->hash);
         }

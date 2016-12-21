@@ -15,6 +15,39 @@ class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
         $this->description = __('Credit Card description');
 
         parent::__construct();
+
+        add_action('woocommerce_order_actions', function ($actions){
+            if (is_array($actions)){
+                $actions['custom_action'] = __('Capture by EBANX');
+            }
+
+            return $actions;
+        });
+
+        add_action('woocommerce_order_action_custom_action', array($this, 'capturePaymentAction'));
+    }
+
+    function capturePaymentAction($order){
+        if ($order->get_status() != 'pending' || $order->payment_method != $this->id) {
+            return;
+        }
+
+        \Ebanx\Config::set([
+            'integrationKey' => $this->private_key,
+            'testMode'       => $this->is_test_mode,
+        ]);
+
+        $request = \Ebanx\Ebanx::doCapture(['hash' => get_post_meta($order->id, '_ebanx_payment_hash')]);
+
+        if ($request->status != 'SUCCESS') {
+            return;
+        }
+
+        if ($request->payment->status == 'CO') {
+            $order->payment_complete();
+            $order->update_status('completed');
+            $order->add_order_note(__('EBANX: Transaction paid.', 'woocommerce-gateway-ebanx'));
+        }
     }
 
     public function checkout_scripts()
@@ -147,6 +180,7 @@ class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
         $data['payment']['creditcard']        = array(
             'token'    => $_POST['ebanx_token'],
             'card_cvv' => $_POST['ebanx_billing_cvv'],
+            'auto_capture' => ($this->configs->settings['capture_enabled'] === 'yes'),
         );
 
         return $data;
