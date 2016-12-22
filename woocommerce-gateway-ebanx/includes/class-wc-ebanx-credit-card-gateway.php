@@ -12,6 +12,7 @@ class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
         $this->method_title = __('EBANX - Credit Card', 'woocommerce-gateway-ebanx');
 
         $this->title       = __('Credit Card');
+        $this->api_name    = '_creditcard';
         $this->description = __('Credit Card description');
 
         parent::__construct();

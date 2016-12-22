@@ -13,6 +13,7 @@ class WC_EBANX_Eft_Gateway extends WC_EBANX_Redirect_Gateway
         $this->method_title = __('EBANX - EFT', 'woocommerce-gateway-ebanx');
 
         $this->title       = __('EFT', 'woocommerce-gateway-ebanx');
+        $this->api_name    = 'eft';
         $this->description = __('EFT Description', 'woocommerce-gateway-ebanx');
 
         parent::__construct();
@@ -61,7 +62,7 @@ class WC_EBANX_Eft_Gateway extends WC_EBANX_Redirect_Gateway
             wc_get_template(
                 'eft/payment-instructions.php',
                 array(
-                    'title'       => $this->title,
+                    'title'       => $this->title, // TODO: static method use this ?
                     'description' => $this->description,
                 ),
                 'woocommerce/ebanx/',
@@ -79,7 +80,7 @@ class WC_EBANX_Eft_Gateway extends WC_EBANX_Redirect_Gateway
         $data = parent::request_data($order);
 
         $data['payment']['eft_code']          = $_POST['eft'];
-        $data['payment']['payment_type_code'] = 'eft';
+        $data['payment']['payment_type_code'] = $this->api_name;
 
         return $data;
     }
