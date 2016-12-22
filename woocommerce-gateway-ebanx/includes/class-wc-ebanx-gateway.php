@@ -29,6 +29,7 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
 
         add_filter('woocommerce_checkout_fields', function ($fields) {
             $cpf = get_user_meta($this->userId, '__ebanx_billing_brazil_document');
+            $rut = get_user_meta($this->userId, '__ebanx_billing_chile_document');
 
             $fields['billing']['ebanx_billing_brazil_birth_date'] = array(
                 'type'  => 'text',
@@ -39,6 +40,16 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
                 'label'    => 'CPF',
                 'required' => true,
                 'default' => isset($cpf[0]) ? $cpf[0] : ''
+            );
+            $fields['billing']['ebanx_billing_chile_birth_date'] = array(
+                'type'  => 'text',
+                'label' => 'Datos de nacimiento',
+            );
+            $fields['billing']['ebanx_billing_chile_document'] = array(
+                'type'     => 'text',
+                'label'    => 'RUT',
+                'required' => true,
+                'default' => isset($rut[0]) ? $rut[0] : ''
             );
             return $fields;
         });
@@ -147,6 +158,7 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
 
         if (trim(strtolower(WC()->customer->get_shipping_country())) === WC_EBANX_Gateway_Utils::COUNTRY_BRAZIL) {
             if (empty($_POST['ebanx_billing_brazil_document']) ||
+                empty($_POST['ebanx_billing_brazil_birth_date']) ||
                 empty($_POST['billing_postcode']) ||
                 empty($_POST['billing_address_1']) ||
                 empty($_POST['billing_city']) ||
@@ -154,6 +166,18 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
             ) {
                 throw new Exception('INVALID-FIELDS');
             }
+
+            $_POST['ebanx_billing_document'] = $_POST['ebanx_billing_brazil_document'];
+            $_POST['ebanx_billing_birth_date'] = $_POST['ebanx_billing_brazil_birth_date'];
+        }
+
+        if (trim(strtolower(WC()->customer->get_shipping_country())) === WC_EBANX_Gateway_Utils::COUNTRY_CHILE) {
+            if (empty($_POST['ebanx_billing_chile_document']) || empty($_POST['ebanx_billing_chile_birth_date'])) {
+                throw new Exception('INVALID-FIELDS');
+            }
+
+            $_POST['ebanx_billing_document'] = $_POST['ebanx_billing_chile_document'];
+            $_POST['ebanx_billing_birth_date'] = $_POST['ebanx_billing_chile_birth_date'];
         }
 
         $addresses = WC_Ebanx_Gateway_Utils::split_street($_POST['billing_address_1'] . ' ' . $_POST['billing_address_2']);
@@ -161,8 +185,8 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
         $street_number = empty($addresses['houseNumber']) ? 'S/N' : trim($addresses['houseNumber'] . ' ' . $addresses['additionToAddress2']);
 
         $data['payment'] = array_merge($data['payment'], array(
-            'document'      => $_POST['ebanx_billing_brazil_document'],
-            'birth_date'    => $_POST['ebanx_billing_brazil_birth_date'],
+            'document'      => $_POST['ebanx_billing_document'],
+            'birth_date'    => $_POST['ebanx_billing_birth_date'],
             'zipcode'       => $_POST['billing_postcode'],
             'address'       => $_POST['billing_address_1'],
             'street_number' => $street_number,
@@ -391,8 +415,12 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
     {
         if ($this->userId) {
             if (trim(strtolower($order->get_address()['country'])) === WC_EBANX_Gateway_Utils::COUNTRY_BRAZIL) {
-                update_user_meta($this->userId, '__ebanx_billing_brazil_document', $_POST['ebanx_billing_brazil_document']);
-                update_user_meta($this->userId, '__ebanx_billing_brazil_birth_date', $_POST['ebanx_billing_brazil_birth_date']);
+                update_user_meta($this->userId, '__ebanx_billing_brazil_document', $_POST['ebanx_billing_document']);
+                update_user_meta($this->userId, '__ebanx_billing_brazil_birth_date', $_POST['ebanx_billing_birth_date']);
+            }
+            if (trim(strtolower($order->get_address()['country'])) === WC_EBANX_Gateway_Utils::COUNTRY_CHILE) {
+                update_user_meta($this->userId, '__ebanx_billing_chile_document', $_POST['ebanx_billing_document']);
+                update_user_meta($this->userId, '__ebanx_billing_chile_birth_date', $_POST['ebanx_billing_birth_date']);
             }
         }
     }

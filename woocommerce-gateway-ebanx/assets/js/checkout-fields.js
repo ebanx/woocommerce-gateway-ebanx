@@ -1,4 +1,6 @@
 jQuery( function($) {
+	$(document).find("#ebanx_billing_chile_birth_date").mask('00/00/0000');
+	$(document).find("#ebanx_billing_chile_document").mask('00.000.000-0');
 	$(document).find("#ebanx_billing_brazil_birth_date").mask('00/00/0000');
 	$(document).find("#ebanx_billing_brazil_document").mask('000.000.000-00');
 
@@ -20,6 +22,13 @@ jQuery( function($) {
 			case "br":
 				ebanxBillingContainers().each(function() {
 					if(this.id.match(/^ebanx_billing_brazil_.*$/)) {
+						jQuery(this).show().attr("required", true);
+					}
+				});
+			break;
+			case "cl":
+				ebanxBillingContainers().each(function() {
+					if(this.id.match(/^ebanx_billing_chile_.*$/)) {
 						jQuery(this).show().attr("required", true);
 					}
 				});

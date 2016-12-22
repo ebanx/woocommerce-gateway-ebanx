@@ -228,6 +228,7 @@ if (!class_exists('WC_EBANX')) {
             include_once(INCLUDES_DIR . 'class-wc-ebanx-gateway.php');
             include_once(INCLUDES_DIR . 'class-wc-ebanx-redirect-gateway.php');
             include_once(INCLUDES_DIR . 'class-wc-ebanx-pagoefectivo-gateway.php');
+            include_once(INCLUDES_DIR . 'class-wc-ebanx-sencillito-gateway.php');
             include_once(INCLUDES_DIR . 'class-wc-ebanx-account-gateway.php');
             include_once(INCLUDES_DIR . 'class-wc-ebanx-safetypay-gateway.php');
             include_once(INCLUDES_DIR . 'class-wc-ebanx-my-account.php');
@@ -267,6 +268,7 @@ if (!class_exists('WC_EBANX')) {
             $methods[] = 'WC_EBANX_Credit_Card_Gateway';
             $methods[] = 'WC_EBANX_Debit_Card_Gateway';
             $methods[] = 'WC_EBANX_Oxxo_Gateway';
+            $methods[] = 'WC_EBANX_Sencillito_Gateway';
             $methods[] = 'WC_EBANX_Servipag_Gateway';
             $methods[] = 'WC_EBANX_Tef_Gateway';
             $methods[] = 'WC_EBANX_Pagoefectivo_Gateway';
