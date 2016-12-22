@@ -12,9 +12,9 @@ class WC_EBANX_Account_Gateway extends WC_EBANX_Redirect_Gateway
         $this->id           = 'ebanx-account';
         $this->method_title = __('EBANX - ACCOUNT', 'woocommerce-gateway-ebanx');
 
-        $this->title       = __('Conta EBANX');
         $this->api_name    = 'ebanxaccount';
-        $this->description = __('Conta EBANX description');
+        $this->title       = __('Conta EBANX', 'woocommerce-gateway-ebanx');
+        $this->description = __('Conta EBANX description', 'woocommerce-gateway-ebanx');
 
         parent::__construct();
 

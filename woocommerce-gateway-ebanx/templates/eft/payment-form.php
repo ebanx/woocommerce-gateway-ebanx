@@ -10,16 +10,14 @@
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
+
+asort($banks);
 ?>
 
 <div class="ebanx-eft-payment">
-  <p>Which bank to pay?</p>
-
-	<?php foreach(WC_EBANX_Gateway_Utils::$BANKS_EFT_ALLOWED[WC_EBANX_Gateway_Utils::COUNTRY_COLOMBIA] as $bank): ?>
-		<div class="form-row">
-			<label class="ebanx-label">
-				<input type="radio" name="eft" value="<?=$bank;?>" checked> <?=$bank;?>
-			</label>
-		</div>
-	<? endforeach; ?>
+    <select name="eft">
+        <?php foreach($banks as $key => $bank): ?>
+        	<option value="<?php echo $key ?>"><?php echo $bank ?></option>
+        <?php endforeach ?>
+    </select>
 </div>

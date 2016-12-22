@@ -111,7 +111,7 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway
                 'class'       => 'ebanx-select',
                 'options'     => array(
                     'ebanx-sencillito'    => 'Sencillito',
-                    'ebanx-baking-ticket' => 'ServiPag',
+                    'ebanx-servipag' => 'ServiPag',
                 ),
             ),
             'colombia_payment_methods'  => array(
@@ -120,7 +120,7 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway
                 'type'        => 'multiselect',
                 'class'       => 'ebanx-select',
                 'options'     => array(
-                    'ebanx-eft' => 'EFT',
+                    'ebanx-eft' => 'PSE',
                 ),
             ),
             'peru_payment_methods'      => array(

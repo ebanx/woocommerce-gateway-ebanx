@@ -30,7 +30,7 @@ class WC_EBANX_One_Click
 
         add_action('wp_loaded', array($this, 'one_click_handler'), 99);
 
-        $this->cards = get_user_meta($this->userId, '__ebanx_credit_card_token', true);
+        $this->cards = get_user_meta($this->userId, '_ebanx_credit_card_token', true);
     }
 
     public function one_click_url( $url )
@@ -59,7 +59,7 @@ class WC_EBANX_One_Click
     public function empty_cart()
     {
         $cart = WC()->session->get( 'cart' );
-        update_user_meta( $this->userId, '__ebanx_persistent_cart', $cart );
+        update_user_meta( $this->userId, '_ebanx_persistent_cart', $cart );
 
         WC()->cart->empty_cart( true );
     }
@@ -226,7 +226,7 @@ class WC_EBANX_One_Click
         WC()->cart->empty_cart( true );
 
         // update user meta with saved persistent
-        $saved_cart = get_user_meta( $this->userId, '__ebanx_persistent_cart', true );
+        $saved_cart = get_user_meta( $this->userId, '_ebanx_persistent_cart', true );
         // then reload cart
         WC()->session->set( 'cart', $saved_cart );
         WC()->cart->get_cart_from_session();
@@ -342,7 +342,7 @@ class WC_EBANX_One_Click
     }
 
     protected function customerHasEBANXRequiredData() {
-        $card = current(array_filter((array) get_user_meta($this->userId, '__ebanx_credit_card_token', true), function ($card) {
+        $card = current(array_filter((array) get_user_meta($this->userId, '_ebanx_credit_card_token', true), function ($card) {
             return $card->token == $_GET['_ebanx_one_click_token'];
         }));
 
@@ -353,7 +353,7 @@ class WC_EBANX_One_Click
         $_POST['ebanx_is_one_click'] = true;
         $_POST['ebanx_billing_instalments'] = $_GET['_ebanx_one_click_installments'];
 
-        $_POST['ebanx_billing_brazil_document'] = get_user_meta($this->userId, '__ebanx_billing_brazil_document', true);
+        $_POST['ebanx_billing_brazil_document'] = get_user_meta($this->userId, '_ebanx_billing_brazil_document', true);
 
         $_POST['billing_postcode']  = $this->get_user_billing_address()['postcode'];
         $_POST['billing_address_1'] = $this->get_user_billing_address()['address_1'];

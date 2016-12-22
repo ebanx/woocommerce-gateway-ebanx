@@ -9,11 +9,11 @@ class WC_Ebanx_Debit_Card_Gateway extends WC_Ebanx_Gateway
     public function __construct()
     {
         $this->id           = 'ebanx-debit-card';
-        $this->method_title = __('EBANX - Debit Card', 'woocommerce-ebanx');
+        $this->method_title = __('EBANX - Debit Card', 'woocommerce-gateway-ebanx');
 
-        $this->title       = __('Debit Card');
         $this->api_name    = 'debitcard';
-        $this->description = __('Debit Card description');
+        $this->title       = __('Debit Card', 'woocommerce-gateway-ebanx');
+        $this->description = __('Debit Card description', 'woocommerce-gateway-ebanx');
 
         parent::__construct();
 
@@ -35,12 +35,6 @@ class WC_Ebanx_Debit_Card_Gateway extends WC_Ebanx_Gateway
 
             wp_localize_script('woocommerce_ebanx', 'wc_ebanx_params', apply_filters('wc_ebanx_params', $ebanx_params));
         }
-    }
-
-    public function show_icon()
-    {
-        // TODO: ?
-        return plugins_url('/assets/images/' . $this->id . '-' . $this->getTransactionAddress('country') . '.png', plugin_basename(dirname(__FILE__)));
     }
 
     public function is_available()

@@ -11,9 +11,9 @@ class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
         $this->id           = 'ebanx-credit-card';
         $this->method_title = __('EBANX - Credit Card', 'woocommerce-gateway-ebanx');
 
-        $this->title       = __('Credit Card');
         $this->api_name    = '_creditcard';
-        $this->description = __('Credit Card description');
+        $this->title       = __('Credit Card', 'woocommerce-gateway-ebanx');
+        $this->description = __('Pay with your credit card via EBANX.', 'woocommerce-gateway-ebanx');
 
         parent::__construct();
 
@@ -97,8 +97,8 @@ class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
 
     public function is_available()
     {
-        $this->method = ($this->getTransactionAddress('country') === WC_Ebanx_Gateway_Utils::COUNTRY_BRAZIL) ? 'brazil_payment_methods' : 'mexico_payment_methods';
-        $this->enabled = in_array($this->id, $this->configs->settings[$this->method]) ? 'yes' : false;
+        $this->method = ($this->getTransactionAddress('country') === WC_Ebanx_Gateway_Utils::COUNTRY_BRAZIL) ? 'brazil_payment_methods' : ($this->getTransactionAddress('country') === WC_Ebanx_Gateway_Utils::COUNTRY_MEXICO) ? 'mexico_payment_methods' : false;
+        $this->enabled = $this->method && in_array($this->id, $this->configs->settings[$this->method]) ? 'yes' : false;
 
         return parent::is_available();
     }
@@ -111,7 +111,7 @@ class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
 
         $cart_total = $this->get_order_total();
 
-        $cards = array_filter((array) get_user_meta($this->userId, '__ebanx_credit_card_token', true), function ($card) {
+        $cards = array_filter((array) get_user_meta($this->userId, '_ebanx_credit_card_token', true), function ($card) {
             return !empty($card->brand) && !empty($card->token) && !empty($card->masked_number); // TODO: Implement token due date
         });
 
@@ -134,8 +134,8 @@ class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
         $order = new WC_Order($order_id);
 
         $data = array(
-            'instalments' => get_post_meta($order->id, 'Number of Instalments', true),
-            'card_brand'  => get_post_meta($order->id, 'Card\'s Brand Name', true),
+            'instalments' => get_post_meta($order->id, '_instalments_number', true),
+            'card_brand'  => get_post_meta($order->id, '_cards_brand_name', true),
             // TODO: display masked number
         );
 
@@ -209,7 +209,7 @@ class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
         parent::save_user_meta_fields($order);
 
         if ($this->userId && $this->configs->settings['enable_place_order'] === 'yes' && isset($_POST['ebanx-save-credit-card']) && $_POST['ebanx-save-credit-card'] === 'yes') {
-            $cards = get_user_meta($this->userId, '__ebanx_credit_card_token', true);
+            $cards = get_user_meta($this->userId, '_ebanx_credit_card_token', true);
             $cards = !empty($cards) ? $cards : [];
 
             $card = new \stdClass();
@@ -229,7 +229,7 @@ class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
 
             $cards[] = $card;
 
-            update_user_meta($this->userId, '__ebanx_credit_card_token', $cards);
+            update_user_meta($this->userId, '_ebanx_credit_card_token', $cards);
         }
     }
 }
