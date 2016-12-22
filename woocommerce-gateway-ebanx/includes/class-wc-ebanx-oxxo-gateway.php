@@ -13,6 +13,7 @@ class WC_EBANX_Oxxo_Gateway extends WC_EBANX_Gateway
         $this->method_title = __('EBANX - Oxxo', 'woocommerce-gateway-ebanx');
 
         $this->title       = __('Oxxo');
+        $this->api_name    = 'oxxo';
         $this->description = __('Oxxo description');
 
         parent::__construct();
@@ -72,7 +73,7 @@ class WC_EBANX_Oxxo_Gateway extends WC_EBANX_Gateway
 
         $data = parent::request_data($order);
 
-        $data['payment']['payment_type_code'] = 'oxxo';
+        $data['payment']['payment_type_code'] = $this->api_name;
 
         return $data;
     }

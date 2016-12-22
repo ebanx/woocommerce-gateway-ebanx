@@ -13,6 +13,7 @@ class WC_EBANX_Servipag_Gateway extends WC_EBANX_Gateway
         $this->method_title = __('EBANX - Servipag', 'woocommerce-gateway-ebanx');
 
         $this->title       = __('ServiPag');
+        $this->api_name    = 'servipag';
         $this->description = __('ServiPag Description');
 
         parent::__construct();
@@ -72,7 +73,7 @@ class WC_EBANX_Servipag_Gateway extends WC_EBANX_Gateway
 
         $data = parent::request_data($order);
 
-        $data['payment']['payment_type_code'] = 'servipag';
+        $data['payment']['payment_type_code'] = $this->api_name;
 
         return $data;
     }

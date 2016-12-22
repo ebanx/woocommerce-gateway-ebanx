@@ -223,6 +223,7 @@ if (!class_exists('WC_EBANX')) {
          */
         private function includes()
         {
+            include_once(INCLUDES_DIR . 'class-wc-ebanx-custom-order.php');
             include_once(INCLUDES_DIR . 'class-wc-ebanx-gateway-utils.php');
             include_once(INCLUDES_DIR . 'class-wc-ebanx-gateway.php');
             include_once(INCLUDES_DIR . 'class-wc-ebanx-redirect-gateway.php');

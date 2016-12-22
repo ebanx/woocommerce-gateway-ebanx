@@ -12,6 +12,7 @@ class WC_Ebanx_Debit_Card_Gateway extends WC_Ebanx_Gateway
         $this->method_title = __('EBANX - Debit Card', 'woocommerce-ebanx');
 
         $this->title       = __('Debit Card');
+        $this->api_name    = 'debitcard';
         $this->description = __('Debit Card description');
 
         parent::__construct();
@@ -76,7 +77,7 @@ class WC_Ebanx_Debit_Card_Gateway extends WC_Ebanx_Gateway
 
         $data = parent::request_data($order);
 
-        $data['payment']['payment_type_code'] = "debitcard";
+        $data['payment']['payment_type_code'] = $this->api_name;
 
         // TODO: need fingerprint ?
 
