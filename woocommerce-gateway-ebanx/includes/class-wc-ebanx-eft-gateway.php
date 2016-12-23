@@ -43,6 +43,7 @@ class WC_EBANX_Eft_Gateway extends WC_EBANX_Redirect_Gateway
         wc_get_template(
             'eft/payment-form.php',
             array(
+                'language' => $this->language,
                 'title'       => $this->title,
                 'description' => $this->description,
                 'banks'       => WC_EBANX_Gateway_Utils::$BANKS_EFT_ALLOWED[WC_EBANX_Gateway_Utils::COUNTRY_COLOMBIA]

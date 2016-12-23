@@ -34,7 +34,9 @@ class WC_EBANX_Banking_Ticket_Gateway extends WC_EBANX_Gateway
 
         wc_get_template(
             'banking-ticket/checkout-instructions.php',
-            array(),
+            array(
+                'language' => $this->language
+            ),
             'woocommerce/ebanx/',
             WC_EBANX::get_templates_path()
         );

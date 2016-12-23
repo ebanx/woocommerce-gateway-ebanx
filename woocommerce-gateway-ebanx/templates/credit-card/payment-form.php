@@ -12,19 +12,19 @@ if (!defined('ABSPATH')) {
 }
 ?>
 
-<div id="ebanx-credit-cart-form">
-    <section class="form-row">
+<div id="ebanx-credit-cart-form" class="ebanx-payment-container ebanx-language-<?php echo $language ?>">
+    <section class="ebanx-form-row">
     	<?php if (!empty($cards)): ?>
     		<?php foreach ($cards as $card): ?>
                 <div class="ebanx-credit-card-option">
                     <label class="ebanx-credit-card-label">
         				<input type="radio" class="input-radio <?php echo trim($card->brand . "-" . $card->masked_number); ?>" value="<?php echo $card->token; ?>" name="ebanx-credit-card-use" />
-        				<span class="ebanx-credit-card-brand"><img src="<?php echo PLUGIN_DIR_URL . "assets/images/icons/$card->brand.png" ?>" height="20" style="height: 20px; margin-left: 0; margin-right: 7px;" alt="<?php echo $card->brand ?>"></span>
+        				<span class="ebanx-credit-card-brand"><img src="<?php echo PLUGIN_DIR_URL . "assets/images/icons/$card->brand.png" ?>" height="20" style="height: 20px; margin-left: 0; margin-right: 7px; float: left;" alt="<?php echo $card->brand ?>"></span>
                         <span class="ebanx-credit-card-bin">&bull;&bull;&bull;&bull; <?php echo substr($card->masked_number, -4) ?></span>
         			</label>
         			<div class="ebanx-container-credit-card" style="display: none;">
-        				<div class="form-row">
-        					<section class="form-row">
+        				<div class="ebanx-form-row">
+        					<section class="ebanx-form-row">
         					    <label for="ebanx-card-cvv"><?php _e('Card Code', 'woocommerce-gateway-ebanx');?> <span class="required">*</span></label>
 
             					<input class="input-text wc-credit-card-form-card-cvc" type="text" autocomplete="off" placeholder="<?php _e('CVV', 'woocommerce-gateway-ebanx');?>" />

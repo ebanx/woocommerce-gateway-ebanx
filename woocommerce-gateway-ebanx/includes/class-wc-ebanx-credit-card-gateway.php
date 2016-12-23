@@ -118,6 +118,7 @@ class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
         wc_get_template(
             'credit-card/payment-form.php',
             array(
+                'language' => $this->language,
                 'cards'           => (array) $cards,
                 'cart_total'      => $cart_total,
                 'country'         => $this->getTransactionAddress('country'),

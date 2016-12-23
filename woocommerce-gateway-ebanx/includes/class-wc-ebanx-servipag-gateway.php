@@ -40,11 +40,11 @@ class WC_EBANX_Servipag_Gateway extends WC_EBANX_Gateway
             echo wp_kses_post(wpautop(wptexturize($description)));
         }
 
-        $cart_total = $this->get_order_total();
-
         wc_get_template(
             'servipag/payment-form.php',
-            array(),
+            array(
+                'language' => $this->language,
+            ),
             'woocommerce/ebanx/',
             WC_EBANX::get_templates_path()
         );

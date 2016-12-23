@@ -1,6 +1,6 @@
 <!-- Installments -->
 <?php if ($max_installment > 0) : ?>
-    <section class="form-row">
+    <section class="ebanx-form-row">
         <label for="ebanx-card-installments"><?php _e( 'Instalments', 'woocommerce-gateway-ebanx' ); ?> <span class="required">*</span></label>
         <select class="ebanx-instalments">
             <?php for ($number = 1; $number <= $max_installment; ++$number):

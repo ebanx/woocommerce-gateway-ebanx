@@ -44,7 +44,9 @@ class WC_EBANX_Oxxo_Gateway extends WC_EBANX_Gateway
 
         wc_get_template(
             'oxxo/payment-form.php',
-            array(),
+            array(
+                'language' => $this->language,
+            ),
             'woocommerce/ebanx/',
             WC_EBANX::get_templates_path()
         );
