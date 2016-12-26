@@ -9,7 +9,7 @@ if (!defined('ABSPATH')) {
 	<div id="ebanx-container-new-debit-card">
 		<section class="ebanx-form-row">
 			<label for="ebanx-debit-card-holder-name"><?php _e('Card Holder Name', 'woocommerce-gateway-ebanx');?><span class="required">*</span></label>
-			<input id="ebanx-debit-card-holder-name" class="input-text" type="text" autocomplete="off" />
+			<input id="ebanx-debit-card-holder-name" class="wc-credit-card-form-card-number input-text" type="text" autocomplete="off" />
 		</section>
 		<section class="ebanx-form-row">
 			<label for="ebanx-debit-card-number"><?php _e('Card Number', 'woocommerce-gateway-ebanx');?> <span class="required">*</span></label>

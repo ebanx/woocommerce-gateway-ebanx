@@ -13,16 +13,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 ?>
 
 <div id="ebanx-safetypay-payment" class="ebanx-payment-container ebanx-language-<?php echo $language ?>">
-  <p>Which bank to pay?</p>
-
-	<div class="ebanx-form-row">
+  <div class="ebanx-form-row">
 		<label class="ebanx-label">
 			<input type="radio" name="safetypay" value="cash" checked> Cash
 		</label>
 	</div>
 	<div class="ebanx-form-row">
-		<label class="ebanx-label">
-			<input type="radio" name="safetypay" value="online"> Online
-		</label>
+    	<label class="ebanx-label">
+    		<input type="radio" name="safetypay" value="online"> Online
+    	</label>
 	</div>
 </div>

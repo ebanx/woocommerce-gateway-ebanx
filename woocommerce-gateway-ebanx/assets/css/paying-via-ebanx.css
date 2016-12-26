@@ -261,3 +261,20 @@ div.ebanx-form-row {
         width: 100%;
     }
 }
+
+.woocommerce-checkout #payment ul.payment_methods .wc_payment_method[class*="ebanx"] > input[type="checkbox"] {
+  margin-right: 1em;
+}
+
+.wc_payment_method[class*="ebanx"] .payment_box input[type="checkbox"],
+.wc_payment_method[class*="ebanx"] .payment_box input[type="radio"] {
+  width: auto;
+  display: inline-block !important;
+  float: none !important;
+}
+
+.ebanx-label {
+  width: 100%;
+  display: block;
+  overflow: hidden;
+}
