@@ -394,7 +394,7 @@ class WC_EBANX_One_Click
             'cards' => $this->cards,
             'cart_total' => $product->price,
             'max_installment' => $this->gateway->configs->settings['credit_card_instalments'],
-            'label' => $this->gateway->configs->settings['one_click_label_button'],
+            'label' => __('Pay with one click', 'woocommerce-gateway-ebanx')
         ));
 
         wc_get_template('one-click.php', $args, '', WC_EBANX::get_templates_path().'credit-card/');
