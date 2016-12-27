@@ -10,4 +10,5 @@
             <?php endfor; ?>
         </select>
     </section>
+    <div class="clear"></div>
 <?php endif; ?>

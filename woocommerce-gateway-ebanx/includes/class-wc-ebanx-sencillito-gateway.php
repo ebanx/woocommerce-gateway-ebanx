@@ -11,9 +11,9 @@ class WC_EBANX_Sencillito_Gateway extends WC_EBANX_Redirect_Gateway
         $this->id           = 'ebanx-sencillito';
         $this->method_title = __('EBANX - Sencillito', 'woocommerce-gateway-ebanx');
 
-        $this->title       = __('Sencillito');
         $this->api_name    = 'sencillito';
-        $this->description = __('Sencillito Description');
+        $this->title       = __('Sencillito');
+        $this->description = __('Pay with Sencillito.');
 
         parent::__construct();
 

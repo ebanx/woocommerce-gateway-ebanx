@@ -4,6 +4,7 @@
             <label for="ebanx-card-holder-name"><?php _e('Card Holder Name', 'woocommerce-gateway-ebanx');?><span class="required">*</span></label>
             <input id="ebanx-card-holder-name" class="wc-credit-card-form-card-number input-text" type="text" autocomplete="off" />
         </section>
+        <div class="clear"></div>
     <?php endif; ?>
     <section class="ebanx-form-row">
         <label for="ebanx-card-number"><?php _e('Card Number', 'woocommerce-gateway-ebanx');?> <span class="required">*</span></label>
@@ -18,7 +19,6 @@
         <label for="ebanx-card-cvv"><?php _e('Card Code', 'woocommerce-gateway-ebanx');?> <span class="required">*</span></label>
         <input id="ebanx-card-cvv" class="input-text wc-credit-card-form-card-cvc" type="text" autocomplete="off" placeholder="<?php _e('CVV', 'woocommerce-gateway-ebanx');?>" />
     </section>
-    <div class="clear"></div>
 
     <?php include 'installments.php';?>
 
@@ -29,6 +29,6 @@
                 <?php _e('Save this card for a future order', 'woocommerce-gateway-ebanx');?>
             </label>
         </section>
+        <div class="clear"></div>
     <?php endif; ?>
-    <div class="clear"></div>
 </div>

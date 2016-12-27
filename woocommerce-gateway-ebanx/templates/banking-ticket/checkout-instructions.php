@@ -12,6 +12,4 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 ?>
 
-<div id="ebanx-bank-slip-instructions" class="ebanx-payment-container ebanx-language-<?php echo $language ?>">
-	<p><?php esc_html_e( 'After clicking "Place order" you will have access to banking banking ticket which you can print and pay in your internet banking or in a lottery retailer.', 'woocommerce-gateway-ebanx' ); ?><br /><?php esc_html_e( 'Note: The order will be confirmed only after the payment approval.', 'woocommerce-gateway-ebanx' ); ?></p>
-</div>
+<div id="ebanx-banking-ticket" class="ebanx-payment-container ebanx-language-<?php echo $language ?>"></div>
