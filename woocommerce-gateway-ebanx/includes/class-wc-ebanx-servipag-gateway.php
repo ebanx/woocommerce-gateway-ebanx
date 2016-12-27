@@ -12,9 +12,9 @@ class WC_EBANX_Servipag_Gateway extends WC_EBANX_Gateway
         $this->id           = 'ebanx-servipag';
         $this->method_title = __('EBANX - Servipag', 'woocommerce-gateway-ebanx');
 
-        $this->title       = __('ServiPag');
         $this->api_name    = 'servipag';
-        $this->description = __('ServiPag Description');
+        $this->title       = __('ServiPag', 'woocommerce-gateway-ebanx');
+        $this->description = __('Paga con Servipag.', 'woocommerce-gateway-ebanx');
 
         parent::__construct();
 
@@ -40,11 +40,11 @@ class WC_EBANX_Servipag_Gateway extends WC_EBANX_Gateway
             echo wp_kses_post(wpautop(wptexturize($description)));
         }
 
-        $cart_total = $this->get_order_total();
-
         wc_get_template(
             'servipag/payment-form.php',
-            array(),
+            array(
+                'language' => $this->language,
+            ),
             'woocommerce/ebanx/',
             WC_EBANX::get_templates_path()
         );

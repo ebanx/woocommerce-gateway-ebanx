@@ -10,11 +10,11 @@ class WC_EBANX_Eft_Gateway extends WC_EBANX_Redirect_Gateway
     public function __construct()
     {
         $this->id           = 'ebanx-eft';
-        $this->method_title = __('EBANX - EFT', 'woocommerce-gateway-ebanx');
+        $this->method_title = __('EBANX - PSE', 'woocommerce-gateway-ebanx');
 
-        $this->title       = __('EFT', 'woocommerce-gateway-ebanx');
         $this->api_name    = 'eft';
-        $this->description = __('EFT Description', 'woocommerce-gateway-ebanx');
+        $this->title       = __('PSE - Pago Seguros en Línea', 'woocommerce-gateway-ebanx');
+        $this->description = __('Paga con PSE - Pago Seguros en Línea.', 'woocommerce-gateway-ebanx');
 
         parent::__construct();
 
@@ -43,8 +43,10 @@ class WC_EBANX_Eft_Gateway extends WC_EBANX_Redirect_Gateway
         wc_get_template(
             'eft/payment-form.php',
             array(
+                'language' => $this->language,
                 'title'       => $this->title,
                 'description' => $this->description,
+                'banks'       => WC_EBANX_Gateway_Utils::$BANKS_EFT_ALLOWED[WC_EBANX_Gateway_Utils::COUNTRY_COLOMBIA]
             ),
             'woocommerce/ebanx/',
             WC_EBANX::get_templates_path()
@@ -73,7 +75,7 @@ class WC_EBANX_Eft_Gateway extends WC_EBANX_Redirect_Gateway
 
     protected function request_data($order)
     {
-        if (!isset($_POST['eft']) || !in_array($_POST['eft'], WC_EBANX_Gateway_Utils::$BANKS_EFT_ALLOWED[WC_EBANX_Gateway_Utils::COUNTRY_COLOMBIA])) {
+        if (!isset($_POST['eft']) || !array_key_exists($_POST['eft'], WC_EBANX_Gateway_Utils::$BANKS_EFT_ALLOWED[WC_EBANX_Gateway_Utils::COUNTRY_COLOMBIA])) {
             throw new Exception('MISSING-BANK-NAME');
         }
 

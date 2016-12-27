@@ -12,27 +12,25 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 ?>
 
-<div class="ebanx-tef-payment">
-  <p>Which bank to pay?</p>
-
-	<div class="form-row">
+<div id="ebanx-tef-payment" class="ebanx-payment-container ebanx-language-<?php echo $language ?>">
+	<p>
 		<label class="ebanx-label">
 			<input type="radio" name="tef" value="itau" checked> Itaú
 		</label>
-	</div>
-	<div class="form-row">
+	</p>
+	<p>
 		<label class="ebanx-label">
 			<input type="radio" name="tef" value="bradesco"> Bradesco
 		</label>
-	</div>
-	<div class="form-row">
+	</p>
+	<p>
 		<label class="ebanx-label">
 			<input type="radio" name="tef" value="bancodobrasil"> Banco do Brasil
 		</label>
-	</div>
-	<div class="form-row">
+	</p>
+	<p>
 		<label class="ebanx-label">
 			<input type="radio" name="tef" value="banrisul"> Banrisul
 		</label>
-	</div>
+	</p>
 </div>

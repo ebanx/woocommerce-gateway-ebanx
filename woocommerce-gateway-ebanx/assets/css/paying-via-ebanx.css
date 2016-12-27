@@ -1,0 +1,284 @@
+.wc_payment_method[class*="ebanx"] div.payment_box {
+  position: relative;
+  padding-right:
+}
+
+.wc_payment_method[class*="ebanx"] > label[for*="ebanx"] > img {
+  width: auto;
+  height: 24px;
+}
+
+.wc_payment_method[class*="ebanx"] .ebanx-payment-container[class*="ebanx-language-"]:after {
+  content: '';
+  position: absolute;
+  top: 1em;
+  right: 1em;
+
+  display: block;
+  width: 133px;
+  height: 22px;
+
+  background-image: url(../images/ebanx-paying.png);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+}
+
+.wc_payment_method[class*="ebanx"] .ebanx-payment-container.ebanx-language-br:after {
+  width: 135px;
+
+  background-image: url(../images/ebanx-pagando.png);
+}
+
+.wc_payment_method[class*="ebanx"] .ebanx-payment-container.ebanx-language-mx:after,
+.wc_payment_method[class*="ebanx"] .ebanx-payment-container.ebanx-language-pe:after,
+.wc_payment_method[class*="ebanx"] .ebanx-payment-container.ebanx-language-co:after,
+.wc_payment_method[class*="ebanx"] .ebanx-payment-container.ebanx-language-cl:after {
+  width: 168px;
+
+  background-image: url(../images/ebanx-estas-pagando.png);
+}
+
+.wc_payment_method[class*="ebanx"] div.payment_box > p:first-child {
+  max-width: calc(100% - 140px - 1em);
+  margin-bottom: 0 !important;
+}
+
+.ebanx-payment-container:not(:empty) {
+  margin-top: 15px;
+}
+
+html[lang*="en"] .wc_payment_method[class*="ebanx"] div.payment_box > p:first-child {
+  max-width: calc(100% - 140px - 1em);
+}
+
+html[lang*="pt"] .wc_payment_method[class*="ebanx"] div.payment_box > p:first-child {
+  max-width: calc(100% - 150px - 1em);
+}
+
+html[lang*="es"] .wc_payment_method[class*="ebanx"] div.payment_box > p:first-child {
+  max-width: calc(100% - 180px - 1em);
+}
+
+.wc_payment_method[class*="ebanx"] > label > img {
+  margin-left: 5px;
+}
+
+#shop-isle-checkout-coupon .checkout_coupon .ebanx-form-row-first {
+    width: 100%;
+    margin-left: -200px;
+    padding-left: 200px;
+    margin-right: 0;
+}
+
+#shop-isle-checkout-coupon .checkout_coupon .ebanx-form-row-first input[type="text"] {
+    font-family: "Roboto Condensed", sans-serif;
+    letter-spacing: 2px;
+    font-size: 12px;
+    height: 35px;
+    border: 1px solid #EAEAEA;
+    -webkit-border-radius: 2px;
+    -moz-border-radius: 2px;
+    border-radius: 2px;
+    padding: 6px 12px;
+    width: 100%;
+}
+
+.woocommerce #shop-isle-checkout-coupon .ebanx-form-row input[type='submit'] {
+    margin-right: 0;
+    max-width: 195px;
+}
+
+#shop-isle-checkout-coupon .checkout_coupon .ebanx-form-row-last {
+    width: auto;
+}
+
+#payment .payment_methods li .payment_box fieldset .ebanx-form-row {
+    margin-bottom: 1em
+}
+
+#payment .payment_methods li .payment_box fieldset .ebanx-form-row-first select {
+    width: 48%
+}
+
+#payment .payment_methods li .payment_box fieldset .ebanx-form-row-first select:nth-child(2n) {
+    float: right
+}
+
+.ebanx-form-row label {
+    display: block
+}
+
+.ebanx-form-row input,
+.ebanx-form-row select,
+.ebanx-form-row textarea {
+    width: 100%
+}
+
+.ebanx-form-row .button,
+.ebanx-form-row input[type=checkbox],
+.ebanx-form-row input[type=radio] {
+    width: auto
+}
+
+.ebanx-form-row.create-account label {
+    display: inline-block
+}
+
+.ebanx-form-row.woocommerce-validated input.input-text {
+    box-shadow: inset 2px 0 0 #0f834d
+}
+
+.ebanx-form-row.woocommerce-invalid input.input-text {
+    box-shadow: inset 2px 0 0 #e2401c
+}
+
+.ebanx-form-row-last {
+    margin-right: 0!important
+}
+
+.ebanx-form-row-wide {
+    clear: both;
+    width: 100%
+}
+
+.col2-set .ebanx-form-row-first {
+    width: 33.3333333333%;
+    float: left;
+    margin-right: 11.1111111111%
+}
+
+.col2-set .ebanx-form-row-last {
+    width: 55.5555555556%;
+    float: right;
+    margin-right: 0
+}
+
+.ebanx-form-row {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+div.ebanx-form-row {
+  padding: 0 1em;
+}
+
+.woocommerce-order-pay #order_review .payment_methods+.ebanx-form-row {
+    padding: 1em
+}
+
+.page-template-template-fullwidth-php .col2-set .ebanx-form-row-first {
+    width: 45.4545454545%;
+    margin-right: 9.0909090909%
+}
+
+.page-template-template-fullwidth-php .col2-set .ebanx-form-row-last {
+    width: 45.4545454545%;
+    float: right;
+    margin-right: 0
+}
+
+.ebanx-form-row-first {
+    width: 47.0588235294%;
+    float: left;
+    margin-right: 5.8823529412%;
+    clear: both
+}
+
+.ebanx-form-row-last {
+    width: 47.0588235294%;
+    float: right;
+    margin-right: 0
+}
+
+.page-template-template-fullwidth-php .ebanx-form-row-first {
+    width: 47.8260869565%;
+    float: left;
+    margin-right: 4.347826087%
+}
+
+.page-template-template-fullwidth-php .ebanx-form-row-last {
+    width: 47.8260869565%;
+    float: right;
+    margin-right: 0
+}
+
+.woocommerce .ebanx-form-row input[type='submit'] {
+	background: rgba(17, 17, 17, 1);
+	color: #fff;
+	font-family: "Roboto Condensed",sans-serif;
+	text-transform: uppercase;
+	letter-spacing: 2px;
+	font-size: 11px;
+	padding: 8px 37px;
+	-webkit-border-radius: 2px;
+	-moz-border-radius: 2px;
+	border-radius: 2px;
+	width: auto;
+	border: none;
+}
+
+.woocommerce .ebanx-form-row input[type='submit']:hover {
+	background: rgba(17, 17, 17, 0.8);
+}
+
+.ebanx-form-row #rememberme {
+	vertical-align: -12px;
+}
+.ebanx-form-row label {
+	font-weight: normal;
+}
+
+.ebanx-form-row textarea {
+    font-family: "Roboto Condensed", sans-serif;
+    letter-spacing: 2px;
+    font-size: 12px;
+    height: 75px;
+    border: 1px solid #EAEAEA;
+    -webkit-border-radius: 2px;
+    -moz-border-radius: 2px;
+    border-radius: 2px;
+    padding: 6px 12px;
+}
+.ebanx-form-row.woocommerce-validated input.input-text {
+    box-shadow: none;
+}
+
+.ebanx-form-row .button,
+.ebanx-form-row input[type=checkbox],
+.ebanx-form-row input[type=radio] {
+    float: left;
+    margin-right: 5px;
+}
+
+@media(max-width: 480px) {
+    #shop-isle-checkout-coupon .checkout_coupon .ebanx-form-row-first {
+        margin-left: 0;
+        padding-left: 0;
+    }
+    #shop-isle-checkout-coupon .checkout_coupon .ebanx-form-row-last {
+        width: 100%;
+    }
+    .woocommerce #shop-isle-checkout-coupon .ebanx-form-row input[type='submit'] {
+        margin-right: 0;
+        max-width: 100%;
+        width: 100%;
+    }
+}
+
+.woocommerce-checkout #payment ul.payment_methods .wc_payment_method[class*="ebanx"] > input[type="checkbox"] {
+  margin-right: 1em;
+}
+
+.wc_payment_method[class*="ebanx"] .payment_box input[type="checkbox"],
+.wc_payment_method[class*="ebanx"] .payment_box input[type="radio"] {
+  width: auto;
+  display: inline-block !important;
+  float: none !important;
+}
+
+.ebanx-label {
+  width: 100%;
+  display: block;
+  overflow: hidden;
+}

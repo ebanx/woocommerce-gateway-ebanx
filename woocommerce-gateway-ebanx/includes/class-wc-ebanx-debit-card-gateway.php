@@ -4,25 +4,25 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-class WC_Ebanx_Debit_Card_Gateway extends WC_Ebanx_Gateway
+class WC_EBANX_Debit_Card_Gateway extends WC_EBANX_Gateway
 {
     public function __construct()
     {
         $this->id           = 'ebanx-debit-card';
-        $this->method_title = __('EBANX - Debit Card', 'woocommerce-ebanx');
+        $this->method_title = __('EBANX - Debit Card', 'woocommerce-gateway-ebanx');
 
-        $this->title       = __('Debit Card');
         $this->api_name    = 'debitcard';
-        $this->description = __('Debit Card description');
+        $this->title       = __('Tarjeta de Débito', 'woocommerce-gateway-ebanx');
+        $this->description = __('Paga con tarjeta de débito.', 'woocommerce-gateway-ebanx');
 
         parent::__construct();
 
         $this->enabled = in_array($this->id, $this->configs->settings['mexico_payment_methods']) ? 'yes' : false;
     }
 
-    public function checkout_scripts()
+    public function checkout_assets()
     {
-        parent::checkout_scripts();
+        parent::checkout_assets();
 
         if (is_checkout()) {
             wp_enqueue_script('wc-debit-card-form');
@@ -37,12 +37,6 @@ class WC_Ebanx_Debit_Card_Gateway extends WC_Ebanx_Gateway
         }
     }
 
-    public function show_icon()
-    {
-        // TODO: ?
-        return plugins_url('/assets/images/' . $this->id . '-' . $this->getTransactionAddress('country') . '.png', plugin_basename(dirname(__FILE__)));
-    }
-
     public function is_available()
     {
         return parent::is_available() && strtolower($this->getTransactionAddress('country')) === WC_Ebanx_Gateway_Utils::COUNTRY_MEXICO;
@@ -50,9 +44,14 @@ class WC_Ebanx_Debit_Card_Gateway extends WC_Ebanx_Gateway
 
     public function payment_fields()
     {
+        if ($description = $this->get_description()) {
+            echo wp_kses_post(wpautop(wptexturize($description)));
+        }
+
         wc_get_template(
             'debit-card/payment-form.php',
             array(
+                'language' => $this->language,
                 'cart_total' => $this->get_order_total()
             ),
             'woocommerce/ebanx/',

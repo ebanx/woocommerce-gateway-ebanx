@@ -98,9 +98,9 @@ jQuery( function($) {
 
 				if (cardUse && cardUse.val() && cardUse.val() !== 'new') {
 					creditcard.token = cardUse.val();
-					creditcard.card_cvv = $(cardUse).parent().siblings('.ebanx-container-credit-card').find('.wc-credit-card-form-card-cvv').val();
-					creditcard.brand = $(cardUse).parent().siblings('.ebanx-container-credit-card').find('.ebanx-card-brand-use').val();
-					creditcard.masked_number = $(cardUse).parent().siblings('.ebanx-container-credit-card').find('.ebanx-card-masked-number-use').val();
+					creditcard.card_cvv = $(cardUse).parents('.ebanx-credit-card-option').find('.wc-credit-card-form-card-cvc').val();
+					creditcard.brand = $(cardUse).parents('.ebanx-credit-card-option').find('.ebanx-card-brand-use').val();
+					creditcard.masked_number = $(cardUse).parents('.ebanx-credit-card-option').find('.ebanx-card-masked-number-use').val();
           creditcard.instalments = $(cardUse).parents('.form-row').find('.ebanx-instalments').val();
 
 					var response = {
@@ -117,7 +117,11 @@ jQuery( function($) {
           wc_ebanx_form.renderInstalments(creditcard.instalments);
           wc_ebanx_form.renderCvv(creditcard.card_cvv);
 
-					wc_ebanx_form.onEBANXReponse(response);
+          EBANX.deviceFingerprint.setup(function (deviceId) {
+            response.data.deviceId = deviceId;
+
+            wc_ebanx_form.onEBANXReponse(response);
+          });
 				} else {
           wc_ebanx_form.renderInstalments(creditcard.instalments);
           wc_ebanx_form.renderCvv(creditcard.card_cvv);

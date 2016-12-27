@@ -1,8 +1,8 @@
 <?php
 /**
- * Bank Slip - Payment instructions.
+ * Banking Ticket - Payment instructions.
  *
- * @author  Pagar.me
+ * @author  EBANX
  * @package WooCommerce_Pagarme/Templates
  * @version 2.0.0
  */
@@ -12,6 +12,4 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 ?>
 
-<div id="pagarme-bank-slip-instructions">
-	<p><?php esc_html_e( 'After clicking "Place order" you will have access to banking banking ticket which you can print and pay in your internet banking or in a lottery retailer.', 'woocommerce-pagarme' ); ?><br /><?php esc_html_e( 'Note: The order will be confirmed only after the payment approval.', 'woocommerce-pagarme' ); ?></p>
-</div>
+<div id="ebanx-banking-ticket" class="ebanx-payment-container ebanx-language-<?php echo $language ?>"></div>

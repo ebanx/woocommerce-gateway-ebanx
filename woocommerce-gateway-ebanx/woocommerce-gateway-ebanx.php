@@ -19,6 +19,7 @@ if (!defined('ABSPATH')) {
 
 define('WC_EBANX_MIN_PHP_VER', '5.3.0');
 define('WC_EBANX_MIN_WC_VER', '2.5.0');
+define('PLUGIN_DIR_URL', plugin_dir_url(__FILE__) . DIRECTORY_SEPARATOR);
 define('INCLUDES_DIR', __DIR__ . DIRECTORY_SEPARATOR . 'includes' . DIRECTORY_SEPARATOR);
 define('SERVICES_DIR', __DIR__ . DIRECTORY_SEPARATOR . 'services' . DIRECTORY_SEPARATOR);
 
@@ -94,18 +95,18 @@ if (!class_exists('WC_EBANX')) {
         {
             if (isset($_POST['credit-card-delete']) && is_account_page()) {
                 // Find credit cards saved and delete the selected
-                $cards = get_user_meta(get_current_user_id(), '__ebanx_credit_card_token', true);
+                $cards = get_user_meta(get_current_user_id(), '_ebanx_credit_card_token', true);
 
                 foreach ($cards as $k => $cd) {
-                    if (in_array($cd->masked_number, $_POST['credit-card-delete'])) {
+                    if ($cd && in_array($cd->masked_number, $_POST['credit-card-delete'])) {
                         unset($cards[$k]);
                     }
                 }
 
-                update_user_meta(get_current_user_id(), '__ebanx_credit_card_token', $cards);
+                update_user_meta(get_current_user_id(), '_ebanx_credit_card_token', $cards);
             }
 
-            $cards = array_filter((array) get_user_meta(get_current_user_id(), '__ebanx_credit_card_token', true), function ($card) {
+            $cards = array_filter((array) get_user_meta(get_current_user_id(), '_ebanx_credit_card_token', true), function ($card) {
                 return !empty($card->brand) && !empty($card->token) && !empty($card->masked_number); // TODO: Implement token due date
             });
 

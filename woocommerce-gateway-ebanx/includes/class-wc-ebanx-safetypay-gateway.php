@@ -12,8 +12,8 @@ class WC_EBANX_Safetypay_Gateway extends WC_EBANX_Redirect_Gateway
         $this->id           = 'ebanx-safetypay';
         $this->method_title = __('EBANX - Safetypay', 'woocommerce-gateway-ebanx');
 
-        $this->title       = __('SafetyPay');
-        $this->description = __('SafetyPay Description');
+        $this->title       = __('SafetyPay', 'woocommerce-gateway-ebanx');
+        $this->description = __('Paga con SafetyPay.', 'woocommerce-gateway-ebanx');
 
         parent::__construct();
 
@@ -64,6 +64,7 @@ class WC_EBANX_Safetypay_Gateway extends WC_EBANX_Redirect_Gateway
         wc_get_template(
             'safetypay/payment-form.php',
             array(
+                'language' => $this->language,
                 'title'       => $this->title,
                 'description' => $this->description,
             ),

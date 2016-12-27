@@ -11,7 +11,7 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway
     {
         $this->id                 = 'ebanx-global';
         $this->method_title       = __('EBANX', 'woocommerce-gateway-ebanx');
-        $this->method_description = __('EBANX allows you to offer local payment methods.', 'woocommerce-gateway-ebanx');
+        $this->method_description = __('EBANX easy-to-setup checkout allows your business to accept local payments in Brazil, Mexico, Colombia, Chile & Peru.', 'woocommerce-gateway-ebanx');
 
         $this->init_form_fields();
         $this->init_settings();
@@ -41,59 +41,60 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway
     public function init_form_fields()
     {
         $this->form_fields = array(
-            'test_mode_enabled'         => array(
-                'title'       => __('Test Mode', 'woocommerce-gateway-ebanx'),
-                'type'        => 'checkbox',
-                'label'       => __('Enable Test Mode', 'woocommerce-gateway-ebanx'),
-                'description' => __('Check to enable the test mode.'),
-                'desc_tip'    => true,
-                'default'     => 'yes',
+            'integration_title' => array(
+                'title' => __('Integration', 'woocommerce-gateway-ebanx'),
+                'type' => 'title',
+                'description' => sprintf(__('You can obtain the integration keys in the settings section, logging in to the <a href="https://www.ebanx.com/business/en/dashboard">EBANX Dashboard.</a>', 'woocommerce-gateway-ebanx'), 'https://google.com'),
             ),
             'sandbox_private_key'       => array(
-                'title'       => __('Secret Test Key', 'woocommerce-gateway-ebanx'),
-                'description' => __('You can get your Secret Test Key here.', 'woocommerce-gateway-ebanx'),
+                'title'       => __('Sandbox Integration Key', 'woocommerce-gateway-ebanx'),
                 'type'        => 'text',
             ),
             'sandbox_public_key'        => array(
-                'title'       => __('Public Test Key', 'woocommerce-gateway-ebanx'),
-                'description' => __('You can get your Public Test Key here.', 'woocommerce-gateway-ebanx'),
+                'title'       => __('Sandbox Public Integration Key', 'woocommerce-gateway-ebanx'),
                 'type'        => 'text',
             ),
             'production_private_key'    => array(
-                'title'       => __('Secret Live Key', 'woocommerce-gateway-ebanx'),
-                'description' => __('You can get your Secret Live Key here.', 'woocommerce-gateway-ebanx'),
+                'title'       => __('Live Integration Key', 'woocommerce-gateway-ebanx'),
                 'type'        => 'text',
             ),
             'production_public_key'     => array(
-                'title'       => __('Public Live Key', 'woocommerce-gateway-ebanx'),
-                'description' => __('You can get your Public Live Key here.', 'woocommerce-gateway-ebanx'),
+                'title'       => __('Live Public Integration Key', 'woocommerce-gateway-ebanx'),
                 'type'        => 'text',
+            ),
+            'test_mode_enabled'         => array(
+                'title'       => __('EBANX Sandbox', 'woocommerce-gateway-ebanx'),
+                'type'        => 'checkbox',
+                'label'       => __('Enable Sandbox Mode', 'woocommerce-gateway-ebanx'),
+                'description' => __('EBANX Sandbox is a testing environment that mimics the live environment. Use it to make payment requests to see how your ecommerce processes them.'),
+                'desc_tip'    => true,
+                'default'     => 'yes',
             ),
             'debug_enabled'             => array(
                 'title'       => __('Debug Log', 'woocommerce-gateway-ebanx'),
-                'label'       => __('Enable logging', 'woocommerce-gateway-ebanx'),
-                'description' => __('Log events, such as API requests. You can check the log in here.', 'woocommerce-gateway-ebanx'),
+                'label'       => __('Enable Debug Log', 'woocommerce-gateway-ebanx'),
+                'description' => sprintf(__('Record all errors that occur when executing a transaction. E.g, IPNs & API requests. ', 'woocommerce-gateway-ebanx'), 'http://google.com'),
                 'type'        => 'checkbox',
+                'desc_tip' => true
             ),
             'display_methods_title'     => array(
-                'title' => __('Display Payment Methods', 'woocommerce-gateway-ebanx'),
+                'title' => __('Enable payment methods', 'woocommerce-gateway-ebanx'),
                 'type'  => 'title',
+                'description' => sprintf(__('Set up payment methods for your checkout. Confirm that method is enabled on your contract.', 'woocommerce-gateway-ebanx'), 'http://google.com')
             ),
             'brazil_payment_methods'    => array(
                 'title'       => __('Brazil', 'woocommerce-gateway-ebanx'),
-                'description' => __('Know more about Brazil payment methods here.', 'woocommerce-gateway-ebanx'),
                 'type'        => 'multiselect',
                 'class'       => 'ebanx-select',
                 'options'     => array(
                     'ebanx-credit-card'    => 'Credit Card',
-                    'ebanx-banking-ticket' => 'Boleto',
-                    'ebanx-tef'            => 'TEF',
-                    'ebanx-account'        => 'EBANX e-wallet',
+                    'ebanx-banking-ticket' => 'Boleto EBANX',
+                    'ebanx-tef'            => 'Online Banking (TEF)',
+                    'ebanx-account'        => 'EBANX Wallet',
                 ),
             ),
             'mexico_payment_methods'    => array(
                 'title'       => __('Mexico', 'woocommerce-gateway-ebanx'),
-                'description' => __('Know more about Mexico payment methods here.', 'woocommerce-gateway-ebanx'),
                 'type'        => 'multiselect',
                 'class'       => 'ebanx-select',
                 'options'     => array(
@@ -104,46 +105,65 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway
             ),
             'chile_payment_methods'     => array(
                 'title'       => __('Chile', 'woocommerce-gateway-ebanx'),
-                'description' => __('Know more about Chile payment methods here.', 'woocommerce-gateway-ebanx'),
                 'type'        => 'multiselect',
                 'class'       => 'ebanx-select',
                 'options'     => array(
                     'ebanx-sencillito'    => 'Sencillito',
-                    'ebanx-baking-ticket' => 'ServiPag',
+                    'ebanx-servipag' => 'Servipag',
                 ),
             ),
             'colombia_payment_methods'  => array(
                 'title'       => __('Colombia', 'woocommerce-gateway-ebanx'),
-                'description' => __('Know more about Colombia payment methods here.', 'woocommerce-gateway-ebanx'),
                 'type'        => 'multiselect',
                 'class'       => 'ebanx-select',
                 'options'     => array(
-                    'ebanx-eft' => 'EFT',
+                    'ebanx-eft' => 'PSE - Pago Seguros en Línea (EFT)',
                 ),
             ),
             'peru_payment_methods'      => array(
                 'title'       => __('Peru', 'woocommerce-gateway-ebanx'),
-                'description' => __('Know more about Peru payment methods here.', 'woocommerce-gateway-ebanx'),
                 'type'        => 'multiselect',
                 'class'       => 'ebanx-select',
                 'options'     => array(
                     'ebanx-safetypay'    => 'SafetyPay',
-                    'ebanx-pagoefectivo' => 'Pago Efectivo',
+                    'ebanx-pagoefectivo' => 'PagoEfectivo',
                 ),
             ),
-            'payment_options_title'     => array(
-                'title' => __('Payment Options', 'woocommerce-gateway-ebanx'),
+            'advanced_options_title'     => array(
+                'title' => __('Advanced Options', 'woocommerce-gateway-ebanx'),
                 'type'  => 'title',
             ),
             'credit_card_options_title' => array(
                 'title' => __('Credit Card', 'woocommerce-gateway-ebanx'),
                 'type'  => 'title',
             ),
+            'enable_place_order'        => array(
+                'title' => __('Save Card Data', 'woocommerce-gateway-ebanx'),
+                'type'  => 'checkbox',
+                'label' => __('Enable saving card data', 'woocommerce-gateway-ebanx'),
+                'description' => __('Allow your client to save credit card and debit card data for future purchases.', 'woocommerce-gateway-ebanx'),
+                'desc_tip' => true
+            ),
+            'one_click' => array(
+                'type'        => 'checkbox',
+                'title'       => __('One-Click Payment', 'woocommerce-gateway-ebanx'),
+                'label'       => __('Enable save card for next time', 'woocommerce-gateway-ebanx'),
+                'default'     => 'no',
+                'description' => __('Allow your client to complete payments using credit cards stored on file, in one click.', 'woocommerce-gateway-ebanx'),
+                'desc_tip' => true
+            ),
+            'capture_enabled'           => array(
+                'type'    => 'checkbox',
+                'title'   => __('Enable auto-capture', 'woocommerce-gateway-ebanx'),
+                'label'   => __('Enable auto-capture.', 'woocommerce-gateway-ebanx'),
+                'default' => 'no',
+                'description' => __('Automatically capture payments from your customers. Otherwise you will need to capture the payment going to: WooCommerce > Orders. Uncaptured payments will be cancelled in 4 days.', 'woocommerce-gateway-ebanx'),
+                'desc_tip' => true
+            ),
             'credit_card_instalments'   => array(
-                'title'       => __('Number of Instalments', 'woocommerce-gateway-ebanx'),
+                'title'       => __('Maximum nº of Installments', 'woocommerce-gateway-ebanx'),
                 'type'        => 'select',
                 'default'     => '12',
-                'description' => __('Maximum number of installments possible with payments by credit card.', 'woocommerce-gateway-ebanx'),
                 'class'       => 'ebanx-select',
                 'options'     => array(
                     '1'  => '1',
@@ -159,12 +179,8 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway
                     '11' => '11',
                     '12' => '12',
                 ),
-            ),
-            'one_click_enabled'         => array(
-                'type'    => 'checkbox',
-                'title'   => __('One-Click Payment', 'woocommerce-gateway-ebanx'),
-                'label'   => __('Enable save card for next time.', 'woocommerce-gateway-ebanx'),
-                'default' => 'no',
+                'description' => __('Establish the maximum number of installments in which your customer can pay, as consented on your contract.', 'woocommerce-gateway-ebanx'),
+                'desc_tip' => true
             ),
             'capture_enabled'           => array(
                 'type'    => 'checkbox',
@@ -172,12 +188,17 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway
                 'label'   => __('Capture the payment immediatly.', 'woocommerce-gateway-ebanx'),
                 'default' => 'yes',
             ),
+            'avoid_duplication_enabled' => array(
+                'title' => __('Avoid duplication', 'woocommerce-gateway-ebanx'),
+                'type' => 'checkbox',
+                'label' => __('Keep only EBANX on credit card checkout.', 'woocommerce-gateway-ebanx')
+            ),
             'cash_options_title'        => array(
-                'title' => __('Cash', 'woocommerce-gateway-ebanx'),
+                'title' => __('Cash Payments (Boleto, OXXO, Sencilito, PagoEfectivo)', 'woocommerce-gateway-ebanx'),
                 'type'  => 'title',
             ),
             'due_date_days'             => array(
-                'title'   => __('Due Date in days', 'woocommerce-gateway-ebanx'),
+                'title'   => __('Days to Expiration', 'woocommerce-gateway-ebanx'),
                 'type'    => 'select',
                 'default' => '3',
                 'class'   => 'ebanx-select',
@@ -186,25 +207,9 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway
                     '2' => '2',
                     '3' => '3',
                 ),
-            ),
-            'enable_place_order'        => array(
-                'title' => __('Place order', 'woocommerce-gateway-ebanx'),
-                'type'  => 'checkbox',
-                'label' => __('Enable place order.', 'woocommerce-gateway-ebanx'),
-            ),
-            'one_click'                 => array(
-                'type'        => 'checkbox',
-                'title'       => __('One click payment', 'woocommerce-gateway-ebanx'),
-                'description' => __('Enable one-click payment.', 'woocommerce-gateway-ebanx'),
-                'label'       => __('Enable one-click payment', 'woocommerce-gateway-ebanx'),
-                'default'     => 'no',
-            ),
-            'one_click_label_button'    => array(
-                'title'       => __('one-click payment label button', 'woocommerce-gateway-ebanx'),
-                'type'        => 'text',
-                'description' => __('Label to one-click payment button', 'woocommerce-gateway-ebanx'),
-                'default'     => 'one-click payment',
-            ),
+                'description' => __('Define the maximum number of days on which your customer can complete the payment of: Boleto, OXXO, Sencilito, PagoEfectivo and SafetyPay.', 'woocommerce-gateway-ebanx'),
+                'desc_tip' => true
+            )
         );
     }
 

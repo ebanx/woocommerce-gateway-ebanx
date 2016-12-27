@@ -11,9 +11,9 @@ class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
         $this->id           = 'ebanx-credit-card';
         $this->method_title = __('EBANX - Credit Card', 'woocommerce-gateway-ebanx');
 
-        $this->title       = __('Credit Card');
         $this->api_name    = '_creditcard';
-        $this->description = __('Credit Card description');
+        $this->title       = __('Credit Card', 'woocommerce-gateway-ebanx');
+        $this->description = __('Pay with credit card.', 'woocommerce-gateway-ebanx');
 
         parent::__construct();
 
@@ -51,9 +51,9 @@ class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
         }
     }
 
-    public function checkout_scripts()
+    public function checkout_assets()
     {
-        parent::checkout_scripts();
+        parent::checkout_assets();
 
         if (is_checkout()) {
             wp_enqueue_script('wc-credit-card-form');
@@ -97,32 +97,76 @@ class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
 
     public function is_available()
     {
-        $this->method = ($this->getTransactionAddress('country') === WC_Ebanx_Gateway_Utils::COUNTRY_BRAZIL) ? 'brazil_payment_methods' : 'mexico_payment_methods';
-        $this->enabled = in_array($this->id, $this->configs->settings[$this->method]) ? 'yes' : false;
+        switch ($this->getTransactionAddress('country')) {
+            case WC_EBANX_Gateway_Utils::COUNTRY_BRAZIL:
+                $this->title = 'Cartão de Crédito';
+                break;
+            case WC_EBANX_Gateway_Utils::COUNTRY_MEXICO:
+                $this->title = 'Tarjeta de Crédito';
+                break;
+            default:
+                $this->title = 'Credit Card';
+                break;
+        }
+
+        $this->method = ($this->getTransactionAddress('country') === WC_EBANX_Gateway_Utils::COUNTRY_BRAZIL) ? 'brazil_payment_methods' : ($this->getTransactionAddress('country') === WC_EBANX_Gateway_Utils::COUNTRY_MEXICO) ? 'mexico_payment_methods' : false;
+        $this->enabled = $this->method && in_array($this->id, $this->configs->settings[$this->method]) ? 'yes' : false;
 
         return parent::is_available();
     }
 
     public function payment_fields()
     {
-        if ($description = $this->get_description()) {
-            echo wp_kses_post(wpautop(wptexturize($description)));
-        }
+        $languages = array(
+            'mx' => 'es',
+            'cl' => 'es',
+            'pe' => 'es',
+            'co' => 'es',
+            'br' => 'pt-br',
+        );
+        $language = $languages[$this->language];
+
+        $messages = array(
+            'pt-br' => array(
+                'title' => 'Pague com cartão de crédito.',
+                'number' => 'Número do Cartão',
+                'expiry' => 'Data de validade (MM/YY)',
+                'cvv' => 'Código de segurança',
+                'instalments' => 'Número de parcelas',
+                'save_card' => 'Salvar este cartão para compras futuras',
+                'name' => 'Nome impresso no cartão',
+                'another' => 'Usar um outro cartão'
+            ),
+            'es' => array(
+                'title' => 'Paga con tarjeta de crédito.',
+                'number' => 'Número de la tarjeta',
+                'expiry' => 'Fecha de expiración (MM/AA)',
+                'cvv' => 'Código de verificación',
+                'instalments' => 'Meses sin interesses',
+                'save_card' => 'Guarda esta tarjeta para compras futuras.',
+                'name' => 'Titular de la tarjeta',
+                'another' => 'Otra tarjeta de crédito'
+            )
+        );
 
         $cart_total = $this->get_order_total();
 
-        $cards = array_filter((array) get_user_meta($this->userId, '__ebanx_credit_card_token', true), function ($card) {
+        $cards = array_filter((array) get_user_meta($this->userId, '_ebanx_credit_card_token', true), function ($card) {
             return !empty($card->brand) && !empty($card->token) && !empty($card->masked_number); // TODO: Implement token due date
         });
+
+        echo wp_kses_post(wpautop(wptexturize($messages[$language]['title'])));
 
         wc_get_template(
             'credit-card/payment-form.php',
             array(
+                'language'        => $this->language,
                 'cards'           => (array) $cards,
                 'cart_total'      => $cart_total,
                 'country'         => $this->getTransactionAddress('country'),
                 'max_installment' => $this->configs->settings['credit_card_instalments'],
                 'place_order_enabled' => (isset($this->configs->settings['enable_place_order']) && $this->configs->settings['enable_place_order'] === 'yes'),
+                't' => $messages[$language]
             ),
             'woocommerce/ebanx/',
             WC_EBANX::get_templates_path()
@@ -134,8 +178,8 @@ class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
         $order = new WC_Order($order_id);
 
         $data = array(
-            'instalments' => get_post_meta($order->id, 'Number of Instalments', true),
-            'card_brand'  => get_post_meta($order->id, 'Card\'s Brand Name', true),
+            'instalments' => get_post_meta($order->id, '_instalments_number', true),
+            'card_brand'  => get_post_meta($order->id, '_cards_brand_name', true),
             // TODO: display masked number
         );
 
@@ -209,7 +253,7 @@ class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
         parent::save_user_meta_fields($order);
 
         if ($this->userId && $this->configs->settings['enable_place_order'] === 'yes' && isset($_POST['ebanx-save-credit-card']) && $_POST['ebanx-save-credit-card'] === 'yes') {
-            $cards = get_user_meta($this->userId, '__ebanx_credit_card_token', true);
+            $cards = get_user_meta($this->userId, '_ebanx_credit_card_token', true);
             $cards = !empty($cards) ? $cards : [];
 
             $card = new \stdClass();
@@ -229,7 +273,7 @@ class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
 
             $cards[] = $card;
 
-            update_user_meta($this->userId, '__ebanx_credit_card_token', $cards);
+            update_user_meta($this->userId, '_ebanx_credit_card_token', $cards);
         }
     }
 }
