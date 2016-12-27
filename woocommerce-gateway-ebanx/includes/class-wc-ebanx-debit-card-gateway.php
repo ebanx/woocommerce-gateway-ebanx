@@ -4,7 +4,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-class WC_Ebanx_Debit_Card_Gateway extends WC_Ebanx_Gateway
+class WC_EBANX_Debit_Card_Gateway extends WC_EBANX_Gateway
 {
     public function __construct()
     {
@@ -12,8 +12,8 @@ class WC_Ebanx_Debit_Card_Gateway extends WC_Ebanx_Gateway
         $this->method_title = __('EBANX - Debit Card', 'woocommerce-gateway-ebanx');
 
         $this->api_name    = 'debitcard';
-        $this->title       = __('Debit Card', 'woocommerce-gateway-ebanx');
-        $this->description = __('Debit Card description', 'woocommerce-gateway-ebanx');
+        $this->title       = __('Tarjeta de Débito', 'woocommerce-gateway-ebanx');
+        $this->description = __('Paga con tarjeta de débito.', 'woocommerce-gateway-ebanx');
 
         parent::__construct();
 
@@ -44,6 +44,10 @@ class WC_Ebanx_Debit_Card_Gateway extends WC_Ebanx_Gateway
 
     public function payment_fields()
     {
+        if ($description = $this->get_description()) {
+            echo wp_kses_post(wpautop(wptexturize($description)));
+        }
+
         wc_get_template(
             'debit-card/payment-form.php',
             array(

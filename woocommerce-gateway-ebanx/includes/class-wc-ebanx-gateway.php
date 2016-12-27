@@ -31,7 +31,7 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
             $cpf = get_user_meta($this->userId, '_ebanx_billing_brazil_document');
             $rut = get_user_meta($this->userId, '_ebanx_billing_chile_document');
             $birth_date_br = get_user_meta($this->userId, '_ebanx_billing_brazil_birth_date');
-            $birth_date_cl = get_user_meta($this->userId, '_ebanx_billing_chi_birth_date');
+            $birth_date_cl = get_user_meta($this->userId, '_ebanx_billing_chile_birth_date');
 
             $fields['billing']['ebanx_billing_brazil_birth_date'] = array(
                 'type'  => 'text',
@@ -41,7 +41,6 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
             $fields['billing']['ebanx_billing_brazil_document'] = array(
                 'type'     => 'text',
                 'label'    => 'CPF',
-                'required' => true,
                 'default' => isset($cpf[0]) ? $cpf[0] : ''
             );
             $fields['billing']['ebanx_billing_chile_birth_date'] = array(
@@ -52,7 +51,6 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
             $fields['billing']['ebanx_billing_chile_document'] = array(
                 'type'     => 'text',
                 'label'    => 'RUT',
-                'required' => true,
                 'default' => isset($rut[0]) ? $rut[0] : ''
             );
             return $fields;
@@ -355,7 +353,7 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
                     'MISSING-INSTALMENTS'        => 'Por favor, escoge en cuántos meses sin intereses deseas pagar.',
                     'MISSING-BANK-NAME'          => 'Por favor, escoge el banco para finalizar la compra.',
                     'INVALID-SAFETYPAY-TYPE'     => 'Por favor, escoge una opción para el método de pago SafetyPay.',
-                    'INVALID-FIELDS'             => 'Alguns campos não foram preenchidos corretamente. Por favor, verifique e tente novamente.',
+                    'INVALID-FIELDS'             => 'Algunos campos no fueron llenados correctamente. Por favor verifica e inténtalo de nuevo.',
                     'INVALID-BILLING-COUNTRY'    => 'Por favor, escoge un país.',
                     'INVALID-ADDRESS'            => 'Por favor, introduce tu dirección completa. Número de residencia o apartamento.',
                 ),

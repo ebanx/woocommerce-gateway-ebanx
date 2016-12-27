@@ -97,7 +97,19 @@ class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
 
     public function is_available()
     {
-        $this->method = ($this->getTransactionAddress('country') === WC_Ebanx_Gateway_Utils::COUNTRY_BRAZIL) ? 'brazil_payment_methods' : ($this->getTransactionAddress('country') === WC_Ebanx_Gateway_Utils::COUNTRY_MEXICO) ? 'mexico_payment_methods' : false;
+        switch ($this->getTransactionAddress('country')) {
+            case WC_EBANX_Gateway_Utils::COUNTRY_BRAZIL:
+                $this->title = 'Cartão de Crédito';
+                break;
+            case WC_EBANX_Gateway_Utils::COUNTRY_MEXICO:
+                $this->title = 'Tarjeta de Crédito';
+                break;
+            default:
+                $this->title = 'Credit Card';
+                break;
+        }
+
+        $this->method = ($this->getTransactionAddress('country') === WC_EBANX_Gateway_Utils::COUNTRY_BRAZIL) ? 'brazil_payment_methods' : ($this->getTransactionAddress('country') === WC_EBANX_Gateway_Utils::COUNTRY_MEXICO) ? 'mexico_payment_methods' : false;
         $this->enabled = $this->method && in_array($this->id, $this->configs->settings[$this->method]) ? 'yes' : false;
 
         return parent::is_available();
@@ -105,9 +117,37 @@ class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
 
     public function payment_fields()
     {
-        if ($description = $this->get_description()) {
-            echo wp_kses_post(wpautop(wptexturize($description)));
-        }
+        $languages = array(
+            'mx' => 'es',
+            'cl' => 'es',
+            'pe' => 'es',
+            'co' => 'es',
+            'br' => 'pt-br',
+        );
+        $language = $languages[$this->language];
+
+        $messages = array(
+            'pt-br' => array(
+                'title' => 'Pague com cartão de crédito.',
+                'number' => 'Número do Cartão',
+                'expiry' => 'Data de validade (MM/YY)',
+                'cvv' => 'Código de segurança',
+                'instalments' => 'Número de parcelas',
+                'save_card' => 'Salvar este cartão para compras futuras',
+                'name' => 'Nome impresso no cartão',
+                'another' => 'Usar um outro cartão'
+            ),
+            'es' => array(
+                'title' => 'Paga con tarjeta de crédito.',
+                'number' => 'Número de la tarjeta',
+                'expiry' => 'Fecha de expiración (MM/AA)',
+                'cvv' => 'Código de verificación',
+                'instalments' => 'Meses sin interesses',
+                'save_card' => 'Guarda esta tarjeta para compras futuras.',
+                'name' => 'Titular de la tarjeta',
+                'another' => 'Otra tarjeta de crédito'
+            )
+        );
 
         $cart_total = $this->get_order_total();
 
@@ -115,15 +155,18 @@ class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
             return !empty($card->brand) && !empty($card->token) && !empty($card->masked_number); // TODO: Implement token due date
         });
 
+        echo wp_kses_post(wpautop(wptexturize($messages[$language]['title'])));
+
         wc_get_template(
             'credit-card/payment-form.php',
             array(
-                'language' => $this->language,
+                'language'        => $this->language,
                 'cards'           => (array) $cards,
                 'cart_total'      => $cart_total,
                 'country'         => $this->getTransactionAddress('country'),
                 'max_installment' => $this->configs->settings['credit_card_instalments'],
                 'place_order_enabled' => (isset($this->configs->settings['enable_place_order']) && $this->configs->settings['enable_place_order'] === 'yes'),
+                't' => $messages[$language]
             ),
             'woocommerce/ebanx/',
             WC_EBANX::get_templates_path()

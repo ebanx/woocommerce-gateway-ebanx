@@ -14,7 +14,7 @@ class WC_EBANX_Oxxo_Gateway extends WC_EBANX_Gateway
 
         $this->api_name    = 'oxxo';
         $this->title       = __('OXXO', 'woocommerce-gateway-ebanx');
-        $this->description = __('Pay with OXXO ticket.', 'woocommerce-gateway-ebanx');
+        $this->description = __('Paga con boleta OXXO.', 'woocommerce-gateway-ebanx');
 
         parent::__construct();
 

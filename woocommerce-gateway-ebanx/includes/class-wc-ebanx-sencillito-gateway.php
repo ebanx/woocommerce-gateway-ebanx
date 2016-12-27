@@ -12,8 +12,8 @@ class WC_EBANX_Sencillito_Gateway extends WC_EBANX_Redirect_Gateway
         $this->method_title = __('EBANX - Sencillito', 'woocommerce-gateway-ebanx');
 
         $this->api_name    = 'sencillito';
-        $this->title       = __('Sencillito');
-        $this->description = __('Pay with Sencillito.');
+        $this->title       = __('Sencillito', 'woocommerce-gateway-ebanx');
+        $this->description = __('Paga con Sencillito.', 'woocommerce-gateway-ebanx');
 
         parent::__construct();
 
@@ -31,5 +31,21 @@ class WC_EBANX_Sencillito_Gateway extends WC_EBANX_Redirect_Gateway
         $data['payment']['payment_type_code'] = $this->api_name;
 
         return $data;
+    }
+
+    public function payment_fields()
+    {
+        if ($description = $this->get_description()) {
+            echo wp_kses_post(wpautop(wptexturize($description)));
+        }
+
+        wc_get_template(
+            'sencillito/payment-form.php',
+            array(
+                'language' => $this->language
+            ),
+            'woocommerce/ebanx/',
+            WC_EBANX::get_templates_path()
+        );
     }
 }

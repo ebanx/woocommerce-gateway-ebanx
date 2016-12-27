@@ -14,7 +14,7 @@ class WC_EBANX_Pagoefectivo_Gateway extends WC_EBANX_Redirect_Gateway
 
         $this->api_name    = 'pagoefectivo';
         $this->title       = __('PagoEfectivo', 'woocommerce-gateway-ebanx');
-        $this->description = __('Pay with PagoEfectivo.', 'woocommerce-gateway-ebanx');
+        $this->description = __('Paga con PagoEfectivo.', 'woocommerce-gateway-ebanx');
 
         parent::__construct();
 

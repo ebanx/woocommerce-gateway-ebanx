@@ -22,6 +22,15 @@ class WC_EBANX_My_Account
     {
         add_filter('woocommerce_my_account_my_orders_actions', array($this, 'my_orders_banking_ticket_link'), 10, 2);
         add_action('woocommerce_order_items_table', array($this, 'order_details'));
+        add_action('wp_enqueue_scripts', array($this, 'assets'), 100);
+    }
+
+    public function assets()
+    {
+        wp_enqueue_style(
+            'woocommerce_my_account_style',
+            plugins_url('assets/css/my-account.css', WC_EBANX::DIR)
+        );
     }
 
     /**
@@ -85,7 +94,10 @@ class WC_EBANX_My_Account
                 WC_EBANX_Account_Gateway::thankyou_page($order->id);
                 break;
             case 'ebanx-debit-card':
-                WC_Ebanx_Debit_Card_Gateway::thankyou_page($order->id);
+                WC_EBANX_Debit_Card_Gateway::thankyou_page($order->id);
+                break;
+            case 'ebanx-sencillito':
+                WC_EBANX_Sencillito_Gateway::thankyou_page($order->id);
                 break;
         }
     }

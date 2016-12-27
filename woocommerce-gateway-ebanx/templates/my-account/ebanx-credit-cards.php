@@ -1,22 +1,30 @@
 <?php if (!empty($cards)): ?>
 
-    <p>The following credit cards will be listed on the checkout page. To delete a credit card, just check it and save.</p>
+    <h3>Your saved credit cards</h3>
 
-    <form method="post" action="">
-        <div class="u-columns col2-set credit-cards">
+    <p>The following credit cards will be listed on the checkout page. To delete a credit card, just check it and submit.</p>
+
+    <form method="post" action="" class="ebanx-credit-cards-form">
+        <div class="ebanx-credit-cards">
             <?php foreach ($cards as $card): ?>
-                <div class="u-column1 col-1 woocommerce-Address">
-            		<label class="woocommerce-Address-title title">
-            			<h3><input type="checkbox" name="credit-card-delete[]" value="<?php echo $card->masked_number ?>"> <?php echo ucfirst($card->brand) ?></h3>
-                        <span><strong>Number: </strong><?php echo $card->masked_number ?></span>
-                    </label>
-            	</div>
+        		<label class="ebanx-credit-card">
+                    <input type="checkbox" name="credit-card-delete[]" value="<?php echo $card->masked_number ?>" class="ebanx-delete-input">
+        			<div class="ebanx-credit-card-info">
+                        <div>
+                            <img src="<?php echo PLUGIN_DIR_URL . "assets/images/icons/$card->brand.png" ?>" height="20" style="height: 20px; margin-left: 0; margin-right: 7px; float: none;" alt="<?php echo $card->brand ?>" class="ebanx-credit-card-brand">
+                            <span class="ebanx-credit-card-brand-name"><?php echo ucfirst($card->brand) ?></span>
+                        </div>
+                        <p class="ebanx-credit-card-bin">&bull;&bull;&bull;&bull; <?php echo substr($card->masked_number, -4) ?></p>
+                    </div>
+                </label>
             <?php endforeach ?>
         </div>
 
-        <input type="submit" class="button" value="Delete and Save">
+        <input type="submit" class="button" value="Delete cards">
     </form>
 
 <?php else: ?>
-    <p>No credit cards found. To save a credit card, pay a order on checkout using one.</p>
+    <h3>No credit cards found</h3>
+
+    <p>To save a credit card, pay an order on checkout using credit card as payment method.</p>
 <?php endif ?>

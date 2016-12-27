@@ -1,6 +1,6 @@
 <?php
 /**
- * Bank Slip - Payment instructions.
+ * Banking Ticket - Payment instructions.
  *
  * @author  EBANX
  * @package WooCommerce_Pagarme/Templates

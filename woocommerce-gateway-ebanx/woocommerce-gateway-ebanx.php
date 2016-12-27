@@ -98,7 +98,7 @@ if (!class_exists('WC_EBANX')) {
                 $cards = get_user_meta(get_current_user_id(), '_ebanx_credit_card_token', true);
 
                 foreach ($cards as $k => $cd) {
-                    if (in_array($cd->masked_number, $_POST['credit-card-delete'])) {
+                    if ($cd && in_array($cd->masked_number, $_POST['credit-card-delete'])) {
                         unset($cards[$k]);
                     }
                 }

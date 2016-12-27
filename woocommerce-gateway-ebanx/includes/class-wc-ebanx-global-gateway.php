@@ -90,7 +90,7 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway
                     'ebanx-credit-card'    => 'Credit Card',
                     'ebanx-banking-ticket' => 'Boleto EBANX',
                     'ebanx-tef'            => 'Online Banking (TEF)',
-                    'ebanx-account'        => 'EBANX e-wallet',
+                    'ebanx-account'        => 'EBANX Wallet',
                 ),
             ),
             'mexico_payment_methods'    => array(

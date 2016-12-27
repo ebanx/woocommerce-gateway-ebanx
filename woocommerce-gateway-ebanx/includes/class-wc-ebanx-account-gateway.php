@@ -13,8 +13,8 @@ class WC_EBANX_Account_Gateway extends WC_EBANX_Redirect_Gateway
         $this->method_title = __('EBANX - ACCOUNT', 'woocommerce-gateway-ebanx');
 
         $this->api_name    = 'ebanxaccount';
-        $this->title       = __('EBANX Account', 'woocommerce-gateway-ebanx');
-        $this->description = __('Pay using your EBANX account cash.', 'woocommerce-gateway-ebanx');
+        $this->title       = __('Saldo EBANX', 'woocommerce-gateway-ebanx');
+        $this->description = __('Pague usando o saldo da sua conta EBANX.', 'woocommerce-gateway-ebanx');
 
         parent::__construct();
 
@@ -34,5 +34,21 @@ class WC_EBANX_Account_Gateway extends WC_EBANX_Redirect_Gateway
         $data['payment']['payment_type_code'] = $this->api_name;
 
         return $data;
+    }
+
+    public function payment_fields()
+    {
+        if ($description = $this->get_description()) {
+            echo wp_kses_post(wpautop(wptexturize($description)));
+        }
+
+        wc_get_template(
+            'account/payment-form.php',
+            array(
+                'language' => $this->language
+            ),
+            'woocommerce/ebanx/',
+            WC_EBANX::get_templates_path()
+        );
     }
 }

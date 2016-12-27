@@ -41,7 +41,11 @@
 
 .wc_payment_method[class*="ebanx"] div.payment_box > p:first-child {
   max-width: calc(100% - 140px - 1em);
-  margin-bottom: 15px !important;
+  margin-bottom: 0 !important;
+}
+
+.ebanx-payment-container:not(:empty) {
+  margin-top: 15px;
 }
 
 html[lang*="en"] .wc_payment_method[class*="ebanx"] div.payment_box > p:first-child {
