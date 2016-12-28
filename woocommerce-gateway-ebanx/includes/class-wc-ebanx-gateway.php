@@ -161,6 +161,15 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
             )
         );
 
+        if (!empty($this->configs->settings['due_date_days']))
+        {
+            $date = new DateTime();
+
+            $date->modify("+{$this->configs->settings['due_date_days']} day");
+
+            $data['payment']['due_date'] = $date->format('d/m/Y');
+        }
+
         if (trim(strtolower(WC()->customer->get_shipping_country())) === WC_EBANX_Gateway_Utils::COUNTRY_BRAZIL) {
             if (empty($_POST['ebanx_billing_brazil_document']) ||
                 empty($_POST['ebanx_billing_brazil_birth_date']) ||

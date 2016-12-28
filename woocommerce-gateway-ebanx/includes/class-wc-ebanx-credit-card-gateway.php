@@ -47,7 +47,7 @@ class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
         if ($request->payment->status == 'CO') {
             $order->payment_complete();
             $order->update_status('completed');
-            $order->add_order_note(__('EBANX: Transaction paid.', 'woocommerce-gateway-ebanx'));
+            $order->add_order_note(__('EBANX: Transaction captured by '.wp_get_current_user()->data->user_email, 'woocommerce-gateway-ebanx'));
         }
     }
 
@@ -109,7 +109,7 @@ class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
                 break;
         }
 
-        $this->method = ($this->getTransactionAddress('country') === WC_EBANX_Gateway_Utils::COUNTRY_BRAZIL) ? 'brazil_payment_methods' : ($this->getTransactionAddress('country') === WC_EBANX_Gateway_Utils::COUNTRY_MEXICO) ? 'mexico_payment_methods' : false;
+        $this->method = $this->getTransactionAddress('country') === WC_EBANX_Gateway_Utils::COUNTRY_BRAZIL ? 'brazil_payment_methods' : ($this->getTransactionAddress('country') === WC_EBANX_Gateway_Utils::COUNTRY_MEXICO ? 'mexico_payment_methods' : false);
         $this->enabled = $this->method && in_array($this->id, $this->configs->settings[$this->method]) ? 'yes' : false;
 
         return parent::is_available();

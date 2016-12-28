@@ -101,7 +101,7 @@ jQuery( function($) {
 					creditcard.card_cvv = $(cardUse).parents('.ebanx-credit-card-option').find('.wc-credit-card-form-card-cvc').val();
 					creditcard.brand = $(cardUse).parents('.ebanx-credit-card-option').find('.ebanx-card-brand-use').val();
 					creditcard.masked_number = $(cardUse).parents('.ebanx-credit-card-option').find('.ebanx-card-masked-number-use').val();
-          creditcard.instalments = $(cardUse).parents('.form-row').find('.ebanx-instalments').val();
+          creditcard.instalments = $(cardUse).parents('.ebanx-form-row').find('.ebanx-instalments').val();
 
 					var response = {
 						data: {
