@@ -2,7 +2,7 @@
 <?php if ($max_installment > 0) : ?>
     <section class="ebanx-form-row">
         <label for="ebanx-card-installments"><?php echo $t['instalments']; ?> <span class="required">*</span></label>
-        <select class="ebanx-instalments">
+        <select class="ebanx-instalments" name="ebanx-credit-card-installments">
             <?php for ($number = 1; $number <= $max_installment; ++$number):
                 $installment_amount = strip_tags( wc_price( $cart_total / ($number) ) );
                 ?>

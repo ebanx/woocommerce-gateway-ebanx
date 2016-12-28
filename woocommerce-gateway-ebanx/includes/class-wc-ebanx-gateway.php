@@ -262,6 +262,8 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
                 'redirect' => $this->get_return_url($order),
             ));
         } catch (Exception $e) {
+            var_dump($e);
+            exit;
             $code = $e->getMessage();
 
             $languages = array(
@@ -419,7 +421,8 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
 
         if ($request->payment->pre_approved && $request->payment->status == 'CO') {
             $order->add_order_note(__('EBANX: Transaction paid.', 'woocommerce-gateway-ebanx'));
-            $order->payment_complete($request->hash);
+            $order->payment_complete($request->payment->hash);
+            $order->update_status('completed');
         }
 
         $this->save_order_meta_fields($order, $request);
