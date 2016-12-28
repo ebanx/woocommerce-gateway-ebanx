@@ -109,7 +109,7 @@ class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
                 break;
         }
 
-        $this->method = ($this->getTransactionAddress('country') === WC_EBANX_Gateway_Utils::COUNTRY_BRAZIL) ? 'brazil_payment_methods' : ($this->getTransactionAddress('country') === WC_EBANX_Gateway_Utils::COUNTRY_MEXICO) ? 'mexico_payment_methods' : false;
+        $this->method = $this->getTransactionAddress('country') === WC_EBANX_Gateway_Utils::COUNTRY_BRAZIL ? 'brazil_payment_methods' : ($this->getTransactionAddress('country') === WC_EBANX_Gateway_Utils::COUNTRY_MEXICO ? 'mexico_payment_methods' : false);
         $this->enabled = $this->method && in_array($this->id, $this->configs->settings[$this->method]) ? 'yes' : false;
 
         return parent::is_available();
