@@ -262,8 +262,6 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
                 'redirect' => $this->get_return_url($order),
             ));
         } catch (Exception $e) {
-            var_dump($e);
-            exit;
             $code = $e->getMessage();
 
             $languages = array(
