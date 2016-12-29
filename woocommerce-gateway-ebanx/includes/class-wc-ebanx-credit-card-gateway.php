@@ -35,7 +35,7 @@ class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
 
         \Ebanx\Config::set([
             'integrationKey' => $this->private_key,
-            'testMode'       => $this->is_test_mode,
+            'testMode'       => $this->is_sandbox_mode,
         ]);
 
         $request = \Ebanx\Ebanx::doCapture(['hash' => get_post_meta($order->id, '_ebanx_payment_hash')]);
@@ -65,7 +65,7 @@ class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
 
             $ebanx_params = array(
                 'key'  => $this->public_key,
-                'mode' => $this->is_test_mode ? 'test' : 'production',
+                'mode' => $this->is_sandbox_mode ? 'test' : 'production',
             );
 
             // If we're on the pay page we need to pass ebanx.js the address of the order.

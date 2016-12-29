@@ -15,11 +15,11 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
 
         $this->configs = new WC_EBANX_Global_Gateway();
 
-        $this->is_test_mode = $this->configs->settings['test_mode_enabled'] === 'yes';
+        $this->is_sandbox_mode = $this->configs->settings['sandbox_mode_enabled'] === 'yes';
 
-        $this->private_key = $this->is_test_mode ? $this->configs->settings['sandbox_private_key'] : $this->configs->settings['production_private_key'];
+        $this->private_key = $this->is_sandbox_mode ? $this->configs->settings['sandbox_private_key'] : $this->configs->settings['live_private_key'];
 
-        $this->public_key = $this->is_test_mode ? $this->configs->settings['sandbox_public_key'] : $this->configs->settings['production_public_key'];
+        $this->public_key = $this->is_sandbox_mode ? $this->configs->settings['sandbox_public_key'] : $this->configs->settings['live_public_key'];
 
         if ($this->configs->settings['debug_enabled'] === 'yes') {
             $this->log = new WC_Logger();
@@ -110,7 +110,7 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
 
         $config = [
             'integrationKey' => $this->private_key,
-            'testMode'       => $this->is_test_mode,
+            'testMode'       => $this->is_sandbox_mode,
         ];
 
         \Ebanx\Config::set($config);
@@ -247,7 +247,7 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
 
                 $config = [
                     'integrationKey' => $this->private_key,
-                    'testMode'       => $this->is_test_mode,
+                    'testMode'       => $this->is_sandbox_mode,
                 ];
 
                 \Ebanx\Config::set($config);
@@ -456,7 +456,7 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
     {
         $config = [
             'integrationKey' => $this->private_key,
-            'testMode'       => $this->is_test_mode,
+            'testMode'       => $this->is_sandbox_mode,
         ];
 
         \Ebanx\Config::set($config);

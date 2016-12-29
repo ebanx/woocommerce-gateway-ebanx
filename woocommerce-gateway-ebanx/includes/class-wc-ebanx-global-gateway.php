@@ -58,15 +58,15 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway
                 'title'       => __('Sandbox Public Integration Key', 'woocommerce-gateway-ebanx'),
                 'type'        => 'text',
             ),
-            'production_private_key'    => array(
+            'live_private_key'    => array(
                 'title'       => __('Live Integration Key', 'woocommerce-gateway-ebanx'),
                 'type'        => 'text',
             ),
-            'production_public_key'     => array(
+            'live_public_key'     => array(
                 'title'       => __('Live Public Integration Key', 'woocommerce-gateway-ebanx'),
                 'type'        => 'text',
             ),
-            'test_mode_enabled'         => array(
+            'sandbox_mode_enabled'         => array(
                 'title'       => __('EBANX Sandbox', 'woocommerce-gateway-ebanx'),
                 'type'        => 'checkbox',
                 'label'       => __('Enable Sandbox Mode', 'woocommerce-gateway-ebanx'),
