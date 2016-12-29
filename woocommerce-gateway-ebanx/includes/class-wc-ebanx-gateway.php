@@ -392,7 +392,14 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
 
     protected function save_order_meta_fields($order, $request)
     {
+        // To save only on DB to internal use
         update_post_meta($order->id, '_ebanx_payment_hash', $request->payment->hash);
+        update_post_meta($order->id, '_ebanx_payment_open_date', $request->payment->open_date);
+        update_post_meta($order->id, '_ebanx_payment_customer_email', sanitize_email($_POST['billing_email']));
+        update_post_meta($order->id, '_ebanx_payment_customer_phone', sanitize_text_field($_POST['billing_phone']));
+        update_post_meta($order->id, '_ebanx_payment_customer_address', sanitize_text_field($_POST['billing_address_1']));
+
+        // To show to the merchant
         update_post_meta($order->id, 'Payment\'s Hash', $request->payment->hash);
 
         $this->save_user_meta_fields($order);
