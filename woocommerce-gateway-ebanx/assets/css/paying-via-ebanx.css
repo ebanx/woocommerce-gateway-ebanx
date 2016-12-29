@@ -377,6 +377,8 @@ div.ebanx-form-row {
   visibility: hidden;
   opacity: 0;
   transition: all 200ms ease-in-out;
+  word-break: normal;
+  white-space: normal;
 }
 
 .woocommerce .ebanx-button--copy.ebanx-button--copy-success > .ebanx-button--copy-msg {
