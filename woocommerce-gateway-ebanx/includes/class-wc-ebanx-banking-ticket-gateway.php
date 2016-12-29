@@ -59,15 +59,38 @@ class WC_EBANX_Banking_Ticket_Gateway extends WC_EBANX_Gateway
         update_post_meta($order->id, '_boleto_barcode', $request->payment->boleto_barcode);
     }
 
+    public static function barcode_anti_fraud($code) {
+        if (strlen($code) != 47) return '';
+        return array(
+            'boleto1' => '<span>' . substr($code, 0,  5) . '</span>',
+            'boleto2' => '<span>' . substr($code, 5, 5) . '</span>',
+            'boleto3' => '<span>' . substr($code, 10, 5) . '</span>',
+            'boleto4' => '<span>' . substr($code, 15, 6) . '</span>',
+            'boleto5' => '<span>' . substr($code, 21, 5) . '</span>',
+            'boleto6' => '<span>' . substr($code, 26, 6) . '</span>',
+            'boleto7' => '<span>' . substr($code, 32, 1) . '</span>',
+            'boleto8' => '<span>' . substr($code, 33, 14) . '</span>',
+        );
+    }
+
     public static function thankyou_page($order_id)
     {
         $order = new WC_Order($order_id);
-
         if (in_array($order->get_status(), array('pending', 'on-hold'))) {
+            $boleto_url = get_post_meta($order->id, '_boleto_url', true);
+            $url_pdf = $boleto_url."&format=pdf";
+            $url_print = $boleto_url."&format=print";
+            $barcode = get_post_meta($order->id, '_boleto_barcode', true);
+
+            $barcode_anti_fraud = WC_EBANX_Banking_Ticket_Gateway::barcode_anti_fraud($barcode);
+
             $data = array(
-                'url'      => get_post_meta($order->id, 'Banking Ticket URL', true),
-                'barcode'  => get_post_meta($order->id, 'Banking Ticket Barcode', true),
-                'due_date' => get_post_meta($order->id, 'Payment\'s Due Date', true),
+                'due_date'        => get_post_meta($order->id, '_payment_due_date', true),
+                'url'             => $boleto_url,
+                'barcode'         => $barcode,
+                'url_pdf'         => $url_pdf,
+                'url_print'       => $url_print,
+                'barcode_fraud'   => $barcode_anti_fraud,
             );
 
             wc_get_template(
