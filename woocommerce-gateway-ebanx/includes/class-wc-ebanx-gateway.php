@@ -265,6 +265,7 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
                 'redirect' => $this->get_return_url($order),
             ));
         } catch (Exception $e) {
+
             $code = $e->getMessage();
 
             $languages = array(
@@ -443,7 +444,7 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
         }
     }
 
-    final public function process_hook($hash, $notificationType)
+    final public function process_hook(array $codes, $notificationType)
     {
         $config = [
             'integrationKey' => $this->private_key,
@@ -452,15 +453,13 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
 
         \Ebanx\Config::set($config);
 
-        $data = \Ebanx\EBANX::doQuery(array(
-            'hash' => $hash,
-        ));
+        $data = \Ebanx\EBANX::doQuery($codes);
 
         $order = reset(get_posts(array(
             'meta_query' => array(
                 array(
                     'key'   => '_ebanx_payment_hash',
-                    'value' => $hash,
+                    'value' => $data->payment->hash,
                 ),
             ),
             'post_type'  => 'shop_order',
