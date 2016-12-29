@@ -15,7 +15,7 @@ $i = 0;
         <input type="hidden" name="ebanx_one_click" id="ebanx-one-click" value />
 
         <div class="ebanx-one-click-button-container">
-            <button id="ebanx-one-click-button" class="ebanx-one-click-button button" type="button"><?php _e('One-Click Purchase', 'woocommerce-gateway-ebanx') ?></button>
+            <button id="ebanx-one-click-button" class="single_add_to_cart_button ebanx-one-click-button button" type="button"><?php _e('One-Click Purchase', 'woocommerce-gateway-ebanx') ?></button>
 
             <div class="ebanx-one-click-tooltip">
                 <button class="ebanx-one-click-close-button"></button>
@@ -40,7 +40,7 @@ $i = 0;
                     <?php include 'installments.php';?>
                 </div>
 
-                <button class="ebanx-one-click-pay button" type="button"><?php echo $t['pay'] ?></button>
+                <button class="single_add_to_cart_button ebanx-one-click-pay button" type="button"><?php echo $t['pay'] ?></button>
             </div>
         </div>
     </div>

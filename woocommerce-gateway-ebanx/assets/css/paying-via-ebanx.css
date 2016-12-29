@@ -1,6 +1,6 @@
 .wc_payment_method[class*="ebanx"] div.payment_box {
   position: relative;
-  padding-right:
+  padding-bottom: 45px !important;
 }
 
 .wc_payment_method[class*="ebanx"] > label[for*="ebanx"] > img {
@@ -11,7 +11,7 @@
 .wc_payment_method[class*="ebanx"] .ebanx-payment-container[class*="ebanx-language-"]:after {
   content: '';
   position: absolute;
-  top: 1em;
+  bottom: 1em;
   right: 1em;
 
   display: block;
@@ -40,24 +40,11 @@
 }
 
 .wc_payment_method[class*="ebanx"] div.payment_box > p:first-child {
-  max-width: calc(100% - 140px - 1em);
   margin-bottom: 0 !important;
 }
 
 .ebanx-payment-container:not(:empty) {
   margin-top: 15px;
-}
-
-html[lang*="en"] .wc_payment_method[class*="ebanx"] div.payment_box > p:first-child {
-  max-width: calc(100% - 140px - 1em);
-}
-
-html[lang*="pt"] .wc_payment_method[class*="ebanx"] div.payment_box > p:first-child {
-  max-width: calc(100% - 150px - 1em);
-}
-
-html[lang*="es"] .wc_payment_method[class*="ebanx"] div.payment_box > p:first-child {
-  max-width: calc(100% - 180px - 1em);
 }
 
 .wc_payment_method[class*="ebanx"] > label > img {
