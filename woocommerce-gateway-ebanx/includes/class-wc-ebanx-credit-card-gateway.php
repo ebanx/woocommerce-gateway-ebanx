@@ -128,7 +128,7 @@ class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
 
         $messages = array(
             'pt-br' => array(
-                'title' => 'Pague com cartão de crédito.',
+                'title' => '',
                 'number' => 'Número do Cartão',
                 'expiry' => 'Data de validade (MM/YY)',
                 'cvv' => 'Código de segurança',
@@ -138,7 +138,7 @@ class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
                 'another' => 'Usar um outro cartão'
             ),
             'es' => array(
-                'title' => 'Paga con tarjeta de crédito.',
+                'title' => '',
                 'number' => 'Número de la tarjeta',
                 'expiry' => 'Fecha de expiración (MM/AA)',
                 'cvv' => 'Código de verificación',
