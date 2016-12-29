@@ -269,3 +269,158 @@ div.ebanx-form-row {
   display: block;
   overflow: hidden;
 }
+
+/* $EBANX BUTTONS */
+
+.woocommerce .ebanx-button {
+  max-width: 100%;
+  display: inline-block;
+  padding-top: .75rem;
+  padding-right: 1rem;
+  padding-bottom: .75rem;
+  padding-left: 1rem;
+  line-height: 1;
+  text-align: center;
+  border: 1px solid transparent;
+  border-radius: 2px;
+  outline: 0;
+  text-shadow: 0 0 1px rgba(0,0,0,.3);
+  transition-property: background-color;
+  transition-duration: 200ms;
+  transition-timing-function: ease-in-out;
+}
+
+.woocommerce .ebanx-button--white {
+  font-weight: 600;
+  background: #FFF;
+  border: 1px solid #CCD9E1;
+  border-radius: 2px;
+  color: #6C849F;
+  text-shadow: none;
+  box-shadow: none;
+}
+
+.woocommerce .ebanx-button--white:hover {
+  color: #6C849F;
+  background-color: #CCD9E1;
+  border-color: #6C849F;
+}
+
+.woocommerce .ebanx-button--xsmall {
+  padding-top: .625rem;
+  padding-right: .75rem;
+  padding-bottom: .625rem;
+  padding-left: .75rem;
+  font-size: .625rem;
+}
+
+.woocommerce .ebanx-button--small {
+  padding-top: .75rem;
+  padding-right: .875rem;
+  padding-bottom: .75rem;
+  padding-left: .875rem;
+  font-size: .75rem;
+}
+
+.woocommerce .ebanx-button--block {
+  display: block;
+  width: 100%;
+}
+
+.woocommerce .ebanx-button--group > .ebanx-button {
+  display: inline-block;
+}
+
+.woocommerce .ebanx-button--group > .ebanx-button:not(:first-child) {
+  margin-left: 10px;
+}
+
+.woocommerce .ebanx-button--group-two > a,
+.woocommerce .ebanx-button--group-two > button,
+.woocommerce .ebanx-button--group-two > .button {
+  width: 49%;
+  float: left;
+}
+
+.woocommerce .ebanx-button--group-two > a:not(:first-child),
+.woocommerce .ebanx-button--group-two > button:not(:first-child),
+.woocommerce .ebanx-button--group-two > .button:not(:first-child) {
+  float: right;
+}
+
+.woocommerce .ebanx-button--group::before,
+.woocommerce .ebanx-button--group::after {
+  content: " ";
+  display: table;
+}
+
+.woocommerce .ebanx-button--group::after {clear: both;}
+
+
+
+.woocommerce .ebanx-button--copy {
+  position: relative;
+}
+
+.woocommerce .ebanx-button--copy > .ebanx-button--copy-msg {
+  width: 100px;
+  position: absolute;
+  left: calc(50% - 50px);
+  bottom: calc(100% + 5px);
+  padding: 10px;
+  background-color: #7ED321;
+  border: 1px solid #73B828;
+  font-size: 10px;
+  font-weight: normal;
+  color: #FFF;
+  border-radius: 2px;
+  visibility: hidden;
+  opacity: 0;
+  transition: all 200ms ease-in-out;
+  word-break: normal;
+  white-space: normal;
+}
+
+.woocommerce .ebanx-button--copy.ebanx-button--copy-success > .ebanx-button--copy-msg {
+  visibility: visible;
+  opacity: 1;
+}
+
+
+/* $THANK YOU PAGE */
+
+/* $BOLETO */
+
+.banking-ticket__desc-text {
+  font-size: 11px;
+  margin: 0;
+}
+
+.banking-ticket__desc-text:not(:first-child) {
+  margin-top: 5px;
+}
+
+.banking-ticket__barcode {
+  margin-bottom: 10px;
+}
+
+.banking-ticket__barcode::before,
+.banking-ticket__barcode::after {
+  content: " ";
+  display: table;
+}
+
+.banking-ticket__barcode::after {clear: both;}
+
+.banking-ticket__barcode-code {
+  display: inline-block;
+  font-size: 12px;
+  color: #000;
+  letter-spacing: .32px;
+  vertical-align: middle;
+}
+
+.banking-ticket__barcode-copy {
+  display: inline-block;
+  margin-left: 32px;
+}
