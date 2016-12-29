@@ -145,6 +145,9 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
             'mode'      => 'full',
             'operation' => 'request',
             'payment'   => array(
+                'user_value_1'          => 'name=plugin',
+                'user_value_2'          => 'value=woocommerce',
+                'user_value_3'          => 'version='.WC_EBANX::VERSION,
                 'country'               => $order->get_address()['country'],
                 'currency_code'         => WC_EBANX_Gateway_Utils::CURRENCY_CODE_USD, // TODO: Dynamic
                 "name"                  => $order->get_address()['first_name'] . " " . $order->get_address()['last_name'],
@@ -165,6 +168,15 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
                 }, $order->get_items()),
             )
         );
+
+        if (!empty($this->configs->settings['due_date_days']))
+        {
+            $date = new DateTime();
+
+            $date->modify("+{$this->configs->settings['due_date_days']} day");
+
+            $data['payment']['due_date'] = $date->format('d/m/Y');
+        }
 
         if (trim(strtolower(WC()->customer->get_shipping_country())) === WC_EBANX_Gateway_Utils::COUNTRY_BRAZIL) {
             if (empty($_POST['ebanx_billing_brazil_document']) ||
@@ -258,6 +270,8 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
                 'redirect' => $this->get_return_url($order),
             ));
         } catch (Exception $e) {
+            var_dump($e);
+            exit;
             $code = $e->getMessage();
 
             $languages = array(
@@ -383,7 +397,14 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
 
     protected function save_order_meta_fields($order, $request)
     {
+        // To save only on DB to internal use
         update_post_meta($order->id, '_ebanx_payment_hash', $request->payment->hash);
+        update_post_meta($order->id, '_ebanx_payment_open_date', $request->payment->open_date);
+        update_post_meta($order->id, '_ebanx_payment_customer_email', sanitize_email($_POST['billing_email']));
+        update_post_meta($order->id, '_ebanx_payment_customer_phone', sanitize_text_field($_POST['billing_phone']));
+        update_post_meta($order->id, '_ebanx_payment_customer_address', sanitize_text_field($_POST['billing_address_1']));
+
+        // To show to the merchant
         update_post_meta($order->id, 'Payment\'s Hash', $request->payment->hash);
 
         $this->save_user_meta_fields($order);
@@ -415,7 +436,8 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
 
         if ($request->payment->pre_approved && $request->payment->status == 'CO') {
             $order->add_order_note(__('EBANX: Transaction paid.', 'woocommerce-gateway-ebanx'));
-            $order->payment_complete($request->hash);
+            $order->payment_complete($request->payment->hash);
+            $order->update_status('completed');
         }
 
         $this->save_order_meta_fields($order, $request);

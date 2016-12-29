@@ -47,7 +47,7 @@ class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
         if ($request->payment->status == 'CO') {
             $order->payment_complete();
             $order->update_status('completed');
-            $order->add_order_note(__('EBANX: Transaction paid.', 'woocommerce-gateway-ebanx'));
+            $order->add_order_note(__('EBANX: Transaction captured by '.wp_get_current_user()->data->user_email, 'woocommerce-gateway-ebanx'));
         }
     }
 
@@ -109,7 +109,7 @@ class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
                 break;
         }
 
-        $this->method = ($this->getTransactionAddress('country') === WC_EBANX_Gateway_Utils::COUNTRY_BRAZIL) ? 'brazil_payment_methods' : ($this->getTransactionAddress('country') === WC_EBANX_Gateway_Utils::COUNTRY_MEXICO) ? 'mexico_payment_methods' : false;
+        $this->method = $this->getTransactionAddress('country') === WC_EBANX_Gateway_Utils::COUNTRY_BRAZIL ? 'brazil_payment_methods' : ($this->getTransactionAddress('country') === WC_EBANX_Gateway_Utils::COUNTRY_MEXICO ? 'mexico_payment_methods' : false);
         $this->enabled = $this->method && in_array($this->id, $this->configs->settings[$this->method]) ? 'yes' : false;
 
         return parent::is_available();
@@ -128,7 +128,7 @@ class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
 
         $messages = array(
             'pt-br' => array(
-                'title' => 'Pague com cartão de crédito.',
+                'title' => '',
                 'number' => 'Número do Cartão',
                 'expiry' => 'Data de validade (MM/YY)',
                 'cvv' => 'Código de segurança',
@@ -138,7 +138,7 @@ class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
                 'another' => 'Usar um outro cartão'
             ),
             'es' => array(
-                'title' => 'Paga con tarjeta de crédito.',
+                'title' => '',
                 'number' => 'Número de la tarjeta',
                 'expiry' => 'Fecha de expiración (MM/AA)',
                 'cvv' => 'Código de verificación',
@@ -155,7 +155,7 @@ class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
             return !empty($card->brand) && !empty($card->token) && !empty($card->masked_number); // TODO: Implement token due date
         });
 
-        echo wp_kses_post(wpautop(wptexturize($messages[$language]['title'])));
+        // echo wp_kses_post(wpautop(wptexturize($messages[$language]['title'])));
 
         wc_get_template(
             'credit-card/payment-form.php',
