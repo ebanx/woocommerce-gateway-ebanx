@@ -40,7 +40,7 @@ $i = 0;
                     <?php include 'installments.php';?>
                 </div>
 
-                <button class="ebanx-one-click-pay button" type="button"><?php echo $t['pay'] ?></button>
+                <button class="single_add_to_cart_button ebanx-one-click-pay button" type="button"><?php echo $t['pay'] ?></button>
             </div>
         </div>
     </div>
