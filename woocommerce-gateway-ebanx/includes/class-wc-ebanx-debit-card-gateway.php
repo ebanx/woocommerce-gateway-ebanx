@@ -96,4 +96,11 @@ class WC_EBANX_Debit_Card_Gateway extends WC_EBANX_Gateway
 
         parent::process_response($request, $order);
     }
+
+    protected function save_order_meta_fields($order, $request)
+    {
+        parent::save_order_meta_fields($order, $request);
+
+        update_post_meta($order->id, '_cards_brand_name', $request->payment->payment_type_code);
+    }
 }
