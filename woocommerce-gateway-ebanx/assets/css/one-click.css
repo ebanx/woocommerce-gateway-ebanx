@@ -1,6 +1,7 @@
 .ebanx-one-click-container {
   position: relative;
-  margin: 15px 0;
+  padding: 15px 0;
+  clear: both;
 }
 
 .ebanx-one-click-button-container {
@@ -9,6 +10,7 @@
 
 .ebanx-one-click-button {
   float: none !important;
+  margin-left: 0 !important;
 }
 
 .ebanx-one-click-tooltip {
@@ -116,4 +118,5 @@
   float: none !important;
   width: 100% !important;
   display: block !important;
+  margin-left: 0 !important;
 }
