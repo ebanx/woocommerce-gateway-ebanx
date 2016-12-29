@@ -30,7 +30,9 @@ class WC_EBANX_One_Click
 
         add_action('wp_loaded', array($this, 'one_click_handler'), 99);
 
-        $this->cards = array_filter(get_user_meta($this->userId, '_ebanx_credit_card_token', true));
+        $cards = get_user_meta($this->userId, '_ebanx_credit_card_token', true);
+
+        $this->cards = is_array($cards) ? array_filter($cards) : array();
     }
 
     public function one_click_url( $url )

@@ -18,7 +18,7 @@ class WC_EBANX_Banking_Ticket_Gateway extends WC_EBANX_Gateway
 
         parent::__construct();
 
-        $this->enabled = in_array($this->id, $this->configs->settings['brazil_payment_methods']) ? 'yes' : false;
+        $this->enabled = is_array($this->configs->settings['brazil_payment_methods']) ? in_array($this->id, $this->configs->settings['brazil_payment_methods']) ? 'yes' : false : false;
     }
 
     public function is_available()
@@ -59,12 +59,40 @@ class WC_EBANX_Banking_Ticket_Gateway extends WC_EBANX_Gateway
         update_post_meta($order->id, '_boleto_barcode', $request->payment->boleto_barcode);
     }
 
+    public static function barcode_anti_fraud($code)
+    {
+        if (strlen($code) != 47) return '';
+        return array(
+            'boleto1' => '<span>' . substr($code, 0,  5) . '</span>',
+            'boleto2' => '<span>' . substr($code, 5, 5) . '</span>',
+            'boleto3' => '<span>' . substr($code, 10, 5) . '</span>',
+            'boleto4' => '<span>' . substr($code, 15, 6) . '</span>',
+            'boleto5' => '<span>' . substr($code, 21, 5) . '</span>',
+            'boleto6' => '<span>' . substr($code, 26, 6) . '</span>',
+            'boleto7' => '<span>' . substr($code, 32, 1) . '</span>',
+            'boleto8' => '<span>' . substr($code, 33, 14) . '</span>',
+        );
+    }
+
     public static function thankyou_page($order)
     {
+        $boleto_url = get_post_meta($order->id, '_boleto_url', true);
+        $boleto_basic = $boleto_url . "&format=basic";
+        $boleto_pdf = $boleto_url."&format=pdf";
+        $boleto_print = $boleto_url."&format=print";
+        $barcode = get_post_meta($order->id, '_boleto_barcode', true);
+        $customer_email = get_post_meta($order->id, '_ebanx_payment_customer_email', true);
+
+        $barcode_anti_fraud = WC_EBANX_Banking_Ticket_Gateway::barcode_anti_fraud($barcode);
+
         $data = array(
-            'url'      => get_post_meta($order->id, 'Banking Ticket URL', true),
-            'barcode'  => get_post_meta($order->id, 'Banking Ticket Barcode', true),
-            'due_date' => get_post_meta($order->id, 'Payment\'s Due Date', true),
+            'due_date'        => get_post_meta($order->id, '_payment_due_date', true),
+            'barcode'         => $barcode,
+            'barcode_fraud'   => $barcode_anti_fraud,
+            'url_basic'       => $boleto_basic,
+            'url_pdf'         => $boleto_pdf,
+            'url_print'       => $boleto_print,
+            'customer_email'  => $customer_email,
         );
 
         wc_get_template(
@@ -73,5 +101,8 @@ class WC_EBANX_Banking_Ticket_Gateway extends WC_EBANX_Gateway
             'woocommerce/ebanx/',
             WC_EBANX::get_templates_path()
         );
+
+        wp_enqueue_script('woocommerce_ebanx_clipboard', plugins_url('assets/js/vendor/clipboard.min.js', WC_EBANX::DIR));
+        wp_enqueue_script('woocommerce_ebanx_order_received', plugins_url('assets/js/order-received.js', WC_EBANX::DIR));
     }
 }

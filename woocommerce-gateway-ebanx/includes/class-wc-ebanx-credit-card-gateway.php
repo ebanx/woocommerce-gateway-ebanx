@@ -58,8 +58,8 @@ class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
         if (is_checkout()) {
             wp_enqueue_script('wc-credit-card-form');
             // Using // to avoid conflicts between http and https protocols
-            wp_enqueue_script('ebanx_fingerprint', '//downloads.ebanx.com/poc-checkout/src/device-fingerprint.js', '', '1.0', true); // TODO: REMOVE THIS
-            wp_enqueue_script('ebanx', '//downloads.ebanx.com/poc-checkout/src/ebanx.js', '', '1.0', true);
+            wp_enqueue_script('ebanx_fingerprint', '//s3-sa-east-1.amazonaws.com/downloads.ebanx.com/poc-checkout/src/device-fingerprint.js', '', '1.0', true); // TODO: REMOVE THIS
+            wp_enqueue_script('ebanx', '//s3-sa-east-1.amazonaws.com/downloads.ebanx.com/poc-checkout/src/ebanx.js', '', '1.0', true);
             wp_enqueue_script('woocommerce_ebanx_jquery_mask', plugins_url('assets/js/jquery-mask.js', WC_EBANX::DIR), array());
             wp_enqueue_script('woocommerce_ebanx', plugins_url('assets/js/credit-card.js', WC_EBANX::DIR), array('jquery-payment', 'ebanx'), WC_EBANX::VERSION, true);
 
@@ -110,7 +110,7 @@ class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
         }
 
         $this->method = $this->getTransactionAddress('country') === WC_EBANX_Gateway_Utils::COUNTRY_BRAZIL ? 'brazil_payment_methods' : ($this->getTransactionAddress('country') === WC_EBANX_Gateway_Utils::COUNTRY_MEXICO ? 'mexico_payment_methods' : false);
-        $this->enabled = $this->method && in_array($this->id, $this->configs->settings[$this->method]) ? 'yes' : false;
+        $this->enabled = $this->method && is_array($this->configs->settings[$this->method]) ? in_array($this->id, $this->configs->settings[$this->method]) ? 'yes' : false : false;
 
         return parent::is_available();
     }
@@ -165,7 +165,7 @@ class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
                 'cart_total'      => $cart_total,
                 'country'         => $this->getTransactionAddress('country'),
                 'max_installment' => $this->configs->settings['credit_card_instalments'],
-                'place_order_enabled' => (isset($this->configs->settings['enable_place_order']) && $this->configs->settings['enable_place_order'] === 'yes'),
+                'place_order_enabled' => (isset($this->configs->settings['save_card_data']) && $this->configs->settings['save_card_data'] === 'yes'),
                 't' => $messages[$language]
             ),
             'woocommerce/ebanx/',
@@ -252,7 +252,7 @@ class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
     {
         parent::save_user_meta_fields($order);
 
-        if ($this->userId && $this->configs->settings['enable_place_order'] === 'yes' && isset($_POST['ebanx-save-credit-card']) && $_POST['ebanx-save-credit-card'] === 'yes') {
+        if ($this->userId && $this->configs->settings['save_card_data'] === 'yes' && isset($_POST['ebanx-save-credit-card']) && $_POST['ebanx-save-credit-card'] === 'yes') {
             $cards = get_user_meta($this->userId, '_ebanx_credit_card_token', true);
             $cards = !empty($cards) ? $cards : [];
 

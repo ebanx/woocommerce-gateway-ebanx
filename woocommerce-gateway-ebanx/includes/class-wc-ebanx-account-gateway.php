@@ -14,12 +14,12 @@ class WC_EBANX_Account_Gateway extends WC_EBANX_Redirect_Gateway
 
         $this->api_name    = 'ebanxaccount';
         $this->title       = __('Saldo EBANX', 'woocommerce-gateway-ebanx');
-        $this->description = __('Pague usando o saldo da sua conta EBANX.', 'woocommerce-gateway-ebanx');
+        $this->description = __('Pague usando o saldo da sua conta do EBANX.', 'woocommerce-gateway-ebanx');
 
         parent::__construct();
 
         // TODO: Put that to father and remove of the all children's
-        $this->enabled = in_array($this->id, $this->configs->settings['brazil_payment_methods']) ? 'yes' : false;
+        $this->enabled = is_array($this->configs->settings['brazil_payment_methods']) ? in_array($this->id, $this->configs->settings['brazil_payment_methods']) ? 'yes' : false : false;
     }
 
     public function is_available()
