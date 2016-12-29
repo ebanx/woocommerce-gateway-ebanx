@@ -78,11 +78,6 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
                 plugins_url('assets/css/paying-via-ebanx.css', WC_EBANX::DIR)
             );
         }
-
-        if (is_wc_endpoint_url( 'order-received' )) {
-            wp_enqueue_script('woocommerce_ebanx_clipboard', plugins_url('assets/js/vendor/clipboard.min.js', WC_EBANX::DIR));
-            wp_enqueue_script('woocommerce_ebanx_order_received', plugins_url('assets/js/order-received.js', WC_EBANX::DIR));
-        }
     }
     public function admin_options()
     {

@@ -100,5 +100,8 @@ class WC_EBANX_Banking_Ticket_Gateway extends WC_EBANX_Gateway
                 WC_EBANX::get_templates_path()
             );
         }
+
+        wp_enqueue_script('woocommerce_ebanx_clipboard', plugins_url('assets/js/vendor/clipboard.min.js', WC_EBANX::DIR));
+        wp_enqueue_script('woocommerce_ebanx_order_received', plugins_url('assets/js/order-received.js', WC_EBANX::DIR));
     }
 }
