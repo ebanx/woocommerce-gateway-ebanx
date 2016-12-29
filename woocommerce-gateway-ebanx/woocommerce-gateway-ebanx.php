@@ -1,6 +1,6 @@
 <?php
 /**
- * Plugin Name: WooCommerce EBANX.com
+ * Plugin Name: WooCommerce EBANX
  * Plugin URI: http://github.com/ebanx/woocommerce
  * Description: Gateway de pagamento ebanx.com para WooCommerce.
  * Author: EBANX
@@ -198,9 +198,6 @@ if (!class_exists('WC_EBANX')) {
                 $message = __('WooCommerce EBANX - The minimum WooCommerce version required for this plugin is %1$s. You are running %2$s.', 'woocommerce-gateway-ebanx', 'woocommerce-gateway-ebanx');
                 return sprintf($message, WC_EBANX_MIN_WC_VER, WC_VERSION);
             }
-            if (!function_exists('curl_init')) {
-                return __('WooCommerce EBANX - cURL is not installed.', 'woocommerce-gateway-ebanx');
-            }
             return false;
         }
 
@@ -293,7 +290,7 @@ if (!class_exists('WC_EBANX')) {
 
             $ebanx_global = 'ebanx-global';
 
-            $plugin_links[] = '<a href="' . esc_url(admin_url('admin.php?page=wc-settings&tab=checkout&section=' . $ebanx_global)) . '">' . __('EBANX Settings', 'woocommerce-gateway-ebanx') . '</a>';
+            $plugin_links[] = '<a href="' . esc_url(admin_url('admin.php?page=wc-settings&tab=checkout&section=' . $ebanx_global)) . '">' . __('Settings', 'woocommerce-gateway-ebanx') . '</a>';
 
             return array_merge($plugin_links, $links);
         }
