@@ -280,6 +280,7 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
             $errors = array(
                 'pt-br' => array(
                     'GENERAL'                    => 'Não foi possível concluir a compra. Por favor, tente novamente ou entre em contato com o site.',
+                    'BP-DPAR-4'                  => 'Invalid integration key.',
                     'BP-DR-13'                   => 'Informe o seu nome completo.',
                     'BP-DR-15'                   => 'Informe um email válido.',
                     'BP-DR-19'                   => 'Informe a sua data de nascimento no formato dia/mes/ano, por exemplo, 30/10/1980.',
