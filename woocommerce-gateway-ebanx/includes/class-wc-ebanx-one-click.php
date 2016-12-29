@@ -18,7 +18,7 @@ class WC_EBANX_One_Click
         $this->userId  = get_current_user_id();
         $this->gateway = new WC_EBANX_Credit_Card_Gateway();
 
-        add_action('wp_enqueue_scripts', array($this, 'enqueue_scripts'), 10);
+        add_action('wp_enqueue_scripts', array($this, 'enqueue_scripts'), 100);
         add_action('woocommerce_before_add_to_cart_form', array($this, 'add_button'));
 
         if( isset( $_REQUEST['ebanx_one_click'] ) && $_REQUEST['ebanx_one_click'] == 'is_one_click' ) {
@@ -30,7 +30,7 @@ class WC_EBANX_One_Click
 
         add_action('wp_loaded', array($this, 'one_click_handler'), 99);
 
-        $this->cards = get_user_meta($this->userId, '_ebanx_credit_card_token', true);
+        $this->cards = array_filter(get_user_meta($this->userId, '_ebanx_credit_card_token', true));
     }
 
     public function one_click_url( $url )
@@ -192,6 +192,7 @@ class WC_EBANX_One_Click
             $order->set_total( WC()->cart->tax_total, 'tax' );
             $order->set_total( WC()->cart->shipping_tax_total, 'shipping_tax' );
             $order->set_total( WC()->cart->total );
+            $order->set_payment_method($this->gateway);
 
             $data = $this->gateway->process_payment($order->id);
 
@@ -202,9 +203,9 @@ class WC_EBANX_One_Click
             $wpdb->query( 'COMMIT' );
 
             // TODO: Apply credit card payment method and finish with that
-
-            $message = apply_filters( 'ebanx_success_msg_order_created', __( 'Thank you. Your order has been received and it is now waiting for payment', 'ebanx-woocommerce-one-click-checkout' ) );
-            wc_add_notice( $message, 'success' );
+            $this->restore_cart();
+            wp_redirect($order->get_checkout_order_received_url());
+            exit;
         } catch ( Exception $e ) {
             $wpdb->query( 'ROLLBACK' );
 
@@ -314,10 +315,7 @@ class WC_EBANX_One_Click
         // TODO: Solved apply css
         wp_enqueue_style(
             'woocommerce_ebanx_one_click_style',
-            plugins_url('assets/css/one-click.css', WC_EBANX::DIR),
-            array(),
-            WC_EBANX::VERSION,
-            true
+            plugins_url('assets/css/one-click.css', WC_EBANX::DIR)
         );
     }
 
@@ -342,7 +340,7 @@ class WC_EBANX_One_Click
     }
 
     protected function customerHasEBANXRequiredData() {
-        $card = current(array_filter((array) get_user_meta($this->userId, '_ebanx_credit_card_token', true), function ($card) {
+        $card = current(array_filter((array) array_filter(get_user_meta($this->userId, '_ebanx_credit_card_token', true)), function ($card) {
             return $card->token == $_GET['_ebanx_one_click_token'];
         }));
 
@@ -354,6 +352,7 @@ class WC_EBANX_One_Click
         $_POST['ebanx_billing_instalments'] = $_GET['_ebanx_one_click_installments'];
 
         $_POST['ebanx_billing_brazil_document'] = get_user_meta($this->userId, '_ebanx_billing_brazil_document', true);
+        $_POST['ebanx_billing_brazil_birth_date'] = get_user_meta($this->userId, '_ebanx_billing_brazil_birth_date', true);
 
         $_POST['billing_postcode']  = $this->get_user_billing_address()['postcode'];
         $_POST['billing_address_1'] = $this->get_user_billing_address()['address_1'];
@@ -366,7 +365,8 @@ class WC_EBANX_One_Click
             empty($_POST['ebanx_billing_instalments']) ||
             empty($_POST['ebanx_billing_cvv']) ||
             empty($_POST['ebanx_is_one_click']) ||
-            empty($_POST['ebanx_billing_brazil_document'])
+            empty($_POST['ebanx_billing_brazil_document']) ||
+            empty($_POST['ebanx_billing_brazil_birth_date'])
         ) {
             return false;
         }
@@ -390,14 +390,46 @@ class WC_EBANX_One_Click
     {
         global $product;
 
+        switch(get_locale()) {
+            case 'pt_BR':
+                $messages = array(
+                    'instalments' => 'Número de parcelas',
+                    'cvv' => 'Código de segurança',
+                    'title' => 'Escolha um cartão',
+                    'pay' => 'Pagar agora'
+                );
+                break;
+            case 'es_ES':
+            case 'es_CO':
+            case 'es_CL':
+            case 'es_PE':
+            case 'es_MX':
+                $messages = array(
+                    'instalments' => 'Meses sin interesses',
+                    'cvv' => 'Código de verificación',
+                    'title' => 'Elegir una tarjeta',
+                    'pay' => 'Pagar Ahora'
+                );
+                break;
+            default:
+                $messages = array(
+                    'instalments' => 'Number of Installments',
+                    'cvv' => 'Card code',
+                    'title' => 'Choose Card',
+                    'pay' => 'Pay Now'
+                );
+                break;
+        }
+
         $args = apply_filters('ebanx_template_args', array(
             'cards' => $this->cards,
             'cart_total' => $product->price,
             'max_installment' => $this->gateway->configs->settings['credit_card_instalments'],
-            'label' => __('Pay with one click', 'woocommerce-gateway-ebanx')
+            'label' => __('Pay with one click', 'woocommerce-gateway-ebanx'),
+            't' => $messages
         ));
 
-        wc_get_template('one-click.php', $args, '', WC_EBANX::get_templates_path().'credit-card/');
+        wc_get_template('one-click.php', $args, '', WC_EBANX::get_templates_path() . 'credit-card/');
     }
 }
 

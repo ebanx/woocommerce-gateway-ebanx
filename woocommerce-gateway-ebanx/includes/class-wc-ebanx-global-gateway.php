@@ -35,6 +35,10 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway
             jQuery('.ebanx-select').select2();
           });
         </script>
+
+        <style>
+            .form-table th { width: 250px !important; }
+        </style>
       ";
     }
 
@@ -73,12 +77,12 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway
             'debug_enabled'             => array(
                 'title'       => __('Debug Log', 'woocommerce-gateway-ebanx'),
                 'label'       => __('Enable Debug Log', 'woocommerce-gateway-ebanx'),
-                'description' => sprintf(__('Record all errors that occur when executing a transaction. E.g, IPNs & API requests. ', 'woocommerce-gateway-ebanx'), 'http://google.com'),
+                'description' => __('Record all errors that occur when executing a transaction.', 'woocommerce-gateway-ebanx'),
                 'type'        => 'checkbox',
                 'desc_tip' => true
             ),
             'display_methods_title'     => array(
-                'title' => __('Enable payment methods', 'woocommerce-gateway-ebanx'),
+                'title' => __('Enable Payment Methods', 'woocommerce-gateway-ebanx'),
                 'type'  => 'title',
                 'description' => sprintf(__('Set up payment methods for your checkout. Confirm that method is enabled on your contract.', 'woocommerce-gateway-ebanx'), 'http://google.com')
             ),
@@ -137,27 +141,27 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway
                 'title' => __('Credit Card', 'woocommerce-gateway-ebanx'),
                 'type'  => 'title',
             ),
-            'enable_place_order'        => array(
+            'save_card_data'        => array(
                 'title' => __('Save Card Data', 'woocommerce-gateway-ebanx'),
                 'type'  => 'checkbox',
                 'label' => __('Enable saving card data', 'woocommerce-gateway-ebanx'),
-                'description' => __('Allow your client to save credit card and debit card data for future purchases.', 'woocommerce-gateway-ebanx'),
+                'description' => __('Allow your customer to save credit card and debit card data for future purchases.', 'woocommerce-gateway-ebanx'),
                 'desc_tip' => true
             ),
             'one_click' => array(
                 'type'        => 'checkbox',
                 'title'       => __('One-Click Payment', 'woocommerce-gateway-ebanx'),
-                'label'       => __('Enable save card for next time', 'woocommerce-gateway-ebanx'),
+                'label'       => __('Enable one-click-payment', 'woocommerce-gateway-ebanx'),
                 'default'     => 'no',
-                'description' => __('Allow your client to complete payments using credit cards stored on file, in one click.', 'woocommerce-gateway-ebanx'),
+                'description' => __('Allow your customer to complete payments in one-click using credit cards saved.', 'woocommerce-gateway-ebanx'),
                 'desc_tip' => true
             ),
-            'capture_enabled'           => array(
+            'capture_enabled' => array(
                 'type'    => 'checkbox',
-                'title'   => __('Enable auto-capture', 'woocommerce-gateway-ebanx'),
-                'label'   => __('Enable auto-capture.', 'woocommerce-gateway-ebanx'),
-                'default' => 'no',
-                'description' => __('Automatically capture payments from your customers. Otherwise you will need to capture the payment going to: WooCommerce > Orders. Uncaptured payments will be cancelled in 4 days.', 'woocommerce-gateway-ebanx'),
+                'title'   => __('Enable Auto-Capture', 'woocommerce-gateway-ebanx'),
+                'label'   => __('Capture the payment immediatly.', 'woocommerce-gateway-ebanx'),
+                'default' => 'yes',
+                'description' => __('Automatically capture payments from your customers. Otherwise you will need to capture the payment going to: WooCommerce -> Orders. Not captured payments will be cancelled in 4 days.', 'woocommerce-gateway-ebanx'),
                 'desc_tip' => true
             ),
             'credit_card_instalments'   => array(
@@ -182,19 +186,8 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway
                 'description' => __('Establish the maximum number of installments in which your customer can pay, as consented on your contract.', 'woocommerce-gateway-ebanx'),
                 'desc_tip' => true
             ),
-            'capture_enabled'           => array(
-                'type'    => 'checkbox',
-                'title'   => __('Capture', 'woocommerce-gateway-ebanx'),
-                'label'   => __('Capture the payment immediatly.', 'woocommerce-gateway-ebanx'),
-                'default' => 'yes',
-            ),
-            'avoid_duplication_enabled' => array(
-                'title' => __('Avoid duplication', 'woocommerce-gateway-ebanx'),
-                'type' => 'checkbox',
-                'label' => __('Keep only EBANX on credit card checkout.', 'woocommerce-gateway-ebanx')
-            ),
             'cash_options_title'        => array(
-                'title' => __('Cash Payments (Boleto, OXXO, Sencilito, PagoEfectivo)', 'woocommerce-gateway-ebanx'),
+                'title' => __('Cash Payments', 'woocommerce-gateway-ebanx'),
                 'type'  => 'title',
             ),
             'due_date_days'             => array(

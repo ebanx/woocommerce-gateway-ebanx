@@ -83,9 +83,4 @@ class WC_EBANX_Tef_Gateway extends WC_EBANX_Redirect_Gateway
 
         return $data;
     }
-
-    protected function save_order_meta_fields($order, $request)
-    {
-        // TODO: What are the fields necessaries by this payment method?
-    }
 }
