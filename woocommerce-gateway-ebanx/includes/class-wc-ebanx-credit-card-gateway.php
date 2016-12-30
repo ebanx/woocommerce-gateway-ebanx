@@ -142,7 +142,7 @@ class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
                 'number' => 'Número de la tarjeta',
                 'expiry' => 'Fecha de expiración (MM/AA)',
                 'cvv' => 'Código de verificación',
-                'instalments' => 'Meses sin interesses',
+                'instalments' => 'Meses sin intereses',
                 'save_card' => 'Guarda esta tarjeta para compras futuras.',
                 'name' => 'Titular de la tarjeta',
                 'another' => 'Otra tarjeta de crédito'

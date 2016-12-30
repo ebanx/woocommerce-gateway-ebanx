@@ -400,7 +400,11 @@ class WC_EBANX_One_Click
             case 'es_PE':
             case 'es_MX':
                 $messages = array(
-                    'instalments' => 'Meses sin interesses',
+                    'instalments' => 'Meses sin intereses',
+                    'cvv' => 'Código de verificación',
+                    'title' => 'Elegir una tarjeta',
+                    'pay' => 'Pagar Ahora',
+                    'processing' => 'Procesando...'
                 );
                 break;
             default:
