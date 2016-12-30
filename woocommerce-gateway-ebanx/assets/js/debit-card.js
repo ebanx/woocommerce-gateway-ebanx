@@ -80,7 +80,7 @@ jQuery( function($) {
 					"card_number": parseInt(card.replace(/ /g,'')),
 					"card_name": card_name,
 					"card_due_date": (parseInt( expires['month'] ) || 0) + '/' + (parseInt( expires['year'] ) || 0),
-					"card_cvv": parseInt(cvv)
+					"card_cvv": cvv
 				};
 
 				wc_ebanx_form.renderCvv(debitcard.card_cvv);

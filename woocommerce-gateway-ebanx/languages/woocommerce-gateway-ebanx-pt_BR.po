@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
-"POT-Creation-Date: 2016-12-30 14:07-0200\n"
-"PO-Revision-Date: 2016-12-30 14:07-0200\n"
+"POT-Creation-Date: 2016-12-30 15:59-0200\n"
+"PO-Revision-Date: 2016-12-30 16:04-0200\n"
 "Last-Translator: \n"
 "Language-Team: EBANX\n"
 "Language: pt_BR\n"
@@ -104,7 +104,7 @@ msgstr ""
 msgid "Birth Date"
 msgstr "Data de Nascimento"
 
-#: includes/class-wc-ebanx-gateway.php:449
+#: includes/class-wc-ebanx-gateway.php:453
 msgid "EBANX: Transaction paid."
 msgstr ""
 
@@ -296,7 +296,7 @@ msgstr ""
 msgid "Sorry, invalid shipping method."
 msgstr ""
 
-#: includes/class-wc-ebanx-one-click.php:429
+#: includes/class-wc-ebanx-one-click.php:395
 msgid "Pay with one click"
 msgstr "Pague com um clique"
 
@@ -377,7 +377,7 @@ msgstr ""
 #: templates/credit-card/card-template.php:16
 #: templates/debit-card/payment-form.php:21
 msgid "MM / YY"
-msgstr ""
+msgstr "MM / AA"
 
 #: templates/credit-card/card-template.php:20
 #: templates/credit-card/payment-form.php:33
@@ -399,7 +399,23 @@ msgstr "%1$dx de %2$s"
 
 #: templates/credit-card/one-click.php:18
 msgid "One-Click Purchase"
-msgstr ""
+msgstr "Pague com um clique"
+
+#: templates/credit-card/one-click.php:23
+msgid "Choose Card"
+msgstr "Escolha um cartão"
+
+#: templates/credit-card/one-click.php:35
+msgid "Card Code"
+msgstr "Código de segurança"
+
+#: templates/credit-card/one-click.php:43
+msgid "Processing..."
+msgstr "Processando..."
+
+#: templates/credit-card/one-click.php:43
+msgid "Pay Now"
+msgstr "Pagar"
 
 #: templates/eft/payment-instructions.php:17
 #: templates/servipag/payment-instructions.php:17

@@ -353,6 +353,10 @@ div.ebanx-form-row {
   margin-left: 10px;
 }
 
+.woocommerce .ebanx-button--group-two {
+  margin: 20px 0;
+}
+
 .woocommerce .ebanx-button--group-two > a,
 .woocommerce .ebanx-button--group-two > button,
 .woocommerce .ebanx-button--group-two > .button {

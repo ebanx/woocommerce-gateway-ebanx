@@ -392,10 +392,6 @@ class WC_EBANX_One_Click
             case 'pt_BR':
                 $messages = array(
                     'instalments' => 'Número de parcelas',
-                    'cvv' => 'Código de segurança',
-                    'title' => 'Escolha um cartão',
-                    'pay' => 'Pagar agora',
-                    'processing' => 'Processando...'
                 );
                 break;
             case 'es_ES':
@@ -404,7 +400,7 @@ class WC_EBANX_One_Click
             case 'es_PE':
             case 'es_MX':
                 $messages = array(
-                    'instalments' => 'Meses sin interesses',
+                    'instalments' => 'Meses sin intereses',
                     'cvv' => 'Código de verificación',
                     'title' => 'Elegir una tarjeta',
                     'pay' => 'Pagar Ahora',
@@ -413,11 +409,7 @@ class WC_EBANX_One_Click
                 break;
             default:
                 $messages = array(
-                    'instalments' => 'Number of Installments',
-                    'cvv' => 'Card code',
-                    'title' => 'Choose Card',
-                    'pay' => 'Pay Now',
-                    'processing' => 'Processing...'
+                    'instalments' => 'Number of installments',
                 );
                 break;
         }

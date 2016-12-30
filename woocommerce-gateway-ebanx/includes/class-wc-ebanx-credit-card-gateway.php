@@ -142,7 +142,7 @@ class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
                 'number' => 'Número de la tarjeta',
                 'expiry' => 'Fecha de expiración (MM/AA)',
                 'cvv' => 'Código de verificación',
-                'instalments' => 'Meses sin interesses',
+                'instalments' => 'Meses sin intereses',
                 'save_card' => 'Guarda esta tarjeta para compras futuras.',
                 'name' => 'Titular de la tarjeta',
                 'another' => 'Otra tarjeta de crédito'
@@ -244,6 +244,7 @@ class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
 
         update_post_meta($order->id, '_cards_brand_name', $request->payment->payment_type_code);
         update_post_meta($order->id, '_instalments_number', $request->payment->instalments);
+        update_post_meta($order->id, '_masked_card_number', $_POST['ebanx_masked_card_number']);
     }
 
     protected function save_user_meta_fields($order)
