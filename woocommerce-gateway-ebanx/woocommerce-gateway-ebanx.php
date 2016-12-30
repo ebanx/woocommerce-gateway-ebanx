@@ -139,6 +139,37 @@ if (!class_exists('WC_EBANX')) {
         {
             add_rewrite_endpoint(self::$endpoint, EP_ROOT | EP_PAGES);
             flush_rewrite_rules();
+
+            add_option('woocommerce_ebanx-global_settings', array(
+                'sandbox_mode_enabled' => 'yes',
+                'brazil_payment_methods' => array(
+                    'ebanx-credit-card',
+                    'ebanx-banking-ticket',
+                    'ebanx-tef',
+                    'ebanx-account',
+                ),
+                'mexico_payment_methods' => array(
+                    'ebanx-credit-card',
+                    'ebanx-debit-card',
+                    'ebanx-oxxo',
+                ),
+                'chile_payment_methods' => array(
+                    'ebanx-sencillito',
+                    'ebanx-servipag',
+                ),
+                'colombia_payment_methods' => array(
+                    'ebanx-eft',
+                ),
+                'peru_payment_methods' => array(
+                    'ebanx-safetypay',
+                    'ebanx-pagoefectivo',
+                ),
+                'save_card_data' => 'yes',
+                'one_click' => 'yes',
+                'capture_enabled' => 'yes',
+                'credit_card_instalments' => '1',
+                'due_date_days' => '3',
+            ));
         }
 
         public function my_account_menus_title($title)
