@@ -74,6 +74,9 @@ if (!class_exists('WC_EBANX')) {
             add_filter('the_title', array($this, 'my_account_menus_title'));
             add_action('woocommerce_account_' . self::$endpoint . '_endpoint', array($this, 'my_account_template'));
 
+            // i18n
+            $this->enable_i18n();
+
             if (class_exists('WC_Payment_Gateway')) {
                 $this->includes();
 
@@ -89,6 +92,11 @@ if (!class_exists('WC_EBANX')) {
             if (self::get_environment_warning()) {
                 return;
             }
+        }
+
+        public function enable_i18n()
+        {
+            load_plugin_textdomain( 'woocommerce-gateway-ebanx', false, dirname( plugin_basename(__FILE__) ) . '/languages/' );
         }
 
         public function my_account_template()
