@@ -32,10 +32,7 @@ class WC_EBANX_One_Click
 
         $cards = get_user_meta($this->userId, '_ebanx_credit_card_token', true);
 
-        if(is_string($cards))
-            $cards = array($cards);
-
-        $this->cards = array_filter($cards);
+        $this->cards = is_array($cards) ? array_filter($cards) : array();
     }
 
     public function one_click_url( $url )
