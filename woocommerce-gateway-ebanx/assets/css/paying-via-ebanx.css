@@ -43,6 +43,10 @@
   margin-bottom: 0 !important;
 }
 
+.ebanx-credit-card-label {
+  overflow: hidden;
+}
+
 .ebanx-payment-container:not(:empty) {
   margin-top: 15px;
 }
@@ -144,6 +148,10 @@
 .ebanx-form-row {
   margin-top: 10px;
   margin-bottom: 10px;
+}
+
+.ebanx-form-row:not(.ebanx-form-row-first):not(.ebanx-form-row-last):not(.ebanx-form-row-wide) {
+  clear: both;
 }
 
 div.ebanx-form-row {
@@ -262,6 +270,16 @@ div.ebanx-form-row {
   width: auto;
   display: inline-block !important;
   float: none !important;
+}
+
+.wc_payment_method[class*="ebanx"] .payment_box .ebanx-credit-card-label > .input-radio,
+.wc_payment_method[class*="ebanx"] .payment_box .ebanx-credit-card-label > .ebanx-credit-card-brand,
+.wc_payment_method[class*="ebanx"] .payment_box .ebanx-credit-card-label > .ebanx-credit-card-bin {
+  float: left !important;
+}
+
+.ebanx-credit-card-label > .ebanx-credit-card-bin {
+  margin-top: 0 !important;
 }
 
 .ebanx-label {
