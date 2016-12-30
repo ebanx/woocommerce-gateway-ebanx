@@ -175,8 +175,6 @@ class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
 
     public static function thankyou_page($order)
     {
-        $order = new WC_Order($order);
-
         $data = array(
             'instalments' => get_post_meta($order->id, '_instalments_number', true),
             'card_brand'  => get_post_meta($order->id, '_cards_brand_name', true),

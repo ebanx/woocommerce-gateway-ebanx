@@ -55,7 +55,6 @@ class WC_EBANX_Tef_Gateway extends WC_EBANX_Redirect_Gateway
 
     public static function thankyou_page($order)
     {
-        $order = wc_get_order($order);
         $data  = get_post_meta($order, '_wc_ebanx_transaction_data', true);
 
         wc_get_template(

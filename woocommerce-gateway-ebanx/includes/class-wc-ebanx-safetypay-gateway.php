@@ -35,10 +35,7 @@ class WC_EBANX_Safetypay_Gateway extends WC_EBANX_Redirect_Gateway
 
     public static function thankyou_page($order)
     {
-        $order = wc_get_order($order);
         $data  = get_post_meta($order, '_wc_ebanx_transaction_data', true);
-
-        // TODO: how do this?
 
         wc_get_template(
             'safetypay/payment-instructions.php',
