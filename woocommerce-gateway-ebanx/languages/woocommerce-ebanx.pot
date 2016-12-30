@@ -23,7 +23,7 @@ msgid "Currency %s is not supported. Works only with Brazilian Real."
 msgstr ""
 
 #. Plugin Name of the plugin/theme
-msgid "WooCommerce EBANX"
+msgid "WooCommerce EBANX Gateway"
 msgstr ""
 
 #: includes/admin/views/html-notice-missing-woocommerce.php:22
