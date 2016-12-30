@@ -50,16 +50,26 @@ class WC_EBANX_Pagoefectivo_Gateway extends WC_EBANX_Gateway
         );
     }
 
+    protected function save_order_meta_fields($order, $request)
+    {
+        parent::save_order_meta_fields($order, $request);
+
+        update_post_meta($order->id, '_pagoefectivo_url', $request->redirect_url);
+    }
+
     public static function thankyou_page($order)
     {
-        $data  = get_post_meta($order, '_wc_ebanx_transaction_data', true);
+        $pagoefectivo_url = get_post_meta($order->id, '_pagoefectivo_url', true);
+        $customer_email = get_post_meta($order->id, '_ebanx_payment_customer_email', true);
+
+        $data = array(
+            'url_basic' => $pagoefectivo_url,
+            'customer_email' => $customer_email,
+        );
 
         wc_get_template(
             'pagoefectivo/payment-instructions.php',
-            array(
-                'title'       => $this->title, // TODO: Static use this?
-                'description' => $this->description,
-            ),
+            $data,
             'woocommerce/ebanx/',
             WC_EBANX::get_templates_path()
         );
