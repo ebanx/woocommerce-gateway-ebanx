@@ -199,7 +199,7 @@ class WC_EBANX_One_Click
             $data = $this->gateway->process_payment($order->id);
 
             if ($data['result'] !== 'success') {
-                throw new Exception("Error."); // TODO: ?
+                throw new Exception('Error.'); // TODO: ?
             }
 
             $wpdb->query( 'COMMIT' );
@@ -210,10 +210,6 @@ class WC_EBANX_One_Click
             exit;
         } catch ( Exception $e ) {
             $wpdb->query( 'ROLLBACK' );
-
-            if ( $e->getMessage() ) {
-                wc_add_notice( $e->getMessage(), 'error' );
-            }
 
             $order = false;
         }
@@ -398,7 +394,8 @@ class WC_EBANX_One_Click
                     'instalments' => 'Número de parcelas',
                     'cvv' => 'Código de segurança',
                     'title' => 'Escolha um cartão',
-                    'pay' => 'Pagar agora'
+                    'pay' => 'Pagar agora',
+                    'processing' => 'Processando...'
                 );
                 break;
             case 'es_ES':
@@ -410,7 +407,8 @@ class WC_EBANX_One_Click
                     'instalments' => 'Meses sin interesses',
                     'cvv' => 'Código de verificación',
                     'title' => 'Elegir una tarjeta',
-                    'pay' => 'Pagar Ahora'
+                    'pay' => 'Pagar Ahora',
+                    'processing' => 'Procesando...'
                 );
                 break;
             default:
@@ -418,7 +416,8 @@ class WC_EBANX_One_Click
                     'instalments' => 'Number of Installments',
                     'cvv' => 'Card code',
                     'title' => 'Choose Card',
-                    'pay' => 'Pay Now'
+                    'pay' => 'Pay Now',
+                    'processing' => 'Processing...'
                 );
                 break;
         }

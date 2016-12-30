@@ -32,7 +32,7 @@ $i = 0;
                 </div>
 
                 <div class="ebanx-one-click-cvv">
-                    <label><?php echo $t['cvv'] ?> *</label>
+                    <label><?php echo $t['cvv'] ?></label>
                     <input type="text" maxlength="4" minlength="3" class="ebanx-one-click-cvv-input" id="ebanx-one-click-cvv-input" name="ebanx_one_click_cvv" placeholder="CVV">
                 </div>
 
@@ -40,7 +40,7 @@ $i = 0;
                     <?php include 'installments.php';?>
                 </div>
 
-                <button class="single_add_to_cart_button ebanx-one-click-pay button" type="button"><?php echo $t['pay'] ?></button>
+                <button class="single_add_to_cart_button ebanx-one-click-pay button" data-processing-label="<?php echo $t['processing'] ?>" type="button"><?php echo $t['pay'] ?></button>
             </div>
         </div>
     </div>

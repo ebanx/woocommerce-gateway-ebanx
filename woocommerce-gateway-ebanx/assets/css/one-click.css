@@ -64,6 +64,7 @@
 
 .ebanx-one-click-tooltip > h3 {
   margin: 0 0 12px;
+  padding: 0;
 
   font-size: 14px;
 }
@@ -75,11 +76,24 @@
 
   width: 20px;
   height: 20px;
+  padding: 0;
 
   border: 0;
   background: url(../images/close-button.png) no-repeat center;
   background-size: 20px;
   border-radius: 50%;
+}
+
+.ebanx-one-click-close-button:hover {
+  background: url(../images/close-button.png) no-repeat center;
+  background-size: 20px;
+  border-radius: 50%;
+  opacity: .5;
+}
+
+.ebanx-one-click-card {
+  display: flex;
+  align-items: center;
 }
 
 .ebanx-one-click-card > img {
@@ -119,4 +133,9 @@
   width: 100% !important;
   display: block !important;
   margin-left: 0 !important;
+}
+
+.ebanx-one-click-card-radio {
+  width: auto !important;
+  margin: 0 !important;
 }

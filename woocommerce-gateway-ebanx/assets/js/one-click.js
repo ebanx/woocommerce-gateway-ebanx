@@ -20,10 +20,13 @@ jQuery(document).ready(function ($) {
       hidden.val('is_one_click');
       var cardSelected = $('.ebanx-card-use:checked');
       var cvv = $('#ebanx-one-click-cvv-input').val();
+      var self = $(this);
 
       if (!!cvv.length === false) {
         return false;
       }
+
+      self.text(self.attr('data-processing-label')).attr('disabled', 'disabled');
 
       $('form.cart').submit();
     });
