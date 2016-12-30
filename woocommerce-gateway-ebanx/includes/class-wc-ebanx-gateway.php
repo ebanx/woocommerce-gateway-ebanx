@@ -8,9 +8,14 @@ if (!defined('ABSPATH')) {
 
 abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
 {
+    protected static $ebanx_params = array();
+    protected static $initializedGateways = 0;
+    protected static $totalGateways = 0;
 
     public function __construct()
     {
+        self::$totalGateways++;
+
         $this->userId = get_current_user_id();
 
         $this->configs = new WC_EBANX_Global_Gateway();
@@ -77,6 +82,16 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
                 'woocommerce_ebanx_paying_via_ebanx_style',
                 plugins_url('assets/css/paying-via-ebanx.css', WC_EBANX::DIR)
             );
+
+            static::$ebanx_params = array(
+                'key'  => $this->public_key,
+                'mode' => $this->is_test_mode ? 'test' : 'production',
+            );
+
+            self::$initializedGateways++;
+
+            if(self::$initializedGateways === self::$totalGateways)
+                wp_localize_script('woocommerce_ebanx', 'wc_ebanx_params', apply_filters('wc_ebanx_params', static::$ebanx_params));
         }
     }
     public function admin_options()
