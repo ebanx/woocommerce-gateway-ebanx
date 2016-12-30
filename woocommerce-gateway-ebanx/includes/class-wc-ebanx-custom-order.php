@@ -1,14 +1,17 @@
 <?php
 
 add_action('add_meta_boxes', function() {
-    global $woocommerce, $order, $post;
-
     add_meta_box('mv_other_fields', __('My Field','woocommerce'), function () {
         global $woocommerce, $order, $post;
 
+        if (!empty(get_post_meta($post->ID, '_ebanx_payment_hash', true)))
+        {
+            return;
+        }
+
         $meta_field_data = get_post_meta($post->ID, '_my_choice', true); //? get_post_meta($post->ID, '_my_choice', true) : '';
 
-        $gateways = WC()->payment_gateways->get_available_payment_gateways();
+        $gateways = WC()->payment_gateways->payment_gateways;
 
         $gateways = array_filter($gateways, function($gateway) {
             return preg_match('/(ebanx)/', $gateway->id);
@@ -25,7 +28,6 @@ add_action('add_meta_boxes', function() {
 
         echo '<input type="hidden" name="ebanx-payment-nonce" value="' . wp_create_nonce() . '">';
         echo "<select name='ebanx-payment-type'>{$options}</select>";
-        //$meta_field_data
     }, 'shop_order', 'side', 'core');
 });
 
