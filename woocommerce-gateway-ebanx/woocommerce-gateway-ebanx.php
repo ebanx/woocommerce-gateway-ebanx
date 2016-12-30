@@ -1,6 +1,6 @@
 <?php
 /**
- * Plugin Name: WooCommerce EBANX
+ * Plugin Name: WooCommerce EBANX Gateway
  * Plugin URI: http://github.com/ebanx/woocommerce
  * Description: Gateway de pagamento ebanx.com para WooCommerce.
  * Author: EBANX
@@ -188,14 +188,14 @@ if (!class_exists('WC_EBANX')) {
         public static function get_environment_warning()
         {
             if (version_compare(phpversion(), WC_EBANX_MIN_PHP_VER, '<')) {
-                $message = __('WooCommerce EBANX - The minimum PHP version required for this plugin is %1$s. You are running %2$s.', 'woocommerce-gateway-ebanx', 'woocommerce-gateway-ebanx');
+                $message = __('WooCommerce EBANX Gateway - The minimum PHP version required for this plugin is %1$s. You are running %2$s.', 'woocommerce-gateway-ebanx', 'woocommerce-gateway-ebanx');
                 return sprintf($message, WC_EBANX_MIN_PHP_VER, phpversion());
             }
             if (!defined('WC_VERSION')) {
-                return __('WooCommerce EBANX requires WooCommerce to be activated to work.', 'woocommerce-gateway-ebanx');
+                return __('WooCommerce EBANX Gateway requires WooCommerce to be activated to work.', 'woocommerce-gateway-ebanx');
             }
             if (version_compare(WC_VERSION, WC_EBANX_MIN_WC_VER, '<')) {
-                $message = __('WooCommerce EBANX - The minimum WooCommerce version required for this plugin is %1$s. You are running %2$s.', 'woocommerce-gateway-ebanx', 'woocommerce-gateway-ebanx');
+                $message = __('WooCommerce EBANX Gateway - The minimum WooCommerce version required for this plugin is %1$s. You are running %2$s.', 'woocommerce-gateway-ebanx', 'woocommerce-gateway-ebanx');
                 return sprintf($message, WC_EBANX_MIN_WC_VER, WC_VERSION);
             }
             return false;
