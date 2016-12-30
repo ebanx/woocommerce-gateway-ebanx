@@ -1,12 +1,12 @@
 <?php
 /**
  * Plugin Name: WooCommerce EBANX Gateway
- * Plugin URI: http://github.com/ebanx/woocommerce
- * Description: Gateway de pagamento ebanx.com para WooCommerce.
+ * Plugin URI: https://www.ebanx.com/business/en/developers/integrations/extensions-and-plugins/woocommerce-plugin
+ * Description: Accept credit card and cash payments in Brazil and Latin America using EBANX.
  * Author: EBANX
- * Author URI: https://ebanx.com/
+ * Author URI: https://www.ebanx.com/business/
  * Version: 1.0.0
- * License: GPLv2 or later
+ * License: MIT
  * Text Domain: woocommerce-ebanx
  * Domain Path: /languages
  *
