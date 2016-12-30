@@ -4,7 +4,9 @@ add_action('add_meta_boxes', function() {
     add_meta_box('mv_other_fields', __('Process Payment via EBANX','woocommerce'), function () {
         global $woocommerce, $order, $post;
 
-        if (!empty(get_post_meta($post->ID, '_ebanx_payment_hash', true)))
+        $order = wc_get_order($post->ID);
+
+        if (!empty(get_post_meta($post->ID, '_ebanx_payment_hash', true)) || wc_get_payment_gateway_by_order($order))
         {
             return;
         }
