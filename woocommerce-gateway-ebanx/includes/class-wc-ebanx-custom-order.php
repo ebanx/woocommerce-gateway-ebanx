@@ -1,7 +1,7 @@
 <?php
 
 add_action('add_meta_boxes', function() {
-    add_meta_box('mv_other_fields', __('My Field','woocommerce'), function () {
+    add_meta_box('mv_other_fields', __('Process Payment via EBANX','woocommerce'), function () {
         global $woocommerce, $order, $post;
 
         if (!empty(get_post_meta($post->ID, '_ebanx_payment_hash', true)))
@@ -17,7 +17,7 @@ add_action('add_meta_boxes', function() {
             return preg_match('/(ebanx)/', $gateway->id);
         });
 
-        $options = "<option value=''>EBANX Gateway</option>";
+        $options = "<option value=''>Select a Payment Method</option>";
 
         foreach ($gateways as $gateway)
         {
