@@ -410,7 +410,7 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
         $card_brand_name = get_post_meta($order->id, '_cards_brand_name');
         $order_amount = get_post_meta($order->id, '_order_total')[0];
         $instalments_number = get_post_meta($order->id, '_instalments_number')[0];
-        $instalments_amount = round($order_amount / $instalments_number);
+        $instalments_amount = round($order_amount / $instalments_number, 2);
         $masked_card = get_post_meta($order->id, '_masked_card_number')[0];
         $customer_email = get_post_meta($order->id, '_billing_email', true);
 
