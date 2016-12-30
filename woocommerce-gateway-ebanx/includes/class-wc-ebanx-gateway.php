@@ -15,11 +15,11 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
 
         $this->configs = new WC_EBANX_Global_Gateway();
 
-        $this->is_test_mode = $this->configs->settings['test_mode_enabled'] === 'yes';
+        $this->is_sandbox_mode = $this->configs->settings['sandbox_mode_enabled'] === 'yes';
 
-        $this->private_key = $this->is_test_mode ? $this->configs->settings['sandbox_private_key'] : $this->configs->settings['production_private_key'];
+        $this->private_key = $this->is_sandbox_mode ? $this->configs->settings['sandbox_private_key'] : $this->configs->settings['live_private_key'];
 
-        $this->public_key = $this->is_test_mode ? $this->configs->settings['sandbox_public_key'] : $this->configs->settings['production_public_key'];
+        $this->public_key = $this->is_sandbox_mode ? $this->configs->settings['sandbox_public_key'] : $this->configs->settings['live_public_key'];
 
         if ($this->configs->settings['debug_enabled'] === 'yes') {
             $this->log = new WC_Logger();
@@ -73,6 +73,13 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
     {
         if (is_checkout()) {
             wp_enqueue_script('woocommerce_ebanx_checkout_fields', plugins_url('assets/js/checkout-fields.js', WC_EBANX::DIR));
+        }
+        if (
+            is_wc_endpoint_url( 'order-pay' ) ||
+            is_wc_endpoint_url( 'order-received' ) ||
+            is_wc_endpoint_url( 'view-order' ) ||
+            is_checkout()
+        ) {
             wp_enqueue_style(
                 'woocommerce_ebanx_paying_via_ebanx_style',
                 plugins_url('assets/css/paying-via-ebanx.css', WC_EBANX::DIR)
@@ -110,7 +117,7 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
 
         $config = [
             'integrationKey' => $this->private_key,
-            'testMode'       => $this->is_test_mode,
+            'testMode'       => $this->is_sandbox_mode,
         ];
 
         \Ebanx\Config::set($config);
@@ -145,8 +152,8 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
                 'user_value_3'          => 'version='.WC_EBANX::VERSION,
                 'country'               => $order->get_address()['country'],
                 'currency_code'         => WC_EBANX_Gateway_Utils::CURRENCY_CODE_USD, // TODO: Dynamic
-                "name"                  => $order->get_address()['first_name'] . " " . $order->get_address()['last_name'],
-                "email"                 => $order->get_address()['email'],
+                'name'                  => $order->get_address()['first_name'] . " " . $order->get_address()['last_name'],
+                'email'                 => $order->get_address()['email'],
                 "phone_number"          => $order->get_address()['phone'],
                 'amount_total'          => $order->get_total(),
                 'order_number'          => $order->id,
@@ -164,10 +171,11 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
             )
         );
 
-        if (!empty($this->configs->settings['due_date_days']))
+        if (!empty($this->configs->settings['due_date_days']) && in_array($this->api_name, array_keys(WC_EBANX_Gateway_Utils::$CASH_PAYMENTS_TIMEZONES)))
         {
             $date = new DateTime();
 
+            $date->setTimezone(new DateTimeZone(WC_EBANX_Gateway_Utils::$CASH_PAYMENTS_TIMEZONES[$this->api_name]));
             $date->modify("+{$this->configs->settings['due_date_days']} day");
 
             $data['payment']['due_date'] = $date->format('d/m/Y');
@@ -197,7 +205,13 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
             $_POST['ebanx_billing_birth_date'] = $_POST['ebanx_billing_chile_birth_date'];
         }
 
-        $addresses = WC_Ebanx_Gateway_Utils::split_street($_POST['billing_address_1'] . ' ' . $_POST['billing_address_2']);
+        $addresses = $_POST['billing_address_1'];
+
+        if (!empty($_POST['billing_address_2'])) {
+            $addresses .= " $_POST[billing_address_2]";
+        }
+
+        $addresses = WC_Ebanx_Gateway_Utils::split_street($addresses);
 
         $street_number = empty($addresses['houseNumber']) ? 'S/N' : trim($addresses['houseNumber'] . ' ' . $addresses['additionToAddress2']);
 
@@ -247,7 +261,7 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
 
                 $config = [
                     'integrationKey' => $this->private_key,
-                    'testMode'       => $this->is_test_mode,
+                    'testMode'       => $this->is_sandbox_mode,
                 ];
 
                 \Ebanx\Config::set($config);
@@ -265,6 +279,8 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
                 'redirect' => $this->get_return_url($order),
             ));
         } catch (Exception $e) {
+
+            $this->language = $this->getTransactionAddress('country');
 
             $code = $e->getMessage();
 
@@ -301,6 +317,7 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
                     'BP-DR-51'                   => 'Insira o nome que está impresso no cartão de crédito.',
                     'BP-DR-52'                   => 'O nome do cartão deve ter até 50 caracteres.',
                     'BP-DR-54'                   => 'Digite o CVV que está impresso no cartão.',
+                    'BP-DR-55'                   => 'Digite o CVV corretamente.',
                     'BP-DR-56'                   => 'Digite a data de validade do seu cartão.',
                     'BP-DR-57'                   => 'A sua data deve estar no formato mes/ano, por exemplo, 12/2020.',
                     'BP-DR-59'                   => 'A data é inferior a permitida.',
@@ -314,6 +331,7 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
                     'BP-DR-89'                   => 'O número de parcelas não é permitida, entre em contato com o site.',
                     'BP-DR-95'                   => 'O nome impresso no cartão não é válido, número não são permitidos.',
                     'BP-DR-97'                   => 'Compras parceladas não são permitidas em cartões pré pagos.',
+                    'BP-DR-98'                   => 'O país relacionado ao email digitado não corresponde ao país do método de pagamento.',
                     'BP-DR-100'                  => 'Compras parceladas não são permitidas em cartões de débito.',
                     'MISSING-CARD-PARAMS'        => 'Verifique se os dados do cartão de crédito estão corretos.',
                     'MISSING-DEVICE-FINGERPRINT' => 'Algo aconteceu e não conseguimos concluir a sua compra. Por favor tente novamente.',
@@ -347,6 +365,7 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
                     'BP-DR-51'                   => 'Por favor, introduce el nombre como está en tu tarjeta de crédito.',
                     'BP-DR-52'                   => 'El nombre en la tarjeta no debe superar los 50 caracteres.',
                     'BP-DR-54'                   => 'Por favor, introduce el CVV impreso en la tarjeta.',
+                    'BP-DR-55'                   => 'Por favor, introduce el CVV correctamente.',
                     'BP-DR-56'                   => 'Por favor, introduce la fecha de vencimiento de tu tarjeta.',
                     'BP-DR-57'                   => 'Por favor, escribe la fecha en el formato MM/AAAA',
                     'BP-DR-59'                   => 'Por favor, introduce una fecha válida.',
@@ -360,6 +379,7 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
                     'BP-DR-89'                   => 'El número de meses sin intereses seleccionado es inválido. Entra en contacto con el sitio web.',
                     'BP-DR-95'                   => 'El nombre escrito en la tarjeta no es válido. Números no son permitidos.',
                     'BP-DR-97'                   => 'Disculpa, la opción de pago "meses sin intereses" no es permitida para tarjetas pre-pago.',
+                    'BP-DR-98'                   => 'O país relacionada o correo electrónico digitados no corresponde el método del pago.',
                     'BP-DR-100'                  => 'Disculpa, la opción de pago "meses sin intereses" no es permitida para tarjetas de débito.',
                     'MISSING-CARD-PARAMS'        => 'Por favor, verifica que la información de la tarjeta esté correcta.',
                     'MISSING-DEVICE-FINGERPRINT' => 'Hemos encontrado un error y no fue posible concluir la compra. Por favor intenta de nuevo.',
@@ -373,7 +393,7 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
                 ),
             );
 
-            $message = !empty($errors[$language][$code]) ? $errors[$language][$code] : $errors[$language]['GENERAL'];
+            $message = !empty($errors[$language][$code]) ? $errors[$language][$code] : $errors[$language]['GENERAL'] . " ({$code})";
 
             WC()->session->set('refresh_totals', true);
             WC_Ebanx::log('EBANX Error: $message');
@@ -381,6 +401,59 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
             wc_add_notice($message, 'error');
             return;
         }
+    }
+
+    public static function thankyou_page($order, $payment_method)
+    {
+        $customer_billing_country = get_post_meta($order->id, '_billing_country');
+        $customer_country = strtolower($customer_billing_country[0]);
+        $card_brand_name = get_post_meta($order->id, '_cards_brand_name');
+        $order_amount = get_post_meta($order->id, '_order_total')[0];
+        $instalments_number = get_post_meta($order->id, '_instalments_number')[0];
+        $instalments_amount = round($order_amount / $instalments_number);
+        $masked_card = get_post_meta($order->id, '_masked_card_number')[0];
+
+        $languages = array(
+            'mx' => 'es',
+            'cl' => 'es',
+            'pe' => 'es',
+            'co' => 'es',
+            'br' => 'pt-br',
+        );
+
+        $language = $languages[$customer_country];
+
+        $messages = array(
+            'pt-br' => array(
+                'payment_approved' => 'Seu pagamento foi aprovado.',
+                'important_data' => 'Confira abaixo alguns dados importantes sobre a sua compra.',
+                'total_amount' => 'Valor total:',
+                'instalments' => 'parcelas de',
+                'card_last_numbers' => sprintf('Pago com Cartão %s:', ucwords($card_brand_name[0])),
+                'thanks_message' => 'Obrigado por ter comprado conosco.',
+            ),
+            'es' => array(
+                'payment_approved' => 'Pago aprobado con éxito.',
+                'important_data' => 'Verifique algunos datos importantes abajo en su compra.',
+                'total_amount' => 'Valor total:',
+                'instalments' => 'parcelas de',
+                'card_last_numbers' => sprintf('Pago con tarjeta %s:', ucwords($card_brand_name[0])),
+                'thanks_message' => 'Gracias por haber comprado con nosotros.',
+            )
+        );
+
+        wc_get_template(
+            $payment_method !== 'ebanx-credit-card' ? 'payment-completed.php' : 'credit-card/payment-completed.php',
+            array(
+                'order_amount' => $order_amount,
+                'instalments_number' => $instalments_number,
+                'instalments_amount' => $instalments_amount,
+                'masked_card' => $masked_card,
+                't' => $messages[$language],
+            ),
+            'woocommerce/ebanx/',
+            WC_EBANX::get_templates_path()
+        );
     }
 
     protected function dispatch($data)
@@ -457,7 +530,7 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
     {
         $config = [
             'integrationKey' => $this->private_key,
-            'testMode'       => $this->is_test_mode,
+            'testMode'       => $this->is_sandbox_mode,
         ];
 
         \Ebanx\Config::set($config);

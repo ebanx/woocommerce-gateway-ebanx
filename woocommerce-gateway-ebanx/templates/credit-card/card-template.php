@@ -25,7 +25,7 @@
     <?php if ($place_order_enabled) : ?>
         <section class="ebanx-form-row">
             <label for="ebanx-save-credit-card">
-                <input id="ebanx-save-credit-card" name="ebanx-save-credit-card" class="input-text wc-credit-card-form-save" type="checkbox" style="width: auto; display: inline-block;" value="yes" checked />
+                <input id="ebanx-save-credit-card" name="ebanx-save-credit-card" class="wc-credit-card-form-save" type="checkbox" style="width: auto; display: inline-block;" value="yes" checked />
                 <?php echo $t['save_card']; ?>
             </label>
         </section>

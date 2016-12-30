@@ -30,7 +30,7 @@ class WC_EBANX_Debit_Card_Gateway extends WC_EBANX_Gateway
 
             $ebanx_params = array(
                 'key'  => $this->public_key,
-                'mode' => $this->is_test_mode ? 'test' : 'production',
+                'mode' => $this->is_sandbox_mode ? 'test' : 'production',
             );
 
             wp_localize_script('woocommerce_ebanx', 'wc_ebanx_params', apply_filters('wc_ebanx_params', $ebanx_params));
@@ -59,10 +59,8 @@ class WC_EBANX_Debit_Card_Gateway extends WC_EBANX_Gateway
         );
     }
 
-    public static function thankyou_page($order_id)
+    public static function thankyou_page($order)
     {
-        $order = new WC_Order($order_id);
-
         $data = array(
             'card_brand'  => get_post_meta($order->id, 'Card\'s Brand Name', true)
         );

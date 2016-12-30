@@ -20,7 +20,7 @@ $i = 0;
             <div class="ebanx-one-click-tooltip">
                 <button class="ebanx-one-click-close-button"></button>
 
-                <h3><?php echo $t['title'] ?></h3>
+                <h3><?php _e('Choose Card', 'woocommerce-gateway-ebanx') ?></h3>
                 <div class="ebanx-one-click-cards">
                     <?php foreach ($cards as $key => $card): ?>
                         <label class="ebanx-one-click-card">
@@ -32,7 +32,7 @@ $i = 0;
                 </div>
 
                 <div class="ebanx-one-click-cvv">
-                    <label><?php echo $t['cvv'] ?> *</label>
+                    <label><?php _e('Card Code', 'woocommerce-gateway-ebanx') ?></label>
                     <input type="text" maxlength="4" minlength="3" class="ebanx-one-click-cvv-input" id="ebanx-one-click-cvv-input" name="ebanx_one_click_cvv" placeholder="CVV">
                 </div>
 
@@ -40,7 +40,7 @@ $i = 0;
                     <?php include 'installments.php';?>
                 </div>
 
-                <button class="single_add_to_cart_button ebanx-one-click-pay button" type="button"><?php echo $t['pay'] ?></button>
+                <button class="single_add_to_cart_button ebanx-one-click-pay button" data-processing-label="<?php _e('Processing...', 'woocommerce-gateway-ebanx') ?>" type="button"><?php _e('Pay Now', 'woocommerce-gateway-ebanx') ?></button>
             </div>
         </div>
     </div>

@@ -25,7 +25,7 @@ jQuery( function($) {
 					this.onCCFormChange
 				)
 				.on(
-					'ebanxError',
+					'ebanxErrorCreditCard',
 					this.onError
 				);
 		},
@@ -60,6 +60,11 @@ jQuery( function($) {
       wc_ebanx_form.removeErrors();
 
 			$('#ebanx-credit-cart-form').prepend('<p class="woocommerce-error">' + (res.response.error.err.message || 'Some error happened. Please, verify the data of your credit card and try again.') + '</p>');
+
+			$('body, html').animate({
+				scrollTop: $('#ebanx-credit-cart-form').find('.woocommerce-error').offset().top - 20
+			});
+
 			wc_ebanx_form.unblock();
 		},
 
@@ -92,7 +97,7 @@ jQuery( function($) {
 					"card_number": parseInt(card.replace(/ /g,'')),
 					"card_name": card_name,
 					"card_due_date": (parseInt( expires['month'] ) || 0) + '/' + (parseInt( expires['year'] ) || 0),
-					"card_cvv": parseInt(cvv),
+					"card_cvv": cvv,
           "instalments": instalments
 				};
 
@@ -144,7 +149,7 @@ jQuery( function($) {
 
 		onEBANXReponse: function (response) {
 			if ( response.data && (response.data.status == 'ERROR' || !response.data.token)) {
-				$( document ).trigger('ebanxError', { response: response } );
+				$( document ).trigger('ebanxErrorCreditCard', { response: response } );
 
         wc_ebanx_form.removeHiddenInputs();
 			} else {

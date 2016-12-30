@@ -35,7 +35,7 @@ class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
 
         \Ebanx\Config::set([
             'integrationKey' => $this->private_key,
-            'testMode'       => $this->is_test_mode,
+            'testMode'       => $this->is_sandbox_mode,
         ]);
 
         $request = \Ebanx\Ebanx::doCapture(['hash' => get_post_meta($order->id, '_ebanx_payment_hash')]);
@@ -65,7 +65,7 @@ class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
 
             $ebanx_params = array(
                 'key'  => $this->public_key,
-                'mode' => $this->is_test_mode ? 'test' : 'production',
+                'mode' => $this->is_sandbox_mode ? 'test' : 'production',
             );
 
             // If we're on the pay page we need to pass ebanx.js the address of the order.
@@ -173,10 +173,8 @@ class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
         );
     }
 
-    public static function thankyou_page($order_id)
+    public static function thankyou_page($order)
     {
-        $order = new WC_Order($order_id);
-
         $data = array(
             'instalments' => get_post_meta($order->id, '_instalments_number', true),
             'card_brand'  => get_post_meta($order->id, '_cards_brand_name', true),
@@ -246,6 +244,7 @@ class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
 
         update_post_meta($order->id, '_cards_brand_name', $request->payment->payment_type_code);
         update_post_meta($order->id, '_instalments_number', $request->payment->instalments);
+        update_post_meta($order->id, '_masked_card_number', $_POST['ebanx_masked_card_number']);
     }
 
     protected function save_user_meta_fields($order)
