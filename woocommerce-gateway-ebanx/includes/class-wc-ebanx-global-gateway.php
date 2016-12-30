@@ -58,15 +58,15 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway
                 'title'       => __('Sandbox Public Integration Key', 'woocommerce-gateway-ebanx'),
                 'type'        => 'text',
             ),
-            'production_private_key'    => array(
+            'live_private_key'    => array(
                 'title'       => __('Live Integration Key', 'woocommerce-gateway-ebanx'),
                 'type'        => 'text',
             ),
-            'production_public_key'     => array(
+            'live_public_key'     => array(
                 'title'       => __('Live Public Integration Key', 'woocommerce-gateway-ebanx'),
                 'type'        => 'text',
             ),
-            'test_mode_enabled'         => array(
+            'sandbox_mode_enabled'         => array(
                 'title'       => __('EBANX Sandbox', 'woocommerce-gateway-ebanx'),
                 'type'        => 'checkbox',
                 'label'       => __('Enable Sandbox Mode', 'woocommerce-gateway-ebanx'),
@@ -96,6 +96,12 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway
                     'ebanx-tef'            => 'Online Banking (TEF)',
                     'ebanx-account'        => 'EBANX Wallet',
                 ),
+                'default'     => array(
+                    'ebanx-credit-card',
+                    'ebanx-banking-ticket',
+                    'ebanx-tef',
+                    'ebanx-account',
+                ),
             ),
             'mexico_payment_methods'    => array(
                 'title'       => __('Mexico', 'woocommerce-gateway-ebanx'),
@@ -106,14 +112,23 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway
                     'ebanx-debit-card'  => 'Debit Card',
                     'ebanx-oxxo'        => 'OXXO',
                 ),
+                'default'     => array(
+                    'ebanx-credit-card',
+                    'ebanx-debit-card',
+                    'ebanx-oxxo',
+                ),
             ),
             'chile_payment_methods'     => array(
                 'title'       => __('Chile', 'woocommerce-gateway-ebanx'),
                 'type'        => 'multiselect',
                 'class'       => 'ebanx-select',
                 'options'     => array(
-                    'ebanx-sencillito'    => 'Sencillito',
-                    'ebanx-servipag' => 'Servipag',
+                    'ebanx-sencillito' => 'Sencillito',
+                    'ebanx-servipag'   => 'Servipag',
+                ),
+                'default'     => array(
+                    'ebanx-sencillito',
+                    'ebanx-servipag',
                 ),
             ),
             'colombia_payment_methods'  => array(
@@ -123,6 +138,9 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway
                 'options'     => array(
                     'ebanx-eft' => 'PSE - Pago Seguros en Línea (EFT)',
                 ),
+                'default'     => array(
+                    'ebanx-eft',
+                ),
             ),
             'peru_payment_methods'      => array(
                 'title'       => __('Peru', 'woocommerce-gateway-ebanx'),
@@ -131,6 +149,10 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway
                 'options'     => array(
                     'ebanx-safetypay'    => 'SafetyPay',
                     'ebanx-pagoefectivo' => 'PagoEfectivo',
+                ),
+                'default'     => array(
+                    'ebanx-safetypay',
+                    'ebanx-pagoefectivo',
                 ),
             ),
             'advanced_options_title'     => array(
@@ -144,17 +166,18 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway
             'save_card_data'        => array(
                 'title' => __('Save Card Data', 'woocommerce-gateway-ebanx'),
                 'type'  => 'checkbox',
+                'default' => 'yes',
                 'label' => __('Enable saving card data', 'woocommerce-gateway-ebanx'),
                 'description' => __('Allow your customer to save credit card and debit card data for future purchases.', 'woocommerce-gateway-ebanx'),
-                'desc_tip' => true
+                'desc_tip' => true,
             ),
             'one_click' => array(
                 'type'        => 'checkbox',
                 'title'       => __('One-Click Payment', 'woocommerce-gateway-ebanx'),
                 'label'       => __('Enable one-click-payment', 'woocommerce-gateway-ebanx'),
-                'default'     => 'no',
+                'default'     => 'yes',
                 'description' => __('Allow your customer to complete payments in one-click using credit cards saved.', 'woocommerce-gateway-ebanx'),
-                'desc_tip' => true
+                'desc_tip' => true,
             ),
             'capture_enabled' => array(
                 'type'    => 'checkbox',
@@ -167,7 +190,7 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway
             'credit_card_instalments'   => array(
                 'title'       => __('Maximum nº of Installments', 'woocommerce-gateway-ebanx'),
                 'type'        => 'select',
-                'default'     => '12',
+                'default'     => '1',
                 'class'       => 'ebanx-select',
                 'options'     => array(
                     '1'  => '1',

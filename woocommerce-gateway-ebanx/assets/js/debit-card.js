@@ -15,7 +15,7 @@ jQuery( function($) {
 
 			$(document)
 				.on(
-					'ebanxError',
+					'ebanxErrorDebitCard',
 					this.onError
 				);
 		},
@@ -45,7 +45,12 @@ jQuery( function($) {
 		onError: function (e, res) {
       		wc_ebanx_form.removeErrors();
 
-			$('#ebanx-debit-cart-form').prepend('<p class="woocommerce-error">' + res.response.error.message + '</p>');
+			$('#ebanx-debit-cart-form').prepend('<p class="woocommerce-error">' + (res.response.error.err.message || 'Some error happened. Please, verify the data of your debit card and try again.') + '</p>');
+
+			$('body, html').animate({
+				scrollTop: $('#ebanx-debit-cart-form').find('.woocommerce-error').offset().top - 20
+			});
+
 			wc_ebanx_form.unblock();
 		},
 
@@ -90,7 +95,7 @@ jQuery( function($) {
 
 		onEBANXReponse: function (response) {
 			if ( response.data && (response.data.status == 'ERROR' || !response.data.token)) {
-				$( document ).trigger('ebanxError', { response: response } );
+				$( document ).trigger('ebanxErrorDebitCard', { response: response } );
 
         		wc_ebanx_form.removeHiddenInputs();
 			} else {

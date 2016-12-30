@@ -50,19 +50,16 @@ class WC_EBANX_Servipag_Gateway extends WC_EBANX_Gateway
         );
     }
 
-    public static function thankyou_page($order_id)
+    public static function thankyou_page($order)
     {
-        $order = wc_get_order($order_id);
-        $data  = get_post_meta($order_id, '_wc_ebanx_transaction_data', true);
+        $data  = get_post_meta($order, '_wc_ebanx_transaction_data', true);
 
-        if (isset($data['installments']) && in_array($order->get_status(), array('processing', 'on-hold'), true)) {
-            wc_get_template(
-                'servipag/payment-instructions.php',
-                array(),
-                'woocommerce/ebanx/',
-                WC_EBANX::get_templates_path()
-            );
-        }
+        wc_get_template(
+            'servipag/payment-instructions.php',
+            array(),
+            'woocommerce/ebanx/',
+            WC_EBANX::get_templates_path()
+        );
     }
 
     protected function request_data($order)

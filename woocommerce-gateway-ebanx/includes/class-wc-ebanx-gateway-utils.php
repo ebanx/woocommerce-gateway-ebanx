@@ -37,6 +37,14 @@ abstract class WC_EBANX_Gateway_Utils
         self::COUNTRY_MEXICO => self::COUNTRY_MEXICO,
     );
 
+    public static $CASH_PAYMENTS_TIMEZONES = array(
+      'boleto' => 'America/Sao_Paulo',
+      'oxxo' => 'America/Mexico_City',
+      'pagoefectivo' => 'America/Lima',
+      'sencillito' => 'America/Santiago',
+      'safetypay-cash' => 'America/Lima'
+    );
+
     public static $BANKS_TEF_ALLOWED = array(
         self::COUNTRY_BRAZIL => array('bancodobrasil', 'itau', 'bradesco', 'banrisul'),
     );

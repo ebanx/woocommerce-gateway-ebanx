@@ -46,7 +46,6 @@ class WC_EBANX_Banking_Ticket_Gateway extends WC_EBANX_Gateway
     {
         $data                                 = parent::request_data($order);
         $data['payment']['payment_type_code'] = $this->api_name;
-        // TODO: needs due_date ??
         return $data;
     }
 
@@ -59,7 +58,8 @@ class WC_EBANX_Banking_Ticket_Gateway extends WC_EBANX_Gateway
         update_post_meta($order->id, '_boleto_barcode', $request->payment->boleto_barcode);
     }
 
-    public static function barcode_anti_fraud($code) {
+    public static function barcode_anti_fraud($code)
+    {
         if (strlen($code) != 47) return '';
         return array(
             'boleto1' => '<span>' . substr($code, 0,  5) . '</span>',
@@ -73,33 +73,33 @@ class WC_EBANX_Banking_Ticket_Gateway extends WC_EBANX_Gateway
         );
     }
 
-    public static function thankyou_page($order_id)
+    public static function thankyou_page($order)
     {
-        $order = new WC_Order($order_id);
-        if (in_array($order->get_status(), array('pending', 'on-hold'))) {
-            $boleto_url = get_post_meta($order->id, '_boleto_url', true);
-            $url_pdf = $boleto_url."&format=pdf";
-            $url_print = $boleto_url."&format=print";
-            $barcode = get_post_meta($order->id, '_boleto_barcode', true);
+        $boleto_url = get_post_meta($order->id, '_boleto_url', true);
+        $boleto_basic = $boleto_url . "&format=basic";
+        $boleto_pdf = $boleto_url."&format=pdf";
+        $boleto_print = $boleto_url."&format=print";
+        $barcode = get_post_meta($order->id, '_boleto_barcode', true);
+        $customer_email = get_post_meta($order->id, '_ebanx_payment_customer_email', true);
 
-            $barcode_anti_fraud = WC_EBANX_Banking_Ticket_Gateway::barcode_anti_fraud($barcode);
+        $barcode_anti_fraud = WC_EBANX_Banking_Ticket_Gateway::barcode_anti_fraud($barcode);
 
-            $data = array(
-                'due_date'        => get_post_meta($order->id, '_payment_due_date', true),
-                'url'             => $boleto_url,
-                'barcode'         => $barcode,
-                'url_pdf'         => $url_pdf,
-                'url_print'       => $url_print,
-                'barcode_fraud'   => $barcode_anti_fraud,
-            );
+        $data = array(
+            'due_date'        => get_post_meta($order->id, '_payment_due_date', true),
+            'barcode'         => $barcode,
+            'barcode_fraud'   => $barcode_anti_fraud,
+            'url_basic'       => $boleto_basic,
+            'url_pdf'         => $boleto_pdf,
+            'url_print'       => $boleto_print,
+            'customer_email'  => $customer_email,
+        );
 
-            wc_get_template(
-                'banking-ticket/payment-instructions.php',
-                $data,
-                'woocommerce/ebanx/',
-                WC_EBANX::get_templates_path()
-            );
-        }
+        wc_get_template(
+            'banking-ticket/payment-instructions.php',
+            $data,
+            'woocommerce/ebanx/',
+            WC_EBANX::get_templates_path()
+        );
 
         wp_enqueue_script('woocommerce_ebanx_clipboard', plugins_url('assets/js/vendor/clipboard.min.js', WC_EBANX::DIR));
         wp_enqueue_script('woocommerce_ebanx_order_received', plugins_url('assets/js/order-received.js', WC_EBANX::DIR));

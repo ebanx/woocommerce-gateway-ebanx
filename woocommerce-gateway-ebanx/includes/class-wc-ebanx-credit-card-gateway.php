@@ -35,7 +35,7 @@ class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
 
         \Ebanx\Config::set([
             'integrationKey' => $this->private_key,
-            'testMode'       => $this->is_test_mode,
+            'testMode'       => $this->is_sandbox_mode,
         ]);
 
         $request = \Ebanx\Ebanx::doCapture(['hash' => get_post_meta($order->id, '_ebanx_payment_hash')]);
@@ -166,10 +166,8 @@ class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
         );
     }
 
-    public static function thankyou_page($order_id)
+    public static function thankyou_page($order)
     {
-        $order = new WC_Order($order_id);
-
         $data = array(
             'instalments' => get_post_meta($order->id, '_instalments_number', true),
             'card_brand'  => get_post_meta($order->id, '_cards_brand_name', true),

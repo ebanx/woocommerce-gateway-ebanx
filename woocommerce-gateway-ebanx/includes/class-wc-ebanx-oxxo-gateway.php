@@ -52,19 +52,34 @@ class WC_EBANX_Oxxo_Gateway extends WC_EBANX_Gateway
         );
     }
 
-    public static function thankyou_page($order_id)
+    protected function save_order_meta_fields($order, $request)
     {
-        $order = wc_get_order($order_id);
-        $data  = get_post_meta($order_id, '_wc_ebanx_transaction_data', true);
+        parent::save_order_meta_fields($order, $request);
 
-        if (isset($data['installments']) && in_array($order->get_status(), array('processing', 'on-hold'), true)) {
-            wc_get_template(
-                'oxxo/payment-instructions.php',
-                array(),
-                'woocommerce/ebanx/',
-                WC_EBANX::get_templates_path()
-            );
-        }
+        update_post_meta($order->id, '_oxxo_url', $request->payment->oxxo_url);
+    }
+
+    public static function thankyou_page($order)
+    {
+        $oxxo_url = get_post_meta($order->id, '_oxxo_url', true);
+        $oxxo_basic = $oxxo_url . "&format=basic";
+        $oxxo_pdf = $oxxo_url . "&format=pdf";
+        $oxxo_print = $oxxo_url . "&format=print";
+        $customer_email = get_post_meta($order->id, '_ebanx_payment_customer_email', true);
+
+        $data = array(
+            'url_basic'      => $oxxo_basic,
+            'url_pdf'        => $oxxo_pdf,
+            'url_print'      => $oxxo_print,
+            'customer_email' => $customer_email
+        );
+
+        wc_get_template(
+            'oxxo/payment-instructions.php',
+            $data,
+            'woocommerce/ebanx/',
+            WC_EBANX::get_templates_path()
+        );
     }
 
     protected function request_data($order)

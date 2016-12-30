@@ -62,7 +62,7 @@ add_action('save_post', function ($orderId) {
 
     $config = [
         'integrationKey' => $gateway->private_key,
-        'testMode'       => $gateway->is_test_mode,
+        'testMode'       => $gateway->is_sandbox_mode,
     ];
 
     \Ebanx\Config::set($config);
