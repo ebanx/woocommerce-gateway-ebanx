@@ -4,7 +4,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-class WC_EBANX_Servipag_Gateway extends WC_EBANX_Gateway
+class WC_EBANX_Servipag_Gateway extends WC_EBANX_Redirect_Gateway
 {
 
     public function __construct()
