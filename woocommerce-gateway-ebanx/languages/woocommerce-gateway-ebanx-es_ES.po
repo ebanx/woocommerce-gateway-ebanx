@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
-"POT-Creation-Date: 2016-12-30 14:07-0200\n"
-"PO-Revision-Date: 2016-12-30 14:24-0200\n"
+"POT-Creation-Date: 2016-12-30 16:02-0200\n"
+"PO-Revision-Date: 2016-12-30 16:03-0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: es\n"
@@ -10,8 +10,15 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 1.8.11\n"
-"X-Poedit-Basepath: .\n"
+"X-Poedit-Basepath: ..\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-KeywordsList: __;_e\n"
+"X-Poedit-SearchPath-0: .\n"
+"X-Poedit-SearchPathExcluded-0: assets\n"
+"X-Poedit-SearchPathExcluded-1: bin\n"
+"X-Poedit-SearchPathExcluded-2: travis\n"
+"X-Poedit-SearchPathExcluded-3: includes/ebanx-php\n"
 
 #: includes/admin/views/html-notice-currency-not-supported.php:15
 #, php-format
@@ -96,7 +103,7 @@ msgstr ""
 msgid "Birth Date"
 msgstr "Fecha de Nacimiento"
 
-#: includes/class-wc-ebanx-gateway.php:449
+#: includes/class-wc-ebanx-gateway.php:453
 msgid "EBANX: Transaction paid."
 msgstr ""
 
@@ -288,7 +295,7 @@ msgstr ""
 msgid "Sorry, invalid shipping method."
 msgstr ""
 
-#: includes/class-wc-ebanx-one-click.php:429
+#: includes/class-wc-ebanx-one-click.php:395
 msgid "Pay with one click"
 msgstr ""
 
@@ -369,7 +376,7 @@ msgstr ""
 #: templates/credit-card/card-template.php:16
 #: templates/debit-card/payment-form.php:21
 msgid "MM / YY"
-msgstr ""
+msgstr "MM / AA"
 
 #: templates/credit-card/card-template.php:20
 #: templates/credit-card/payment-form.php:33
@@ -391,7 +398,23 @@ msgstr "%1$dx de %2$s"
 
 #: templates/credit-card/one-click.php:18
 msgid "One-Click Purchase"
-msgstr ""
+msgstr "Un-clic para comprar"
+
+#: templates/credit-card/one-click.php:23
+msgid "Choose Card"
+msgstr "Elige la tarjeta"
+
+#: templates/credit-card/one-click.php:35
+msgid "Card Code"
+msgstr "Código de verificación"
+
+#: templates/credit-card/one-click.php:43
+msgid "Processing..."
+msgstr "Procesando..."
+
+#: templates/credit-card/one-click.php:43
+msgid "Pay Now"
+msgstr "Pagar"
 
 #: templates/eft/payment-instructions.php:17
 #: templates/servipag/payment-instructions.php:17
