@@ -373,7 +373,7 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
                 ),
             );
 
-            $message = !empty($errors[$language][$code]) ? $errors[$language][$code] : $errors[$language]['GENERAL'];
+            $message = !empty($errors[$language][$code]) ? $errors[$language][$code] : $errors[$language]['GENERAL'] . " ({$code})";
 
             WC()->session->set('refresh_totals', true);
             WC_Ebanx::log('EBANX Error: $message');
