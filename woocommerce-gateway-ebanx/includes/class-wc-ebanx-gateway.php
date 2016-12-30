@@ -403,6 +403,59 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
         }
     }
 
+    public static function thankyou_page($order, $payment_method)
+    {
+        $customer_billing_country = get_post_meta($order->id, '_billing_country');
+        $customer_country = strtolower($customer_billing_country[0]);
+        $card_brand_name = get_post_meta($order->id, '_cards_brand_name');
+        $order_amount = get_post_meta($order->id, '_order_total')[0];
+        $instalments_number = get_post_meta($order->id, '_instalments_number')[0];
+        $instalments_amount = round($order_amount / $instalments_number);
+        $masked_card = get_post_meta($order->id, '_masked_card_number')[0];
+
+        $languages = array(
+            'mx' => 'es',
+            'cl' => 'es',
+            'pe' => 'es',
+            'co' => 'es',
+            'br' => 'pt-br',
+        );
+
+        $language = $languages[$customer_country];
+
+        $messages = array(
+            'pt-br' => array(
+                'payment_approved' => 'Seu pagamento foi aprovado.',
+                'important_data' => 'Confira abaixo alguns dados importantes sobre a sua compra.',
+                'total_amount' => 'Valor total:',
+                'instalments' => 'parcelas de',
+                'card_last_numbers' => sprintf('Pago com Cartão %s:', ucwords($card_brand_name[0])),
+                'thanks_message' => 'Obrigado por ter comprado conosco.',
+            ),
+            'es' => array(
+                'payment_approved' => 'Pago aprobado con éxito.',
+                'important_data' => 'Verifique algunos datos importantes abajo en su compra.',
+                'total_amount' => 'Valor total:',
+                'instalments' => 'parcelas de',
+                'card_last_numbers' => sprintf('Pago con tarjeta %s:', ucwords($card_brand_name[0])),
+                'thanks_message' => 'Gracias por haber comprado con nosotros.',
+            )
+        );
+
+        wc_get_template(
+            $payment_method !== 'ebanx-credit-card' ? 'payment-completed.php' : 'credit-card/payment-completed.php',
+            array(
+                'order_amount' => $order_amount,
+                'instalments_number' => $instalments_number,
+                'instalments_amount' => $instalments_amount,
+                'masked_card' => $masked_card,
+                't' => $messages[$language],
+            ),
+            'woocommerce/ebanx/',
+            WC_EBANX::get_templates_path()
+        );
+    }
+
     protected function dispatch($data)
     {
         WC()->cart->empty_cart();

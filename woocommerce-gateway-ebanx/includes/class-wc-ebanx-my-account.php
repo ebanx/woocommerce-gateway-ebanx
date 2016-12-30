@@ -63,10 +63,17 @@ class WC_EBANX_My_Account
      * @param  object $order The order object
      * @return void
      */
-    public function order_details($order)
+    public static function order_details($order)
     {
-        if (!in_array($order->get_status(), array('pending', 'on-hold'))) {
+        if (!in_array($order->get_status(), array('pending', 'on-hold', 'completed'))) {
             return;
+        }
+
+        $payment_method = get_post_meta($order->id, '_payment_method')[0];
+
+
+        if ($order->get_status() === 'completed') {
+            return WC_EBANX_Gateway::thankyou_page($order, $payment_method);
         }
 
         switch ($order->payment_method) {
