@@ -92,8 +92,7 @@
 }
 
 .ebanx-one-click-card {
-  display: flex;
-  align-items: center;
+  overflow: hidden;
 }
 
 .ebanx-one-click-card > img {
@@ -138,4 +137,10 @@
 .ebanx-one-click-card-radio {
   width: auto !important;
   margin: 0 !important;
+}
+
+.ebanx-one-click-card-radio,
+.ebanx-one-click-card > img,
+.ebanx-one-click-card > span {
+  float: left !important;
 }
