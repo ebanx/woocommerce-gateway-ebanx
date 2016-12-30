@@ -33,7 +33,7 @@ $i = 0;
 
                 <div class="ebanx-one-click-cvv">
                     <label><?php echo $t['cvv'] ?></label>
-                    <input type="text" maxlength="4" minlength="3" class="ebanx-one-click-cvv-input" id="ebanx-one-click-cvv-input" name="ebanx_one_click_cvv" placeholder="CVV">
+                    <input type="text" maxlength="4" minlength="3" class="ebanx-one-click-cvv-input input-text" id="ebanx-one-click-cvv-input" name="ebanx_one_click_cvv" placeholder="CVV">
                 </div>
 
                 <div class="ebanx-one-click-installments">

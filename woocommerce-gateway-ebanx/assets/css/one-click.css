@@ -108,6 +108,12 @@
 .ebanx-one-click-cvv-input {
   display: block !important;
   width: 100% !important;
+  transition: all .2s;
+}
+
+.ebanx-one-click-cvv-input.is-invalid {
+  -webkit-box-shadow: inset 2px 0 0 #e2401c;;
+  box-shadow: inset 2px 0 0 #e2401c;;
 }
 
 .ebanx-one-click-tooltip .ebanx-instalments {
