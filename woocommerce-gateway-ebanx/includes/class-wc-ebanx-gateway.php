@@ -412,6 +412,7 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
         $instalments_number = get_post_meta($order->id, '_instalments_number')[0];
         $instalments_amount = round($order_amount / $instalments_number);
         $masked_card = get_post_meta($order->id, '_masked_card_number')[0];
+        $customer_email = get_post_meta($order->id, '_billing_email', true);
 
         $languages = array(
             'mx' => 'es',
@@ -431,6 +432,10 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
                 'instalments' => 'parcelas de',
                 'card_last_numbers' => sprintf('Pago com Cartão %s:', ucwords($card_brand_name[0])),
                 'thanks_message' => 'Obrigado por ter comprado conosco.',
+                'completed' => array(
+                    'title' => 'Obrigado! O pagamento foi realizado com sucesso',
+                    'thanks_message' => sprintf('Um comprovante foi enviado para o email <strong>%s</strong>.', $customer_email),
+                )
             ),
             'es' => array(
                 'payment_approved' => 'Pago aprobado con éxito.',
@@ -439,6 +444,10 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
                 'instalments' => 'parcelas de',
                 'card_last_numbers' => sprintf('Pago con tarjeta %s:', ucwords($card_brand_name[0])),
                 'thanks_message' => 'Gracias por haber comprado con nosotros.',
+                'completed' => array(
+                    'title' => '¡Gracias! Solicitud realizada corrrectamente.',
+                    'thanks_message' => sprintf('La confirmación de tu pedido será enviado a <strong>%s</strong>.', $customer_email),
+                )
             )
         );
 
