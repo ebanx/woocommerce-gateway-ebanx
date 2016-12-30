@@ -152,8 +152,8 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
                 'user_value_3'          => 'version='.WC_EBANX::VERSION,
                 'country'               => $order->get_address()['country'],
                 'currency_code'         => WC_EBANX_Gateway_Utils::CURRENCY_CODE_USD, // TODO: Dynamic
-                "name"                  => $order->get_address()['first_name'] . " " . $order->get_address()['last_name'],
-                "email"                 => $order->get_address()['email'],
+                'name'                  => $order->get_address()['first_name'] . " " . $order->get_address()['last_name'],
+                'email'                 => $order->get_address()['email'],
                 "phone_number"          => $order->get_address()['phone'],
                 'amount_total'          => $order->get_total(),
                 'order_number'          => $order->id,
@@ -205,7 +205,13 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
             $_POST['ebanx_billing_birth_date'] = $_POST['ebanx_billing_chile_birth_date'];
         }
 
-        $addresses = WC_Ebanx_Gateway_Utils::split_street($_POST['billing_address_1'] . ' ' . $_POST['billing_address_2']);
+        $addresses = $_POST['billing_address_1'];
+
+        if (!empty($_POST['billing_address_2'])) {
+            $addresses .= " $_POST[billing_address_2]";
+        }
+
+        $addresses = WC_Ebanx_Gateway_Utils::split_street($addresses);
 
         $street_number = empty($addresses['houseNumber']) ? 'S/N' : trim($addresses['houseNumber'] . ' ' . $addresses['additionToAddress2']);
 
@@ -273,6 +279,8 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
                 'redirect' => $this->get_return_url($order),
             ));
         } catch (Exception $e) {
+
+            $this->language = $this->getTransactionAddress('country');
 
             $code = $e->getMessage();
 
