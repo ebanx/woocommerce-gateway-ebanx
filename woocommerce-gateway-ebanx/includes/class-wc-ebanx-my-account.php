@@ -65,39 +65,43 @@ class WC_EBANX_My_Account
      */
     public function order_details($order)
     {
+        if (!in_array($order->get_status(), array('pending', 'on-hold'))) {
+            return;
+        }
+
         switch ($order->payment_method) {
             case 'ebanx-credit-card':
-                WC_EBANX_Credit_Card_Gateway::thankyou_page($order->id);
+                WC_EBANX_Credit_Card_Gateway::thankyou_page($order);
                 break;
             case 'ebanx-banking-ticket':
-                WC_EBANX_Banking_Ticket_Gateway::thankyou_page($order->id);
+                WC_EBANX_Banking_Ticket_Gateway::thankyou_page($order);
                 break;
             case 'ebanx-eft':
-                WC_EBANX_Eft_Gateway::thankyou_page($order->id);
+                WC_EBANX_Eft_Gateway::thankyou_page($order);
                 break;
             case 'ebanx-oxxo':
-                WC_EBANX_Oxxo_Gateway::thankyou_page($order->id);
+                WC_EBANX_Oxxo_Gateway::thankyou_page($order);
                 break;
             case 'ebanx-pagoefectivo':
-                WC_EBANX_Pagoefectivo_Gateway::thankyou_page($order->id);
+                WC_EBANX_Pagoefectivo_Gateway::thankyou_page($order);
                 break;
             case 'ebanx-safetypay':
-                WC_EBANX_Safetypay_Gateway::thankyou_page($order->id);
+                WC_EBANX_Safetypay_Gateway::thankyou_page($order);
                 break;
             case 'ebanx-servipag':
-                WC_EBANX_Servipag_Gateway::thankyou_page($order->id);
+                WC_EBANX_Servipag_Gateway::thankyou_page($order);
                 break;
             case 'ebanx-tef':
-                WC_EBANX_Tef_Gateway::thankyou_page($order->id);
+                WC_EBANX_Tef_Gateway::thankyou_page($order);
                 break;
             case 'ebanx-account':
-                WC_EBANX_Account_Gateway::thankyou_page($order->id);
+                WC_EBANX_Account_Gateway::thankyou_page($order);
                 break;
             case 'ebanx-debit-card':
-                WC_EBANX_Debit_Card_Gateway::thankyou_page($order->id);
+                WC_EBANX_Debit_Card_Gateway::thankyou_page($order);
                 break;
             case 'ebanx-sencillito':
-                WC_EBANX_Sencillito_Gateway::thankyou_page($order->id);
+                WC_EBANX_Sencillito_Gateway::thankyou_page($order);
                 break;
         }
     }

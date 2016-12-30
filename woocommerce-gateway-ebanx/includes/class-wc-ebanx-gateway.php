@@ -73,6 +73,13 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
     {
         if (is_checkout()) {
             wp_enqueue_script('woocommerce_ebanx_checkout_fields', plugins_url('assets/js/checkout-fields.js', WC_EBANX::DIR));
+        }
+        if (
+            is_wc_endpoint_url( 'order-pay' ) ||
+            is_wc_endpoint_url( 'order-received' ) ||
+            is_wc_endpoint_url( 'view-order' ) ||
+            is_checkout()
+        ) {
             wp_enqueue_style(
                 'woocommerce_ebanx_paying_via_ebanx_style',
                 plugins_url('assets/css/paying-via-ebanx.css', WC_EBANX::DIR)

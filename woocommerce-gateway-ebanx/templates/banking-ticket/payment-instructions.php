@@ -16,8 +16,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 <div class="banking-ticket__desc">
     <p class="woocommerce-thankyou-order-received">Seu boleto foi gerado com sucesso</p>
     <p>Pague agora o seu boleto para liberar o seu pedido.</p>
-    <!-- TODO -->
-    <p>O boleto também foi enviado para o email <strong>heijoshe@gmail.com</strong>.</p>
+    <p>O boleto também foi enviado para o email <strong><?=$customer_email ?></strong>.</p>
     <p>Dúvidas de como pagar seu boleto? <a href="#" target="_blank">Clique aqui</a>.</p>
 </div>
 
@@ -32,7 +31,6 @@ if ( ! defined( 'ABSPATH' ) ) {
             Copiar
             <span class="ebanx-button--copy-msg">Copiado com sucesso!</span>
         </button>
-
     </div>
 </div>
 
@@ -40,13 +38,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 <div class="banking-ticket__actions">
     <div class="ebanx-button--group ebanx-button--group-two">
-        <a href="<?php echo $url_pdf ?>" target="_blank" class="button banking-ticket__action">Salvar em PDF</a>
-        <a href="<?php echo $url_print ?>" target="_blank" class="button banking-ticket__action">Imprimir boleto</a>
+        <a href="<?=$url_pdf ?>" target="_blank" class="button banking-ticket__action">Salvar em PDF</a>
+        <a href="<?=$url_print ?>" target="_blank" class="button banking-ticket__action">Imprimir boleto</a>
     </div>
 </div>
 
 
 
 <div>
-    <iframe src="<?php echo $url; ?>" style="width: 100%; height: 1000px; border: 0px;"></iframe>
+    <iframe src="<?=$url_basic; ?>" style="width: 100%; height: 1000px; border: 0px;"></iframe>
 </div>

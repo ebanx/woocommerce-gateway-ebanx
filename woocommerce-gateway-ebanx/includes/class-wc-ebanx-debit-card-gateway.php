@@ -59,10 +59,8 @@ class WC_EBANX_Debit_Card_Gateway extends WC_EBANX_Gateway
         );
     }
 
-    public static function thankyou_page($order_id)
+    public static function thankyou_page($order)
     {
-        $order = new WC_Order($order_id);
-
         $data = array(
             'card_brand'  => get_post_meta($order->id, 'Card\'s Brand Name', true)
         );
