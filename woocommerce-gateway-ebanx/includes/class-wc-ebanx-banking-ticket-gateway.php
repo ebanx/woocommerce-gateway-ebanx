@@ -46,7 +46,6 @@ class WC_EBANX_Banking_Ticket_Gateway extends WC_EBANX_Gateway
     {
         $data                                 = parent::request_data($order);
         $data['payment']['payment_type_code'] = $this->api_name;
-        // TODO: needs due_date ??
         return $data;
     }
 

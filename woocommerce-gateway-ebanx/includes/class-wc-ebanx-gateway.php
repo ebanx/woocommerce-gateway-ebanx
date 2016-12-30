@@ -171,10 +171,11 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
             )
         );
 
-        if (!empty($this->configs->settings['due_date_days']))
+        if (!empty($this->configs->settings['due_date_days']) && in_array($this->api_name, array_keys(WC_EBANX_Gateway_Utils::$CASH_PAYMENTS_TIMEZONES)))
         {
             $date = new DateTime();
 
+            $date->setTimezone(new DateTimeZone(WC_EBANX_Gateway_Utils::$CASH_PAYMENTS_TIMEZONES[$this->api_name]));
             $date->modify("+{$this->configs->settings['due_date_days']} day");
 
             $data['payment']['due_date'] = $date->format('d/m/Y');
