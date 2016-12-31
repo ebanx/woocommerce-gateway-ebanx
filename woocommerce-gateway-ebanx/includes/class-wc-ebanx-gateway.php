@@ -441,7 +441,7 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
                 'payment_approved' => 'Pago aprobado con éxito.',
                 'important_data' => 'Verifique algunos datos importantes abajo en su compra.',
                 'total_amount' => 'Valor total:',
-                'instalments' => 'parcelas de',
+                'instalments' => 'meses sen intereses de',
                 'card_last_numbers' => sprintf('Pago con tarjeta %s:', ucwords($card_brand_name[0])),
                 'thanks_message' => 'Gracias por haber comprado con nosotros.',
                 'completed' => array(
