@@ -1,38 +1,5 @@
 <?php
 
-add_action('add_meta_boxes', function() {
-    add_meta_box('mv_other_fields', __('Process Payment via EBANX','woocommerce'), function () {
-        global $woocommerce, $order, $post;
-
-        $order = wc_get_order($post->ID);
-
-        if (!empty(get_post_meta($post->ID, '_ebanx_payment_hash', true)) || wc_get_payment_gateway_by_order($order))
-        {
-            return;
-        }
-
-        $meta_field_data = get_post_meta($post->ID, '_my_choice', true); //? get_post_meta($post->ID, '_my_choice', true) : '';
-
-        $gateways = WC()->payment_gateways->payment_gateways;
-
-        $gateways = array_filter($gateways, function($gateway) {
-            return preg_match('/(ebanx)/', $gateway->id);
-        });
-
-        $options = "<option value=''>Select a Payment Method</option>";
-
-        foreach ($gateways as $gateway)
-        {
-            if ($gateway->api_name) {
-                $options .= "<option value='{$gateway->id}'>{$gateway->title}</option>";
-            }
-        }
-
-        echo '<input type="hidden" name="ebanx-payment-nonce" value="' . wp_create_nonce() . '">';
-        echo "<select name='ebanx-payment-type'>{$options}</select>";
-    }, 'shop_order', 'side', 'core');
-});
-
 add_action('save_post', function ($orderId) {
     if (!is_admin() || !isset($_POST['ebanx-payment-nonce']) ||
         !wp_verify_nonce($_REQUEST['ebanx-payment-nonce']) || (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) ||
