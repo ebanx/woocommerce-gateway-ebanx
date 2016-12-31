@@ -6,6 +6,39 @@ if (!defined('ABSPATH')) {
 
 final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway
 {
+    public static $defaults = array(
+            'sandbox_mode_enabled' => 'yes',
+            'sandbox_private_key' => '',
+            'sandbox_public_key' => '',
+            'debug_enabled' => 'yes',
+            'brazil_payment_methods' => array(
+                'ebanx-credit-card',
+                'ebanx-banking-ticket',
+                'ebanx-tef',
+                'ebanx-account',
+            ),
+            'mexico_payment_methods' => array(
+                'ebanx-credit-card',
+                'ebanx-debit-card',
+                'ebanx-oxxo',
+            ),
+            'chile_payment_methods' => array(
+                'ebanx-sencillito',
+                'ebanx-servipag',
+            ),
+            'colombia_payment_methods' => array(
+                'ebanx-eft',
+            ),
+            'peru_payment_methods' => array(
+                'ebanx-safetypay',
+                'ebanx-pagoefectivo',
+            ),
+            'save_card_data' => 'yes',
+            'one_click' => 'yes',
+            'capture_enabled' => 'yes',
+            'credit_card_instalments' => '1',
+            'due_date_days' => '3'
+        );
 
     public function __construct()
     {
@@ -166,7 +199,6 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway
             'save_card_data'        => array(
                 'title' => __('Save Card Data', 'woocommerce-gateway-ebanx'),
                 'type'  => 'checkbox',
-                'default' => 'yes',
                 'label' => __('Enable saving card data', 'woocommerce-gateway-ebanx'),
                 'description' => __('Allow your customer to save credit card and debit card data for future purchases.', 'woocommerce-gateway-ebanx'),
                 'desc_tip' => true,
@@ -175,7 +207,6 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway
                 'type'        => 'checkbox',
                 'title'       => __('One-Click Payment', 'woocommerce-gateway-ebanx'),
                 'label'       => __('Enable one-click-payment', 'woocommerce-gateway-ebanx'),
-                'default'     => 'yes',
                 'description' => __('Allow your customer to complete payments in one-click using credit cards saved.', 'woocommerce-gateway-ebanx'),
                 'desc_tip' => true,
             ),
@@ -183,14 +214,12 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway
                 'type'    => 'checkbox',
                 'title'   => __('Enable Auto-Capture', 'woocommerce-gateway-ebanx'),
                 'label'   => __('Capture the payment immediatly.', 'woocommerce-gateway-ebanx'),
-                'default' => 'yes',
                 'description' => __('Automatically capture payments from your customers. Otherwise you will need to capture the payment going to: WooCommerce -> Orders. Not captured payments will be cancelled in 4 days.', 'woocommerce-gateway-ebanx'),
                 'desc_tip' => true
             ),
             'credit_card_instalments'   => array(
                 'title'       => __('Maximum nº of Installments', 'woocommerce-gateway-ebanx'),
                 'type'        => 'select',
-                'default'     => '1',
                 'class'       => 'ebanx-select',
                 'options'     => array(
                     '1'  => '1',
@@ -216,7 +245,6 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway
             'due_date_days'             => array(
                 'title'   => __('Days to Expiration', 'woocommerce-gateway-ebanx'),
                 'type'    => 'select',
-                'default' => '3',
                 'class'   => 'ebanx-select',
                 'options' => array(
                     '1' => '1',
@@ -227,6 +255,17 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway
                 'desc_tip' => true
             )
         );
+
+        $this->injectDefaults();
+    }
+
+    private function injectDefaults(){
+        foreach($this->form_fields as $field => &$properties){
+            if(!isset(self::$defaults[$field]))
+                continue;
+
+            $properties['default'] = self::$defaults[$field];
+        }
     }
 
     public function is_available()

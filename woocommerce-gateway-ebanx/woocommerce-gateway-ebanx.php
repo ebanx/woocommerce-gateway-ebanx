@@ -140,6 +140,8 @@ if (!class_exists('WC_EBANX')) {
         {
             add_rewrite_endpoint(self::$endpoint, EP_ROOT | EP_PAGES);
             flush_rewrite_rules();
+
+            add_option('woocommerce_ebanx-global_settings', WC_EBANX_Global_Gateway::$defaults);
         }
 
         public function my_account_menus_title($title)
