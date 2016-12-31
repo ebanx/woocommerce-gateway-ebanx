@@ -92,7 +92,7 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
 
             static::$ebanx_params = array(
                 'key'  => $this->public_key,
-                'mode' => $this->is_test_mode ? 'test' : 'production',
+                'mode' => $this->is_sandbox_mode ? 'test' : 'production',
             );
 
             self::$initializedGateways++;
