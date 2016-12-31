@@ -14,10 +14,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 <hr>
 
 <div class="banking-ticket__desc">
-    <p class="woocommerce-thankyou-order-received">Seu boleto foi gerado com sucesso</p>
-    <p>Pague agora o seu boleto para liberar o seu pedido.</p>
-    <p>O boleto também foi enviado para o email <strong><?=$customer_email ?></strong>.</p>
-    <p>Dúvidas de como pagar seu boleto? <a href="#" target="_blank">Clique aqui</a>.</p>
+    <p class="woocommerce-thankyou-order-received">Pronto, seu boleto foi gerado, <?=$customer_name ?></p>
+    <p>Mandamos uma cópia para <strong><?=$customer_email ?></strong>.</p>
+    <p>Não se esqueça: ele vence dia <?=$due_date?>. Depois disso só é possível pagar no banco Itaú.</p>
+    <p>Dica: Além dos bancos e casas lotéricas você também pode pagar pelo seu internet banking, sem sair de casa.</p>
+    <p>Ficou alguma dúvida? A gente te <a href="https://www.ebanx.com/br/ajuda" target="_blank">ajuda</a>.</p>
 </div>
 
 <hr>
