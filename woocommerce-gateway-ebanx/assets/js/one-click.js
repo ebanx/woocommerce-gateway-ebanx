@@ -3,6 +3,19 @@ jQuery(document).ready(function ($) {
     var hidden = $('#ebanx-one-click');
     var close = $('.ebanx-one-click-close-button');
     var tooltip = $('.ebanx-one-click-tooltip');
+    var cvv = $('#ebanx-one-click-cvv-input');
+    var payButton = $('.ebanx-one-click-pay');
+    var instalments = $('.ebanx-instalments');
+    var isProcessing = false;
+    var formCart = $('form.cart');
+
+    var addError = function (el) {
+      $(el).addClass('is-invalid');
+    };
+
+    var removeError = function (el) {
+      $(el).removeClass('is-invalid');
+    }
 
     button.on('click', function (e) {
       e.preventDefault();
@@ -14,20 +27,45 @@ jQuery(document).ready(function ($) {
       tooltip.removeClass('is-active');
     });
 
-    $('.ebanx-one-click-pay').on('click', function (e) {
-      e.preventDefault();
+    var pay = function (e) {
+      var value = cvv.val();
+      console.log('pay');
 
-      hidden.val('is_one_click');
-      var cardSelected = $('.ebanx-card-use:checked');
-      var cvv = $('#ebanx-one-click-cvv-input').val();
-      var self = $(this);
-
-      if (!!cvv.length === false) {
+      if (isProcessing) {
+        e.preventDefault();
         return false;
       }
 
-      self.text(self.attr('data-processing-label')).attr('disabled', 'disabled');
+      if (tooltip.hasClass('is-active') && !(value.length >= 3 && value.length <= 4)) {
+        addError(cvv);
+        e.preventDefault();
+      }
 
-      $('form.cart').submit();
+      if (tooltip.hasClass('is-active') && (value.length >= 3 && value.length <= 4)) {
+        hidden.val('is_one_click');
+        removeError(cvv);
+
+        payButton.text(payButton.attr('data-processing-label')).attr('disabled', 'disabled');
+
+
+        isProcessing = true;
+      }
+    }
+
+    formCart.on('submit', pay);
+
+    $('.ebanx-one-click-pay').on('click', function (e) {
+      formCart.submit();
+    });
+
+    cvv.on('keyup', function () {
+      var value = cvv.val();
+
+      if (!(value.length >= 3 && value.length <= 4)) {
+        addError(cvv);
+      }
+      else {
+        removeError(cvv);
+      }
     });
 });
