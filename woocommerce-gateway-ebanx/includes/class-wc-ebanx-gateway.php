@@ -428,6 +428,7 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
         $instalments_amount = round($order_amount / $instalments_number, 2);
         $masked_card = get_post_meta($order->id, '_masked_card_number')[0];
         $customer_email = get_post_meta($order->id, '_billing_email', true);
+        $customer_name = get_post_meta($order->id, '_billing_first_name', true);
 
         $languages = array(
             'mx' => 'es',
@@ -441,9 +442,9 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
 
         $messages = array(
             'pt-br' => array(
-                'payment_approved' => 'Seu pagamento foi aprovado.',
-                'important_data' => 'Confira abaixo alguns dados importantes sobre a sua compra.',
-                'total_amount' => 'Valor total:',
+                'payment_approved' => sprintf('Seu pagamento foi confirmado, %s.', $customer_name),
+                'important_data' => '<strong>Resumo da compra:</strong>',
+                'total_amount' => 'Valor:',
                 'instalments' => 'parcelas de',
                 'card_last_numbers' => sprintf('Pago com Cartão %s:', ucwords($card_brand_name[0])),
                 'thanks_message' => 'Obrigado por ter comprado conosco.',
@@ -453,9 +454,9 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
                 )
             ),
             'es' => array(
-                'payment_approved' => 'Pago aprobado con éxito.',
-                'important_data' => 'Verifique algunos datos importantes abajo en su compra.',
-                'total_amount' => 'Valor total:',
+                'payment_approved' => sprintf('Pago aprobado con éxito, %s.', $customer_name),
+                'important_data' => 'Resumo de la compra:',
+                'total_amount' => 'Valor:',
                 'instalments' => 'meses sen intereses de',
                 'card_last_numbers' => sprintf('Pago con tarjeta %s:', ucwords($card_brand_name[0])),
                 'thanks_message' => 'Gracias por haber comprado con nosotros.',
