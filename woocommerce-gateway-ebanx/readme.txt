@@ -11,7 +11,7 @@ Gain access to 236M internet users in Latin America with EBANX payment solutions
 
 == Description ==
 
-The WooCommerce EBANX Payment Gateway plugin allows you to accept local & international payment methods directly on your ecommerce store. Using the EBANX plugin you can process relevant cash, online debit, credit card, and EBANX Wallet payments in Brazil, Mexico, Colombia, Chile & Peru. **No technical knowledge is needed for installation.** Installation is the simple, the way it should be.
+The WooCommerce EBANX Payment Gateway plugin allows you to accept local & international payment methods directly on your ecommerce store. Using the EBANX plugin you can process relevant cash, online debit, credit card, and EBANX Wallet payments in Brazil, Mexico, Colombia, Chile & Peru. **No technical knowledge is needed for installation.** Installation is simple, the way it should be.
 
 **Exclusive Advantages**
 
@@ -58,9 +58,9 @@ Automatic installation is the easiest option and can be done without leaving you
 
 To install the plugin manually, download our plugin and upload it to your web server via an FTP application. Visit the [WordPress codex](https://codex.wordpress.org/Managing_Plugins#Manual_Plugin_Installation "WordPress codex") for further instructions. 
 
-**Via Github**
+**Via GitHub**
 
-The EBANX Gateway Plugin can also be installed using GitHub. You can find our repository [here](https://github.com/ebanx/checkout-woocommerce/ "EBANX GitHub repository"). To view step-by-step installation via GitHub instructions click [here](https://help.github.com/articles/cloning-a-repository/ "GitHub"). 
+The EBANX Gateway Plugin can also be installed using GitHub. You can find our repository [here](https://github.com/ebanx/checkout-woocommerce/ "EBANX GitHub repository"). To view step-by-step installation via GitHub instructions click [here](https://github.com/ebanx/checkout-woocommerce/tree/master/woocommerce-gateway-ebanx "Install Via GitHub").
 
 Still need your API Keys? You can pick those up [here](https://www.ebanx.com/business/en/dashboard "EBANX API keys"). 
 
