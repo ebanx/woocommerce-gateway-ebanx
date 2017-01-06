@@ -378,7 +378,9 @@ div.ebanx-form-row {
 
 .woocommerce .ebanx-button--group::after {clear: both;}
 
-
+.woocommerce .woocommerce-thankyou-order-received {
+  /*display: none !important;*/
+}
 
 .woocommerce .ebanx-button--copy {
   position: relative;
@@ -390,11 +392,8 @@ div.ebanx-form-row {
   left: calc(50% - 50px);
   bottom: calc(100% + 5px);
   padding: 10px;
-  background-color: #7ED321;
-  border: 1px solid #73B828;
-  font-size: 10px;
+  font-size: 15px;
   font-weight: normal;
-  color: #FFF;
   border-radius: 2px;
   visibility: hidden;
   opacity: 0;
