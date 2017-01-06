@@ -87,13 +87,13 @@ class WC_EBANX_Banking_Ticket_Gateway extends WC_EBANX_Gateway
         $barcode_anti_fraud = WC_EBANX_Banking_Ticket_Gateway::barcode_anti_fraud($barcode);
 
         $data = array(
-            'due_date'        => get_post_meta($order->id, '_payment_due_date', true),
             'barcode'         => $barcode,
             'barcode_fraud'   => $barcode_anti_fraud,
             'url_basic'       => $boleto_basic,
             'url_pdf'         => $boleto_pdf,
             'url_print'       => $boleto_print,
             'customer_email'  => $customer_email,
+            'customer_name'   => $customer_name,
             'due_date'        => $boleto_due_date,
         );
 
