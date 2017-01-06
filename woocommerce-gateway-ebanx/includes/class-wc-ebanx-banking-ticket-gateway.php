@@ -80,7 +80,9 @@ class WC_EBANX_Banking_Ticket_Gateway extends WC_EBANX_Gateway
         $boleto_pdf = $boleto_url."&format=pdf";
         $boleto_print = $boleto_url."&format=print";
         $barcode = get_post_meta($order->id, '_boleto_barcode', true);
+
         $customer_email = get_post_meta($order->id, '_ebanx_payment_customer_email', true);
+        $customer_name = get_post_meta($order->id, '_billing_first_name', true);
 
         $barcode_anti_fraud = WC_EBANX_Banking_Ticket_Gateway::barcode_anti_fraud($barcode);
 
@@ -92,6 +94,7 @@ class WC_EBANX_Banking_Ticket_Gateway extends WC_EBANX_Gateway
             'url_pdf'         => $boleto_pdf,
             'url_print'       => $boleto_print,
             'customer_email'  => $customer_email,
+            'customer_name'   => $customer_name,
         );
 
         wc_get_template(
