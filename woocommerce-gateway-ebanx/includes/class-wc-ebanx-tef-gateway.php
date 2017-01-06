@@ -55,14 +55,15 @@ class WC_EBANX_Tef_Gateway extends WC_EBANX_Redirect_Gateway
 
     public static function thankyou_page($order)
     {
-        $data  = get_post_meta($order, '_wc_ebanx_transaction_data', true);
+        $customer_name = get_post_meta($order->id, '_billing_first_name', true);
+
+        $data = array(
+            'customer_name' => $customer_name,
+        );
 
         wc_get_template(
             'tef/payment-instructions.php',
-            array(
-                'title'       => $this->title,
-                'description' => $this->description,
-            ),
+            $data,
             'woocommerce/ebanx/',
             WC_EBANX::get_templates_path()
         );

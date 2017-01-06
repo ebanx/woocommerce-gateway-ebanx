@@ -61,6 +61,7 @@ if (!class_exists('WC_EBANX')) {
         private function __construct()
         {
             add_action('admin_init', array($this, 'check_environment'));
+            add_action('current_screen', array($this, 'check_status_change_notification_url_configured'));
             add_action('admin_notices', array($this, 'admin_notices'), 15);
             add_action('plugins_loaded', array($this, 'init'));
 
@@ -139,6 +140,8 @@ if (!class_exists('WC_EBANX')) {
         {
             add_rewrite_endpoint(self::$endpoint, EP_ROOT | EP_PAGES);
             flush_rewrite_rules();
+
+            add_option('woocommerce_ebanx-global_settings', WC_EBANX_Global_Gateway::$defaults);
         }
 
         public function my_account_menus_title($title)
@@ -190,6 +193,40 @@ if (!class_exists('WC_EBANX')) {
             $environment_warning = self::get_environment_warning();
             if ($environment_warning && is_plugin_active(plugin_basename(__FILE__))) {
                 $this->add_admin_notice('bad_environment', 'error', $environment_warning);
+            }
+        }
+
+        public function check_status_change_notification_url_configured()
+        {
+            $screen = get_current_screen();
+            if ($screen->id != 'woocommerce_page_wc-settings') return;
+            if ($_GET['tab'] != 'checkout' || !isset($_GET['section']) || $_GET['section'] != 'ebanx-global') return;
+
+            $this->configs = new WC_EBANX_Global_Gateway();
+            $is_sandbox = ($this->configs->settings['sandbox_mode_enabled'] == 'yes');
+
+            if (empty($this->get_notification_url($is_sandbox))) {
+                $home_url = get_home_url();
+                $live_url = "https://www.ebanx.com/business/en/dashboard/settings#settings-integration";
+                $sandbox_url = "https://www.ebanx.com/business/en/dashboard/test/settings#settings-integration";
+                $merchant_area_url = ($is_sandbox) ? $sandbox_url : $live_url;
+
+                $message = "There was a problem with your notification settings. Please go to <a href='${merchant_area_url}'>Settings in your Dashboard</a> and copy & paste “${home_url}” into the “Status Change Notification URL” field under Services URLs. This will allow WooCommerce to receive payment confirmations automatically.";
+
+                $this->add_admin_notice('configure_status_change', 'error', $message);
+            }
+        }
+
+        private function get_notification_url($is_sandbox)
+        {
+            $private_key = $is_sandbox ? $this->configs->settings['sandbox_private_key'] : $this->configs->settings['live_private_key'];
+            \Ebanx\Config::set(array('integrationKey' => $private_key, 'testMode' => $is_sandbox));
+            try {
+                $res = \Ebanx\Ebanx::getMerchantIntegrationProperties(array('integrationKey' => '1231000'));
+                return $res->body->url_status_change_notification;
+            } catch (Exception $e) {
+                $message = 'Could not connect to EBANX servers. Please check if your server can reach your API: https://api.ebanx.com';
+                $this->add_admin_notice('connection_error', 'error', $message);
             }
         }
 

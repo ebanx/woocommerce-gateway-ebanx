@@ -53,20 +53,13 @@ class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
 
     public function checkout_assets()
     {
-        parent::checkout_assets();
-
         if (is_checkout()) {
             wp_enqueue_script('wc-credit-card-form');
             // Using // to avoid conflicts between http and https protocols
-            wp_enqueue_script('ebanx_fingerprint', '//s3-sa-east-1.amazonaws.com/downloads.ebanx.com/poc-checkout/src/device-fingerprint.js', '', '1.0', true); // TODO: REMOVE THIS
-            wp_enqueue_script('ebanx', '//s3-sa-east-1.amazonaws.com/downloads.ebanx.com/poc-checkout/src/ebanx.js', '', '1.0', true);
+            wp_enqueue_script('ebanx_fingerprint', '//js.ebanx.com/device-fingerprint-1.4.min.js', '', null, true);
+            wp_enqueue_script('ebanx', '//js.ebanx.com/ebanx-1.4.min.js', '', null, true);
             wp_enqueue_script('woocommerce_ebanx_jquery_mask', plugins_url('assets/js/jquery-mask.js', WC_EBANX::DIR), array());
             wp_enqueue_script('woocommerce_ebanx', plugins_url('assets/js/credit-card.js', WC_EBANX::DIR), array('jquery-payment', 'ebanx'), WC_EBANX::VERSION, true);
-
-            $ebanx_params = array(
-                'key'  => $this->public_key,
-                'mode' => $this->is_sandbox_mode ? 'test' : 'production',
-            );
 
             // If we're on the pay page we need to pass ebanx.js the address of the order.
             if (is_checkout_pay_page() && isset($_GET['order']) && isset($_GET['order_id'])) { // TODO: WE CAN REMOVE THIS?
@@ -75,19 +68,19 @@ class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
                 $order     = wc_get_order($order_id);
 
                 if ($order->id === $order_id && $order->order_key === $order_key) {
-                    $ebanx_params['billing_first_name'] = $order->billing_first_name;
-                    $ebanx_params['billing_last_name']  = $order->billing_last_name;
-                    $ebanx_params['billing_address_1']  = $order->billing_address_1;
-                    $ebanx_params['billing_address_2']  = $order->billing_address_2;
-                    $ebanx_params['billing_state']      = $order->billing_state;
-                    $ebanx_params['billing_city']       = $order->billing_city;
-                    $ebanx_params['billing_postcode']   = $order->billing_postcode;
-                    $ebanx_params['billing_country']    = $order->billing_country;
+                    static::$ebanx_params['billing_first_name'] = $order->billing_first_name;
+                    static::$ebanx_params['billing_last_name']  = $order->billing_last_name;
+                    static::$ebanx_params['billing_address_1']  = $order->billing_address_1;
+                    static::$ebanx_params['billing_address_2']  = $order->billing_address_2;
+                    static::$ebanx_params['billing_state']      = $order->billing_state;
+                    static::$ebanx_params['billing_city']       = $order->billing_city;
+                    static::$ebanx_params['billing_postcode']   = $order->billing_postcode;
+                    static::$ebanx_params['billing_country']    = $order->billing_country;
                 }
             }
-
-            wp_localize_script('woocommerce_ebanx', 'wc_ebanx_params', apply_filters('wc_ebanx_params', $ebanx_params));
         }
+
+        parent::checkout_assets();
     }
 
     public function show_icon()

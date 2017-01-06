@@ -8,9 +8,14 @@ if (!defined('ABSPATH')) {
 
 abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
 {
+    protected static $ebanx_params = array();
+    protected static $initializedGateways = 0;
+    protected static $totalGateways = 0;
 
     public function __construct()
     {
+        self::$totalGateways++;
+
         $this->userId = get_current_user_id();
 
         $this->configs = new WC_EBANX_Global_Gateway();
@@ -84,6 +89,16 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
                 'woocommerce_ebanx_paying_via_ebanx_style',
                 plugins_url('assets/css/paying-via-ebanx.css', WC_EBANX::DIR)
             );
+
+            static::$ebanx_params = array(
+                'key'  => $this->public_key,
+                'mode' => $this->is_sandbox_mode ? 'test' : 'production',
+            );
+
+            self::$initializedGateways++;
+
+            if(self::$initializedGateways === self::$totalGateways)
+                wp_localize_script('woocommerce_ebanx', 'wc_ebanx_params', apply_filters('wc_ebanx_params', static::$ebanx_params));
         }
     }
     public function admin_options()
@@ -414,6 +429,7 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
         $instalments_amount = round($order_amount / $instalments_number, 2);
         $masked_card = get_post_meta($order->id, '_masked_card_number')[0];
         $customer_email = get_post_meta($order->id, '_billing_email', true);
+        $customer_name = get_post_meta($order->id, '_billing_first_name', true);
 
         $languages = array(
             'mx' => 'es',
@@ -427,9 +443,9 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
 
         $messages = array(
             'pt-br' => array(
-                'payment_approved' => 'Seu pagamento foi aprovado.',
-                'important_data' => 'Confira abaixo alguns dados importantes sobre a sua compra.',
-                'total_amount' => 'Valor total:',
+                'payment_approved' => sprintf('Seu pagamento foi confirmado, %s.', $customer_name),
+                'important_data' => '<strong>Resumo da compra:</strong>',
+                'total_amount' => 'Valor:',
                 'instalments' => 'parcelas de',
                 'card_last_numbers' => sprintf('Pago com Cartão %s:', ucwords($card_brand_name[0])),
                 'thanks_message' => 'Obrigado por ter comprado conosco.',
@@ -439,10 +455,10 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
                 )
             ),
             'es' => array(
-                'payment_approved' => 'Pago aprobado con éxito.',
-                'important_data' => 'Verifique algunos datos importantes abajo en su compra.',
-                'total_amount' => 'Valor total:',
-                'instalments' => 'parcelas de',
+                'payment_approved' => sprintf('Pago aprobado con éxito, %s.', $customer_name),
+                'important_data' => '<strong>Resumo de la compra:</strong>',
+                'total_amount' => 'Valor:',
+                'instalments' => 'meses sen intereses de',
                 'card_last_numbers' => sprintf('Pago con tarjeta %s:', ucwords($card_brand_name[0])),
                 'thanks_message' => 'Gracias por haber comprado con nosotros.',
                 'completed' => array(

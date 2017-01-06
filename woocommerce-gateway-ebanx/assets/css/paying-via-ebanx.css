@@ -388,7 +388,7 @@ div.ebanx-form-row {
 
 .woocommerce .ebanx-button--copy > .ebanx-button--copy-msg {
   width: 100px;
-  position: absolute;
+  position: absolute !important;
   left: calc(50% - 50px);
   bottom: calc(100% + 5px);
   padding: 10px;

@@ -13,6 +13,5 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 ?>
 
-<div class="woocommerce-message">
-	<span><?php printf( wp_kses( __( 'Payment successfully made using %1$s oxxo in %2$s.', 'woocommerce-gateway-ebanx' ), array( 'strong' => array() ) ), '' ); ?></span>
-</div>
+<p>Pagamento confirmado, <?=$customer_name ?>!</p>
+<p>Ficou alguma dúvida? A gente te <a href="https://www.ebanx.com/br/ajuda">ajuda</a>.</p>
