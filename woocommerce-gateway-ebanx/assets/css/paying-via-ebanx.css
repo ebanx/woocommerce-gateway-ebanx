@@ -378,10 +378,6 @@ div.ebanx-form-row {
 
 .woocommerce .ebanx-button--group::after {clear: both;}
 
-.woocommerce .woocommerce-thankyou-order-received {
-  /*display: none !important;*/
-}
-
 .woocommerce .ebanx-button--copy {
   position: relative;
 }
