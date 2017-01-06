@@ -14,10 +14,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 <hr>
 
 <div class="banking-ticket__desc">
-    <p class="woocommerce-thankyou-order-received">Seu boleto foi gerado com sucesso</p>
-    <p>Pague agora o seu boleto para liberar o seu pedido.</p>
-    <p>O boleto também foi enviado para o email <strong><?=$customer_email ?></strong>.</p>
-    <p>Dúvidas de como pagar seu boleto? <a href="#" target="_blank">Clique aqui</a>.</p>
+    <p class="woocommerce-thankyou-order-received">Pronto, seu boleto foi gerado, <?=$customer_name?>.</p>
+    <p>Mandamos uma cópia para o email <strong><?=$customer_email ?></strong>.</p>
+    <p>
+        - Não se esqueça, ele vence dia <strong><?=date_i18n('d/m', strtotime($due_date))?></strong>. Depois disso não é mais possível realizar o pagamento.<br/>
+        - Dica: Além dos bancos e casas lotéricas você também pode pagar pelo seu internet banking, sem sair de casa.
+    </p>
+    <p>Ficou alguma dúvida? A gente te <a href="#" target="_blank">ajuda</a>.</p>
 </div>
 
 <hr>
@@ -29,7 +32,7 @@ if ( ! defined( 'ABSPATH' ) ) {
     <div class="banking-ticket__barcode-copy">
         <button type="button" class="button ebanx-button--copy" data-clipboard-text="<?php echo $barcode; ?>">
             Copiar
-            <span class="ebanx-button--copy-msg">Copiado com sucesso!</span>
+            <span class="ebanx-button--copy-msg woocommerce-message">Copiado!</span>
         </button>
     </div>
 </div>
@@ -43,8 +46,16 @@ if ( ! defined( 'ABSPATH' ) ) {
     </div>
 </div>
 
-
-
 <div>
-    <iframe src="<?=$url_basic; ?>" style="width: 100%; height: 1000px; border: 0px;"></iframe>
+    <iframe id="ebanx-boleto-frame" src="<?=$url_basic; ?>" style="width: 100%; border: 0px;" height="1000"></iframe>
+    <script type="text/javascript">
+        (function(){
+            setTimeout(function(){
+                var el = document.getElementById('ebanx-boleto-frame');
+                var targetSize = el.contentDocument.body.offsetHeight - 200 + 'px';
+                el.style.height = 0; //this forces the browser to recalculate, otherwise it only adds to size...
+                el.style.height = targetSize;
+            }, 0);
+        })();
+    </script>
 </div>
