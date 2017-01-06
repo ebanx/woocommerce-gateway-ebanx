@@ -20,7 +20,7 @@ if ( ! defined( 'ABSPATH' ) ) {
         - Não se esqueça, ele vence dia <strong><?=date_i18n('d/m', strtotime($due_date))?></strong>. Depois disso não é mais possível realizar o pagamento.<br/>
         - Dica: Além dos bancos e casas lotéricas você também pode pagar pelo seu internet banking, sem sair de casa.
     </p>
-    <p>Ficou alguma dúvida? A gente te <a href="#" target="_blank">ajuda</a>.</p>
+    <p>Ficou alguma dúvida? A gente te <a href="https://www.ebanx.com/br/ajuda/pagamentos/boleto-bancario" target="_blank">ajuda</a>.</p>
 </div>
 
 <hr>
