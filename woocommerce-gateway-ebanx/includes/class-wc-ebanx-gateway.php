@@ -403,8 +403,9 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
         }
     }
 
-    public static function thankyou_page($order, $payment_method)
+    public static function thankyou_page($order)
     {
+        $payment_method = $order->payment_method;
         $customer_billing_country = get_post_meta($order->id, '_billing_country');
         $customer_country = strtolower($customer_billing_country[0]);
         $card_brand_name = get_post_meta($order->id, '_cards_brand_name');
