@@ -430,6 +430,7 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
         $masked_card = get_post_meta($order->id, '_masked_card_number')[0];
         $customer_email = get_post_meta($order->id, '_billing_email', true);
         $customer_name = get_post_meta($order->id, '_billing_first_name', true);
+        $merchant = $order->merchant;
 
         $languages = array(
             'mx' => 'es',
@@ -443,10 +444,11 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
 
         $messages = array(
             'pt-br' => array(
-                'payment_approved' => sprintf('Seu pagamento foi confirmado, %s.', $customer_name),
+                'payment_approved' => sprintf('Pagamento confirmado, %s.', $customer_name),
                 'important_data' => '<strong>Resumo da compra:</strong>',
                 'total_amount' => 'Valor:',
-                'instalments' => 'parcelas de',
+                'installments' => sprintf('Pagamento parcelado em %s vezes', $instalments_number),
+                'single_installment' => 'Pagamento à vista',
                 'card_last_numbers' => sprintf('Pago com Cartão %s:', ucwords($card_brand_name[0])),
                 'thanks_message' => 'Obrigado por ter comprado conosco.',
                 'completed' => array(
@@ -455,10 +457,11 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
                 )
             ),
             'es' => array(
-                'payment_approved' => sprintf('Pago aprobado con éxito, %s.', $customer_name),
+                'payment_approved' => sprintf('Pago aprobado, %s.', $customer_name),
                 'important_data' => '<strong>Resumo de la compra:</strong>',
                 'total_amount' => 'Valor:',
-                'instalments' => 'meses sen intereses de',
+                'installments' => sprintf('Pago en %s meses sin intereses', $instalments_number),
+                'single_installment' => 'Pago en una sola exhibición',
                 'card_last_numbers' => sprintf('Pago con tarjeta %s:', ucwords($card_brand_name[0])),
                 'thanks_message' => 'Gracias por haber comprado con nosotros.',
                 'completed' => array(
@@ -521,6 +524,7 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
         WC_Ebanx::log("Processing response: " . print_r($request, true));
 
         if ($request->status == 'ERROR') {
+            print_r($request->payment->transaction_status);
             return $this->process_response_error($request, $order);
         }
 

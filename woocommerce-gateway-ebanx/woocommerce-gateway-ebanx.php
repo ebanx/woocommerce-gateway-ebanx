@@ -200,7 +200,7 @@ if (!class_exists('WC_EBANX')) {
         {
             $screen = get_current_screen();
             if ($screen->id != 'woocommerce_page_wc-settings') return;
-            if ($_GET['tab'] != 'checkout' || !isset($_GET['section']) || $_GET['section'] != 'ebanx-global') return;
+            if (!isset($_GET['tab']) || $_GET['tab'] != 'checkout' || !isset($_GET['section']) || $_GET['section'] != 'ebanx-global') return;
 
             $this->configs = new WC_EBANX_Global_Gateway();
             $is_sandbox = ($this->configs->settings['sandbox_mode_enabled'] == 'yes');
