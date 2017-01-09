@@ -7,38 +7,38 @@ if (!defined('ABSPATH')) {
 final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway
 {
     public static $defaults = array(
-            'sandbox_mode_enabled' => 'yes',
-            'sandbox_private_key' => '',
-            'sandbox_public_key' => '',
-            'debug_enabled' => 'yes',
-            'brazil_payment_methods' => array(
-                'ebanx-credit-card',
-                'ebanx-banking-ticket',
-                'ebanx-tef',
-                'ebanx-account',
-            ),
-            'mexico_payment_methods' => array(
-                'ebanx-credit-card',
-                'ebanx-debit-card',
-                'ebanx-oxxo',
-            ),
-            'chile_payment_methods' => array(
-                'ebanx-sencillito',
-                'ebanx-servipag',
-            ),
-            'colombia_payment_methods' => array(
-                'ebanx-eft',
-            ),
-            'peru_payment_methods' => array(
-                'ebanx-safetypay',
-                'ebanx-pagoefectivo',
-            ),
-            'save_card_data' => 'yes',
-            'one_click' => 'yes',
-            'capture_enabled' => 'yes',
-            'credit_card_instalments' => '1',
-            'due_date_days' => '3'
-        );
+        'sandbox_mode_enabled' => 'yes',
+        'sandbox_private_key' => '',
+        'sandbox_public_key' => '',
+        'debug_enabled' => 'yes',
+        'brazil_payment_methods' => array(
+            'ebanx-credit-card',
+            'ebanx-banking-ticket',
+            'ebanx-tef',
+            'ebanx-account',
+        ),
+        'mexico_payment_methods' => array(
+            'ebanx-credit-card',
+            'ebanx-debit-card',
+            'ebanx-oxxo',
+        ),
+        'chile_payment_methods' => array(
+            'ebanx-sencillito',
+            'ebanx-servipag',
+        ),
+        'colombia_payment_methods' => array(
+            'ebanx-eft',
+        ),
+        'peru_payment_methods' => array(
+            'ebanx-safetypay',
+            'ebanx-pagoefectivo',
+        ),
+        'save_card_data' => 'yes',
+        'one_click' => 'yes',
+        'capture_enabled' => 'yes',
+        'credit_card_instalments' => '1',
+        'due_date_days' => '3'
+    );
 
     public function __construct()
     {
