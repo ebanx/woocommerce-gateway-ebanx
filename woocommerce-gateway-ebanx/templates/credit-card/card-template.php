@@ -8,16 +8,16 @@
     <?php endif; ?>
     <section class="ebanx-form-row">
         <label for="ebanx-card-number"><?php echo $t['number'] ?> <span class="required">*</span></label>
-        <input id="ebanx-card-number" class="input-text wc-credit-card-form-card-number" type="text" maxlength="20" autocomplete="off" placeholder="&bull;&bull;&bull;&bull; &bull;&bull;&bull;&bull; &bull;&bull;&bull;&bull; &bull;&bull;&bull;&bull;" />
+        <input id="ebanx-card-number" class="input-text wc-credit-card-form-card-number" type="tel" maxlength="20" autocomplete="off" placeholder="&bull;&bull;&bull;&bull; &bull;&bull;&bull;&bull; &bull;&bull;&bull;&bull; &bull;&bull;&bull;&bull;" />
     </section>
     <div class="clear"></div>
     <section class="ebanx-form-row ebanx-form-row-first">
         <label for="ebanx-card-expiry"><?php echo $t['expiry']; ?> <span class="required">*</span></label>
-        <input id="ebanx-card-expiry" class="input-text wc-credit-card-form-card-expiry" type="text" autocomplete="off" placeholder="<?php _e('MM / YY', 'woocommerce-gateway-ebanx');?>" />
+        <input id="ebanx-card-expiry" class="input-text wc-credit-card-form-card-expiry" type="tel" autocomplete="off" placeholder="<?php echo $t['expiry_placeholder'] ?>" maxlength="7" />
     </section>
     <section class="ebanx-form-row ebanx-form-row-last">
         <label for="ebanx-card-cvv"><?php echo $t['cvv']; ?> <span class="required">*</span></label>
-        <input id="ebanx-card-cvv" class="input-text wc-credit-card-form-card-cvc" type="text" autocomplete="off" placeholder="<?php _e('CVV', 'woocommerce-gateway-ebanx');?>" />
+        <input id="ebanx-card-cvv" class="input-text wc-credit-card-form-card-cvc" type="tel" autocomplete="off" placeholder="<?php _e('CVV', 'woocommerce-gateway-ebanx');?>" />
     </section>
 
     <?php include 'installments.php';?>

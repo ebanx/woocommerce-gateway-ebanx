@@ -1,4 +1,7 @@
 .idea/
 wordpress/
 woocommerce-gateway-ebanx/travis/vendor/
-.DS_Store*
+.DS_Store
+*.log
+*.gz
+*.gz.*
