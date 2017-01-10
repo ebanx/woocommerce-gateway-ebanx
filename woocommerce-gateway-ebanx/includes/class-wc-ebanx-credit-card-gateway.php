@@ -4,6 +4,12 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
+class TransactionStatus{
+    const OK = 'OK';
+    const NOK = 'NOK';
+    const RETRY = 'RETRY';
+}
+
 class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
 {
     public function __construct()
@@ -172,7 +178,12 @@ class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
             'instalments' => get_post_meta($order->id, '_instalments_number', true),
             'card_brand'  => get_post_meta($order->id, '_cards_brand_name', true),
             // TODO: display masked number
+            'useremail'   => get_post_meta($order->id, '_billing_email', true);
+            'username'    => get_post_meta($order->id, '_billing_first_name', true);
         );
+
+        $request_data = $this->request_data($order);
+        $data['auto_capture'] = $request_data['payment']['creditcard']['auto_capture'];
 
         if (isset($data['instalments'])) {
             wc_get_template(
@@ -222,10 +233,25 @@ class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
         return $data;
     }
 
+    protected function process_credit_error($request, $order)
+    {
+        switch ($request->payment->transaction_status) {
+            case TransactionStatus::OK:
+                throw new Exception("FATAL: Unexpected application state. Aborting.");
+            case TransactionStatus::NOK:
+                throw new Exception('AR-TS-0');
+            case TransactionStatus::RETRY:
+                throw new Exception('AR-TS-1');
+        }
+    }
+
     protected function process_response($request, $order)
     {
-        if ($request->status == 'ERROR' || !$request->payment->pre_approved) {
+        if ($request->status == 'ERROR') {
             return $this->process_response_error($request, $order);
+        }
+        if (!$request->payment->pre_approved) {
+            return $this->process_credit_error($request, $order);
         }
 
         parent::process_response($request, $order);

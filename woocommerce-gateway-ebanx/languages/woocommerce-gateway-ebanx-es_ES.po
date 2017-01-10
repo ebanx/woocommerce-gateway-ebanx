@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "POT-Creation-Date: 2016-12-30 16:02-0200\n"
-"PO-Revision-Date: 2016-12-30 16:03-0200\n"
+"PO-Revision-Date: 2017-01-10 18:48-0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: es\n"
@@ -390,6 +390,11 @@ msgstr ""
 #, php-format
 msgid "Payment successfully made using %1$s credit card in %2$s."
 msgstr "Pago realizado con tarjeta de crédito %1$s (%2$s meses sin intereses)"
+
+#: templates/credit-card/payment-instructions.php:20
+#, php-format
+msgid "%1$s, your payment is on the way. Wait for mail confirmation on %2$s."
+msgstr "%1$s, estamos procesando su pago. Espera la confirmación por el %2$s."
 
 #: templates/credit-card/installments.php:9
 #, php-format

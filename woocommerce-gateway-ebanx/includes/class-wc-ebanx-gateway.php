@@ -357,6 +357,8 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
                     'INVALID-FIELDS'             => 'Alguns campos não foram preenchidos corretamente. Por favor, verifique e tente novamente.',
                     'INVALID-BILLING-COUNTRY'    => 'Por favor, escolha um país.',
                     'INVALID-ADDRESS'            => 'Insira o seu endereço completo com o número da casa, apartamento ou estabelecimento.',
+                    'AR-TS-0'                    => 'Ops! Sua compra não foi autorizada. Entre em contato com a operadora do seu cartão para mais informações.',
+                    'AR-TS-1'                    => 'Ops! Sua compra não foi autorizada. Tente novamente em alguns instantes.',
                 ),
                 'es'    => array(
                     'GENERAL'                    => 'No pudimos concluir tu compra. Por favor intenta nuevamente o entra en contacto con el sitio web.',
@@ -405,6 +407,8 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
                     'INVALID-FIELDS'             => 'Algunos campos no fueron llenados correctamente. Por favor verifica e inténtalo de nuevo.',
                     'INVALID-BILLING-COUNTRY'    => 'Por favor, escoge un país.',
                     'INVALID-ADDRESS'            => 'Por favor, introduce tu dirección completa. Número de residencia o apartamento.',
+                    'AR-TS-0'                    => 'Ups! Su compra no ha sido autorizada. Por favor, póngase en contacto con el operador de la tarjeta para obtener más informaciónes.',
+                    'AR-TS-1'                    => 'Ups! Su compra no ha sido autorizada. Por favor, inténtelo de nuevo en unos instantes.',
                 ),
             );
 
@@ -524,7 +528,6 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
         WC_Ebanx::log("Processing response: " . print_r($request, true));
 
         if ($request->status == 'ERROR') {
-            print_r($request->payment->transaction_status);
             return $this->process_response_error($request, $order);
         }
 
