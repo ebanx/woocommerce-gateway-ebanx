@@ -129,22 +129,24 @@ class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
             'pt-br' => array(
                 'title' => '',
                 'number' => 'Número do Cartão',
-                'expiry' => 'Data de validade (MM/YY)',
+                'expiry' => 'Data de validade (MM / AA)',
                 'cvv' => 'Código de segurança',
                 'instalments' => 'Número de parcelas',
                 'save_card' => 'Salvar este cartão para compras futuras',
                 'name' => 'Nome impresso no cartão',
-                'another' => 'Usar um outro cartão'
+                'another' => 'Usar um outro cartão',
+                'expiry_placeholder' => 'MM / AA'
             ),
             'es' => array(
                 'title' => '',
                 'number' => 'Número de la tarjeta',
-                'expiry' => 'Fecha de expiración (MM/AA)',
+                'expiry' => 'Fecha de expiración (MM / AA)',
                 'cvv' => 'Código de verificación',
                 'instalments' => 'Meses sin intereses',
                 'save_card' => 'Guarda esta tarjeta para compras futuras.',
                 'name' => 'Titular de la tarjeta',
-                'another' => 'Otra tarjeta de crédito'
+                'another' => 'Otra tarjeta de crédito',
+                'expiry_placeholder' => 'MM / AA'
             )
         );
 

@@ -1,14 +1,15 @@
-.wc_payment_method[class*="ebanx"] div.payment_box {
+li[class*="ebanx"] div.payment_box {
   position: relative;
   padding-bottom: 45px !important;
 }
 
-.wc_payment_method[class*="ebanx"] > label[for*="ebanx"] > img {
+li[class*="ebanx"] > label[for*="ebanx"] > img {
   width: auto;
-  height: 24px;
+  height: auto;
+  max-height: 24px;
 }
 
-.wc_payment_method[class*="ebanx"] .ebanx-payment-container[class*="ebanx-language-"]:after {
+li[class*="ebanx"] .ebanx-payment-container[class*="ebanx-language-"]:after {
   content: '';
   position: absolute;
   bottom: 1em;
@@ -24,22 +25,22 @@
   background-size: contain;
 }
 
-.wc_payment_method[class*="ebanx"] .ebanx-payment-container.ebanx-language-br:after {
+li[class*="ebanx"] .ebanx-payment-container.ebanx-language-br:after {
   width: 135px;
 
   background-image: url(../images/ebanx-pagando.png);
 }
 
-.wc_payment_method[class*="ebanx"] .ebanx-payment-container.ebanx-language-mx:after,
-.wc_payment_method[class*="ebanx"] .ebanx-payment-container.ebanx-language-pe:after,
-.wc_payment_method[class*="ebanx"] .ebanx-payment-container.ebanx-language-co:after,
-.wc_payment_method[class*="ebanx"] .ebanx-payment-container.ebanx-language-cl:after {
+li[class*="ebanx"] .ebanx-payment-container.ebanx-language-mx:after,
+li[class*="ebanx"] .ebanx-payment-container.ebanx-language-pe:after,
+li[class*="ebanx"] .ebanx-payment-container.ebanx-language-co:after,
+li[class*="ebanx"] .ebanx-payment-container.ebanx-language-cl:after {
   width: 168px;
 
   background-image: url(../images/ebanx-estas-pagando.png);
 }
 
-.wc_payment_method[class*="ebanx"] div.payment_box > p:first-child {
+li[class*="ebanx"] div.payment_box > p:first-child {
   margin-bottom: 0 !important;
 }
 
@@ -51,7 +52,7 @@
   margin-top: 15px;
 }
 
-.wc_payment_method[class*="ebanx"] > label > img {
+li[class*="ebanx"] > label > img {
   margin-left: 5px;
 }
 
@@ -199,29 +200,29 @@ div.ebanx-form-row {
 }
 
 .woocommerce .ebanx-form-row input[type='submit'] {
-	background: rgba(17, 17, 17, 1);
-	color: #fff;
-	font-family: "Roboto Condensed",sans-serif;
-	text-transform: uppercase;
-	letter-spacing: 2px;
-	font-size: 11px;
-	padding: 8px 37px;
-	-webkit-border-radius: 2px;
-	-moz-border-radius: 2px;
-	border-radius: 2px;
-	width: auto;
-	border: none;
+  background: rgba(17, 17, 17, 1);
+  color: #fff;
+  font-family: "Roboto Condensed",sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  font-size: 11px;
+  padding: 8px 37px;
+  -webkit-border-radius: 2px;
+  -moz-border-radius: 2px;
+  border-radius: 2px;
+  width: auto;
+  border: none;
 }
 
 .woocommerce .ebanx-form-row input[type='submit']:hover {
-	background: rgba(17, 17, 17, 0.8);
+  background: rgba(17, 17, 17, 0.8);
 }
 
 .ebanx-form-row #rememberme {
-	vertical-align: -12px;
+  vertical-align: -12px;
 }
 .ebanx-form-row label {
-	font-weight: normal;
+  font-weight: normal;
 }
 
 .ebanx-form-row textarea {
@@ -261,20 +262,20 @@ div.ebanx-form-row {
     }
 }
 
-.woocommerce-checkout #payment ul.payment_methods .wc_payment_method[class*="ebanx"] > input[type="checkbox"] {
+.woocommerce-checkout #payment ul.payment_methods li[class*="ebanx"] > input[type="checkbox"] {
   margin-right: 1em;
 }
 
-.wc_payment_method[class*="ebanx"] .payment_box input[type="checkbox"],
-.wc_payment_method[class*="ebanx"] .payment_box input[type="radio"] {
+li[class*="ebanx"] .payment_box input[type="checkbox"],
+li[class*="ebanx"] .payment_box input[type="radio"] {
   width: auto;
   display: inline-block !important;
   float: none !important;
 }
 
-.wc_payment_method[class*="ebanx"] .payment_box .ebanx-credit-card-label > .input-radio,
-.wc_payment_method[class*="ebanx"] .payment_box .ebanx-credit-card-label > .ebanx-credit-card-brand,
-.wc_payment_method[class*="ebanx"] .payment_box .ebanx-credit-card-label > .ebanx-credit-card-bin {
+li[class*="ebanx"] .payment_box .ebanx-credit-card-label > .input-radio,
+li[class*="ebanx"] .payment_box .ebanx-credit-card-label > .ebanx-credit-card-brand,
+li[class*="ebanx"] .payment_box .ebanx-credit-card-label > .ebanx-credit-card-bin {
   float: left !important;
 }
 
@@ -378,18 +379,23 @@ div.ebanx-form-row {
 
 .woocommerce .ebanx-button--group::after {clear: both;}
 
+
+
 .woocommerce .ebanx-button--copy {
   position: relative;
 }
 
 .woocommerce .ebanx-button--copy > .ebanx-button--copy-msg {
   width: 100px;
-  position: absolute !important;
+  position: absolute;
   left: calc(50% - 50px);
   bottom: calc(100% + 5px);
   padding: 10px;
-  font-size: 15px;
+  background-color: #7ED321;
+  border: 1px solid #73B828;
+  font-size: 10px;
   font-weight: normal;
+  color: #FFF;
   border-radius: 2px;
   visibility: hidden;
   opacity: 0;

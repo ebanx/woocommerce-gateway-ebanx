@@ -200,7 +200,8 @@ if (!class_exists('WC_EBANX')) {
         {
             $screen = get_current_screen();
             if ($screen->id != 'woocommerce_page_wc-settings') return;
-            if (!isset($_GET['tab']) || $_GET['tab'] != 'checkout' || !isset($_GET['section']) || $_GET['section'] != 'ebanx-global') return;
+
+            if (!isset($_GET['tab']) || !isset($_GET['section']) || $_GET['tab'] != 'checkout' || $_GET['section'] != 'ebanx-global') return;
 
             $this->configs = new WC_EBANX_Global_Gateway();
             $is_sandbox = ($this->configs->settings['sandbox_mode_enabled'] == 'yes');
@@ -220,12 +221,21 @@ if (!class_exists('WC_EBANX')) {
         private function get_notification_url($is_sandbox)
         {
             $private_key = $is_sandbox ? $this->configs->settings['sandbox_private_key'] : $this->configs->settings['live_private_key'];
+
             \Ebanx\Config::set(array('integrationKey' => $private_key, 'testMode' => $is_sandbox));
+
             try {
                 $res = \Ebanx\Ebanx::getMerchantIntegrationProperties(array('integrationKey' => '1231000'));
+
+                if (empty($res->body->url_status_change_notification)) {
+                    throw new Exception('CONNECTION-ERROR');
+                }
+
                 return $res->body->url_status_change_notification;
             } catch (Exception $e) {
-                $message = 'Could not connect to EBANX servers. Please check if your server can reach your API: https://api.ebanx.com';
+                $api_url = 'https://api.ebanx.com';
+
+                $message = sprintf('Could not connect to EBANX servers. Please check if your server can reach your API: <a href="%1$s">%1$s</a>', $api_url);
                 $this->add_admin_notice('connection_error', 'error', $message);
             }
         }
