@@ -288,6 +288,7 @@ li[class*="ebanx"] .payment_box .ebanx-credit-card-label > .ebanx-credit-card-bi
   width: 100%;
   display: block;
   overflow: hidden;
+  padding: 0 2px;
 }
 
 /* $EBANX BUTTONS */
