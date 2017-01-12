@@ -7,6 +7,7 @@ li[class*="ebanx"] > label[for*="ebanx"] > img {
   width: auto;
   height: auto;
   max-height: 24px;
+  max-width: none !important;
 }
 
 li[class*="ebanx"] .ebanx-payment-container[class*="ebanx-language-"]:after {
