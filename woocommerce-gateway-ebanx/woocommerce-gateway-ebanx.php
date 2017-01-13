@@ -61,6 +61,7 @@ if (!class_exists('WC_EBANX')) {
         private function __construct()
         {
             add_action('admin_init', array($this, 'check_environment'));
+            add_action('admin_init', array($this, 'ebanx_sidebar_shortcut'));
             add_action('current_screen', array($this, 'check_status_change_notification_url_configured'));
             add_action('admin_notices', array($this, 'admin_notices'), 15);
             add_action('plugins_loaded', array($this, 'init'));
@@ -367,6 +368,20 @@ if (!class_exists('WC_EBANX')) {
             if (defined('WP_DEBUG') && WP_DEBUG) {
                 error_log($message);
             }
+        }
+
+        public function ebanx_sidebar_shortcut()
+        {
+            add_menu_page(
+                'EBANX Settings',
+                'EBANX Settings',
+                'administrator',
+                // TODO: Create a dynamic url
+                'admin.php?page=wc-settings&tab=checkout&section=ebanx-global',
+                '',
+                'dashicons-admin-site',
+                21
+            );
         }
     }
 
