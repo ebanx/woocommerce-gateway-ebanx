@@ -30,10 +30,7 @@ if ( ! defined( 'ABSPATH' ) ) {
         <?=$barcode_fraud['boleto1']; ?>.<?=$barcode_fraud['boleto2']; ?> <?=$barcode_fraud['boleto3']; ?>.<?=$barcode_fraud['boleto4']; ?> <?=$barcode_fraud['boleto5']; ?>.<?=$barcode_fraud['boleto6']; ?> <?=$barcode_fraud['boleto7']; ?> <?=$barcode_fraud['boleto8']; ?>
     </div>
     <div class="banking-ticket__barcode-copy">
-        <button type="button" class="button ebanx-button--copy" data-clipboard-text="<?php echo $barcode; ?>">
-            Copiar
-            <span class="ebanx-button--copy-msg woocommerce-message">Copiado!</span>
-        </button>
+        <button type="button" class="button ebanx-button--copy" data-clipboard-text="<?php echo $barcode; ?>">Copiar</button>
     </div>
 </div>
 
