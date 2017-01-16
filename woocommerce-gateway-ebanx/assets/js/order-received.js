@@ -29,4 +29,19 @@ jQuery(document).ready(function ($) {
         .text('Copiar');
     }, 2000);
   });
+
+  // iFrame Resizer
+  var iframe = $('.woocommerce-order-received iframe')[0];
+
+  function resizeIframe(iframe) {
+    iframe.style.height = iframe.contentWindow.document.body.parentElement.scrollHeight + 'px';
+  }
+
+  $(window).on('load resize', function () {
+    resizeIframe(iframe);
+  });
+
+  iframe.contentWindow.addEventListener('resize', function () {
+    resizeIframe(iframe);
+  });
 });

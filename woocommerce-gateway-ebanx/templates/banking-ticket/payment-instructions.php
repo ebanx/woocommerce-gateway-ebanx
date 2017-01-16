@@ -44,15 +44,5 @@ if ( ! defined( 'ABSPATH' ) ) {
 </div>
 
 <div>
-    <iframe id="ebanx-boleto-frame" src="<?=$url_basic; ?>" style="width: 100%; border: 0px;" height="1000"></iframe>
-    <script type="text/javascript">
-        (function(){
-            setTimeout(function(){
-                var el = document.getElementById('ebanx-boleto-frame');
-                var targetSize = el.contentDocument.body.offsetHeight - 200 + 'px';
-                el.style.height = 0; //this forces the browser to recalculate, otherwise it only adds to size...
-                el.style.height = targetSize;
-            }, 0);
-        })();
-    </script>
+    <iframe id="ebanx-boleto-frame" src="<?= $url_iframe; ?>" style="width: 100%; border: 0px; height: 1000px"></iframe>
 </div>

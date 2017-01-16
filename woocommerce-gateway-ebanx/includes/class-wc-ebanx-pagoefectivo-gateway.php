@@ -64,6 +64,7 @@ class WC_EBANX_Pagoefectivo_Gateway extends WC_EBANX_Gateway
 
         $data = array(
             'url_basic' => $pagoefectivo_url,
+            'url_iframe' => get_site_url() . '/?ebanx=order-received&url=' . $pagoefectivo_url,
             'customer_email' => $customer_email,
         );
 
@@ -73,6 +74,8 @@ class WC_EBANX_Pagoefectivo_Gateway extends WC_EBANX_Gateway
             'woocommerce/ebanx/',
             WC_EBANX::get_templates_path()
         );
+
+        wp_enqueue_script('woocommerce_ebanx_order_received', plugins_url('assets/js/order-received.js', WC_EBANX::DIR));
     }
 
     protected function process_response($request, $order)
