@@ -310,11 +310,11 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
 
             $demo_cards_url = '#';
             switch ($this->id)
-                case 'ebanx-debit-card':
-                    $demo_cards_url = 'https://www.ebanx.com/business/en/developers/integrations/testing/debit-card-test-numbers';
-                    break;
                 case 'ebanx-credit-card':
-                    $demo_cards_url = 'https://www.ebanx.com/business/en/developers/integrations/testing/credit-card-test-numbers';
+                    $demo_cards_url = WC_EBANX_Gateway_Utils::$DEMO_CARDS_URLS[WC_EBANX_Gateway_Utils::DEMO_CARD_URL_CREDIT];
+                    break;
+                case 'ebanx-debit-card':
+                    $demo_cards_url = WC_EBANX_Gateway_Utils::$DEMO_CARDS_URLS[WC_EBANX_Gateway_Utils::DEMO_CARD_URL_DEBIT];
                     break;
             }
 
