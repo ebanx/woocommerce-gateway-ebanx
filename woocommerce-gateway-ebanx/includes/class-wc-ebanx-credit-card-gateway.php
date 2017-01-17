@@ -4,7 +4,8 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-class TransactionStatus{
+class TransactionStatus
+{
     const OK = 'OK';
     const NOK = 'NOK';
     const RETRY = 'RETRY';
