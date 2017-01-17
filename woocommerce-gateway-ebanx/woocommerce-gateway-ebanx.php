@@ -60,6 +60,8 @@ if (!class_exists('WC_EBANX')) {
          */
         private function __construct()
         {
+            // Admin Init
+            add_action('admin_footer', array($this, 'disable_ebanx_gateways'), 0);
             add_action('admin_init', array($this, 'check_environment'));
             add_action('current_screen', array($this, 'check_status_change_notification_url_configured'));
             add_action('admin_notices', array($this, 'admin_notices'), 15);
@@ -367,6 +369,41 @@ if (!class_exists('WC_EBANX')) {
             if (defined('WP_DEBUG') && WP_DEBUG) {
                 error_log($message);
             }
+        }
+
+        /**
+         * Disabled all others EBANX gateways
+         * @return void
+         */
+        public function disable_ebanx_gateways()
+        {
+            echo "
+                <style>
+                    .woocommerce_page_wc-settings .subsubsub > li { display: none; }
+                    .woocommerce_page_wc-settings .woocommerce .form-table th { width: 250px !important; }
+                </style>
+
+                <script>
+                    var woocommerceSettings = jQuery('.woocommerce_page_wc-settings');
+
+                    if (woocommerceSettings) {
+                        var subsub = jQuery('.subsubsub > li');
+
+                        for (var i = 0, t = subsub.length; i < t; ++i) {
+                            var s = jQuery(subsub[i]);
+                            var sub = jQuery(s).find('a');
+
+                            if (sub.text().indexOf('EBANX -') === -1) {
+                                s.css({
+                                    display: 'inline-block'
+                                });
+                            }
+                        }
+
+                        jQuery('.ebanx-select').select2();
+                    }
+                </script>
+            ";
         }
     }
 
