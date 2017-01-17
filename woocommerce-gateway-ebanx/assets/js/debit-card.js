@@ -5,7 +5,17 @@ EBANX.config.setPublishableKey(wc_ebanx_params.key);
 // TODO: Create abstract card js to use on debit and debit ?
 
 jQuery( function($) {
+	var demo_cards_url = 'https://www.ebanx.com/business/en/developers/integrations/testing/debit-card-test-numbers';
 	var wc_ebanx_form = {
+		demo_cards_messages: {
+			"pt": "<br/>Você pode usar um <a href=\""
+					+ demo_cards_url
+					+ "\">desses números</a> de cartões de teste para simular uma compra.",
+			"es": "<br/>Puede utilizar uno de <a href=\""
+					+ demo_cards_url
+					+ "\">estos números</a> de tarjetas de prueba para simular una compra."
+		},
+
 		init: function( form ) {
 			this.form = form;
 
@@ -43,8 +53,18 @@ jQuery( function($) {
 		},
 
 		onError: function (e, res) {
-      		wc_ebanx_form.removeErrors();
+			wc_ebanx_form.removeErrors();
 
+			if (res.response.error.err.name == 'InvalidValueFieldError'
+				&& res.response.error.err.field == 'card_number'
+				&& wc_ebanx_params.mode == 'test') {
+
+				var country = $('#billing_country').val().toLowerCase();
+				res.response.error.err.message += (country == 'br'
+						? wc_ebanx_form.demo_cards_messages.pt
+						: wc_ebanx_form.demo_cards_messages.es
+					);
+			}
 			$('#ebanx-debit-cart-form').prepend('<p class="woocommerce-error">' + (res.response.error.err.message || 'Some error happened. Please, verify the data of your debit card and try again.') + '</p>');
 
 			$('body, html').animate({

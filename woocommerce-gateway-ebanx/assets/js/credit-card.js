@@ -3,10 +3,20 @@ EBANX.config.setMode(wc_ebanx_params.mode);
 EBANX.config.setPublishableKey(wc_ebanx_params.key);
 
 jQuery( function($) {
+	var demo_cards_url = 'https://www.ebanx.com/business/en/developers/integrations/testing/credit-card-test-numbers';
+
 	/**
 	 * Object to handle EBANX payment forms.
 	 */
 	var wc_ebanx_form = {
+		demo_cards_messages: {
+			"pt": "<br/>Você pode usar um <a href=\""
+					+ demo_cards_url
+					+ "\">desses números</a> de cartões de teste para simular uma compra.",
+			"es": "<br/>Puede utilizar uno de <a href=\""
+					+ demo_cards_url
+					+ "\">estos números</a> de tarjetas de prueba para simular una compra."
+		},
 
 		/**
 		 * Initialize event handlers and UI state.
@@ -57,8 +67,18 @@ jQuery( function($) {
 		},
 
 		onError: function (e, res) {
-      wc_ebanx_form.removeErrors();
+			wc_ebanx_form.removeErrors();
 
+			if (res.response.error.err.name == 'InvalidValueFieldError'
+				&& res.response.error.err.field == 'card_number'
+				&& wc_ebanx_params.mode == 'test') {
+
+				var country = $('#billing_country').val().toLowerCase();
+				res.response.error.err.message += (country == 'br'
+						? wc_ebanx_form.demo_cards_messages.pt
+						: wc_ebanx_form.demo_cards_messages.es
+					);
+			}
 			$('#ebanx-credit-cart-form').prepend('<p class="woocommerce-error">' + (res.response.error.err.message || 'Some error happened. Please, verify the data of your credit card and try again.') + '</p>');
 
 			$('body, html').animate({
@@ -131,6 +151,7 @@ jQuery( function($) {
           wc_ebanx_form.renderInstalments(creditcard.instalments);
           wc_ebanx_form.renderCvv(creditcard.card_cvv);
 
+          console.info("CREATING NEW TOKEN");
 					EBANX.card.createToken(creditcard, wc_ebanx_form.onEBANXReponse);
 				}
 			}

@@ -309,7 +309,7 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
             $language = $languages[$this->language];
 
             $demo_cards_url = '#';
-            switch ($this->id)
+            switch ($this->id) {
                 case 'ebanx-credit-card':
                     $demo_cards_url = WC_EBANX_Gateway_Utils::DEMO_CARD_URL_CREDIT;
                     break;
