@@ -57,22 +57,22 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway
     public function disable_ebanx_gateways()
     {
         echo "
-        <script>
-          jQuery(document).ready(function () {
-            var subsub = jQuery('.subsubsub > li:contains(EBANX - )');
+            <script>
+              jQuery(document).ready(function () {
+                var subsub = jQuery('.subsubsub > li:contains(EBANX - )');
 
-            for (var i = 0, t = subsub.length; i < t; ++i) {
-              subsub[i].remove();
-            }
+                for (var i = 0, t = subsub.length; i < t; ++i) {
+                  subsub[i].remove();
+                }
 
-            jQuery('.ebanx-select').select2();
-          });
-        </script>
+                jQuery('.ebanx-select').select2();
+              });
+            </script>
 
-        <style>
-            .form-table th { width: 250px !important; }
-        </style>
-      ";
+            <style>
+                .form-table th { width: 250px !important; }
+            </style>
+        ";
     }
 
     public function init_form_fields()
