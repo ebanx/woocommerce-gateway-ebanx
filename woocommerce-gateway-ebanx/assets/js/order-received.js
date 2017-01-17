@@ -31,17 +31,19 @@ jQuery(document).ready(function ($) {
   });
 
   // iFrame Resizer
-  var iframe = $('.woocommerce-order-received iframe')[0];
+  var iframe = document.querySelector('.woocommerce-order-received iframe');
 
-  function resizeIframe(iframe) {
-    iframe.style.height = iframe.contentWindow.document.body.parentElement.scrollHeight + 'px';
+  if (iframe) {
+    var resizeIframe = function resizeIframe(iframe) {
+      iframe.style.height = iframe.contentWindow.document.body.parentElement.scrollHeight + 'px';
+    }
+
+    $(window).on('load', function () {
+      resizeIframe(iframe);
+    });
+
+    iframe.contentWindow.addEventListener('resize', function () {
+      resizeIframe(iframe);
+    });
   }
-
-  $(window).on('load resize', function () {
-    resizeIframe(iframe);
-  });
-
-  iframe.contentWindow.addEventListener('resize', function () {
-    resizeIframe(iframe);
-  });
 });
