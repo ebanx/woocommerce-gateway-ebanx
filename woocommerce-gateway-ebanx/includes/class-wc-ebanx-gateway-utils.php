@@ -77,12 +77,8 @@ abstract class WC_EBANX_Gateway_Utils
         'cash', 'online',
     );
 
-    const DEMO_CARD_URL_CREDIT = 0;
-    const DEMO_CARD_URL_DEBIT = 1;
-    public static $DEMO_CARDS_URLS = array(
-      'https://www.ebanx.com/business/en/developers/integrations/testing/credit-card-test-numbers',
-      'https://www.ebanx.com/business/en/developers/integrations/testing/debit-card-test-numbers'
-    );
+    const DEMO_CARD_URL_CREDIT = 'https://www.ebanx.com/business/en/developers/integrations/testing/credit-card-test-numbers';
+    const DEMO_CARD_URL_DEBIT = 'https://www.ebanx.com/business/en/developers/integrations/testing/debit-card-test-numbers';
 
     /**
      * This function splits an address line like for example "Pallaswiesenstr. 45 App 231" into its individual parts.
