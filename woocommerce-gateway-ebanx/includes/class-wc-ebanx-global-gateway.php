@@ -190,7 +190,7 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway
             'capture_enabled' => array(
                 'type'    => 'checkbox',
                 'title'   => __('Enable Auto-Capture', 'woocommerce-gateway-ebanx'),
-                'label'   => __('Capture the payment immediatly.', 'woocommerce-gateway-ebanx'),
+                'label'   => __('Capture the payment immediately', 'woocommerce-gateway-ebanx'),
                 'description' => __('Automatically capture payments from your customers. Otherwise you will need to capture the payment going to: WooCommerce -> Orders. Not captured payments will be cancelled in 4 days.', 'woocommerce-gateway-ebanx'),
                 'desc_tip' => true
             ),
