@@ -6,6 +6,8 @@ if (!defined('ABSPATH')) {
 
 class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
 {
+    private static $auto_capture = false;
+
     public function __construct()
     {
         $this->id           = 'ebanx-credit-card';
@@ -26,6 +28,8 @@ class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
         });
 
         add_action('woocommerce_order_action_custom_action', array($this, 'capturePaymentAction'));
+
+        self::$auto_capture = $this->configs->settings['capture_enabled'] === 'yes';
     }
 
     function capturePaymentAction($order){
@@ -178,8 +182,7 @@ class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
             'username'    => get_post_meta($order->id, '_billing_first_name', true)
         );
 
-        $request_data = $this->request_data($order);
-        $data['auto_capture'] = $request_data['payment']['creditcard']['auto_capture'];
+        $data['auto_capture'] = self::$auto_capture;
 
         if (isset($data['instalments'])) {
             wc_get_template(
