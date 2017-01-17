@@ -10,10 +10,10 @@ jQuery( function($) {
 		demo_cards_messages: {
 			"pt": "<br/>Você pode usar um <a href=\""
 					+ demo_cards_url
-					+ "\">desses números</a> de cartões de teste para simular uma compra.",
+					+ "\" target=\"_blank\">desses números</a> de cartões de teste para simular uma compra.",
 			"es": "<br/>Puede utilizar uno de <a href=\""
 					+ demo_cards_url
-					+ "\">estos números</a> de tarjetas de prueba para simular una compra."
+					+ "\" target=\"_blank\">estos números</a> de tarjetas de prueba para simular una compra."
 		},
 
 		init: function( form ) {
