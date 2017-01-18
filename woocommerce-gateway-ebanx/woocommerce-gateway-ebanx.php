@@ -70,6 +70,7 @@ if (!class_exists('WC_EBANX')) {
 
             // My Account
             add_action('init', array($this, 'my_account_endpoint'));
+            add_action('init', array($this, 'ebanx_order_received'));
             add_filter('query_vars', array($this, 'my_account_query_vars'), 0);
             register_activation_hook(self::DIR, array($this, 'my_account_endpoint'));
             register_deactivation_hook(self::DIR, array($this, 'my_account_endpoint'));
@@ -95,6 +96,14 @@ if (!class_exists('WC_EBANX')) {
         {
             if (self::get_environment_warning()) {
                 return;
+            }
+        }
+
+        public function ebanx_order_received()
+        {
+            if (isset($_GET['ebanx']) && $_GET['ebanx'] === 'order-received' && isset($_GET['url'])) {
+                echo file_get_contents($_GET['url']);
+                exit;
             }
         }
 

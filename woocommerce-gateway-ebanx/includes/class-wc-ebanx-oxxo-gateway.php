@@ -71,6 +71,7 @@ class WC_EBANX_Oxxo_Gateway extends WC_EBANX_Gateway
             'url_basic'      => $oxxo_basic,
             'url_pdf'        => $oxxo_pdf,
             'url_print'      => $oxxo_print,
+            'url_iframe' => get_site_url() . '/?ebanx=order-received&url=' . $oxxo_basic,
             'customer_email' => $customer_email
         );
 
@@ -80,6 +81,9 @@ class WC_EBANX_Oxxo_Gateway extends WC_EBANX_Gateway
             'woocommerce/ebanx/',
             WC_EBANX::get_templates_path()
         );
+
+        wp_enqueue_script('woocommerce_ebanx_clipboard', plugins_url('assets/js/vendor/clipboard.min.js', WC_EBANX::DIR));
+        wp_enqueue_script('woocommerce_ebanx_order_received', plugins_url('assets/js/order-received.js', WC_EBANX::DIR));
     }
 
     protected function request_data($order)

@@ -381,36 +381,60 @@ li[class*="ebanx"] .payment_box .ebanx-credit-card-label > .ebanx-credit-card-bi
 
 .woocommerce .ebanx-button--group::after {clear: both;}
 
-
-
 .woocommerce .ebanx-button--copy {
   position: relative;
+  margin-bottom: 0 !important;
+
+  transition: all .3s;
 }
 
-.woocommerce .ebanx-button--copy > .ebanx-button--copy-msg {
-  width: 100px;
-  position: absolute;
-  left: calc(50% - 50px);
-  bottom: calc(100% + 5px);
-  padding: 10px;
-  background-color: #7ED321;
-  border: 1px solid #73B828;
-  font-size: 10px;
-  font-weight: normal;
-  color: #FFF;
-  border-radius: 2px;
-  visibility: hidden;
-  opacity: 0;
-  transition: all 200ms ease-in-out;
-  word-break: normal;
-  white-space: normal;
+.ebanx-button--copy-success {
+  animation: fresh 1.8s cubic-bezier(0.215, 0.61, 0.355, 1);
 }
 
-.woocommerce .ebanx-button--copy.ebanx-button--copy-success > .ebanx-button--copy-msg {
-  visibility: visible;
-  opacity: 1;
+.ebanx-button--copy-error {
+  animation: copyError .5s cubic-bezier(0.215, 0.61, 0.355, 1);
 }
 
+@keyframes fresh {
+  0% {
+    transform: scale(1);
+  }
+
+  70% {
+    transform: scale(1.1);
+  }
+
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes copyError {
+  0% {
+    transform: translateX(0);
+  }
+
+  20% {
+    transform: translateX(25px) rotate(2deg);
+  }
+
+  40% {
+    transform: translateX(-25px) rotate(-2deg);
+  }
+
+  60% {
+    transform: translateX(25px) rotate(2deg);
+  }
+
+  80% {
+    transform: translateX(-25px) rotate(-2deg);
+  }
+
+  100% {
+    transform: translateX(0);
+  }
+}
 
 /* $THANK YOU PAGE */
 
@@ -439,8 +463,6 @@ li[class*="ebanx"] .payment_box .ebanx-credit-card-label > .ebanx-credit-card-bi
 
 .banking-ticket__barcode-code {
   display: inline-block;
-  font-size: 12px;
-  color: #000;
   letter-spacing: .32px;
   vertical-align: middle;
 }

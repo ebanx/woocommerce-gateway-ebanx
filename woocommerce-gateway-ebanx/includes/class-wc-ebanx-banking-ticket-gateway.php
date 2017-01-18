@@ -92,6 +92,7 @@ class WC_EBANX_Banking_Ticket_Gateway extends WC_EBANX_Gateway
             'url_basic'       => $boleto_basic,
             'url_pdf'         => $boleto_pdf,
             'url_print'       => $boleto_print,
+            'url_iframe' => get_site_url() . '/?ebanx=order-received&url=' . $boleto_basic,
             'customer_email'  => $customer_email,
             'customer_name'   => $customer_name,
             'due_date'        => $boleto_due_date,
