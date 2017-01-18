@@ -25,11 +25,61 @@ class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
             return $actions;
         });
 
+        add_action('init', array($this, 'capturePayment'));
+
         add_action('woocommerce_order_action_custom_action', array($this, 'capturePaymentAction'));
+
+        add_filter('woocommerce_admin_order_actions', array($this, 'add_cancel_order_actions_button'), PHP_INT_MAX, 2);
     }
 
-    function capturePaymentAction($order){
-        if ($order->get_status() != 'pending' || $order->payment_method != $this->id) {
+    public function add_cancel_order_actions_button($actions, $order) {
+        if ($this->enableToCapture($order))
+        {
+            $actions['capture'] = array(
+                'url'  => admin_url('admin-ajax.php?ebanx-capture=true&order_id=' . $order->id),
+                'name' => 'Capture'
+            );
+        }
+
+        return $actions;
+    }
+
+    protected function enableToCapture($order)
+    {
+        if ($order->get_status() != 'pending' || $order->payment_method != $this->id)
+        {
+            return false;
+        }
+
+        return true;
+    }
+
+    function capturePayment()
+    {
+        if (!isset($_REQUEST['ebanx-capture']) || !isset($_REQUEST['order_id']))
+        {
+            return;
+        }
+
+        $response = $this->capturePaymentAction(wc_get_order($_REQUEST['order_id']));
+
+        $class = 'notice notice-success';
+        $message = 'Order captured!';
+
+        if ($response !== true)
+        {
+            $class = 'notice notice-error';
+            $message = 'Error on capture payment';
+        }
+
+        wp_redirect(admin_url('edit.php?post_type=shop_order'));
+        exit;
+    }
+
+    function capturePaymentAction($order)
+    {
+        if (!$this->enableToCapture($order))
+        {
             return;
         }
 
@@ -41,7 +91,7 @@ class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
         $request = \Ebanx\Ebanx::doCapture(['hash' => get_post_meta($order->id, '_ebanx_payment_hash')]);
 
         if ($request->status != 'SUCCESS') {
-            return;
+            return $request;
         }
 
         if ($request->payment->status == 'CO') {
@@ -49,6 +99,8 @@ class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
             $order->update_status('completed');
             $order->add_order_note(__('EBANX: Transaction captured by '.wp_get_current_user()->data->user_email, 'woocommerce-gateway-ebanx'));
         }
+
+        return true;
     }
 
     public function checkout_assets()
