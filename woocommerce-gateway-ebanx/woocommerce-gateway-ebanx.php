@@ -30,7 +30,6 @@ if (!class_exists('WC_EBANX')) {
      */
     class WC_EBANX
     {
-
         /**
          * Plugin version.
          *
@@ -60,26 +59,42 @@ if (!class_exists('WC_EBANX')) {
          */
         private function __construct()
         {
-            // Admin Init
-            add_action('admin_footer', array($this, 'disable_ebanx_gateways'), 0);
-            add_action('admin_init', array($this, 'check_environment'));
-            add_action('admin_init', array($this, 'ebanx_sidebar_shortcut'));
-            add_action('current_screen', array($this, 'check_status_change_notification_url_configured'));
-            add_action('admin_notices', array($this, 'admin_notices'), 15);
+            /**
+             * Actions
+             */
             add_action('plugins_loaded', array($this, 'init'));
 
-            // My Account
             add_action('init', array($this, 'my_account_endpoint'));
             add_action('init', array($this, 'ebanx_order_received'));
+
+            add_action('admin_footer', array($this, 'disable_ebanx_gateways'), 0);
+
+            add_action('admin_init', array($this, 'check_environment'));
+            add_action('admin_init', array($this, 'ebanx_sidebar_shortcut'));
+
+            add_action('current_screen', array($this, 'check_status_change_notification_url_configured'));
+
+            add_action('admin_notices', array($this, 'admin_notices'), 15);
+
+            add_action('woocommerce_account_' . self::$endpoint . '_endpoint', array($this, 'my_account_template'));
+
+            /**
+             * Filters
+             */
             add_filter('query_vars', array($this, 'my_account_query_vars'), 0);
+            add_filter('woocommerce_account_menu_items', array($this, 'my_account_menus'));
+            add_filter('the_title', array($this, 'my_account_menus_title'));
+
+            /**
+             * Hooks
+             */
             register_activation_hook(self::DIR, array($this, 'my_account_endpoint'));
             register_deactivation_hook(self::DIR, array($this, 'my_account_endpoint'));
 
-            add_filter('woocommerce_account_menu_items', array($this, 'my_account_menus'));
-            add_filter('the_title', array($this, 'my_account_menus_title'));
-            add_action('woocommerce_account_' . self::$endpoint . '_endpoint', array($this, 'my_account_template'));
 
-            // i18n
+            /**
+             * i18n
+             */
             $this->enable_i18n();
 
             if (class_exists('WC_Payment_Gateway')) {
@@ -92,6 +107,10 @@ if (!class_exists('WC_EBANX')) {
             }
         }
 
+        /**
+         * Call when the plugins are loaded
+         * @return void
+         */
         public function init()
         {
             if (self::get_environment_warning()) {
@@ -107,11 +126,19 @@ if (!class_exists('WC_EBANX')) {
             }
         }
 
+        /**
+         * It enables the i18n of the plugin using the languages folders and the domain 'woocommerce-gateway-ebanx'
+         * @return void
+         */
         public function enable_i18n()
         {
-            load_plugin_textdomain( 'woocommerce-gateway-ebanx', false, dirname( plugin_basename(__FILE__) ) . '/languages/' );
+            load_plugin_textdomain('woocommerce-gateway-ebanx', false, dirname( plugin_basename(__FILE__) ) . '/languages/');
         }
 
+        /**
+         * It enables the my account page for logged users
+         * @return void
+         */
         public function my_account_template()
         {
             if (isset($_POST['credit-card-delete']) && is_account_page()) {
@@ -141,6 +168,11 @@ if (!class_exists('WC_EBANX')) {
             );
         }
 
+        /**
+         * Mount query vars on my account for credit cards
+         * @param  array $vars
+         * @return void
+         */
         public function my_account_query_vars($vars)
         {
             $vars[] = self::$endpoint;
@@ -156,6 +188,11 @@ if (!class_exists('WC_EBANX')) {
             add_option('woocommerce_ebanx-global_settings', WC_EBANX_Global_Gateway::$defaults);
         }
 
+        /**
+         * It enables a tab on WooCommerce My Account page
+         * @param  string $title
+         * @return string Return the title to show on tab
+         */
         public function my_account_menus_title($title)
         {
             global $wp_query;
@@ -170,6 +207,11 @@ if (!class_exists('WC_EBANX')) {
             return $title;
         }
 
+        /**
+         * It enalbes the menu as a tab on My Account page
+         * @param  array $menu The all menus supported by WooCoomerce
+         * @return array       The new menu
+         */
         public function my_account_menus($menu)
         {
             // Remove the logout menu item.
@@ -183,6 +225,7 @@ if (!class_exists('WC_EBANX')) {
 
             return $menu;
         }
+
 
         public function admin_notices()
         {
@@ -367,9 +410,14 @@ if (!class_exists('WC_EBANX')) {
         public function woocommerce_missing_notice()
         {
             // TODO: Others notice here
-            include dirname(__FILE__) . '/includes/admin/views/html-notice-missing-woocommerce.php';
+            include dirname(self::DIR) . '/includes/admin/views/html-notice-missing-woocommerce.php';
         }
 
+        /**
+         * Log messages
+         * @param  string $message The log message
+         * @return void
+         */
         public static function log($message)
         {
             if (empty(self::$log)) self::$log = new WC_Logger();
@@ -416,6 +464,10 @@ if (!class_exists('WC_EBANX')) {
             ";
         }
 
+        /**
+         * It inserts a EBANX Settings shortcut on Wordpress sidebar
+         * @return void
+         */
         public function ebanx_sidebar_shortcut()
         {
             add_menu_page(
