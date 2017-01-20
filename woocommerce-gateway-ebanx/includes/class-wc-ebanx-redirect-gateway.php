@@ -31,7 +31,7 @@ abstract class WC_EBANX_Redirect_Gateway extends WC_EBANX_Gateway
      *
      * @return array
      */
-    final protected function dispatch()
+    final protected function dispatch($data)
     {
         return parent::dispatch(array(
             'result'   => 'success',
