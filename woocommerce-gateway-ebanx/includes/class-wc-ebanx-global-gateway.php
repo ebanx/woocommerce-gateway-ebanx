@@ -6,6 +6,11 @@ if (!defined('ABSPATH')) {
 
 final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway
 {
+    /**
+     * Mock to insert when plugin is installed
+     *
+     * @var array
+     */
     public static $defaults = array(
         'sandbox_mode_enabled' => 'yes',
         'sandbox_private_key' => '',
@@ -40,6 +45,9 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway
         'due_date_days' => '3'
     );
 
+    /**
+     * Constructor
+     */
     public function __construct()
     {
         $this->id                 = 'ebanx-global';
@@ -52,6 +60,21 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway
         add_action('woocommerce_update_options_payment_gateways_' . $this->id, array($this, 'process_admin_options'));
     }
 
+    /**
+     * This method always will return false, it doesn't need to show to the customers
+     *
+     * @return boolean Always return false
+     */
+    public function is_available()
+    {
+        return false;
+    }
+
+    /**
+     * Define the fields on EBANX WooCommerce settings page and set the defaults when the plugin is installed
+     *
+     * @return void
+     */
     public function init_form_fields()
     {
         $this->form_fields = array(
@@ -236,6 +259,11 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway
         $this->injectDefaults();
     }
 
+    /**
+     * Inject the default data based on mock
+     *
+     * @return void
+     */
     private function injectDefaults(){
         foreach($this->form_fields as $field => &$properties){
             if(!isset(self::$defaults[$field]))
@@ -243,10 +271,5 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway
 
             $properties['default'] = self::$defaults[$field];
         }
-    }
-
-    public function is_available()
-    {
-        return false;
     }
 }
