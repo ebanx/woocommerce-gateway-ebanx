@@ -3,7 +3,7 @@
  * EBANX Account - Payment Form.
  *
  * @author  EBANX
- * @package WooCommerce_Pagarme/Templates
+ * @package WooCommerce_EBANX/Templates
  * @version 2.0.0
  */
 

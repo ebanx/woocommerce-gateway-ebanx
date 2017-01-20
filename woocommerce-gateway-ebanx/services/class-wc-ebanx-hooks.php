@@ -2,19 +2,29 @@
 
 class WC_EBANX_Hooks
 {
-
+    /**
+     * Initiliazer
+     *
+     * @return void
+     */
     public static function init()
     {
         add_action('init', __CLASS__ . '::paymentStatusHookAction');
     }
 
+    /**
+     * Process future hooks for cash payments like TEF, OXXO, etc
+     *
+     * @return boolean
+     */
     public static function paymentStatusHookAction()
     {
-//        $myfile = fopen("/var/www/checkout-woocommerce/test.txt", "a") or die("Unable to open file!");
-//        fwrite($myfile, json_encode(array('get' => $_GET, 'post' => $_REQUEST, 'request' => $_REQUEST)));
-
-        if (isset($_REQUEST['operation']) && $_REQUEST['operation'] == 'payment_status_change'
-            && isset($_REQUEST['notification_type']) && (isset($_REQUEST['hash_codes'])||isset($_REQUEST['codes']))
+        if (
+            isset($_REQUEST['operation']) &&
+            $_REQUEST['operation'] == 'payment_status_change' &&
+            isset($_REQUEST['notification_type']) &&
+            (isset($_REQUEST['hash_codes']) ||
+            isset($_REQUEST['codes']))
         ) {
             $codes = array();
 
