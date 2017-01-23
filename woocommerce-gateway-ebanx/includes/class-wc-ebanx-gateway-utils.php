@@ -10,12 +10,18 @@ if (!defined('ABSPATH')) {
  */
 abstract class WC_EBANX_Gateway_Utils
 {
+    /**
+     * Countries that EBANX process
+     */
     const COUNTRY_PERU     = 'pe';
     const COUNTRY_CHILE    = 'cl';
     const COUNTRY_BRAZIL   = 'br';
     const COUNTRY_MEXICO   = 'mx';
     const COUNTRY_COLOMBIA = 'co';
 
+    /**
+     * Currencies that EBANX processes
+     */
     const CURRENCY_CODE_BRL = 'BRL';
     const CURRENCY_CODE_USD = 'USD';
     const CURRENCY_CODE_EUR = 'EUR';
@@ -24,9 +30,17 @@ abstract class WC_EBANX_Gateway_Utils
     const CURRENCY_CODE_COP = 'COP';
     const CURRENCY_CODE_CLP = 'CLP';
 
+    /**
+     * URLs for sending in API requests to override dashboard's config
+     */
     const NOTIFICATION_URL = '/index.php/ebanx/notify/';
     const RESPONSE_URL = '/index.php/ebanx/return/';
 
+    /**
+     * The list of all countries that EBANX processes
+     *
+     * @var array
+     */
     public static $ALL_COUNTRIES = array(
         self::COUNTRY_BRAZIL,
         self::COUNTRY_COLOMBIA,
@@ -35,11 +49,21 @@ abstract class WC_EBANX_Gateway_Utils
         self::COUNTRY_CHILE,
     );
 
+    /**
+     * The countries that credit cards are processed by EBANX
+     *
+     * @var array
+     */
     public static $CREDIT_CARD_COUNTRIES = array(
         self::COUNTRY_BRAZIL => self::COUNTRY_BRAZIL,
         self::COUNTRY_MEXICO => self::COUNTRY_MEXICO,
     );
 
+    /**
+     * The timezones of the countries processed by EBANX
+     *
+     * @var array
+     */
     public static $CASH_PAYMENTS_TIMEZONES = array(
       'boleto' => 'America/Sao_Paulo',
       'oxxo' => 'America/Mexico_City',
@@ -48,10 +72,20 @@ abstract class WC_EBANX_Gateway_Utils
       'safetypay-cash' => 'America/Lima'
     );
 
+    /**
+     * The banks that EBANX process in Brazil
+     *
+     * @var array
+     */
     public static $BANKS_TEF_ALLOWED = array(
         self::COUNTRY_BRAZIL => array('bancodobrasil', 'itau', 'bradesco', 'banrisul'),
     );
 
+    /**
+     * The banks that EBANX process in Colombia
+     *
+     * @var array
+     */
     public static $BANKS_EFT_ALLOWED = array(
         self::COUNTRY_COLOMBIA => array(
             'banco_agrario' => 'Banco Agrario',
@@ -73,9 +107,14 @@ abstract class WC_EBANX_Gateway_Utils
             'bancoomeva_s.a.' => 'Bancoomeva',
             'citibank_' => 'Citibank',
             'helm_bank_s.a.' => 'Helm Bank',
-        ),
+        )
     );
 
+    /**
+     * Types allowed by SafetyPay
+     *
+     * @var array
+     */
     public static $TYPES_SAFETYPAY_ALLOWED = array(
         'cash', 'online',
     );
@@ -90,7 +129,6 @@ abstract class WC_EBANX_Gateway_Utils
      * @param string $address
      * @return array
      */
-
     public static function split_street($address)
     {
         $regex = '/\A\s*

@@ -6,7 +6,9 @@ if (!defined('ABSPATH')) {
 
 class WC_EBANX_Servipag_Gateway extends WC_EBANX_Redirect_Gateway
 {
-
+    /**
+     * Constructor
+     */
     public function __construct()
     {
         $this->id           = 'ebanx-servipag';
@@ -21,19 +23,19 @@ class WC_EBANX_Servipag_Gateway extends WC_EBANX_Redirect_Gateway
         $this->enabled = is_array($this->configs->settings['chile_payment_methods']) ? in_array($this->id, $this->configs->settings['chile_payment_methods']) ? 'yes' : false : false;
     }
 
+    /**
+     * Check if the method is available to show to the users
+     *
+     * @return boolean
+     */
     public function is_available()
     {
         return parent::is_available() && ($this->getTransactionAddress('country') == WC_EBANX_Gateway_Utils::COUNTRY_CHILE);
     }
 
     /**
-     * TODO: ??
-     * Admin page.
+     * The HTML structure on checkout page
      */
-    /*public function admin_options() {
-    include dirname( __FILE__ ) . '/admin/views/notices/html-notice-country-not-supported.php';
-    }*/
-
     public function payment_fields()
     {
         if ($description = $this->get_description()) {
@@ -50,6 +52,12 @@ class WC_EBANX_Servipag_Gateway extends WC_EBANX_Redirect_Gateway
         );
     }
 
+    /**
+     * The page of order received, we call them as "Thank you pages"
+     *
+     * @param  WC_Order $order The order created
+     * @return void
+     */
     public static function thankyou_page($order)
     {
         $data  = get_post_meta($order, '_wc_ebanx_transaction_data', true);
@@ -62,6 +70,12 @@ class WC_EBANX_Servipag_Gateway extends WC_EBANX_Redirect_Gateway
         );
     }
 
+    /**
+     * Mount the data to send to EBANX API
+     *
+     * @param  WC_Order $order
+     * @return array
+     */
     protected function request_data($order)
     {
         /*TODO: ? if (empty($_POST['ebanx_servipag_rut'])) {

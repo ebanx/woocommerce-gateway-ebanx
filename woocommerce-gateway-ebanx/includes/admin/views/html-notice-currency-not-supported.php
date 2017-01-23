@@ -2,7 +2,7 @@
 /**
  * Notice: Currency not supported.
  *
- * @package WooCommerce_Pagarme/Admin/Notices
+ * @package WooCommerce_EBANX/Admin/Notices
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
