@@ -3,7 +3,7 @@ Contributors: ebanxwp
 Tags: credit card, boleto, ebanx, woocommerce, approval rate, conversion rate, brazil, mexico, peru, colombia, chile, oxxo, cash payment, local payment one-click payment, installments
 Requires at least: 3.7
 Tested up to: 4.7
-Stable tag: 1.0.1
+Stable tag: 1.0.2
 License: MIT
 License URI: https://opensource.org/licenses/MIT
 
@@ -112,6 +112,10 @@ The [Developer’s Academy](https://www.ebanx.com/business/en/developers/integra
 
 
 == Changelog ==
+
+= 1.0.2 =
+* Bug - Fixed bug that was breaking the media uploader [#267](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/267)
+* Enhancement - All methods are commented now [#266](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/266)
 
 = 1.0.1 =
 * 2016-01-17 - Texts - Chaging the namings and texts from plugin.
