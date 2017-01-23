@@ -102,6 +102,14 @@ if (!class_exists('WC_EBANX')) {
 
                 add_filter('woocommerce_payment_gateways', array($this, 'add_gateway'));
                 add_filter('plugin_action_links_' . plugin_basename(__FILE__), array($this, 'plugin_action_links'));
+
+                /**
+                 * Configs
+                 */
+                $this->configs = new WC_EBANX_Global_Gateway();
+                $this->is_sandbox_mode = $this->configs->settings['sandbox_mode_enabled'] === 'yes';
+                $this->private_key = $this->is_sandbox_mode ? $this->configs->settings['sandbox_private_key'] : $this->configs->settings['live_private_key'];
+                $this->public_key = $this->is_sandbox_mode ? $this->configs->settings['sandbox_public_key'] : $this->configs->settings['live_public_key'];
             } else {
                 add_action('admin_notices', array($this, 'woocommerce_missing_notice'));
             }
@@ -292,15 +300,11 @@ if (!class_exists('WC_EBANX')) {
                 return;
             }
 
-            $this->configs = new WC_EBANX_Global_Gateway();
-
-            $is_sandbox = ($this->configs->settings['sandbox_mode_enabled'] == 'yes');
-
-            if (empty($this->get_notification_url($is_sandbox))) {
+            if (empty($this->get_notification_url($this->is_sandbox_mode))) {
                 $home_url = get_home_url();
                 $live_url = "https://www.ebanx.com/business/en/dashboard/settings#settings-integration";
                 $sandbox_url = "https://www.ebanx.com/business/en/dashboard/test/settings#settings-integration";
-                $merchant_area_url = ($is_sandbox) ? $sandbox_url : $live_url;
+                $merchant_area_url = ($this->is_sandbox_mode) ? $sandbox_url : $live_url;
 
                 $message = "There was a problem with your notification settings. Please go to <a href='${merchant_area_url}'>Settings in your Dashboard</a> and copy & paste “${home_url}” into the “Status Change Notification URL” field under Services URLs. This will allow WooCommerce to receive payment confirmations automatically.";
 
@@ -311,17 +315,14 @@ if (!class_exists('WC_EBANX')) {
         /**
          * Check on EBANX API server if the merchant's private key
          *
-         * @param  boolean $is_sandbox A boolean that identify if the sandbox mode is enabled
          * @return void
          */
-        private function get_notification_url($is_sandbox)
+        private function get_notification_url()
         {
-            $private_key = ($is_sandbox) ? $sandbox_url : $live_url;
-
-            \Ebanx\Config::set(array('integrationKey' => $private_key, 'testMode' => $is_sandbox));
+            \Ebanx\Config::set(array('integrationKey' => $this->private_key, 'testMode' => $this->is_sandbox_mode));
 
             try {
-                $res = \Ebanx\Ebanx::getMerchantIntegrationProperties(array('integrationKey' => $private_key));
+                $res = \Ebanx\Ebanx::getMerchantIntegrationProperties(array('integrationKey' => $this->private_key));
 
                 if (empty($res->body->url_status_change_notification)) {
                     throw new Exception('CONNECTION-ERROR');
