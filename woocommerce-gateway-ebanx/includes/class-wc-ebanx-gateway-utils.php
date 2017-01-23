@@ -24,6 +24,9 @@ abstract class WC_EBANX_Gateway_Utils
     const CURRENCY_CODE_COP = 'COP';
     const CURRENCY_CODE_CLP = 'CLP';
 
+    const NOTIFICATION_URL = '/index.php/ebanx/notify/';
+    const RESPONSE_URL = '/index.php/ebanx/return/';
+
     public static $ALL_COUNTRIES = array(
         self::COUNTRY_BRAZIL,
         self::COUNTRY_COLOMBIA,

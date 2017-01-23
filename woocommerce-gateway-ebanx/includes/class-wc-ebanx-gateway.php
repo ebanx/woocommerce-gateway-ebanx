@@ -161,6 +161,8 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
         $data = array(
             'mode'      => 'full',
             'operation' => 'request',
+            'notification_url' => home_url(WC_EBANX_Gateway_Utils::NOTIFICATION_URL),
+            'response_url' => home_url(WC_EBANX_Gateway_Utils::RESPONSE_URL),
             'payment'   => array(
                 'user_value_1'          => 'name=plugin',
                 'user_value_2'          => 'value=woocommerce',
