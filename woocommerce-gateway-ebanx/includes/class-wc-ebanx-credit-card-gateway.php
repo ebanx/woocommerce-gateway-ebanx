@@ -243,11 +243,15 @@ class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
         $data = parent::request_data($order);
 
         if (in_array(trim(strtolower(WC()->customer->get_shipping_country())), WC_EBANX_Gateway_Utils::$CREDIT_CARD_COUNTRIES)) {
-            if (empty($_POST['ebanx_billing_instalments'])) {
-                throw new Exception('MISSING-INSTALMENTS');
-            }
+            $data['payment']['instalments'] = '1';
 
-            $data['payment']['instalments'] = $_POST['ebanx_billing_instalments'];
+            if ($this->configs->settings['credit_card_instalments'] > 1) {
+                if (empty($_POST['ebanx_billing_instalments'])) {
+                    throw new Exception('MISSING-INSTALMENTS');
+                }
+
+                $data['payment']['instalments'] = $_POST['ebanx_billing_instalments'];
+            }
         }
 
         if (!empty($_POST['ebanx_device_fingerprint'])) {
