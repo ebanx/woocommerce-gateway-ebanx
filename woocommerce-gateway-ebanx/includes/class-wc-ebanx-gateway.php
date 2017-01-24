@@ -12,6 +12,9 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
     protected static $initializedGateways = 0;
     protected static $totalGateways = 0;
 
+    /**
+     * Constructor
+     */
     public function __construct()
     {
         self::$totalGateways++;
@@ -32,34 +35,7 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
 
         add_action('wp_enqueue_scripts', array($this, 'checkout_assets'), 100);
 
-        add_filter('woocommerce_checkout_fields', function ($fields) {
-            $cpf = get_user_meta($this->userId, '_ebanx_billing_brazil_document');
-            $rut = get_user_meta($this->userId, '_ebanx_billing_chile_document');
-            $birth_date_br = get_user_meta($this->userId, '_ebanx_billing_brazil_birth_date');
-            $birth_date_cl = get_user_meta($this->userId, '_ebanx_billing_chile_birth_date');
-
-            $fields['billing']['ebanx_billing_brazil_birth_date'] = array(
-                'type'  => 'text',
-                'label' => __('Birth Date', 'woocommerce-gateway-ebanx'),
-                'default' => isset($birth_date_br[0]) ? $birth_date_br[0] : ''
-            );
-            $fields['billing']['ebanx_billing_brazil_document'] = array(
-                'type'     => 'text',
-                'label'    => 'CPF',
-                'default' => isset($cpf[0]) ? $cpf[0] : ''
-            );
-            $fields['billing']['ebanx_billing_chile_birth_date'] = array(
-                'type'  => 'text',
-                'label' => __('Birth Date', 'woocommerce-gateway-ebanx'),
-                'default' => isset($birth_date_cl[0]) ? $birth_date_cl[0] : ''
-            );
-            $fields['billing']['ebanx_billing_chile_document'] = array(
-                'type'     => 'text',
-                'label'    => 'RUT',
-                'default' => isset($rut[0]) ? $rut[0] : ''
-            );
-            return $fields;
-        });
+        add_filter('woocommerce_checkout_fields', array($this, 'checkout_fields'));
 
         $this->supports = array(
             // 'subscriptions',
@@ -69,11 +45,69 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
         $this->icon = $this->show_icon();
     }
 
+    /**
+     * Check if the method is available to show to the users
+     *
+     * @return boolean
+     */
+    public function is_available()
+    {
+        $this->language = $this->getTransactionAddress('country');
+
+        return parent::is_available() && !empty($this->public_key) && !empty($this->private_key) && $this->enabled === 'yes';
+    }
+
+    /**
+     * Insert custom billing fields on checkout page
+     *
+     * @param  array $fields WooCommerce's fields
+     * @return array         The new fields
+     */
+    public function checkout_fields($fields) {
+        $cpf = get_user_meta($this->userId, '_ebanx_billing_brazil_document');
+        $rut = get_user_meta($this->userId, '_ebanx_billing_chile_document');
+        $birth_date_br = get_user_meta($this->userId, '_ebanx_billing_brazil_birth_date');
+        $birth_date_cl = get_user_meta($this->userId, '_ebanx_billing_chile_birth_date');
+
+        $fields['billing']['ebanx_billing_brazil_birth_date'] = array(
+            'type'  => 'text',
+            'label' => __('Birth Date', 'woocommerce-gateway-ebanx'),
+            'default' => isset($birth_date_br[0]) ? $birth_date_br[0] : ''
+        );
+        $fields['billing']['ebanx_billing_brazil_document'] = array(
+            'type'     => 'text',
+            'label'    => 'CPF',
+            'default' => isset($cpf[0]) ? $cpf[0] : ''
+        );
+        $fields['billing']['ebanx_billing_chile_birth_date'] = array(
+            'type'  => 'text',
+            'label' => __('Birth Date', 'woocommerce-gateway-ebanx'),
+            'default' => isset($birth_date_cl[0]) ? $birth_date_cl[0] : ''
+        );
+        $fields['billing']['ebanx_billing_chile_document'] = array(
+            'type'     => 'text',
+            'label'    => 'RUT',
+            'default' => isset($rut[0]) ? $rut[0] : ''
+        );
+
+        return $fields;
+    }
+
+    /**
+     * The icon on the right of the gateway name on checkout page
+     *
+     * @return string The URI of the icon
+     */
     public function show_icon()
     {
         return plugins_url('/assets/images/' . $this->id . '.png', plugin_basename(dirname(__FILE__)));
     }
 
+    /**
+     * Insert the necessary assets on checkout page
+     *
+     * @return void
+     */
     public function checkout_assets()
     {
         if (is_checkout()) {
@@ -97,22 +131,29 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
 
             self::$initializedGateways++;
 
-            if(self::$initializedGateways === self::$totalGateways)
+            if (self::$initializedGateways === self::$totalGateways) {
                 wp_localize_script('woocommerce_ebanx', 'wc_ebanx_params', apply_filters('wc_ebanx_params', static::$ebanx_params));
+            }
         }
     }
+
+    /**
+     * Output the admin settings in the correct format.
+     *
+     * @return void
+     */
     public function admin_options()
     {
         include dirname(__FILE__) . '/admin/views/html-admin-page.php';
     }
 
-    public function is_available()
-    {
-        $this->language = $this->getTransactionAddress('country');
-
-        return parent::is_available() && !empty($this->public_key) && !empty($this->private_key) && $this->enabled === 'yes';
-    }
-
+    /**
+     * Process a refund created by the merchant
+     * @param  integer $order_id    The id of the order created
+     * @param  int $amount          The amount of the refund
+     * @param  string $reason       Optional description
+     * @return boolean
+     */
     public function process_refund($order_id, $amount = null, $reason = '')
     {
         $order = wc_get_order($order_id);
@@ -156,6 +197,12 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
         return true;
     }
 
+    /**
+     * Mount the data to send to EBANX API
+     *
+     * @param  WC_Order $order
+     * @return array
+     */
     protected function request_data($order)
     {
         $data = array(
@@ -164,7 +211,7 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
             'payment'   => array(
                 'user_value_1'          => 'name=plugin',
                 'user_value_2'          => 'value=woocommerce',
-                'user_value_3'          => 'version='.WC_EBANX::VERSION,
+                'user_value_3'          => 'version=' . WC_EBANX::VERSION,
                 'country'               => $order->get_address()['country'],
                 'currency_code'         => WC_EBANX_Gateway_Utils::CURRENCY_CODE_USD, // TODO: Dynamic
                 'name'                  => $order->get_address()['first_name'] . " " . $order->get_address()['last_name'],
@@ -243,6 +290,12 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
         return $data;
     }
 
+    /**
+     * Get the customer's address
+     *
+     * @param  string $attr
+     * @return boolean|string
+     */
     protected function getTransactionAddress($attr = '')
     {
         if (empty(WC()->customer) || is_admin()) {
@@ -266,6 +319,14 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
         return $this->address;
     }
 
+    /**
+     * The main method to process the payment came from WooCommerce checkout
+     * This method check the informations sent by WooCommerce and if them are fine, it sends the request to EBANX API
+     * The catch captures the errors and check the code sent by EBANX API and then show to the users the right error message
+     *
+     * @param  integer $order_id    The ID of the order created
+     * @return void
+     */
     public function process_payment($order_id)
     {
         try {
@@ -422,6 +483,12 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
         }
     }
 
+    /**
+     * The page of order received, we call them as "Thank you pages"
+     *
+     * @param  WC_Order $order The order created
+     * @return void
+     */
     public static function thankyou_page($order)
     {
         $payment_method = $order->payment_method;
@@ -489,6 +556,12 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
         );
     }
 
+    /**
+     * Clean the cart and dispatch the data to request
+     *
+     * @param  array $data  The checkout's data
+     * @return array
+     */
     protected function dispatch($data)
     {
         WC()->cart->empty_cart();
@@ -496,6 +569,13 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
         return $data;
     }
 
+    /**
+     * Save order's meta fields for future use
+     *
+     * @param  WC_Order $order The order created
+     * @param  Object $request The request from EBANX success response
+     * @return void
+     */
     protected function save_order_meta_fields($order, $request)
     {
         // To save only on DB to internal use
@@ -513,17 +593,25 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
             update_post_meta($order->id, '_ebanx_payment_customer_address', sanitize_text_field($_POST['billing_address_1']));
         }
 
-        // To show to the merchant
+        // It shows to the merchant
         update_post_meta($order->id, 'Payment\'s Hash', $request->payment->hash);
 
         $this->save_user_meta_fields($order);
     }
 
+    /**
+     * It just process the errors response and it generates a log to the merchant on Wordpress panel
+     * It always throws an Exception
+     *
+     * @param  Object $request      The EBANX error object
+     * @param  WC_Order $order      The WooCommerce order
+     * @return void
+     */
     protected function process_response_error($request, $order)
     {
         $code = $request->status_code;
 
-        $error_message = 'EBANX: An error occurred: ' . $code . ' - ' . $request->status_message;
+        $error_message = __(sprintf('EBANX: An error occurred: %s - %s', $code, $request->status_message), 'woocommerce-gateway-ebanx');
 
         $order->update_status('failed', $error_message);
         $order->add_order_note($error_message);
@@ -531,6 +619,13 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
         throw new Exception($code);
     }
 
+    /**
+     * Process the response of request from EBANX API
+     *
+     * @param  Object $request The result of request
+     * @param  WC_Order $order   The order created
+     * @return void
+     */
     protected function process_response($request, $order)
     {
         WC_Ebanx::log("Processing response: " . print_r($request, true));
@@ -546,12 +641,18 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
         if ($request->payment->pre_approved && $request->payment->status == 'CO') {
             $order->add_order_note(__('EBANX: Transaction paid.', 'woocommerce-gateway-ebanx'));
             $order->payment_complete($request->payment->hash);
-            $order->update_status('completed');
+            $order->update_status('processing');
         }
 
         $this->save_order_meta_fields($order, $request);
     }
 
+    /**
+     * Save user's meta fields for future use
+     *
+     * @param  WC_Order $order The order created
+     * @return void
+     */
     protected function save_user_meta_fields($order)
     {
         if ($this->userId) {
@@ -567,6 +668,13 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
         }
     }
 
+    /**
+     * Create the hooks to process cash payments
+     *
+     * @param  array  $codes
+     * @param  string $notificationType     The type of the description
+     * @return void
+     */
     final public function process_hook(array $codes, $notificationType)
     {
         $config = [
@@ -621,19 +729,18 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
             case 'UPDATE':
                 switch (strtoupper($data->payment->status)) {
                     case 'CO':
-                        $order->update_status('completed');
-                        break;
-                    case 'CA':
-                        $order->update_status('cancelled');
-                        break;
-                    case 'PE':
-                        $order->update_status('pending');
-                        break;
-                    case 'OP':
                         $order->update_status('processing');
                         break;
+                    case 'CA':
+                        $order->update_status('failed');
+                        break;
+                    case 'PE':
+                        $order->update_status('on-hold');
+                        break;
+                    case 'OP':
+                        $order->update_status('pending');
+                        break;
                 }
-                // TODO: How to call process response to finish the transaction and save meta fields?
                 break;
         };
     }

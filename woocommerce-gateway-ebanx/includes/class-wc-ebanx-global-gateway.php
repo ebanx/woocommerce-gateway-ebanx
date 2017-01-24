@@ -6,6 +6,11 @@ if (!defined('ABSPATH')) {
 
 final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway
 {
+    /**
+     * Mock to insert when plugin is installed
+     *
+     * @var array
+     */
     public static $defaults = array(
         'sandbox_mode_enabled' => 'yes',
         'sandbox_private_key' => '',
@@ -40,6 +45,9 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway
         'due_date_days' => '3'
     );
 
+    /**
+     * Constructor
+     */
     public function __construct()
     {
         $this->id                 = 'ebanx-global';
@@ -50,31 +58,23 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway
         $this->init_settings();
 
         add_action('woocommerce_update_options_payment_gateways_' . $this->id, array($this, 'process_admin_options'));
-
-        add_action('woocommerce_settings_start', array($this, 'disable_ebanx_gateways'));
     }
 
-    public function disable_ebanx_gateways()
+    /**
+     * This method always will return false, it doesn't need to show to the customers
+     *
+     * @return boolean Always return false
+     */
+    public function is_available()
     {
-        echo "
-        <script>
-          jQuery(document).ready(function () {
-            var subsub = jQuery('.subsubsub > li:contains(EBANX - )');
-
-            for (var i = 0, t = subsub.length; i < t; ++i) {
-              subsub[i].remove();
-            }
-
-            jQuery('.ebanx-select').select2();
-          });
-        </script>
-
-        <style>
-            .form-table th { width: 250px !important; }
-        </style>
-      ";
+        return false;
     }
 
+    /**
+     * Define the fields on EBANX WooCommerce settings page and set the defaults when the plugin is installed
+     *
+     * @return void
+     */
     public function init_form_fields()
     {
         $this->form_fields = array(
@@ -213,7 +213,7 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway
             'capture_enabled' => array(
                 'type'    => 'checkbox',
                 'title'   => __('Enable Auto-Capture', 'woocommerce-gateway-ebanx'),
-                'label'   => __('Capture the payment immediatly.', 'woocommerce-gateway-ebanx'),
+                'label'   => __('Capture the payment immediately', 'woocommerce-gateway-ebanx'),
                 'description' => __('Automatically capture payments from your customers. Otherwise you will need to capture the payment going to: WooCommerce -> Orders. Not captured payments will be cancelled in 4 days.', 'woocommerce-gateway-ebanx'),
                 'desc_tip' => true
             ),
@@ -259,6 +259,11 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway
         $this->injectDefaults();
     }
 
+    /**
+     * Inject the default data based on mock
+     *
+     * @return void
+     */
     private function injectDefaults(){
         foreach($this->form_fields as $field => &$properties){
             if(!isset(self::$defaults[$field]))
@@ -266,10 +271,5 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway
 
             $properties['default'] = self::$defaults[$field];
         }
-    }
-
-    public function is_available()
-    {
-        return false;
     }
 }

@@ -10,21 +10,29 @@ if (!defined('ABSPATH')) {
 }
 
 /**
- * WC_EBANX_My_Account class.
+ * WC_EBANX_My_Account enables the thank you pages
  */
 class WC_EBANX_My_Account
 {
 
     /**
-     * Initialize my account actions.
+     * Constructor and initialize the filters and actions
      */
     public function __construct()
     {
-        add_filter('woocommerce_my_account_my_orders_actions', array($this, 'my_orders_banking_ticket_link'), 10, 2);
+        // Actions
         add_action('woocommerce_order_items_table', array($this, 'order_details'));
         add_action('wp_enqueue_scripts', array($this, 'assets'), 100);
+
+        // Filters
+        add_filter('woocommerce_my_account_my_orders_actions', array($this, 'my_orders_banking_ticket_link'), 10, 2);
     }
 
+    /**
+     * Load the assets needed by my account page
+     *
+     * @return void
+     */
     public function assets()
     {
         wp_enqueue_style(
@@ -58,9 +66,9 @@ class WC_EBANX_My_Account
     }
 
     /**
-     * Call thankyou page on order details page in my Account
+     * Call thankyou pages on order details page on My Account by gateway method
      *
-     * @param  object $order The order object
+     * @param  WC_Order $order      The object order
      * @return void
      */
     public static function order_details($order)
@@ -114,4 +122,7 @@ class WC_EBANX_My_Account
     }
 }
 
+/**
+ * Initialize the thank you pages
+ */
 new WC_EBANX_My_Account();
