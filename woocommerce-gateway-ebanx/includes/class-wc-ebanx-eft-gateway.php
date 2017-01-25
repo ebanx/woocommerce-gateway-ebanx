@@ -30,7 +30,7 @@ class WC_EBANX_Eft_Gateway extends WC_EBANX_Redirect_Gateway
      */
     public function is_available()
     {
-        return parent::is_available() && ($this->getTransactionAddress('country') == WC_EBANX_Gateway_Utils::COUNTRY_COLOMBIA);
+        return parent::is_available() && $this->getTransactionAddress('country') == WC_EBANX_Gateway_Utils::COUNTRY_COLOMBIA;
     }
 
     /**

@@ -277,15 +277,37 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
 
         $street_number = empty($addresses['houseNumber']) ? 'S/N' : trim($addresses['houseNumber'] . ' ' . $addresses['additionToAddress2']);
 
-        $data['payment'] = array_merge($data['payment'], array(
-            'document'      => $_POST['ebanx_billing_document'],
-            'birth_date'    => $_POST['ebanx_billing_birth_date'],
-            'zipcode'       => $_POST['billing_postcode'],
-            'address'       => $_POST['billing_address_1'],
-            'street_number' => $street_number,
-            'city'          => $_POST['billing_city'],
-            'state'         => $_POST['billing_state'],
-        ));
+        $newData = array();
+
+        if (!empty($_POST['ebanx_billing_document'])) {
+            $newData['payment']['document'] = $_POST['ebanx_billing_document'];
+        }
+
+        if (!empty($_POST['ebanx_billing_birth_date'])) {
+            $newData['payment']['birth_date'] = $_POST['ebanx_billing_birth_date'];
+        }
+
+        if (!empty($_POST['billing_postcode'])) {
+            $newData['payment']['zipcode'] = $_POST['billing_postcode'];
+        }
+
+        if (!empty($_POST['billing_address_1'])) {
+            $newData['payment']['address'] = $_POST['billing_address_1'];
+        }
+
+        if (!empty($street_number)) {
+            $newData['payment']['street_number'] = $street_number;
+        }
+
+        if (!empty($_POST['billing_city'])) {
+            $newData['payment']['city'] = $_POST['billing_city'];
+        }
+
+        if (!empty($_POST['billing_state'])) {
+            $newData['payment']['state'] = $_POST['billing_state'];
+        }
+
+        $data['payment'] = array_merge($data['payment'], $newData);
 
         return $data;
     }
@@ -298,18 +320,14 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
      */
     protected function getTransactionAddress($attr = '')
     {
-        if (empty(WC()->customer) || is_admin()) {
+        if (empty(WC()->customer) || is_admin() || (empty($_POST['billing_country']) && empty(WC()->customer->get_country()))) {
             return false;
-        }
-
-        if (empty($_POST['billing_country']) && empty(WC()->customer->get_shipping_country())) {
-            throw new Exception('INVALID-BILLING-COUNTRY');
         }
 
         if (!empty($_POST['billing_country'])) {
             $this->address['country'] = trim(strtolower($_POST['billing_country']));
         } else {
-            $this->address['country'] = trim(strtolower(WC()->customer->get_shipping_country()));
+            $this->address['country'] = trim(strtolower(WC()->customer->get_country()));
         }
 
         if ($attr !== '' && !empty($this->address[$attr])) {

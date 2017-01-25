@@ -15,7 +15,9 @@ class WC_EBANX_One_Click {
      */
     public function __construct() {
         $this->userId  = get_current_user_id();
-        $this->gateway = new WC_EBANX_Credit_Card_Gateway();
+        $this->userCountry = trim(strtolower(get_user_meta( $this->userId, 'billing_country', true )));
+
+        $this->gateway = ($this->userCountry) ? ($this->userCountry === WC_EBANX_Gateway_Utils::COUNTRY_BRAZIL) ? new WC_EBANX_Credit_Card_BR_Gateway() : new WC_EBANX_Credit_Card_MX_Gateway() : false;
 
         add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ), 100 );
         add_action( 'woocommerce_before_add_to_cart_form', array( $this, 'add_button' ) );
@@ -111,7 +113,7 @@ class WC_EBANX_One_Click {
                 ) );
 
             if ( is_wp_error( $order ) ) {
-                throw new Exception( sprintf( __( 'Error %d: Unable to create the order. Please try again.', 'ebanx-woocommerce-one-click-checkout' ), 400 ) );
+                throw new Exception( sprintf( __( 'Error %d: Unable to create the order. Please try again.', 'woocommerce-gateway-ebanx' ), 400 ) );
             } else {
                 $order_id = $order->id;
                 do_action( 'woocommerce_new_order', $order_id );
@@ -150,7 +152,7 @@ class WC_EBANX_One_Click {
                 );
 
                 if ( ! $item_id ) {
-                    throw new Exception( sprintf( __( 'Error %d: Unable to create the order. Please try again.', 'ebanx-woocommerce-one-click-checkout' ), 402 ) );
+                    throw new Exception( sprintf( __( 'Error %d: Unable to create the order. Please try again.', 'woocommerce-gateway-ebanx' ), 402 ) );
                 }
 
                 do_action( 'woocommerce_add_order_item_meta', $item_id, $item, $item_cart_key );
@@ -160,7 +162,7 @@ class WC_EBANX_One_Click {
                 $item_id = $order->add_fee( $fee );
 
                 if ( ! $item_id ) {
-                    throw new Exception( sprintf( __( 'Error %d: Unable to create the order. Please try again.', 'ebanx-woocommerce-one-click-checkout' ), 403 ) );
+                    throw new Exception( sprintf( __( 'Error %d: Unable to create the order. Please try again.', 'woocommerce-gateway-ebanx' ), 403 ) );
                 }
                 // Allow plugins to add order item meta to fees
                 do_action( 'woocommerce_add_order_fee_meta', $order_id, $item_id, $fee, $fee_key );
@@ -168,7 +170,7 @@ class WC_EBANX_One_Click {
 
             if ( WC()->cart->needs_shipping() ) {
                 if ( ! in_array( WC()->customer->get_shipping_country(), array_keys( WC()->countries->get_shipping_countries() ) ) ) {
-                    throw new Exception( sprintf( __( 'Unfortunately <strong>we do not ship to %s</strong>. Please enter an alternative shipping address.', 'ebanx-woocommerce-one-click-checkout' ), WC()->countries->shipping_to_prefix() . ' ' . WC()->customer->get_shipping_country() ) );
+                    throw new Exception( sprintf( __( 'Unfortunately <strong>we do not ship to %s</strong>. Please enter an alternative shipping address.', 'woocommerce-gateway-ebanx' ), WC()->countries->shipping_to_prefix() . ' ' . WC()->customer->get_shipping_country() ) );
                 }
 
                 $packages        = WC()->shipping->get_packages();
@@ -181,20 +183,20 @@ class WC_EBANX_One_Click {
                         $item_id = $order->add_shipping( $package['rates'][ $shipping_method[ $package_key ] ] );
 
                         if ( ! $item_id ) {
-                            throw new Exception( sprintf( __( 'Error %d: Unable to create the order. Please try again.', 'ebanx-woocommerce-one-click-checkout' ), 404 ) );
+                            throw new Exception( sprintf( __( 'Error %d: Unable to create the order. Please try again.', 'woocommerce-gateway-ebanx' ), 404 ) );
                         }
 
                         do_action( 'woocommerce_add_shipping_order_item', $order_id, $item_id, $package_key );
                     }
                     else {
-                        throw new Exception( __( 'Sorry, invalid shipping method.', 'ebanx-woocommerce-one-click-checkout' ) );
+                        throw new Exception( __( 'Sorry, invalid shipping method.', 'woocommerce-gateway-ebanx' ) );
                     }
                 }
             }
 
             foreach ( array_keys( WC()->cart->taxes + WC()->cart->shipping_taxes ) as $tax_rate_id ) {
                 if ( $tax_rate_id && ! $order->add_tax( $tax_rate_id, WC()->cart->get_tax_amount( $tax_rate_id ), WC()->cart->get_shipping_tax_amount( $tax_rate_id ) ) && apply_filters( 'woocommerce_cart_remove_taxes_zero_rate_id', 'zero-rated' ) !== $tax_rate_id ) {
-                    throw new Exception( sprintf( __( 'Error %d: Unable to create the order. Please try again.', 'ebanx-woocommerce-one-click-checkout' ), 405 ) );
+                    throw new Exception( sprintf( __( 'Error %d: Unable to create the order. Please try again.', 'woocommerce-gateway-ebanx' ), 405 ) );
                 }
             }
 
@@ -211,12 +213,11 @@ class WC_EBANX_One_Click {
             $data = $this->gateway->process_payment( $order->id );
 
             if ( $data['result'] !== 'success' ) {
-                throw new Exception( 'Error.' ); // TODO: ?
+                throw new Exception( 'Error.' );
             }
 
             $wpdb->query( 'COMMIT' );
 
-            // TODO: Apply credit card payment method and finish with that
             $this->restore_cart();
             wp_redirect( $order->get_checkout_order_received_url() );
             exit;
@@ -343,7 +344,6 @@ class WC_EBANX_One_Click {
             true
         );
 
-        // TODO: Solved apply css
         wp_enqueue_style(
             'woocommerce_ebanx_one_click_style',
             plugins_url( 'assets/css/one-click.css', WC_EBANX::DIR )
@@ -447,11 +447,7 @@ class WC_EBANX_One_Click {
             case 'es_PE':
             case 'es_MX':
                 $messages = array(
-                    'instalments' => 'Meses sin intereses',
-                    'cvv' => 'Código de verificación',
-                    'title' => 'Elegir una tarjeta',
-                    'pay' => 'Pagar Ahora',
-                    'processing' => 'Procesando...'
+                    'instalments' => 'Meses sin intereses'
                 );
                 break;
             default:
@@ -466,10 +462,10 @@ class WC_EBANX_One_Click {
                 'cart_total' => $product->price,
                 'max_installment' => $this->gateway->configs->settings['credit_card_instalments'],
                 'label' => __( 'Pay with one click', 'woocommerce-gateway-ebanx' ),
-                't' => $messages
+                'instalments' => $messages['instalments']
             ) );
 
-        wc_get_template( 'one-click.php', $args, '', WC_EBANX::get_templates_path() . 'credit-card/' );
+        wc_get_template( 'one-click.php', $args, '', WC_EBANX::get_templates_path() . 'one-click/' );
     }
 }
 

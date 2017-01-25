@@ -11,49 +11,27 @@ class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
      */
     public function __construct()
     {
-        $this->id = 'ebanx-credit-card';
-        $this->method_title = __('EBANX - Credit Card', 'woocommerce-gateway-ebanx');
-
         $this->api_name = '_creditcard';
-        $this->title = __('Credit Card', 'woocommerce-gateway-ebanx');
-        $this->description = __('Pay with credit card.', 'woocommerce-gateway-ebanx');
 
         parent::__construct();
 
-        add_action('woocommerce_order_actions', function ($actions) {
-            if (is_array($actions)) {
-                $actions['custom_action'] = __('Capture by EBANX');
-            }
-
-            return $actions;
-        });
+        add_action('woocommerce_order_actions', array($this, 'auto_capture'));
 
         add_action('woocommerce_order_action_custom_action', array($this, 'capture_payment_action'));
     }
 
     /**
-     * Check if the method is available to show to the users
+     * Check the Auto Capture
      *
-     * @return boolean
+     * @param  array $actions
+     * @return array
      */
-    public function is_available()
-    {
-        switch ($this->getTransactionAddress('country')) {
-            case WC_EBANX_Gateway_Utils::COUNTRY_BRAZIL:
-                $this->title = 'Cartão de Crédito';
-                break;
-            case WC_EBANX_Gateway_Utils::COUNTRY_MEXICO:
-                $this->title = 'Tarjeta de Crédito';
-                break;
-            default:
-                $this->title = 'Credit Card';
-                break;
+    public function auto_capture($actions) {
+        if (is_array($actions)) {
+            $actions['custom_action'] = __('Capture by EBANX');
         }
 
-        $this->method = $this->getTransactionAddress('country') === WC_EBANX_Gateway_Utils::COUNTRY_BRAZIL ? 'brazil_payment_methods' : ($this->getTransactionAddress('country') === WC_EBANX_Gateway_Utils::COUNTRY_MEXICO ? 'mexico_payment_methods' : false);
-        $this->enabled = $this->method && is_array($this->configs->settings[$this->method]) ? in_array($this->id, $this->configs->settings[$this->method]) ? 'yes' : false : false;
-
-        return parent::is_available();
+        return $actions;
     }
 
     /**
@@ -124,103 +102,6 @@ class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
     }
 
     /**
-     * The icon on the right of the gateway name on checkout page
-     *
-     * @return string The URI of the icon
-     */
-    public function show_icon()
-    {
-        return plugins_url('/assets/images/' . $this->id . '-' . $this->getTransactionAddress('country') . '.png', plugin_basename(dirname(__FILE__)));
-    }
-
-    /**
-     * The HTML structure on checkout page
-     */
-    public function payment_fields()
-    {
-        $languages = array(
-            'mx' => 'es',
-            'cl' => 'es',
-            'pe' => 'es',
-            'co' => 'es',
-            'br' => 'pt-br',
-        );
-        $language = $languages[$this->language];
-
-        $messages = array(
-            'pt-br' => array(
-                'title' => '',
-                'number' => 'Número do Cartão',
-                'expiry' => 'Data de validade (MM / AA)',
-                'cvv' => 'Código de segurança',
-                'instalments' => 'Número de parcelas',
-                'save_card' => 'Salvar este cartão para compras futuras',
-                'name' => 'Nome impresso no cartão',
-                'another' => 'Usar um outro cartão',
-                'expiry_placeholder' => 'MM / AA',
-            ),
-            'es' => array(
-                'title' => '',
-                'number' => 'Número de la tarjeta',
-                'expiry' => 'Fecha de expiración (MM / AA)',
-                'cvv' => 'Código de verificación',
-                'instalments' => 'Meses sin intereses',
-                'save_card' => 'Guarda esta tarjeta para compras futuras.',
-                'name' => 'Titular de la tarjeta',
-                'another' => 'Otra tarjeta de crédito',
-                'expiry_placeholder' => 'MM / AA',
-            ),
-        );
-
-        $cart_total = $this->get_order_total();
-
-        $cards = array_filter((array) get_user_meta($this->userId, '_ebanx_credit_card_token', true), function ($card) {
-            return !empty($card->brand) && !empty($card->token) && !empty($card->masked_number); // TODO: Implement token due date
-        });
-
-        // echo wp_kses_post(wpautop(wptexturize($messages[$language]['title'])));
-
-        wc_get_template(
-            'credit-card/payment-form.php',
-            array(
-                'language' => $this->language,
-                'cards' => (array) $cards,
-                'cart_total' => $cart_total,
-                'country' => $this->getTransactionAddress('country'),
-                'max_installment' => $this->configs->settings['credit_card_instalments'],
-                'place_order_enabled' => (isset($this->configs->settings['save_card_data']) && $this->configs->settings['save_card_data'] === 'yes'),
-                't' => $messages[$language],
-            ),
-            'woocommerce/ebanx/',
-            WC_EBANX::get_templates_path()
-        );
-    }
-
-    /**
-     * The page of order received, we call them as "Thank you pages"
-     *
-     * @param  WC_Order $order The order created
-     * @return void
-     */
-    public static function thankyou_page($order)
-    {
-        $data = array(
-            'instalments' => get_post_meta($order->id, '_instalments_number', true),
-            'card_brand' => get_post_meta($order->id, '_cards_brand_name', true),
-            // TODO: display masked number
-        );
-
-        if (isset($data['instalments'])) {
-            wc_get_template(
-                'credit-card/payment-instructions.php',
-                $data,
-                'woocommerce/ebanx/',
-                WC_EBANX::get_templates_path()
-            );
-        }
-    }
-
-    /**
      * Mount the data to send to EBANX API
      *
      * @param  WC_Order $order
@@ -242,7 +123,7 @@ class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
 
         $data = parent::request_data($order);
 
-        if (in_array(trim(strtolower(WC()->customer->get_shipping_country())), WC_EBANX_Gateway_Utils::$CREDIT_CARD_COUNTRIES)) {
+        if (in_array($this->getTransactionAddress('country'), WC_EBANX_Gateway_Utils::$CREDIT_CARD_COUNTRIES)) {
             $data['payment']['instalments'] = '1';
 
             if ($this->configs->settings['credit_card_instalments'] > 1) {

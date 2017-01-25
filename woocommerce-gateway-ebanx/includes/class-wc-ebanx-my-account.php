@@ -77,16 +77,16 @@ class WC_EBANX_My_Account
             return;
         }
 
-        $payment_method = get_post_meta($order->id, '_payment_method')[0];
-
-
         if ($order->get_status() === 'completed') {
             return WC_EBANX_Gateway::thankyou_page($order, $payment_method);
         }
 
         switch ($order->payment_method) {
-            case 'ebanx-credit-card':
-                WC_EBANX_Credit_Card_Gateway::thankyou_page($order);
+            case 'ebanx-credit-card-br':
+                WC_EBANX_Credit_Card_BR_Gateway::thankyou_page($order);
+                break;
+            case 'ebanx-credit-card-mx':
+                WC_EBANX_Credit_Card_MX_Gateway::thankyou_page($order);
                 break;
             case 'ebanx-banking-ticket':
                 WC_EBANX_Banking_Ticket_Gateway::thankyou_page($order);

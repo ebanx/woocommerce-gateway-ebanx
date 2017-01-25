@@ -395,6 +395,8 @@ if (!class_exists('WC_EBANX')) {
             include_once(INCLUDES_DIR . 'class-wc-ebanx-banking-ticket-gateway.php');
             include_once(INCLUDES_DIR . 'class-wc-ebanx-global-gateway.php');
             include_once(INCLUDES_DIR . 'class-wc-ebanx-credit-card-gateway.php');
+            include_once(INCLUDES_DIR . 'class-wc-ebanx-credit-card-br-gateway.php');
+            include_once(INCLUDES_DIR . 'class-wc-ebanx-credit-card-mx-gateway.php');
             include_once(INCLUDES_DIR . 'class-wc-ebanx-debit-card-gateway.php');
             include_once(INCLUDES_DIR . 'class-wc-ebanx-oxxo-gateway.php');
             include_once(INCLUDES_DIR . 'class-wc-ebanx-servipag-gateway.php');
@@ -425,7 +427,8 @@ if (!class_exists('WC_EBANX')) {
         {
             $methods[] = 'WC_EBANX_Global_Gateway';
             $methods[] = 'WC_EBANX_Banking_Ticket_Gateway';
-            $methods[] = 'WC_EBANX_Credit_Card_Gateway';
+            $methods[] = 'WC_EBANX_Credit_Card_BR_Gateway';
+            $methods[] = 'WC_EBANX_Credit_Card_MX_Gateway';
             $methods[] = 'WC_EBANX_Debit_Card_Gateway';
             $methods[] = 'WC_EBANX_Oxxo_Gateway';
             $methods[] = 'WC_EBANX_Sencillito_Gateway';
