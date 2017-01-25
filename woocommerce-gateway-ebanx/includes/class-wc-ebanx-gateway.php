@@ -418,6 +418,8 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
                     'INVALID-FIELDS'             => 'Alguns campos não foram preenchidos corretamente. Por favor, verifique e tente novamente.',
                     'INVALID-BILLING-COUNTRY'    => 'Por favor, escolha um país.',
                     'INVALID-ADDRESS'            => 'Insira o seu endereço completo com o número da casa, apartamento ou estabelecimento.',
+                    'AR-TS-0'                    => 'Ops! Sua compra não foi autorizada. Entre em contato com a operadora do seu cartão para mais informações.',
+                    'AR-TS-1'                    => 'Ops! Sua compra não foi autorizada. Tente novamente em alguns instantes.',
                 ),
                 'es'    => array(
                     'GENERAL'                    => 'No pudimos concluir tu compra. Por favor intenta nuevamente o entra en contacto con el sitio web.',
@@ -466,6 +468,8 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
                     'INVALID-FIELDS'             => 'Algunos campos no fueron llenados correctamente. Por favor verifica e inténtalo de nuevo.',
                     'INVALID-BILLING-COUNTRY'    => 'Por favor, escoge un país.',
                     'INVALID-ADDRESS'            => 'Por favor, introduce tu dirección completa. Número de residencia o apartamento.',
+                    'AR-TS-0'                    => 'Ups! Su compra no ha sido autorizada. Por favor, póngase en contacto con el operador de la tarjeta para obtener más informaciónes.',
+                    'AR-TS-1'                    => 'Ups! Su compra no ha sido autorizada. Por favor, inténtelo de nuevo en unos instantes.',
                 ),
             );
 
@@ -497,6 +501,7 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
         $masked_card = get_post_meta($order->id, '_masked_card_number')[0];
         $customer_email = get_post_meta($order->id, '_billing_email', true);
         $customer_name = get_post_meta($order->id, '_billing_first_name', true);
+        $merchant = $order->merchant;
 
         $languages = array(
             'mx' => 'es',
@@ -510,10 +515,11 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
 
         $messages = array(
             'pt-br' => array(
-                'payment_approved' => sprintf('Seu pagamento foi confirmado, %s.', $customer_name),
+                'payment_approved' => sprintf('Pagamento confirmado, %s.', $customer_name),
                 'important_data' => '<strong>Resumo da compra:</strong>',
                 'total_amount' => 'Valor:',
-                'instalments' => 'parcelas de',
+                'installments' => sprintf('Pagamento parcelado em %s vezes', $instalments_number),
+                'single_installment' => 'Pagamento à vista',
                 'card_last_numbers' => sprintf('Pago com Cartão %s:', ucwords($card_brand_name[0])),
                 'thanks_message' => 'Obrigado por ter comprado conosco.',
                 'completed' => array(
@@ -522,10 +528,11 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
                 )
             ),
             'es' => array(
-                'payment_approved' => sprintf('Pago aprobado con éxito, %s.', $customer_name),
+                'payment_approved' => sprintf('Pago aprobado, %s.', $customer_name),
                 'important_data' => '<strong>Resumo de la compra:</strong>',
                 'total_amount' => 'Valor:',
-                'instalments' => 'meses sen intereses de',
+                'installments' => sprintf('Pago en %s meses sin intereses', $instalments_number),
+                'single_installment' => 'Pago en una sola exhibición',
                 'card_last_numbers' => sprintf('Pago con tarjeta %s:', ucwords($card_brand_name[0])),
                 'thanks_message' => 'Gracias por haber comprado con nosotros.',
                 'completed' => array(

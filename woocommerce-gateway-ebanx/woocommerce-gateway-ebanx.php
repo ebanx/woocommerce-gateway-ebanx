@@ -291,12 +291,11 @@ if (!class_exists('WC_EBANX')) {
         public function check_status_change_notification_url_configured()
         {
             $screen = get_current_screen();
-
             if ($screen->id != 'woocommerce_page_wc-settings') {
                 return;
             }
 
-            if (!isset($_GET['section']) || $_GET['tab'] != 'checkout' || $_GET['section'] != 'ebanx-global') {
+            if (!isset($_GET['tab']) || !isset($_GET['section']) || $_GET['tab'] != 'checkout' || $_GET['section'] != 'ebanx-global') {
                 return;
             }
 

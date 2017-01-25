@@ -6,6 +6,8 @@ if (!defined('ABSPATH')) {
 
 class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
 {
+    private static $auto_capture = false;
+
     /**
      * Constructor
      */
@@ -28,6 +30,7 @@ class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
             return $actions;
         });
 
+        self::$auto_capture = $this->configs->settings['capture_enabled'] === 'yes';
         add_action('woocommerce_order_action_custom_action', array($this, 'capture_payment_action'));
     }
 
@@ -208,7 +211,11 @@ class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
             'instalments' => get_post_meta($order->id, '_instalments_number', true),
             'card_brand' => get_post_meta($order->id, '_cards_brand_name', true),
             // TODO: display masked number
+            'useremail'   => get_post_meta($order->id, '_billing_email', true),
+            'username'    => get_post_meta($order->id, '_billing_first_name', true)
         );
+
+        $data['auto_capture'] = self::$auto_capture;
 
         if (isset($data['instalments'])) {
             wc_get_template(

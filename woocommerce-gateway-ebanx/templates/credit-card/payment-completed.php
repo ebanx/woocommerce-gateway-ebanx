@@ -16,9 +16,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 <p><?=$t['important_data'] ?></p>
 <p><?=$t['total_amount'] ?> <?=WC_EBANX_Gateway_Utils::CURRENCY_CODE_USD ?> <?=$order_amount ?></p>
 <?php if ($instalments_number > 1) : ?>
-    <p><?=$instalments_number ?> <?=$t['instalments'] ?> <?=WC_EBANX_Gateway_Utils::CURRENCY_CODE_USD ?> <?=$instalments_amount ?></p>
+    <p><?=$t['installments']?></p>
 <?php else : ?>
-    <p>Pagamento à vista</p>
+    <p><?=$t['single_installment']?></p>
 <?php endif; ?>
-<p><?=$t['card_last_numbers'] ?> <?=$masked_card ?></p>
-<p><?=$t['thanks_message'] ?></p>
