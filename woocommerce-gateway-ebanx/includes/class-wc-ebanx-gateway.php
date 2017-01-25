@@ -72,21 +72,25 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
         $fields['billing']['ebanx_billing_brazil_birth_date'] = array(
             'type'  => 'text',
             'label' => __('Birth Date', 'woocommerce-gateway-ebanx'),
+            'class' => array('ebanx_billing_brazil_birth_date'),
             'default' => isset($birth_date_br[0]) ? $birth_date_br[0] : ''
         );
         $fields['billing']['ebanx_billing_brazil_document'] = array(
             'type'     => 'text',
             'label'    => 'CPF',
+            'class' => array('ebanx_billing_brazil_document'),
             'default' => isset($cpf[0]) ? $cpf[0] : ''
         );
         $fields['billing']['ebanx_billing_chile_birth_date'] = array(
             'type'  => 'text',
             'label' => __('Birth Date', 'woocommerce-gateway-ebanx'),
+            'class' => array('ebanx_billing_chile_birth_date'),
             'default' => isset($birth_date_cl[0]) ? $birth_date_cl[0] : ''
         );
         $fields['billing']['ebanx_billing_chile_document'] = array(
             'type'     => 'text',
             'label'    => 'RUT',
+            'class' => array('ebanx_billing_chile_document'),
             'default' => isset($rut[0]) ? $rut[0] : ''
         );
 
