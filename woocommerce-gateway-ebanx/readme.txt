@@ -78,8 +78,7 @@ Still need your API Keys? You can pick those up [here](https://www.ebanx.com/bus
 
 = Does this plugin support subscriptions or recurring charges? =
 
-Not yet. However, customers are able to save credit card information and
-make one-click purchases. We are working on having the next version of the plugin support subscriptions.
+Not yet. However, customers are able to save credit card information and make one-click purchases. We are working on having the next version of the plugin support subscriptions.
 
 = Who can I contact if I still have questions? =
 
