@@ -44,22 +44,28 @@ class WC_EBANX_One_Click {
      */
     public function one_click_url( $url ) {
         if ( !isset( $_REQUEST['add-to-cart'] ) || !isset( $_REQUEST['ebanx_one_click_cvv'] )
-            || !isset( $_REQUEST['ebanx_one_click_token'] ) || !isset( $_REQUEST['ebanx-credit-card-installments'] )
+            || !isset( $_REQUEST['ebanx_one_click_token'] )
         ) {
             return $url;
         }
 
         $product_id = intval( $_REQUEST['add-to-cart'] );
 
+        $instalments = '1';
+
+        if (!empty($_REQUEST['ebanx-credit-card-installments'])) {
+            $instalments = $_REQUEST['ebanx-credit-card-installments'];
+        }
+
         // create nonce
         $nonce = wp_create_nonce( $this->orderAction );
         $args = apply_filters( 'ebanx_one_click_url_args', array(
-                '_ebanx_one_click_action' => $this->orderAction,
-                '_ebanx_nonce' => $nonce,
-                '_ebanx_one_click_token' => $_REQUEST['ebanx_one_click_token'],
-                '_ebanx_one_click_cvv' => $_REQUEST['ebanx_one_click_cvv'],
-                '_ebanx_one_click_installments' => $_REQUEST['ebanx-credit-card-installments']
-            ) );
+            '_ebanx_one_click_action' => $this->orderAction,
+            '_ebanx_nonce' => $nonce,
+            '_ebanx_one_click_token' => $_REQUEST['ebanx_one_click_token'],
+            '_ebanx_one_click_cvv' => $_REQUEST['ebanx_one_click_cvv'],
+            '_ebanx_one_click_installments' => $instalments
+        ));
 
         return esc_url_raw( add_query_arg( $args, get_permalink( $product_id ) ) );
     }

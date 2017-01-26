@@ -214,4 +214,32 @@ class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
             update_user_meta($this->userId, '_ebanx_credit_card_token', $cards);
         }
     }
+
+    /**
+     * The page of order received, we call them as "Thank you pages"
+     *
+     * @param  WC_Order $order The order created
+     * @return void
+     */
+    public static function thankyou_page($order)
+    {
+        $order_amount = $order->get_total();
+        $instalments_number = get_post_meta($order->id, '_instalments_number')[0] || 1;
+
+        $data = array(
+            'data' => array(
+                'card_brand_name' => get_post_meta($order->id, '_cards_brand_name', true),
+                'order_amount' => $order_amount,
+                'instalments_number' => $instalments_number,
+                'instalments_amount' => round($order_amount / $instalments_number, 2),
+                'masked_card' => substr(get_post_meta($order->id, '_masked_card_number', true), -4),
+                'customer_email' => $order->billing_email,
+                'customer_name' => $order->billing_first_name
+            ),
+            'order_status' => $order->get_status(),
+            'method' => $order->payment_method
+        );
+
+        parent::thankyou_page($data);
+    }
 }

@@ -67,4 +67,20 @@ class WC_EBANX_Account_Gateway extends WC_EBANX_Redirect_Gateway
             WC_EBANX::get_templates_path()
         );
     }
+
+    /**
+     * The page of order received, we call them as "Thank you pages"
+     *
+     * @param  WC_Order $order The order created
+     * @return void
+     */
+    public static function thankyou_page($order)
+    {
+        $data = array(
+            'data' => array(),
+            'order_status' => $order->get_status(),
+            'method' => 'account'
+        );
+        parent::thankyou_page($data);
+    }
 }

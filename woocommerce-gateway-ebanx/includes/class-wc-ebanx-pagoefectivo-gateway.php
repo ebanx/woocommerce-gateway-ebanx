@@ -75,20 +75,18 @@ class WC_EBANX_Pagoefectivo_Gateway extends WC_EBANX_Gateway
     public static function thankyou_page($order)
     {
         $pagoefectivo_url = get_post_meta($order->id, '_pagoefectivo_url', true);
-        $customer_email = get_post_meta($order->id, '_ebanx_payment_customer_email', true);
 
         $data = array(
-            'url_basic' => $pagoefectivo_url,
-            'url_iframe' => get_site_url() . '/?ebanx=order-received&url=' . $pagoefectivo_url,
-            'customer_email' => $customer_email,
+            'data' => array(
+                'url_basic' => $pagoefectivo_url,
+                'url_iframe' => get_site_url() . '/?ebanx=order-received&url=' . $pagoefectivo_url,
+                'customer_email' => $order->billing_email
+            ),
+            'order_status' => $order->get_status(),
+            'method' => 'pagoefectivo'
         );
 
-        wc_get_template(
-            'pagoefectivo/payment-instructions.php',
-            $data,
-            'woocommerce/ebanx/',
-            WC_EBANX::get_templates_path()
-        );
+        parent::thankyou_page($data);
 
         wp_enqueue_script('woocommerce_ebanx_clipboard', plugins_url('assets/js/vendor/clipboard.min.js', WC_EBANX::DIR));
         wp_enqueue_script('woocommerce_ebanx_order_received', plugins_url('assets/js/order-received.js', WC_EBANX::DIR));

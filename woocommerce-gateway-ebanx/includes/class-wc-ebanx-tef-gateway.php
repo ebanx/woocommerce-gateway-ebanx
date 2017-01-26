@@ -63,18 +63,30 @@ class WC_EBANX_Tef_Gateway extends WC_EBANX_Redirect_Gateway
      */
     public static function thankyou_page($order)
     {
-        $customer_name = get_post_meta($order->id, '_billing_first_name', true);
-
         $data = array(
-            'customer_name' => $customer_name,
+            'data' => array(
+                'bank_name' => get_post_meta($order->id, '_ebanx_tef_bank', true),
+                'customer_name' => get_post_meta($order->id, '_billing_first_name', true)
+            ),
+            'order_status' => $order->get_status(),
+            'method' => 'tef'
         );
 
-        wc_get_template(
-            'tef/payment-instructions.php',
-            $data,
-            'woocommerce/ebanx/',
-            WC_EBANX::get_templates_path()
-        );
+        parent::thankyou_page($data);
+    }
+
+    /**
+     * Save order's meta fields for future use
+     *
+     * @param  WC_Order $order The order created
+     * @param  Object $request The request from EBANX success response
+     * @return void
+     */
+    protected function save_order_meta_fields($order, $request)
+    {
+        update_post_meta($order->id, '_ebanx_tef_bank', sanitize_text_field($_POST['tef']));
+
+        parent::save_order_meta_fields($order, $request);
     }
 
     /**

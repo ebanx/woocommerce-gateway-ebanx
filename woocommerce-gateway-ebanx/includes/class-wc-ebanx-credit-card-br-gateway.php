@@ -90,7 +90,7 @@ class WC_EBANX_Credit_Card_BR_Gateway extends WC_EBANX_Credit_Card_Gateway
         // echo wp_kses_post(wpautop(wptexturize($messages[$language]['title'])));
 
         wc_get_template(
-            'credit-card-br/payment-form.php',
+            'ebanx-credit-card-br/payment-form.php',
             array(
                 'language' => $this->language,
                 'cards' => (array) $cards,
@@ -102,29 +102,5 @@ class WC_EBANX_Credit_Card_BR_Gateway extends WC_EBANX_Credit_Card_Gateway
             'woocommerce/ebanx/',
             WC_EBANX::get_templates_path()
         );
-    }
-
-    /**
-     * The page of order received, we call them as "Thank you pages"
-     *
-     * @param  WC_Order $order The order created
-     * @return void
-     */
-    public static function thankyou_page($order)
-    {
-        $data = array(
-            'instalments' => get_post_meta($order->id, '_instalments_number', true),
-            'card_brand' => get_post_meta($order->id, '_cards_brand_name', true),
-            // TODO: display masked number
-        );
-
-        if (isset($data['instalments'])) {
-            wc_get_template(
-                'credit-card-br/payment-instructions.php',
-                $data,
-                'woocommerce/ebanx/',
-                WC_EBANX::get_templates_path()
-            );
-        }
     }
 }
