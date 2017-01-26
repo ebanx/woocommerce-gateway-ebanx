@@ -237,10 +237,13 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
     protected function request_data($order)
     {
         $names = $this->get_billing_field_names();
+        $home_url = home_url();
 
         $data = array(
             'mode'      => 'full',
             'operation' => 'request',
+            'notification_url' => $home_url,
+            'response_url' => $home_url,
             'payment'   => array(
                 'user_value_1'          => 'name=plugin',
                 'user_value_2'          => 'value=woocommerce',
