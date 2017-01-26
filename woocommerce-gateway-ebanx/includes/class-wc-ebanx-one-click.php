@@ -17,7 +17,7 @@ class WC_EBANX_One_Click {
         $this->userId  = get_current_user_id();
         $this->userCountry = trim(strtolower(get_user_meta( $this->userId, 'billing_country', true )));
 
-        $this->gateway = ($this->userCountry) ? ($this->userCountry === WC_EBANX_Gateway_Utils::COUNTRY_BRAZIL) ? new WC_EBANX_Credit_Card_BR_Gateway() : new WC_EBANX_Credit_Card_MX_Gateway() : false;
+        $this->gateway = $this->userCountry ? ($this->userCountry === WC_EBANX_Gateway_Utils::COUNTRY_BRAZIL ? new WC_EBANX_Credit_Card_BR_Gateway() : new WC_EBANX_Credit_Card_MX_Gateway()) : false;
 
         add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ), 100 );
         add_action( 'woocommerce_before_add_to_cart_form', array( $this, 'add_button' ) );

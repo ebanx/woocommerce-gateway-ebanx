@@ -66,6 +66,9 @@ class WC_EBANX_Hooks {
                 exit;
             }
         }
+
+        ob_end_clean();
+
         return true;
     }
 }

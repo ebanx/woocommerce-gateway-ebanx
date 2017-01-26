@@ -91,7 +91,6 @@ if (!class_exists('WC_EBANX')) {
             register_activation_hook(self::DIR, array($this, 'my_account_endpoint'));
             register_deactivation_hook(self::DIR, array($this, 'my_account_endpoint'));
 
-
             /**
              * i18n
              */
