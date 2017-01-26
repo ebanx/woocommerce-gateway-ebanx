@@ -31,12 +31,6 @@ abstract class WC_EBANX_Gateway_Utils
     const CURRENCY_CODE_CLP = 'CLP';
 
     /**
-     * URLs for sending in API requests to override dashboard's config
-     */
-    const NOTIFICATION_URL = '/index.php/ebanx/notify/';
-    const RESPONSE_URL = '/index.php/ebanx/return/';
-
-    /**
      * The list of all countries that EBANX processes
      *
      * @var array
