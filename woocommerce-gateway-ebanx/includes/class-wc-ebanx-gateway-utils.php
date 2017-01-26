@@ -20,7 +20,7 @@ abstract class WC_EBANX_Gateway_Utils
     const COUNTRY_COLOMBIA = 'co';
 
     /**
-     * Currencies that EBANX process
+     * Currencies that EBANX processes
      */
     const CURRENCY_CODE_BRL = 'BRL';
     const CURRENCY_CODE_USD = 'USD';
@@ -31,7 +31,7 @@ abstract class WC_EBANX_Gateway_Utils
     const CURRENCY_CODE_CLP = 'CLP';
 
     /**
-     * The list of all countries that EBANX process
+     * The list of all countries that EBANX processes
      *
      * @var array
      */
