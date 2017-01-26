@@ -30,7 +30,7 @@ class WC_EBANX_Oxxo_Gateway extends WC_EBANX_Gateway
      */
     public function is_available()
     {
-        return parent::is_available() && ($this->getTransactionAddress('country') == WC_EBANX_Gateway_Utils::COUNTRY_MEXICO);
+        return parent::is_available() && $this->getTransactionAddress('country') == WC_EBANX_Gateway_Utils::COUNTRY_MEXICO;
     }
 
     /**
@@ -83,19 +83,18 @@ class WC_EBANX_Oxxo_Gateway extends WC_EBANX_Gateway
         $customer_email = get_post_meta($order->id, '_ebanx_payment_customer_email', true);
 
         $data = array(
-            'url_basic'      => $oxxo_basic,
-            'url_pdf'        => $oxxo_pdf,
-            'url_print'      => $oxxo_print,
-            'url_iframe' => get_site_url() . '/?ebanx=order-received&url=' . $oxxo_basic,
-            'customer_email' => $customer_email
+            'data' => array(
+                'url_basic'      => $oxxo_basic,
+                'url_pdf'        => $oxxo_pdf,
+                'url_print'      => $oxxo_print,
+                'url_iframe'     => get_site_url() . '/?ebanx=order-received&url=' . $oxxo_basic,
+                'customer_email' => $customer_email
+            ),
+            'order_status' => $order->get_status(),
+            'method' => 'oxxo'
         );
 
-        wc_get_template(
-            'oxxo/payment-instructions.php',
-            $data,
-            'woocommerce/ebanx/',
-            WC_EBANX::get_templates_path()
-        );
+        parent::thankyou_page($data);
 
         wp_enqueue_script('woocommerce_ebanx_clipboard', plugins_url('assets/js/vendor/clipboard.min.js', WC_EBANX::DIR));
         wp_enqueue_script('woocommerce_ebanx_order_received', plugins_url('assets/js/order-received.js', WC_EBANX::DIR));

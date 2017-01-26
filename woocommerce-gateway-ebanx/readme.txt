@@ -3,7 +3,7 @@ Contributors: ebanxwp
 Tags: credit card, boleto, ebanx, woocommerce, approval rate, conversion rate, brazil, mexico, peru, colombia, chile, oxxo, cash payment, local payment one-click payment, installments
 Requires at least: 3.7
 Tested up to: 4.7
-Stable tag: 1.0.2
+Stable tag: 1.1.0
 License: MIT
 License URI: https://opensource.org/licenses/MIT
 
@@ -113,6 +113,11 @@ The [Developer’s Academy](https://www.ebanx.com/business/en/developers/integra
 
 == Changelog ==
 
+= 1.1.0 =
+* Feature - Instalments field now gets hidden when max instalments is set to one [#275](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/275)
+* Fix - Thank you pages for each payment gateway are now called by order status [#277](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/277)
+* Fix - The credit cards gateways were separated by countries [#277](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/277)
+
 = 1.0.2 =
 * Bug - Fixed bug that was breaking the media uploader [#267](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/267)
 * Enhancement - All methods are commented now [#266](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/266)
@@ -125,4 +130,9 @@ The [Developer’s Academy](https://www.ebanx.com/business/en/developers/integra
 
 == Screenshots ==
 
-1. The settings page to put the integrations keys and enable or disable the payments methods.
+1. EBANX Features - Be able to accept local credit cards.
+2. EBANX Features - One of the features that the plugin brings, it's the One Click Payment. A functionality that allows your customer to save their card data and buy the product with only one click.
+3. EBANX Features - Once you choose the EBANX Plugin, your Latin American customers will be able to pay in local methods, such as: boleto, oxxo payments and national credit cards. 
+4. Plugin Configuration - To start your integration, go to your [EBANX Dashboard](https://www.ebanx.com/business/en/dashboard/users/sign_in) settings to find your test and live keys. Insert them and choose to enable the sandbox mode for testing.
+5. Plugin Configuration - You can choose the countries and gateways to work with just by inserting them on the right field to enable payments methods.
+6. Plugin Configuration - Set more advanced options such as: Save Card Data, One-click payment, enable auto-capture and maximum number of installments.

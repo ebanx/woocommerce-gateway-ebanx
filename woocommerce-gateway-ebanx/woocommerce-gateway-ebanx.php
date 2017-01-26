@@ -5,7 +5,7 @@
  * Description: Offer Latin American local payment methods & increase your conversion rates with the solution used by AliExpress, AirBnB and Spotify in Brazil.
  * Author: EBANX
  * Author URI: https://www.ebanx.com/business/en
- * Version: 1.0.2
+ * Version: 1.1.0
  * License: MIT
  * Text Domain: woocommerce-gateway-ebanx
  * Domain Path: /languages
@@ -35,7 +35,7 @@ if (!class_exists('WC_EBANX')) {
          *
          * @var string
          */
-        const VERSION = '1.0.2';
+        const VERSION = '1.1.0';
 
         const DIR = __FILE__;
 
@@ -90,7 +90,6 @@ if (!class_exists('WC_EBANX')) {
              */
             register_activation_hook(self::DIR, array($this, 'my_account_endpoint'));
             register_deactivation_hook(self::DIR, array($this, 'my_account_endpoint'));
-
 
             /**
              * i18n
@@ -395,6 +394,8 @@ if (!class_exists('WC_EBANX')) {
             include_once(INCLUDES_DIR . 'class-wc-ebanx-banking-ticket-gateway.php');
             include_once(INCLUDES_DIR . 'class-wc-ebanx-global-gateway.php');
             include_once(INCLUDES_DIR . 'class-wc-ebanx-credit-card-gateway.php');
+            include_once(INCLUDES_DIR . 'class-wc-ebanx-credit-card-br-gateway.php');
+            include_once(INCLUDES_DIR . 'class-wc-ebanx-credit-card-mx-gateway.php');
             include_once(INCLUDES_DIR . 'class-wc-ebanx-debit-card-gateway.php');
             include_once(INCLUDES_DIR . 'class-wc-ebanx-oxxo-gateway.php');
             include_once(INCLUDES_DIR . 'class-wc-ebanx-servipag-gateway.php');
@@ -425,7 +426,8 @@ if (!class_exists('WC_EBANX')) {
         {
             $methods[] = 'WC_EBANX_Global_Gateway';
             $methods[] = 'WC_EBANX_Banking_Ticket_Gateway';
-            $methods[] = 'WC_EBANX_Credit_Card_Gateway';
+            $methods[] = 'WC_EBANX_Credit_Card_BR_Gateway';
+            $methods[] = 'WC_EBANX_Credit_Card_MX_Gateway';
             $methods[] = 'WC_EBANX_Debit_Card_Gateway';
             $methods[] = 'WC_EBANX_Oxxo_Gateway';
             $methods[] = 'WC_EBANX_Sencillito_Gateway';
