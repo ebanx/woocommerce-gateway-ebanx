@@ -28,14 +28,14 @@ if (!defined('ABSPATH')) {
         			<div class="ebanx-container-credit-card" style="<?php if ($k!==0): ?>display: none;<?php endif; ?>">
         				<section class="ebanx-form-row">
         					<section class="ebanx-form-row">
-        					    <label for="ebanx-card-cvv"><?php echo $t['cvv'] ?> <span class="required">*</span></label>
+        					    <label for="ebanx-card-cvv"><?php _e('Código de segurança', 'woocommerce-gateway-ebanx') ?> <span class="required">*</span></label>
 
             					<input class="input-text wc-credit-card-form-card-cvc" type="text" autocomplete="off" placeholder="<?php _e('CVV', 'woocommerce-gateway-ebanx');?>" style="float: none;" />
             					<input type="hidden" autocomplete="off" value="<?php echo $card->brand; ?>" class="ebanx-card-brand-use" />
             					<input type="hidden" autocomplete="off" value="<?php echo $card->masked_number; ?>" class="ebanx-card-masked-number-use" />
         					</section>
 
-                            <?php include 'installments.php';?>
+                            <?php include WC_EBANX::get_templates_path() . '/instalments.php'; ?>
         				</section>
         			</div>
                 </div>
@@ -43,7 +43,7 @@ if (!defined('ABSPATH')) {
 
             <div class="ebanx-credit-card-option">
                 <label class="ebanx-credit-card-label">
-        			<input type="radio" class="input-radio" value="new" <?php if (empty($cards)): ?>checked="checked"<?php endif; ?> name="ebanx-credit-card-use"> <?php echo $t['another'] ?>
+        			<input type="radio" class="input-radio" value="new" <?php if (empty($cards)): ?>checked="checked"<?php endif; ?> name="ebanx-credit-card-use"> <?php _e('Usar um outro cartão', 'woocommerce-gateway-ebanx') ?>
                 </label>
     			<div class="ebanx-container-credit-card" id="ebanx-container-new-credit-card" style="<?php if (!empty($cards)): ?>display: none;<?php endif; ?>">
     				<?php include_once 'card-template.php';?>

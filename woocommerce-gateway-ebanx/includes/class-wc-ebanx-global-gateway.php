@@ -17,13 +17,13 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway
         'sandbox_public_key' => '',
         'debug_enabled' => 'yes',
         'brazil_payment_methods' => array(
-            'ebanx-credit-card',
+            'ebanx-credit-card-br',
             'ebanx-banking-ticket',
             'ebanx-tef',
             'ebanx-account',
         ),
         'mexico_payment_methods' => array(
-            'ebanx-credit-card',
+            'ebanx-credit-card-mx',
             'ebanx-debit-card',
             'ebanx-oxxo',
         ),
@@ -128,13 +128,13 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway
                 'type'        => 'multiselect',
                 'class'       => 'ebanx-select',
                 'options'     => array(
-                    'ebanx-credit-card'    => 'Credit Card',
+                    'ebanx-credit-card-br' => 'Credit Card',
                     'ebanx-banking-ticket' => 'Boleto EBANX',
                     'ebanx-tef'            => 'Online Banking (TEF)',
                     'ebanx-account'        => 'EBANX Wallet',
                 ),
                 'default'     => array(
-                    'ebanx-credit-card',
+                    'ebanx-credit-card-br',
                     'ebanx-banking-ticket',
                     'ebanx-tef',
                     'ebanx-account',
@@ -145,12 +145,12 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway
                 'type'        => 'multiselect',
                 'class'       => 'ebanx-select',
                 'options'     => array(
-                    'ebanx-credit-card' => 'Credit Card',
+                    'ebanx-credit-card-mx' => 'Credit Card',
                     'ebanx-debit-card'  => 'Debit Card',
                     'ebanx-oxxo'        => 'OXXO',
                 ),
                 'default'     => array(
-                    'ebanx-credit-card',
+                    'ebanx-credit-card-mx',
                     'ebanx-debit-card',
                     'ebanx-oxxo',
                 ),

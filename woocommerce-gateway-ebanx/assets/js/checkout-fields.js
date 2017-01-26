@@ -1,6 +1,5 @@
 jQuery( function($) {
   $(document).find(".ebanx_billing_chile_birth_date input").mask('00/00/0000');
-  $(document).find(".ebanx_billing_chile_document input").mask('00.000.000-0');
   $(document).find(".ebanx_billing_brazil_birth_date input").mask('00/00/0000');
   $(document).find(".ebanx_billing_brazil_document input").mask('000.000.000-00');
 
