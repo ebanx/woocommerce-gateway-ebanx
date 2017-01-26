@@ -606,7 +606,7 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
     {
         $code = $request->status_code;
 
-        $error_message = 'EBANX: An error occurred: ' . $code . ' - ' . $request->status_message;
+        $error_message = __(sprintf('EBANX: An error occurred: %s - %s', $code, $request->status_message), 'woocommerce-gateway-ebanx');
 
         $order->update_status('failed', $error_message);
         $order->add_order_note($error_message);
@@ -636,7 +636,7 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
         if ($request->payment->pre_approved && $request->payment->status == 'CO') {
             $order->add_order_note(__('EBANX: Transaction paid.', 'woocommerce-gateway-ebanx'));
             $order->payment_complete($request->payment->hash);
-            $order->update_status('completed');
+            $order->update_status('processing');
         }
 
         $this->save_order_meta_fields($order, $request);
@@ -724,16 +724,16 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
             case 'UPDATE':
                 switch (strtoupper($data->payment->status)) {
                     case 'CO':
-                        $order->update_status('completed');
+                        $order->update_status('processing');
                         break;
                     case 'CA':
-                        $order->update_status('cancelled');
+                        $order->update_status('failed');
                         break;
                     case 'PE':
-                        $order->update_status('pending');
+                        $order->update_status('on-hold');
                         break;
                     case 'OP':
-                        $order->update_status('processing');
+                        $order->update_status('pending');
                         break;
                 }
                 break;
