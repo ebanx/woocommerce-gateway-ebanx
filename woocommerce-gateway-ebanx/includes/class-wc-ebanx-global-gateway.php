@@ -42,7 +42,11 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway
         'one_click' => 'yes',
         'capture_enabled' => 'yes',
         'credit_card_instalments' => '1',
-        'due_date_days' => '3'
+        'due_date_days' => '3',
+        'ebanx_billing_brazil_birth_date_field_name' => 'ebanx_billing_brazil_birth_date',
+        'ebanx_billing_brazil_document_field_name' => 'ebanx_billing_brazil_document',
+        'ebanx_billing_chile_birth_date_field_name' => 'ebanx_billing_chile_birth_date',
+        'ebanx_billing_chile_document_field_name' => 'ebanx_billing_chile_document',
     );
 
     /**

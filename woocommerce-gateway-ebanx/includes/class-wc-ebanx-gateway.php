@@ -64,29 +64,35 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
      * @return array         The new fields
      */
     public function checkout_fields($fields) {
+        $names = $this->get_billing_field_names();
+
         $cpf = get_user_meta($this->userId, '_ebanx_billing_brazil_document', true);
         $rut = get_user_meta($this->userId, '_ebanx_billing_chile_document', true);
         $birth_date_br = get_user_meta($this->userId, '_ebanx_billing_brazil_birth_date', true);
         $birth_date_cl = get_user_meta($this->userId, '_ebanx_billing_chile_birth_date', true);
 
-        $fields['billing']['ebanx_billing_brazil_birth_date'] = array(
+        $fields['billing'][$names['ebanx_billing_brazil_birth_date']] = array(
             'type'  => 'text',
             'label' => __('Birth Date', 'woocommerce-gateway-ebanx'),
+            'class' => array('ebanx_billing_brazil_birth_date'),
             'default' => isset($birth_date_br) ? $birth_date_br : ''
         );
-        $fields['billing']['ebanx_billing_brazil_document'] = array(
+        $fields['billing'][$names['ebanx_billing_brazil_document']] = array(
             'type'     => 'text',
             'label'    => 'CPF',
+            'class' => array('ebanx_billing_brazil_document'),
             'default' => isset($cpf) ? $cpf : ''
         );
-        $fields['billing']['ebanx_billing_chile_birth_date'] = array(
+        $fields['billing'][$names['ebanx_billing_chile_birth_date']] = array(
             'type'  => 'text',
             'label' => __('Birth Date', 'woocommerce-gateway-ebanx'),
+            'class' => array('ebanx_billing_chile_birth_date'),
             'default' => isset($birth_date_cl) ? $birth_date_cl : ''
         );
-        $fields['billing']['ebanx_billing_chile_document'] = array(
+        $fields['billing'][$names['ebanx_billing_chile_document']] = array(
             'type'     => 'text',
             'label'    => 'RUT',
+            'class' => array('ebanx_billing_chile_document'),
             'default' => isset($rut) ? $rut : ''
         );
 
@@ -198,6 +204,31 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
     }
 
     /**
+     * Fetches the billing field names for compatibility with checkout managers
+     * @return array
+     */
+    protected function get_billing_field_names() {
+        return [
+            'ebanx_billing_brazil_birth_date' => $this->get_settings_or_default('ebanx_billing_brazil_birth_date_field_name', 'ebanx_billing_brazil_birth_dateAAA'),
+            'ebanx_billing_brazil_document' => $this->get_settings_or_default('ebanx_billing_brazil_document_field_name', 'ebanx_billing_brazil_documentAAA'),
+            'ebanx_billing_chile_birth_date' => $this->get_settings_or_default('ebanx_billing_chile_birth_date_field_name', 'ebanx_billing_chile_birth_dateAAA'),
+            'ebanx_billing_chile_document' => $this->get_settings_or_default('ebanx_billing_chile_document_field_name', 'ebanx_billing_chile_documentAAA'),
+        ];
+    }
+
+    /**
+     * Fetches a single setting from the gateway settings if found, otherwise it returns an optional default value
+     * @param  string $name    The setting name to fetch
+     * @param  mixed  $default The default value in case setting is not present
+     * @return mixed
+     */
+    private function get_settings_or_default($name, $default=null) {
+        if(!isset($this->configs->settings[$name]) || empty($this->configs->settings[$name]))
+            return $default;
+        return $this->configs->settings[$name];
+    }
+
+    /**
      * Mount the data to send to EBANX API
      *
      * @param  WC_Order $order
@@ -205,6 +236,7 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
      */
     protected function request_data($order)
     {
+        $names = $this->get_billing_field_names();
         $home_url = home_url();
 
         $data = array(
@@ -248,8 +280,8 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
         }
 
         if (trim(strtolower(WC()->customer->get_shipping_country())) === WC_EBANX_Gateway_Utils::COUNTRY_BRAZIL) {
-            if (empty($_POST['ebanx_billing_brazil_document']) ||
-                empty($_POST['ebanx_billing_brazil_birth_date']) ||
+            if (empty($_POST[$names['ebanx_billing_brazil_document']]) ||
+                empty($_POST[$names['ebanx_billing_brazil_birth_date']]) ||
                 empty($_POST['billing_postcode']) ||
                 empty($_POST['billing_address_1']) ||
                 empty($_POST['billing_city']) ||
@@ -258,17 +290,17 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
                 throw new Exception('INVALID-FIELDS');
             }
 
-            $_POST['ebanx_billing_document'] = $_POST['ebanx_billing_brazil_document'];
-            $_POST['ebanx_billing_birth_date'] = $_POST['ebanx_billing_brazil_birth_date'];
+            $_POST['ebanx_billing_document'] = $_POST[$names['ebanx_billing_brazil_document']];
+            $_POST['ebanx_billing_birth_date'] = $_POST[$names['ebanx_billing_brazil_birth_date']];
         }
 
         if (trim(strtolower(WC()->customer->get_shipping_country())) === WC_EBANX_Gateway_Utils::COUNTRY_CHILE) {
-            if (empty($_POST['ebanx_billing_chile_document']) || empty($_POST['ebanx_billing_chile_birth_date'])) {
+            if (empty($_POST[$names['ebanx_billing_chile_document']]) || empty($_POST[$names['ebanx_billing_chile_birth_date']])) {
                 throw new Exception('INVALID-FIELDS');
             }
 
-            $_POST['ebanx_billing_document'] = $_POST['ebanx_billing_chile_document'];
-            $_POST['ebanx_billing_birth_date'] = $_POST['ebanx_billing_chile_birth_date'];
+            $_POST['ebanx_billing_document'] = $_POST[$names['ebanx_billing_chile_document']];
+            $_POST['ebanx_billing_birth_date'] = $_POST[$names['ebanx_billing_chile_birth_date']];
         }
 
         $addresses = $_POST['billing_address_1'];
