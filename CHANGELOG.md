@@ -1,7 +1,9 @@
 # CHANGELOG
 
 ## 1.1.0
-* Feature - Installments field now gets hidden when max installments is set to one [#275](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/275)
+* Feature - Instalments field now gets hidden when max instalments is set to one [#275](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/275)
+* Fix - Thank you pages for each payment gateway are now called by order status [#277](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/277)
+* Fix - The credit cards gateways were separated by countries [#277](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/277)
 
 ## 1.0.2
 * Bug - Fixed bug that was breaking the media uploader [#267](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/267)

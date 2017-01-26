@@ -1,6 +1,6 @@
 <?php
 /**
- * Payment completed.
+ * TEF - Payment instructions.
  *
  * @author  EBANX.com
  * @package WooCommerce_EBANX/Templates
@@ -10,7 +10,6 @@
 if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
+
 ?>
 
-<p><?= $t['completed']['title'] ?></p>
-<p><?= $t['completed']['thanks_message'] ?></p>

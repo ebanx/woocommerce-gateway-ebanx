@@ -30,7 +30,7 @@ class WC_EBANX_Eft_Gateway extends WC_EBANX_Redirect_Gateway
      */
     public function is_available()
     {
-        return parent::is_available() && ($this->getTransactionAddress('country') == WC_EBANX_Gateway_Utils::COUNTRY_COLOMBIA);
+        return parent::is_available() && $this->getTransactionAddress('country') == WC_EBANX_Gateway_Utils::COUNTRY_COLOMBIA;
     }
 
     /**
@@ -63,17 +63,13 @@ class WC_EBANX_Eft_Gateway extends WC_EBANX_Redirect_Gateway
      */
     public static function thankyou_page($order)
     {
-        $data  = get_post_meta($order, '_wc_ebanx_transaction_data', true);
-
-        wc_get_template(
-            'eft/payment-instructions.php',
-            array(
-                'title'       => $this->title,
-                'description' => $this->description,
-            ),
-            'woocommerce/ebanx/',
-            WC_EBANX::get_templates_path()
+        $data = array(
+            'data' => array(),
+            'order_status' => $order->get_status(),
+            'method' => 'debit-card'
         );
+
+        parent::thankyou_page($data);
     }
 
     /**

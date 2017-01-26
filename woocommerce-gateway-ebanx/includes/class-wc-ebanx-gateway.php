@@ -64,30 +64,30 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
      * @return array         The new fields
      */
     public function checkout_fields($fields) {
-        $cpf = get_user_meta($this->userId, '_ebanx_billing_brazil_document');
-        $rut = get_user_meta($this->userId, '_ebanx_billing_chile_document');
-        $birth_date_br = get_user_meta($this->userId, '_ebanx_billing_brazil_birth_date');
-        $birth_date_cl = get_user_meta($this->userId, '_ebanx_billing_chile_birth_date');
+        $cpf = get_user_meta($this->userId, '_ebanx_billing_brazil_document', true);
+        $rut = get_user_meta($this->userId, '_ebanx_billing_chile_document', true);
+        $birth_date_br = get_user_meta($this->userId, '_ebanx_billing_brazil_birth_date', true);
+        $birth_date_cl = get_user_meta($this->userId, '_ebanx_billing_chile_birth_date', true);
 
         $fields['billing']['ebanx_billing_brazil_birth_date'] = array(
             'type'  => 'text',
             'label' => __('Birth Date', 'woocommerce-gateway-ebanx'),
-            'default' => isset($birth_date_br[0]) ? $birth_date_br[0] : ''
+            'default' => isset($birth_date_br) ? $birth_date_br : ''
         );
         $fields['billing']['ebanx_billing_brazil_document'] = array(
             'type'     => 'text',
             'label'    => 'CPF',
-            'default' => isset($cpf[0]) ? $cpf[0] : ''
+            'default' => isset($cpf) ? $cpf : ''
         );
         $fields['billing']['ebanx_billing_chile_birth_date'] = array(
             'type'  => 'text',
             'label' => __('Birth Date', 'woocommerce-gateway-ebanx'),
-            'default' => isset($birth_date_cl[0]) ? $birth_date_cl[0] : ''
+            'default' => isset($birth_date_cl) ? $birth_date_cl : ''
         );
         $fields['billing']['ebanx_billing_chile_document'] = array(
             'type'     => 'text',
             'label'    => 'RUT',
-            'default' => isset($rut[0]) ? $rut[0] : ''
+            'default' => isset($rut) ? $rut : ''
         );
 
         return $fields;
@@ -279,15 +279,37 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
 
         $street_number = empty($addresses['houseNumber']) ? 'S/N' : trim($addresses['houseNumber'] . ' ' . $addresses['additionToAddress2']);
 
-        $data['payment'] = array_merge($data['payment'], array(
-            'document'      => $_POST['ebanx_billing_document'],
-            'birth_date'    => $_POST['ebanx_billing_birth_date'],
-            'zipcode'       => $_POST['billing_postcode'],
-            'address'       => $_POST['billing_address_1'],
-            'street_number' => $street_number,
-            'city'          => $_POST['billing_city'],
-            'state'         => $_POST['billing_state'],
-        ));
+        $newData = array();
+
+        if (!empty($_POST['ebanx_billing_document'])) {
+            $newData['payment']['document'] = $_POST['ebanx_billing_document'];
+        }
+
+        if (!empty($_POST['ebanx_billing_birth_date'])) {
+            $newData['payment']['birth_date'] = $_POST['ebanx_billing_birth_date'];
+        }
+
+        if (!empty($_POST['billing_postcode'])) {
+            $newData['payment']['zipcode'] = $_POST['billing_postcode'];
+        }
+
+        if (!empty($_POST['billing_address_1'])) {
+            $newData['payment']['address'] = $_POST['billing_address_1'];
+        }
+
+        if (!empty($street_number)) {
+            $newData['payment']['street_number'] = $street_number;
+        }
+
+        if (!empty($_POST['billing_city'])) {
+            $newData['payment']['city'] = $_POST['billing_city'];
+        }
+
+        if (!empty($_POST['billing_state'])) {
+            $newData['payment']['state'] = $_POST['billing_state'];
+        }
+
+        $data['payment'] = array_merge($data['payment'], $newData['payment']);
 
         return $data;
     }
@@ -300,18 +322,14 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
      */
     protected function getTransactionAddress($attr = '')
     {
-        if (empty(WC()->customer) || is_admin()) {
+        if (empty(WC()->customer) || is_admin() || (empty($_POST['billing_country']) && empty(WC()->customer->get_country()))) {
             return false;
-        }
-
-        if (empty($_POST['billing_country']) && empty(WC()->customer->get_shipping_country())) {
-            throw new Exception('INVALID-BILLING-COUNTRY');
         }
 
         if (!empty($_POST['billing_country'])) {
             $this->address['country'] = trim(strtolower($_POST['billing_country']));
         } else {
-            $this->address['country'] = trim(strtolower(WC()->customer->get_shipping_country()));
+            $this->address['country'] = trim(strtolower(WC()->customer->get_country()));
         }
 
         if ($attr !== '' && !empty($this->address[$attr])) {
@@ -474,7 +492,7 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
             $message = !empty($errors[$language][$code]) ? $errors[$language][$code] : $errors[$language]['GENERAL'] . " ({$code})";
 
             WC()->session->set('refresh_totals', true);
-            WC_Ebanx::log('EBANX Error: $message');
+            WC_Ebanx::log("EBANX Error: $message");
 
             wc_add_notice($message, 'error');
             return;
@@ -487,68 +505,18 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
      * @param  WC_Order $order The order created
      * @return void
      */
-    public static function thankyou_page($order)
+    public static function thankyou_page($data)
     {
-        $payment_method = $order->payment_method;
-        $customer_billing_country = get_post_meta($order->id, '_billing_country');
-        $customer_country = strtolower($customer_billing_country[0]);
-        $card_brand_name = get_post_meta($order->id, '_cards_brand_name');
-        $order_amount = get_post_meta($order->id, '_order_total')[0];
-        $instalments_number = get_post_meta($order->id, '_instalments_number')[0];
-        $instalments_amount = round($order_amount / $instalments_number, 2);
-        $masked_card = get_post_meta($order->id, '_masked_card_number')[0];
-        $customer_email = get_post_meta($order->id, '_billing_email', true);
-        $customer_name = get_post_meta($order->id, '_billing_first_name', true);
+        $file_name = "{$data['method']}/payment-{$data['order_status']}.php";
 
-        $languages = array(
-            'mx' => 'es',
-            'cl' => 'es',
-            'pe' => 'es',
-            'co' => 'es',
-            'br' => 'pt-br',
-        );
-
-        $language = $languages[$customer_country];
-
-        $messages = array(
-            'pt-br' => array(
-                'payment_approved' => sprintf('Seu pagamento foi confirmado, %s.', $customer_name),
-                'important_data' => '<strong>Resumo da compra:</strong>',
-                'total_amount' => 'Valor:',
-                'instalments' => 'parcelas de',
-                'card_last_numbers' => sprintf('Pago com Cartão %s:', ucwords($card_brand_name[0])),
-                'thanks_message' => 'Obrigado por ter comprado conosco.',
-                'completed' => array(
-                    'title' => 'Obrigado! O pagamento foi realizado com sucesso',
-                    'thanks_message' => sprintf('Um comprovante foi enviado para o email <strong>%s</strong>.', $customer_email),
-                )
-            ),
-            'es' => array(
-                'payment_approved' => sprintf('Pago aprobado con éxito, %s.', $customer_name),
-                'important_data' => '<strong>Resumo de la compra:</strong>',
-                'total_amount' => 'Valor:',
-                'instalments' => 'meses sen intereses de',
-                'card_last_numbers' => sprintf('Pago con tarjeta %s:', ucwords($card_brand_name[0])),
-                'thanks_message' => 'Gracias por haber comprado con nosotros.',
-                'completed' => array(
-                    'title' => '¡Gracias! Solicitud realizada corrrectamente.',
-                    'thanks_message' => sprintf('La confirmación de tu pedido será enviado a <strong>%s</strong>.', $customer_email),
-                )
-            )
-        );
-
-        wc_get_template(
-            $payment_method !== 'ebanx-credit-card' ? 'payment-completed.php' : 'credit-card/payment-completed.php',
-            array(
-                'order_amount' => $order_amount,
-                'instalments_number' => $instalments_number,
-                'instalments_amount' => $instalments_amount,
-                'masked_card' => $masked_card,
-                't' => $messages[$language],
-            ),
-            'woocommerce/ebanx/',
-            WC_EBANX::get_templates_path()
-        );
+        if (file_exists(WC_EBANX::get_templates_path() . $file_name)) {
+            wc_get_template(
+                $file_name,
+                $data['data'],
+                'woocommerce/ebanx/',
+                WC_EBANX::get_templates_path()
+            );
+        }
     }
 
     /**
@@ -576,6 +544,7 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
         // To save only on DB to internal use
         update_post_meta($order->id, '_ebanx_payment_hash', $request->payment->hash);
         update_post_meta($order->id, '_ebanx_payment_open_date', $request->payment->open_date);
+
         if (isset($_POST['billing_email'])) {
             update_post_meta($order->id, '_ebanx_payment_customer_email', sanitize_email($_POST['billing_email']));
         }
@@ -590,8 +559,27 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
 
         // It shows to the merchant
         update_post_meta($order->id, 'Payment\'s Hash', $request->payment->hash);
+    }
 
-        $this->save_user_meta_fields($order);
+    /**
+     * Save user's meta fields for future use
+     *
+     * @param  WC_Order $order The order created
+     * @return void
+     */
+    protected function save_user_meta_fields($order)
+    {
+        if ($this->userId) {
+            if (trim(strtolower($order->billing_country)) === WC_EBANX_Gateway_Utils::COUNTRY_BRAZIL) {
+                update_user_meta($this->userId, '_ebanx_billing_brazil_document', sanitize_text_field($_POST['ebanx_billing_brazil_document']));
+                update_user_meta($this->userId, '_ebanx_billing_brazil_birth_date', sanitize_text_field($_POST['ebanx_billing_brazil_birth_date']));
+            }
+
+            if (trim(strtolower($order->billing_country)) === WC_EBANX_Gateway_Utils::COUNTRY_CHILE) {
+                update_user_meta($this->userId, '_ebanx_billing_chile_document', sanitize_text_field($_POST['ebanx_billing_chile_document']));
+                update_user_meta($this->userId, '_ebanx_billing_chile_birth_date', sanitize_text_field($_POST['ebanx_billing_chile_birth_date']));
+            }
+        }
     }
 
     /**
@@ -629,9 +617,24 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
             return $this->process_response_error($request, $order);
         }
 
-        $message = 'Payment approved. Hash: ' . $request->payment->hash;
+        $message = __(sprintf('Payment approved. Hash: %s', $request->payment->hash), 'woocommerce-gateway-ebanx');
 
         WC_Ebanx::log($message);
+
+        if ($request->payment->status == 'CA') {
+            $order->add_order_note(__('EBANX: Payment failed.', 'woocommerce-gateway-ebanx'));
+            $order->update_status('failed');
+        }
+
+        if ($request->payment->status == 'OP') {
+            $order->add_order_note(__('EBANX: Payment opened.', 'woocommerce-gateway-ebanx'));
+            $order->update_status('pending');
+        }
+
+        if ($request->payment->status == 'PE') {
+            $order->add_order_note(__('EBANX: Waiting payment.', 'woocommerce-gateway-ebanx'));
+            $order->update_status('on-hold');
+        }
 
         if ($request->payment->pre_approved && $request->payment->status == 'CO') {
             $order->add_order_note(__('EBANX: Transaction paid.', 'woocommerce-gateway-ebanx'));
@@ -639,28 +642,11 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
             $order->update_status('processing');
         }
 
+        // Save post's meta fields
         $this->save_order_meta_fields($order, $request);
-    }
 
-    /**
-     * Save user's meta fields for future use
-     *
-     * @param  WC_Order $order The order created
-     * @return void
-     */
-    protected function save_user_meta_fields($order)
-    {
-        if ($this->userId) {
-            if (trim(strtolower($order->get_address()['country'])) === WC_EBANX_Gateway_Utils::COUNTRY_BRAZIL) {
-                update_user_meta($this->userId, '_ebanx_billing_brazil_document', $_POST['ebanx_billing_brazil_document']);
-                update_user_meta($this->userId, '_ebanx_billing_brazil_birth_date', $_POST['ebanx_billing_brazil_birth_date']);
-            }
-
-            if (trim(strtolower($order->get_address()['country'])) === WC_EBANX_Gateway_Utils::COUNTRY_CHILE) {
-                update_user_meta($this->userId, '_ebanx_billing_chile_document', $_POST['ebanx_billing_document']);
-                update_user_meta($this->userId, '_ebanx_billing_chile_birth_date', $_POST['ebanx_billing_birth_date']);
-            }
-        }
+        // Save user's fields
+        $this->save_user_meta_fields($order);
     }
 
     /**
@@ -678,6 +664,13 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
         ];
 
         \Ebanx\Config::set($config);
+
+        /**
+         * Validates the request parameters
+         */
+        if (isset($codes['hash']) && !empty($codes['hash']) && isset($codes['merchant_payment_code']) && !empty($codes['merchant_payment_code'])) {
+            unset($codes['merchant_payment_code']);
+        }
 
         $data = \Ebanx\EBANX::doQuery($codes);
 
@@ -738,5 +731,7 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
                 }
                 break;
         };
+
+        return $order;
     }
 }

@@ -62,6 +62,7 @@ class WC_EBANX_Banking_Ticket_Gateway extends WC_EBANX_Gateway
     {
         $data = parent::request_data($order);
         $data['payment']['payment_type_code'] = $this->api_name;
+
         return $data;
     }
 
@@ -125,23 +126,22 @@ class WC_EBANX_Banking_Ticket_Gateway extends WC_EBANX_Gateway
         $barcode_anti_fraud = WC_EBANX_Banking_Ticket_Gateway::barcode_anti_fraud($barcode);
 
         $data = array(
-            'barcode'         => $barcode,
-            'barcode_fraud'   => $barcode_anti_fraud,
-            'url_basic'       => $boleto_basic,
-            'url_pdf'         => $boleto_pdf,
-            'url_print'       => $boleto_print,
-            'url_iframe' => get_site_url() . '/?ebanx=order-received&url=' . $boleto_basic,
-            'customer_email'  => $customer_email,
-            'customer_name'   => $customer_name,
-            'due_date'        => $boleto_due_date
+            'data' => array(
+                'barcode'         => $barcode,
+                'barcode_fraud'   => $barcode_anti_fraud,
+                'url_basic'       => $boleto_basic,
+                'url_pdf'         => $boleto_pdf,
+                'url_print'       => $boleto_print,
+                'url_iframe'      => get_site_url() . '/?ebanx=order-received&url=' . $boleto_basic,
+                'customer_email'  => $customer_email,
+                'customer_name'   => $customer_name,
+                'due_date'        => $boleto_due_date,
+            ),
+            'order_status' => $order->get_status(),
+            'method' => 'banking-ticket'
         );
 
-        wc_get_template(
-            'banking-ticket/payment-instructions.php',
-            $data,
-            'woocommerce/ebanx/',
-            WC_EBANX::get_templates_path()
-        );
+        parent::thankyou_page($data);
 
         wp_enqueue_script('woocommerce_ebanx_clipboard', plugins_url('assets/js/vendor/clipboard.min.js', WC_EBANX::DIR));
         wp_enqueue_script('woocommerce_ebanx_order_received', plugins_url('assets/js/order-received.js', WC_EBANX::DIR));
