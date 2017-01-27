@@ -293,12 +293,7 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway
 				'title' => __('CNPJ Document field', 'woocommerce-gateway-ebanx'),
 				'type' => 'text',
 				'placeholder' => __('eg: billing_brazil_cnpj', 'woocommerce-gateway-ebanx')
-			),
-			'checkout_manager_company_social_name' => array(
-				'title' => __('Company Name', 'woocommerce-gateway-ebanx'),
-				'type' => 'text',
-				'placeholder' => __('eg: billing_brazil_company_name', 'woocommerce-gateway-ebanx')
-			),
+			)
 		);
 
 		$this->injectDefaults();

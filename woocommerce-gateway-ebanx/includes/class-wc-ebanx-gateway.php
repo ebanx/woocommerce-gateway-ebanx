@@ -23,7 +23,7 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
 
         $this->configs = new WC_EBANX_Global_Gateway();
 
-        $this->is_sandbox_mode = $this->configs->settings['sandbox_mode_enabled'] === 'yes';
+        $this->is_sandbox_mode = ($this->configs->settings['sandbox_mode_enabled'] === 'yes');
 
         $this->private_key = $this->is_sandbox_mode ? $this->configs->settings['sandbox_private_key'] : $this->configs->settings['live_private_key'];
 
@@ -43,6 +43,8 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
         );
 
         $this->icon = $this->show_icon();
+
+        $this->names = $this->get_billing_field_names();
     }
 
     /**
@@ -64,33 +66,138 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
      * @return array         The new fields
      */
     public function checkout_fields($fields) {
+    	$fields_options = $this->configs->settings['brazil_taxes_options'];
+
+    	if (!is_array($fields_options)) {
+    		$fields_options = array();
+    	}
+
         $cpf = get_user_meta($this->userId, '_ebanx_billing_brazil_document', true);
-        $rut = get_user_meta($this->userId, '_ebanx_billing_chile_document', true);
         $birth_date_br = get_user_meta($this->userId, '_ebanx_billing_brazil_birth_date', true);
+
+        $cnpj = get_user_meta($this->userId, '_ebanx_billing_brazil_cnpj', true);
+
+        $rut = get_user_meta($this->userId, '_ebanx_billing_chile_document', true);
         $birth_date_cl = get_user_meta($this->userId, '_ebanx_billing_chile_birth_date', true);
 
-        $fields['billing']['ebanx_billing_brazil_birth_date'] = array(
+        $ebanx_selector = array(
+        	'type' => 'select',
+        	'label' => __('Select an option', 'woocommerce-gateway-ebanx'),
+        	'default' => 'cpf',
+        	'class' => array('ebanx_billing_brazil_selector'),
+        	'options' => array(
+        		'cpf' => __('CPF - Individuals', 'woocommerce-gateway-ebanx'),
+        		'cnpj' => __('CNPJ - Companies', 'woocommerce-gateway-ebanx')
+        	)
+        );
+
+        $ebanx_billing_brazil_birth_date = array(
             'type'  => 'text',
             'label' => __('Birth Date', 'woocommerce-gateway-ebanx'),
+            'class' => array('ebanx_billing_brazil_birth_date', 'ebanx_billing_brazil_cpf', 'ebanx_billing_brazil_selector_option'),
             'default' => isset($birth_date_br) ? $birth_date_br : ''
         );
-        $fields['billing']['ebanx_billing_brazil_document'] = array(
+        $ebanx_billing_brazil_document = array(
             'type'     => 'text',
             'label'    => 'CPF',
+            'class' => array('ebanx_billing_brazil_document', 'ebanx_billing_brazil_cpf', 'ebanx_billing_brazil_selector_option'),
             'default' => isset($cpf) ? $cpf : ''
         );
-        $fields['billing']['ebanx_billing_chile_birth_date'] = array(
+
+        $ebanx_billing_brazil_cnpj = array(
+            'type'     => 'text',
+            'label'    => 'CNPJ',
+            'class' => array('ebanx_billing_brazil_cnpj', 'ebanx_billing_brazil_cnpj', 'ebanx_billing_brazil_selector_option'),
+            'default' => isset($cnpj) ? $cnpj : ''
+        );
+
+        $ebanx_billing_chile_birth_date = array(
             'type'  => 'text',
             'label' => __('Birth Date', 'woocommerce-gateway-ebanx'),
+            'class' => array('ebanx_billing_chile_birth_date'),
             'default' => isset($birth_date_cl) ? $birth_date_cl : ''
         );
-        $fields['billing']['ebanx_billing_chile_document'] = array(
+        $ebanx_billing_chile_document = array(
             'type'     => 'text',
             'label'    => 'RUT',
+            'class' => array('ebanx_billing_chile_document'),
             'default' => isset($rut) ? $rut : ''
         );
 
+        // CPF and CNPJ are enabled
+        if (in_array('cpf', $fields_options) && in_array('cnpj', $fields_options) && $this->is_checkout_manager_settings_empty()) {
+        	$fields['billing']['ebanx_billing_brazil_selector'] = $ebanx_selector;
+        }
+
+        // CPF is enabled
+        if (in_array('cpf', $fields_options)) {
+        	if (empty($this->get_settings_or_default('checkout_manager_cpf_brazil'))) {
+        		$fields['billing']['ebanx_billing_brazil_document'] = $ebanx_billing_brazil_document;
+        	}
+
+        	if (empty($this->get_settings_or_default('checkout_manager_birthdate'))) {
+        		$fields['billing']['ebanx_billing_brazil_birth_date'] = $ebanx_billing_brazil_birth_date;
+        	}
+        }
+
+        // CNPJ is enabled
+        if (in_array('cnpj', $fields_options)) {
+        	if (empty($this->get_settings_or_default('checkout_manager_cnpj_brazil'))) {
+        		$fields['billing']['ebanx_billing_brazil_cnpj'] = $ebanx_billing_brazil_cnpj;
+        	}
+        }
+
+        // For Chile
+        $fields['billing']['ebanx_billing_chile_document'] = $ebanx_billing_chile_document;
+        $fields['billing']['ebanx_billing_chile_birth_date'] = $ebanx_billing_chile_birth_date;
+
         return $fields;
+    }
+
+    /**
+     * Check if the merchant uses a checkout manager and configured the checkout manager options
+     *
+     * @return boolean
+     */
+    protected function is_checkout_manager_settings_empty() {
+    	return empty($this->get_settings_or_default('checkout_manager_cpf_brazil'))
+    			&& empty($this->get_settings_or_default('checkout_manager_birthdate'))
+    			&& empty($this->get_settings_or_default('checkout_manager_cnpj_brazil'));
+    }
+
+    /**
+     * Fetches the billing field names for compatibility with checkout managers
+     *
+     * @return array
+     */
+    public function get_billing_field_names() {
+        return array(
+        	// Brazil CPF
+            'ebanx_billing_brazil_document' => $this->get_settings_or_default('checkout_manager_cpf_brazil', 'ebanx_billing_brazil_document'),
+            'ebanx_billing_brazil_birth_date' => $this->get_settings_or_default('checkout_manager_birthdate', 'ebanx_billing_brazil_birth_date'),
+
+            // Brazil CNPJ
+            'ebanx_billing_brazil_cnpj' => $this->get_settings_or_default('checkout_manager_cnpj_brazil', 'ebanx_billing_brazil_cnpj'),
+
+            // Chile Fields
+            'ebanx_billing_chile_document' => 'ebanx_billing_chile_document',
+            'ebanx_billing_chile_birth_date' => 'ebanx_billing_chile_birth_date'
+        );
+    }
+
+    /**
+     * Fetches a single setting from the gateway settings if found, otherwise it returns an optional default value
+     *
+     * @param  string $name    The setting name to fetch
+     * @param  mixed  $default The default value in case setting is not present
+     * @return mixed
+     */
+    private function get_settings_or_default($name, $default=null) {
+        if(!isset($this->configs->settings[$name]) || empty($this->configs->settings[$name])) {
+            return $default;
+        }
+
+        return $this->configs->settings[$name];
     }
 
     /**
@@ -207,6 +314,9 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
     {
         $home_url = home_url();
 
+    	$is_cpf = false;
+    	$is_cnpj = false;
+
         $data = array(
             'mode'      => 'full',
             'operation' => 'request',
@@ -216,11 +326,11 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
                 'user_value_1'          => 'name=plugin',
                 'user_value_2'          => 'value=woocommerce',
                 'user_value_3'          => 'version=' . WC_EBANX::VERSION,
-                'country'               => $order->get_address()['country'],
+                'country'               => $order->billing_country,
                 'currency_code'         => WC_EBANX_Gateway_Utils::CURRENCY_CODE_USD, // TODO: Dynamic
-                'name'                  => $order->get_address()['first_name'] . " " . $order->get_address()['last_name'],
-                'email'                 => $order->get_address()['email'],
-                "phone_number"          => $order->get_address()['phone'],
+                'name'                  => $order->billing_first_name . ' ' . $order->billing_last_name,
+                'email'                 => $order->billing_email,
+                "phone_number"          => $order->billing_phone,
                 'amount_total'          => $order->get_total(),
                 'order_number'          => $order->id,
                 'merchant_payment_code' => $order->id . '-' . md5(rand(123123, 9999999)),
@@ -247,10 +357,14 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
             $data['payment']['due_date'] = $date->format('d/m/Y');
         }
 
-        if (trim(strtolower(WC()->customer->get_shipping_country())) === WC_EBANX_Gateway_Utils::COUNTRY_BRAZIL) {
-            if (empty($_POST['ebanx_billing_brazil_document']) ||
-                empty($_POST['ebanx_billing_brazil_birth_date']) ||
-                empty($_POST['billing_postcode']) ||
+        if ($this->getTransactionAddress('country') === WC_EBANX_Gateway_Utils::COUNTRY_BRAZIL) {
+
+        	$is_cpf = !empty($_POST[$this->names['ebanx_billing_brazil_document']]);
+        	$is_cnpj = !empty($_POST[$this->names['ebanx_billing_brazil_cnpj']]);
+
+            if (
+            	(!$is_cpf && !$is_cnpj) ||
+            	empty($_POST['billing_postcode']) ||
                 empty($_POST['billing_address_1']) ||
                 empty($_POST['billing_city']) ||
                 empty($_POST['billing_state'])
@@ -258,11 +372,21 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
                 throw new Exception('INVALID-FIELDS');
             }
 
-            $_POST['ebanx_billing_document'] = $_POST['ebanx_billing_brazil_document'];
-            $_POST['ebanx_billing_birth_date'] = $_POST['ebanx_billing_brazil_birth_date'];
+            if ($is_cnpj) {
+            	if (empty($_POST['billing_company'])) {
+            		throw new Exception('INVALID-FIELDS');
+            	}
+
+            	$_POST['ebanx_billing_document'] = $_POST[$this->names['ebanx_billing_brazil_cnpj']];
+            }
+            else if ($is_cpf) {
+            	$_POST['ebanx_billing_document'] = $_POST[$this->names['ebanx_billing_brazil_document']];
+            	$_POST['ebanx_billing_birth_date'] = $_POST[$this->names['ebanx_billing_brazil_birth_date']];
+            }
+
         }
 
-        if (trim(strtolower(WC()->customer->get_shipping_country())) === WC_EBANX_Gateway_Utils::COUNTRY_CHILE) {
+        if ($this->getTransactionAddress('country') === WC_EBANX_Gateway_Utils::COUNTRY_CHILE) {
             if (empty($_POST['ebanx_billing_chile_document']) || empty($_POST['ebanx_billing_chile_birth_date'])) {
                 throw new Exception('INVALID-FIELDS');
             }
@@ -310,6 +434,13 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
         if (!empty($_POST['billing_state'])) {
             $newData['payment']['state'] = $_POST['billing_state'];
         }
+
+        if ($this->getTransactionAddress('country') === WC_EBANX_Gateway_Utils::COUNTRY_BRAZIL) {
+
+	        if ($is_cnpj) {
+	            $newData['payment']['name'] = $_POST['billing_company'];
+	        }
+	    }
 
         $data['payment'] = array_merge($data['payment'], $newData['payment']);
 
@@ -573,13 +704,27 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
     {
         if ($this->userId) {
             if (trim(strtolower($order->billing_country)) === WC_EBANX_Gateway_Utils::COUNTRY_BRAZIL) {
-                update_user_meta($this->userId, '_ebanx_billing_brazil_document', sanitize_text_field($_POST['ebanx_billing_brazil_document']));
-                update_user_meta($this->userId, '_ebanx_billing_brazil_birth_date', sanitize_text_field($_POST['ebanx_billing_brazil_birth_date']));
+            	if (isset($_POST[$this->names['ebanx_billing_brazil_document']])) {
+	                update_user_meta($this->userId, '_ebanx_billing_brazil_document', sanitize_text_field($_POST[$this->names['ebanx_billing_brazil_document']]));
+	            }
+
+	            if (isset($_POST[$this->names['ebanx_billing_brazil_birth_date']])) {
+	                update_user_meta($this->userId, '_ebanx_billing_brazil_birth_date', sanitize_text_field($_POST[$this->names['ebanx_billing_brazil_birth_date']]));
+	            }
+
+                if (isset($_POST[$this->names['ebanx_billing_brazil_cnpj']])) {
+                	update_user_meta($this->userId, '_ebanx_billing_brazil_cnpj', sanitize_text_field($_POST[$this->names['ebanx_billing_brazil_cnpj']]));
+                }
             }
 
             if (trim(strtolower($order->billing_country)) === WC_EBANX_Gateway_Utils::COUNTRY_CHILE) {
-                update_user_meta($this->userId, '_ebanx_billing_chile_document', sanitize_text_field($_POST['ebanx_billing_chile_document']));
-                update_user_meta($this->userId, '_ebanx_billing_chile_birth_date', sanitize_text_field($_POST['ebanx_billing_chile_birth_date']));
+            	if (isset($_POST['ebanx_billing_chile_document'])) {
+                	update_user_meta($this->userId, '_ebanx_billing_chile_document', sanitize_text_field($_POST['ebanx_billing_chile_document']));
+                }
+
+                if (isset($_POST['ebanx_billing_chile_birth_date'])) {
+                	update_user_meta($this->userId, '_ebanx_billing_chile_birth_date', sanitize_text_field($_POST['ebanx_billing_chile_birth_date']));
+                }
             }
         }
     }
