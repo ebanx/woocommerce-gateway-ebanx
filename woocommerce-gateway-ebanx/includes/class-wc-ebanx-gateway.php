@@ -406,6 +406,9 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
         $street_number = empty($addresses['houseNumber']) ? 'S/N' : trim($addresses['houseNumber'] . ' ' . $addresses['additionToAddress2']);
 
         $newData = array();
+        $newData['payment'] = array();
+
+        $newData['payment']['person_type'] = 'personal';
 
         if (!empty($_POST['ebanx_billing_document'])) {
             $newData['payment']['document'] = $_POST['ebanx_billing_document'];
@@ -438,11 +441,18 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
         if ($this->getTransactionAddress('country') === WC_EBANX_Gateway_Utils::COUNTRY_BRAZIL) {
 
 	        if ($is_cnpj) {
+	            $newData['payment']['person_type'] = 'business'; //TODO: Update docs, better call dev!
+	            $newData['payment']['responsible'] = array(
+	            	"name" => $data['payment']['name'],
+	            	"birth_date" => "01/01/1970" //TODO: Optional field flag, better call dev!
+	            );
 	            $newData['payment']['name'] = $_POST['billing_company'];
 	        }
 	    }
 
         $data['payment'] = array_merge($data['payment'], $newData['payment']);
+
+        print_r($data);
 
         return $data;
     }
@@ -529,7 +539,7 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
                     'BP-DR-13'                   => 'Informe o seu nome completo.',
                     'BP-DR-15'                   => 'Informe um email válido.',
                     'BP-DR-19'                   => 'Informe a sua data de nascimento no formato dia/mes/ano, por exemplo, 30/10/1980.',
-                    'BP-DR-23'                   => 'O número do seu CPF é obrigatório.',
+                    'BP-DR-23'                   => 'O número de documento inválido.',
                     'BP-DR-24'                   => 'Informe o seu CEP.',
                     'BP-DR-25'                   => 'Informe o seu endereço.',
                     'BP-DR-26'                   => 'O número da sua residência é obrigatório.',
@@ -577,7 +587,7 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
                     'BP-DR-13'                   => 'Por favor, escribe tu nombre completo.',
                     'BP-DR-15'                   => 'El email no es válido. ',
                     'BP-DR-19'                   => 'Escribe tu fecha de nacimiento en el formato DD/MM/AA.',
-                    'BP-DR-23'                   => 'O número do seu CPF é obrigatório.',
+                    'BP-DR-23'                   => 'El numero de documento no es valido.',
                     'BP-DR-24'                   => 'Por favor, escribe tu código postal.',
                     'BP-DR-25'                   => 'Por favor, escribe tu dirección.',
                     'BP-DR-26'                   => 'Tu número de residencia es obligatorio.',
