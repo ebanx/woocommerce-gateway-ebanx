@@ -67,6 +67,7 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
      */
     public function checkout_fields($fields) {
     	$fields_options = $this->configs->settings['brazil_taxes_options'];
+    	$disable_own_fields = $this->configs->settings['checkout_manager_enabled'] === "yes";
 
     	if (!is_array($fields_options)) {
     		$fields_options = array();
@@ -124,28 +125,24 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
             'default' => isset($rut) ? $rut : ''
         );
 
-        // CPF and CNPJ are enabled
-        if (in_array('cpf', $fields_options) && in_array('cnpj', $fields_options) && $this->is_checkout_manager_settings_empty()) {
-        	$fields['billing']['ebanx_billing_brazil_selector'] = $ebanx_selector;
-        }
+        if (!$disable_own_fields) {
+	        // CPF and CNPJ are enabled
+	        if (in_array('cpf', $fields_options) && in_array('cnpj', $fields_options)) {
+	        	$fields['billing']['ebanx_billing_brazil_selector'] = $ebanx_selector;
+	        }
 
-        // CPF is enabled
-        if (in_array('cpf', $fields_options)) {
-        	if (empty($this->get_settings_or_default('checkout_manager_cpf_brazil'))) {
-        		$fields['billing']['ebanx_billing_brazil_document'] = $ebanx_billing_brazil_document;
-        	}
+	        // CPF is enabled
+	        if (in_array('cpf', $fields_options)) {
+	    		$fields['billing']['ebanx_billing_brazil_document'] = $ebanx_billing_brazil_document;
 
-        	if (empty($this->get_settings_or_default('checkout_manager_birthdate'))) {
-        		$fields['billing']['ebanx_billing_brazil_birth_date'] = $ebanx_billing_brazil_birth_date;
-        	}
-        }
+	        	$fields['billing']['ebanx_billing_brazil_birth_date'] = $ebanx_billing_brazil_birth_date;
+	        }
 
-        // CNPJ is enabled
-        if (in_array('cnpj', $fields_options)) {
-        	if (empty($this->get_settings_or_default('checkout_manager_cnpj_brazil'))) {
-        		$fields['billing']['ebanx_billing_brazil_cnpj'] = $ebanx_billing_brazil_cnpj;
-        	}
-        }
+	        // CNPJ is enabled
+	        if (in_array('cnpj', $fields_options)) {
+	        	$fields['billing']['ebanx_billing_brazil_cnpj'] = $ebanx_billing_brazil_cnpj;
+	        }
+	    }
 
         // For Chile
         $fields['billing']['ebanx_billing_chile_document'] = $ebanx_billing_chile_document;
