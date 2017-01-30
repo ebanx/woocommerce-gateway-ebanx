@@ -66,12 +66,12 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
      * @return array         The new fields
      */
     public function checkout_fields($fields) {
-    	$fields_options = $this->configs->settings['brazil_taxes_options'];
-    	$disable_own_fields = $this->configs->settings['checkout_manager_enabled'] === "yes";
-
-    	if (!is_array($fields_options)) {
-    		$fields_options = array();
+    	$fields_options = array();
+    	if (isset($this->configs->settings['brazil_taxes_options']) && is_array($this->configs->settings['brazil_taxes_options'])) {
+    		$fields_options = $this->configs->settings['brazil_taxes_options'];
     	}
+
+    	$disable_own_fields = isset($this->configs->settings['checkout_manager_enabled']) && $this->configs->settings['checkout_manager_enabled'] === "yes";
 
         $cpf = get_user_meta($this->userId, '_ebanx_billing_brazil_document', true);
         $birth_date_br = get_user_meta($this->userId, '_ebanx_billing_brazil_birth_date', true);

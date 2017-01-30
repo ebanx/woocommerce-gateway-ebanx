@@ -43,8 +43,7 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway
 		'capture_enabled' => 'yes',
 		'credit_card_instalments' => '1',
 		'due_date_days' => '3',
-		'brazil_taxes_options' => 'cpf',
-		'checkout_manager_enabled' => false
+		'brazil_taxes_options' => 'cpf'
 	);
 
 	/**
@@ -269,6 +268,7 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway
 			'brazil_taxes_options' => array(
 				'title' => __('Fields options', 'woocommerce-gateway-ebanx'),
 				'type'        => 'multiselect',
+				'required'    => true,
 				'class'       => 'ebanx-select ebanx-advanced-option',
 				'options'     => array(
 					'cpf' => __('CPF - Individuals', 'woocommerce-gateway-ebanx'),
