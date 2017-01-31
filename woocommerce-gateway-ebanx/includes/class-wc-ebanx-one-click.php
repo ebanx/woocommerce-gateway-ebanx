@@ -362,6 +362,10 @@ class WC_EBANX_One_Click {
     public function add_button() {
         global $product;
 
+        if ($this->gateway === false) {
+            return;
+        }
+
         if (
             $product->product_type == 'external' ||
             !$this->customerCan() ||
