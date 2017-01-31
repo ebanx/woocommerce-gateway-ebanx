@@ -259,34 +259,26 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway
 				'title' => __('Advanced Options', 'woocommerce-gateway-ebanx'),
 				'type' => 'title'
 			),
-			'brazil_tax_title' => array(
-				'title' => __('Brazil Tax Identification Number', 'woocommerce-gateway-ebanx'),
-				'type' => 'title',
-				'class' => 'ebanx-advanced-option',
-				'description' => __('Pick the fields that will be available to your customers fill their tax identification number as individuals (CPF) or company (CNPJ).', 'woocommerce-gateway-ebanx')
-			),
 			'brazil_taxes_options' => array(
-				'title' => __('Fields options', 'woocommerce-gateway-ebanx'),
+				'title' => __('Enable checkout for:', 'woocommerce-gateway-ebanx'),
 				'type'        => 'multiselect',
 				'required'    => true,
 				'class'       => 'ebanx-select ebanx-advanced-option',
+				'description' => __('Brazil Tax Identification Number - Pick the fields that will be available to your customers fill their tax identification number as individuals (CPF) or company (CNPJ).', 'woocommerce-gateway-ebanx'),
+				'desc_tip' => true,
 				'options'     => array(
 					'cpf' => __('CPF - Individuals', 'woocommerce-gateway-ebanx'),
 					'cnpj' => __('CNPJ - Companies', 'woocommerce-gateway-ebanx')
 				),
 				'default' => array('cpf')
 			),
-			'checkout_manager_title' => array(
-				'title' => __('Checkout Manager', 'woocommerce-gateway-ebanx'),
-				'type' => 'title',
-				'class' => 'ebanx-advanced-option',
-				'description' => __('In order to process with the EBANX Plugin in Brazil there a few mandatory fields such as: CPF identification and birth date for individuals, and CNPJ and razão social for companies.<br><br>If you make use of a Checkout Manager to display those fields, please identify the name of them below in each one of the respective.', 'woocommerce-gateway-ebanx'),
-			),
 			'checkout_manager_enabled' => array(
 				'title' => __('Make use of a checkout manager', 'woocommerce-gateway-ebanx'),
 				'label' => __('Enable reading of third party plugin fields', 'woocommerce-gateway-ebanx'),
 				'type' => 'checkbox',
-				'class' => 'ebanx-advanced-option'
+				'class' => 'ebanx-advanced-option',
+				'description' => __('In order to process with the EBANX Plugin in Brazil there a few mandatory fields such as: CPF identification and birth date for individuals, and CNPJ for companies. If you make use of a Checkout Manager to display those fields, please identify the name of them below in each one of the respective.', 'woocommerce-gateway-ebanx'),
+				'desc_tip' => true
 			),
 			'checkout_manager_cpf_brazil' => array(
 				'title' => __('CPF Document field', 'woocommerce-gateway-ebanx'),
