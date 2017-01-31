@@ -309,7 +309,7 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
      */
     protected function request_data($order)
     {
-        $home_url = home_url();
+        $home_url = esc_url( home_url() );
 
     	$is_cpf = false;
     	$is_cnpj = false;
@@ -318,8 +318,8 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
             'mode'      => 'full',
             'operation' => 'request',
             'notification_url' => $home_url,
-            'response_url' => $home_url,
             'payment'   => array(
+            	'redirect_url' => $home_url,
                 'user_value_1'          => 'name=plugin',
                 'user_value_2'          => 'value=woocommerce',
                 'user_value_3'          => 'version=' . WC_EBANX::VERSION,
