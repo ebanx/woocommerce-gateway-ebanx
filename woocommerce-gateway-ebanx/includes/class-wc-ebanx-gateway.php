@@ -449,8 +449,6 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
 
         $data['payment'] = array_merge($data['payment'], $newData['payment']);
 
-        print_r($data);
-
         return $data;
     }
 
