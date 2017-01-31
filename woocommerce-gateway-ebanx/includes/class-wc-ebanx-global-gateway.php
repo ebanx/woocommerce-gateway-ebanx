@@ -264,8 +264,6 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway
 				'type'        => 'multiselect',
 				'required'    => true,
 				'class'       => 'ebanx-select ebanx-advanced-option',
-				'description' => __('Brazil Tax Identification Number - Pick the fields that will be available to your customers fill their tax identification number as individuals (CPF) or company (CNPJ).', 'woocommerce-gateway-ebanx'),
-				'desc_tip' => true,
 				'options'     => array(
 					'cpf' => __('CPF - Individuals', 'woocommerce-gateway-ebanx'),
 					'cnpj' => __('CNPJ - Companies', 'woocommerce-gateway-ebanx')
@@ -273,27 +271,27 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway
 				'default' => array('cpf')
 			),
 			'checkout_manager_enabled' => array(
-				'title' => __('Make use of a checkout manager', 'woocommerce-gateway-ebanx'),
-				'label' => __('Enable reading of third party plugin fields', 'woocommerce-gateway-ebanx'),
+				'title' => __('Checkout Manager', 'woocommerce-gateway-ebanx'),
+				'label' => __('Use my checkout manager fields', 'woocommerce-gateway-ebanx'),
 				'type' => 'checkbox',
 				'class' => 'ebanx-advanced-option',
-				'description' => __('In order to process with the EBANX Plugin in Brazil there a few mandatory fields such as: CPF identification and birth date for individuals, and CNPJ for companies. If you make use of a Checkout Manager to display those fields, please identify the name of them below in each one of the respective.', 'woocommerce-gateway-ebanx'),
+				'description' => __('If you make use of a Checkout Manager, please identify the HTML name attribute of the fields.', 'woocommerce-gateway-ebanx'),
 				'desc_tip' => true
 			),
 			'checkout_manager_cpf_brazil' => array(
-				'title' => __('CPF Document field', 'woocommerce-gateway-ebanx'),
+				'title' => __('CPF', 'woocommerce-gateway-ebanx'),
 				'type' => 'text',
 				'class' => 'ebanx-advanced-option ebanx-checkout-manager-field cpf',
 				'placeholder' => __('eg: billing_brazil_cpf', 'woocommerce-gateway-ebanx')
 			),
 			'checkout_manager_birthdate' => array(
-				'title' => __('Birthdate field', 'woocommerce-gateway-ebanx'),
+				'title' => __('Birth date', 'woocommerce-gateway-ebanx'),
 				'type' => 'text',
 				'class' => 'ebanx-advanced-option ebanx-checkout-manager-field cpf',
 				'placeholder' => __('eg: billing_brazil_birth_date', 'woocommerce-gateway-ebanx')
 			),
 			'checkout_manager_cnpj_brazil' => array(
-				'title' => __('CNPJ Document field', 'woocommerce-gateway-ebanx'),
+				'title' => __('CNPJ', 'woocommerce-gateway-ebanx'),
 				'type' => 'text',
 				'class' => 'ebanx-advanced-option ebanx-checkout-manager-field cnpj',
 				'placeholder' => __('eg: billing_brazil_cnpj', 'woocommerce-gateway-ebanx')
