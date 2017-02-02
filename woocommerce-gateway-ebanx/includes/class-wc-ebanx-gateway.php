@@ -438,10 +438,9 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
         if ($this->getTransactionAddress('country') === WC_EBANX_Gateway_Utils::COUNTRY_BRAZIL) {
 
 	        if ($is_cnpj) {
-	            $newData['payment']['person_type'] = 'business'; //TODO: Update docs, better call dev!
+	            $newData['payment']['person_type'] = 'business';
 	            $newData['payment']['responsible'] = array(
-	            	"name" => $data['payment']['name'],
-	            	"birth_date" => "01/01/1970" //TODO: Optional field flag, better call dev!
+	            	"name" => $data['payment']['name']
 	            );
 	            $newData['payment']['name'] = $_POST['billing_company'];
 	        }
