@@ -534,7 +534,7 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
                     'BP-DR-15'                   => 'Informe um email válido.',
                     'BP-DR-19'                   => 'Informe a sua data de nascimento no formato dia/mes/ano, por exemplo, 30/10/1980.',
                     'BP-DR-20'                   => 'Informe a sua data de nascimento no formato dia/mes/ano, por exemplo, 30/10/1980.',
-                    'BP-DR-23'                   => 'O número de documento inválido.',
+                    'BP-DR-23'                   => 'O número de documento informado é inválido.',
                     'BP-DR-24'                   => 'Informe o seu CEP.',
                     'BP-DR-25'                   => 'Informe o seu endereço.',
                     'BP-DR-26'                   => 'O número da sua residência é obrigatório.',
