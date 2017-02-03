@@ -67,7 +67,7 @@ if (!class_exists('WC_EBANX')) {
             add_action('init', array($this, 'my_account_endpoint'));
             add_action('init', array($this, 'ebanx_order_received'));
 
-            add_action('admin_footer', array($this, 'disable_ebanx_gateways'), 0);
+            add_action('admin_footer', array($this, 'render_static_assets'), 0);
 
             add_action('admin_init', array($this, 'check_environment'));
             add_action('admin_init', array($this, 'ebanx_sidebar_shortcut'));
@@ -486,7 +486,54 @@ if (!class_exists('WC_EBANX')) {
         }
 
         /**
-         * Disabled all others EBANX gateways
+         * Renders the static assets needed to change admin panel to desired behavior
+         *
+         * @return void
+         */
+        public function render_static_assets() {
+        	$this->hide_advanced_options_section();
+        	$this->resize_settings_menu_icon();
+        	$this->disable_ebanx_gateways();
+        }
+
+        /**
+         * Renders the script to manage the advanced options script part of ebanx gateway configuration
+         *
+         * @return void
+         */
+        public function hide_advanced_options_section() {
+        	if (!isset($_GET['section']) || $_GET['section'] !== 'ebanx-global') {
+        		return;
+        	}
+
+        	echo "
+        	<style>
+        		.wc-settings-sub-title.togglable {
+        			cursor: pointer;
+        			font-size: larger;
+        		}
+        		.wc-settings-sub-title.togglable:after {
+        			content: ' ▲';
+        		}
+        		.wc-settings-sub-title.togglable.closed:after {
+        			content: ' ▼';
+        		}
+        	</style>";
+
+        	wp_enqueue_script('woocommerce_ebanx_advanced_options', plugins_url('assets/js/advanced-options.js', WC_EBANX::DIR));
+        }
+
+        /**
+         * Renders the style tag to resize the menu icon to the correct size
+         *
+         * @return void
+         */
+        public function resize_settings_menu_icon() {
+        	echo "<style> #adminmenu div.wp-menu-image.svg { background-size: auto 18px !important; } </style>";
+        }
+
+        /**
+         * Disabled all other EBANX gateways
          *
          * @return void
          */
@@ -496,7 +543,6 @@ if (!class_exists('WC_EBANX')) {
                 <style>
                     .woocommerce_page_wc-settings .subsubsub > li { display: none; }
                     .woocommerce_page_wc-settings .woocommerce .form-table th { width: 250px !important; }
-                    #adminmenu div.wp-menu-image.svg { background-size: auto 18px !important; }
                 </style>
 
                 <script>

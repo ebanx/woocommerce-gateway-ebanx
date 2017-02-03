@@ -362,6 +362,10 @@ class WC_EBANX_One_Click {
     public function add_button() {
         global $product;
 
+        if ($this->gateway === false) {
+            return;
+        }
+
         if (
             $product->product_type == 'external' ||
             !$this->customerCan() ||
@@ -387,6 +391,7 @@ class WC_EBANX_One_Click {
         $card = current( array_filter( (array) array_filter( get_user_meta( $this->userId, '_ebanx_credit_card_token', true ) ), function ( $card ) {
                     return $card->token == $_GET['_ebanx_one_click_token'];
                 } ) );
+       	$names = $this->gateway->names;
 
         $_POST['ebanx_token'] = $card->token;
         $_POST['ebanx_masked_card_number'] = $card->masked_number;
@@ -395,8 +400,8 @@ class WC_EBANX_One_Click {
         $_POST['ebanx_is_one_click'] = true;
         $_POST['ebanx_billing_instalments'] = $_GET['_ebanx_one_click_installments'];
 
-        $_POST['ebanx_billing_brazil_document'] = get_user_meta( $this->userId, '_ebanx_billing_brazil_document', true );
-        $_POST['ebanx_billing_brazil_birth_date'] = get_user_meta( $this->userId, '_ebanx_billing_brazil_birth_date', true );
+        $_POST[$names['ebanx_billing_brazil_document']] = get_user_meta( $this->userId, '_ebanx_billing_brazil_document', true );
+        $_POST[$names['ebanx_billing_brazil_birth_date']] = get_user_meta( $this->userId, '_ebanx_billing_brazil_birth_date', true );
 
         $_POST['billing_postcode']  = $this->get_user_billing_address()['postcode'];
         $_POST['billing_address_1'] = $this->get_user_billing_address()['address_1'];
@@ -409,7 +414,8 @@ class WC_EBANX_One_Click {
             empty( $_POST['ebanx_billing_instalments'] ) ||
             empty( $_POST['ebanx_billing_cvv'] ) ||
             empty( $_POST['ebanx_is_one_click'] ) ||
-            empty( $_POST['ebanx_billing_brazil_document'] ) ||
+            !isset( $_POST[$names['ebanx_billing_brazil_document']] ) ||
+            empty( $_POST[$names['ebanx_billing_brazil_document']] ) ||
             empty( $_POST['ebanx_billing_brazil_birth_date'] )
         ) {
             return false;
