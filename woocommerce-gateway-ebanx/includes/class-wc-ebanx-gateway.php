@@ -524,16 +524,6 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
             );
             $language = $languages[$this->language];
 
-            $demo_cards_url = '#';
-            switch ($this->id)
-                case 'ebanx-debit-card':
-                    $demo_cards_url = 'https://www.ebanx.com/business/en/developers/integrations/testing/debit-card-test-numbers';
-                    break;
-                case 'ebanx-credit-card':
-                    $demo_cards_url = 'https://www.ebanx.com/business/en/developers/integrations/testing/credit-card-test-numbers';
-                    break;
-            }
-
             $errors = array(
                 'pt-br' => array(
                     'GENERAL'                    => 'Não foi possível concluir a compra. Por favor, tente novamente ou entre em contato com o site.',
@@ -564,9 +554,7 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
                     'BP-DR-57'                   => 'A sua data deve estar no formato mes/ano, por exemplo, 12/2020.',
                     'BP-DR-59'                   => 'A data é inferior a permitida.',
                     'BP-DR-61'                   => 'Não foi possível utilizar este cartão de crédito. Contate o site informando este código: BP-DR-61.',
-                    'BP-DR-75'                   => 'O número do cartão de crédito é inválido.' . (
-                        $this->is_sandbox_mode ? 'Você pode usar um <a href="'.$demo_cards_url.'">desses números</a> de cartões de teste para simular uma compra.' : ''
-                        ),
+                    'BP-DR-75'                   => 'O número do cartão de crédito é inválido.',
                     'BP-DR-77'                   => 'Este país não está habilitado.',
                     'BP-DR-78'                   => 'Este site não vende para este país.',
                     'BP-DR-79'                   => 'O número de parcelas não é permitido, por favor, escolha outro.',
@@ -615,9 +603,7 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
                     'BP-DR-57'                   => 'Por favor, escribe la fecha en el formato MM/AAAA',
                     'BP-DR-59'                   => 'Por favor, introduce una fecha válida.',
                     'BP-DR-61'                   => 'Disculpa pero no fue posible procesar tu tarjeta de crédito. Contacta el sitio web informado este código: BP-DR-61.',
-                    'BP-DR-75'                   => 'El número de tarjeta de crédito es inválido.' . (
-                        $this->is_sandbox_mode ? 'Puede utilizar uno de <a href="'.$demo_cards_url.'">estos números</a> de tarjetas de prueba para simular una compra.' : ''
-                        ),
+                    'BP-DR-75'                   => 'El número de tarjeta de crédito es inválido.',
                     'BP-DR-77'                   => 'Disculpa, el país que has declarado no está habilitado.',
                     'BP-DR-78'                   => 'Disculpa, aun no vendemos en el país que declaraste.',
                     'BP-DR-79'                   => 'Disculpa, selecciona otro número de meses sin intereses.',
