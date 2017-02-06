@@ -202,6 +202,10 @@ class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
             $card->masked_number = $_POST['ebanx_masked_card_number'];
 
             foreach ($cards as $cd) {
+                if (empty($cd)) {
+                	continue;
+                }
+
                 if ($cd->masked_number == $card->masked_number && $cd->brand == $card->brand) {
                     $cd->token = $card->token;
                     unset($card);
@@ -209,7 +213,9 @@ class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
             }
 
             // TODO: Implement token due date
-            $cards[] = $card;
+            if (isset($card)) {
+            	$cards[] = $card;
+            }
 
             update_user_meta($this->userId, '_ebanx_credit_card_token', $cards);
         }

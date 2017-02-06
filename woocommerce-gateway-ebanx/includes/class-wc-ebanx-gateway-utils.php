@@ -105,6 +105,13 @@ abstract class WC_EBANX_Gateway_Utils
     );
 
     /**
+     * The Brazil taxes available options that EBANX process
+     * 
+     * @var array
+     */
+    public static $BRAZIL_TAXES_ALLOWED = array('cpf', 'cnpj');
+
+    /**
      * Types allowed by SafetyPay
      *
      * @var array
