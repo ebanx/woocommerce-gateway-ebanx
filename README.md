@@ -1,6 +1,6 @@
 [![Build Status](https://travis-ci.com/ebanx/checkout-woocommerce.svg?token=fnHBQhvUoN1zMVexkAyq&branch=master)](https://travis-ci.com/ebanx/checkout-woocommerce)
 
-# EBANX WooCommerce Payment Gateway Plugin
+# EBANX Payment Gateway for WooCommerce
 
 This plugin enables you to integrate your WooCommerce store with the EBANX payment gateway.
 

@@ -8,10 +8,8 @@
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
-	exit;
+    exit;
 }
 
 ?>
 
-<p>Pagamento confirmado, <?=$customer_name ?>!</p>
-<p>Ficou alguma dúvida? A gente te <a href="https://www.ebanx.com/br/ajuda">ajuda</a>.</p>

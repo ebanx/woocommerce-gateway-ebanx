@@ -6,7 +6,9 @@ if (!defined('ABSPATH')) {
 
 class WC_EBANX_Safetypay_Gateway extends WC_EBANX_Redirect_Gateway
 {
-
+    /**
+     * Constructor
+     */
     public function __construct()
     {
         $this->id           = 'ebanx-safetypay';
@@ -20,34 +22,36 @@ class WC_EBANX_Safetypay_Gateway extends WC_EBANX_Redirect_Gateway
         $this->enabled = is_array($this->configs->settings['peru_payment_methods']) ? in_array($this->id, $this->configs->settings['peru_payment_methods']) ? 'yes' : false : false;
     }
 
+    /**
+     * Check if the method is available to show to the users
+     *
+     * @return boolean
+     */
     public function is_available()
     {
-        return parent::is_available() && ($this->getTransactionAddress('country') == WC_EBANX_Gateway_Utils::COUNTRY_PERU);
+        return parent::is_available() && $this->getTransactionAddress('country') == WC_EBANX_Gateway_Utils::COUNTRY_PERU;
     }
 
     /**
-     * TODO: ??
-     * Admin page.
+     * The page of order received, we call them as "Thank you pages"
+     *
+     * @param  WC_Order $order The order created
+     * @return void
      */
-    /*public function admin_options() {
-    include dirname( __FILE__ ) . '/admin/views/notices/html-notice-country-not-supported.php';
-    }*/
-
     public static function thankyou_page($order)
     {
-        $data  = get_post_meta($order, '_wc_ebanx_transaction_data', true);
-
-        wc_get_template(
-            'safetypay/payment-instructions.php',
-            array(
-                'title'       => $this->title,
-                'description' => $this->description,
-            ),
-            'woocommerce/ebanx/',
-            WC_EBANX::get_templates_path()
+        $data = array(
+            'data' => array(),
+            'order_status' => $order->get_status(),
+            'method' => 'pagoefectivo'
         );
+
+        parent::thankyou_page($data);
     }
 
+    /**
+     * The HTML structure on checkout page
+     */
     public function payment_fields()
     {
         if ($description = $this->get_description()) {
@@ -68,6 +72,12 @@ class WC_EBANX_Safetypay_Gateway extends WC_EBANX_Redirect_Gateway
         );
     }
 
+    /**
+     * Mount the data to send to EBANX API
+     *
+     * @param  WC_Order $order
+     * @return array
+     */
     protected function request_data($order)
     {
         if (!isset($_POST['safetypay']) || !in_array($_POST['safetypay'], WC_EBANX_Gateway_Utils::$TYPES_SAFETYPAY_ALLOWED)) {

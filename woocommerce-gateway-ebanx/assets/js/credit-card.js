@@ -16,7 +16,8 @@ jQuery( function($) {
 
 			$(this.form)
 				.on('click', '#place_order', this.onSubmit)
-				.on('submit checkout_place_order_ebanx-credit-card');
+        .on('submit checkout_place_order_ebanx-credit-card-br')
+				.on('submit checkout_place_order_ebanx-credit-card-mx');
 
 			$(document)
 				.on(
@@ -31,7 +32,7 @@ jQuery( function($) {
 		},
 
 		isEBANXPaymentMethod: function () {
-			return $('input[value=ebanx-credit-card]').is(':checked') && (!$('input[name="wc-ebanx-payment-token"]:checked').length || 'new' === $('input[name="wc-ebanx-payment-token"]:checked').val());
+			return $('input[value*=ebanx-credit-card]').is(':checked') && (!$('input[name="wc-ebanx-payment-token"]:checked').length || 'new' === $('input[name="wc-ebanx-payment-token"]:checked').val());
 		},
 
 		hasToken: function () {
@@ -141,7 +142,7 @@ jQuery( function($) {
 		},
 
 		toggleCardUse: function () {
-			$(document).on('click', '.payment_method_ebanx-credit-card .ebanx-credit-card-label', function () {
+			$(document).on('click', 'li[class*="payment_method_ebanx-credit-card"] .ebanx-credit-card-label', function () {
 				$('.ebanx-container-credit-card').hide();
 				$(this).siblings('.ebanx-container-credit-card').show();
 			});
