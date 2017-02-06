@@ -162,9 +162,7 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
             'mode'      => 'full',
             'operation' => 'request',
             'payment'   => array(
-                'user_value_1'          => 'name=plugin',
-                'user_value_2'          => 'value=woocommerce',
-                'user_value_3'          => 'version='.WC_EBANX::VERSION,
+                'user_value_1'          => 'from_woocommerce',
                 'country'               => $order->get_address()['country'],
                 'currency_code'         => WC_EBANX_Gateway_Utils::CURRENCY_CODE_USD, // TODO: Dynamic
                 'name'                  => $order->get_address()['first_name'] . " " . $order->get_address()['last_name'],
