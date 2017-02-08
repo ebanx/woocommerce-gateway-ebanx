@@ -61,8 +61,9 @@ jQuery( function($) {
       disableFields(getBillingFields());
       enableFields(getBillingFields(this.value.toLowerCase()));
 
-      if (this.value.toLowerCase() === 'br')
+      if (this.value.toLowerCase() === 'br') {
         taxes.change();
+      }
     })
     .change();
 });
