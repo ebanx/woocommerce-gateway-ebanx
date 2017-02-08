@@ -84,10 +84,13 @@ class WC_EBANX_Credit_Card_BR_Gateway extends WC_EBANX_Credit_Card_Gateway
         $cart_total = $this->get_order_total();
 
         $cards = array_filter((array) get_user_meta($this->userId, '_ebanx_credit_card_token', true), function ($card) {
-            return !empty($card->brand) && !empty($card->token) && !empty($card->masked_number); // TODO: Implement token due date
+            return !empty($card->brand) && !empty($card->token) && !empty($card->masked_number);
         });
 
-        // echo wp_kses_post(wpautop(wptexturize($messages[$language]['title'])));
+        $exchange = \Ebanx\Ebanx::getExchange((object)array(
+            'USD',
+            'BRL'
+        ));
 
         wc_get_template(
             'ebanx-credit-card-br/payment-form.php',
