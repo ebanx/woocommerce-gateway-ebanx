@@ -35,7 +35,7 @@ jQuery( function($) {
     });
   };
 
-	var disableFields = function (billingFields) {
+  var disableFields = function (billingFields) {
     billingFields.each(function() {
       $(this).hide().removeAttr('required');
     });
@@ -61,7 +61,9 @@ jQuery( function($) {
       disableFields(getBillingFields());
       enableFields(getBillingFields(this.value.toLowerCase()));
 
-      taxes.change();
+      if (this.value.toLowerCase() === 'br') {
+        taxes.change();
+      }
     })
     .change();
 });
