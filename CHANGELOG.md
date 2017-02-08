@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## 1.1.1
+* Fix - Brazil compliance fields showing for other countries [#298](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/298)
+
 ## 1.1.0
 * Feature - Instalments field now gets hidden when max instalments is set to one [#275](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/275)
 * Feature - Send store notification and return links to payment api [#268](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/268)
