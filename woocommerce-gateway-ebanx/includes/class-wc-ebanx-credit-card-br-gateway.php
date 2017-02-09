@@ -87,10 +87,17 @@ class WC_EBANX_Credit_Card_BR_Gateway extends WC_EBANX_Credit_Card_Gateway
             return !empty($card->brand) && !empty($card->token) && !empty($card->masked_number);
         });
 
-        $exchange = \Ebanx\Ebanx::getExchange((object)array(
-            'USD',
-            'BRL'
+        \Ebanx\Config::set([
+            'integrationKey' => $this->private_key,
+            'testMode' => $this->is_sandbox_mode,
+        ]);
+
+        $exchange = \Ebanx\Ebanx::getExchange(array(
+            'currency_code' => 'USD',
+            'currency_base_code' => 'BRL'
         ));
+
+        $acquirer_max_instalments = floor($cart_total * $exchange->rate / 20);
 
         wc_get_template(
             'ebanx-credit-card-br/payment-form.php',
