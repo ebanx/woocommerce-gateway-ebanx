@@ -49,3 +49,4 @@ require_once 'Ebanx/Command/Token.php';
 require_once 'Ebanx/Command/Zipcode.php';
 require_once 'Ebanx/Command/DocumentBalance.php';
 require_once 'Ebanx/Command/MerchantIntegrationProperties.php';
+require_once 'Ebanx/Command/MerchantIntegrationPublicProperties.php';
