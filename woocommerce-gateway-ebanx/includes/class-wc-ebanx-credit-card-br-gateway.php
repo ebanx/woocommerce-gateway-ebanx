@@ -6,6 +6,8 @@ if (!defined('ABSPATH')) {
 
 class WC_EBANX_Credit_Card_BR_Gateway extends WC_EBANX_Credit_Card_Gateway
 {
+    const ACQUIRER_MIN_INSTALMENT_VALUE = 20; // BRL
+
     /**
      * Constructor
      */
@@ -79,8 +81,7 @@ class WC_EBANX_Credit_Card_BR_Gateway extends WC_EBANX_Credit_Card_Gateway
     /**
      * The HTML structure on checkout page
      */
-    public function payment_fields()
-    {
+    public function payment_fields() {
         $cart_total = $this->get_order_total();
 
         $cards = array_filter((array) get_user_meta($this->userId, '_ebanx_credit_card_token', true), function ($card) {
@@ -92,12 +93,13 @@ class WC_EBANX_Credit_Card_BR_Gateway extends WC_EBANX_Credit_Card_Gateway
             'testMode' => $this->is_sandbox_mode,
         ]);
 
-        $exchange = \Ebanx\Ebanx::getExchange(array(
+        $usd_to_brl = \Ebanx\Ebanx::getExchange(array(
             'currency_code' => 'USD',
             'currency_base_code' => 'BRL'
         ));
 
-        $acquirer_max_instalments = floor($cart_total * $exchange->rate / 20);
+        $brl_value = $cart_total * $usd_to_brl->currency_rate->rate;
+        $acquirer_max_instalments = floor($brl_value / self::ACQUIRER_MIN_INSTALMENT_VALUE);
 
         wc_get_template(
             'ebanx-credit-card-br/payment-form.php',
@@ -105,7 +107,7 @@ class WC_EBANX_Credit_Card_BR_Gateway extends WC_EBANX_Credit_Card_Gateway
                 'language' => $this->language,
                 'cards' => (array) $cards,
                 'cart_total' => $cart_total,
-                'max_installment' => $this->configs->settings['credit_card_instalments'],
+                'max_installment' => min($this->configs->settings['credit_card_instalments'], $acquirer_max_instalments),
                 'place_order_enabled' => (isset($this->configs->settings['save_card_data']) && $this->configs->settings['save_card_data'] === 'yes'),
                 'instalments' => 'Número de parcelas',
             ),

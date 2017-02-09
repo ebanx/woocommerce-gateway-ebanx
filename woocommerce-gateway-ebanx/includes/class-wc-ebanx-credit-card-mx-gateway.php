@@ -6,6 +6,8 @@ if (!defined('ABSPATH')) {
 
 class WC_EBANX_Credit_Card_MX_Gateway extends WC_EBANX_Credit_Card_Gateway
 {
+    const ACQUIRER_MIN_INSTALMENT_VALUE = 100; //MXN
+
     /**
      * Constructor
      */
@@ -35,15 +37,25 @@ class WC_EBANX_Credit_Card_MX_Gateway extends WC_EBANX_Credit_Card_Gateway
     /**
      * The HTML structure on checkout page
      */
-    public function payment_fields()
-    {
+    public function payment_fields() {
        $cart_total = $this->get_order_total();
 
         $cards = array_filter((array) get_user_meta($this->userId, '_ebanx_credit_card_token', true), function ($card) {
-            return !empty($card->brand) && !empty($card->token) && !empty($card->masked_number); // TODO: Implement token due date
+            return !empty($card->brand) && !empty($card->token) && !empty($card->masked_number);
         });
 
-        // echo wp_kses_post(wpautop(wptexturize($messages[$language]['title'])));
+        \Ebanx\Config::set([
+            'integrationKey' => $this->private_key,
+            'testMode' => $this->is_sandbox_mode,
+        ]);
+
+        $usd_to_mxn = \Ebanx\Ebanx::getExchange(array(
+            'currency_code' => 'USD',
+            'currency_base_code' => 'MXN'
+        ));
+
+        $mxn_value = $cart_total * $usd_to_mxn->currency_rate->rate;
+        $acquirer_max_instalments = floor($mxn_value / self::ACQUIRER_MIN_INSTALMENT_VALUE);
 
         wc_get_template(
             'ebanx-credit-card-mx/payment-form.php',
@@ -52,7 +64,7 @@ class WC_EBANX_Credit_Card_MX_Gateway extends WC_EBANX_Credit_Card_Gateway
                 'cards' => (array) $cards,
                 'cart_total' => $cart_total,
                 'country' => $this->getTransactionAddress('country'),
-                'max_installment' => $this->configs->settings['credit_card_instalments'],
+                'max_installment' => min($this->configs->settings['credit_card_instalments'], $acquirer_max_instalments),
                 'place_order_enabled' => (isset($this->configs->settings['save_card_data']) && $this->configs->settings['save_card_data'] === 'yes'),
                 'instalments' => 'Meses sin intereses',
             ),
