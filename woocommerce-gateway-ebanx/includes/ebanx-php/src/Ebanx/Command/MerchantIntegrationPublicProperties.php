@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright (c) 2013, EBANX Tecnologia da Informação Ltda.
+ * Copyright (c) 2016, EBANX Tecnologia da Informação Ltda.
  *  All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -32,37 +32,25 @@
 namespace Ebanx\Command;
 
 /**
- * The abstract command class
+ * Command for the 'query' action
  *
- * @author Gustavo Henrique Mascarenhas Machado gustavo@ebanx.com
+ * @author Cezar Luiz <cezar@ebanx.com> and Roger Cruz <roger@ebanx.com>
  */
-abstract class AbstractCommand
+class MerchantIntegrationPublicProperties extends \Ebanx\Command\AbstractCommand
 {
-    /**
-     * Associative array of params
-     * @var array
-     */
-    protected $params = array();
-
     /**
      * The HTTP method
      * @var string
      */
-    protected $method = 'POST';
+    protected $method = 'GET';
 
     /**
      * The action URL address
      * @var string
      */
-    protected $action = null;
+    protected $action = 'merchantIntegrationProperties/isValidPublicIntegrationKey';
 
-    /**
-     * The response type - HTML or JSON
-     * @var string
-     */
-    protected $_responseType = 'JSON';
-
-    protected $ignoredStatusCodes = array();
+    protected $ignoredStatusCodes = array('409');
 
     /**
      * Validates the request parameters
@@ -70,27 +58,8 @@ abstract class AbstractCommand
      * @return mixed
      * @throws InvalidArgumentException
      */
-    abstract protected function validate($validator);
-
-    /**
-     * Executes the command in the EBANX API
-     * @param  array $params The request parameters
-     * @return mixed
-     */
-    public function execute($params)
+    protected function validate($validator)
     {
-        $this->params = $params;
-        $this->validate(new \Ebanx\Command\Validator($this->params));
-
-        // Get the HTTP client from the registry
-        $httpClient = \Ebanx\Config::getHttpClient();
-        $client = new $httpClient();
-        $client->setParams($this->params)
-               ->setMethod($this->method)
-               ->setAction($this->action)
-               ->setIgnoredStatusCodes($this->ignoredStatusCodes)
-               ->setResponseType($this->_responseType);
-
-        return $client->send();
+    	$validator->validatePresence('public_integration_key');
     }
 }

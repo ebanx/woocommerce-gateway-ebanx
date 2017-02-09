@@ -41,128 +41,148 @@ use GuzzleHttp;
  */
 class Client
 {
-    /**
-     * The request HTTP method
-     * @var string
-     */
-    protected $method;
+	/**
+	 * The request HTTP method
+	 * @var string
+	 */
+	protected $method;
 
-    /**
-     * The allowed HTTP methods
-     * @var array
-     */
-    protected $allowedMethods = array('POST', 'GET');
+	/**
+	 * The allowed HTTP methods
+	 * @var array
+	 */
+	protected $allowedMethods = array('POST', 'GET');
 
-    /**
-     * The HTTP action (URI)
-     * @var string
-     */
-    protected $action;
+	/**
+	 * The HTTP action (URI)
+	 * @var string
+	 */
+	protected $action;
 
-    /**
-     * The request parameters
-     * @var array
-     */
-    protected $params;
+	/**
+	 * The request parameters
+	 * @var array
+	 */
+	protected $params;
 
-    /**
-     * Flag to call json_decode on response
-     * @var boolean
-     */
-    protected $decodeResponse = false;
+	/**
+	 * Flag to call json_decode on response
+	 * @var boolean
+	 */
+	protected $decodeResponse = false;
 
-    /**
-     * Set the request parameters
-     * @param array $params The request parameters
-     * @return Ebanx\Http\Client
-     */
-    public function setParams($params)
-    {
-        $this->params = $params;
-        $this->params['integration_key'] = Config::getIntegrationKey();
+	protected $ignoredStatusCodes = array();
 
-        return $this;
-    }
+	/**
+	 * Set the request parameters
+	 * @param array $params The request parameters
+	 * @return Ebanx\Http\Client
+	 */
+	public function setParams($params)
+	{
+		$this->params = $params;
+		$this->params['integration_key'] = Config::getIntegrationKey();
 
-    /**
-     * Set the request HTTP method
-     * @param string $method The request HTTP method
-     * @return Ebanx\Http\Client
-     * @throws InvalidArgumentException
-     */
-    public function setMethod($method)
-    {
-        if (!in_array(strtoupper($method), $this->allowedMethods))
-        {
-          throw new \InvalidArgumentException("The HTTP Client doesn't accept $method requests.");
-        }
+		return $this;
+	}
 
-        $this->method = $method;
-        return $this;
-    }
+	/**
+	 * Set the request HTTP method
+	 * @param string $method The request HTTP method
+	 * @return Ebanx\Http\Client
+	 * @throws InvalidArgumentException
+	 */
+	public function setMethod($method)
+	{
+		if (!in_array(strtoupper($method), $this->allowedMethods))
+		{
+		  throw new \InvalidArgumentException("The HTTP Client doesn't accept $method requests.");
+		}
 
-    /**
-     * Set the request target URI
-     * @param string $action The target URI
-     * @return Ebanx\Http\Client
-     */
-    public function setAction($action)
-    {
-        $this->action = Config::getURL() . $action;
-        return $this;
-    }
+		$this->method = $method;
+		return $this;
+	}
 
-    /**
-     * Set the decodeResponse flag depending on the response type (JSON or HTML)
-     * @param string $responseType The response type (JSON or HTML)
-     * @return Ebanx\Http\Client
-     */
+	/**
+	 * Set the request target URI
+	 * @param string $action The target URI
+	 * @return Ebanx\Http\Client
+	 */
+	public function setAction($action)
+	{
+		$this->action = Config::getURL() . $action;
+		return $this;
+	}
 
-    public function setResponseType($responseType)
-    {
-        if (strtoupper($responseType) == 'JSON')
-        {
-            $this->decodeResponse = true;
-        }
+	/**
+	 * Set the decodeResponse flag depending on the response type (JSON or HTML)
+	 * @param string $responseType The response type (JSON or HTML)
+	 * @return Ebanx\Http\Client
+	 */
+	public function setResponseType($responseType)
+	{
+		if (strtoupper($responseType) == 'JSON')
+		{
+			$this->decodeResponse = true;
+		}
 
-        return $this;
-    }
+		return $this;
+	}
 
-    /**
-     * Sends the HTTP request
-     * @return StdClass
-     */
-    public function send()
-    {
-        if (!ini_get('allow_url_fopen'))
-        {
-            throw new \RuntimeException('allow_url_fopen must be enabled to use PHP streams.');
-        }
+	public function setIgnoredStatusCodes($list) {
+		$this->ignoredStatusCodes = $list;
 
-        $params = http_build_query($this->params);
-        $uri    = ($this->method == 'GET') ? ($this->action . '?' . $params) : $this->action;
+		return $this;
+	}
 
-        $context = stream_context_create(array(
-            'http' => array(
-                'method' => $this->method
-              , 'header' => "Content-Type: application/x-www-form-urlencoded\r\n" .
-                            "User-Agent: EBANX PHP Library " . \Ebanx\Ebanx::VERSION . "\r\n"
-              , 'content' => ($this->method == 'GET') ? '' : $params
-            )
-        ));
+	private function get_http_response_code($url) {
+		$headers = get_headers($url);
+		return substr($headers[0], 9, 3);
+	}
 
-        $response = file_get_contents($uri, false, $context);
+	/**
+	 * Sends the HTTP request
+	 * @return StdClass
+	 */
+	public function send()
+	{
+		try {
+			if (!ini_get('allow_url_fopen'))
+			{
+				throw new \RuntimeException('allow_url_fopen must be enabled to use PHP streams.');
+			}
 
-        if ($response && strlen($response))
-        {
-            if ($this->decodeResponse)
-            {
-                return json_decode($response);
-            }
+			$params = http_build_query($this->params);
+			$uri    = ($this->method == 'GET') ? ($this->action . '?' . $params) : $this->action;
 
-            return $response;
-        }
+			$context = stream_context_create(array(
+				'http' => array(
+					'method' => $this->method
+				  , 'header' => "Content-Type: application/x-www-form-urlencoded\r\n" .
+								"User-Agent: EBANX PHP Library " . \Ebanx\Ebanx::VERSION . "\r\n"
+				  , 'content' => ($this->method == 'GET') ? '' : $params
+				)
+			));
 
-        throw new \RuntimeException("Bad HTTP request: {$response}");
-    }
+			if (in_array($this->get_http_response_code($uri), $this->ignoredStatusCodes)) {
+				return (object) array('status' => 'HTTP_STATUS_CODE_IGNORED');
+			}
+
+			$response = file_get_contents($uri, false, $context);
+
+			if ($response && strlen($response))
+			{
+				if ($this->decodeResponse)
+				{
+					return json_decode($response);
+				}
+
+				return $response;
+			}
+
+			throw new \RuntimeException("Bad HTTP request: {$response}");
+		} finally {
+			$this->ignoredStatusCodes = array();
+		}
+	}
 }
