@@ -112,6 +112,9 @@ The [Developer’s Academy](https://www.ebanx.com/business/en/developers/integra
 
 == Changelog ==
 
+= 1.2.0 =
+* Feature - Instalments limit based on minimun amount accepted by credit card acquirer [#298](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/298)
+
 = 1.1.2 =
 * Fix - Integration keys validation messages now update properly [#297](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/297)
 
