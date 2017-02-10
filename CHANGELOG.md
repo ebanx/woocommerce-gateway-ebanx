@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## 1.1.3
+* Fix - Undisplayed thank-you-page messages [#299](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/299)
+
 ## 1.1.2
 * Fix - Integration keys validation messages now update properly [#297](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/297)
 
