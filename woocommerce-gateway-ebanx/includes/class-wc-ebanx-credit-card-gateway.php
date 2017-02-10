@@ -214,7 +214,7 @@ class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
 
             // TODO: Implement token due date
             if (isset($card)) {
-            	$cards[] = $card;
+                $cards[] = $card;
             }
 
             update_user_meta($this->userId, '_ebanx_credit_card_token', $cards);
