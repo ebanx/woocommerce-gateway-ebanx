@@ -31,6 +31,12 @@ abstract class WC_EBANX_Gateway_Utils
     const CURRENCY_CODE_CLP = 'CLP';
 
     /**
+     * Minimal instalment value for acquirers to approve based on currency
+     */
+    const ACQUIRER_MIN_INSTALMENT_VALUE_MXN = 100;
+    const ACQUIRER_MIN_INSTALMENT_VALUE_BRL = 20;
+
+    /**
      * The list of all countries that EBANX processes
      *
      * @var array
@@ -106,7 +112,7 @@ abstract class WC_EBANX_Gateway_Utils
 
     /**
      * The Brazil taxes available options that EBANX process
-     * 
+     *
      * @var array
      */
     public static $BRAZIL_TAXES_ALLOWED = array('cpf', 'cnpj');

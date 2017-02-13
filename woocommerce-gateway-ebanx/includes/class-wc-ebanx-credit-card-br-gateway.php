@@ -6,8 +6,6 @@ if (!defined('ABSPATH')) {
 
 class WC_EBANX_Credit_Card_BR_Gateway extends WC_EBANX_Credit_Card_Gateway
 {
-    const ACQUIRER_MIN_INSTALMENT_VALUE = 20; // BRL
-
     /**
      * Constructor
      */
@@ -94,12 +92,12 @@ class WC_EBANX_Credit_Card_BR_Gateway extends WC_EBANX_Credit_Card_Gateway
         ]);
 
         $usd_to_brl = \Ebanx\Ebanx::getExchange(array(
-            'currency_code' => 'USD',
-            'currency_base_code' => 'BRL'
+            'currency_code' => WC_Ebanx_Gateway_Utils::CURRENCY_CODE_USD,
+            'currency_base_code' => WC_Ebanx_Gateway_Utils::CURRENCY_CODE_BRL
         ));
 
         $brl_value = $cart_total * $usd_to_brl->currency_rate->rate;
-        $acquirer_max_instalments = floor($brl_value / self::ACQUIRER_MIN_INSTALMENT_VALUE);
+        $acquirer_max_instalments = floor($brl_value / WC_Ebanx_Gateway_Utils::ACQUIRER_MIN_INSTALMENT_VALUE);
 
         wc_get_template(
             'ebanx-credit-card-br/payment-form.php',
