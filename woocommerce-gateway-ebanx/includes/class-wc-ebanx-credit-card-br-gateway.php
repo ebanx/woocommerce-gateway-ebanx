@@ -97,7 +97,7 @@ class WC_EBANX_Credit_Card_BR_Gateway extends WC_EBANX_Credit_Card_Gateway
         ));
 
         $brl_value = $cart_total * $usd_to_brl->currency_rate->rate;
-        $acquirer_max_instalments = floor($brl_value / WC_Ebanx_Gateway_Utils::ACQUIRER_MIN_INSTALMENT_VALUE);
+        $acquirer_max_instalments = floor($brl_value / WC_Ebanx_Gateway_Utils::ACQUIRER_MIN_INSTALMENT_VALUE_BRL);
 
         wc_get_template(
             'ebanx-credit-card-br/payment-form.php',

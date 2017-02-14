@@ -53,7 +53,7 @@ class WC_EBANX_Credit_Card_MX_Gateway extends WC_EBANX_Credit_Card_Gateway
         ));
 
         $mxn_value = $cart_total * $usd_to_mxn->currency_rate->rate;
-        $acquirer_max_instalments = floor($mxn_value / WC_Ebanx_Gateway_Utils::ACQUIRER_MIN_INSTALMENT_VALUE);
+        $acquirer_max_instalments = floor($mxn_value / WC_Ebanx_Gateway_Utils::ACQUIRER_MIN_INSTALMENT_VALUE_MXN);
 
         wc_get_template(
             'ebanx-credit-card-mx/payment-form.php',
