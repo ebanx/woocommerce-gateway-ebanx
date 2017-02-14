@@ -31,7 +31,6 @@
 
 namespace Ebanx\Http;
 
-use Ebanx\Config;
 use Ebanx\Http;
 
 /**
