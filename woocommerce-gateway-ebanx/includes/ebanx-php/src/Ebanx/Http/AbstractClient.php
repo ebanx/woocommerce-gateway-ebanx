@@ -40,116 +40,116 @@ use Ebanx\Config;
  */
 abstract class AbstractClient
 {
-	/**
-	 * The HTTP action (URI)
-	 * @var string
-	 */
-	protected $action;
+    /**
+     * The HTTP action (URI)
+     * @var string
+     */
+    protected $action;
 
-	/**
-	 * The allowed HTTP methods
-	 * @var array
-	 */
-	protected $allowedMethods = array('POST', 'GET');
+    /**
+     * The allowed HTTP methods
+     * @var array
+     */
+    protected $allowedMethods = array('POST', 'GET');
 
-	/**
-	 * Flag to call json_decode on response
-	 * @var boolean
-	 */
-	protected $hasToDecodeResponse = false;
+    /**
+     * Flag to call json_decode on response
+     * @var boolean
+     */
+    protected $hasToDecodeResponse = false;
 
-	/**
-	 * The ignored status codes
-	 * @var array
-	 */
-	protected $ignoredStatusCodes = array();
+    /**
+     * The ignored status codes
+     * @var array
+     */
+    protected $ignoredStatusCodes = array();
 
-	/**
-	 * The request HTTP method
-	 * @var string
-	 */
-	protected $method;
+    /**
+     * The request HTTP method
+     * @var string
+     */
+    protected $method;
 
-	/**
-	 * The request parameters
-	 * @var array
-	 */
-	protected $requestParams;
+    /**
+     * The request parameters
+     * @var array
+     */
+    protected $requestParams;
 
 
-	/**
-	 * Sends the HTTP request
-	 * @return StdClass
-	 */
-	abstract public function send();
+    /**
+     * Sends the HTTP request
+     * @return StdClass
+     */
+    abstract public function send();
 
-	/**
-	 * Returns HTTP response code
-	 * @return string
-	 */
-	protected function get_http_response_code($url) {
-		$headers = get_headers($url);
-		return substr($headers[0], 9, 3);
-	}
+    /**
+     * Returns HTTP response code
+     * @return string
+     */
+    protected function get_http_response_code($url) {
+        $headers = get_headers($url);
+        return substr($headers[0], 9, 3);
+    }
 
-	/**
-	 * Set the request target URI
-	 * @param string $action The target URI
-	 * @return Ebanx\Http\AbstractClient A "Ebanx\Http\AbstractClient" subclass object
-	 */
-	public function setAction($action)
-	{
-		$this->action = Config::getURL() . $action;
-		return $this;
-	}
+    /**
+     * Set the request target URI
+     * @param string $action The target URI
+     * @return Ebanx\Http\AbstractClient A "Ebanx\Http\AbstractClient" subclass object
+     */
+    public function setAction($action)
+    {
+        $this->action = Config::getURL() . $action;
+        return $this;
+    }
 
-	/**
-	 * Set the ignored status codes
-	 * @param array $ignoredStatusCodes The ignored status codes
-	 * @return Ebanx\Http\AbstractClient A "Ebanx\Http\AbstractClient" subclass object
-	 */
-	public function setIgnoredStatusCodes($ignoredStatusCodes)
-	{
-		$this->ignoredStatusCodes = $ignoredStatusCodes;
-		return $this;
-	}
+    /**
+     * Set the ignored status codes
+     * @param array $ignoredStatusCodes The ignored status codes
+     * @return Ebanx\Http\AbstractClient A "Ebanx\Http\AbstractClient" subclass object
+     */
+    public function setIgnoredStatusCodes($ignoredStatusCodes)
+    {
+        $this->ignoredStatusCodes = $ignoredStatusCodes;
+        return $this;
+    }
 
-	/**
-	 * Set the request HTTP method
-	 * @param string $method The request HTTP method
-	 * @return Ebanx\Http\AbstractClient A "Ebanx\Http\AbstractClient" subclass object
-	 * @throws InvalidArgumentException
-	 */
-	public function setMethod($method)
-	{
-		if(!in_array(strtoupper($method), $this->allowedMethods)) {
-		  throw new \InvalidArgumentException("The HTTP Client doesn't accept $method requests.");
-		}
+    /**
+     * Set the request HTTP method
+     * @param string $method The request HTTP method
+     * @return Ebanx\Http\AbstractClient A "Ebanx\Http\AbstractClient" subclass object
+     * @throws InvalidArgumentException
+     */
+    public function setMethod($method)
+    {
+        if(!in_array(strtoupper($method), $this->allowedMethods)) {
+          throw new \InvalidArgumentException("The HTTP Client doesn't accept $method requests.");
+        }
 
-		$this->method = $method;
-		return $this;
-	}
+        $this->method = $method;
+        return $this;
+    }
 
-	/**
-	 * Set the request parameters
-	 * @param array $params The request parameters
-	 * @return Ebanx\Http\AbstractClient A "Ebanx\Http\AbstractClient" subclass object
-	 */
-	public function setRequestParams($requestParams)
-	{
-		$this->requestParams = $requestParams;
-		$this->requestParams['integration_key'] = Config::getIntegrationKey();
-		return $this;
-	}
+    /**
+     * Set the request parameters
+     * @param array $params The request parameters
+     * @return Ebanx\Http\AbstractClient A "Ebanx\Http\AbstractClient" subclass object
+     */
+    public function setRequestParams($requestParams)
+    {
+        $this->requestParams = $requestParams;
+        $this->requestParams['integration_key'] = Config::getIntegrationKey();
+        return $this;
+    }
 
-	/**
-	 * Set the decodeResponse flag depending on the response type (JSON or HTML)
-	 * @param string $responseType The response type (JSON or HTML)
-	 * @return Ebanx\Http\AbstractClient A "Ebanx\Http\AbstractClient" subclass object
-	 */
-	public function setResponseType($responseType)
-	{
-		$this->hasToDecodeResponse = strtoupper($responseType) == 'JSON';
-		return $this;
-	}
+    /**
+     * Set the decodeResponse flag depending on the response type (JSON or HTML)
+     * @param string $responseType The response type (JSON or HTML)
+     * @return Ebanx\Http\AbstractClient A "Ebanx\Http\AbstractClient" subclass object
+     */
+    public function setResponseType($responseType)
+    {
+        $this->hasToDecodeResponse = strtoupper($responseType) == 'JSON';
+        return $this;
+    }
 }
