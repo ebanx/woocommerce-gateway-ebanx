@@ -39,27 +39,34 @@ namespace Ebanx\Http;
 class ClientCurl extends AbstractClient
 {
     private $curl;
+    private $uri;
 
     /**
      * {@inheritDoc} using curl.
      */
     public function send()
     {
-        $this->_setupCurl();
-        $response = curl_exec($this->curl);
-        if(curl_getinfo($this->curl, CURLINFO_HTTP_CODE) === 200) {
-            if($this->hasToDecodeResponse) {
-                $response = json_decode($response);
+        try {
+            $this->_setupCurl();
+
+            if(in_array($this->get_http_response_code($this->uri), $this->ignoredStatusCodes)) {
+                return (object) array('status' => 'HTTP_STATUS_CODE_IGNORED');
             }
-        } else {
-            if(curl_errno($this->curl)) {
-                throw new \RuntimeException('The HTTP request failed: ' . curl_error($this->curl));
-            } else {
+
+            $response = curl_exec($this->curl);
+
+            if (curl_getinfo($this->curl, CURLINFO_HTTP_CODE) !== 200) {
+                if (curl_errno($this->curl)) {
+                    throw new \RuntimeException('The HTTP request failed: ' . curl_error($this->curl));
+                }
                 throw new \RuntimeException('The HTTP request failed: unknown error.');
             }
+            curl_close($this->curl);
+
+            return $this->hasToDecodeResponse ? json_decode($response) : $response;
+        } finally {
+            $this->ignoredStatusCodes = array();
         }
-        curl_close($this->curl);
-        return $response;
     }
 
     /**
@@ -69,18 +76,23 @@ class ClientCurl extends AbstractClient
     private function _setupCurl()
     {
         $requestParams = http_build_query($this->requestParams);
-        if($this->method == 'POST') {
+
+        $this->uri = $this->action;
+        if ($this->method == 'GET') {
+            $this->uri .= '?'.$requestParams;
+        }
+
+        $this->curl = curl_init($this->uri);
+
+        if ($this->method == 'POST') {
             // POST requests
-            $this->curl = curl_init($this->action);
             curl_setopt($this->curl, CURLOPT_POST, true);
             curl_setopt($this->curl, CURLOPT_POSTFIELDS, $requestParams);
-        } elseif($this->method == 'GET') {
-            // GET requests
-            $this->curl = curl_init($this->action . '?' . $requestParams);
         }
+
         // We want to receive the returned data
         curl_setopt($this->curl, CURLOPT_RETURNTRANSFER, true);
         // Setup custom user agent
-         curl_setopt($this->curl, CURLOPT_USERAGENT, 'EBANX PHP Library ' . \Ebanx\Ebanx::VERSION);
+        curl_setopt($this->curl, CURLOPT_USERAGENT, 'EBANX PHP Library ' . \Ebanx\Ebanx::VERSION);
     }
 }
