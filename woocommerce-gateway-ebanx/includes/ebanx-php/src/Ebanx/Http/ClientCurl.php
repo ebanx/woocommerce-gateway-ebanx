@@ -31,34 +31,56 @@
 
 namespace Ebanx\Http;
 
-use Ebanx\Http;
-
 /**
- * HTTP request client wrapper, using curl, with stream fallback
+ * HTTP request client wrapper, using curl
  *
  * @author Guilherme Pressutto guilherme.pressutto@ebanx.com
  */
-class ClientFactory
+class ClientCurl extends AbstractClient
 {
+    private $curl;
 
     /**
-     * Returns CurlClient if curl is enabled, else
-     * returns StreamClient if php_ini allows url fopen, else
-     * throws an exception
-     * @return Ebanx\Http\AbstractClient A "Ebanx\Http\AbstractClient" subclass object
-     * @throws RuntimeException
+     * {@inheritDoc} using curl.
      */
-    public static function getInstance()
+    public function send()
     {
-        if(in_array('curl', get_loaded_extensions())) {
-            return new ClientCurl();
+        $this->_setupCurl();
+        $response = curl_exec($this->curl);
+        if(curl_getinfo($this->curl, CURLINFO_HTTP_CODE) === 200) {
+            if($this->hasToDecodeResponse) {
+                $response = json_decode($response);
+            }
         } else {
-            if(ini_get('allow_url_fopen')) {
-                return new ClientStream();
+            if(curl_errno($this->curl)) {
+                throw new \RuntimeException('The HTTP request failed: ' . curl_error($this->curl));
             } else {
-                throw new \RuntimeException('allow_url_fopen must be enabled to use PHP streams.');
+                throw new \RuntimeException('The HTTP request failed: unknown error.');
             }
         }
-        return null;
+        curl_close($this->curl);
+        return $response;
+    }
+
+    /**
+     * Initialize the cURL resource
+     * @return void
+     */
+    private function _setupCurl()
+    {
+        $requestParams = http_build_query($this->requestParams);
+        if($this->method == 'POST') {
+            // POST requests
+            $this->curl = curl_init($this->action);
+            curl_setopt($this->curl, CURLOPT_POST, true);
+            curl_setopt($this->curl, CURLOPT_POSTFIELDS, $requestParams);
+        } elseif($this->method == 'GET') {
+            // GET requests
+            $this->curl = curl_init($this->action . '?' . $requestParams);
+        }
+        // We want to receive the returned data
+        curl_setopt($this->curl, CURLOPT_RETURNTRANSFER, true);
+        // Setup custom user agent
+         curl_setopt($this->curl, CURLOPT_USERAGENT, 'EBANX PHP Library ' . \Ebanx\Ebanx::VERSION);
     }
 }
