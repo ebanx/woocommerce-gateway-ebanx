@@ -45,7 +45,7 @@ class ClientFactory
      * Returns CurlClient if curl_* is enabled, else
      * returns StreamClient if php_ini allows url fopen, else
      * throws an exception
-     * @return mixed
+     * @return Ebanx\Http\AbstractClient A "Ebanx\Http\AbstractClient" subclass object
      * @throws RuntimeException
      */
     public static function getInstance()
