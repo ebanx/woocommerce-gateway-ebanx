@@ -50,15 +50,15 @@ class ClientFactory
      */
     public static function getInstance()
     {
-        if(in_array('curl', get_loaded_extensions())) {
+        if (in_array('curl', get_loaded_extensions())) {
             return new ClientCurl();
-        } else {
-            if(ini_get('allow_url_fopen')) {
-                return new ClientStream();
-            } else {
-                throw new \RuntimeException('allow_url_fopen must be enabled to use PHP streams.');
-            }
         }
-        return null;
+
+        if (ini_get('allow_url_fopen')) {
+            return new ClientStream();
+        }
+
+        throw new \RuntimeException('No supported HTTP request method on this server.'.
+                                    ' Please enable curl or allow_url_fopen.');
     }
 }
