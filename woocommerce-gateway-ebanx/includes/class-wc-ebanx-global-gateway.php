@@ -281,7 +281,7 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway
 			'checkout_manager_brazil_person_type' => array(
 				'title' => __('Entity Type Selector', 'woocommerce-gateway-ebanx'),
 				'type' => 'text',
-				'class' => 'ebanx-advanced-option ebanx-checkout-manager-field cpf cnpj',
+				'class' => 'ebanx-advanced-option ebanx-checkout-manager-field cpf_cnpj',
 				'placeholder' => __('eg: billing_brazil_entity', 'woocommerce-gateway-ebanx')
 			),
 			'checkout_manager_cpf_brazil' => array(

@@ -44,6 +44,9 @@
       for (var i in modes) {
         enableFields(fields.filter('.' + modes[i]));
       }
+      if (modes.length == 2) {
+        enableFields(fields.filter('.cpf_cnpj'));
+      }
     }
   };
 

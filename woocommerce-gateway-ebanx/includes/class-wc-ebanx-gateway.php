@@ -370,9 +370,6 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
             $has_cpf = !empty($_POST[$this->names['ebanx_billing_brazil_document']]);
             $has_cnpj = !empty($_POST[$this->names['ebanx_billing_brazil_cnpj']]);
 
-            var_dump($has_cnpj);
-            var_dump($has_cpf);
-
             if (
                 empty($_POST['billing_postcode']) ||
                 empty($_POST['billing_address_1']) ||
