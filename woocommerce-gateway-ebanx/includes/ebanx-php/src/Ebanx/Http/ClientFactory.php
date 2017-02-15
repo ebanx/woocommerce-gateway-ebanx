@@ -50,13 +50,14 @@ class ClientFactory
      */
     public static function getInstance()
     {
-        if(in_array('curl', get_loaded_extensions())) {
+        //if(in_array('curl', get_loaded_extensions())) { DEBUG: uncomment before committing
+        if(false) { //DEBUG: remove before committing
             echo "<script>console.log('ClientFactory: Curl');</script>"; //DEBUG: remove before committing
             return new Client();
         } else {
             if(ini_get('allow_url_fopen')) {
                 echo "<script>console.log('ClientFactory: Stream');</script>"; //DEBUG: remove before committing
-                return new Client();
+                return new ClientStream();
             } else {
                 throw new \RuntimeException('allow_url_fopen must be enabled to use PHP streams.');
             }

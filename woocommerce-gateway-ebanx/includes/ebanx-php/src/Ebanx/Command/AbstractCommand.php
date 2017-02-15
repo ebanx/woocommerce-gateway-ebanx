@@ -85,7 +85,7 @@ abstract class AbstractCommand
         // Get the HTTP client from the registry
         $httpClient = \Ebanx\Config::getHttpClient();
         $client = new $httpClient();
-        $client->setParams($this->params)
+        $client->setRequestParams($this->params)
                ->setMethod($this->method)
                ->setAction($this->action)
                ->setIgnoredStatusCodes($this->ignoredStatusCodes)
