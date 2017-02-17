@@ -11,6 +11,8 @@ Offer Latin American local payment methods & increase your conversion rates with
 
 == Description ==
 
+[youtube https://www.youtube.com/watch?v=J8vFkDwHMWA]
+
 Accept with ease and security, the most popular local payment methods in Latin America and receive your money anywhere in the world. The WooCommerce EBANX Payment Gateway plugin will enable you to significantly increase your cross-border sales & conversion rates by allowing you to sell like a local in the world’s fastest growing ecommerce markets.
 
 Ready to accept local payments but don’t have an account yet? Finish our [simple sign-up](https://www.ebanx.com/business/en/dashboard) and we can start helping you sell like a local in Latin America or schedule a [call with a Business Development Executive](https://app.hubspot.com/meetings/ebanx-ronaldo/schedule-call).
