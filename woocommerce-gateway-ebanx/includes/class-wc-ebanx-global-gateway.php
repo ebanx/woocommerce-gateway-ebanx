@@ -278,6 +278,12 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway
 				'description' => __('If you make use of a Checkout Manager, please identify the HTML name attribute of the fields.', 'woocommerce-gateway-ebanx'),
 				'desc_tip' => true
 			),
+			'checkout_manager_brazil_person_type' => array(
+				'title' => __('Entity Type Selector', 'woocommerce-gateway-ebanx'),
+				'type' => 'text',
+				'class' => 'ebanx-advanced-option ebanx-checkout-manager-field cpf_cnpj',
+				'placeholder' => __('eg: billing_brazil_entity', 'woocommerce-gateway-ebanx')
+			),
 			'checkout_manager_cpf_brazil' => array(
 				'title' => __('CPF', 'woocommerce-gateway-ebanx'),
 				'type' => 'text',
