@@ -301,7 +301,19 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway
 				'type' => 'text',
 				'class' => 'ebanx-advanced-option ebanx-checkout-manager-field cnpj',
 				'placeholder' => __('eg: billing_brazil_cnpj', 'woocommerce-gateway-ebanx')
-			)
+			),
+			'checkout_manager_chile_document' => array(
+				'title' => __('RUT', 'woocommerce-gateway-ebanx'),
+				'type' => 'text',
+				'class' => 'ebanx-advanced-option ebanx-checkout-manager-field',
+				'placeholder' => __('eg: billing_chile_document', 'woocommerce-gateway-ebanx')
+			),
+			'checkout_manager_chile_birth_date' => array(
+				'title' => __('Birthdate', 'woocommerce-gateway-ebanx'),
+				'type' => 'text',
+				'class' => 'ebanx-advanced-option ebanx-checkout-manager-field',
+				'placeholder' => __('eg: billing_chile_birth_date', 'woocommerce-gateway-ebanx')
+			),
 		);
 
 		$this->injectDefaults();
