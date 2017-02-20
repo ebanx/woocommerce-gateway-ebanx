@@ -64,7 +64,7 @@ All pages that incorporate the EBANX plugin must be served over HTTPS.
 
 **Automatic**
 
-Automatic installation is the easiest option and can be done without leaving your web browser. To do an automatic install of the EBANX plugin, login to the WordPress Dashboard, go to the Plugins menu, and select “Add New.” Then, search for the “EBANX Gateway Plugin” and click “Install Now.”
+Automatic installation is the easiest option and can be done without leaving your web browser. To do an automatic install of the EBANX plugin, login to the WordPress Dashboard, go to the Plugins menu, and select “Add New.” Then, search for the “EBANX Payment Gateway for WooCommerce” and click “Install Now.”
 
 **Manual**
 
