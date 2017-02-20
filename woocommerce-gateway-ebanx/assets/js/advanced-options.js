@@ -41,6 +41,7 @@
     disableFields(fields);
 
     if (fieldsToggler[0].checked) {
+      enableFields(fields.filter('.always-visible'));
       for (var i in modes) {
         enableFields(fields.filter('.' + modes[i]));
       }
