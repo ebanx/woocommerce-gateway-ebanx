@@ -169,8 +169,8 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
             'ebanx_billing_brazil_cnpj' => $this->get_checkout_manager_settings_or_default('checkout_manager_cnpj_brazil', 'ebanx_billing_brazil_cnpj'),
 
             // Chile Fields
-            'ebanx_billing_chile_document' => 'ebanx_billing_chile_document',
-            'ebanx_billing_chile_birth_date' => 'ebanx_billing_chile_birth_date'
+            'ebanx_billing_chile_document' => $this->get_checkout_manager_settings_or_default('checkout_manager_chile_document', 'ebanx_billing_chile_document'),
+            'ebanx_billing_chile_birth_date' => $this->get_checkout_manager_settings_or_default('checkout_manager_chile_birth_date', 'ebanx_billing_chile_birth_date')
         );
     }
 
@@ -391,12 +391,12 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
         }
 
         if ($this->getTransactionAddress('country') === WC_EBANX_Gateway_Utils::COUNTRY_CHILE) {
-            if (empty($_POST['ebanx_billing_chile_document']) || empty($_POST['ebanx_billing_chile_birth_date'])) {
+            if (empty($_POST[$this->names['ebanx_billing_chile_document']]) || empty($_POST[$this->names['ebanx_billing_chile_birth_date']])) {
                 throw new Exception('INVALID-FIELDS');
             }
 
-            $_POST['ebanx_billing_document'] = $_POST['ebanx_billing_chile_document'];
-            $_POST['ebanx_billing_birth_date'] = $_POST['ebanx_billing_chile_birth_date'];
+            $_POST['ebanx_billing_document'] = $_POST[$this->names['ebanx_billing_chile_document']];
+            $_POST['ebanx_billing_birth_date'] = $_POST[$this->names['ebanx_billing_chile_birth_date']];
         }
 
         $addresses = $_POST['billing_address_1'];
