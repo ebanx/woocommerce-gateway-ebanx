@@ -169,8 +169,8 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
             'ebanx_billing_brazil_cnpj' => $this->get_checkout_manager_settings_or_default('checkout_manager_cnpj_brazil', 'ebanx_billing_brazil_cnpj'),
 
             // Chile Fields
-            'ebanx_billing_chile_document' => 'ebanx_billing_chile_document',
-            'ebanx_billing_chile_birth_date' => 'ebanx_billing_chile_birth_date'
+            'ebanx_billing_chile_document' => $this->get_checkout_manager_settings_or_default('checkout_manager_chile_document', 'ebanx_billing_chile_document'),
+            'ebanx_billing_chile_birth_date' => $this->get_checkout_manager_settings_or_default('checkout_manager_chile_birth_date', 'ebanx_billing_chile_birth_date')
         );
     }
 
