@@ -59,6 +59,10 @@ if (!class_exists('WC_EBANX')) {
 		 */
 		private function __construct()
 		{
+			if (!class_exists('WC_Payment_Gateway')) {
+				add_action('admin_notices', array($this, 'woocommerce_missing_notice'));
+				return;
+			}
 			/**
 			 * Actions
 			 */
@@ -98,18 +102,14 @@ if (!class_exists('WC_EBANX')) {
 			 */
 			$this->enable_i18n();
 
-			if (class_exists('WC_Payment_Gateway')) {
-				$this->includes();
+			$this->includes();
 
-				add_filter('woocommerce_payment_gateways', array($this, 'add_gateway'));
-				add_filter('plugin_action_links_' . plugin_basename(__FILE__), array($this, 'plugin_action_links'));
+			add_filter('woocommerce_payment_gateways', array($this, 'add_gateway'));
+			add_filter('plugin_action_links_' . plugin_basename(__FILE__), array($this, 'plugin_action_links'));
 
-				add_action('woocommerce_settings_saved', array($this, 'setup_configs'), 10);
-				add_action('woocommerce_settings_saved', array($this, 'check_merchant_api_keys'), 20);
-				add_action('woocommerce_settings_saved', array($this, 'admin_notices'), 30);
-			} else {
-				add_action('admin_notices', array($this, 'woocommerce_missing_notice'));
-			}
+			add_action('woocommerce_settings_saved', array($this, 'setup_configs'), 10);
+			add_action('woocommerce_settings_saved', array($this, 'check_merchant_api_keys'), 20);
+			add_action('woocommerce_settings_saved', array($this, 'admin_notices'), 30);
 		}
 
 		public function setup_configs() {
