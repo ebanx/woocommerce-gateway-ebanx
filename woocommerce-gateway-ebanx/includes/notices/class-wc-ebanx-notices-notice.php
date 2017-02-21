@@ -14,6 +14,7 @@ class WC_EBANX_Notices_Notice {
 			'info'
 		);
 	private $is_dismissible = true;
+	private $view;
 
 	public function __construct() {
 		$args = func_get_args();
@@ -26,6 +27,11 @@ class WC_EBANX_Notices_Notice {
 				$this->message = $args[0];
 				break;
 		}
+	}
+
+	public function with_view($view) {
+		$this->view = $view;
+		return $this;
 	}
 
 	public function with_message($message) {
@@ -52,8 +58,12 @@ class WC_EBANX_Notices_Notice {
 	}
 
 	public function enqueue() {
-		if (is_null($this->message) || is_null($this->type)) {
-			throw new Exception("You need to specify a message and a type");
+		if (isset($this->view)) {
+			include INCLUDES_DIR . 'admin/views/html-notice-'.$this->view.'.php';
+			return;
+		}
+		if (is_null($this->message)) {
+			throw new Exception("You need to specify a message");
 		}
 		add_action('admin_notices', function () {
 			$classes = "notice notice-{$this->type}";
