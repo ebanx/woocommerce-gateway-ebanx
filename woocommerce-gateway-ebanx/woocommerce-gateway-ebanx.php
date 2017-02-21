@@ -60,7 +60,10 @@ if (!class_exists('WC_EBANX')) {
 		private function __construct()
 		{
 			if (!class_exists('WC_Payment_Gateway')) {
-				add_action('admin_notices', array($this, 'woocommerce_missing_notice'));
+				include_once(INCLUDES_DIR . 'notices/class-wc-ebanx-notices-notice.php');
+				$notice = new WC_EBANX_Notices_Notice();
+				$notice->with_view('missing-woocommerce')
+					   ->enqueue();
 				return;
 			}
 			/**
