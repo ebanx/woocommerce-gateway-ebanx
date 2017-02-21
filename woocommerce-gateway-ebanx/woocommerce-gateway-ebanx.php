@@ -23,6 +23,14 @@ define('PLUGIN_DIR_URL', plugin_dir_url(__FILE__) . DIRECTORY_SEPARATOR);
 define('INCLUDES_DIR', __DIR__ . DIRECTORY_SEPARATOR . 'includes' . DIRECTORY_SEPARATOR);
 define('SERVICES_DIR', __DIR__ . DIRECTORY_SEPARATOR . 'services' . DIRECTORY_SEPARATOR);
 
+spl_autoload_register( 'ebanx_autoloader' );
+function ebanx_autoloader( $class_name ) {
+	if ( false !== strpos( $class_name, 'WC_EBANX' ) && $class_name !== 'WC_EBANX' ) {
+    	$class_file = 'class-' . strtolower( str_replace( '_', '-', $class_name ) ) . '.php';
+    require_once INCLUDES_DIR . $class_file;
+  }
+}
+
 if (!class_exists('WC_EBANX')) {
 
 	/**
@@ -99,8 +107,6 @@ if (!class_exists('WC_EBANX')) {
 			$this->enable_i18n();
 
 			if (class_exists('WC_Payment_Gateway')) {
-				$this->includes();
-
 				add_filter('woocommerce_payment_gateways', array($this, 'add_gateway'));
 				add_filter('plugin_action_links_' . plugin_basename(__FILE__), array($this, 'plugin_action_links'));
 
@@ -358,34 +364,6 @@ if (!class_exists('WC_EBANX')) {
 			}
 
 			return self::$instance;
-		}
-
-		/**
-		 * Includes.
-		 */
-		private function includes()
-		{
-			include_once(INCLUDES_DIR . 'class-wc-ebanx-custom-order.php');
-			include_once(INCLUDES_DIR . 'class-wc-ebanx-gateway-utils.php');
-			include_once(INCLUDES_DIR . 'class-wc-ebanx-gateway.php');
-			include_once(INCLUDES_DIR . 'class-wc-ebanx-redirect-gateway.php');
-			include_once(INCLUDES_DIR . 'class-wc-ebanx-pagoefectivo-gateway.php');
-			include_once(INCLUDES_DIR . 'class-wc-ebanx-sencillito-gateway.php');
-			include_once(INCLUDES_DIR . 'class-wc-ebanx-account-gateway.php');
-			include_once(INCLUDES_DIR . 'class-wc-ebanx-safetypay-gateway.php');
-			include_once(INCLUDES_DIR . 'class-wc-ebanx-my-account.php');
-			include_once(INCLUDES_DIR . 'class-wc-ebanx-banking-ticket-gateway.php');
-			include_once(INCLUDES_DIR . 'class-wc-ebanx-global-gateway.php');
-			include_once(INCLUDES_DIR . 'class-wc-ebanx-credit-card-gateway.php');
-			include_once(INCLUDES_DIR . 'class-wc-ebanx-credit-card-br-gateway.php');
-			include_once(INCLUDES_DIR . 'class-wc-ebanx-credit-card-mx-gateway.php');
-			include_once(INCLUDES_DIR . 'class-wc-ebanx-debit-card-gateway.php');
-			include_once(INCLUDES_DIR . 'class-wc-ebanx-oxxo-gateway.php');
-			include_once(INCLUDES_DIR . 'class-wc-ebanx-servipag-gateway.php');
-			include_once(INCLUDES_DIR . 'class-wc-ebanx-tef-gateway.php');
-			include_once(INCLUDES_DIR . 'class-wc-ebanx-eft-gateway.php');
-			include_once(INCLUDES_DIR . 'class-wc-ebanx-one-click.php');
-			include_once(SERVICES_DIR . 'class-wc-ebanx-hooks.php');
 		}
 
 		/**
