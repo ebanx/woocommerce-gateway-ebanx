@@ -5,17 +5,50 @@ if (!defined('ABSPATH')) {
 }
 
 class WC_EBANX_Notices_Notice {
+
+	/**
+	 * The message of the notice
+	 * 
+	 * @var string
+	 */
 	private $message;
+
+	/**
+	 * The type of the notice
+	 * 
+	 * @var string
+	 */
 	private $type = 'info';
+
+	/**
+	 * An array of valid types
+	 * 
+	 * @var array
+	 */
 	private $allowed_types = array(
 			'error',
 			'warning',
 			'success',
 			'info'
 		);
+
+	/**
+	 * Determines if the notice is dismissible
+	 * 
+	 * @var boolean
+	 */
 	private $is_dismissible = true;
+
+	/**
+	 * View's file name
+	 * 
+	 * @var string
+	 */
 	private $view;
 
+	/**
+	 * Constructor
+	 */
 	public function __construct() {
 		$args = func_get_args();
 		switch (count($args)) {
@@ -29,16 +62,34 @@ class WC_EBANX_Notices_Notice {
 		}
 	}
 
+	/**
+	 * If using a view file instead of a message, it sets the view file name
+	 * 
+	 * @param  string $view
+	 * @return WC_EBANX_Notices_Notice
+	 */
 	public function with_view($view) {
 		$this->view = $view;
 		return $this;
 	}
 
+	/**
+	 * Sets the message of the notice
+	 * 
+	 * @param  string $message
+	 * @return WC_EBANX_Notices_Notice
+	 */
 	public function with_message($message) {
 		$this->message = $message;
 		return $this;
 	}
 
+	/**
+	 * Sets the type of the notice
+	 * 
+	 * @param  string $type
+	 * @return WC_EBANX_Notices_Notice
+	 */
 	public function with_type($type) {
 		if (!in_array($type, $this->allowed_types)) {
 			throw new InvalidArgumentException("Unknown notice type");
@@ -47,16 +98,32 @@ class WC_EBANX_Notices_Notice {
 		return $this;
 	}
 
+	/**
+	 * Makes the notice dismissible
+	 * 
+	 * @return WC_EBANX_Notices_Notice
+	 */
 	public function dismissible() {
 		$this->is_dismissible = true;
 		return $this;
 	}
 
+	/**
+	 * Makes the notice persistent
+	 * 
+	 * @return WC_EBANX_Notices_Notice
+	 */
 	public function persistent() {
 		$this->is_dismissible = false;
 		return $this;
 	}
 
+	/**
+	 * Enqueues the notice to the WordPress hook
+	 * 
+	 * @return null
+	 * @throws Exception
+	 */
 	public function enqueue() {
 		if (isset($this->view)) {
 			include INCLUDES_DIR . 'admin/views/html-notice-'.$this->view.'.php';
