@@ -58,7 +58,16 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
     {
         $this->language = $this->getTransactionAddress('country');
 
-        return parent::is_available() && !empty($this->public_key) && !empty($this->private_key) && $this->enabled === 'yes' && ;
+        return parent::is_available() && !empty($this->public_key) && !empty($this->private_key) && $this->enabled === 'yes' && $this->ebanx_process_merchant_currency($this->merchant_currency);
+    }
+
+    /**
+     * Check if the currency is processed by EBANX
+     * @param  string $currency Possible currencies: BRL, USD, MXN, COP, CLP, EUR, PEN
+     * @return boolean          Return true if EBANX process the currency
+     */
+    public function ebanx_process_merchant_currency($currency) {
+    	return in_array(strtoupper($currency), WC_EBANX_Gateway_Utils::$CURRENCIES_CODES_ALLOWED);
     }
 
     /**
