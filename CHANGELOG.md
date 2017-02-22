@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## 1.2.3
+* Fix - Checkout manager field for person type selecting in Brasil value is now respected [#323](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/323)
+
 ## 1.2.2
 * Fix - Chceckout manager fields are no longer mandatory when activated [#320](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/320)
 
