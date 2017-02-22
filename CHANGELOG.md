@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## 1.2.2
+* Fix - Chceckout manager fields are no longer mandatory when activated [#320](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/320)
+
 ## 1.2.1
 * Fix - Chile payments when using checkout manager [#306](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/306)
 
