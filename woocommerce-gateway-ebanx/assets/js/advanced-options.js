@@ -29,11 +29,11 @@
   var fieldsToggler = $('#woocommerce_ebanx-global_checkout_manager_enabled');
 
   var disableFields = function(jqElementList){
-    jqElementList.removeAttr('required').closest('tr').hide();
+    jqElementList.closest('tr').hide();
   };
 
   var enableFields = function(jqElementList){
-    jqElementList.attr('required', '').closest('tr').show();
+    jqElementList.closest('tr').show();
   };
 
   var updateFields = function(){
