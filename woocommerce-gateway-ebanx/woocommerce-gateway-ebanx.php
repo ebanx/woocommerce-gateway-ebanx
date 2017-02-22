@@ -24,6 +24,11 @@ define('INCLUDES_DIR', __DIR__ . DIRECTORY_SEPARATOR . 'includes' . DIRECTORY_SE
 define('SERVICES_DIR', __DIR__ . DIRECTORY_SEPARATOR . 'services' . DIRECTORY_SEPARATOR);
 
 if (!class_exists('WC_EBANX')) {
+	/**
+	 * Hooks
+	 */
+	register_activation_hook(__FILE__, array('WC_EBANX', 'active_plugin'));
+	register_deactivation_hook(__FILE__, array('WC_EBANX', 'deactivate_plugin'));
 
 	/**
 	 * WooCommerce WC_EBANX main class.
@@ -86,12 +91,6 @@ if (!class_exists('WC_EBANX')) {
 			add_filter('query_vars', array($this, 'my_account_query_vars'), 0);
 			add_filter('woocommerce_account_menu_items', array($this, 'my_account_menus'));
 			add_filter('the_title', array($this, 'my_account_menus_title'));
-
-			/**
-			 * Hooks
-			 */
-			register_activation_hook(self::DIR, array($this, 'my_account_endpoint'));
-			register_deactivation_hook(self::DIR, array($this, 'my_account_endpoint'));
 
 			/**
 			 * i18n
@@ -199,12 +198,65 @@ if (!class_exists('WC_EBANX')) {
 			return $vars;
 		}
 
+		/**
+		 * It creates a endpoint to my account
+		 *
+		 * @return void
+		 */
 		public function my_account_endpoint()
 		{
+			// My account endpoint
 			add_rewrite_endpoint(self::$endpoint, EP_ROOT | EP_PAGES);
-			flush_rewrite_rules();
 
 			add_option('woocommerce_ebanx-global_settings', WC_EBANX_Global_Gateway::$defaults);
+
+			flush_rewrite_rules();
+		}
+
+		/**
+		 * Save some informations from merchant and send to EBANX servers
+		 * @return void
+		 */
+		public static function save_merchant_infos() {
+			// Save merchant informations
+			$user = get_userdata(get_current_user_id());
+
+			$url = 'http://';
+			$args = array(
+				'body' => array(
+					'user_email' => $user->user_email,
+					'user_display_name' => $user->display_name,
+					'user_last_name' => $user->last_name,
+					'user_first_name' => $user->first_name,
+					'site_email' => get_bloginfo('admin_email'),
+					'site_url' => get_bloginfo('url'),
+					'site_name' => get_bloginfo('name'),
+					'site_language' => get_bloginfo('language'),
+					'wordpress_version' => get_bloginfo('version'),
+					'woocommerce_version' => WC()->version,
+					'activation_plugin_time' => time()
+				)
+			);
+		}
+
+		/**
+		 * Method that will be called when plugin is activated
+		 *
+		 * @return void
+		 */
+		public static function active_plugin() {
+			self::save_merchant_infos();
+
+			flush_rewrite_rules();
+		}
+
+		/**
+		 * Method that will be called when plugin is deactivated
+		 *
+		 * @return void
+		 */
+		public static function deactivate_plugin() {
+			flush_rewrite_rules();
 		}
 
 		/**
