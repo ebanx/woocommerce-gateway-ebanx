@@ -56,7 +56,7 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
     {
         $this->language = $this->getTransactionAddress('country');
 
-        return parent::is_available() && !empty($this->public_key) && !empty($this->private_key) && $this->enabled === 'yes';
+        return parent::is_available() && !empty($this->public_key) && !empty($this->private_key) && $this->enabled === 'yes' && ;
     }
 
     /**
