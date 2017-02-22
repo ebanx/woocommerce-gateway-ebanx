@@ -45,6 +45,8 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
         $this->icon = $this->show_icon();
 
         $this->names = $this->get_billing_field_names();
+
+        $this->merchant_currency = get_woocommerce_currency();
     }
 
     /**
