@@ -412,7 +412,7 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
         $newData = array();
         $newData['payment'] = array();
 
-        $newData['payment']['person_type'] = 'personal';
+        $newData['payment']['person_type'] = $person_type;
 
         if (!empty($_POST['ebanx_billing_document'])) {
             $newData['payment']['document'] = $_POST['ebanx_billing_document'];
@@ -444,8 +444,7 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
 
         if ($this->getTransactionAddress('country') === WC_EBANX_Gateway_Utils::COUNTRY_BRAZIL) {
 
-            if ($is_cnpj) {
-                $newData['payment']['person_type'] = 'business';
+            if ($person_type == 'business') {
                 $newData['payment']['responsible'] = array(
                     "name" => $data['payment']['name']
                 );
