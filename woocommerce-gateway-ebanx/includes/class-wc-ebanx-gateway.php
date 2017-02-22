@@ -46,7 +46,7 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
 
         $this->names = $this->get_billing_field_names();
 
-        $this->merchant_currency = get_woocommerce_currency();
+        $this->merchant_currency = strtoupper(get_woocommerce_currency());
     }
 
     /**
@@ -331,7 +331,7 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
                 'user_value_2'          => 'value=woocommerce',
                 'user_value_3'          => 'version=' . WC_EBANX::VERSION,
                 'country'               => $order->billing_country,
-                'currency_code'         => WC_EBANX_Gateway_Utils::CURRENCY_CODE_USD, // TODO: Dynamic
+                'currency_code'         => $this->merchant_currency,
                 'name'                  => $order->billing_first_name . ' ' . $order->billing_last_name,
                 'email'                 => $order->billing_email,
                 "phone_number"          => $order->billing_phone,
