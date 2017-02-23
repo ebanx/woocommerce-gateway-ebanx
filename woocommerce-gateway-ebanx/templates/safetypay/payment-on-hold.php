@@ -14,5 +14,5 @@ if ( ! defined( 'ABSPATH' ) ) {
 ?>
 
 <div class="woocommerce-message">
-	<span><?php printf( wp_kses( __( 'Payment successfully made using %1$s safetypay in %2$s.', 'woocommerce-gateway-ebanx' ), array( 'strong' => array() ) ), '' ); ?></span>
+	<span><?php _e('Payment successfully made using Safetypay.', 'woocommerce-gateway-ebanx' ); ?></span>
 </div>
