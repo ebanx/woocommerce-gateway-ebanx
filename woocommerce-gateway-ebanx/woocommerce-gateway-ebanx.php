@@ -57,11 +57,13 @@ if (!class_exists('WC_EBANX')) {
 		 */
 		private function __construct()
 		{
+			include_once(INCLUDES_DIR . 'notices/class-wc-ebanx-notices-notice.php');
+			$this->notices = new WC_EBANX_Notices_Notice();
+
 			if (!class_exists('WC_Payment_Gateway')) {
-				include_once(INCLUDES_DIR . 'notices/class-wc-ebanx-notices-notice.php');
-				$notice = new WC_EBANX_Notices_Notice();
-				$notice->with_view('missing-woocommerce')
-					   ->enqueue();
+				$this->notices
+					->with_view('missing-woocommerce')
+					->enqueue();
 				return;
 			}
 			/**
@@ -256,8 +258,8 @@ if (!class_exists('WC_EBANX')) {
 			$environment_warning = self::get_environment_warning();
 
 			if ($environment_warning && is_plugin_active(plugin_basename(__FILE__))) {
-				$notice = new WC_EBANX_Notices_Notice();
-				$notice->with_message($environment_warning)
+				$this->notices
+					->with_message($environment_warning)
 					->with_type('error')
 					->persistent()
 					->enqueue();
@@ -271,10 +273,6 @@ if (!class_exists('WC_EBANX')) {
 		 */
 		public function check_merchant_api_keys()
 		{
-			if (!isset($_GET['section']) || $_GET['tab'] != 'checkout' || $_GET['section'] != 'ebanx-global') {
-				return;
-			}
-
 			\Ebanx\Config::set(array('integrationKey' => $this->private_key, 'testMode' => $this->is_sandbox_mode));
 
 			try {
@@ -288,8 +286,8 @@ if (!class_exists('WC_EBANX')) {
 				$api_url = 'https://api.ebanx.com';
 
 				$message = sprintf('Could not connect to EBANX servers. Please check if your server can reach our API (<a href="%1$s">%1$s</a>) and your integrations keys are correct.', $api_url);
-				$notice = new WC_EBANX_Notices_Notice();
-				$notice->with_message($message)
+				$this->notices
+					->with_message($message)
 					->with_type('error')
 					->persistent()
 					->enqueue();
