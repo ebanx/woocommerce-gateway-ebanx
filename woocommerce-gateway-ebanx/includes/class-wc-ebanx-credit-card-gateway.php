@@ -4,7 +4,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
+abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
 {
     /**
      * Constructor

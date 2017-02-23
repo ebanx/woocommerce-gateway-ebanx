@@ -64,6 +64,13 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
 	}
 
 	/**
+	 * Check if the currency is processed by EBANX
+	 * @param  string $currency Possible currencies: BRL, USD, EUR, PEN, CLP, COP, MXN
+	 * @return boolean          Return true if EBANX process the currency
+	 */
+	abstract public function ebanx_process_merchant_currency($currency);
+
+	/**
 	 * General method to check if the currency is USD or EUR. These currencies are accepted by all payment methods.
 	 *
 	 * @param  string $currency Possible currencies: USD, EUR
