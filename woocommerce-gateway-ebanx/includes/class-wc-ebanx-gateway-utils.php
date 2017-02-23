@@ -22,13 +22,13 @@ abstract class WC_EBANX_Gateway_Utils
 	/**
 	 * Currencies that EBANX processes
 	 */
-	const CURRENCY_CODE_BRL = 'BRL';
-	const CURRENCY_CODE_USD = 'USD';
-	const CURRENCY_CODE_EUR = 'EUR';
-	const CURRENCY_CODE_PEN = 'PEN';
-	const CURRENCY_CODE_MXN = 'MXN';
-	const CURRENCY_CODE_COP = 'COP';
-	const CURRENCY_CODE_CLP = 'CLP';
+	const CURRENCY_CODE_BRL = 'BRL'; // Brazil
+	const CURRENCY_CODE_USD = 'USD'; // USA
+	const CURRENCY_CODE_EUR = 'EUR'; // Euro
+	const CURRENCY_CODE_PEN = 'PEN'; // Peru
+	const CURRENCY_CODE_MXN = 'MXN'; // Mexico
+	const CURRENCY_CODE_COP = 'COP'; // Colombia
+	const CURRENCY_CODE_CLP = 'CLP'; // Chile
 	public static $CURRENCIES_CODES_ALLOWED = array(
 		self::CURRENCY_CODE_BRL,
 		self::CURRENCY_CODE_USD,
