@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.com/ebanx/checkout-woocommerce.svg?token=fnHBQhvUoN1zMVexkAyq&branch=master)](https://travis-ci.com/ebanx/checkout-woocommerce)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/09ef5eb63a394dc3b76cb4319129fbf3)](https://www.codacy.com/app/EBANX/woocommerce-gateway-ebanx?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=ebanx/woocommerce-gateway-ebanx&amp;utm_campaign=Badge_Grade)
 
 # EBANX Payment Gateway for WooCommerce
 
