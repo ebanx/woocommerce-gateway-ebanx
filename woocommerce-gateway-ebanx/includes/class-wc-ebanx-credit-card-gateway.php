@@ -4,7 +4,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
+abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
 {
     /**
      * Constructor
@@ -240,7 +240,9 @@ class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
                 'instalments_amount' => round($order_amount / $instalments_number, 2),
                 'masked_card' => substr(get_post_meta($order->id, '_masked_card_number', true), -4),
                 'customer_email' => $order->billing_email,
-                'customer_name' => $order->billing_first_name
+                'customer_name' => $order->billing_first_name,
+                'order_total' => $order->get_formatted_order_total(),
+                'order_currency' => $order->get_order_currency()
             ),
             'order_status' => $order->get_status(),
             'method' => $order->payment_method
