@@ -296,10 +296,7 @@ li[class*="ebanx"] .payment_box .ebanx-credit-card-label > .ebanx-credit-card-bi
 .woocommerce .ebanx-button {
   max-width: 100%;
   display: inline-block;
-  padding-top: .75rem;
-  padding-right: 1rem;
-  padding-bottom: .75rem;
-  padding-left: 1rem;
+  padding: .75rem 1rem;
   line-height: 1;
   text-align: center;
   border: 1px solid transparent;
@@ -328,18 +325,12 @@ li[class*="ebanx"] .payment_box .ebanx-credit-card-label > .ebanx-credit-card-bi
 }
 
 .woocommerce .ebanx-button--xsmall {
-  padding-top: .625rem;
-  padding-right: .75rem;
-  padding-bottom: .625rem;
-  padding-left: .75rem;
+  padding: .625rem .75rem;
   font-size: .625rem;
 }
 
 .woocommerce .ebanx-button--small {
-  padding-top: .75rem;
-  padding-right: .875rem;
-  padding-bottom: .75rem;
-  padding-left: .875rem;
+  padding: .75rem .875rem;
   font-size: .75rem;
 }
 
