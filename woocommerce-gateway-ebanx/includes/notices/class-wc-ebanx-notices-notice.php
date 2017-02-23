@@ -121,24 +121,32 @@ class WC_EBANX_Notices_Notice {
 	/**
 	 * Enqueues the notice to the WordPress hook
 	 * 
-	 * @return null
+	 * @return WC_EBANX_Notices_Notice
 	 * @throws Exception
 	 */
 	public function enqueue() {
 		if (isset($this->view)) {
-			include INCLUDES_DIR . 'admin/views/html-notice-'.$this->view.'.php';
-			return;
+			$view = $this->view;
+			add_action('admin_notices', function () use ($view) {
+				include INCLUDES_DIR . 'admin/views/html-notice-'.$view.'.php';
+			});
+			$this->view = null;
+			return $this;
 		}
 		if (is_null($this->message)) {
 			throw new Exception("You need to specify a message");
 		}
-		add_action('admin_notices', function () {
-			$classes = "notice notice-{$this->type}";
-			if ($this->is_dismissible) {
+		$type = $this->type;
+		$message = $this->message;
+		$is_dismissible = $this->is_dismissible;
+		add_action('admin_notices', function () use ($type, $message, $is_dismissible) {
+			$classes = "notice notice-{$type}";
+			if ($is_dismissible) {
 				$classes .= ' is-dismissible';
 			}
-			$notice = "<div class='$classes'><p>{$this->message}</p></div>";
+			$notice = "<div class='$classes'><p>{$message}</p></div>";
 			echo $notice;
 		});
+		return $this;
 	}
 }
