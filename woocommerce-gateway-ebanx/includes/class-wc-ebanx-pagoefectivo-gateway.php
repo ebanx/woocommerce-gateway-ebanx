@@ -34,6 +34,15 @@ class WC_EBANX_Pagoefectivo_Gateway extends WC_EBANX_Gateway
     }
 
     /**
+	 * Check if the currency is processed by EBANX
+	 * @param  string $currency Possible currencies: PEN
+	 * @return boolean          Return true if EBANX process the currency
+	 */
+	public function ebanx_process_merchant_currency($currency) {
+		return $currency === WC_EBANX_Gateway_Utils::CURRENCY_CODE_PEN;
+	}
+
+    /**
      * The HTML structure on checkout page
      */
     public function payment_fields()

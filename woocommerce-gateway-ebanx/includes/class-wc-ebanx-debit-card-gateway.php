@@ -34,6 +34,15 @@ class WC_EBANX_Debit_Card_Gateway extends WC_EBANX_Gateway
     }
 
     /**
+	 * Check if the currency is processed by EBANX
+	 * @param  string $currency Possible currencies: MXN
+	 * @return boolean          Return true if EBANX process the currency
+	 */
+	public function ebanx_process_merchant_currency($currency) {
+		return $currency === WC_EBANX_Gateway_Utils::CURRENCY_CODE_MXN;
+	}
+
+    /**
      * Insert the necessary assets on checkout page
      *
      * @return void

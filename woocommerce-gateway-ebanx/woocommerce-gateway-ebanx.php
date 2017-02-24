@@ -59,6 +59,13 @@ if (!class_exists('WC_EBANX')) {
 		 */
 		private function __construct()
 		{
+			if (!class_exists('WC_Payment_Gateway')) {
+				include_once(INCLUDES_DIR . 'notices/class-wc-ebanx-notices-notice.php');
+				$notice = new WC_EBANX_Notices_Notice();
+				$notice->with_view('missing-woocommerce')
+					   ->enqueue();
+				return;
+			}
 			/**
 			 * Actions
 			 */
@@ -98,18 +105,14 @@ if (!class_exists('WC_EBANX')) {
 			 */
 			$this->enable_i18n();
 
-			if (class_exists('WC_Payment_Gateway')) {
-				$this->includes();
+			$this->includes();
 
-				add_filter('woocommerce_payment_gateways', array($this, 'add_gateway'));
-				add_filter('plugin_action_links_' . plugin_basename(__FILE__), array($this, 'plugin_action_links'));
+			add_filter('woocommerce_payment_gateways', array($this, 'add_gateway'));
+			add_filter('plugin_action_links_' . plugin_basename(__FILE__), array($this, 'plugin_action_links'));
 
-				add_action('woocommerce_settings_saved', array($this, 'setup_configs'), 10);
-				add_action('woocommerce_settings_saved', array($this, 'check_merchant_api_keys'), 20);
-				add_action('woocommerce_settings_saved', array($this, 'admin_notices'), 30);
-			} else {
-				add_action('admin_notices', array($this, 'woocommerce_missing_notice'));
-			}
+			add_action('woocommerce_settings_saved', array($this, 'setup_configs'), 10);
+			add_action('woocommerce_settings_saved', array($this, 'check_merchant_api_keys'), 20);
+			add_action('woocommerce_settings_saved', array($this, 'admin_notices'), 30);
 		}
 
 		public function setup_configs() {
@@ -386,6 +389,7 @@ if (!class_exists('WC_EBANX')) {
 			include_once(INCLUDES_DIR . 'class-wc-ebanx-eft-gateway.php');
 			include_once(INCLUDES_DIR . 'class-wc-ebanx-one-click.php');
 			include_once(SERVICES_DIR . 'class-wc-ebanx-hooks.php');
+			include_once(INCLUDES_DIR . 'notices/class-wc-ebanx-notices-notice.php');
 		}
 
 		/**
@@ -544,6 +548,10 @@ if (!class_exists('WC_EBANX')) {
 								});
 							}
 						}
+
+						var last = subsub.filter(function () { return jQuery(this).css('display') === 'inline-block' }).last();
+
+						last.html(last.html().replace(/ \| ?/g, ''));
 
 						jQuery('.ebanx-select').select2();
 					}

@@ -34,6 +34,15 @@ class WC_EBANX_Sencillito_Gateway extends WC_EBANX_Redirect_Gateway
     }
 
     /**
+	 * Check if the currency is processed by EBANX
+	 * @param  string $currency Possible currencies: CLP
+	 * @return boolean          Return true if EBANX process the currency
+	 */
+	public function ebanx_process_merchant_currency($currency) {
+		return $currency === WC_EBANX_Gateway_Utils::CURRENCY_CODE_CLP;
+	}
+
+    /**
      * Mount the data to send to EBANX API
      *
      * @param  WC_Order $order
