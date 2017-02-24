@@ -1,28 +1,28 @@
 <?php
 
 if (!defined('ABSPATH')) {
-    exit;
+	exit;
 }
 
 class WC_EBANX_Notices_Notice {
 
 	/**
 	 * The message of the notice
-	 * 
+	 *
 	 * @var string
 	 */
 	private $message;
 
 	/**
 	 * The type of the notice
-	 * 
+	 *
 	 * @var string
 	 */
 	private $type = 'info';
 
 	/**
 	 * An array of valid types
-	 * 
+	 *
 	 * @var array
 	 */
 	private $allowed_types = array(
@@ -34,14 +34,14 @@ class WC_EBANX_Notices_Notice {
 
 	/**
 	 * Determines if the notice is dismissible
-	 * 
+	 *
 	 * @var boolean
 	 */
 	private $is_dismissible = true;
 
 	/**
 	 * View's file name
-	 * 
+	 *
 	 * @var string
 	 */
 	private $view;
@@ -64,7 +64,7 @@ class WC_EBANX_Notices_Notice {
 
 	/**
 	 * If using a view file instead of a message, it sets the view file name
-	 * 
+	 *
 	 * @param  string $view
 	 * @return WC_EBANX_Notices_Notice
 	 */
@@ -75,7 +75,7 @@ class WC_EBANX_Notices_Notice {
 
 	/**
 	 * Sets the message of the notice
-	 * 
+	 *
 	 * @param  string $message
 	 * @return WC_EBANX_Notices_Notice
 	 */
@@ -86,7 +86,7 @@ class WC_EBANX_Notices_Notice {
 
 	/**
 	 * Sets the type of the notice
-	 * 
+	 *
 	 * @param  string $type
 	 * @return WC_EBANX_Notices_Notice
 	 */
@@ -100,7 +100,7 @@ class WC_EBANX_Notices_Notice {
 
 	/**
 	 * Makes the notice dismissible
-	 * 
+	 *
 	 * @return WC_EBANX_Notices_Notice
 	 */
 	public function dismissible() {
@@ -110,7 +110,7 @@ class WC_EBANX_Notices_Notice {
 
 	/**
 	 * Makes the notice persistent
-	 * 
+	 *
 	 * @return WC_EBANX_Notices_Notice
 	 */
 	public function persistent() {
@@ -120,7 +120,7 @@ class WC_EBANX_Notices_Notice {
 
 	/**
 	 * Enqueues the notice to the WordPress hook
-	 * 
+	 *
 	 * @return WC_EBANX_Notices_Notice
 	 * @throws Exception
 	 */
