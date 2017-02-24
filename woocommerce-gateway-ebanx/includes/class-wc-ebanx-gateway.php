@@ -92,7 +92,7 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
 			$fields_options = $this->configs->settings['brazil_taxes_options'];
 		}
 
-		$disable_own_fields = isset($this->configs->settings['checkout_manager_enabled']) && $this->configs->settings['checkout_manager_enabled'] === "yes";
+		$disable_own_fields = isset($this->configs->settings['checkout_manager_enabled']) && $this->configs->settings['checkout_manager_enabled'] === 'yes';
 
 		$cpf = get_user_meta($this->userId, '_ebanx_billing_brazil_document', true);
 		$birth_date_br = get_user_meta($this->userId, '_ebanx_billing_brazil_birth_date', true);
@@ -180,7 +180,7 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
 	public function get_billing_field_names() {
 		return array(
 			// Brazil General
-			'ebanx_billing_person_type' => $this->get_checkout_manager_settings_or_default('checkout_manager_brazil_person_type', 'ebanx_billing_person_type'),
+			'ebanx_billing_brazil_person_type' => $this->get_checkout_manager_settings_or_default('checkout_manager_brazil_person_type', 'ebanx_billing_brazil_person_type'),
 
 			// Brazil CPF
 			'ebanx_billing_brazil_document' => $this->get_checkout_manager_settings_or_default('checkout_manager_cpf_brazil', 'ebanx_billing_brazil_document'),
@@ -384,7 +384,7 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
 				$person_type = 'business';
 			}
 			if (in_array('cpf', $fields_options) && in_array('cnpj', $fields_options)) {
-				$person_type = $_POST[$this->names['ebanx_billing_person_type']] == 'cnpj' ? 'business' : 'personal';
+				$person_type = $_POST[$this->names['ebanx_billing_brazil_person_type']] == 'cnpj' ? 'business' : 'personal';
 			}
 
 
@@ -749,8 +749,8 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
 					update_user_meta($this->userId, '_ebanx_billing_brazil_cnpj', sanitize_text_field($_POST[$this->names['ebanx_billing_brazil_cnpj']]));
 				}
 
-				if (isset($_POST[$this->names['ebanx_billing_person_type']])) {
-					update_user_meta($this->userId, '_ebanx_billing_person_type', sanitize_text_field($_POST[$this->names['ebanx_billing_person_type']]));
+				if (isset($_POST[$this->names['ebanx_billing_brazil_person_type']])) {
+					update_user_meta($this->userId, '_ebanx_billing_brazil_person_type', sanitize_text_field($_POST[$this->names['ebanx_billing_brazil_person_type']]));
 				}
 			}
 

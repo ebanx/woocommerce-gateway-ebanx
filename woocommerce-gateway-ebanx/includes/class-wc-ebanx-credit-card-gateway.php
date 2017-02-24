@@ -126,11 +126,7 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
         if (in_array($this->getTransactionAddress('country'), WC_EBANX_Gateway_Utils::$CREDIT_CARD_COUNTRIES)) {
             $data['payment']['instalments'] = '1';
 
-            if ($this->configs->settings['credit_card_instalments'] > 1) {
-                if (empty($_POST['ebanx_billing_instalments'])) {
-                    throw new Exception('MISSING-INSTALMENTS');
-                }
-
+            if ($this->configs->settings['credit_card_instalments'] > 1 && isset($_POST['ebanx_billing_instalments'])) {
                 $data['payment']['instalments'] = $_POST['ebanx_billing_instalments'];
             }
         }
@@ -230,7 +226,7 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
     public static function thankyou_page($order)
     {
         $order_amount = $order->get_total();
-        $instalments_number = get_post_meta($order->id, '_instalments_number')[0] || 1;
+        $instalments_number = get_post_meta($order->id, '_instalments_number', true) ?: 1;
 
         $data = array(
             'data' => array(

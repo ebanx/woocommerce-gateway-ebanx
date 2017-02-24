@@ -120,7 +120,7 @@ jQuery( function($) {
 						}
 					};
 
-          wc_ebanx_form.renderInstalments(creditcard.instalments);
+          wc_ebanx_form.renderInstalments(creditcard.instalments || 1);
           wc_ebanx_form.renderCvv(creditcard.card_cvv);
 
           EBANX.deviceFingerprint.setup(function (deviceId) {
@@ -129,7 +129,7 @@ jQuery( function($) {
             wc_ebanx_form.onEBANXReponse(response);
           });
 				} else {
-          wc_ebanx_form.renderInstalments(creditcard.instalments);
+          wc_ebanx_form.renderInstalments(creditcard.instalments || 1);
           wc_ebanx_form.renderCvv(creditcard.card_cvv);
 
 					EBANX.card.createToken(creditcard, wc_ebanx_form.onEBANXReponse);
