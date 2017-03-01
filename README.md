@@ -4,7 +4,7 @@
 
 This plugin enables you to integrate your WooCommerce store with the EBANX payment gateway.
 
-Please, visit the [official plugin page on WordPress store.](https://wordpress.org/plugins/ebanx-payment-gateway-for-woocommerce/).
+Please, visit the [official plugin page on WordPress store](https://wordpress.org/plugins/ebanx-payment-gateway-for-woocommerce/).
 
 ## Requirements
 * PHP 5.6+
