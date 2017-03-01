@@ -289,8 +289,12 @@ if (!class_exists('WC_EBANX')) {
 				$this->notices
 					->with_message($message)
 					->with_type('error')
-					->persistent()
-					->enqueue();
+					->persistent();
+				if (empty($_POST)) {
+					$this->notices->enqueue();
+					return;
+				}
+				$this->notices->echo();
 			}
 		}
 

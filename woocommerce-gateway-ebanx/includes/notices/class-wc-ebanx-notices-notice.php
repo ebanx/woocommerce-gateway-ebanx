@@ -8,21 +8,21 @@ class WC_EBANX_Notices_Notice {
 
 	/**
 	 * The message of the notice
-	 * 
+	 *
 	 * @var string
 	 */
 	private $message;
 
 	/**
 	 * The type of the notice
-	 * 
+	 *
 	 * @var string
 	 */
 	private $type = 'info';
 
 	/**
 	 * An array of valid types
-	 * 
+	 *
 	 * @var array
 	 */
 	private $allowed_types = array(
@@ -34,14 +34,14 @@ class WC_EBANX_Notices_Notice {
 
 	/**
 	 * Determines if the notice is dismissible
-	 * 
+	 *
 	 * @var boolean
 	 */
 	private $is_dismissible = true;
 
 	/**
 	 * View's file name
-	 * 
+	 *
 	 * @var string
 	 */
 	private $view;
@@ -64,7 +64,7 @@ class WC_EBANX_Notices_Notice {
 
 	/**
 	 * If using a view file instead of a message, it sets the view file name
-	 * 
+	 *
 	 * @param  string $view
 	 * @return WC_EBANX_Notices_Notice
 	 */
@@ -75,7 +75,7 @@ class WC_EBANX_Notices_Notice {
 
 	/**
 	 * Sets the message of the notice
-	 * 
+	 *
 	 * @param  string $message
 	 * @return WC_EBANX_Notices_Notice
 	 */
@@ -86,7 +86,7 @@ class WC_EBANX_Notices_Notice {
 
 	/**
 	 * Sets the type of the notice
-	 * 
+	 *
 	 * @param  string $type
 	 * @return WC_EBANX_Notices_Notice
 	 */
@@ -100,7 +100,7 @@ class WC_EBANX_Notices_Notice {
 
 	/**
 	 * Makes the notice dismissible
-	 * 
+	 *
 	 * @return WC_EBANX_Notices_Notice
 	 */
 	public function dismissible() {
@@ -110,7 +110,7 @@ class WC_EBANX_Notices_Notice {
 
 	/**
 	 * Makes the notice persistent
-	 * 
+	 *
 	 * @return WC_EBANX_Notices_Notice
 	 */
 	public function persistent() {
@@ -120,7 +120,7 @@ class WC_EBANX_Notices_Notice {
 
 	/**
 	 * Enqueues the notice to the WordPress hook
-	 * 
+	 *
 	 * @return WC_EBANX_Notices_Notice
 	 * @throws Exception
 	 */
@@ -147,6 +147,34 @@ class WC_EBANX_Notices_Notice {
 			$notice = "<div class='$classes'><p>{$message}</p></div>";
 			echo $notice;
 		});
+		return $this;
+	}
+
+	/**
+	 * Prints the notice when using hook won't work
+	 *
+	 * @return WC_EBANX_Notices_Notice
+	 * @throws Exception
+	 */
+	public function echo() {
+		if (isset($this->view)) {
+			$view = $this->view;
+			include INCLUDES_DIR . 'admin/views/html-notice-'.$view.'.php';
+			$this->view = null;
+			return $this;
+		}
+		if (is_null($this->message)) {
+			throw new Exception("You need to specify a message");
+		}
+		$type = $this->type;
+		$message = $this->message;
+		$is_dismissible = $this->is_dismissible;
+		$classes = "notice notice-{$type}";
+		if ($is_dismissible) {
+			$classes .= ' is-dismissible';
+		}
+		$notice = "<div class='$classes'><p>{$message}</p></div>";
+		echo $notice;
 		return $this;
 	}
 }
