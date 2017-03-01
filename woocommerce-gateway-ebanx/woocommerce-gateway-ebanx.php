@@ -221,22 +221,33 @@ if (!class_exists('WC_EBANX')) {
 			// Save merchant informations
 			$user = get_userdata(get_current_user_id());
 
-			$url = 'http://';
+			$url = 'http://dev-everest.ebanx.com/api/lead';
 			$args = array(
 				'body' => array(
-					'user_email' => $user->user_email,
-					'user_display_name' => $user->display_name,
-					'user_last_name' => $user->last_name,
-					'user_first_name' => $user->first_name,
-					'site_email' => get_bloginfo('admin_email'),
-					'site_url' => get_bloginfo('url'),
-					'site_name' => get_bloginfo('name'),
-					'site_language' => get_bloginfo('language'),
-					'wordpress_version' => get_bloginfo('version'),
-					'woocommerce_version' => WC()->version,
-					'activation_plugin_time' => time()
+					'lead' => array(
+						'user_email' => $user->user_email,
+						'user_display_name' => $user->display_name,
+						'user_last_name' => $user->last_name,
+						'user_first_name' => $user->first_name,
+						'site_email' => get_bloginfo('admin_email'),
+						'site_url' => get_bloginfo('url'),
+						'site_name' => get_bloginfo('name'),
+						'site_language' => get_bloginfo('language'),
+						'wordpress_version' => get_bloginfo('version'),
+						'woocommerce_version' => WC()->version
+					)
 				)
 			);
+
+			// Call EBANX API to save a lead
+			$request = wp_remote_post($url, $args);
+
+			if (isset($request['body'])) {
+				$data = json_decode($request['body']);
+
+				// Update merchant
+				update_post_meta(0, '_ebanx_lead_id', $data->id);
+			}
 		}
 
 		/**
