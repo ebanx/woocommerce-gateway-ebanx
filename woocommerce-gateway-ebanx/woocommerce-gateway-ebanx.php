@@ -246,7 +246,7 @@ if (!class_exists('WC_EBANX')) {
 				$data = json_decode($request['body']);
 
 				// Update merchant
-				update_post_meta(0, '_ebanx_lead_id', $data->id);
+				update_option('_ebanx_lead_id', $data->id, false);
 			}
 		}
 
