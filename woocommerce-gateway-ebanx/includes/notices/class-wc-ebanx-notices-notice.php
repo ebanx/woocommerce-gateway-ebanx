@@ -156,7 +156,7 @@ class WC_EBANX_Notices_Notice {
 	 * @return WC_EBANX_Notices_Notice
 	 * @throws Exception
 	 */
-	public function echo() {
+	public function display() {
 		if (isset($this->view)) {
 			$view = $this->view;
 			include INCLUDES_DIR . 'admin/views/html-notice-'.$view.'.php';

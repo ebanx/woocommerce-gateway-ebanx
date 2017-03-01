@@ -294,7 +294,7 @@ if (!class_exists('WC_EBANX')) {
 					$this->notices->enqueue();
 					return;
 				}
-				$this->notices->echo();
+				$this->notices->display();
 			}
 		}
 
