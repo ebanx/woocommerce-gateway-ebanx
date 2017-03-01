@@ -16,7 +16,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 <p><strong><?php _e('Resumo da compra:', 'woocommerce-gateway-ebanx') ?></strong></p>
 <p><?php _e('Valor:', 'woocommerce-gateway-ebanx') ?> <?php echo $order_total ?></p>
 <?php if ($instalments_number > 1) : ?>
-    <p><?php $instalments_number ?> <?php _e('parcelas de', 'woocommerce-gateway-ebanx') ?> <?php echo $order_currency ?> <?php echo $instalments_amount ?></p>
+    <p><?php echo $instalments_number ?> <?php _e('parcelas de', 'woocommerce-gateway-ebanx') ?> <?php echo $order_currency ?> <?php echo $instalments_amount ?></p>
 <?php else : ?>
     <p><?php _e('Pagamento à vista', 'woocommerce-gateway-ebanx') ?></p>
 <?php endif; ?>
