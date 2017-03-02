@@ -6,6 +6,10 @@ if (!defined('ABSPATH')) {
 
 abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
 {
+	protected $instalment_rates = array(
+			0, 0, 0.10, 0.20, 0.30, 0.40, 0.50, 0.60, 0.70, 0.80, 0.90, 1.00, 1.10
+		);
+
     /**
      * Constructor
      */
