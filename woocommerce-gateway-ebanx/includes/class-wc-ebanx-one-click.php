@@ -468,7 +468,7 @@ class WC_EBANX_One_Click {
 					'currency_code' => WC_Ebanx_Gateway_Utils::CURRENCY_CODE_USD,
 					'currency_base_code' => WC_Ebanx_Gateway_Utils::CURRENCY_CODE_BRL
 				));
-				$acquirer_min_instalment_value = WC_Ebanx_Gateway_Utils::ACQUIRER_MIN_INSTALMENT_VALUE_BRL;
+				$min_instalment_value = WC_Ebanx_Gateway_Utils::ACQUIRER_MIN_INSTALMENT_VALUE_BRL;
 				break;
 			case 'es_ES':
 			case 'es_CO':
@@ -482,7 +482,7 @@ class WC_EBANX_One_Click {
 					'currency_code' => WC_Ebanx_Gateway_Utils::CURRENCY_CODE_USD,
 					'currency_base_code' => WC_Ebanx_Gateway_Utils::CURRENCY_CODE_MXN
 				));
-				$acquirer_min_instalment_value = WC_Ebanx_Gateway_Utils::ACQUIRER_MIN_INSTALMENT_VALUE_MXN;
+				$min_instalment_value = WC_Ebanx_Gateway_Utils::ACQUIRER_MIN_INSTALMENT_VALUE_MXN;
 				break;
 			default:
 				$messages = array(
@@ -490,15 +490,15 @@ class WC_EBANX_One_Click {
 				);
 				break;
 		}
-		if (isset($usd_to_local) && isset($acquirer_min_instalment_value)) {
+		if (isset($usd_to_local) && isset($min_instalment_value)) {
 			$local_value = $product->price * $usd_to_local->currency_rate->rate;
-			$acquirer_max_instalments = floor($local_value / $acquirer_min_instalment_value);
+			$max_instalments = floor($local_value / $min_instalment_value);
 		}
 
 		$args = apply_filters( 'ebanx_template_args', array(
 				'cards' => $this->cards,
 				'cart_total' => $product->price,
-				'max_installment' => min($this->gateway->configs->settings['credit_card_instalments'], $acquirer_max_instalments),
+				'max_installment' => min($this->gateway->configs->settings['credit_card_instalments'], $max_instalments),
 				'label' => __( 'Pay with one click', 'woocommerce-gateway-ebanx' ),
 				'instalments' => $messages['instalments']
 			) );
