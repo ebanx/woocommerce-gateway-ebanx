@@ -316,7 +316,7 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway
 			),
 		);
 
-		$this->injectDefaults();
+		$this->inject_defaults();
 	}
 
 	/**
@@ -324,10 +324,11 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway
 	 *
 	 * @return void
 	 */
-	private function injectDefaults(){
+	private function inject_defaults(){
 		foreach($this->form_fields as $field => &$properties){
-			if(!isset(self::$defaults[$field]))
+			if (!isset(self::$defaults[$field])) {
 				continue;
+			}
 
 			$properties['default'] = self::$defaults[$field];
 		}

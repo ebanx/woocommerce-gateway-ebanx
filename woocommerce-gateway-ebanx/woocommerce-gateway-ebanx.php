@@ -109,6 +109,7 @@ if (!class_exists('WC_EBANX')) {
 			add_filter('plugin_action_links_' . plugin_basename(__FILE__), array($this, 'plugin_action_links'));
 
 			add_action('woocommerce_settings_saved', array($this, 'setup_configs'), 10);
+			add_action('woocommerce_settings_saved', array($this, 'update_lead'), 20);
 			add_action('woocommerce_settings_saved', array($this, 'check_merchant_api_keys'), 20);
 		}
 
@@ -216,13 +217,14 @@ if (!class_exists('WC_EBANX')) {
 
 		/**
 		 * Save some informations from merchant and send to EBANX servers
+		 *
 		 * @return void
 		 */
 		public static function save_merchant_infos() {
 			// Save merchant informations
 			$user = get_userdata(get_current_user_id());
 
-			$url = 'http://ebanx.com/en/business/dashboard/api/lead';
+			$url = 'https://ebanx.com/en/business/dashboard/api/lead';
 			$args = array(
 				'body' => array(
 					'lead' => array(
@@ -249,6 +251,28 @@ if (!class_exists('WC_EBANX')) {
 				// Update merchant
 				update_option('_ebanx_lead_id', $data->id, false);
 			}
+		}
+
+		/**
+		 * Update and inegrate the lead to the merchant using the merchant's integration key
+		 *
+		 * @return void
+		 */
+		public function update_lead() {
+			$url = 'https://ebanx.com/en/business/dashboard/api/lead';
+			$lead_id = get_option('_ebanx_lead_id');
+
+			$args = array(
+				'body' => array(
+					'lead' => array(
+						'id' => $lead_id,
+						'integration_key' => $this->private_key
+					)
+				)
+			);
+
+			// Call EBANX API to save a lead
+			wp_remote_post($url, $args);
 		}
 
 		/**
