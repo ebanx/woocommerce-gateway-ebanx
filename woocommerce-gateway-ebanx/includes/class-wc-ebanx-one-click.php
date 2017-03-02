@@ -455,9 +455,9 @@ class WC_EBANX_One_Click {
 		}
 
 		\Ebanx\Config::set([
-            'integrationKey' => $private_key,
-            'testMode' => $is_sandbox_mode,
-        ]);
+			'integrationKey' => $private_key,
+			'testMode' => $is_sandbox_mode,
+		]);
 
 		switch ( get_locale() ) {
 			case 'pt_BR':
@@ -465,10 +465,10 @@ class WC_EBANX_One_Click {
 					'instalments' => 'Número de parcelas',
 				);
 				$usd_to_local = \Ebanx\Ebanx::getExchange(array(
-		            'currency_code' => WC_Ebanx_Gateway_Utils::CURRENCY_CODE_USD,
-		            'currency_base_code' => WC_Ebanx_Gateway_Utils::CURRENCY_CODE_BRL
-		        ));
-		        $acquirer_min_instalment_value = WC_Ebanx_Gateway_Utils::ACQUIRER_MIN_INSTALMENT_VALUE_BRL;
+					'currency_code' => WC_Ebanx_Gateway_Utils::CURRENCY_CODE_USD,
+					'currency_base_code' => WC_Ebanx_Gateway_Utils::CURRENCY_CODE_BRL
+				));
+				$acquirer_min_instalment_value = WC_Ebanx_Gateway_Utils::ACQUIRER_MIN_INSTALMENT_VALUE_BRL;
 				break;
 			case 'es_ES':
 			case 'es_CO':
@@ -479,10 +479,10 @@ class WC_EBANX_One_Click {
 					'instalments' => 'Meses sin intereses'
 				);
 				$usd_to_local = \Ebanx\Ebanx::getExchange(array(
-		            'currency_code' => WC_Ebanx_Gateway_Utils::CURRENCY_CODE_USD,
-		            'currency_base_code' => WC_Ebanx_Gateway_Utils::CURRENCY_CODE_MXN
-		        ));
-		        $acquirer_min_instalment_value = WC_Ebanx_Gateway_Utils::ACQUIRER_MIN_INSTALMENT_VALUE_MXN;
+					'currency_code' => WC_Ebanx_Gateway_Utils::CURRENCY_CODE_USD,
+					'currency_base_code' => WC_Ebanx_Gateway_Utils::CURRENCY_CODE_MXN
+				));
+				$acquirer_min_instalment_value = WC_Ebanx_Gateway_Utils::ACQUIRER_MIN_INSTALMENT_VALUE_MXN;
 				break;
 			default:
 				$messages = array(
@@ -492,9 +492,8 @@ class WC_EBANX_One_Click {
 		}
 		if (isset($usd_to_local) && isset($acquirer_min_instalment_value)) {
 			$local_value = $product->price * $usd_to_local->currency_rate->rate;
-	        $acquirer_max_instalments = floor($local_value / $acquirer_min_instalment_value);
+			$acquirer_max_instalments = floor($local_value / $acquirer_min_instalment_value);
 		}
-        print_r($usd_to_local);
 
 		$args = apply_filters( 'ebanx_template_args', array(
 				'cards' => $this->cards,
