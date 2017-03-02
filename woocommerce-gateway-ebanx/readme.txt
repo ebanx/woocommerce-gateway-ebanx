@@ -1,9 +1,9 @@
 === EBANX Payment Gateway for WooCommerce ===
 Contributors: ebanxwp
 Tags: credit card, boleto, ebanx, woocommerce, approval rate, conversion rate, brazil, mexico, peru, colombia, chile, oxxo, cash payment, local payment one-click payment, installments, alternative payments, accept more payments
-Requires at least: 3.7
+Requires at least: 4.0
 Tested up to: 4.7
-Stable tag: 1.2.2
+Stable tag: 1.3.0
 License: MIT
 License URI: https://opensource.org/licenses/MIT
 
@@ -114,7 +114,15 @@ The [Developer’s Academy](https://www.ebanx.com/business/en/developers/integra
 
 == Changelog ==
 
-* 1.2.2 =
+= 1.3.0 =
+* Feature - Allowed local currency, USD and EUR to be processed by EBANX based on WooCommerce Currency Options [#325](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/325)
+* Improvement - Updated to new EBANX logo [#326](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/326)
+* Fix - Removed the pipe character from the last WooCommerce Checkout Settings tab menu [#329](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/329)
+
+= 1.2.3 =
+* Fix - Checkout manager field for person type selecting in Brasil value is now respected [#323](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/323)
+
+= 1.2.2 =
 * Fix - Chceckout manager fields are no longer mandatory when activated [#320](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/320)
 
 = 1.2.1 =

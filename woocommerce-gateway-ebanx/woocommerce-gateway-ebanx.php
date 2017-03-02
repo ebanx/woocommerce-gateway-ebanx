@@ -5,7 +5,7 @@
  * Description: Offer Latin American local payment methods & increase your conversion rates with the solution used by AliExpress, AirBnB and Spotify in Brazil.
  * Author: EBANX
  * Author URI: https://www.ebanx.com/business/en
- * Version: 1.2.2
+ * Version: 1.3.0
  * License: MIT
  * Text Domain: woocommerce-gateway-ebanx
  * Domain Path: /languages
@@ -40,7 +40,7 @@ if (!class_exists('WC_EBANX')) {
 		 *
 		 * @var string
 		 */
-		const VERSION = '1.2.2';
+		const VERSION = '1.3.0';
 
 		const DIR = __FILE__;
 
@@ -53,8 +53,6 @@ if (!class_exists('WC_EBANX')) {
 
 		private static $log;
 
-		public $notices = array();
-
 		private static $endpoint = 'ebanx-credit-cards';
 
 		private static $menu_name = 'EBANX - Credit Cards';
@@ -64,6 +62,15 @@ if (!class_exists('WC_EBANX')) {
 		 */
 		private function __construct()
 		{
+			include_once(INCLUDES_DIR . 'notices/class-wc-ebanx-notices-notice.php');
+			$this->notices = new WC_EBANX_Notices_Notice();
+
+			if (!class_exists('WC_Payment_Gateway')) {
+				$this->notices
+					->with_view('missing-woocommerce')
+					->enqueue();
+				return;
+			}
 			/**
 			 * Actions
 			 */
@@ -80,7 +87,6 @@ if (!class_exists('WC_EBANX')) {
 			if ( empty( $_POST ) ) {
 				add_action('admin_init', array($this, 'setup_configs'), 10);
 				add_action('admin_init', array($this, 'check_merchant_api_keys'), 20);
-				add_action('admin_notices', array($this, 'admin_notices'), 30);
 			}
 
 			add_action('woocommerce_account_' . self::$endpoint . '_endpoint', array($this, 'my_account_template'));
@@ -97,18 +103,13 @@ if (!class_exists('WC_EBANX')) {
 			 */
 			$this->enable_i18n();
 
-			if (class_exists('WC_Payment_Gateway')) {
-				$this->includes();
+			$this->includes();
 
-				add_filter('woocommerce_payment_gateways', array($this, 'add_gateway'));
-				add_filter('plugin_action_links_' . plugin_basename(__FILE__), array($this, 'plugin_action_links'));
+			add_filter('woocommerce_payment_gateways', array($this, 'add_gateway'));
+			add_filter('plugin_action_links_' . plugin_basename(__FILE__), array($this, 'plugin_action_links'));
 
-				add_action('woocommerce_settings_saved', array($this, 'setup_configs'), 10);
-				add_action('woocommerce_settings_saved', array($this, 'check_merchant_api_keys'), 20);
-				add_action('woocommerce_settings_saved', array($this, 'admin_notices'), 30);
-			} else {
-				add_action('admin_notices', array($this, 'woocommerce_missing_notice'));
-			}
+			add_action('woocommerce_settings_saved', array($this, 'setup_configs'), 10);
+			add_action('woocommerce_settings_saved', array($this, 'check_merchant_api_keys'), 20);
 		}
 
 		public function setup_configs() {
@@ -311,35 +312,6 @@ if (!class_exists('WC_EBANX')) {
 		}
 
 		/**
-		 * Render warning notices if something is wrong
-		 *
-		 * @return void
-		 */
-		public function admin_notices()
-		{
-			foreach ((array) $this->notices as $notice_key => $notice) {
-				echo "<div class='" . esc_attr($notice['class']) . "'><p>";
-				echo wp_kses($notice['message'], array('a' => array('href' => array())));
-				echo "</p></div>";
-			}
-		}
-
-		/**
-		 * Push noticies to insert on another moment
-		 *
-		 * @param string $slug
-		 * @param string $class
-		 * @param string $message
-		 */
-		protected function add_admin_notice($slug, $class, $message)
-		{
-			$this->notices[$slug] = array(
-				'class'   => $class,
-				'message' => $message
-			);
-		}
-
-		/**
 		 * Check if the merchant environment
 		 *
 		 * @return void
@@ -349,7 +321,11 @@ if (!class_exists('WC_EBANX')) {
 			$environment_warning = self::get_environment_warning();
 
 			if ($environment_warning && is_plugin_active(plugin_basename(__FILE__))) {
-				$this->add_admin_notice('bad_environment', 'error', $environment_warning);
+				$this->notices
+					->with_message($environment_warning)
+					->with_type('error')
+					->persistent()
+					->enqueue();
 			}
 		}
 
@@ -360,10 +336,6 @@ if (!class_exists('WC_EBANX')) {
 		 */
 		public function check_merchant_api_keys()
 		{
-			if (!isset($_GET['section']) || $_GET['tab'] != 'checkout' || $_GET['section'] != 'ebanx-global') {
-				return;
-			}
-
 			\Ebanx\Config::set(array('integrationKey' => $this->private_key, 'testMode' => $this->is_sandbox_mode));
 
 			try {
@@ -377,7 +349,15 @@ if (!class_exists('WC_EBANX')) {
 				$api_url = 'https://api.ebanx.com';
 
 				$message = sprintf('Could not connect to EBANX servers. Please check if your server can reach our API (<a href="%1$s">%1$s</a>) and your integrations keys are correct.', $api_url);
-				$this->add_admin_notice('connection_error', 'error', $message);
+				$this->notices
+					->with_message($message)
+					->with_type('error')
+					->persistent();
+				if (empty($_POST)) {
+					$this->notices->enqueue();
+					return;
+				}
+				$this->notices->display();
 			}
 		}
 
@@ -449,6 +429,7 @@ if (!class_exists('WC_EBANX')) {
 			include_once(INCLUDES_DIR . 'class-wc-ebanx-eft-gateway.php');
 			include_once(INCLUDES_DIR . 'class-wc-ebanx-one-click.php');
 			include_once(SERVICES_DIR . 'class-wc-ebanx-hooks.php');
+			include_once(INCLUDES_DIR . 'notices/class-wc-ebanx-notices-notice.php');
 		}
 
 		/**
@@ -607,6 +588,10 @@ if (!class_exists('WC_EBANX')) {
 								});
 							}
 						}
+
+						var last = subsub.filter(function () { return jQuery(this).css('display') === 'inline-block' }).last();
+
+						last.html(last.html().replace(/ \| ?/g, ''));
 
 						jQuery('.ebanx-select').select2();
 					}
