@@ -13,6 +13,10 @@ class WC_EBANX_One_Click {
 	private $private_key;
 	private $is_sandbox_mode;
 
+	protected $instalment_rates = array(
+			0, 0, 0.10, 0.20, 0.30, 0.40, 0.50, 0.60, 0.70, 0.80, 0.90, 1.00, 1.10
+		);
+
 	/**
 	 * Constructor
 	 */
@@ -478,6 +482,7 @@ class WC_EBANX_One_Click {
 				'cards' => $this->cards,
 				'cart_total' => $product->price,
 				'max_installment' => min($this->gateway->configs->settings['credit_card_instalments'], $max_instalments),
+                'installment_taxes' => $this->instalment_rates,
 				'label' => __( 'Pay with one click', 'woocommerce-gateway-ebanx' ),
 				'instalments' => $messages['instalments']
 			) );
