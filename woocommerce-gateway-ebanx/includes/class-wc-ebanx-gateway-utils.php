@@ -46,6 +46,11 @@ abstract class WC_EBANX_Gateway_Utils
 	const ACQUIRER_MIN_INSTALMENT_VALUE_BRL = 20;
 
 	/**
+	 * Max supported credit-card instalments
+	 */
+	const MAX_INSTALMENTS = 12;
+
+	/**
 	 * The list of all countries that EBANX processes
 	 *
 	 * @var array
