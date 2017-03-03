@@ -43,7 +43,8 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway
 		'capture_enabled' => 'yes',
 		'credit_card_instalments' => '1',
 		'due_date_days' => '3',
-		'brazil_taxes_options' => 'cpf'
+		'brazil_taxes_options' => 'cpf',
+		'interest_rates_enabled' => 'no'
 	);
 
 	/**
@@ -255,6 +256,7 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway
 		$interest_rates_array['interest_rates_01'] = array(
 			'title' => __('1x Interest Rate in %', 'woocommerce-gateway-ebanx'),
 			'type' => 'number',
+			'step' => 'any',
 			'class' => 'interest-rates-fields ebanx-payments-option',
 			'placeholder' => __('eg: 15.7%', 'woocommerce-gateway-ebanx')
 		);
@@ -263,6 +265,7 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway
 			$interest_rates_array['interest_rates_'.sprintf("%02d", $i)] = array(
 				'title' => __($i.'x Interest Rate', 'woocommerce-gateway-ebanx'),
 				'type' => 'number',
+				'step' => 'any',
 				'class' => 'interest-rates-fields ebanx-payments-option',
 				'placeholder' => __('eg: 15.7%', 'woocommerce-gateway-ebanx')
 			);

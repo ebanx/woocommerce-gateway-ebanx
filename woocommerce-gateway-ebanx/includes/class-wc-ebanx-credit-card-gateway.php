@@ -6,9 +6,7 @@ if (!defined('ABSPATH')) {
 
 abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
 {
-	protected $instalment_rates = array(
-			0, 0, 0.10, 0.20, 0.30, 0.40, 0.50, 0.60, 0.70, 0.80, 0.90, 1.00, 1.10
-		);
+	protected $instalment_rates = array();
 
     /**
      * Constructor
@@ -22,6 +20,17 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
         add_action('woocommerce_order_actions', array($this, 'auto_capture'));
 
         add_action('woocommerce_order_action_custom_action', array($this, 'capture_payment_action'));
+
+        if ($this->configs->settings['interest_rates_enabled'] == 'yes') {
+        	$max_instalments = $this->configs->settings['credit_card_instalments'];
+        	for ($i=1; $i <= $max_instalments; $i++) {
+        		$field = 'interest_rates_' . sprintf("%02d", $i);
+        		$this->instalment_rates[$i] = 0;
+        		if (is_numeric($this->configs->settings[$field])) {
+        			$this->instalment_rates[$i] = $this->configs->settings[$field] / 100;
+        		}
+        	}
+        }
     }
 
     /**

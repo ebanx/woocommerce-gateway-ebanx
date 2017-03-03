@@ -13,9 +13,7 @@ class WC_EBANX_One_Click {
 	private $private_key;
 	private $is_sandbox_mode;
 
-	protected $instalment_rates = array(
-			0, 0, 0.10, 0.20, 0.30, 0.40, 0.50, 0.60, 0.70, 0.80, 0.90, 1.00, 1.10
-		);
+	protected $instalment_rates = array();
 
 	/**
 	 * Constructor
@@ -41,6 +39,17 @@ class WC_EBANX_One_Click {
 		$cards = get_user_meta( $this->userId, '_ebanx_credit_card_token', true );
 
 		$this->cards = is_array( $cards ) ? array_filter( $cards ) : array();
+
+        if ($this->gateway->configs->settings['interest_rates_enabled'] == 'yes') {
+        	$max_instalments = $this->gateway->configs->settings['credit_card_instalments'];
+        	for ($i=1; $i <= $max_instalments; $i++) {
+        		$field = 'interest_rates_' . sprintf("%02d", $i);
+        		$this->instalment_rates[$i] = 0;
+        		if (is_numeric($this->gateway->configs->settings[$field])) {
+        			$this->instalment_rates[$i] = $this->gateway->configs->settings[$field] / 100;
+        		}
+        	}
+        }
 	}
 
 	/**
