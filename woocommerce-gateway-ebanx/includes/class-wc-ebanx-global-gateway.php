@@ -239,6 +239,33 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway
 				'description' => __('Establish the maximum number of installments in which your customer can pay, as consented on your contract.', 'woocommerce-gateway-ebanx'),
 				'desc_tip' => true
 			),
+			'interest_rates' => array(
+				'type'    => 'checkbox',
+				'title'   => __('Interest Rates', 'woocommerce-gateway-ebanx'),
+				'label'   => __('Enable Interest Rates', 'woocommerce-gateway-ebanx'),
+				'desc_tip' => true
+			)
+		);
+		$interest_rates_array = array();
+		$interest_rates_array['interest_rates_01'] = array(
+			'title' => __('1x Interest Rate in %', 'woocommerce-gateway-ebanx'),
+			'type' => 'number',
+			'class' => 'interest_rates_fields',
+			'placeholder' => __('eg: 15.7%', 'woocommerce-gateway-ebanx')
+		);
+
+		for ($i=2; $i <= 12; $i++) {
+			$interest_rates_array['interest_rates_'.sprintf("%02d", $i)] = array(
+				'title' => __($i.'x Interest Rate', 'woocommerce-gateway-ebanx'),
+				'type' => 'number',
+				'class' => 'interest_rates_fields',
+				'placeholder' => __('eg: 15.7%', 'woocommerce-gateway-ebanx')
+			);
+		}
+
+		$this->form_fields = array_merge($this->form_fields, $interest_rates_array);
+
+		$this->form_fields = array_merge($this->form_fields, array(
 			'cash_options_title'        => array(
 				'title' => __('Cash Payments', 'woocommerce-gateway-ebanx'),
 				'type'  => 'title',
@@ -314,7 +341,7 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway
 				'class' => 'ebanx-advanced-option ebanx-checkout-manager-field always-visible',
 				'placeholder' => __('eg: billing_chile_birth_date', 'woocommerce-gateway-ebanx')
 			),
-		);
+		));
 
 		$this->injectDefaults();
 	}
