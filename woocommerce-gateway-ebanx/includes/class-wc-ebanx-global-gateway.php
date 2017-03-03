@@ -191,7 +191,7 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway
 			),
 			'payments_options_title'     => array(
 				'title' => __('Payments Options', 'woocommerce-gateway-ebanx'),
-				'type'  => 'title',
+				'type'  => 'title'
 			),
 			'credit_card_options_title' => array(
 				'title' => __('Credit Card', 'woocommerce-gateway-ebanx'),
@@ -239,7 +239,7 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway
 				'description' => __('Establish the maximum number of installments in which your customer can pay, as consented on your contract.', 'woocommerce-gateway-ebanx'),
 				'desc_tip' => true
 			),
-			'interest_rates' => array(
+			'interest_rates_enabled' => array(
 				'type'    => 'checkbox',
 				'title'   => __('Interest Rates', 'woocommerce-gateway-ebanx'),
 				'label'   => __('Enable Interest Rates', 'woocommerce-gateway-ebanx'),
@@ -250,7 +250,7 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway
 		$interest_rates_array['interest_rates_01'] = array(
 			'title' => __('1x Interest Rate in %', 'woocommerce-gateway-ebanx'),
 			'type' => 'number',
-			'class' => 'interest_rates_fields',
+			'class' => 'interest-rates-fields',
 			'placeholder' => __('eg: 15.7%', 'woocommerce-gateway-ebanx')
 		);
 
@@ -258,7 +258,7 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway
 			$interest_rates_array['interest_rates_'.sprintf("%02d", $i)] = array(
 				'title' => __($i.'x Interest Rate', 'woocommerce-gateway-ebanx'),
 				'type' => 'number',
-				'class' => 'interest_rates_fields',
+				'class' => 'interest-rates-fields',
 				'placeholder' => __('eg: 15.7%', 'woocommerce-gateway-ebanx')
 			);
 		}

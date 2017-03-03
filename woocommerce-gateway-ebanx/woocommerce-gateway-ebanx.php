@@ -484,6 +484,7 @@ if (!class_exists('WC_EBANX')) {
 				}
 			</style>";
 
+			wp_enqueue_script('woocommerce_ebanx_payments_options', plugins_url('assets/js/payments-options.js', WC_EBANX::DIR));
 			wp_enqueue_script('woocommerce_ebanx_advanced_options', plugins_url('assets/js/advanced-options.js', WC_EBANX::DIR));
 		}
 
