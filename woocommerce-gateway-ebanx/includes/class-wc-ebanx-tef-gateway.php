@@ -50,8 +50,6 @@ class WC_EBANX_Tef_Gateway extends WC_EBANX_Redirect_Gateway
             echo wp_kses_post(wpautop(wptexturize($description)));
         }
 
-        $cart_total = $this->get_order_total();
-
         wc_get_template(
             'tef/payment-form.php',
             array(
