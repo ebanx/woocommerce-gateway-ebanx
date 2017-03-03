@@ -87,6 +87,13 @@ if (!class_exists('WC_EBANX')) {
 			add_action('woocommerce_account_' . self::$endpoint . '_endpoint', array($this, 'my_account_template'));
 
 			/**
+			 * Payment by Link
+			 */
+			add_action('add_meta_boxes', array($this, 'ebanx_register_metaboxes_payment_link'));
+			add_action('save_post', array($this, 'ebanx_metabox_payment_link_save'), 10, 2);
+			add_filter( 'woocommerce_admin_billing_fields', array($this, 'ebanx_payment_link_billing_fields') );
+
+			/**
 			 * Filters
 			 */
 			add_filter('query_vars', array($this, 'my_account_query_vars'), 0);
@@ -554,6 +561,56 @@ if (!class_exists('WC_EBANX')) {
 				'data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz48c3ZnIHdpZHRoPSIxNnB4IiBoZWlnaHQ9IjIwcHgiIHZpZXdCb3g9IjAgMCAxNiAyMCIgdmVyc2lvbj0iMS4xIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIj4gICAgICAgIDx0aXRsZT5lYmFueC1zdmc8L3RpdGxlPiAgICA8ZGVzYz5DcmVhdGVkIHdpdGggU2tldGNoLjwvZGVzYz4gICAgPGRlZnM+PC9kZWZzPiAgICA8ZyBpZD0iUGFnZS0xIiBzdHJva2U9Im5vbmUiIHN0cm9rZS13aWR0aD0iMSIgZmlsbD0ibm9uZSIgZmlsbC1ydWxlPSJldmVub2RkIj4gICAgICAgIDxnIGlkPSJlYmFueC1zdmciPiAgICAgICAgICAgIDxwb2x5Z29uIGlkPSJTaGFwZSIgZmlsbD0iIzFDNDE3OCIgcG9pbnRzPSIwLjExMTYyNzkwNyAwLjA5MDkwOTA5MDkgMTIuNTM5NTM0OSAxMCAwLjExMTYyNzkwNyAxOS45MDkwOTA5Ij48L3BvbHlnb24+ICAgICAgICAgICAgPHBvbHlnb24gaWQ9IlNoYXBlIiBmaWxsPSIjREFEQkRCIiBwb2ludHM9IjkuMTM0ODgzNzIgMTIuNzA5MDkwOSAwLjExMTYyNzkwNyAxOS45MDkwOTA5IDE1Ljk2Mjc5MDcgMTkuODkwOTA5MSI+PC9wb2x5Z29uPiAgICAgICAgICAgIDxwb2x5Z29uIGlkPSJTaGFwZSIgZmlsbD0iI0RBREJEQiIgcG9pbnRzPSIwLjExMTYyNzkwNyAwLjA5MDkwOTA5MDkgOS4xMzQ4ODM3MiA3LjI5MDkwOTA5IDE1Ljk2Mjc5MDcgMC4wOTA5MDkwOTA5Ij48L3BvbHlnb24+ICAgICAgICAgICAgPHBvbHlnb24gaWQ9IlNoYXBlIiBmaWxsPSIjMDA5M0QwIiBwb2ludHM9IjAuMTExNjI3OTA3IDE5LjkwOTA5MDkgOS4xMzQ4ODM3MiAxMi43MDkwOTA5IDYuNzUzNDg4MzcgMTAgMC4xMTE2Mjc5MDcgMTcuMiI+PC9wb2x5Z29uPiAgICAgICAgICAgIDxwb2x5Z29uIGlkPSJTaGFwZSIgZmlsbD0iIzAwQkNFNCIgcG9pbnRzPSIwLjExMTYyNzkwNyAyLjggMC4xMTE2Mjc5MDcgMTcuMiA2Ljc1MzQ4ODM3IDEwIj48L3BvbHlnb24+ICAgICAgICAgICAgPHBvbHlnb24gaWQ9IlNoYXBlIiBmaWxsPSIjMDA5M0QwIiBwb2ludHM9IjAuMTExNjI3OTA3IDAuMDkwOTA5MDkwOSA5LjEzNDg4MzcyIDcuMjkwOTA5MDkgNi43NTM0ODgzNyAxMCAwLjExMTYyNzkwNyAyLjgiPjwvcG9seWdvbj4gICAgICAgIDwvZz4gICAgPC9nPjwvc3ZnPg==',
 				21
 			);
+		}
+
+		public function ebanx_register_metaboxes_payment_link () {
+			// Payment by Link
+			add_meta_box( 'ebanx-metabox-payment-link', 'EBANX Options', array($this, 'ebanx_metabox_payment_link_render'), 'shop_order', 'side', 'high' );
+		}
+
+		public function ebanx_metabox_payment_link_render ($post) {
+			wp_nonce_field( basename( __FILE__ ), 'smashing_post_class_nonce' );
+
+			echo '<input type="text" name="haha" value="123" />';
+		}
+
+		public function ebanx_metabox_payment_link_save ($post_id, $post) {
+			// Add nonce for security and authentication.
+			$nonce_name   = isset( $_POST['custom_nonce'] ) ? $_POST['custom_nonce'] : '';
+			$nonce_action = 'custom_nonce_action';
+
+			// Check if nonce is set.
+			if ( ! isset( $nonce_name ) ) {
+				return;
+			}
+
+			// Check if nonce is valid.
+			if ( ! wp_verify_nonce( $nonce_name, $nonce_action ) ) {
+				return;
+			}
+
+			// Check if user has permissions to save data.
+			if ( ! current_user_can( 'edit_post', $post_id ) ) {
+				return;
+			}
+
+			// Check if not an autosave.
+			if ( wp_is_post_autosave( $post_id ) ) {
+				return;
+			}
+
+			// Check if not a revision.
+			if ( wp_is_post_revision( $post_id ) ) {
+				return;
+			}
+		}
+
+		public function ebanx_payment_link_billing_fields ($fields) {
+			$fields['ebanx_brazil_cpf'] = array(
+				'label' => __('CPF', 'woocommerce-gateway-ebanx')
+			);
+
+			return $fields;
 		}
 	}
 
