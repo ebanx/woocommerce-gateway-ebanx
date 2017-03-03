@@ -169,3 +169,7 @@ The [Developer’s Academy](https://www.ebanx.com/business/en/developers/integra
 4. Plugin Configuration - To start your integration, go to your [EBANX Dashboard](https://www.ebanx.com/business/en/dashboard/users/sign_in) settings to find your test and live keys. Insert them and choose to enable the sandbox mode for testing.
 5. Plugin Configuration - You can choose the countries and gateways to work with just by inserting them on the right field to enable payments methods.
 6. Plugin Configuration - Set more advanced options such as: Save Card Data, One-click payment, enable auto-capture and maximum number of installments.
+
+== Arbitrary section ==
+
+When you use our plug in, you trust us with your information and agree that we may keep it and use it for the purposes of our commercial relationship. As we are a PCI compliant company, we will keep all your data safe, and will not use it for any other purposes.
