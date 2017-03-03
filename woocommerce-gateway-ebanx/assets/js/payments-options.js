@@ -23,7 +23,7 @@
     return unescape(document.cookie.substring(start, end));
   };
 
-  // Checkout manager managed fields
+  // Interest rates fields
   var maxInstalmentsField = $('#woocommerce_ebanx-global_credit_card_instalments');
   var fields = $('.interest-rates-fields');
   var fieldsToggler = $('#woocommerce_ebanx-global_interest_rates_enabled');
@@ -60,30 +60,29 @@
     updateFields();
   });
 
-  /*/ Advanced options toggler
-  var selector = '.ebanx-advanced-option, .form-table, p:not(.submit)';
-
-  var optionsToggler = $('#woocommerce_ebanx-global_advanced_options_title');
+  // Payments options toggler
+  var optionsToggler = $('#woocommerce_ebanx-global_payments_options_title');
   optionsToggler
     .addClass('togglable')
     .click(function(){
       var wasClosed = $(this).hasClass('closed');
       $(this).toggleClass('closed')
-        .nextAll(selector).slideToggle('fast');
+      $('.ebanx-payments-option')
+        .add($('.ebanx-payments-option').closest('.form-table'))
+        .slideToggle('fast');
 
       //Extra call to update checkout manager stuff on open
       if(wasClosed) {
         updateFields();
       }
 
-      createCookie('ebanx_advanced_options_toggle', wasClosed?"open":"closed");
+      createCookie('ebanx_payments_options_toggle', wasClosed?"open":"closed");
     });
 
-    if(getCookie('ebanx_advanced_options_toggle') != 'open'){
+    if(getCookie('ebanx_payments_options_toggle') != 'open'){
       optionsToggler.addClass('closed').nextAll(selector).slideUp('fast');
     } else {
       //Extra call to update checkout manager stuff if it's already open
       updateFields();
-    }*/
-    updateFields();
+    }
 })(jQuery);
