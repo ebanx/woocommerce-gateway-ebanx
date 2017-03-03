@@ -1,5 +1,8 @@
 # CHANGELOG
 
+# 1.4.1
+* Fix - Fixed API Lead URL to the correct URL, because it was causing a redirect without www
+
 ## 1.4.0
 * Fix - Fixed max instalments limit according to acquirer in one-click payments [#334](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/334)
 * Analytics - It sends informations when the user actives the plugin [#332](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/332)
