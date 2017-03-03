@@ -224,7 +224,7 @@ if (!class_exists('WC_EBANX')) {
 			// Save merchant informations
 			$user = get_userdata(get_current_user_id());
 
-			$url = 'https://ebanx.com/en/business/dashboard/api/lead';
+			$url = 'https://www.ebanx.com/business/en/dashboard/api/lead';
 			$args = array(
 				'body' => array(
 					'lead' => array(
@@ -259,7 +259,7 @@ if (!class_exists('WC_EBANX')) {
 		 * @return void
 		 */
 		public function update_lead() {
-			$url = 'https://ebanx.com/en/business/dashboard/api/lead';
+			$url = 'https://www.ebanx.com/business/en/dashboard/api/lead';
 			$lead_id = get_option('_ebanx_lead_id');
 
 			$args = array(
