@@ -89,9 +89,9 @@ if (!class_exists('WC_EBANX')) {
 			/**
 			 * Payment by Link
 			 */
-			add_action('add_meta_boxes', array($this, 'ebanx_register_metaboxes_payment_link'));
+			add_action('woocommerce_order_actions_end', array($this, 'ebanx_metabox_save_post_render_button'));
+			// add_action('add_meta_boxes', array($this, 'ebanx_register_metaboxes_payment_link'));
 			add_action('save_post', array($this, 'ebanx_metabox_payment_link_save'), 10, 2);
-			add_filter( 'woocommerce_admin_billing_fields', array($this, 'ebanx_payment_link_billing_fields') );
 
 			/**
 			 * Filters
@@ -568,16 +568,10 @@ if (!class_exists('WC_EBANX')) {
 			add_meta_box( 'ebanx-metabox-payment-link', 'EBANX Options', array($this, 'ebanx_metabox_payment_link_render'), 'shop_order', 'side', 'high' );
 		}
 
-		public function ebanx_metabox_payment_link_render ($post) {
-			wp_nonce_field( basename( __FILE__ ), 'smashing_post_class_nonce' );
-
-			echo '<input type="text" name="haha" value="123" />';
-		}
-
 		public function ebanx_metabox_payment_link_save ($post_id, $post) {
 			// Add nonce for security and authentication.
-			$nonce_name   = isset( $_POST['custom_nonce'] ) ? $_POST['custom_nonce'] : '';
-			$nonce_action = 'custom_nonce_action';
+			$nonce_name   = isset( $_POST['ebanx_save_order_nonce_name'] ) ? $_POST['ebanx_save_order_nonce_name'] : '';
+			$nonce_action = 'ebanx_save_order_nonce_action';
 
 			// Check if nonce is set.
 			if ( ! isset( $nonce_name ) ) {
@@ -603,15 +597,26 @@ if (!class_exists('WC_EBANX')) {
 			if ( wp_is_post_revision( $post_id ) ) {
 				return;
 			}
+
+			print_r($post_id);
+			print_r($post);
+			print_r($_REQUEST);
+			exit;
 		}
 
-		public function ebanx_payment_link_billing_fields ($fields) {
-			$fields['ebanx_brazil_cpf'] = array(
-				'label' => __('CPF', 'woocommerce-gateway-ebanx')
-			);
-
-			return $fields;
-		}
+		public function ebanx_metabox_save_post_render_button () {
+			wp_nonce_field( 'ebanx_save_order_nonce_action', 'ebanx_save_order_nonce_name' );
+		?>
+			<li class="wide">
+				<input
+					type="submit"
+					class="button save_order button-primary tips"
+					name="save_order_ebanx"
+					value="Save EBANX Order"
+					data-tip="The order will be created on your site and also sent to EBANX to generate a payment to your customer pay directly"
+				/>
+			</li>
+		<?php }
 	}
 
 	add_action('plugins_loaded', array('WC_EBANX', 'get_instance'));
