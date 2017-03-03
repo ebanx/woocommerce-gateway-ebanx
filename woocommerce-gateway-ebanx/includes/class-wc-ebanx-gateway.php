@@ -344,7 +344,7 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
 				'currency_code'         => $this->merchant_currency,
 				'name'                  => $order->billing_first_name . ' ' . $order->billing_last_name,
 				'email'                 => $order->billing_email,
-				"phone_number"          => $order->billing_phone,
+				'phone_number'          => $order->billing_phone,
 				'amount_total'          => $order->get_total(),
 				'order_number'          => $order->id,
 				'merchant_payment_code' => $order->id . '-' . md5(rand(123123, 9999999)),
@@ -724,7 +724,7 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
 		}
 
 		// It shows to the merchant
-		update_post_meta($order->id, 'Payment\'s Hash', $request->payment->hash);
+		update_post_meta($order->id, 'EBANX Payment\'s Hash', $request->payment->hash);
 	}
 
 	/**

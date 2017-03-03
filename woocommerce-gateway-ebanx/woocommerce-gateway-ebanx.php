@@ -90,7 +90,6 @@ if (!class_exists('WC_EBANX')) {
 			 * Payment by Link
 			 */
 			add_action('woocommerce_order_actions_end', array($this, 'ebanx_metabox_save_post_render_button'));
-			// add_action('add_meta_boxes', array($this, 'ebanx_register_metaboxes_payment_link'));
 			add_action('save_post', array($this, 'ebanx_metabox_payment_link_save'), 10, 2);
 
 			/**
@@ -352,7 +351,6 @@ if (!class_exists('WC_EBANX')) {
 		 */
 		private function includes()
 		{
-			include_once(INCLUDES_DIR . 'class-wc-ebanx-custom-order.php');
 			include_once(INCLUDES_DIR . 'class-wc-ebanx-gateway-utils.php');
 			include_once(INCLUDES_DIR . 'class-wc-ebanx-gateway.php');
 			include_once(INCLUDES_DIR . 'class-wc-ebanx-redirect-gateway.php');
@@ -563,60 +561,154 @@ if (!class_exists('WC_EBANX')) {
 			);
 		}
 
-		public function ebanx_register_metaboxes_payment_link () {
-			// Payment by Link
-			add_meta_box( 'ebanx-metabox-payment-link', 'EBANX Options', array($this, 'ebanx_metabox_payment_link_render'), 'shop_order', 'side', 'high' );
-		}
-
 		public function ebanx_metabox_payment_link_save ($post_id, $post) {
-			// Add nonce for security and authentication.
-			$nonce_name   = isset( $_POST['ebanx_save_order_nonce_name'] ) ? $_POST['ebanx_save_order_nonce_name'] : '';
-			$nonce_action = 'ebanx_save_order_nonce_action';
 
-			// Check if nonce is set.
-			if ( ! isset( $nonce_name ) ) {
-				return;
-			}
-
-			// Check if nonce is valid.
-			if ( ! wp_verify_nonce( $nonce_name, $nonce_action ) ) {
-				return;
-			}
+			echo 'EBANXERROR EBANX SAVE POST';
 
 			// Check if user has permissions to save data.
 			if ( ! current_user_can( 'edit_post', $post_id ) ) {
+				echo 'EBANXERROR edit_post';
 				return;
 			}
 
 			// Check if not an autosave.
 			if ( wp_is_post_autosave( $post_id ) ) {
+				echo 'EBANXERROR autosave';
 				return;
 			}
 
 			// Check if not a revision.
 			if ( wp_is_post_revision( $post_id ) ) {
+				echo 'EBANXERROR revision';
 				return;
 			}
 
-			print_r($post_id);
-			print_r($post);
-			print_r($_REQUEST);
-			exit;
+			// Check if is an EBANX request
+			if ( ! isset($_REQUEST['save_order_ebanx']) || $_REQUEST['save_order_ebanx'] !== 'Save EBANX Order' ) {
+				echo 'EBANXERROR errroooo';
+				return;
+			}
+
+			$has_errors = false;
+
+			$order = wc_get_order($post_id);
+
+			$ebanx_countries = array('br', 'mx', 'cl', 'co', 'pe');
+
+			if ( empty($order->billing_first_name) || empty($order->billing_last_name) ) {
+				$this->notices
+					->with_message(__('The customer name is required, please provide a valid customer name and last name.', 'woocommerce-gateway-ebanx'))
+					->with_type('error')
+					->persistent()
+					->enqueue();
+
+				$has_errors = true;
+			}
+
+			if ( !in_array(strtolower($order->billing_country), $ebanx_countries) ) {
+				$this->notices
+					->with_message(__('EBANX only support the countries: Brazil, Mexico, Peru, Colombia and Chile. Please, use one of these.', 'woocommerce-gateway-ebanx'))
+					->with_type('error')
+					->persistent()
+					->enqueue();
+
+				$has_errors = true;
+			}
+
+			if ( $order->get_total() < 1 ) {
+				$this->notices
+					->with_message(__('The total amount needs to be greater than $1.', 'woocommerce-gateway-ebanx'))
+					->with_type('error')
+					->persistent()
+					->enqueue();
+
+				$has_errors = true;
+			}
+
+			// TODO: Novo erro: Verificar se o status da ordem é 'wc-pending', só pode criar com o status de 'wc-pending'
+
+			if ( $has_errors ) {
+				echo 'EBANXERROR has_errors';
+				return;
+			}
+
+			$home_url = esc_url( home_url() );
+
+			$payment_type_code = array(
+				'ebanx-banking-ticket' => 'boleto',
+				'ebanx-credit-card-br' => 'creditcard',
+				'ebanx-credit-card-mx' => 'creditcard',
+				'ebanx-debit-card' => 'debitcard',
+				'ebanx-oxxo' => 'oxxo',
+				'ebanx-sencillito' => 'sencillito',
+				'ebanx-servipag' => 'servipag',
+				'ebanx-tef' => 'tef',
+				'ebanx-pagoefectivo' => 'pagoefectivo',
+				'ebanx-safetypay' => 'safetypay',
+				'ebanx-eft' => 'eft',
+				'ebanx-account' => 'ebanxaccount'
+			);
+
+			$payment_data = array(
+				'currency_code' => strtoupper(get_woocommerce_currency()),
+				'amount' => $order->get_total(),
+				'merchant_payment_code' => $order->id . '_' . md5(time()),
+				'name' => $order->billing_first_name . ' ' . $order->billing_last_name,
+				'email' => $order->billing_email,
+				'payment_type_code' => $payment_type_code[$order->payment_method],
+				'order_number' => $order->id,
+				'user_value_1' => 'name=plugin',
+				'user_value_2' => 'value=woocommerce',
+				'user_value_3' => 'version=' . WC_EBANX::VERSION,
+				'notification_url' => $home_url,
+				'country' => strtolower($order->billing_country),
+			);
+
+			$config = array(
+				'integrationKey' => $this->private_key,
+				'testMode' => false
+			);
+
+			\Ebanx\Config::set($config);
+
+    		$request = \Ebanx\EBANX::doRequest($data);
+
+    		if ( $request->status !== 'SUCCESS' ) {
+    			$this->notices
+					->with_message(__('We couldn\'t create your EBANX order. Could you review your fields and try again?', 'woocommerce-gateway-ebanx'))
+					->with_type('error')
+					->persistent()
+					->enqueue();
+
+				return;
+    		}
+
+    		$order->add_order_note('Order created via EBANX.');
+
+			update_post_meta($post_id, 'EBANX Payment\'s Hash', $request->payment->hash);
+			update_post_meta($post_id, '_ebanx_payment_hash', $request->payment->hash);
+			update_post_meta($post_id, '_ebanx_checkout_url', $request->redirect_url);
 		}
 
 		public function ebanx_metabox_save_post_render_button () {
-			wp_nonce_field( 'ebanx_save_order_nonce_action', 'ebanx_save_order_nonce_name' );
+			// TODO: Quando criar a ordem via EBANX, mostrar o link do checkout desabilitado 'type=disabled'
+			// usar get_post_meta e procurar por _ebanx_checkout_url
+			$ebanx_currencies = array('BRL', 'USD', 'EUR', 'PEN', 'CLP', 'MXN', 'COP');
+
+			if ( in_array(strtoupper(get_woocommerce_currency()), $ebanx_currencies) ) {
 		?>
-			<li class="wide">
-				<input
-					type="submit"
-					class="button save_order button-primary tips"
-					name="save_order_ebanx"
-					value="Save EBANX Order"
-					data-tip="The order will be created on your site and also sent to EBANX to generate a payment to your customer pay directly"
-				/>
-			</li>
-		<?php }
+				<li class="wide">
+					<input
+						type="submit"
+						class="button save_order button-primary tips"
+						name="save_order_ebanx"
+						value="Save EBANX Order"
+						data-tip="The order will be created on your site and also sent to EBANX to generate a payment to your customer pay directly"
+					/>
+				</li>
+		<?php
+			}
+		}
 	}
 
 	add_action('plugins_loaded', array('WC_EBANX', 'get_instance'));
