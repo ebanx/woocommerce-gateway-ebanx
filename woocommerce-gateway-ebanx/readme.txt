@@ -63,21 +63,6 @@ All pages that incorporate the EBANX plugin must be served over HTTPS.
 
 [EBANX is a local payments expert](https://www.ebanx.com/business/en) and we offer complete solutions for international businesses wanting to sell more in Latin America. Whether you are an enterprise or running your own startup, EBANX can help you sell internationally with ease and efficiency.
 
-**Notice**
-
-Uppon activation this plugin collects and sends the following information to the EBANX servers:
-
-* User email
-* User display name
-* User's last and first names
-* Website email
-* Website url
-* Website name
-* Website language
-* Wordpress version
-* WooCommerce version
-* Activation date
-
 == Installation ==
 
 **Automatic**
