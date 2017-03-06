@@ -5,7 +5,7 @@
  * Description: Offer Latin American local payment methods & increase your conversion rates with the solution used by AliExpress, AirBnB and Spotify in Brazil.
  * Author: EBANX
  * Author URI: https://www.ebanx.com/business/en
- * Version: 1.3.0
+ * Version: 1.4.1
  * License: MIT
  * Text Domain: woocommerce-gateway-ebanx
  * Domain Path: /languages
@@ -24,6 +24,11 @@ define('INCLUDES_DIR', __DIR__ . DIRECTORY_SEPARATOR . 'includes' . DIRECTORY_SE
 define('SERVICES_DIR', __DIR__ . DIRECTORY_SEPARATOR . 'services' . DIRECTORY_SEPARATOR);
 
 if (!class_exists('WC_EBANX')) {
+	/**
+	 * Hooks
+	 */
+	register_activation_hook(__FILE__, array('WC_EBANX', 'active_plugin'));
+	register_deactivation_hook(__FILE__, array('WC_EBANX', 'deactivate_plugin'));
 
 	/**
 	 * WooCommerce WC_EBANX main class.
@@ -35,7 +40,7 @@ if (!class_exists('WC_EBANX')) {
 		 *
 		 * @var string
 		 */
-		const VERSION = '1.3.0';
+		const VERSION = '1.4.1';
 
 		const DIR = __FILE__;
 
@@ -100,12 +105,6 @@ if (!class_exists('WC_EBANX')) {
 			add_filter('the_title', array($this, 'my_account_menus_title'));
 
 			/**
-			 * Hooks
-			 */
-			register_activation_hook(self::DIR, array($this, 'my_account_endpoint'));
-			register_deactivation_hook(self::DIR, array($this, 'my_account_endpoint'));
-
-			/**
 			 * i18n
 			 */
 			$this->enable_i18n();
@@ -116,6 +115,7 @@ if (!class_exists('WC_EBANX')) {
 			add_filter('plugin_action_links_' . plugin_basename(__FILE__), array($this, 'plugin_action_links'));
 
 			add_action('woocommerce_settings_saved', array($this, 'setup_configs'), 10);
+			add_action('woocommerce_settings_saved', array($this, 'update_lead'), 20);
 			add_action('woocommerce_settings_saved', array($this, 'check_merchant_api_keys'), 20);
 		}
 
@@ -206,12 +206,99 @@ if (!class_exists('WC_EBANX')) {
 			return $vars;
 		}
 
+		/**
+		 * It creates a endpoint to my account
+		 *
+		 * @return void
+		 */
 		public function my_account_endpoint()
 		{
+			// My account endpoint
 			add_rewrite_endpoint(self::$endpoint, EP_ROOT | EP_PAGES);
-			flush_rewrite_rules();
 
 			add_option('woocommerce_ebanx-global_settings', WC_EBANX_Global_Gateway::$defaults);
+
+			flush_rewrite_rules();
+		}
+
+		/**
+		 * Save some informations from merchant and send to EBANX servers
+		 *
+		 * @return void
+		 */
+		public static function save_merchant_infos() {
+			// Save merchant informations
+			$user = get_userdata(get_current_user_id());
+
+			$url = 'https://www.ebanx.com/business/en/dashboard/api/lead';
+			$args = array(
+				'body' => array(
+					'lead' => array(
+						'user_email' => $user->user_email,
+						'user_display_name' => $user->display_name,
+						'user_last_name' => $user->last_name,
+						'user_first_name' => $user->first_name,
+						'site_email' => get_bloginfo('admin_email'),
+						'site_url' => get_bloginfo('url'),
+						'site_name' => get_bloginfo('name'),
+						'site_language' => get_bloginfo('language'),
+						'wordpress_version' => get_bloginfo('version'),
+						'woocommerce_version' => WC()->version
+					)
+				)
+			);
+
+			// Call EBANX API to save a lead
+			$request = wp_remote_post($url, $args);
+
+			if (isset($request['body'])) {
+				$data = json_decode($request['body']);
+
+				// Update merchant
+				update_option('_ebanx_lead_id', $data->id, false);
+			}
+		}
+
+		/**
+		 * Update and inegrate the lead to the merchant using the merchant's integration key
+		 *
+		 * @return void
+		 */
+		public function update_lead() {
+			$url = 'https://www.ebanx.com/business/en/dashboard/api/lead';
+			$lead_id = get_option('_ebanx_lead_id');
+
+			$args = array(
+				'body' => array(
+					'lead' => array(
+						'id' => $lead_id,
+						'integration_key' => $this->private_key
+					)
+				)
+			);
+
+			// Call EBANX API to save a lead
+			wp_remote_post($url, $args);
+		}
+
+		/**
+		 * Method that will be called when plugin is activated
+		 *
+		 * @return void
+		 */
+		public static function active_plugin() {
+			self::save_merchant_infos();
+
+			flush_rewrite_rules();
+		}
+
+		/**
+		 * Method that will be called when plugin is deactivated
+		 *
+		 * @return void
+		 */
+		public static function deactivate_plugin() {
+			flush_rewrite_rules();
 		}
 
 		/**
@@ -489,6 +576,7 @@ if (!class_exists('WC_EBANX')) {
 				}
 			</style>";
 
+			wp_enqueue_script('woocommerce_ebanx_payments_options', plugins_url('assets/js/payments-options.js', WC_EBANX::DIR));
 			wp_enqueue_script('woocommerce_ebanx_advanced_options', plugins_url('assets/js/advanced-options.js', WC_EBANX::DIR));
 		}
 
