@@ -61,26 +61,28 @@
   });
 
   // Advanced options toggler
-  var selector = '.ebanx-advanced-option, .form-table, p:not(.submit)';
-
   var optionsToggler = $('#woocommerce_ebanx-global_advanced_options_title');
+
+  var toggleElements = function() {
+    var wasClosed = optionsToggler.hasClass('closed');
+    optionsToggler.toggleClass('closed');
+    $('.ebanx-advanced-option')
+      .add($('.ebanx-advanced-option').closest('.form-table'))
+      .slideToggle('fast');
+
+    //Extra call to update checkout manager stuff on open
+    if(wasClosed) {
+      updateFields();
+    }
+
+    createCookie('ebanx_advanced_options_toggle', wasClosed?"open":"closed");
+  };
   optionsToggler
     .addClass('togglable')
-    .click(function(){
-      var wasClosed = $(this).hasClass('closed');
-      $(this).toggleClass('closed')
-        .nextAll(selector).slideToggle('fast');
-
-      //Extra call to update checkout manager stuff on open
-      if(wasClosed) {
-        updateFields();
-      }
-
-      createCookie('ebanx_advanced_options_toggle', wasClosed?"open":"closed");
-    });
+    .click(toggleElements);
 
     if(getCookie('ebanx_advanced_options_toggle') != 'open'){
-      optionsToggler.addClass('closed').nextAll(selector).slideUp('fast');
+      toggleElements();
     } else {
       //Extra call to update checkout manager stuff if it's already open
       updateFields();
