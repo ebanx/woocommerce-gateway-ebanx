@@ -1,7 +1,7 @@
 <?php
 
 if (!defined('ABSPATH')) {
-    exit;
+	exit;
 }
 
 class WC_EBANX_Notices_Notice {

@@ -19,7 +19,7 @@ Ready to accept local payments but don’t have an account yet? Finish our [simp
 
 **Plugin Description**
 
-The WooCommerce EBANX Payment Gateway plugin allows you to accept local & international payment methods directly on your ecommerce store. Using the EBANX plugin you can process relevant cash, online debit, and credit card payments in Brazil, Mexico, Chile, Colombia & Peru, and access over 17M EBANX Wallet users. **No technical knowledge is needed for installation. Installation is simple, the way it should be.**
+The WooCommerce EBANX Payment Gateway plugin allows you to accept local & international payment methods directly on your ecommerce store. Using the EBANX plugin you can process relevant cash, online debit, and credit card payments in Brazil, Mexico, Chile, Colombia & Peru, and access over 20M EBANX Wallet users. **No technical knowledge is needed for installation. Installation is simple, the way it should be.**
 
 **EBANX Advantages**
 
@@ -27,7 +27,7 @@ The WooCommerce EBANX Payment Gateway plugin allows you to accept local & intern
 * One-click purchases which allow your client to skip the checkout process
 * Checkout payment form is responsive and adapts nicely to all mobile screen sizes and themes
 * Everything you need in one plugin, you don’t have to install any external plugins or extensions
-* Sell to over 17M EBANX Wallet users
+* Sell to over 20M EBANX Wallet users
 * Join ecommerce merchants such as AliExpress, Airbnb and Spotify
 
 **Customize and Manage Your Payments**
@@ -39,12 +39,14 @@ With the EBANX plugin, you can:
 * Select an expiration date for cash payments
 * Allow customers to save their credit card information
 * Create orders & request refunds directly in WooCommerce
+* Accept Local Currencies, USD and EUR based on your WooCommerce Currency Options, to be processed by EBANX
 
 The plugin also includes:
 
 * Sandbox mode for testing
 * Capture mode that when activated allows you to collect payments after a manual review
 * Extra fields that are added automatically for payments made in Brazil or Chile where customers must provide more information to local regulatory authorities
+* Support for checkout managers
 
 **Want to do a Test Drive?**
 
@@ -72,7 +74,7 @@ To install the plugin manually, download our plugin and upload it to your web se
 
 **Via GitHub**
 
-The EBANX Gateway Plugin can also be installed using GitHub. You can find our repository [here](https://github.com/ebanx/checkout-woocommerce/ "EBANX GitHub repository"). To view step-by-step installation via GitHub instructions click [here](https://github.com/ebanx/checkout-woocommerce/tree/master/woocommerce-gateway-ebanx "Install Via GitHub").
+The EBANX Gateway Plugin can also be installed using GitHub. You can find our repository [here](https://github.com/ebanx/checkout-woocommerce/ "EBANX GitHub repository"). To download the plugin from our repository, please view [our latest release](https://github.com/ebanx/woocommerce-gateway-ebanx/releases/latest "Latest Release from GitHub repository") and download the `woocommerce-gateway-ebanx.zip` package.
 
 Still need your API Keys? You can pick those up [here](https://www.ebanx.com/business/en/dashboard "EBANX API keys").
 
