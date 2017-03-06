@@ -232,7 +232,7 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
 
 	public function process_payment($order_id)
 	{
-		if ( array_key_exists( 'ebanx_billing_instalments', $_POST ) ) {
+		if ( isset( $_POST['ebanx_billing_instalments'] ) ) {
 			$order = wc_get_order( $order_id );
 			$total_price = $order->get_total();
 			$tax_rate = 0;
