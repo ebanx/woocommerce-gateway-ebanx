@@ -3,7 +3,7 @@ Contributors: ebanxwp
 Tags: credit card, boleto, ebanx, woocommerce, approval rate, conversion rate, brazil, mexico, peru, colombia, chile, oxxo, cash payment, local payment one-click payment, installments, alternative payments, accept more payments
 Requires at least: 4.0
 Tested up to: 4.7
-Stable tag: 1.3.0
+Stable tag: 1.4.0
 License: MIT
 License URI: https://opensource.org/licenses/MIT
 
@@ -116,6 +116,13 @@ The [Developer’s Academy](https://www.ebanx.com/business/en/developers/integra
 
 == Changelog ==
 
+= 1.4.1 =
+* Fix - Fixed API Lead URL to the correct URL, because it was causing a redirect without www
+
+= 1.4.0 =
+* Fix - Fixed max instalments limit according to acquirer in one-click payments [#334](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/334)
+* Analytics - It sends informations when the user actives the plugin [#332](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/332)
+
 = 1.3.0 =
 * Feature - Allowed local currency, USD and EUR to be processed by EBANX based on WooCommerce Currency Options [#325](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/325)
 * Improvement - Updated to new EBANX logo [#326](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/326)
@@ -171,3 +178,7 @@ The [Developer’s Academy](https://www.ebanx.com/business/en/developers/integra
 4. Plugin Configuration - To start your integration, go to your [EBANX Dashboard](https://www.ebanx.com/business/en/dashboard/users/sign_in) settings to find your test and live keys. Insert them and choose to enable the sandbox mode for testing.
 5. Plugin Configuration - You can choose the countries and gateways to work with just by inserting them on the right field to enable payments methods.
 6. Plugin Configuration - Set more advanced options such as: Save Card Data, One-click payment, enable auto-capture and maximum number of installments.
+
+== Arbitrary section ==
+
+When you use our plug in, you trust us with your information and agree that we may keep it and use it for the purposes of our commercial relationship. As we are a PCI compliant company, we will keep all your data safe, and will not use it for any other purposes.

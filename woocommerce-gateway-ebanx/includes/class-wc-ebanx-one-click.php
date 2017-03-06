@@ -10,6 +10,11 @@ class WC_EBANX_One_Click {
 	private $gateway;
 	private $orderAction = 'ebanx_create_order';
 
+	private $private_key;
+	private $is_sandbox_mode;
+
+	protected $instalment_rates = array();
+
 	/**
 	 * Constructor
 	 */
@@ -34,6 +39,17 @@ class WC_EBANX_One_Click {
 		$cards = get_user_meta( $this->userId, '_ebanx_credit_card_token', true );
 
 		$this->cards = is_array( $cards ) ? array_filter( $cards ) : array();
+
+		if ($this->gateway->configs->settings['interest_rates_enabled'] == 'yes') {
+			$max_instalments = $this->gateway->configs->settings['credit_card_instalments'];
+			for ($i=1; $i <= $max_instalments; $i++) {
+				$field = 'interest_rates_' . sprintf("%02d", $i);
+				$this->instalment_rates[$i] = 0;
+				if (is_numeric($this->gateway->configs->settings[$field])) {
+					$this->instalment_rates[$i] = $this->gateway->configs->settings[$field] / 100;
+				}
+			}
+		}
 	}
 
 	/**
@@ -469,15 +485,105 @@ class WC_EBANX_One_Click {
 				break;
 		}
 
+		$max_instalments = $this->fetch_acquirer_max_installments_for_price($product->price);
+
 		$args = apply_filters( 'ebanx_template_args', array(
 				'cards' => $this->cards,
 				'cart_total' => $product->price,
-				'max_installment' => $this->gateway->configs->settings['credit_card_instalments'],
+				'max_installment' => min($this->gateway->configs->settings['credit_card_instalments'], $max_instalments),
+				'installment_taxes' => $this->instalment_rates,
 				'label' => __( 'Pay with one click', 'woocommerce-gateway-ebanx' ),
 				'instalments' => $messages['instalments']
 			) );
 
 		wc_get_template( 'one-click.php', $args, '', WC_EBANX::get_templates_path() . 'one-click/' );
+	}
+
+	/**
+	 * Calculates the max instalments allowed based on price, country and minimal instalment value
+	 * given by the credit-card acquirer
+	 *
+	 * @param  $price double Product price used as base
+	 * @return integer
+	 */
+	private function fetch_acquirer_max_installments_for_price($price) {
+		$max_instalments = WC_Ebanx_Gateway_Utils::MAX_INSTALMENTS;
+
+		switch (trim(strtolower(WC()->customer->get_country()))) {
+			case 'br':
+				$usd_to_local_rate = $this->get_currency_rate(WC_Ebanx_Gateway_Utils::CURRENCY_CODE_BRL);
+				$min_instalment_value = WC_Ebanx_Gateway_Utils::ACQUIRER_MIN_INSTALMENT_VALUE_BRL;
+				break;
+			case 'mx':
+				$usd_to_local_rate = $this->get_currency_rate(WC_Ebanx_Gateway_Utils::CURRENCY_CODE_MXN);
+				$min_instalment_value = WC_Ebanx_Gateway_Utils::ACQUIRER_MIN_INSTALMENT_VALUE_MXN;
+				break;
+		}
+
+		if (isset($usd_to_local_rate) && isset($min_instalment_value)) {
+			$local_value = $price * $usd_to_local_rate;
+			$max_instalments = floor($local_value / $min_instalment_value);
+		}
+
+		return $max_instalments;
+	}
+
+	/**
+	 * Sets up the pay api to be called during the one click lifecycle
+	 *
+	 * @return void
+	 */
+	private function setup_pay_api() {
+		if (isset($this->private_key) && isset($this->is_sandbox_mode)) {
+			return;
+		}
+
+		list($this->private_key, $this->is_sandbox_mode) = $this->get_private_key();
+
+		\Ebanx\Config::set([
+			'integrationKey' => $this->private_key,
+			'testMode' => $this->is_sandbox_mode
+		]);
+	}
+
+	/**
+	 * Queries for a currency exchange rate against USD based on a local currency
+	 *
+	 * @param  $local_currency_code string The local currency code to query for
+	 * @return double The currency exchange rate against USD
+	 */
+	private function get_currency_rate($local_currency_code) {
+		$this->setup_pay_api();
+
+		$usd_to_local = \Ebanx\Ebanx::getExchange( array(
+				'currency_code' => WC_Ebanx_Gateway_Utils::CURRENCY_CODE_USD,
+				'currency_base_code' => $local_currency_code
+			) );
+
+		if (!isset($usd_to_local)
+			|| strtoupper(trim($usd_to_local->status)) !== "SUCCESS") {
+
+			return 1;
+		}
+
+		return $usd_to_local->currency_rate->rate;
+	}
+
+	/**
+	 * Retrieve the private key and sandbox mode flag according to
+	 * merchant's settings panel
+	 *
+	 * @return array Private key and sandbox flag in a 2 position array
+	 */
+	private function get_private_key() {
+		$is_sandbox_mode = $this->gateway->configs->settings['sandbox_mode_enabled'] == 'yes';
+		$private_key = $this->gateway->configs->settings['live_private_key'];
+
+		if ($is_sandbox_mode) {
+			$private_key = $this->gateway->configs->settings['sandbox_private_key'];
+		}
+
+		return array($private_key, $is_sandbox_mode);
 	}
 }
 

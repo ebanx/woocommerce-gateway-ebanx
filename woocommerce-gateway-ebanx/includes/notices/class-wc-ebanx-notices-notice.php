@@ -149,4 +149,32 @@ class WC_EBANX_Notices_Notice {
 		});
 		return $this;
 	}
+
+	/**
+	 * Prints the notice when using hook won't work
+	 *
+	 * @return WC_EBANX_Notices_Notice
+	 * @throws Exception
+	 */
+	public function display() {
+		if (isset($this->view)) {
+			$view = $this->view;
+			include INCLUDES_DIR . 'admin/views/html-notice-'.$view.'.php';
+			$this->view = null;
+			return $this;
+		}
+		if (is_null($this->message)) {
+			throw new Exception("You need to specify a message");
+		}
+		$type = $this->type;
+		$message = $this->message;
+		$is_dismissible = $this->is_dismissible;
+		$classes = "notice notice-{$type}";
+		if ($is_dismissible) {
+			$classes .= ' is-dismissible';
+		}
+		$notice = "<div class='$classes'><p>{$message}</p></div>";
+		echo $notice;
+		return $this;
+	}
 }

@@ -72,6 +72,7 @@ class WC_EBANX_Credit_Card_MX_Gateway extends WC_EBANX_Credit_Card_Gateway
 				'cart_total' => $cart_total,
 				'country' => $this->getTransactionAddress('country'),
 				'max_installment' => min($this->configs->settings['credit_card_instalments'], $acquirer_max_instalments),
+				'installment_taxes' => $this->instalment_rates,
 				'place_order_enabled' => (isset($this->configs->settings['save_card_data']) && $this->configs->settings['save_card_data'] === 'yes'),
 				'instalments' => 'Meses sin intereses',
 			),

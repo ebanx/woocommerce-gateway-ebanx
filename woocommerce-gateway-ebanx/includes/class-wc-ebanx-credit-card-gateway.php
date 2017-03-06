@@ -6,6 +6,8 @@ if (!defined('ABSPATH')) {
 
 abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
 {
+	protected $instalment_rates = array();
+
 	/**
 	 * Constructor
 	 */
@@ -18,6 +20,17 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
 		add_action('woocommerce_order_actions', array($this, 'auto_capture'));
 
 		add_action('woocommerce_order_action_custom_action', array($this, 'capture_payment_action'));
+
+		if ($this->configs->settings['interest_rates_enabled'] == 'yes') {
+			$max_instalments = $this->configs->settings['credit_card_instalments'];
+			for ($i=1; $i <= $max_instalments; $i++) {
+				$field = 'interest_rates_' . sprintf("%02d", $i);
+				$this->instalment_rates[$i] = 0;
+				if (is_numeric($this->configs->settings[$field])) {
+					$this->instalment_rates[$i] = $this->configs->settings[$field] / 100;
+				}
+			}
+		}
 	}
 
 	/**
@@ -215,6 +228,22 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
 
 			update_user_meta($this->userId, '_ebanx_credit_card_token', $cards);
 		}
+	}
+
+	public function process_payment($order_id)
+	{
+		if ( isset( $_POST['ebanx_billing_instalments'] ) ) {
+			$order = wc_get_order( $order_id );
+			$total_price = $order->get_total();
+			$tax_rate = 0;
+			$instalments = $_POST['ebanx_billing_instalments'];
+			if ( array_key_exists( $instalments, $this->instalment_rates ) ) {
+				$tax_rate = $this->instalment_rates[$instalments];
+			}
+			$total_price += $total_price * $tax_rate;
+			$order->set_total($total_price);
+		}
+		return parent::process_payment($order_id);
 	}
 
 	/**
