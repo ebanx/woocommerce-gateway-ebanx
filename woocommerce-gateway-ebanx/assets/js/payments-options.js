@@ -60,29 +60,32 @@
     updateFields();
   });
 
-  // Payments options toggler
+  // Payments options toggler 
   var optionsToggler = $('#woocommerce_ebanx-global_payments_options_title');
-  optionsToggler
-    .addClass('togglable')
-    .click(function(){
-      var wasClosed = $(this).hasClass('closed');
-      $(this).toggleClass('closed')
-      $('.ebanx-payments-option')
-        .add($('.ebanx-payments-option').closest('.form-table'))
-        .slideToggle('fast');
 
-      //Extra call to update checkout manager stuff on open
-      if(wasClosed) {
-        updateFields();
-      }
+  var toggleElements = function() {
+    var wasClosed = optionsToggler.hasClass('closed');
+    optionsToggler.toggleClass('closed');
+    $('.ebanx-payments-option')
+      .add($('.ebanx-payments-option').closest('.form-table'))
+      .slideToggle('fast');
 
-      createCookie('ebanx_payments_options_toggle', wasClosed?"open":"closed");
-    });
-
-    if(getCookie('ebanx_payments_options_toggle') != 'open'){
-      optionsToggler.addClass('closed').nextAll(selector).slideUp('fast');
-    } else {
-      //Extra call to update checkout manager stuff if it's already open
+    //Extra call to update checkout manager stuff on open
+    if(wasClosed) {
       updateFields();
     }
+
+    createCookie('ebanx_payments_options_toggle', wasClosed?"open":"closed");
+  };
+
+  optionsToggler
+    .addClass('togglable')
+    .click(toggleElements);
+
+  if(getCookie('ebanx_payments_options_toggle') != 'open'){
+    toggleElements();
+  } else {
+    //Extra call to update checkout manager stuff if it's already open
+    updateFields();
+  }
 })(jQuery);
