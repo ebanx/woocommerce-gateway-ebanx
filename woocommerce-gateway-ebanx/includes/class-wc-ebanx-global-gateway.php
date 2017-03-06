@@ -43,7 +43,8 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway
 		'capture_enabled' => 'yes',
 		'credit_card_instalments' => '1',
 		'due_date_days' => '3',
-		'brazil_taxes_options' => 'cpf'
+		'brazil_taxes_options' => 'cpf',
+		'interest_rates_enabled' => 'no'
 	);
 
 	/**
@@ -191,11 +192,12 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway
 			),
 			'payments_options_title'     => array(
 				'title' => __('Payments Options', 'woocommerce-gateway-ebanx'),
-				'type'  => 'title',
+				'type'  => 'title'
 			),
 			'credit_card_options_title' => array(
 				'title' => __('Credit Card', 'woocommerce-gateway-ebanx'),
 				'type'  => 'title',
+				'class' => 'ebanx-payments-option'
 			),
 			'save_card_data'        => array(
 				'title' => __('Save Card Data', 'woocommerce-gateway-ebanx'),
@@ -203,6 +205,7 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway
 				'label' => __('Enable saving card data', 'woocommerce-gateway-ebanx'),
 				'description' => __('Allow your customer to save credit card and debit card data for future purchases.', 'woocommerce-gateway-ebanx'),
 				'desc_tip' => true,
+				'class' => 'ebanx-payments-option'
 			),
 			'one_click' => array(
 				'type'        => 'checkbox',
@@ -210,18 +213,20 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway
 				'label'       => __('Enable one-click-payment', 'woocommerce-gateway-ebanx'),
 				'description' => __('Allow your customer to complete payments in one-click using credit cards saved.', 'woocommerce-gateway-ebanx'),
 				'desc_tip' => true,
+				'class' => 'ebanx-payments-option'
 			),
 			'capture_enabled' => array(
 				'type'    => 'checkbox',
 				'title'   => __('Enable Auto-Capture', 'woocommerce-gateway-ebanx'),
 				'label'   => __('Capture the payment immediately', 'woocommerce-gateway-ebanx'),
 				'description' => __('Automatically capture payments from your customers. Otherwise you will need to capture the payment going to: WooCommerce -> Orders. Not captured payments will be cancelled in 4 days.', 'woocommerce-gateway-ebanx'),
-				'desc_tip' => true
+				'desc_tip' => true,
+				'class' => 'ebanx-payments-option'
 			),
 			'credit_card_instalments'   => array(
 				'title'       => __('Maximum nº of Installments', 'woocommerce-gateway-ebanx'),
 				'type'        => 'select',
-				'class'       => 'ebanx-select',
+				'class'       => 'ebanx-select ebanx-payments-option',
 				'options'     => array(
 					'1'  => '1',
 					'2'  => '2',
@@ -239,14 +244,45 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway
 				'description' => __('Establish the maximum number of installments in which your customer can pay, as consented on your contract.', 'woocommerce-gateway-ebanx'),
 				'desc_tip' => true
 			),
+			'interest_rates_enabled' => array(
+				'type'    => 'checkbox',
+				'title'   => __('Interest Rates', 'woocommerce-gateway-ebanx'),
+				'label'   => __('Enable Interest Rates', 'woocommerce-gateway-ebanx'),
+				'desc_tip' => true,
+				'class' => 'ebanx-payments-option'
+			)
+		);
+		$interest_rates_array = array();
+		$interest_rates_array['interest_rates_01'] = array(
+			'title' => __('1x Interest Rate in %', 'woocommerce-gateway-ebanx'),
+			'type' => 'number',
+			'step' => 'any',
+			'class' => 'interest-rates-fields ebanx-payments-option',
+			'placeholder' => __('eg: 15.7%', 'woocommerce-gateway-ebanx')
+		);
+
+		for ($i=2; $i <= 12; $i++) {
+			$interest_rates_array['interest_rates_'.sprintf("%02d", $i)] = array(
+				'title' => __($i.'x Interest Rate', 'woocommerce-gateway-ebanx'),
+				'type' => 'number',
+				'step' => 'any',
+				'class' => 'interest-rates-fields ebanx-payments-option',
+				'placeholder' => __('eg: 15.7%', 'woocommerce-gateway-ebanx')
+			);
+		}
+
+		$this->form_fields = array_merge($this->form_fields, $interest_rates_array);
+
+		$this->form_fields = array_merge($this->form_fields, array(
 			'cash_options_title'        => array(
 				'title' => __('Cash Payments', 'woocommerce-gateway-ebanx'),
 				'type'  => 'title',
+				'class' => 'ebanx-payments-option'
 			),
 			'due_date_days'             => array(
 				'title'   => __('Days to Expiration', 'woocommerce-gateway-ebanx'),
 				'type'    => 'select',
-				'class'   => 'ebanx-select',
+				'class'   => 'ebanx-select ebanx-payments-option',
 				'options' => array(
 					'1' => '1',
 					'2' => '2',
@@ -314,7 +350,7 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway
 				'class' => 'ebanx-advanced-option ebanx-checkout-manager-field always-visible',
 				'placeholder' => __('eg: billing_chile_birth_date', 'woocommerce-gateway-ebanx')
 			),
-		);
+		));
 
 		$this->inject_defaults();
 	}
