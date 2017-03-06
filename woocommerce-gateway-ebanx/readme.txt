@@ -38,6 +38,7 @@ With the EBANX plugin, you can:
 * Set a maximum number of installments
 * Select an expiration date for cash payments
 * Allow customers to save their credit card information
+* Set individual interest rates for each credit card instalment plan
 * Create orders & request refunds directly in WooCommerce
 * Accept Local Currencies, USD and EUR based on your WooCommerce Currency Options, to be processed by EBANX
 
@@ -61,6 +62,21 @@ All pages that incorporate the EBANX plugin must be served over HTTPS.
 **About EBANX**
 
 [EBANX is a local payments expert](https://www.ebanx.com/business/en) and we offer complete solutions for international businesses wanting to sell more in Latin America. Whether you are an enterprise or running your own startup, EBANX can help you sell internationally with ease and efficiency.
+
+**Notice**
+
+Uppon activation this plugin collects and sends the following information to the EBANX servers:
+
+* User email
+* User display name
+* User's last and first names
+* Website email
+* Website url
+* Website name
+* Website language
+* Wordpress version
+* WooCommerce version
+* Activation date
 
 == Installation ==
 
@@ -113,6 +129,24 @@ The [Developer’s Academy](https://www.ebanx.com/business/en/developers/integra
 * Colombia
   * Pagos Seguros en Línea (PSE), Online Debit Transfer
 
+= Which currencies does EBANX accept? =
+
+* USD - U.S. Dollar
+* EUR - Euro
+* BRL - Real
+* MXN - Peso Mexicano
+* COP - Peso Colombiano
+* CLP - Peso Chileno
+* PEN - Novo Sol
+
+= Can I use my own Checkout Manager plugin? =
+
+Yes, you can.
+
+1. Set up your own billing fields in the checkout manager plugin page;
+2. Go to the `EBANX Settings` page and open the `Advanced Options` section;
+3. Enable the `Use my checkout manager fields` checkbox and fill in the field names as in step 1;
+4. There you go, you’re all set!
 
 == Changelog ==
 
