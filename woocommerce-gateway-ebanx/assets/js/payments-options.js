@@ -23,10 +23,10 @@
     return unescape(document.cookie.substring(start, end));
   };
 
-  // Checkout manager managed fields
-  var modesField = $('#woocommerce_ebanx-global_brazil_taxes_options');
-  var fields = $('.ebanx-checkout-manager-field');
-  var fieldsToggler = $('#woocommerce_ebanx-global_checkout_manager_enabled');
+  // Interest rates fields
+  var maxInstalmentsField = $('#woocommerce_ebanx-global_credit_card_instalments');
+  var fields = $('.interest-rates-fields');
+  var fieldsToggler = $('#woocommerce_ebanx-global_interest_rates_enabled');
 
   var disableFields = function(jqElementList){
     jqElementList.closest('tr').hide();
@@ -37,17 +37,17 @@
   };
 
   var updateFields = function(){
-    var modes = modesField.val();
+    var maxInstalments = maxInstalmentsField.val();
     disableFields(fields);
 
     if (fieldsToggler[0].checked) {
-      enableFields(fields.filter('.always-visible'));
-      for (var i in modes) {
-        enableFields(fields.filter('.' + modes[i]));
-      }
-      if (modes.length == 2) {
-        enableFields(fields.filter('.cpf_cnpj'));
-      }
+      fields.each(function() {
+        var $this = $(this);
+        var idnum = parseInt($this.attr('id').substr(-2));
+        if (idnum <= maxInstalments) {
+          enableFields($this);
+        }
+      });
     }
   };
 
@@ -56,18 +56,18 @@
       updateFields();
     });
 
-  modesField.change(function(){
+  maxInstalmentsField.change(function(){
     updateFields();
   });
 
-  // Advanced options toggler
-  var optionsToggler = $('#woocommerce_ebanx-global_advanced_options_title');
+  // Payments options toggler 
+  var optionsToggler = $('#woocommerce_ebanx-global_payments_options_title');
 
   var toggleElements = function() {
     var wasClosed = optionsToggler.hasClass('closed');
     optionsToggler.toggleClass('closed');
-    $('.ebanx-advanced-option')
-      .add($('.ebanx-advanced-option').closest('.form-table'))
+    $('.ebanx-payments-option')
+      .add($('.ebanx-payments-option').closest('.form-table'))
       .slideToggle('fast');
 
     //Extra call to update checkout manager stuff on open
@@ -75,16 +75,17 @@
       updateFields();
     }
 
-    createCookie('ebanx_advanced_options_toggle', wasClosed?"open":"closed");
+    createCookie('ebanx_payments_options_toggle', wasClosed?"open":"closed");
   };
+
   optionsToggler
     .addClass('togglable')
     .click(toggleElements);
 
-    if(getCookie('ebanx_advanced_options_toggle') != 'open'){
-      toggleElements();
-    } else {
-      //Extra call to update checkout manager stuff if it's already open
-      updateFields();
-    }
+  if(getCookie('ebanx_payments_options_toggle') != 'open'){
+    toggleElements();
+  } else {
+    //Extra call to update checkout manager stuff if it's already open
+    updateFields();
+  }
 })(jQuery);

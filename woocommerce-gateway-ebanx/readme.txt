@@ -3,7 +3,7 @@ Contributors: ebanxwp
 Tags: credit card, boleto, ebanx, woocommerce, approval rate, conversion rate, brazil, mexico, peru, colombia, chile, oxxo, cash payment, local payment one-click payment, installments, alternative payments, accept more payments
 Requires at least: 4.0
 Tested up to: 4.7
-Stable tag: 1.4.0
+Stable tag: 1.5.0
 License: MIT
 License URI: https://opensource.org/licenses/MIT
 
@@ -19,7 +19,7 @@ Ready to accept local payments but don’t have an account yet? Finish our [simp
 
 **Plugin Description**
 
-The WooCommerce EBANX Payment Gateway plugin allows you to accept local & international payment methods directly on your ecommerce store. Using the EBANX plugin you can process relevant cash, online debit, and credit card payments in Brazil, Mexico, Chile, Colombia & Peru, and access over 17M EBANX Wallet users. **No technical knowledge is needed for installation. Installation is simple, the way it should be.**
+The WooCommerce EBANX Payment Gateway plugin allows you to accept local & international payment methods directly on your ecommerce store. Using the EBANX plugin you can process relevant cash, online debit, and credit card payments in Brazil, Mexico, Chile, Colombia & Peru, and access over 20M EBANX Wallet users. **No technical knowledge is needed for installation. Installation is simple, the way it should be.**
 
 **EBANX Advantages**
 
@@ -27,7 +27,7 @@ The WooCommerce EBANX Payment Gateway plugin allows you to accept local & intern
 * One-click purchases which allow your client to skip the checkout process
 * Checkout payment form is responsive and adapts nicely to all mobile screen sizes and themes
 * Everything you need in one plugin, you don’t have to install any external plugins or extensions
-* Sell to over 17M EBANX Wallet users
+* Sell to over 20M EBANX Wallet users
 * Join ecommerce merchants such as AliExpress, Airbnb and Spotify
 
 **Customize and Manage Your Payments**
@@ -38,13 +38,16 @@ With the EBANX plugin, you can:
 * Set a maximum number of installments
 * Select an expiration date for cash payments
 * Allow customers to save their credit card information
+* Set individual interest rates for each credit card instalment plan
 * Create orders & request refunds directly in WooCommerce
+* Accept Local Currencies, USD and EUR based on your WooCommerce Currency Options, to be processed by EBANX
 
 The plugin also includes:
 
 * Sandbox mode for testing
 * Capture mode that when activated allows you to collect payments after a manual review
 * Extra fields that are added automatically for payments made in Brazil or Chile where customers must provide more information to local regulatory authorities
+* Support for checkout managers
 
 **Want to do a Test Drive?**
 
@@ -72,7 +75,7 @@ To install the plugin manually, download our plugin and upload it to your web se
 
 **Via GitHub**
 
-The EBANX Gateway Plugin can also be installed using GitHub. You can find our repository [here](https://github.com/ebanx/checkout-woocommerce/ "EBANX GitHub repository"). To view step-by-step installation via GitHub instructions click [here](https://github.com/ebanx/checkout-woocommerce/tree/master/woocommerce-gateway-ebanx "Install Via GitHub").
+The EBANX Gateway Plugin can also be installed using GitHub. You can find our repository [here](https://github.com/ebanx/checkout-woocommerce/ "EBANX GitHub repository"). To download the plugin from our repository, please view [our latest release](https://github.com/ebanx/woocommerce-gateway-ebanx/releases/latest "Latest Release from GitHub repository") and download the `woocommerce-gateway-ebanx.zip` package.
 
 Still need your API Keys? You can pick those up [here](https://www.ebanx.com/business/en/dashboard "EBANX API keys").
 
@@ -111,12 +114,37 @@ The [Developer’s Academy](https://www.ebanx.com/business/en/developers/integra
 * Colombia
   * Pagos Seguros en Línea (PSE), Online Debit Transfer
 
+= Which currencies does EBANX accept? =
+
+* USD - U.S. Dollar
+* EUR - Euro
+* BRL - Real
+* MXN - Peso Mexicano
+* COP - Peso Colombiano
+* CLP - Peso Chileno
+* PEN - Novo Sol
+
+= Can I use my own Checkout Manager plugin? =
+
+Yes, you can.
+
+1. Set up your own billing fields in the checkout manager plugin page;
+2. Go to the `EBANX Settings` page and open the `Advanced Options` section;
+3. Enable the `Use my checkout manager fields` checkbox and fill in the field names as in step 1;
+4. There you go, you’re all set!
 
 == Changelog ==
 
+= 1.5.0 =
+* Feature - Instalment interest rates are now configurable [#336](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/336)
+* Improvement - Payment Options section in admin is now togglable [#336](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/336)
+
+= 1.4.1 =
+* Fix - Fixed API Lead URL to the correct URL, because it was causing a redirect without www
+
 = 1.4.0 =
 * Fix - Fixed max instalments limit according to acquirer in one-click payments [#334](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/334)
-* Analytics - It sends informations when the user actives the plugin [#332](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/332)
+* Improvement - Sending analytics information for plugin activations [#332](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/332)
 
 = 1.3.0 =
 * Feature - Allowed local currency, USD and EUR to be processed by EBANX based on WooCommerce Currency Options [#325](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/325)
