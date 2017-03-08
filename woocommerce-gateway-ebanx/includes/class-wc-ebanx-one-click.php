@@ -40,7 +40,7 @@ class WC_EBANX_One_Click {
 
 		$this->cards = is_array( $cards ) ? array_filter( $cards ) : array();
 
-		if ($this->gateway->configs->settings['interest_rates_enabled'] == 'yes') {
+		if ($this->gateway->get_setting_or_default('interest_rates_enabled', 'no') == 'yes') {
 			$max_instalments = $this->gateway->configs->settings['credit_card_instalments'];
 			for ($i=1; $i <= $max_instalments; $i++) {
 				$field = 'interest_rates_' . sprintf("%02d", $i);
