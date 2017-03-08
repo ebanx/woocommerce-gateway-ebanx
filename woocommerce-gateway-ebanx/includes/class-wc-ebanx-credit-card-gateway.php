@@ -21,7 +21,7 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
 
 		add_action('woocommerce_order_action_custom_action', array($this, 'capture_payment_action'));
 
-		if ($this->configs->settings['interest_rates_enabled'] == 'yes') {
+		if ($this->get_setting_or_default('interest_rates_enabled', 'no') == 'yes') {
 			$max_instalments = $this->configs->settings['credit_card_instalments'];
 			for ($i=1; $i <= $max_instalments; $i++) {
 				$field = 'interest_rates_' . sprintf("%02d", $i);
