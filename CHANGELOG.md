@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## 1.5.2
+* Fix - Checking for new feature's settings presence to avoid notices [#342](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/342)
+
 ## 1.5.1
 * Fix - Notification URL in payment payload [#341](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/341)
 
