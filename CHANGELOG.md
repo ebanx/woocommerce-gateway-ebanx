@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## 1.5.3
+* Fix - In case user country was not set one-click payments was crashing [#343](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/343)
+
 ## 1.5.2
 * Fix - Checking for new feature's settings presence to avoid notices [#342](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/342)
 
