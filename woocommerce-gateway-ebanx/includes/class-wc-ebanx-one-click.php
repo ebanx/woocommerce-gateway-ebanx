@@ -10,9 +10,6 @@ class WC_EBANX_One_Click {
 	private $gateway;
 	private $orderAction = 'ebanx_create_order';
 
-	private $private_key;
-	private $is_sandbox_mode;
-
 	protected $instalment_rates = array();
 
 	/**
@@ -108,7 +105,7 @@ class WC_EBANX_One_Click {
 			|| ! isset( $_GET['_ebanx_one_click_action'] ) || $_GET['_ebanx_one_click_action'] != $this->orderAction
 			|| ! isset( $_GET['_ebanx_nonce'] ) || ! wp_verify_nonce( $_GET['_ebanx_nonce'], $this->orderAction )
 			|| !isset( $_GET['_ebanx_one_click_token'] ) || !isset( $_GET['_ebanx_one_click_cvv'] ) || !isset( $_GET['_ebanx_one_click_installments'] )
-			|| ! $this->customerCan() || ! $this->customerHasEBANXRequiredData()
+			|| ! $this->customer_can() || ! $this->customer_has_ebanx_required_data()
 		) {
 			return;
 		}
@@ -147,7 +144,7 @@ class WC_EBANX_One_Click {
 				$shipping_address = apply_filters( 'ebanx_filter_shipping_address', $this->get_user_shipping_address( $this->userId ), $this->userId );
 				$shipping_address = empty( $shipping_address ) ? $billing_address : $shipping_address;
 
-				$this->setShippingInfo( $shipping_address );
+				$this->set_shipping_info( $shipping_address );
 			}
 			else {
 				$shipping_address = array();
@@ -334,11 +331,11 @@ class WC_EBANX_One_Click {
 	}
 
 	/**
-	 * Set shipping info by user's informations
+	 * Set shipping info by user's information
 	 *
-	 * @param array   $values The user's informations
+	 * @param array   $values The user's information
 	 */
-	public function setShippingInfo( $values ) {
+	public function set_shipping_info( $values ) {
 
 		// Update customer location to posted location so we can correctly check available shipping methods
 		if ( ! empty( $values['country'] ) ) {
@@ -384,7 +381,7 @@ class WC_EBANX_One_Click {
 
 		if (
 			$product->product_type == 'external' ||
-			!$this->customerCan() ||
+			!$this->customer_can() ||
 			!$this->gateway->is_available() ||
 			$this->gateway->configs->settings['one_click'] !== 'yes'
 		) {
@@ -403,7 +400,7 @@ class WC_EBANX_One_Click {
 	 *
 	 * @return boolean If the user has all required data, return true
 	 */
-	protected function customerHasEBANXRequiredData() {
+	protected function customer_has_ebanx_required_data() {
 		$card = current( array_filter( (array) array_filter( get_user_meta( $this->userId, '_ebanx_credit_card_token', true ) ), function ( $card ) {
 					return $card->token == $_GET['_ebanx_one_click_token'];
 				} ) );
@@ -445,7 +442,7 @@ class WC_EBANX_One_Click {
 	 *
 	 * @return [type] [description]
 	 */
-	public function customerCan() {
+	public function customer_can() {
 		$return = true;
 
 		if ( !is_user_logged_in() || !get_user_meta( $this->userId, 'billing_email', true ) && !empty( $this->cards ) ) {

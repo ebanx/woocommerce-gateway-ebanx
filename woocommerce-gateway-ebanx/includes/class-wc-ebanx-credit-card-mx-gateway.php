@@ -51,7 +51,7 @@ class WC_EBANX_Credit_Card_MX_Gateway extends WC_EBANX_Credit_Card_Gateway
 			return !empty($card->brand) && !empty($card->token) && !empty($card->masked_number);
 		});
 
-		$acquirer_max_instalments = $this->fetch_acquirer_max_installments_for_price($cart_total, 'mx');
+		$max_instalments = $this->fetch_acquirer_max_installments_for_price($cart_total, 'mx');
 
 		wc_get_template(
 			'ebanx-credit-card-mx/payment-form.php',
@@ -60,7 +60,7 @@ class WC_EBANX_Credit_Card_MX_Gateway extends WC_EBANX_Credit_Card_Gateway
 				'cards' => (array) $cards,
 				'cart_total' => $cart_total,
 				'country' => $this->getTransactionAddress('country'),
-				'max_installment' => min($this->configs->settings['credit_card_instalments'], $acquirer_max_instalments),
+				'max_installment' => min($this->configs->settings['credit_card_instalments'], $max_instalments),
 				'installment_taxes' => $this->instalment_rates,
 				'place_order_enabled' => (isset($this->configs->settings['save_card_data']) && $this->configs->settings['save_card_data'] === 'yes'),
 				'instalments' => 'Meses sin intereses',
