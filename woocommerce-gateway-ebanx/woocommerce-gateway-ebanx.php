@@ -180,6 +180,11 @@ if (!class_exists('WC_EBANX')) {
 			exit;
 		}
 
+		/**
+		 * Responds that the plugin is installed
+		 *
+		 * @return void
+		 */
 		private function ebanx_dashboard_check()
 		{
 			$json = json_encode(array(
