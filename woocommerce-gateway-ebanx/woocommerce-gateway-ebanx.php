@@ -142,8 +142,11 @@ if (!class_exists('WC_EBANX')) {
 		 */
 		public function ebanx_order_received()
 		{
-			if (isset($_GET['ebanx']) && $_GET['ebanx'] === 'order-received' && isset($_GET['url'])) {
-				$url = $_GET['url'];
+			if (isset($_GET['ebanx']) && $_GET['ebanx'] === 'order-received' && isset($_GET['hash'])) {
+				$this->setup_configs();
+				$hash = $_GET['hash'];
+				$subdomain = $this->is_sandbox_mode ? 'sandbox' : 'print';
+				$url = 'https://'.$subdomain.'.ebanx.com/print/?hash=' . $hash . '&format=basic#';
 				if (in_array('curl', get_loaded_extensions())) {
 					$c = curl_init($url);
 					curl_setopt($c, CURLOPT_RETURNTRANSFER, true);
