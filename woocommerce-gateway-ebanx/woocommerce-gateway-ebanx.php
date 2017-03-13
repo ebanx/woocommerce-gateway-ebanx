@@ -135,6 +135,11 @@ if (!class_exists('WC_EBANX')) {
 			}
 		}
 
+		/**
+		 * Check if it is receiving a third-party request and routes it
+		 *
+		 * @return void
+		 */
 		public function ebanx_router()
 		{
 			if (isset($_GET['ebanx'])) {
