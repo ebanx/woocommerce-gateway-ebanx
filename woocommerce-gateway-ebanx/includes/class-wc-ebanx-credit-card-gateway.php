@@ -247,6 +247,36 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
 	}
 
 	/**
+	 * Calculates the max instalments allowed based on price, country and minimal instalment value
+	 * given by the credit-card acquirer
+	 *
+	 * @param  $price double Product price used as base
+	 * @return integer
+	 */
+	public function fetch_acquirer_max_installments_for_price($price, $country = null) {
+		$max_instalments = WC_Ebanx_Gateway_Utils::MAX_INSTALMENTS;
+		$country = $country ?: WC()->customer->get_country();
+
+		switch (trim(strtolower($country))) {
+			case 'br':
+				$site_to_local_rate = $this->get_local_currency_rate_for_site(WC_Ebanx_Gateway_Utils::CURRENCY_CODE_BRL);
+				$min_instalment_value = WC_Ebanx_Gateway_Utils::ACQUIRER_MIN_INSTALMENT_VALUE_BRL;
+				break;
+			case 'mx':
+				$site_to_local_rate = $this->get_local_currency_rate_for_site(WC_Ebanx_Gateway_Utils::CURRENCY_CODE_MXN);
+				$min_instalment_value = WC_Ebanx_Gateway_Utils::ACQUIRER_MIN_INSTALMENT_VALUE_MXN;
+				break;
+		}
+
+		if (isset($site_to_local_rate) && isset($min_instalment_value)) {
+			$local_value = $price * $site_to_local_rate;
+			$max_instalments = floor($local_value / $min_instalment_value);
+		}
+
+		return $max_instalments;
+	}
+
+	/**
 	 * The page of order received, we call them as "Thank you pages"
 	 *
 	 * @param  WC_Order $order The order created

@@ -50,6 +50,18 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
 	}
 
 	/**
+	 * Sets up the pay api to be called during the plugin lifecycle
+	 *
+	 * @return void
+	 */
+	private function setup_pay_api() {
+		\Ebanx\Config::set([
+			'integrationKey' => $this->private_key,
+			'testMode' => $this->is_sandbox_mode
+		]);
+	}
+
+	/**
 	 * Check if the method is available to show to the users
 	 *
 	 * @return boolean
@@ -331,6 +343,51 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
 		update_post_meta($order->id, "_ebanx_payment_refunds", $refunds);
 
 		return true;
+	}
+
+	/**
+	 * Queries for a currency exchange rate against site currency
+	 *
+	 * @param  $local_currency_code string The local currency code to query for
+	 * @return double
+	 */
+	public function get_local_currency_rate_for_site($local_currency_code) {
+		$site_currency = get_woocommerce_currency();
+
+		if ($site_currency === $local_currency_code) {
+			return 1;
+		}
+
+		$usd_to_site_rate = 1;
+
+		if ($site_currency !== WC_Ebanx_Gateway_Utils::CURRENCY_CODE_USD) {
+			$usd_to_site_rate = $this->get_currency_rate($site_currency);
+		}
+
+		return $this->get_currency_rate($local_currency_code) / $usd_to_site_rate;
+	}
+
+	/**
+	 * Queries for a currency exchange rate against USD
+	 *
+	 * @param  $local_currency_code string The local currency code to query for
+	 * @return double
+	 */
+	public function get_currency_rate($local_currency_code) {
+		$this->setup_pay_api();
+
+		$usd_to_local = \Ebanx\Ebanx::getExchange( array(
+				'currency_code' => WC_Ebanx_Gateway_Utils::CURRENCY_CODE_USD,
+				'currency_base_code' => $local_currency_code
+			) );
+
+		if (!isset($usd_to_local)
+			|| strtoupper(trim($usd_to_local->status)) !== "SUCCESS") {
+
+			return 1;
+		}
+
+		return $usd_to_local->currency_rate->rate;
 	}
 
 	/**
