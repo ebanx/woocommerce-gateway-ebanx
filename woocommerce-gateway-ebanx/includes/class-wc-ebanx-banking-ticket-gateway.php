@@ -131,6 +131,7 @@ class WC_EBANX_Banking_Ticket_Gateway extends WC_EBANX_Gateway
 		$customer_email = get_post_meta($order->id, '_billing_email', true);
 		$customer_name = get_post_meta($order->id, '_billing_first_name', true);
 		$boleto_due_date = get_post_meta($order->id, '_payment_due_date', true);
+		$boleto_hash = get_post_meta($order->id, '_ebanx_payment_hash', true);
 
 		$barcode_anti_fraud = WC_EBANX_Banking_Ticket_Gateway::barcode_anti_fraud($barcode);
 
@@ -141,7 +142,7 @@ class WC_EBANX_Banking_Ticket_Gateway extends WC_EBANX_Gateway
 				'url_basic'       => $boleto_basic,
 				'url_pdf'         => $boleto_pdf,
 				'url_print'       => $boleto_print,
-				'url_iframe'      => get_site_url() . '/?ebanx=order-received&url=' . $boleto_basic,
+				'url_iframe'      => get_site_url() . '/?ebanx=order-received&hash=' . $boleto_hash,
 				'customer_email'  => $customer_email,
 				'customer_name'   => $customer_name,
 				'due_date'        => $boleto_due_date,
