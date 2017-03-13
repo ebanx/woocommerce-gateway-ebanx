@@ -188,7 +188,6 @@ if (!class_exists('WC_EBANX')) {
 		private function ebanx_dashboard_check()
 		{
 			$json = json_encode(array(
-				'status' => 200,
 				'ebanx' => true
 				));
 			echo $json;
