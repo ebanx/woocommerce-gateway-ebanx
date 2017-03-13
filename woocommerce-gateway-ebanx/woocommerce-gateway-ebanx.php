@@ -148,6 +148,9 @@ if (!class_exists('WC_EBANX')) {
 					$hash = $_GET['hash'];
 					$this->ebanx_order_received($hash);
 				}
+				if ($action === 'dashboard-check') {
+					$this->ebanx_dashboard_check();
+				}
 			}
 		}
 
@@ -174,6 +177,16 @@ if (!class_exists('WC_EBANX')) {
 			}
 
 			echo file_get_contents($url);
+			exit;
+		}
+
+		private function ebanx_dashboard_check()
+		{
+			$json = json_encode(array(
+				'status' => 200,
+				'ebanx' => true
+				));
+			echo $json;
 			exit;
 		}
 
