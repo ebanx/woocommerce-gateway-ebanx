@@ -148,17 +148,15 @@ if (!class_exists('WC_EBANX')) {
 				$subdomain = $this->is_sandbox_mode ? 'sandbox' : 'print';
 				$url = 'https://'.$subdomain.'.ebanx.com/print/?hash=' . $hash . '&format=basic#';
 				if (in_array('curl', get_loaded_extensions())) {
-					$c = curl_init($url);
-					curl_setopt($c, CURLOPT_RETURNTRANSFER, true);
-					$html = curl_exec($c);
+					$curl = curl_init($url);
+					curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+					$html = curl_exec($curl);
 
-					if (curl_error($c))
-					    die(curl_error($c));
-
-					curl_close($c);
-
-					echo $html;
-					exit;
+					if (!curl_error($curl)) {
+					    curl_close($curl);
+						echo $html;
+						exit;
+					}
 				}
 
 				echo file_get_contents($url);
