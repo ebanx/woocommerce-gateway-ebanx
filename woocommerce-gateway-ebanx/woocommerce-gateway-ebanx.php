@@ -135,10 +135,30 @@ if (!class_exists('WC_EBANX')) {
 			}
 		}
 
+		/**
+		 * Gets the banking ticket HTML by cUrl with url fopen fallback
+		 *
+		 * @return void
+		 */
 		public function ebanx_order_received()
 		{
 			if (isset($_GET['ebanx']) && $_GET['ebanx'] === 'order-received' && isset($_GET['url'])) {
-				echo file_get_contents($_GET['url']);
+				$url = $_GET['url'];
+				if (in_array('curl', get_loaded_extensions())) {
+					$c = curl_init($url);
+					curl_setopt($c, CURLOPT_RETURNTRANSFER, true);
+					$html = curl_exec($c);
+
+					if (curl_error($c))
+					    die(curl_error($c));
+
+					curl_close($c);
+
+					echo $html;
+					exit;
+				}
+
+				echo file_get_contents($url);
 				exit;
 			}
 		}
