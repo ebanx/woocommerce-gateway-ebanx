@@ -77,7 +77,7 @@ if (!class_exists('WC_EBANX')) {
 			add_action('plugins_loaded', array($this, 'plugins_loaded'));
 
 			add_action('init', array($this, 'my_account_endpoint'));
-			add_action('init', array($this, 'ebanx_order_received'));
+			add_action('init', array($this, 'ebanx_router'));
 
 			add_action('admin_footer', array($this, 'render_static_assets'), 0);
 
@@ -135,33 +135,41 @@ if (!class_exists('WC_EBANX')) {
 			}
 		}
 
+		public function ebanx_router()
+		{
+			if (isset($_GET['ebanx'])) {
+				$action = $_GET['ebanx'];
+				if ($action === 'order-received' && isset($_GET['hash'])) {
+					$hash = $_GET['hash'];
+					$this->ebanx_order_received($hash);
+				}
+			}
+		}
+
 		/**
 		 * Gets the banking ticket HTML by cUrl with url fopen fallback
 		 *
 		 * @return void
 		 */
-		public function ebanx_order_received()
+		private function ebanx_order_received($hash)
 		{
-			if (isset($_GET['ebanx']) && $_GET['ebanx'] === 'order-received' && isset($_GET['hash'])) {
-				$this->setup_configs();
-				$hash = $_GET['hash'];
-				$subdomain = $this->is_sandbox_mode ? 'sandbox' : 'print';
-				$url = 'https://'.$subdomain.'.ebanx.com/print/?hash=' . $hash . '&format=basic#';
-				if (in_array('curl', get_loaded_extensions())) {
-					$curl = curl_init($url);
-					curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-					$html = curl_exec($curl);
+			$this->setup_configs();
+			$subdomain = $this->is_sandbox_mode ? 'sandbox' : 'print';
+			$url = 'https://'.$subdomain.'.ebanx.com/print/?hash=' . $hash . '&format=basic#';
+			if (in_array('curl', get_loaded_extensions())) {
+				$curl = curl_init($url);
+				curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+				$html = curl_exec($curl);
 
-					if (!curl_error($curl)) {
-					    curl_close($curl);
-						echo $html;
-						exit;
-					}
+				if (!curl_error($curl)) {
+				    curl_close($curl);
+					echo $html;
+					exit;
 				}
-
-				echo file_get_contents($url);
-				exit;
 			}
+
+			echo file_get_contents($url);
+			exit;
 		}
 
 		/**
