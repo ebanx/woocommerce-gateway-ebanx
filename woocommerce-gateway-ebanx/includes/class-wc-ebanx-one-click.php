@@ -485,7 +485,7 @@ class WC_EBANX_One_Click {
 				break;
 		}
 
-		$max_instalments = $this->fetch_acquirer_max_installments_for_price($product->price);
+		$max_instalments = $this->gateway->fetch_acquirer_max_installments_for_price($product->price);
 
 		$args = apply_filters( 'ebanx_template_args', array(
 				'cards' => $this->cards,
@@ -497,93 +497,6 @@ class WC_EBANX_One_Click {
 			) );
 
 		wc_get_template( 'one-click.php', $args, '', WC_EBANX::get_templates_path() . 'one-click/' );
-	}
-
-	/**
-	 * Calculates the max instalments allowed based on price, country and minimal instalment value
-	 * given by the credit-card acquirer
-	 *
-	 * @param  $price double Product price used as base
-	 * @return integer
-	 */
-	private function fetch_acquirer_max_installments_for_price($price) {
-		$max_instalments = WC_Ebanx_Gateway_Utils::MAX_INSTALMENTS;
-
-		switch (trim(strtolower(WC()->customer->get_country()))) {
-			case 'br':
-				$usd_to_local_rate = $this->get_currency_rate(WC_Ebanx_Gateway_Utils::CURRENCY_CODE_BRL);
-				$min_instalment_value = WC_Ebanx_Gateway_Utils::ACQUIRER_MIN_INSTALMENT_VALUE_BRL;
-				break;
-			case 'mx':
-				$usd_to_local_rate = $this->get_currency_rate(WC_Ebanx_Gateway_Utils::CURRENCY_CODE_MXN);
-				$min_instalment_value = WC_Ebanx_Gateway_Utils::ACQUIRER_MIN_INSTALMENT_VALUE_MXN;
-				break;
-		}
-
-		if (isset($usd_to_local_rate) && isset($min_instalment_value)) {
-			$local_value = $price * $usd_to_local_rate;
-			$max_instalments = floor($local_value / $min_instalment_value);
-		}
-
-		return $max_instalments;
-	}
-
-	/**
-	 * Sets up the pay api to be called during the one click lifecycle
-	 *
-	 * @return void
-	 */
-	private function setup_pay_api() {
-		if (isset($this->private_key) && isset($this->is_sandbox_mode)) {
-			return;
-		}
-
-		list($this->private_key, $this->is_sandbox_mode) = $this->get_private_key();
-
-		\Ebanx\Config::set([
-			'integrationKey' => $this->private_key,
-			'testMode' => $this->is_sandbox_mode
-		]);
-	}
-
-	/**
-	 * Queries for a currency exchange rate against USD based on a local currency
-	 *
-	 * @param  $local_currency_code string The local currency code to query for
-	 * @return double The currency exchange rate against USD
-	 */
-	private function get_currency_rate($local_currency_code) {
-		$this->setup_pay_api();
-
-		$usd_to_local = \Ebanx\Ebanx::getExchange( array(
-				'currency_code' => WC_Ebanx_Gateway_Utils::CURRENCY_CODE_USD,
-				'currency_base_code' => $local_currency_code
-			) );
-
-		if (!isset($usd_to_local)
-			|| strtoupper(trim($usd_to_local->status)) !== "SUCCESS") {
-
-			return 1;
-		}
-
-		return $usd_to_local->currency_rate->rate;
-	}
-
-	/**
-	 * Retrieve the private key and sandbox mode flag according to
-	 * merchant's settings panel
-	 *
-	 * @return array Private key and sandbox flag in a 2 position array
-	 */
-	private function get_private_key() {
-		$is_sandbox_mode = $this->gateway->configs->settings['sandbox_mode_enabled'] == 'yes';
-		$private_key = $this->gateway->configs->settings['live_private_key'];
-
-		if ($is_sandbox_mode) {
-			$private_key = $this->gateway->configs->settings['sandbox_private_key'];
-		}
-
-		return array($private_key, $is_sandbox_mode);
 	}
 }
 
