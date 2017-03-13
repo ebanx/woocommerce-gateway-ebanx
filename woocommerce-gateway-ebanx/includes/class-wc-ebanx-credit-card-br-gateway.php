@@ -81,18 +81,7 @@ class WC_EBANX_Credit_Card_BR_Gateway extends WC_EBANX_Credit_Card_Gateway
 			return !empty($card->brand) && !empty($card->token) && !empty($card->masked_number);
 		});
 
-		\Ebanx\Config::set([
-			'integrationKey' => $this->private_key,
-			'testMode' => $this->is_sandbox_mode,
-		]);
-
-		$usd_to_brl = \Ebanx\Ebanx::getExchange(array(
-			'currency_code' => WC_Ebanx_Gateway_Utils::CURRENCY_CODE_USD,
-			'currency_base_code' => WC_Ebanx_Gateway_Utils::CURRENCY_CODE_BRL
-		));
-
-		$brl_value = $cart_total * $usd_to_brl->currency_rate->rate;
-		$acquirer_max_instalments = floor($brl_value / WC_Ebanx_Gateway_Utils::ACQUIRER_MIN_INSTALMENT_VALUE_BRL);
+		$max_instalments = $this->fetch_acquirer_max_installments_for_price($cart_total, 'br');
 
 		wc_get_template(
 			'ebanx-credit-card-br/payment-form.php',
@@ -100,7 +89,7 @@ class WC_EBANX_Credit_Card_BR_Gateway extends WC_EBANX_Credit_Card_Gateway
 				'language' => $this->language,
 				'cards' => (array) $cards,
 				'cart_total' => $cart_total,
-				'max_installment' => min($this->configs->settings['credit_card_instalments'], $acquirer_max_instalments),
+				'max_installment' => min($this->configs->settings['credit_card_instalments'], $max_instalments),
 				'installment_taxes' => $this->instalment_rates,
 				'place_order_enabled' => (isset($this->configs->settings['save_card_data']) && $this->configs->settings['save_card_data'] === 'yes'),
 				'instalments' => 'Número de parcelas',

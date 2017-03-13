@@ -50,6 +50,18 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
 	}
 
 	/**
+	 * Sets up the pay api to be called during the plugin lifecycle
+	 *
+	 * @return void
+	 */
+	private function setup_pay_api() {
+		\Ebanx\Config::set([
+			'integrationKey' => $this->private_key,
+			'testMode' => $this->is_sandbox_mode
+		]);
+	}
+
+	/**
 	 * Check if the method is available to show to the users
 	 *
 	 * @return boolean
@@ -196,7 +208,7 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
 	}
 
 	/**
-	 * Fetches a single setting from the gateway settings if found, otherwise it returns an optional default value
+	 * Fetches a single checkout manager setting from the gateway settings if found, otherwise it returns an optional default value
 	 *
 	 * @param  string $name    The setting name to fetch
 	 * @param  mixed  $default The default value in case setting is not present
@@ -207,6 +219,21 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
 			return $default;
 		}
 
+		if (!isset($this->configs->settings[$name]) || empty($this->configs->settings[$name])) {
+			return $default;
+		}
+
+		return $this->configs->settings[$name];
+	}
+
+	/**
+	 * Fetches a single setting from the gateway settings if found, otherwise it returns an optional default value
+	 *
+	 * @param  string $name    The setting name to fetch
+	 * @param  mixed  $default The default value in case setting is not present
+	 * @return mixed
+	 */
+	public function get_setting_or_default($name, $default=null) {
 		if (!isset($this->configs->settings[$name]) || empty($this->configs->settings[$name])) {
 			return $default;
 		}
@@ -319,6 +346,51 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
 	}
 
 	/**
+	 * Queries for a currency exchange rate against site currency
+	 *
+	 * @param  $local_currency_code string The local currency code to query for
+	 * @return double
+	 */
+	public function get_local_currency_rate_for_site($local_currency_code) {
+		$site_currency = get_woocommerce_currency();
+
+		if ($site_currency === $local_currency_code) {
+			return 1;
+		}
+
+		$usd_to_site_rate = 1;
+
+		if ($site_currency !== WC_Ebanx_Gateway_Utils::CURRENCY_CODE_USD) {
+			$usd_to_site_rate = $this->get_currency_rate($site_currency);
+		}
+
+		return $this->get_currency_rate($local_currency_code) / $usd_to_site_rate;
+	}
+
+	/**
+	 * Queries for a currency exchange rate against USD
+	 *
+	 * @param  $local_currency_code string The local currency code to query for
+	 * @return double
+	 */
+	public function get_currency_rate($local_currency_code) {
+		$this->setup_pay_api();
+
+		$usd_to_local = \Ebanx\Ebanx::getExchange( array(
+				'currency_code' => WC_Ebanx_Gateway_Utils::CURRENCY_CODE_USD,
+				'currency_base_code' => $local_currency_code
+			) );
+
+		if (!isset($usd_to_local)
+			|| strtoupper(trim($usd_to_local->status)) !== "SUCCESS") {
+
+			return 1;
+		}
+
+		return $usd_to_local->currency_rate->rate;
+	}
+
+	/**
 	 * Mount the data to send to EBANX API
 	 *
 	 * @param  WC_Order $order
@@ -334,9 +406,9 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
 		$data = array(
 			'mode'      => 'full',
 			'operation' => 'request',
-			'notification_url' => $home_url,
 			'payment'   => array(
-				'redirect_url' => $home_url,
+				'notification_url'      => $home_url,
+				'redirect_url'          => $home_url,
 				'user_value_1'          => 'name=plugin',
 				'user_value_2'          => 'value=woocommerce',
 				'user_value_3'          => 'version=' . WC_EBANX::VERSION,

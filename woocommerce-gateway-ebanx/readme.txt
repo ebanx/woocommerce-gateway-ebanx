@@ -3,7 +3,7 @@ Contributors: ebanxwp
 Tags: credit card, boleto, ebanx, woocommerce, approval rate, conversion rate, brazil, mexico, peru, colombia, chile, oxxo, cash payment, local payment one-click payment, installments, alternative payments, accept more payments
 Requires at least: 4.0
 Tested up to: 4.7
-Stable tag: 1.4.0
+Stable tag: 1.5.3
 License: MIT
 License URI: https://opensource.org/licenses/MIT
 
@@ -38,6 +38,7 @@ With the EBANX plugin, you can:
 * Set a maximum number of installments
 * Select an expiration date for cash payments
 * Allow customers to save their credit card information
+* Set individual interest rates for each credit card instalment plan
 * Create orders & request refunds directly in WooCommerce
 * Accept Local Currencies, USD and EUR based on your WooCommerce Currency Options, to be processed by EBANX
 
@@ -113,15 +114,51 @@ The [Developer’s Academy](https://www.ebanx.com/business/en/developers/integra
 * Colombia
   * Pagos Seguros en Línea (PSE), Online Debit Transfer
 
+= Which currencies does EBANX accept? =
+
+* USD - U.S. Dollar
+* EUR - Euro
+* BRL - Real
+* MXN - Peso Mexicano
+* COP - Peso Colombiano
+* CLP - Peso Chileno
+* PEN - Novo Sol
+
+= Can I use my own Checkout Manager plugin? =
+
+Yes, you can.
+
+1. Set up your own billing fields in the checkout manager plugin page;
+2. Go to the `EBANX Settings` page and open the `Advanced Options` section;
+3. Enable the `Use my checkout manager fields` checkbox and fill in the field names as in step 1;
+4. There you go, you’re all set!
 
 == Changelog ==
+
+= 1.5.4 =
+* Improvement - Gets the banking ticket HTML by cUrl with url fopen fallback [#345](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/345)
+* Improvement - Changed iframe boleto URL fetching to avoid xss injections [#345](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/345)
+* Fix - Max instalment limits are now adjusted for local currency instead of assuming USD for prices [#349](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/349)
+
+= 1.5.3 =
+* Fix - In case user country was not set one-click payments was crashing [#343](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/343)
+
+= 1.5.2 =
+* Fix - Checking for new feature's settings presence to avoid notices [#342](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/342)
+
+= 1.5.1 =
+* Fix - Notification URL in payment payload [#341](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/341)
+
+= 1.5.0 =
+* Feature - Instalment interest rates are now configurable [#336](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/336)
+* Improvement - Payment Options section in admin is now togglable [#336](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/336)
 
 = 1.4.1 =
 * Fix - Fixed API Lead URL to the correct URL, because it was causing a redirect without www
 
 = 1.4.0 =
 * Fix - Fixed max instalments limit according to acquirer in one-click payments [#334](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/334)
-* Analytics - It sends informations when the user actives the plugin [#332](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/332)
+* Improvement - Sending analytics information for plugin activations [#332](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/332)
 
 = 1.3.0 =
 * Feature - Allowed local currency, USD and EUR to be processed by EBANX based on WooCommerce Currency Options [#325](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/325)

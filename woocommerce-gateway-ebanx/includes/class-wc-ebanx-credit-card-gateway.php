@@ -21,7 +21,7 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
 
 		add_action('woocommerce_order_action_custom_action', array($this, 'capture_payment_action'));
 
-		if ($this->configs->settings['interest_rates_enabled'] == 'yes') {
+		if ($this->get_setting_or_default('interest_rates_enabled', 'no') == 'yes') {
 			$max_instalments = $this->configs->settings['credit_card_instalments'];
 			for ($i=1; $i <= $max_instalments; $i++) {
 				$field = 'interest_rates_' . sprintf("%02d", $i);
@@ -244,6 +244,36 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
 			$order->set_total($total_price);
 		}
 		return parent::process_payment($order_id);
+	}
+
+	/**
+	 * Calculates the max instalments allowed based on price, country and minimal instalment value
+	 * given by the credit-card acquirer
+	 *
+	 * @param  $price double Product price used as base
+	 * @return integer
+	 */
+	public function fetch_acquirer_max_installments_for_price($price, $country = null) {
+		$max_instalments = WC_Ebanx_Gateway_Utils::MAX_INSTALMENTS;
+		$country = $country ?: WC()->customer->get_country();
+
+		switch (trim(strtolower($country))) {
+			case 'br':
+				$site_to_local_rate = $this->get_local_currency_rate_for_site(WC_Ebanx_Gateway_Utils::CURRENCY_CODE_BRL);
+				$min_instalment_value = WC_Ebanx_Gateway_Utils::ACQUIRER_MIN_INSTALMENT_VALUE_BRL;
+				break;
+			case 'mx':
+				$site_to_local_rate = $this->get_local_currency_rate_for_site(WC_Ebanx_Gateway_Utils::CURRENCY_CODE_MXN);
+				$min_instalment_value = WC_Ebanx_Gateway_Utils::ACQUIRER_MIN_INSTALMENT_VALUE_MXN;
+				break;
+		}
+
+		if (isset($site_to_local_rate) && isset($min_instalment_value)) {
+			$local_value = $price * $site_to_local_rate;
+			$max_instalments = floor($local_value / $min_instalment_value);
+		}
+
+		return $max_instalments;
 	}
 
 	/**
