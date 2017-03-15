@@ -272,6 +272,11 @@ if (!class_exists('WC_EBANX')) {
 		 * @return void
 		 */
 		public static function save_merchant_infos() {
+			// Prevent fatal error if WooCommerce isn't installed
+			if ( !defined('WC_VERSION') ) {
+				return;
+			}
+
 			// Save merchant informations
 			$user = get_userdata(get_current_user_id());
 
