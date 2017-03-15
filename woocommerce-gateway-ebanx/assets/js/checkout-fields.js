@@ -1,7 +1,8 @@
 jQuery (function ($) {
   // Custom select fields
   if ('select2' in $.fn) {
-    $('.ebanx-select-field').select2();
+    $('select.ebanx-select-field').select2();
+    $('.ebanx-select-field > select').select2();
   }
 
   // Masks
