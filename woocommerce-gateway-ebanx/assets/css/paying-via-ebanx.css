@@ -23,7 +23,7 @@ li[class*="ebanx"] .ebanx-payment-container[class*="ebanx-language-"]:after {
   background-image: url(../images/ebanx-paying.png);
   background-repeat: no-repeat;
   background-position: center;
-  background-size: contain;
+  background-size: cover;
 }
 
 li[class*="ebanx"] .ebanx-payment-container.ebanx-language-br:after {
