@@ -141,16 +141,16 @@ abstract class WC_EBANX_Gateway_Utils
 	);
 
 	/**
-	 * Fatia um endereço em nome da rua, número e complemento
+	 * Splits address in street name, house number and addition
 	 *
-	 * @param  string $address Endereço a ser fatiado
+	 * @param  string $address Address to be split
 	 * @return array
 	 */
 	public static function split_street($address) {
 		$result = preg_match('/^([^,\-\/\#0-9]*)\s*[,\-\/\#]?\s*([0-9]+)\s*[,\-\/]?\s*([^,\-\/]*)(\s*[,\-\/]?\s*)([^,\-\/]*)$/', $address, $matches);
 
 		if ($result === false) {
-			throw new \RuntimeException(sprintf('Problemas ao interpretar o endereço: \'%s\'', $address));
+			throw new \RuntimeException(sprintf('Problems trying to parse address: \'%s\'', $address));
 		}
 
 		if ($result === 0) {
