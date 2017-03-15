@@ -1,4 +1,10 @@
-jQuery( function($) {
+jQuery (function ($) {
+  // Custom select fields
+  if ('select2' in $.fn) {
+    $('.ebanx-select-field').select2();
+  }
+
+  // Masks
 	$(document).find(".ebanx_billing_chile_birth_date input").mask('00/00/0000');
   $(document).find(".ebanx_billing_brazil_birth_date input").mask('00/00/0000');
   $(document).find(".ebanx_billing_brazil_document input").mask('000.000.000-00');

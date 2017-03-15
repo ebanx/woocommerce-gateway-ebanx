@@ -15,7 +15,7 @@ asort($banks);
 ?>
 
 <div id="ebanx-eft-payment" class="ebanx-payment-container ebanx-language-<?php echo $language ?>">
-    <select name="eft">
+    <select name="eft" class="ebanx-select-field">
         <?php foreach($banks as $key => $bank): ?>
         	<option value="<?php echo $key ?>"><?php echo $bank ?></option>
         <?php endforeach ?>
