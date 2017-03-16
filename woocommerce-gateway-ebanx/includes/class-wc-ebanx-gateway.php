@@ -261,7 +261,10 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
 		if (is_checkout()) {
 			wp_enqueue_script(
 				'woocommerce_ebanx_checkout_fields',
-				plugins_url('assets/js/checkout-fields.js', WC_EBANX::DIR)
+				plugins_url('assets/js/checkout-fields.js', WC_EBANX::DIR),
+				array('jquery'),
+				WC_EBANX::VERSION,
+				true
 			);
 		}
 		if (
