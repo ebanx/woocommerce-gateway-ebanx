@@ -2,7 +2,7 @@
 <?php if ($max_installment > 1) : ?>
     <section class="ebanx-form-row">
         <label for="ebanx-card-installments"><?php echo $instalments; ?> <span class="required">*</span></label>
-        <select class="ebanx-instalments" name="ebanx-credit-card-installments">
+        <select class="ebanx-instalments ebanx-select-field" name="ebanx-credit-card-installments">
             <?php for ($number = 1; $number <= $max_installment; ++$number):
             	$has_tax = false;
             	$price_total = $cart_total;
