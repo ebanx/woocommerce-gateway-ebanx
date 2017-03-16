@@ -498,12 +498,13 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
 		$addresses = $_POST['billing_address_1'];
 
 		if (!empty($_POST['billing_address_2'])) {
-			$addresses .= " $_POST[billing_address_2]";
+			$addresses .= " - $_POST[billing_address_2]";
 		}
 
 		$addresses = WC_Ebanx_Gateway_Utils::split_street($addresses);
 
-		$street_number = empty($addresses['houseNumber']) ? 'S/N' : trim($addresses['houseNumber'] . ' ' . $addresses['additionToAddress2']);
+		$street_number = empty($addresses['houseNumber']) ? 'S/N' : trim($addresses['houseNumber'] . ' ' . $addresses['additionToAddress']);
+		$street_name = $addresses['streetName'];
 
 		$newData = array();
 		$newData['payment'] = array();
@@ -523,7 +524,7 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
 		}
 
 		if (!empty($_POST['billing_address_1'])) {
-			$newData['payment']['address'] = $_POST['billing_address_1'];
+			$newData['payment']['address'] = $street_name;
 		}
 
 		if (!empty($street_number)) {
