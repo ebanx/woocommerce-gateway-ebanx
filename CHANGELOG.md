@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## 1.7.0
+* Improvement - We removed some unnecessaries folders and files from plugin [#353](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/353)
+
 ## 1.6.1
 * Fix - Address splitting function to avoid mistakes during checkout [#352](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/352)
 
