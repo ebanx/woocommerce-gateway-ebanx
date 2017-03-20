@@ -135,6 +135,9 @@ Yes, you can.
 
 == Changelog ==
 
+= 1.6.2 =
+* Fix - Resolves fatal error when the plugin can't get the current user [#365](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/365)
+
 = 1.6.1 =
 * Fix - Address splitting function to avoid mistakes during checkout [#352](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/352)
 
