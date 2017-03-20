@@ -279,6 +279,9 @@ if (!class_exists('WC_EBANX')) {
 
 			// Save merchant informations
 			$user = get_userdata(get_current_user_id());
+			if (!$user || is_wp_error($user)) {
+				return;
+			}
 
 			$url = 'https://www.ebanx.com/business/en/dashboard/api/lead';
 			$args = array(
