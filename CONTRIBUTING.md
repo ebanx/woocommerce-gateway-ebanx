@@ -6,6 +6,9 @@ This plugin enables you to integrate your WooCommerce store with the EBANX payme
 
 Please, visit the [official plugin page on WordPress store](https://wordpress.org/plugins/ebanx-payment-gateway-for-woocommerce/).
 
+## Introduction
+We've put together all the information you'll need on this file. Also, we always try to keep this file updated and with as much information as possible. If you want to help us with this file or with any coding issue, we would really appreciate it. :heart:
+
 ## Getting Started
 
 If you want to contribute to our repository the best way to do it is cloning it to a different folder than wordpress and creating a symbolic link:
@@ -21,7 +24,7 @@ If you want to contribute to our repository the best way to do it is cloning it 
 	4. Delete that file since we don't need it anymore: `rm latest.tar.gz`
 	5. Create the Database and a User
 	6. Access `http://localhost/wordpress`(it might be different depending on the folder you've downloaded WordPress) and follow its steps.
-2. Install WooCommerce. If you've configured FTP you can access WordPress Admin Dashboard and install it automatically. Else, you can follow these steps:
+2. Install [WooCommerce](https://docs.woocommerce.com/document/installing-uninstalling-woocommerce/). If you've configured FTP you can access WordPress Admin Dashboard and install it automatically. Otherwise, you can follow these steps:
 	1. Go to the plugins folder on your WordPress: `cd /var/www/html/wp-content/plugins`
 	2. Download the lastest WooCommerce build: `git clone https://github.com/woocommerce/woocommerce.git`
 	3. Configure it on WordPress Admin Dashboard
@@ -29,3 +32,12 @@ If you want to contribute to our repository the best way to do it is cloning it 
 4. Go into that folder: `cd woocommerce-gateway-ebanx`. This is going to be your development root folder.
 5. Create a symlink to WordPress plugin folder: `ln -s woocommerce-gateway-ebanx /var/www/html/wp-content/plugins/woocommerce-gateway-ebanx`
 6. Let the coding begin!
+
+## Have you found a bug?
+
+You can create a new [Issue](https://github.com/ebanx/woocommerce-gateway-ebanx/issues/new) and wait for someone to fix it. Keep in mind that if you don't provide enough information no one will be able to help you.
+
+## So you want to code...
+
+If you want to help us by coding all you have to do is fork our repo, create a [well named]branch from develop and make a [pull request](https://github.com/ebanx/woocommerce-gateway-ebanx/compare) to our develop.
+We use [Git Flow](http://nvie.com/posts/a-successful-git-branching-model/) branching model.
