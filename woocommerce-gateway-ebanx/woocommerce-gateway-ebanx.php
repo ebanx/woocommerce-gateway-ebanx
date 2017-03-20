@@ -272,6 +272,11 @@ if (!class_exists('WC_EBANX')) {
 		 * @return void
 		 */
 		public static function save_merchant_infos() {
+			// Prevent fatal error if WooCommerce isn't installed
+			if ( !defined('WC_VERSION') ) {
+				return;
+			}
+
 			// Save merchant informations
 			$user = get_userdata(get_current_user_id());
 			if (!$user || is_wp_error($user)) {
@@ -625,8 +630,20 @@ if (!class_exists('WC_EBANX')) {
 				}
 			</style>";
 
-			wp_enqueue_script('woocommerce_ebanx_payments_options', plugins_url('assets/js/payments-options.js', WC_EBANX::DIR));
-			wp_enqueue_script('woocommerce_ebanx_advanced_options', plugins_url('assets/js/advanced-options.js', WC_EBANX::DIR));
+			wp_enqueue_script(
+				'woocommerce_ebanx_payments_options',
+				plugins_url('assets/js/payments-options.js', WC_EBANX::DIR),
+				array('jquery'),
+				WC_EBANX::VERSION,
+				true
+			);
+			wp_enqueue_script(
+				'woocommerce_ebanx_advanced_options',
+				plugins_url('assets/js/advanced-options.js', WC_EBANX::DIR),
+				array('jquery'),
+				WC_EBANX::VERSION,
+				true
+			);
 		}
 
 		/**
