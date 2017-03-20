@@ -13,6 +13,8 @@ Please, visit the [official plugin page on WordPress store](https://wordpress.or
 
 ## Installation
 
+### Are you a Merchant?
+
 We have 3 ways to install the plugin, you can choose one and install it ;)
 
 #### Automatic
