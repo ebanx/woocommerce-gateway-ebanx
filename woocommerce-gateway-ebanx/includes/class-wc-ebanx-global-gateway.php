@@ -83,7 +83,7 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway
 			'integration_title' => array(
 				'title' => __('Integration', 'woocommerce-gateway-ebanx'),
 				'type' => 'title',
-				'description' => sprintf(__('You can obtain the integration keys in the settings section, logging in to the <a href="https://www.ebanx.com/business/en/dashboard">EBANX Dashboard.</a>', 'woocommerce-gateway-ebanx'), 'https://google.com'),
+				'description' => sprintf(__('You can <a id="woocommerce_ebanx-global_fetch_keys_button" href="ebanx://fetch-integration-keys">obtain the integration keys</a> in the settings section, logging in to the <a href="%s">EBANX Dashboard.</a>', 'woocommerce-gateway-ebanx'), 'https://www.ebanx.com/business/en/dashboard'),
 			),
 			'sandbox_private_key'       => array(
 				'title'       => __('Sandbox Integration Key', 'woocommerce-gateway-ebanx'),
