@@ -11,7 +11,7 @@ We've put together all the information you'll need on this file. Also, we always
 
 ## Getting Started
 
-If you want to contribute to our repository the best way to do it is cloning it to a different folder than wordpress and creating a symbolic link:
+If you want to contribute to our repository the best way is to clone it and then create a symbolic link:
 
 1. Install [WordPress](https://codex.wordpress.org/Installing_WordPress) to your prefered location:
 	1. With your terminal `cd` into your web root folder:  `cd /path/to/public_html`
@@ -26,7 +26,8 @@ If you want to contribute to our repository the best way to do it is cloning it 
 	3. Configure it on WordPress Admin Dashboard
 3. Clone this repository to another folder outsite WordPress folder: `git clone https://github.com/ebanx/woocommerce-gateway-ebanx`
 4. Go into that folder: `cd woocommerce-gateway-ebanx`. This is going to be your development root folder.
-5. Create a symlink to WordPress plugin folder: `ln -s woocommerce-gateway-ebanx /path/to/wordpress/wp-content/plugins/woocommerce-gateway-ebanx`
+5. Create a symlink from the inner folder to your wordpress plugins folder.
+ln -s /path/to/working/directory/woocommerce-gateway-ebanx/woocommerce-gateway-ebanx /path/to/wordpress/wp-content/plugins/woocommerce-gateway-ebanx
 6. Let the coding begin!
 
 ## Have you found a bug?
@@ -35,5 +36,4 @@ You can create a new [Issue](https://github.com/ebanx/woocommerce-gateway-ebanx/
 
 ## So you want to code...
 
-If you want to help us by coding all you have to do is fork our repo, create a [well named]branch from develop and make a [pull request](https://github.com/ebanx/woocommerce-gateway-ebanx/compare) to our develop.
-We use [Git Flow](http://nvie.com/posts/a-successful-git-branching-model/) branching model.
+If you want to code (and you are not an ebanker [yet](https://ebanx.recruiterbox.com/)) all you have to do is fork our repo create a [well named]branch from develop and make a [pull request](https://github.com/ebanx/woocommerce-gateway-ebanx/compare) to our develop.
