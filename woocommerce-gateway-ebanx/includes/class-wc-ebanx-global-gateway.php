@@ -33,6 +33,7 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway
 		),
 		'colombia_payment_methods' => array(
 			'ebanx-eft',
+			'ebanx-baloto',
 		),
 		'peru_payment_methods' => array(
 			'ebanx-safetypay',
@@ -172,9 +173,11 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway
 				'class'       => 'ebanx-select',
 				'options'     => array(
 					'ebanx-eft' => 'PSE - Pago Seguros en Línea (EFT)',
+					'ebanx-baloto' => 'Baloto',
 				),
 				'default'     => array(
 					'ebanx-eft',
+					'ebanx-baloto',
 				),
 			),
 			'peru_payment_methods'      => array(
@@ -288,7 +291,7 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway
 					'2' => '2',
 					'3' => '3',
 				),
-				'description' => __('Define the maximum number of days on which your customer can complete the payment of: Boleto, OXXO, Sencilito, PagoEfectivo and SafetyPay.', 'woocommerce-gateway-ebanx'),
+				'description' => __('Define the maximum number of days on which your customer can complete the payment of: Boleto, OXXO, Sencilito, PagoEfectivo, SafetyPay and Baloto.', 'woocommerce-gateway-ebanx'),
 				'desc_tip' => true
 			),
 			'advanced_options_title' => array(
@@ -349,6 +352,12 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway
 				'type' => 'text',
 				'class' => 'ebanx-advanced-option ebanx-checkout-manager-field always-visible',
 				'placeholder' => __('eg: billing_chile_birth_date', 'woocommerce-gateway-ebanx')
+			),
+			'checkout_manager_colombia_document' => array(
+				'title' => __('DNI', 'woocommerce-gateway-ebanx'),
+				'type' => 'text',
+				'class' => 'ebanx-advanced-option ebanx-checkout-manager-field always-visible',
+				'placeholder' => __('eg: billing_colombia_document', 'woocommerce-gateway-ebanx')
 			),
 		));
 

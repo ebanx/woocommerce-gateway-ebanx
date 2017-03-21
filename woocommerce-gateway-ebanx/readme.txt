@@ -1,6 +1,6 @@
 === EBANX Payment Gateway for WooCommerce ===
 Contributors: ebanxwp
-Tags: credit card, boleto, ebanx, woocommerce, approval rate, conversion rate, brazil, mexico, peru, colombia, chile, oxxo, cash payment, local payment one-click payment, installments, alternative payments, accept more payments
+Tags: credit card, boleto, ebanx, woocommerce, approval rate, conversion rate, brazil, mexico, peru, colombia, chile, oxxo, baloto, cash payment, local payment one-click payment, installments, alternative payments, accept more payments
 Requires at least: 4.0
 Tested up to: 4.7
 Stable tag: 1.6.1
@@ -113,6 +113,7 @@ The [Developer’s Academy](https://www.ebanx.com/business/en/developers/integra
   * SafetyPay, Cash Payment / Debit Transfer
 * Colombia
   * Pagos Seguros en Línea (PSE), Online Debit Transfer
+  * Baloto
 
 = Which currencies does EBANX accept? =
 
