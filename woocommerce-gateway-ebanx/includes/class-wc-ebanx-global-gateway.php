@@ -124,7 +124,7 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway
 			'brazil_payment_methods'    => array(
 				'title'       => __('Brazil', 'woocommerce-gateway-ebanx'),
 				'type'        => 'multiselect',
-				'class'       => 'ebanx-select',
+				'class'       => 'ebanx-select payment-method',
 				'options'     => array(
 					'ebanx-credit-card-br' => 'Credit Card',
 					'ebanx-banking-ticket' => 'Boleto EBANX',
@@ -141,7 +141,7 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway
 			'mexico_payment_methods'    => array(
 				'title'       => __('Mexico', 'woocommerce-gateway-ebanx'),
 				'type'        => 'multiselect',
-				'class'       => 'ebanx-select',
+				'class'       => 'ebanx-select payment-method',
 				'options'     => array(
 					'ebanx-credit-card-mx' => 'Credit Card',
 					'ebanx-debit-card'  => 'Debit Card',
@@ -156,7 +156,7 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway
 			'chile_payment_methods'     => array(
 				'title'       => __('Chile', 'woocommerce-gateway-ebanx'),
 				'type'        => 'multiselect',
-				'class'       => 'ebanx-select',
+				'class'       => 'ebanx-select payment-method',
 				'options'     => array(
 					'ebanx-sencillito' => 'Sencillito',
 					'ebanx-servipag'   => 'Servipag',
@@ -169,7 +169,7 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway
 			'colombia_payment_methods'  => array(
 				'title'       => __('Colombia', 'woocommerce-gateway-ebanx'),
 				'type'        => 'multiselect',
-				'class'       => 'ebanx-select',
+				'class'       => 'ebanx-select payment-method',
 				'options'     => array(
 					'ebanx-eft' => 'PSE - Pago Seguros en Línea (EFT)',
 				),
@@ -180,7 +180,7 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway
 			'peru_payment_methods'      => array(
 				'title'       => __('Peru', 'woocommerce-gateway-ebanx'),
 				'type'        => 'multiselect',
-				'class'       => 'ebanx-select',
+				'class'       => 'ebanx-select payment-method',
 				'options'     => array(
 					'ebanx-safetypay'    => 'SafetyPay',
 					'ebanx-pagoefectivo' => 'PagoEfectivo',
@@ -341,13 +341,13 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway
 			'checkout_manager_chile_document' => array(
 				'title' => __('RUT', 'woocommerce-gateway-ebanx'),
 				'type' => 'text',
-				'class' => 'ebanx-advanced-option ebanx-checkout-manager-field always-visible',
+				'class' => 'ebanx-advanced-option ebanx-checkout-manager-field chile',
 				'placeholder' => __('eg: billing_chile_document', 'woocommerce-gateway-ebanx')
 			),
 			'checkout_manager_chile_birth_date' => array(
 				'title' => __('Birthdate Chile', 'woocommerce-gateway-ebanx'),
 				'type' => 'text',
-				'class' => 'ebanx-advanced-option ebanx-checkout-manager-field always-visible',
+				'class' => 'ebanx-advanced-option ebanx-checkout-manager-field chile',
 				'placeholder' => __('eg: billing_chile_birth_date', 'woocommerce-gateway-ebanx')
 			),
 		));
