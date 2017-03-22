@@ -71,11 +71,11 @@
 		livePublic: $('#woocommerce_ebanx-global_live_public_key')
 	};
 
-	var receiveKeys = function(result){
-		fields.sandboxPrivate.val(result.sandbox.private);
-		fields.sandboxPublic.val(result.sandbox.public);
-		fields.livePrivate.val(result.live.private);
-		fields.livePublic.val(result.live.public);
+	var receiveKeys = function(keys){
+		fields.sandboxPrivate.val(keys.sandbox.private);
+		fields.sandboxPublic.val(keys.sandbox.public);
+		fields.livePrivate.val(keys.live.private);
+		fields.livePublic.val(keys.live.public);
 	};
 
 	var clickFetchKeys = function(e){
@@ -83,10 +83,16 @@
 		modal.open('//localhost/fetchkeys.php');
 	};
 
-	window.SetIntegrationKeys = function(result){
-		receiveKeys(result);
+	var receiveIframeMessage = function(e){
+		var origin = e.origin || e.originalEvent.origin;
+		console.log('origin: '+origin);
+		// if (origin !== 'https://dashboard-v2.ebanx.com' && origin !== 'https://dashboard.ebanx.com')
+		// 	return;
+
+		receiveKeys(e.data);
 		modal.close();
 	};
+	window.addEventListener("message", receiveIframeMessage, false);
 
 	$('#woocommerce_ebanx-global_fetch_keys_button')
 		.click(clickFetchKeys);

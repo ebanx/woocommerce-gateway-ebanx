@@ -79,11 +79,12 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway
 	 */
 	public function init_form_fields()
 	{
+		//. ' <button id="woocommerce_ebanx-global_fetch_keys_button">Fetch Keys from Dashboard</button>'
 		$this->form_fields = array(
 			'integration_title' => array(
 				'title' => __('Integration', 'woocommerce-gateway-ebanx'),
 				'type' => 'title',
-				'description' => sprintf(__('You can <a id="woocommerce_ebanx-global_fetch_keys_button" href="ebanx://fetch-integration-keys">obtain the integration keys</a> in the settings section, logging in to the <a href="%s">EBANX Dashboard.</a>', 'woocommerce-gateway-ebanx'), 'https://www.ebanx.com/business/en/dashboard'),
+				'description' => sprintf(__('You can <a href="javascript:fetch-keys" id="woocommerce_ebanx-global_fetch_keys_button">click here to obtain the integration keys</a> automagically, or copy them from the settings section in the <a href="%s">EBANX Dashboard.</a>', 'woocommerce-gateway-ebanx'), 'https://www.ebanx.com/business/en/dashboard'),
 			),
 			'sandbox_private_key'       => array(
 				'title'       => __('Sandbox Integration Key', 'woocommerce-gateway-ebanx'),
