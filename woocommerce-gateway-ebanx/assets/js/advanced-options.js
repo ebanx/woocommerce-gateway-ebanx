@@ -27,6 +27,7 @@
   var modesField = $('#woocommerce_ebanx-global_brazil_taxes_options');
   var fields = $('.ebanx-checkout-manager-field');
   var fieldsToggler = $('#woocommerce_ebanx-global_checkout_manager_enabled');
+  var fieldsAdvanced = $('#woocommerce_ebanx-ebanx-advanced-option');
   var countryPayments = {
     brazil: $('#woocommerce_ebanx-global_brazil_payment_methods'),
     chile: $('#woocommerce_ebanx-global_chile_payment_methods')
@@ -44,13 +45,15 @@
     var modes = modesField.val();
     var brazil_val = countryPayments.brazil.val();
     var chile_val = countryPayments.chile.val();
-    disableFields(fields);
+    disableFields('.brazil-taxes');
+    disableFields(fieldsAdvanced.filter('.brazil-taxes'));
 
     console.log(countryPayments);
 
     if (fieldsToggler[0].checked) {
       enableFields(fields.filter('.always-visible'));
       if (brazil_val != null && brazil_val.length > 0) {
+        enableFields(fields.filter('.brazil-taxes'));
         for (var i in modes) {
           enableFields(fields.filter('.' + modes[i]));
         }

@@ -299,7 +299,7 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway
 				'title' => __('Enable Checkout for:', 'woocommerce-gateway-ebanx'),
 				'type'        => 'multiselect',
 				'required'    => true,
-				'class'       => 'ebanx-select ebanx-advanced-option',
+				'class'       => 'ebanx-select ebanx-advanced-option brazil-taxes',
 				'options'     => array(
 					'cpf' => __('CPF - Individuals', 'woocommerce-gateway-ebanx'),
 					'cnpj' => __('CNPJ - Companies', 'woocommerce-gateway-ebanx')
