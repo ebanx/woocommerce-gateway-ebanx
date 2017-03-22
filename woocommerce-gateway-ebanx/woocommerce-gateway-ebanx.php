@@ -121,6 +121,15 @@ if (!class_exists('WC_EBANX')) {
 			$this->is_sandbox_mode = $this->configs->settings['sandbox_mode_enabled'] === 'yes';
 			$this->private_key = $this->is_sandbox_mode ? $this->configs->settings['sandbox_private_key'] : $this->configs->settings['live_private_key'];
 			$this->public_key = $this->is_sandbox_mode ? $this->configs->settings['sandbox_public_key'] : $this->configs->settings['live_public_key'];
+
+			if ($this->is_sandbox_mode) {
+				$warning_message = "You are currently in Sandbox mode, in this mode, none of your transactions will be processed.";
+				$this->notices
+					->with_message($warning_message)
+					->with_type('warning')
+					->persistent()
+					->display();
+			}
 		}
 
 		/**
