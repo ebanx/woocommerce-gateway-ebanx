@@ -104,8 +104,8 @@ class WC_EBANX_Baloto_Gateway extends WC_EBANX_Gateway
 
 		parent::thankyou_page($data);
 
-		wp_enqueue_script('woocommerce_ebanx_clipboard', plugins_url('assets/js/vendor/clipboard.min.js', WC_EBANX::DIR));
-		wp_enqueue_script('woocommerce_ebanx_order_received', plugins_url('assets/js/order-received.js', WC_EBANX::DIR));
+		wp_enqueue_script('woocommerce_ebanx_clipboard', plugins_url('assets/js/vendor/clipboard.min.js', WC_EBANX::DIR, false, true));
+		wp_enqueue_script('woocommerce_ebanx_order_received', plugins_url('assets/js/order-received.js', WC_EBANX::DIR, false, true));
 	}
 
 	/**
