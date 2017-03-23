@@ -74,7 +74,7 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
 
 		$this->language = $this->getTransactionAddress('country');
 
-		if($this->is_sandbox_mode && !current_user_can('administrator')){
+		if ($this->is_sandbox_mode && !current_user_can('administrator')) {
 			return false;
 		};
 
