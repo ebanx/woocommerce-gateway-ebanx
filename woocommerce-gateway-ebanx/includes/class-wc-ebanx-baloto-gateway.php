@@ -16,7 +16,7 @@ class WC_EBANX_Baloto_Gateway extends WC_EBANX_Gateway
 
 		$this->api_name    = 'baloto';
 		$this->title       = __('Baloto', 'woocommerce-gateway-ebanx');
-		$this->description = __('Paga con boleta Baloto.', 'woocommerce-gateway-ebanx');
+		$this->description = __('Paga con Baloto.', 'woocommerce-gateway-ebanx');
 
 		parent::__construct();
 
@@ -35,6 +35,7 @@ class WC_EBANX_Baloto_Gateway extends WC_EBANX_Gateway
 
 	/**
 	 * Check if the currency is processed by EBANX
+	 *
 	 * @param  string $currency Possible currencies: COP
 	 * @return boolean          Return true if EBANX process the currency
 	 */
