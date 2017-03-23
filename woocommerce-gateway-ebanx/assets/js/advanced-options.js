@@ -44,27 +44,28 @@
 
   var updateFields = function(){
     var modes = modesField.val();
-    var brazil_val = countryPayments.brazil.val();
-    var chile_val = countryPayments.chile.val();
+    var brazilVal = countryPayments.brazil.val();
+    var chileVal = countryPayments.chile.val();
     disableFields(fields);
     disableFields(fieldBrazilTaxes);
 
-    if (brazil_val != null && brazil_val.length > 0) {
+    if (brazilVal != null && brazilVal.length > 0) {
       enableFields(fieldBrazilTaxes);
     }
 
     if (fieldsToggler[0].checked) {
       enableFields(fields.filter('.always-visible'));
-      if (brazil_val != null && brazil_val.length > 0) {
+      if (brazilVal != null && brazilVal.length > 0) {
         for (var i in modes) {
           enableFields(fields.filter('.' + modes[i]));
         }
-        if (modes.length == 2) {
+       if (modes.length == 2) {
           enableFields(fields.filter('.cpf_cnpj'));
         }
       }
-      if (chile_val != null && chile_val.length > 0) {
-        enableFields(fields.filter('.chile'));
+      if (chileVal != null && chileVal.length > 0) {
+        enableFields(fields.filter('.ebanx-chile-document'));
+        enableFields(fields.filter('.ebanx-chile-bdate'));
       }
     }
   };
