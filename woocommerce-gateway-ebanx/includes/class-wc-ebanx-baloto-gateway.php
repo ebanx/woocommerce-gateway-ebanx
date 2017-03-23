@@ -89,13 +89,14 @@ class WC_EBANX_Baloto_Gateway extends WC_EBANX_Gateway
 		$baloto_pdf = $baloto_url . "&format=pdf";
 		$baloto_print = $baloto_url . "&format=print";
 		$customer_email = get_post_meta($order->id, '_ebanx_payment_customer_email', true);
+		$baloto_hash = get_post_meta($order->id, '_ebanx_payment_hash', true);
 
 		$data = array(
 			'data' => array(
 				'url_basic'      => $baloto_basic,
 				'url_pdf'        => $baloto_pdf,
 				'url_print'      => $baloto_print,
-				'url_iframe'     => get_site_url() . '/?ebanx=order-received&url=' . $baloto_basic,
+				'url_iframe'      => get_site_url() . '/?ebanx=order-received&hash=' . $baloto_hash . '&payment_type=baloto',
 				'customer_email' => $customer_email
 			),
 			'order_status' => $order->get_status(),

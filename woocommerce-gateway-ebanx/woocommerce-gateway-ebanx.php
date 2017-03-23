@@ -173,7 +173,10 @@ if (!class_exists('WC_EBANX')) {
 			if (isset($payment_type) && $payment_type !== 'boleto') {
 				$url .= "{$payment_type}/";
 			}
-			$url .= "?hash={$hash}&format=basic#";
+			$url .= "?hash={$hash}";
+			if (!isset($payment_type) || $payment_type !== 'baloto') {
+				$url .= '&format=basic#';
+			}
 			if (in_array('curl', get_loaded_extensions())) {
 				$curl = curl_init($url);
 				curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
