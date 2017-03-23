@@ -56,3 +56,10 @@ if (!defined('ABSPATH')) {
     	<?php endif;?>
     </section>
 </div>
+
+<script>
+	// Custom select fields
+	if ('jQuery' in window && 'select2' in jQuery.fn) {
+		jQuery('select.ebanx-select-field').select2();
+	}
+</script>

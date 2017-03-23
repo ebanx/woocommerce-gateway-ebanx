@@ -84,11 +84,12 @@ class WC_EBANX_Pagoefectivo_Gateway extends WC_EBANX_Gateway
 	public static function thankyou_page($order)
 	{
 		$pagoefectivo_url = get_post_meta($order->id, '_pagoefectivo_url', true);
+		$pagoefectivo_hash = get_post_meta($order->id, '_ebanx_payment_hash', true);
 
 		$data = array(
 			'data' => array(
 				'url_basic' => $pagoefectivo_url,
-				'url_iframe' => get_site_url() . '/?ebanx=order-received&url=' . $pagoefectivo_url,
+				'url_iframe'      => get_site_url() . '/?ebanx=order-received&hash=' . $pagoefectivo_hash . '&payment_type=cip',
 				'customer_email' => $order->billing_email
 			),
 			'order_status' => $order->get_status(),
@@ -97,8 +98,20 @@ class WC_EBANX_Pagoefectivo_Gateway extends WC_EBANX_Gateway
 
 		parent::thankyou_page($data);
 
-		wp_enqueue_script('woocommerce_ebanx_clipboard', plugins_url('assets/js/vendor/clipboard.min.js', WC_EBANX::DIR));
-		wp_enqueue_script('woocommerce_ebanx_order_received', plugins_url('assets/js/order-received.js', WC_EBANX::DIR));
+		wp_enqueue_script(
+			'woocommerce_ebanx_clipboard',
+			plugins_url('assets/js/vendor/clipboard.min.js', WC_EBANX::DIR),
+			array(),
+			WC_EBANX::VERSION,
+			true
+		);
+		wp_enqueue_script(
+			'woocommerce_ebanx_order_received',
+			plugins_url('assets/js/order-received.js', WC_EBANX::DIR),
+			array('jquery'),
+			WC_EBANX::VERSION,
+			true
+		);
 	}
 
 	/**

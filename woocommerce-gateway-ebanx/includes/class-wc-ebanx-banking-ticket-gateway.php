@@ -142,7 +142,7 @@ class WC_EBANX_Banking_Ticket_Gateway extends WC_EBANX_Gateway
 				'url_basic'       => $boleto_basic,
 				'url_pdf'         => $boleto_pdf,
 				'url_print'       => $boleto_print,
-				'url_iframe'      => get_site_url() . '/?ebanx=order-received&hash=' . $boleto_hash,
+				'url_iframe'      => get_site_url() . '/?ebanx=order-received&hash=' . $boleto_hash . '&payment_type=boleto',
 				'customer_email'  => $customer_email,
 				'customer_name'   => $customer_name,
 				'due_date'        => $boleto_due_date,
@@ -153,7 +153,19 @@ class WC_EBANX_Banking_Ticket_Gateway extends WC_EBANX_Gateway
 
 		parent::thankyou_page($data);
 
-		wp_enqueue_script('woocommerce_ebanx_clipboard', plugins_url('assets/js/vendor/clipboard.min.js', WC_EBANX::DIR));
-		wp_enqueue_script('woocommerce_ebanx_order_received', plugins_url('assets/js/order-received.js', WC_EBANX::DIR));
+		wp_enqueue_script(
+			'woocommerce_ebanx_clipboard',
+			plugins_url('assets/js/vendor/clipboard.min.js', WC_EBANX::DIR),
+			array(),
+			WC_EBANX::VERSION,
+			true
+		);
+		wp_enqueue_script(
+			'woocommerce_ebanx_order_received',
+			plugins_url('assets/js/order-received.js', WC_EBANX::DIR),
+			array('jquery'),
+			WC_EBANX::VERSION,
+			true
+		);
 	}
 }
