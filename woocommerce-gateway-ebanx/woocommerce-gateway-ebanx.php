@@ -146,10 +146,13 @@ if (!class_exists('WC_EBANX')) {
 				$action = $_GET['ebanx'];
 				if ($action === 'order-received' && isset($_GET['hash'])) {
 					$hash = $_GET['hash'];
-					$this->ebanx_order_received($hash);
+					$payment_type = isset($_GET['payment_type']) ? $_GET['payment_type'] : null;
+					$this->ebanx_order_received($hash, $payment_type);
+					return;
 				}
 				if ($action === 'dashboard-check') {
 					$this->ebanx_dashboard_check();
+					return;
 				}
 			}
 		}
@@ -159,11 +162,15 @@ if (!class_exists('WC_EBANX')) {
 		 *
 		 * @return void
 		 */
-		private function ebanx_order_received($hash)
+		private function ebanx_order_received($hash, $payment_type)
 		{
 			$this->setup_configs();
 			$subdomain = $this->is_sandbox_mode ? 'sandbox' : 'print';
-			$url = 'https://'.$subdomain.'.ebanx.com/print/?hash=' . $hash . '&format=basic#';
+			$url = "https://{$subdomain}.ebanx.com/print/";
+			if (isset($payment_type) && $payment_type !== 'boleto') {
+				$url .= "{$payment_type}/";
+			}
+			$url .= "?hash={$hash}&format=basic#";
 			if (in_array('curl', get_loaded_extensions())) {
 				$curl = curl_init($url);
 				curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
