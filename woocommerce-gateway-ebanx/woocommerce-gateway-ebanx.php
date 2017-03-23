@@ -87,7 +87,7 @@ if (!class_exists('WC_EBANX')) {
 			if ( empty( $_POST ) ) {
 				add_action('admin_init', array($this, 'setup_configs'), 10);
 				add_action('admin_init', array($this, 'check_merchant_api_keys'), 20);
-				add_action('admin_init', array($this, 'check_sandbox_mode'), 30);
+				add_action('admin_init', array($this, 'checker'), 30);
 			}
 
 			add_action('woocommerce_account_' . self::$endpoint . '_endpoint', array($this, 'my_account_template'));
@@ -112,9 +112,15 @@ if (!class_exists('WC_EBANX')) {
 			add_action('woocommerce_settings_saved', array($this, 'setup_configs'), 10);
 			add_action('woocommerce_settings_saved', array($this, 'update_lead'), 20);
 			add_action('woocommerce_settings_saved', array($this, 'check_merchant_api_keys'), 20);
-			add_action('woocommerce_settings_saved', array($this, 'check_sandbox_mode'), 30);
+			add_action('woocommerce_settings_saved', array($this, 'checker'), 30);
 		}
 
+
+		/**
+		* Sets up the configuration object
+		*
+		* @return void
+		*/
 		public function setup_configs() {
 			/**
 			 * Configs
@@ -125,17 +131,15 @@ if (!class_exists('WC_EBANX')) {
 			$this->public_key = $this->is_sandbox_mode ? $this->configs->settings['sandbox_public_key'] : $this->configs->settings['live_public_key'];
 		}
 
-		public function check_sandbox_mode() {
-			if (!$this->is_sandbox_mode) {
-				return;
-			}
+		/**
+		*
+		*
+		* @return void
+		*/
+		public function checker() {
 
-			$warning_message = __('EBANX Gateway - You are currently in Sandbox mode, in this mode, none of your transactions will be processed.', 'woocommerce-gateway-ebanx');
-			$this->notices
-				->with_message($warning_message)
-				->with_type('warning')
-				->persistent()
-				->display();
+			WC_EBANX_Checker::check_sandbox_mode($this);
+			
 		}
 
 		/**
@@ -528,6 +532,7 @@ if (!class_exists('WC_EBANX')) {
 			include_once(INCLUDES_DIR . 'class-wc-ebanx-one-click.php');
 			include_once(SERVICES_DIR . 'class-wc-ebanx-hooks.php');
 			include_once(INCLUDES_DIR . 'notices/class-wc-ebanx-notices-notice.php');
+			include_once(INCLUDES_DIR . 'class-wc-ebanx-checker.php');
 		}
 
 		/**
