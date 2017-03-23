@@ -859,7 +859,7 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
 				}
 			}
 
-			if (trim(strtolower($order->billing_country)) === WC_EBANX_Gateway_Utils::COUNTRY_COLOMBIA) {
+			if ($this->getTransactionAddress('country') === WC_EBANX_Gateway_Utils::COUNTRY_COLOMBIA) {
 				if (isset($_POST['ebanx_billing_colombia_document'])) {
 					update_user_meta($this->userId, '_ebanx_billing_colombia_document', sanitize_text_field($_POST['ebanx_billing_colombia_document']));
 				}
