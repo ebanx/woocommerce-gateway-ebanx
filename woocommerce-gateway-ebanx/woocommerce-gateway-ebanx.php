@@ -5,7 +5,7 @@
  * Description: Offer Latin American local payment methods & increase your conversion rates with the solution used by AliExpress, AirBnB and Spotify in Brazil.
  * Author: EBANX
  * Author URI: https://www.ebanx.com/business/en
- * Version: 1.7.0
+ * Version: 1.7.1
  * License: MIT
  * Text Domain: woocommerce-gateway-ebanx
  * Domain Path: /languages
@@ -40,7 +40,7 @@ if (!class_exists('WC_EBANX')) {
 		 *
 		 * @var string
 		 */
-		const VERSION = '1.7.0';
+		const VERSION = '1.7.1';
 
 		const DIR = __FILE__;
 
@@ -146,10 +146,13 @@ if (!class_exists('WC_EBANX')) {
 				$action = $_GET['ebanx'];
 				if ($action === 'order-received' && isset($_GET['hash'])) {
 					$hash = $_GET['hash'];
-					$this->ebanx_order_received($hash);
+					$payment_type = isset($_GET['payment_type']) ? $_GET['payment_type'] : null;
+					$this->ebanx_order_received($hash, $payment_type);
+					return;
 				}
 				if ($action === 'dashboard-check') {
 					$this->ebanx_dashboard_check();
+					return;
 				}
 			}
 		}
@@ -159,11 +162,18 @@ if (!class_exists('WC_EBANX')) {
 		 *
 		 * @return void
 		 */
-		private function ebanx_order_received($hash)
+		private function ebanx_order_received($hash, $payment_type)
 		{
 			$this->setup_configs();
 			$subdomain = $this->is_sandbox_mode ? 'sandbox' : 'print';
-			$url = 'https://'.$subdomain.'.ebanx.com/print/?hash=' . $hash . '&format=basic#';
+			$url = "https://{$subdomain}.ebanx.com/";
+			if (!isset($payment_type) || $payment_type !== 'cip') {
+				$url .= 'print/';
+			}
+			if (isset($payment_type) && $payment_type !== 'boleto') {
+				$url .= "{$payment_type}/";
+			}
+			$url .= "?hash={$hash}&format=basic#";
 			if (in_array('curl', get_loaded_extensions())) {
 				$curl = curl_init($url);
 				curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);

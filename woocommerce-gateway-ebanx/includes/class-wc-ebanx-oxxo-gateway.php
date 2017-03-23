@@ -88,13 +88,14 @@ class WC_EBANX_Oxxo_Gateway extends WC_EBANX_Gateway
 		$oxxo_pdf = $oxxo_url . "&format=pdf";
 		$oxxo_print = $oxxo_url . "&format=print";
 		$customer_email = get_post_meta($order->id, '_ebanx_payment_customer_email', true);
+		$oxxo_hash = get_post_meta($order->id, '_ebanx_payment_hash', true);
 
 		$data = array(
 			'data' => array(
 				'url_basic'      => $oxxo_basic,
 				'url_pdf'        => $oxxo_pdf,
 				'url_print'      => $oxxo_print,
-				'url_iframe'     => get_site_url() . '/?ebanx=order-received&url=' . $oxxo_basic,
+				'url_iframe'      => get_site_url() . '/?ebanx=order-received&hash=' . $oxxo_hash . '&payment_type=oxxo',
 				'customer_email' => $customer_email
 			),
 			'order_status' => $order->get_status(),
