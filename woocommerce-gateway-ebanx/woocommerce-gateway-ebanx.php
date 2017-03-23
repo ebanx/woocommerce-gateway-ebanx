@@ -166,7 +166,10 @@ if (!class_exists('WC_EBANX')) {
 		{
 			$this->setup_configs();
 			$subdomain = $this->is_sandbox_mode ? 'sandbox' : 'print';
-			$url = "https://{$subdomain}.ebanx.com/print/";
+			$url = "https://{$subdomain}.ebanx.com/";
+			if (isset($payment_type) && $payment_type !== 'cip') {
+				$url .= 'print/';
+			}
 			if (isset($payment_type) && $payment_type !== 'boleto') {
 				$url .= "{$payment_type}/";
 			}
