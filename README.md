@@ -14,6 +14,12 @@ Please, visit the [official plugin page on WordPress store](https://wordpress.or
 
 ## Installation
 
+### Do you want to contribute?
+
+We've put together all the information you'll need on [CONTRIBUTING.md](https://github.com/ebanx/woocommerce-gateway-ebanx/blob/master/CONTRIBUTING.md). Also, we always try to keep this file updated and with as much information as possible. If you want to help us with this file or with any coding issue, we would really appreciate it. :heart:
+
+### Are you a Merchant?
+
 We have 3 ways to install the plugin, you can choose one and install it ;)
 
 #### Automatic

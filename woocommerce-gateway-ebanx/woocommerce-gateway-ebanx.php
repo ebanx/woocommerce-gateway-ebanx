@@ -5,7 +5,7 @@
  * Description: Offer Latin American local payment methods & increase your conversion rates with the solution used by AliExpress, AirBnB and Spotify in Brazil.
  * Author: EBANX
  * Author URI: https://www.ebanx.com/business/en
- * Version: 1.6.1
+ * Version: 1.7.0
  * License: MIT
  * Text Domain: woocommerce-gateway-ebanx
  * Domain Path: /languages
@@ -40,7 +40,7 @@ if (!class_exists('WC_EBANX')) {
 		 *
 		 * @var string
 		 */
-		const VERSION = '1.6.1';
+		const VERSION = '1.7.0';
 
 		const DIR = __FILE__;
 
@@ -170,7 +170,7 @@ if (!class_exists('WC_EBANX')) {
 				$html = curl_exec($curl);
 
 				if (!curl_error($curl)) {
-				    curl_close($curl);
+					curl_close($curl);
 					echo $html;
 					exit;
 				}
@@ -272,8 +272,16 @@ if (!class_exists('WC_EBANX')) {
 		 * @return void
 		 */
 		public static function save_merchant_infos() {
+			// Prevent fatal error if WooCommerce isn't installed
+			if ( !defined('WC_VERSION') ) {
+				return;
+			}
+
 			// Save merchant informations
 			$user = get_userdata(get_current_user_id());
+			if (!$user || is_wp_error($user)) {
+				return;
+			}
 
 			$url = 'https://www.ebanx.com/business/en/dashboard/api/lead';
 			$args = array(
@@ -624,8 +632,20 @@ if (!class_exists('WC_EBANX')) {
 				}
 			</style>";
 
-			wp_enqueue_script('woocommerce_ebanx_payments_options', plugins_url('assets/js/payments-options.js', WC_EBANX::DIR));
-			wp_enqueue_script('woocommerce_ebanx_advanced_options', plugins_url('assets/js/advanced-options.js', WC_EBANX::DIR));
+			wp_enqueue_script(
+				'woocommerce_ebanx_payments_options',
+				plugins_url('assets/js/payments-options.js', WC_EBANX::DIR),
+				array('jquery'),
+				WC_EBANX::VERSION,
+				true
+			);
+			wp_enqueue_script(
+				'woocommerce_ebanx_advanced_options',
+				plugins_url('assets/js/advanced-options.js', WC_EBANX::DIR),
+				array('jquery'),
+				WC_EBANX::VERSION,
+				true
+			);
 		}
 
 		/**
