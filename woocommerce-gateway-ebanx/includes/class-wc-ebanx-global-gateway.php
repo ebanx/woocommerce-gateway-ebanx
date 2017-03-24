@@ -291,7 +291,7 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway
 					'2' => '2',
 					'3' => '3',
 				),
-				'description' => __('Define the maximum number of days on which your customer can complete the payment of: Boleto, OXXO, Sencilito, PagoEfectivo, SafetyPay and Baloto.', 'woocommerce-gateway-ebanx'),
+				'description' => __('Define the maximum number of days on which your customer can complete the payment of: Boleto, OXXO, Sencilito, PagoEfectivo and SafetyPay. Baloto is coming soon.', 'woocommerce-gateway-ebanx'),
 				'desc_tip' => true
 			),
 			'advanced_options_title' => array(
