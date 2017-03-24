@@ -173,7 +173,10 @@ if (!class_exists('WC_EBANX')) {
 			if (isset($payment_type) && $payment_type !== 'boleto') {
 				$url .= "{$payment_type}/";
 			}
-			$url .= "?hash={$hash}&format=basic#";
+			$url .= "?hash={$hash}";
+			if (!isset($payment_type) || $payment_type !== 'baloto') {
+				$url .= '&format=basic#';
+			}
 			if (in_array('curl', get_loaded_extensions())) {
 				$curl = curl_init($url);
 				curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
@@ -520,6 +523,7 @@ if (!class_exists('WC_EBANX')) {
 			include_once(INCLUDES_DIR . 'class-wc-ebanx-servipag-gateway.php');
 			include_once(INCLUDES_DIR . 'class-wc-ebanx-tef-gateway.php');
 			include_once(INCLUDES_DIR . 'class-wc-ebanx-eft-gateway.php');
+			include_once(INCLUDES_DIR . 'class-wc-ebanx-baloto-gateway.php');
 			include_once(INCLUDES_DIR . 'class-wc-ebanx-one-click.php');
 			include_once(SERVICES_DIR . 'class-wc-ebanx-hooks.php');
 			include_once(INCLUDES_DIR . 'notices/class-wc-ebanx-notices-notice.php');
@@ -556,6 +560,7 @@ if (!class_exists('WC_EBANX')) {
 			$methods[] = 'WC_EBANX_Pagoefectivo_Gateway';
 			$methods[] = 'WC_EBANX_Safetypay_Gateway';
 			$methods[] = 'WC_EBANX_Eft_Gateway';
+			$methods[] = 'WC_EBANX_Baloto_Gateway';
 			$methods[] = 'WC_EBANX_Account_Gateway';
 
 			return $methods;

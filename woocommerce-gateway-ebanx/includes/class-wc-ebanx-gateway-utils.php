@@ -94,7 +94,8 @@ abstract class WC_EBANX_Gateway_Utils
 	  'oxxo' => 'America/Mexico_City',
 	  'pagoefectivo' => 'America/Lima',
 	  'sencillito' => 'America/Santiago',
-	  'safetypay-cash' => 'America/Lima'
+	  'safetypay-cash' => 'America/Lima',
+	  'baloto' => 'America/Bogota',
 	);
 
 	/**
