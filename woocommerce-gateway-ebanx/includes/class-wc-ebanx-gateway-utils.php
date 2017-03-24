@@ -40,8 +40,8 @@ abstract class WC_EBANX_Gateway_Utils
 	);
 
 	/**
-	+	 *  Local currencies that EBANX processes
-	+	 */
+	 *  Local currencies that EBANX processes
+	 */
 	public static $LOCAL_CURRENCIES = array(
 		self::CURRENCY_CODE_BRL,
 		self::CURRENCY_CODE_CLP,
