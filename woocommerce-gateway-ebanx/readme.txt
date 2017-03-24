@@ -1,9 +1,9 @@
 === EBANX Payment Gateway for WooCommerce ===
 Contributors: ebanxwp
-Tags: credit card, boleto, ebanx, woocommerce, approval rate, conversion rate, brazil, mexico, peru, colombia, chile, oxxo, cash payment, local payment one-click payment, installments, alternative payments, accept more payments
+Tags: credit card, boleto, ebanx, woocommerce, approval rate, conversion rate, brazil, mexico, peru, colombia, chile, oxxo, baloto, cash payment, local payment one-click payment, installments, alternative payments, accept more payments
 Requires at least: 4.0
 Tested up to: 4.7
-Stable tag: 1.7.1
+Stable tag: 1.8.0
 License: MIT
 License URI: https://opensource.org/licenses/MIT
 
@@ -113,6 +113,7 @@ The [Developer’s Academy](https://www.ebanx.com/business/en/developers/integra
   * SafetyPay, Cash Payment / Debit Transfer
 * Colombia
   * Pagos Seguros en Línea (PSE), Online Debit Transfer
+  * Baloto
 
 = Which currencies does EBANX accept? =
 
@@ -134,6 +135,13 @@ Yes, you can.
 4. There you go, you’re all set!
 
 == Changelog ==
+
+= 1.8.0 =
+* Feature - Hide irrelevant fields and group fields by country on EBANX Settings page [#373](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/373)
+* Feature - Added new payment gateway Baloto (Colombia) [#371](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/371)
+* Feature - Hide the payment gateways on checkout page when sandbox mode is enabled for non admin users and not logged users [#380](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/380)
+* Feature - A warning was added when sandbox mode is enabled [#378](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/378)
+* Feature - Added asterisk to required compliance fields on checkout page [#370](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/370)
 
 = 1.7.1 =
 * Fix - Fixed Oxxo and Pagoefectivo iframe not showing [#382](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/382)
