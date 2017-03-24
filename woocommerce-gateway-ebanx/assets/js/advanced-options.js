@@ -56,8 +56,9 @@
     }
 
     if (fieldsToggler[0].checked) {
+      
       enableFields(fields.filter('.always-visible'));
-      if (brazilVal != null && brazilVal.length > 0) {
+      if (brazilVal != null && brazilVal.length > 0 && modes != null) {
         for (var i in modes) {
           enableFields(fields.filter('.' + modes[i]));
         }
