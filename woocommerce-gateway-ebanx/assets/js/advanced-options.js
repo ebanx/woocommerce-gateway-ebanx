@@ -30,7 +30,8 @@
   var fieldBrazilTaxes = $('.brazil-taxes');
   var countryPayments = {
     brazil: $('#woocommerce_ebanx-global_brazil_payment_methods'),
-    chile: $('#woocommerce_ebanx-global_chile_payment_methods')
+    chile: $('#woocommerce_ebanx-global_chile_payment_methods'),
+    colombia: $('#woocommerce_ebanx-global_colombia_payment_methods')
   };
   
 
@@ -46,6 +47,7 @@
     var modes = modesField.val();
     var brazilVal = countryPayments.brazil.val();
     var chileVal = countryPayments.chile.val();
+    var colombiaVal = countryPayments.colombia.val();
     disableFields(fields);
     disableFields(fieldBrazilTaxes);
 
@@ -59,13 +61,19 @@
         for (var i in modes) {
           enableFields(fields.filter('.' + modes[i]));
         }
+
        if (modes.length == 2) {
           enableFields(fields.filter('.cpf_cnpj'));
         }
       }
+
       if (chileVal != null && chileVal.length > 0) {
         enableFields(fields.filter('.ebanx-chile-document'));
         enableFields(fields.filter('.ebanx-chile-bdate'));
+      }
+
+      if (colombiaVal != null && colombiaVal.length > 0) {
+        enableFields(fields.filter('.ebanx-colombia-document'));
       }
     }
   };
