@@ -52,9 +52,14 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway
 	 */
 	public function __construct()
 	{
+		include_once(INCLUDES_DIR . 'notices/class-wc-ebanx-notices-notice.php');
+		$this->notices = new WC_EBANX_Notices_Notice();
+
 		$this->id                 = 'ebanx-global';
 		$this->method_title       = __('EBANX', 'woocommerce-gateway-ebanx');
 		$this->method_description = __('EBANX easy-to-setup checkout allows your business to accept local payments in Brazil, Mexico, Colombia, Chile & Peru.', 'woocommerce-gateway-ebanx');
+
+		$this->merchant_currency = strtoupper(get_woocommerce_currency());
 
 		$this->init_form_fields();
 		$this->init_settings();
@@ -72,6 +77,24 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway
 		return false;
 	}
 
+	/**
+	 * Error handling
+	 *
+	 */
+	public function validate_due_date_days_field() {
+		if ($_POST['woocommerce_ebanx-global_due_date_days'] < 1) {
+			$_POST['woocommerce_ebanx-global_due_date_days'] = self::$defaults['due_date_days'];
+
+			$this->notices
+				->with_message('Days To Expiration must be greater than or equal to 1.')
+				->with_type('error')
+				->display();
+
+			return;
+		}
+
+		return $_POST['woocommerce_ebanx-global_due_date_days'];
+}
 	/**
 	 * Define the fields on EBANX WooCommerce settings page and set the defaults when the plugin is installed
 	 *
@@ -279,18 +302,36 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway
 				'type'  => 'title',
 				'class' => 'ebanx-payments-option'
 			),
-			'due_date_days'             => array(
-				'title'   => __('Days to Expiration', 'woocommerce-gateway-ebanx'),
-				'type'    => 'select',
-				'class'   => 'ebanx-select ebanx-payments-option',
-				'options' => array(
-					'1' => '1',
-					'2' => '2',
-					'3' => '3',
+		));
+
+		if (in_array($this->merchant_currency, WC_EBANX_Gateway_Utils::$LOCAL_CURRENCIES) ) {
+			$this->form_fields = array_merge($this->form_fields, array(
+				'due_date_days' => array(
+					'title' => __('Days to Expiration', 'woocommerce-gateway-ebanx'),
+					'type' => 'number',
+					'class' => 'ebanx-due-cash-date ebanx-payments-option',
+					'description' => __('Define the maximum number of days on which your customer can complete the payment of: Boleto, OXXO, Sencilito, PagoEfectivo and SafetyPay.', 'woocommerce-gateway-ebanx'),
+					'desc_tip' => true
 				),
-				'description' => __('Define the maximum number of days on which your customer can complete the payment of: Boleto, OXXO, Sencilito, PagoEfectivo and SafetyPay.', 'woocommerce-gateway-ebanx'),
-				'desc_tip' => true
-			),
+			));
+		} else {
+			$this->form_fields = array_merge($this->form_fields, array(
+				'due_date_days' => array(
+					'title'   => __('Days to Expiration', 'woocommerce-gateway-ebanx'),
+					'type'    => 'select',
+					'class'   => 'ebanx-select ebanx-due-cash-date ebanx-payments-option',
+					'options' => array(
+						'1' => '1',
+						'2' => '2',
+						'3' => '3',
+						),
+					'description' => __('Define the maximum number of days on which your customer can complete the payment of: Boleto, OXXO, Sencilito, PagoEfectivo and SafetyPay.', 'woocommerce-gateway-ebanx'),
+					'desc_tip' => true
+				),
+			));
+		}
+
+		$this->form_fields = array_merge($this->form_fields, array(
 			'advanced_options_title' => array(
 				'title' => __('Advanced Options', 'woocommerce-gateway-ebanx'),
 				'type' => 'title'
