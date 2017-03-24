@@ -1,3 +1,4 @@
+[![Stories in Ready](https://badge.waffle.io/ebanx/woocommerce-gateway-ebanx.png?label=ready&title=Ready)](https://waffle.io/ebanx/woocommerce-gateway-ebanx)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/09ef5eb63a394dc3b76cb4319129fbf3)](https://www.codacy.com/app/EBANX/woocommerce-gateway-ebanx?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=ebanx/woocommerce-gateway-ebanx&amp;utm_campaign=Badge_Grade)
 
 # EBANX Payment Gateway for WooCommerce
@@ -12,6 +13,12 @@ Please, visit the [official plugin page on WordPress store](https://wordpress.or
 * WooCommerce 2.6+
 
 ## Installation
+
+### Do you want to contribute?
+
+We've put together all the information you'll need on [CONTRIBUTING.md](https://github.com/ebanx/woocommerce-gateway-ebanx/blob/master/CONTRIBUTING.md). Also, we always try to keep this file updated and with as much information as possible. If you want to help us with this file or with any coding issue, we would really appreciate it. :heart:
+
+### Are you a Merchant?
 
 We have 3 ways to install the plugin, you can choose one and install it ;)
 

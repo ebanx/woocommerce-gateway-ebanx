@@ -12,6 +12,8 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
 	protected static $initializedGateways = 0;
 	protected static $totalGateways = 0;
 
+	const REQUIRED_MARK = " <abbr class=\"required\" title=\"required\">*</abbr>";
+
 	/**
 	 * Constructor
 	 */
@@ -118,7 +120,7 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
 			'type' => 'select',
 			'label' => __('Select an option', 'woocommerce-gateway-ebanx'),
 			'default' => 'cpf',
-			'class' => array('ebanx_billing_brazil_selector'),
+			'class' => array('ebanx_billing_brazil_selector', 'ebanx-select-field'),
 			'options' => array(
 				'cpf' => __('CPF - Individuals', 'woocommerce-gateway-ebanx'),
 				'cnpj' => __('CNPJ - Companies', 'woocommerce-gateway-ebanx')
@@ -127,33 +129,33 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
 
 		$ebanx_billing_brazil_birth_date = array(
 			'type'  => 'text',
-			'label' => __('Birth Date', 'woocommerce-gateway-ebanx'),
+			'label' => __('Birth Date', 'woocommerce-gateway-ebanx') . self::REQUIRED_MARK,
 			'class' => array('ebanx_billing_brazil_birth_date', 'ebanx_billing_brazil_cpf', 'ebanx_billing_brazil_selector_option'),
 			'default' => isset($birth_date_br) ? $birth_date_br : ''
 		);
 		$ebanx_billing_brazil_document = array(
 			'type'     => 'text',
-			'label'    => 'CPF',
+			'label'    => 'CPF' . self::REQUIRED_MARK,
 			'class' => array('ebanx_billing_brazil_document', 'ebanx_billing_brazil_cpf', 'ebanx_billing_brazil_selector_option'),
 			'default' => isset($cpf) ? $cpf : ''
 		);
 
 		$ebanx_billing_brazil_cnpj = array(
 			'type'     => 'text',
-			'label'    => 'CNPJ',
+			'label'    => 'CNPJ' . self::REQUIRED_MARK,
 			'class' => array('ebanx_billing_brazil_cnpj', 'ebanx_billing_brazil_cnpj', 'ebanx_billing_brazil_selector_option'),
 			'default' => isset($cnpj) ? $cnpj : ''
 		);
 
 		$ebanx_billing_chile_birth_date = array(
 			'type'  => 'text',
-			'label' => __('Birth Date', 'woocommerce-gateway-ebanx'),
+			'label' => __('Birth Date', 'woocommerce-gateway-ebanx') . self::REQUIRED_MARK,
 			'class' => array('ebanx_billing_chile_birth_date'),
 			'default' => isset($birth_date_cl) ? $birth_date_cl : ''
 		);
 		$ebanx_billing_chile_document = array(
 			'type'     => 'text',
-			'label'    => 'RUT',
+			'label'    => 'RUT' . self::REQUIRED_MARK,
 			'class' => array('ebanx_billing_chile_document'),
 			'default' => isset($rut) ? $rut : ''
 		);
@@ -259,7 +261,13 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
 	public function checkout_assets()
 	{
 		if (is_checkout()) {
-			wp_enqueue_script('woocommerce_ebanx_checkout_fields', plugins_url('assets/js/checkout-fields.js', WC_EBANX::DIR));
+			wp_enqueue_script(
+				'woocommerce_ebanx_checkout_fields',
+				plugins_url('assets/js/checkout-fields.js', WC_EBANX::DIR),
+				array('jquery'),
+				WC_EBANX::VERSION,
+				true
+			);
 		}
 		if (
 			is_wc_endpoint_url( 'order-pay' ) ||
@@ -495,12 +503,13 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
 		$addresses = $_POST['billing_address_1'];
 
 		if (!empty($_POST['billing_address_2'])) {
-			$addresses .= " $_POST[billing_address_2]";
+			$addresses .= " - $_POST[billing_address_2]";
 		}
 
 		$addresses = WC_Ebanx_Gateway_Utils::split_street($addresses);
 
-		$street_number = empty($addresses['houseNumber']) ? 'S/N' : trim($addresses['houseNumber'] . ' ' . $addresses['additionToAddress2']);
+		$street_number = empty($addresses['houseNumber']) ? 'S/N' : trim($addresses['houseNumber'] . ' ' . $addresses['additionToAddress']);
+		$street_name = $addresses['streetName'];
 
 		$newData = array();
 		$newData['payment'] = array();
@@ -520,7 +529,7 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
 		}
 
 		if (!empty($_POST['billing_address_1'])) {
-			$newData['payment']['address'] = $_POST['billing_address_1'];
+			$newData['payment']['address'] = $street_name;
 		}
 
 		if (!empty($street_number)) {

@@ -5,7 +5,7 @@
  * Description: Offer Latin American local payment methods & increase your conversion rates with the solution used by AliExpress, AirBnB and Spotify in Brazil.
  * Author: EBANX
  * Author URI: https://www.ebanx.com/business/en
- * Version: 1.5.3
+ * Version: 1.7.1
  * License: MIT
  * Text Domain: woocommerce-gateway-ebanx
  * Domain Path: /languages
@@ -40,7 +40,7 @@ if (!class_exists('WC_EBANX')) {
 		 *
 		 * @var string
 		 */
-		const VERSION = '1.5.3';
+		const VERSION = '1.7.1';
 
 		const DIR = __FILE__;
 
@@ -152,7 +152,13 @@ if (!class_exists('WC_EBANX')) {
 				$action = $_GET['ebanx'];
 				if ($action === 'order-received' && isset($_GET['hash'])) {
 					$hash = $_GET['hash'];
-					$this->ebanx_order_received($hash);
+					$payment_type = isset($_GET['payment_type']) ? $_GET['payment_type'] : null;
+					$this->ebanx_order_received($hash, $payment_type);
+					return;
+				}
+				if ($action === 'dashboard-check') {
+					$this->ebanx_dashboard_check();
+					return;
 				}
 			}
 		}
@@ -162,24 +168,45 @@ if (!class_exists('WC_EBANX')) {
 		 *
 		 * @return void
 		 */
-		private function ebanx_order_received($hash)
+		private function ebanx_order_received($hash, $payment_type)
 		{
 			$this->setup_configs();
 			$subdomain = $this->is_sandbox_mode ? 'sandbox' : 'print';
-			$url = 'https://'.$subdomain.'.ebanx.com/print/?hash=' . $hash . '&format=basic#';
+			$url = "https://{$subdomain}.ebanx.com/";
+			if (!isset($payment_type) || $payment_type !== 'cip') {
+				$url .= 'print/';
+			}
+			if (isset($payment_type) && $payment_type !== 'boleto') {
+				$url .= "{$payment_type}/";
+			}
+			$url .= "?hash={$hash}&format=basic#";
 			if (in_array('curl', get_loaded_extensions())) {
 				$curl = curl_init($url);
 				curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
 				$html = curl_exec($curl);
 
 				if (!curl_error($curl)) {
-				    curl_close($curl);
+					curl_close($curl);
 					echo $html;
 					exit;
 				}
 			}
 
 			echo file_get_contents($url);
+			exit;
+		}
+
+		/**
+		 * Responds that the plugin is installed
+		 *
+		 * @return void
+		 */
+		private function ebanx_dashboard_check()
+		{
+			$json = json_encode(array(
+				'ebanx' => true
+				));
+			echo $json;
 			exit;
 		}
 
@@ -261,8 +288,16 @@ if (!class_exists('WC_EBANX')) {
 		 * @return void
 		 */
 		public static function save_merchant_infos() {
+			// Prevent fatal error if WooCommerce isn't installed
+			if ( !defined('WC_VERSION') ) {
+				return;
+			}
+
 			// Save merchant informations
 			$user = get_userdata(get_current_user_id());
+			if (!$user || is_wp_error($user)) {
+				return;
+			}
 
 			$url = 'https://www.ebanx.com/business/en/dashboard/api/lead';
 			$args = array(
@@ -610,8 +645,20 @@ if (!class_exists('WC_EBANX')) {
 				}
 			</style>";
 
-			wp_enqueue_script('woocommerce_ebanx_payments_options', plugins_url('assets/js/payments-options.js', WC_EBANX::DIR));
-			wp_enqueue_script('woocommerce_ebanx_advanced_options', plugins_url('assets/js/advanced-options.js', WC_EBANX::DIR));
+			wp_enqueue_script(
+				'woocommerce_ebanx_payments_options',
+				plugins_url('assets/js/payments-options.js', WC_EBANX::DIR),
+				array('jquery'),
+				WC_EBANX::VERSION,
+				true
+			);
+			wp_enqueue_script(
+				'woocommerce_ebanx_advanced_options',
+				plugins_url('assets/js/advanced-options.js', WC_EBANX::DIR),
+				array('jquery'),
+				WC_EBANX::VERSION,
+				true
+			);
 		}
 
 		/**
