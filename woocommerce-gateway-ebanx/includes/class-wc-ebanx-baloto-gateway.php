@@ -4,23 +4,23 @@ if (!defined('ABSPATH')) {
 	exit;
 }
 
-class WC_EBANX_Oxxo_Gateway extends WC_EBANX_Gateway
+class WC_EBANX_Baloto_Gateway extends WC_EBANX_Gateway
 {
 	/**
 	 * Constructor
 	 */
 	public function __construct()
 	{
-		$this->id           = 'ebanx-oxxo';
-		$this->method_title = __('EBANX - OXXO', 'woocommerce-gateway-ebanx');
+		$this->id           = 'ebanx-baloto';
+		$this->method_title = __('EBANX - Baloto', 'woocommerce-gateway-ebanx');
 
-		$this->api_name    = 'oxxo';
-		$this->title       = __('OXXO', 'woocommerce-gateway-ebanx');
-		$this->description = __('Paga con boleta OXXO.', 'woocommerce-gateway-ebanx');
+		$this->api_name    = 'baloto';
+		$this->title       = __('Baloto', 'woocommerce-gateway-ebanx');
+		$this->description = __('Paga con Baloto.', 'woocommerce-gateway-ebanx');
 
 		parent::__construct();
 
-		$this->enabled = is_array($this->configs->settings['mexico_payment_methods']) ? in_array($this->id, $this->configs->settings['mexico_payment_methods']) ? 'yes' : false : false;
+		$this->enabled = is_array($this->configs->settings['colombia_payment_methods']) ? in_array($this->id, $this->configs->settings['colombia_payment_methods']) ? 'yes' : false : false;
 	}
 
 	/**
@@ -30,16 +30,17 @@ class WC_EBANX_Oxxo_Gateway extends WC_EBANX_Gateway
 	 */
 	public function is_available()
 	{
-		return parent::is_available() && $this->getTransactionAddress('country') == WC_EBANX_Gateway_Utils::COUNTRY_MEXICO;
+		return parent::is_available() && $this->getTransactionAddress('country') == WC_EBANX_Gateway_Utils::COUNTRY_COLOMBIA;
 	}
 
 	/**
 	 * Check if the currency is processed by EBANX
-	 * @param  string $currency Possible currencies: MXN
+	 *
+	 * @param  string $currency Possible currencies: COP
 	 * @return boolean          Return true if EBANX process the currency
 	 */
 	public function ebanx_process_merchant_currency($currency) {
-		return $currency === WC_EBANX_Gateway_Utils::CURRENCY_CODE_MXN;
+		return $currency === WC_EBANX_Gateway_Utils::CURRENCY_CODE_COP;
 	}
 
 	/**
@@ -52,7 +53,7 @@ class WC_EBANX_Oxxo_Gateway extends WC_EBANX_Gateway
 		}
 
 		wc_get_template(
-			'oxxo/payment-form.php',
+			'baloto/payment-form.php',
 			array(
 				'language' => $this->language,
 			),
@@ -72,7 +73,7 @@ class WC_EBANX_Oxxo_Gateway extends WC_EBANX_Gateway
 	{
 		parent::save_order_meta_fields($order, $request);
 
-		update_post_meta($order->id, '_oxxo_url', $request->payment->oxxo_url);
+		update_post_meta($order->id, '_baloto_url', $request->payment->baloto_url);
 	}
 
 	/**
@@ -83,41 +84,29 @@ class WC_EBANX_Oxxo_Gateway extends WC_EBANX_Gateway
 	 */
 	public static function thankyou_page($order)
 	{
-		$oxxo_url = get_post_meta($order->id, '_oxxo_url', true);
-		$oxxo_basic = $oxxo_url . "&format=basic";
-		$oxxo_pdf = $oxxo_url . "&format=pdf";
-		$oxxo_print = $oxxo_url . "&format=print";
+		$baloto_url = get_post_meta($order->id, '_baloto_url', true);
+		$baloto_basic = $baloto_url . "&format=basic";
+		$baloto_pdf = $baloto_url . "&format=pdf";
+		$baloto_print = $baloto_url . "&format=print";
 		$customer_email = get_post_meta($order->id, '_ebanx_payment_customer_email', true);
-		$oxxo_hash = get_post_meta($order->id, '_ebanx_payment_hash', true);
+		$baloto_hash = get_post_meta($order->id, '_ebanx_payment_hash', true);
 
 		$data = array(
 			'data' => array(
-				'url_basic'      => $oxxo_basic,
-				'url_pdf'        => $oxxo_pdf,
-				'url_print'      => $oxxo_print,
-				'url_iframe'      => get_site_url() . '/?ebanx=order-received&hash=' . $oxxo_hash . '&payment_type=oxxo',
+				'url_basic'      => $baloto_basic,
+				'url_pdf'        => $baloto_pdf,
+				'url_print'      => $baloto_print,
+				'url_iframe'      => get_site_url() . '/?ebanx=order-received&hash=' . $baloto_hash . '&payment_type=baloto',
 				'customer_email' => $customer_email
 			),
 			'order_status' => $order->get_status(),
-			'method' => 'oxxo'
+			'method' => 'baloto'
 		);
 
 		parent::thankyou_page($data);
 
-		wp_enqueue_script(
-			'woocommerce_ebanx_clipboard',
-			plugins_url('assets/js/vendor/clipboard.min.js', WC_EBANX::DIR),
-			array(),
-			WC_EBANX::VERSION,
-			true
-		);
-		wp_enqueue_script(
-			'woocommerce_ebanx_order_received',
-			plugins_url('assets/js/order-received.js', WC_EBANX::DIR),
-			array('jquery'),
-			WC_EBANX::VERSION,
-			true
-		);
+		wp_enqueue_script('woocommerce_ebanx_clipboard', plugins_url('assets/js/vendor/clipboard.min.js', WC_EBANX::DIR, false, true));
+		wp_enqueue_script('woocommerce_ebanx_order_received', plugins_url('assets/js/order-received.js', WC_EBANX::DIR, false, true));
 	}
 
 	/**
@@ -128,7 +117,7 @@ class WC_EBANX_Oxxo_Gateway extends WC_EBANX_Gateway
 	 */
 	protected function request_data($order)
 	{
-		/*TODO: ? if (empty($_POST['ebanx_oxxo_rfc'])) {
+		/*TODO: ? if (empty($_POST['ebanx_baloto_rfc'])) {
 		throw new Exception("Missing rfc.");
 		}*/
 
