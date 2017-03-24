@@ -132,14 +132,14 @@ if (!class_exists('WC_EBANX')) {
 		}
 
 		/**
-		*
+		* Performs checks on some system status
 		*
 		* @return void
 		*/
 		public function checker() {
 
 			WC_EBANX_Checker::check_sandbox_mode($this);
-			
+
 		}
 
 		/**
