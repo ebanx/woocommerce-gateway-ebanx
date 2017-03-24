@@ -17,7 +17,7 @@ class WC_EBANX_Checker {
 			return;
 		}
 
-		$warning_message = __('EBANX Gateway - You are currently in Sandbox mode, in this mode, none of your transactions will be processed.', 'woocommerce-gateway-ebanx');
+		$warning_message = __('EBANX Gateway - The Sandbox Mode option is enabled, in this mode, none of your transactions will be processed.', 'woocommerce-gateway-ebanx');
 		$context->notices
 			->with_message($warning_message)
 			->with_type('warning')
