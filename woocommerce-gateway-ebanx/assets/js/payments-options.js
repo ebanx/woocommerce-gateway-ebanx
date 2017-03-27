@@ -27,6 +27,7 @@
   var maxInstalmentsField = $('#woocommerce_ebanx-global_credit_card_instalments');
   var fields = $('.interest-rates-fields');
   var fieldsToggler = $('#woocommerce_ebanx-global_interest_rates_enabled');
+  var fieldsDueDate = $('#woocommerce_ebanx-global_due_date_days');
 
   var disableFields = function(jqElementList){
     jqElementList.closest('tr').hide();
@@ -59,6 +60,9 @@
   maxInstalmentsField.change(function(){
     updateFields();
   });
+
+  // Fields due date
+  fieldsDueDate.attr('min', '1');
 
   // Payments options toggler 
   var optionsToggler = $('#woocommerce_ebanx-global_payments_options_title');
