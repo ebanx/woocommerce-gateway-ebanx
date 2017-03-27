@@ -1035,8 +1035,7 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
 	 * @return void
 	 */
 	public function checkout_rate_conversion($currency) {
-		if (get_woocommerce_currency() === WC_EBANX_Gateway_Utils::CURRENCY_CODE_USD
-		|| get_woocommerce_currency() === WC_EBANX_Gateway_Utils::CURRENCY_CODE_EUR) {
+		if (in_array(get_woocommerce_currency(), array(WC_EBANX_Gateway_Utils::CURRENCY_CODE_USD, WC_EBANX_Gateway_Utils::CURRENCY_CODE_EUR))) {
 			
 			$rate = $this->get_local_currency_rate_for_site($currency);
 			$amount = WC()->cart->cart_contents_total;
