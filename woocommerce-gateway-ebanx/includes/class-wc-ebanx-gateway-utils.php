@@ -46,8 +46,7 @@ abstract class WC_EBANX_Gateway_Utils
 		self::CURRENCY_CODE_BRL,
 		self::CURRENCY_CODE_CLP,
 		self::CURRENCY_CODE_COP,
-		self::CURRENCY_CODE_MXN,
-		self::CURRENCY_CODE_EUR
+		self::CURRENCY_CODE_MXN
 	);
 
 	/**
