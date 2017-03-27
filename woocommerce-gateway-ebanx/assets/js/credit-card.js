@@ -88,7 +88,7 @@ jQuery( function($) {
 				var expires   = $('#ebanx-card-expiry').payment('cardExpiryVal');
 				var card_name = $('#ebanx-card-holder-name').val() || ($('#billing_first_name').val() + ' ' + $('#billing_last_name').val());
 				var country   = $('#billing_country').val().toLowerCase();
-        var instalments = $('#ebanx-container-new-credit-card').find('.ebanx-instalments').val();
+        var instalments = $('#ebanx-container-new-credit-card').find('select.ebanx-instalments').val();
 
 				EBANX.config.setCountry(country);
 
@@ -107,7 +107,7 @@ jQuery( function($) {
 					creditcard.card_cvv = $(cardUse).parents('.ebanx-credit-card-option').find('.wc-credit-card-form-card-cvc').val();
 					creditcard.brand = $(cardUse).parents('.ebanx-credit-card-option').find('.ebanx-card-brand-use').val();
 					creditcard.masked_number = $(cardUse).parents('.ebanx-credit-card-option').find('.ebanx-card-masked-number-use').val();
-          creditcard.instalments = $(cardUse).parents('.ebanx-form-row').find('.ebanx-instalments').val();
+          creditcard.instalments = $(cardUse).parents('.ebanx-form-row').find('select.ebanx-instalments').val();
 
 					var response = {
 						data: {
