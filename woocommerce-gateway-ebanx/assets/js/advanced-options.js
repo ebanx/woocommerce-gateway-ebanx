@@ -78,12 +78,12 @@
       }
 
       if (brazilVal == null && chileVal == null && colombiaVal == null) {
-        document.getElementById('woocommerce_ebanx-global_advanced_options_title').style.display = 'none';
+        $('#woocommerce_ebanx-global_advanced_options_title').hide();
         disableFields(ebanxAdvancedOptionEnable);
       }
 
       else {
-        document.getElementById('woocommerce_ebanx-global_advanced_options_title').style.display = 'table';
+        $('#woocommerce_ebanx-global_advanced_options_title').css('display', 'table'); 
         enableFields(ebanxAdvancedOptionEnable);
       }
 
