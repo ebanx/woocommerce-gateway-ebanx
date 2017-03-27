@@ -757,29 +757,23 @@ if (!class_exists('WC_EBANX')) {
 
 		public function ebanx_metabox_payment_link_save ($post_id, $post) {
 
-			echo 'EBANXERROR EBANX SAVE POST';
-
 			// Check if user has permissions to save data.
 			if ( ! current_user_can( 'edit_post', $post_id ) ) {
-				echo 'EBANXERROR edit_post';
 				return;
 			}
 
 			// Check if not an autosave.
 			if ( wp_is_post_autosave( $post_id ) ) {
-				echo 'EBANXERROR autosave';
 				return;
 			}
 
 			// Check if not a revision.
 			if ( wp_is_post_revision( $post_id ) ) {
-				echo 'EBANXERROR revision';
 				return;
 			}
 
 			// Check if is an EBANX request
 			if ( ! isset($_REQUEST['save_order_ebanx']) || $_REQUEST['save_order_ebanx'] !== 'Save EBANX Order' ) {
-				echo 'EBANXERROR errroooo';
 				return;
 			}
 
@@ -794,7 +788,7 @@ if (!class_exists('WC_EBANX')) {
 					->with_message(__('The customer name is required, please provide a valid customer name and last name.', 'woocommerce-gateway-ebanx'))
 					->with_type('error')
 					->persistent()
-					->enqueue();
+					->display();
 
 				$has_errors = true;
 			}
@@ -804,7 +798,7 @@ if (!class_exists('WC_EBANX')) {
 					->with_message(__('EBANX only support the countries: Brazil, Mexico, Peru, Colombia and Chile. Please, use one of these.', 'woocommerce-gateway-ebanx'))
 					->with_type('error')
 					->persistent()
-					->enqueue();
+					->display();
 
 				$has_errors = true;
 			}
@@ -814,7 +808,7 @@ if (!class_exists('WC_EBANX')) {
 					->with_message(__('The total amount needs to be greater than $1.', 'woocommerce-gateway-ebanx'))
 					->with_type('error')
 					->persistent()
-					->enqueue();
+					->display();
 
 				$has_errors = true;
 			}
@@ -822,8 +816,7 @@ if (!class_exists('WC_EBANX')) {
 			// TODO: Novo erro: Verificar se o status da ordem é 'wc-pending', só pode criar com o status de 'wc-pending'
 
 			if ( $has_errors ) {
-				echo 'EBANXERROR has_errors';
-				return;
+				exit;
 			}
 
 			$home_url = esc_url( home_url() );
@@ -843,43 +836,51 @@ if (!class_exists('WC_EBANX')) {
 				'ebanx-account' => 'ebanxaccount'
 			);
 
-			$payment_data = array(
-				'currency_code' => strtoupper(get_woocommerce_currency()),
-				'amount' => $order->get_total(),
+			$data = array(
+				'name'                  => $order->billing_first_name . ' ' . $order->billing_last_name,
+				'email'                 => $order->billing_email,
+				'country'               => strtolower($order->billing_country),
+				'payment_type_code'     => $payment_type_code[$order->payment_method],
 				'merchant_payment_code' => $order->id . '_' . md5(time()),
-				'name' => $order->billing_first_name . ' ' . $order->billing_last_name,
-				'email' => $order->billing_email,
-				'payment_type_code' => $payment_type_code[$order->payment_method],
-				'order_number' => $order->id,
-				'user_value_1' => 'name=plugin',
-				'user_value_2' => 'value=woocommerce',
-				'user_value_3' => 'version=' . WC_EBANX::VERSION,
-				'notification_url' => $home_url,
-				'country' => strtolower($order->billing_country),
+				'currency_code'         => strtoupper(get_woocommerce_currency()),
+				'amount'                => $order->get_total()
 			);
 
-			$config = array(
+			$this->setup_configs();
+
+			$config = [
 				'integrationKey' => $this->private_key,
-				'testMode' => false
-			);
+				'testMode'       => $this->is_sandbox_mode,
+			];
 
 			\Ebanx\Config::set($config);
+			\Ebanx\Config::setDirectMode(false);
 
-    		$request = \Ebanx\EBANX::doRequest($data);
+			$request = false;
 
-    		if ( $request->status !== 'SUCCESS' ) {
-    			$this->notices
+			try {
+				$request = \Ebanx\EBANX::doRequest($data);
+			} catch (Exception $e) {
+				echo $e->getMessage();
+				exit;
+			}
+
+			if ( $request->status !== 'SUCCESS' ) {
+				var_dump($request);
+				echo "<br />";
+				$this->notices
 					->with_message(__('We couldn\'t create your EBANX order. Could you review your fields and try again?', 'woocommerce-gateway-ebanx'))
 					->with_type('error')
 					->persistent()
-					->enqueue();
+					->display();
 
-				return;
-    		}
+				exit;
+			}
 
-    		$order->add_order_note('Order created via EBANX.');
+			$order->add_order_note('Order created via EBANX.');
 
 			update_post_meta($post_id, 'EBANX Payment\'s Hash', $request->payment->hash);
+			update_post_meta($post_id, 'EBANX Checkout URL', $request->redirect_url);
 			update_post_meta($post_id, '_ebanx_payment_hash', $request->payment->hash);
 			update_post_meta($post_id, '_ebanx_checkout_url', $request->redirect_url);
 		}
