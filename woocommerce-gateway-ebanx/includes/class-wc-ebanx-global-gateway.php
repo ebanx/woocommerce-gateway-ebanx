@@ -313,7 +313,7 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway
 				'title' => __('Checkout Manager', 'woocommerce-gateway-ebanx'),
 				'label' => __('Use my checkout manager fields', 'woocommerce-gateway-ebanx'),
 				'type' => 'checkbox',
-				'class' => 'ebanx-advanced-option',
+				'class' => 'ebanx-advanced-option ebanx-advanced-option-enable',
 				'description' => __('If you make use of a Checkout Manager, please identify the HTML name attribute of the fields.', 'woocommerce-gateway-ebanx'),
 				'desc_tip' => true
 			),

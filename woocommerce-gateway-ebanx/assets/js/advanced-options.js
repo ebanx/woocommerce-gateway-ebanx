@@ -28,12 +28,12 @@
   var fields = $('.ebanx-checkout-manager-field');
   var fieldsToggler = $('#woocommerce_ebanx-global_checkout_manager_enabled');
   var fieldBrazilTaxes = $('.brazil-taxes');
+  var ebanxAdvancedOptionEnable = $('.ebanx-advanced-option-enable');
   var countryPayments = {
     brazil: $('#woocommerce_ebanx-global_brazil_payment_methods'),
     chile: $('#woocommerce_ebanx-global_chile_payment_methods'),
     colombia: $('#woocommerce_ebanx-global_colombia_payment_methods')
   };
-  
 
   var disableFields = function(jqElementList){
     jqElementList.closest('tr').hide();
@@ -76,6 +76,17 @@
       if (colombiaVal != null && colombiaVal.length > 0) {
         enableFields(fields.filter('.ebanx-colombia-document'));
       }
+
+      if (brazilVal == null && chileVal == null && colombiaVal == null) {
+        document.getElementById('woocommerce_ebanx-global_advanced_options_title').style.display = 'none';
+        disableFields(ebanxAdvancedOptionEnable);
+      }
+
+      else {
+        document.getElementById('woocommerce_ebanx-global_advanced_options_title').style.display = 'table';
+        enableFields(ebanxAdvancedOptionEnable);
+      }
+
     }
   };
 
