@@ -1027,4 +1027,33 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
 
 		return $order;
 	}
+
+	/**
+	 * Create the conveter amount on checkout page
+	 *
+	 * @param  string $currency Possible currencies: BRL, USD, EUR, PEN, CLP, COP, MXN
+	 * @return void
+	 */
+	public function checkout_rate_conversion($currency) {
+		if (get_woocommerce_currency() === WC_EBANX_Gateway_Utils::CURRENCY_CODE_USD
+		|| get_woocommerce_currency() === WC_EBANX_Gateway_Utils::CURRENCY_CODE_EUR) {
+			
+			$rate = $this->get_local_currency_rate_for_site($currency);
+			$amount = WC()->cart->cart_contents_total;
+			if (WC()->cart->prices_include_tax) {
+				$amount = WC()->cart->cart_contents_total + WC()->cart->tax_total;
+			}
+			$amount *= $rate;
+		
+			wc_get_template(
+				'checkout-conversion-rate.php',
+				array(
+					'currency' => $currency,
+					'amountConverted' => $amount
+				),
+				'woocommerce/ebanx/',
+				WC_EBANX::get_templates_path()
+			);
+		}
+	}
 }

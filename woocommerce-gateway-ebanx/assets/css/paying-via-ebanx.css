@@ -57,6 +57,14 @@ li[class*="ebanx"] > label > img {
   margin-left: 5px;
 }
 
+li[class*="ebanx"] .ebanx-payment-converted-amount {
+  background: #FFF;
+  float: left;
+  font-size: 0.7em;
+  margin-top: 5px;
+  padding: 4px;
+}
+
 #shop-isle-checkout-coupon .checkout_coupon .ebanx-form-row-first {
     width: 100%;
     margin-left: -200px;
