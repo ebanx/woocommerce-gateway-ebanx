@@ -110,6 +110,9 @@ class WC_EBANX_My_Account
 			case 'ebanx-sencillito':
 				WC_EBANX_Sencillito_Gateway::thankyou_page($order);
 				break;
+			case 'ebanx-baloto':
+				WC_EBANX_Baloto_Gateway::thankyou_page($order);
+				break;
 		}
 	}
 }

@@ -40,8 +40,8 @@ abstract class WC_EBANX_Gateway_Utils
 	);
 
 	/**
-	+	 *  Local currencies that EBANX processes
-	+	 */
+	 *  Local currencies that EBANX processes
+	 */
 	public static $LOCAL_CURRENCIES = array(
 		self::CURRENCY_CODE_BRL,
 		self::CURRENCY_CODE_CLP,
@@ -93,7 +93,8 @@ abstract class WC_EBANX_Gateway_Utils
 	  'oxxo' => 'America/Mexico_City',
 	  'pagoefectivo' => 'America/Lima',
 	  'sencillito' => 'America/Santiago',
-	  'safetypay-cash' => 'America/Lima'
+	  'safetypay-cash' => 'America/Lima',
+	  'baloto' => 'America/Bogota',
 	);
 
 	/**
