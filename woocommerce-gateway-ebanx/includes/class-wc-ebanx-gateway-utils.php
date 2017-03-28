@@ -40,6 +40,16 @@ abstract class WC_EBANX_Gateway_Utils
 	);
 
 	/**
+	 *  Local currencies that EBANX processes
+	 */
+	public static $LOCAL_CURRENCIES = array(
+		self::CURRENCY_CODE_BRL,
+		self::CURRENCY_CODE_CLP,
+		self::CURRENCY_CODE_COP,
+		self::CURRENCY_CODE_MXN
+	);
+
+	/**
 	 * Minimal instalment value for acquirers to approve based on currency
 	 */
 	const ACQUIRER_MIN_INSTALMENT_VALUE_MXN = 100;
