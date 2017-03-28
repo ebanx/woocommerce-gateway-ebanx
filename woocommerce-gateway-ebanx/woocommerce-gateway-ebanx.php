@@ -5,7 +5,7 @@
  * Description: Offer Latin American local payment methods & increase your conversion rates with the solution used by AliExpress, AirBnB and Spotify in Brazil.
  * Author: EBANX
  * Author URI: https://www.ebanx.com/business/en
- * Version: 1.8.1
+ * Version: 1.9.0
  * License: MIT
  * Text Domain: woocommerce-gateway-ebanx
  * Domain Path: /languages
@@ -40,7 +40,7 @@ if (!class_exists('WC_EBANX')) {
 		 *
 		 * @var string
 		 */
-		const VERSION = '1.8.1';
+		const VERSION = '1.9.0';
 
 		const DIR = __FILE__;
 
@@ -72,25 +72,35 @@ if (!class_exists('WC_EBANX')) {
 				return;
 			}
 			/**
+			 * i18n
+			 */
+			$this->enable_i18n();
+
+			/**
+			 * Includes
+			 */
+			$this->includes();
+
+			/**
 			 * Actions
 			 */
 			add_action('plugins_loaded', array($this, 'plugins_loaded'));
 
 			add_action('init', array($this, 'my_account_endpoint'));
 			add_action('init', array($this, 'ebanx_router'));
-
 			add_action('admin_footer', array($this, 'render_static_assets'), 0);
-
-			add_action('admin_init', array($this, 'check_environment'));
 			add_action('admin_init', array($this, 'ebanx_sidebar_shortcut'));
 
 			if ( empty( $_POST ) ) {
 				add_action('admin_init', array($this, 'setup_configs'), 10);
-				add_action('admin_init', array($this, 'check_merchant_api_keys'), 20);
 				add_action('admin_init', array($this, 'checker'), 30);
 			}
 
 			add_action('woocommerce_account_' . self::$endpoint . '_endpoint', array($this, 'my_account_template'));
+			add_action('woocommerce_settings_saved', array($this, 'setup_configs'), 10);
+			add_action('woocommerce_settings_saved', array($this, 'on_save_settings'), 10);
+			add_action('woocommerce_settings_saved', array($this, 'update_lead'), 20);
+			add_action('woocommerce_settings_saved', array($this, 'checker'), 20);
 
 			/**
 			 * Filters
@@ -98,21 +108,8 @@ if (!class_exists('WC_EBANX')) {
 			add_filter('query_vars', array($this, 'my_account_query_vars'), 0);
 			add_filter('woocommerce_account_menu_items', array($this, 'my_account_menus'));
 			add_filter('the_title', array($this, 'my_account_menus_title'));
-
-			/**
-			 * i18n
-			 */
-			$this->enable_i18n();
-
-			$this->includes();
-
 			add_filter('woocommerce_payment_gateways', array($this, 'add_gateway'));
 			add_filter('plugin_action_links_' . plugin_basename(__FILE__), array($this, 'plugin_action_links'));
-
-			add_action('woocommerce_settings_saved', array($this, 'setup_configs'), 10);
-			add_action('woocommerce_settings_saved', array($this, 'update_lead'), 20);
-			add_action('woocommerce_settings_saved', array($this, 'check_merchant_api_keys'), 20);
-			add_action('woocommerce_settings_saved', array($this, 'checker'), 30);
 		}
 
 
@@ -137,9 +134,9 @@ if (!class_exists('WC_EBANX')) {
 		* @return void
 		*/
 		public function checker() {
-
 			WC_EBANX_Checker::check_sandbox_mode($this);
-
+			WC_EBANX_Checker::check_merchant_api_keys($this);
+			WC_EBANX_Checker::check_environment($this);
 		}
 
 		/**
@@ -149,7 +146,7 @@ if (!class_exists('WC_EBANX')) {
 		 */
 		public function plugins_loaded()
 		{
-			if (self::get_environment_warning()) {
+			if ($this->get_environment_warning()) {
 				return;
 			}
 		}
@@ -345,6 +342,16 @@ if (!class_exists('WC_EBANX')) {
 		}
 
 		/**
+		 * A method that will be called every time settings are saved
+		 *
+		 * @return void
+		 */
+		public function on_save_settings() {
+			// Delete flag that check if the api is ok
+			delete_option('_ebanx_api_was_checked');
+		}
+
+		/**
 		 * Update and inegrate the lead to the merchant using the merchant's integration key
 		 *
 		 * @return void
@@ -427,62 +434,11 @@ if (!class_exists('WC_EBANX')) {
 		}
 
 		/**
-		 * Check if the merchant environment
-		 *
-		 * @return void
-		 */
-		public function check_environment()
-		{
-			$environment_warning = self::get_environment_warning();
-
-			if ($environment_warning && is_plugin_active(plugin_basename(__FILE__))) {
-				$this->notices
-					->with_message($environment_warning)
-					->with_type('error')
-					->persistent()
-					->enqueue();
-			}
-		}
-
-		/**
-		 * Check if the merchant's integration keys are valid
-		 *
-		 * @return boolean
-		 */
-		public function check_merchant_api_keys()
-		{
-			\Ebanx\Config::set(array('integrationKey' => $this->private_key, 'testMode' => $this->is_sandbox_mode));
-
-			try {
-				$res = \Ebanx\Ebanx::getMerchantIntegrationProperties(array('integrationKey' => $this->private_key));
-				$res_public = \Ebanx\Ebanx::getMerchantIntegrationPublicProperties(array('public_integration_key' => $this->public_key));
-
-				if ( $res->status !== 'SUCCESS' || $res_public->status !== 'SUCCESS' ) {
-					throw new Exception('CONNECTION-ERROR');
-				}
-			} catch (Exception $e) {
-				$api_url = 'https://api.ebanx.com';
-
-				$message = sprintf('Could not connect to EBANX servers. Please check if your server can reach our API (<a href="%1$s">%1$s</a>) and your integrations keys are correct.', $api_url);
-				$this->notices
-					->with_message($message)
-					->with_type('error')
-					->persistent();
-				if (empty($_POST)) {
-					$this->notices->enqueue();
-					return;
-				}
-				$this->notices->display();
-			}
-		}
-
-
-		/**
 		 * Check if the merchant's environment meets the requirements
 		 *
 		 * @return boolean|string
 		 */
-		public static function get_environment_warning()
+		public function get_environment_warning()
 		{
 			if (version_compare(phpversion(), WC_EBANX_MIN_PHP_VER, '<')) {
 				$message = __('EBANX Payment Gateway for WooCommerce - The minimum PHP version required for this plugin is %1$s. You are running %2$s.', 'woocommerce-gateway-ebanx', 'woocommerce-gateway-ebanx');
@@ -523,30 +479,47 @@ if (!class_exists('WC_EBANX')) {
 		 */
 		private function includes()
 		{
+			// Custom Order
 			include_once(INCLUDES_DIR . 'class-wc-ebanx-custom-order.php');
+
+			// Utils
 			include_once(INCLUDES_DIR . 'class-wc-ebanx-gateway-utils.php');
+			include_once(INCLUDES_DIR . 'notices/class-wc-ebanx-notices-notice.php');
+			include_once(INCLUDES_DIR . 'class-wc-ebanx-checker.php');
+			include_once(SERVICES_DIR . 'class-wc-ebanx-hooks.php');
+
+			// Gateways
 			include_once(INCLUDES_DIR . 'class-wc-ebanx-gateway.php');
 			include_once(INCLUDES_DIR . 'class-wc-ebanx-redirect-gateway.php');
-			include_once(INCLUDES_DIR . 'class-wc-ebanx-pagoefectivo-gateway.php');
-			include_once(INCLUDES_DIR . 'class-wc-ebanx-sencillito-gateway.php');
-			include_once(INCLUDES_DIR . 'class-wc-ebanx-account-gateway.php');
-			include_once(INCLUDES_DIR . 'class-wc-ebanx-safetypay-gateway.php');
-			include_once(INCLUDES_DIR . 'class-wc-ebanx-my-account.php');
-			include_once(INCLUDES_DIR . 'class-wc-ebanx-banking-ticket-gateway.php');
 			include_once(INCLUDES_DIR . 'class-wc-ebanx-global-gateway.php');
 			include_once(INCLUDES_DIR . 'class-wc-ebanx-credit-card-gateway.php');
+
+			// Chile Gateways
+			include_once(INCLUDES_DIR . 'class-wc-ebanx-servipag-gateway.php');
+			include_once(INCLUDES_DIR . 'class-wc-ebanx-sencillito-gateway.php');
+
+			// Brazil Gateways
+			include_once(INCLUDES_DIR . 'class-wc-ebanx-banking-ticket-gateway.php');
 			include_once(INCLUDES_DIR . 'class-wc-ebanx-credit-card-br-gateway.php');
+			include_once(INCLUDES_DIR . 'class-wc-ebanx-account-gateway.php');
+			include_once(INCLUDES_DIR . 'class-wc-ebanx-tef-gateway.php');
+
+			// Mexico Gateways
 			include_once(INCLUDES_DIR . 'class-wc-ebanx-credit-card-mx-gateway.php');
 			include_once(INCLUDES_DIR . 'class-wc-ebanx-debit-card-gateway.php');
 			include_once(INCLUDES_DIR . 'class-wc-ebanx-oxxo-gateway.php');
-			include_once(INCLUDES_DIR . 'class-wc-ebanx-servipag-gateway.php');
-			include_once(INCLUDES_DIR . 'class-wc-ebanx-tef-gateway.php');
-			include_once(INCLUDES_DIR . 'class-wc-ebanx-eft-gateway.php');
+
+			// Colombia Gateways
 			include_once(INCLUDES_DIR . 'class-wc-ebanx-baloto-gateway.php');
+			include_once(INCLUDES_DIR . 'class-wc-ebanx-eft-gateway.php');
+
+			// Peru Gateways
+			include_once(INCLUDES_DIR . 'class-wc-ebanx-pagoefectivo-gateway.php');
+			include_once(INCLUDES_DIR . 'class-wc-ebanx-safetypay-gateway.php');
+
+			// Hooks/Actions
+			include_once(INCLUDES_DIR . 'class-wc-ebanx-my-account.php');
 			include_once(INCLUDES_DIR . 'class-wc-ebanx-one-click.php');
-			include_once(SERVICES_DIR . 'class-wc-ebanx-hooks.php');
-			include_once(INCLUDES_DIR . 'notices/class-wc-ebanx-notices-notice.php');
-			include_once(INCLUDES_DIR . 'class-wc-ebanx-checker.php');
 		}
 
 		/**
