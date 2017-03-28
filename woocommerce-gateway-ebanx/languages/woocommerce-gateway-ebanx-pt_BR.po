@@ -397,6 +397,11 @@ msgstr "Pagamento realizado usando o cartão de crédito %1$s em %2$s."
 msgid "%1$dx of %2$s"
 msgstr "%1$dx de %2$s"
 
+#: templates/instalments.php:20
+#, php-format
+msgid "with interest"
+msgstr "com juros"
+
 #: templates/credit-card/one-click.php:18
 msgid "One-Click Purchase"
 msgstr "Pague com um clique"
