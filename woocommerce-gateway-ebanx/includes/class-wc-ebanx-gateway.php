@@ -403,7 +403,9 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
 		$this->setup_pay_api();
 
 		$cache_key = 'EBANX_exchange_'.$local_currency_code;
-		$cache_time = date('YmdH'); // Hourly cache
+
+		// Every five minutes
+		$cache_time = date('YmdH').floor(date('i') / 5);
 
 		$cached = get_option($cache_key);
 		if ($cached !== false) {
