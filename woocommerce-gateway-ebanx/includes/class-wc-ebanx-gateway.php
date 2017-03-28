@@ -844,9 +844,6 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
 		if (isset($_POST['billing_address_1'])) {
 			update_post_meta($order->id, '_ebanx_payment_customer_address', sanitize_text_field($_POST['billing_address_1']));
 		}
-
-		// It shows to the merchant
-		update_post_meta($order->id, 'Payment\'s Hash', $request->payment->hash);
 	}
 
 	/**
