@@ -459,3 +459,27 @@ msgstr ""
 #: woocommerce-gateway-ebanx.php:301
 msgid "Settings"
 msgstr ""
+
+#: woocommerce-gateway-ebanx.php:421
+msgid "EBANX - Credit Cards"
+msgstr "EBANX - Tarjetas de Crédito"
+
+#: templates/my-account/ebanx-credit-cards.php:3
+msgid "Your saved credit cards"
+msgstr "Sus tarjetas de crédito guardados"
+
+#: templates/my-account/ebanx-credit-cards.php:5
+msgid "The following credit cards will be listed on the checkout page. To delete a credit card, just check it and submit."
+msgstr "Las tarjetas de crédito siguientes se mostrarán en la página de pago. Para borrar una tarjeta de crédito, seleccionarlo y haga clic en \"Borrar tarjetas\"."
+
+#: templates/my-account/ebanx-credit-cards.php:23
+msgid "Delete cards"
+msgstr "Borrar tarjetas"
+
+#: templates/my-account/ebanx-credit-cards.php:27
+msgid "No credit cards found"
+msgstr "Ninguna tarjeta de crédito encontrada"
+
+#: templates/my-account/ebanx-credit-cards.php:29
+msgid "To save a credit card, pay an order on checkout using credit card as payment method."
+msgstr "Para guardar una tarjeta de crédito, termina una compra seleccionando tarjeta de crédito como medio de pago."
