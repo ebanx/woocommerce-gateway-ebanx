@@ -1,1 +1,6 @@
-{}
+{
+  "env": {
+    "admin": "admin",
+    "site": "site"
+  }
+}

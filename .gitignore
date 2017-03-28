@@ -6,3 +6,4 @@ woocommerce-gateway-ebanx/travis/vendor/
 *.gz
 *.gz.*
 cypress/videos
+node_modules
