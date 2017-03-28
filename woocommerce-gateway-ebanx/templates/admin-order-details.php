@@ -1,9 +1,3 @@
-<?php
-
-$dashboard_link = "http://dashboard.ebanx.com/" . ($is_sandbox_mode ? 'test/' : '') . "payments/?hash=$payment_hash";
-
-?>
-
 <div class="form-field form-field-wide">
 	<h3><?php _e('EBANX Order Details', 'woocommerce-gateway-ebanx') ?></h3>
 	<p>

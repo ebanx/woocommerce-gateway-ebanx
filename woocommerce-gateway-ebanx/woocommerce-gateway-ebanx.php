@@ -732,13 +732,16 @@ if (!class_exists('WC_EBANX')) {
 		 */
 		public function ebanx_admin_order_details ($order) {
 			if (in_array($order->payment_method, WC_EBANX_Gateway_Utils::flatten(WC_EBANX_Gateway_Utils::$EBANX_GATEWAYS_BY_COUNTRY))) {
+				$payment_hash = get_post_meta($order->id, '_ebanx_payment_hash', true);
+
 				wc_get_template(
 					'admin-order-details.php',
 					array(
 						'order' => $order,
-						'payment_hash' => get_post_meta($order->id, '_ebanx_payment_hash', true),
+						'payment_hash' => $payment_hash,
 						'payment_checkout_url' => get_post_meta($order->id, '_ebanx_checkout_url', true),
-						'is_sandbox_mode' => $this->is_sandbox_mode
+						'is_sandbox_mode' => $this->is_sandbox_mode,
+						'dashboard_link' => "http://dashboard.ebanx.com/" . ($this->is_sandbox_mode ? 'test/' : '') . "payments/?hash=$payment_hash"
 					),
 					'woocommerce/ebanx/',
 					WC_EBANX::get_templates_path()
