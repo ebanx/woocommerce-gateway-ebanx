@@ -4,6 +4,8 @@ if (!defined('ABSPATH')) {
 	exit;
 }
 
+include_once(INCLUDES_DIR . 'notices/class-wc-ebanx-notices-notice.php');
+
 final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway
 {
 	/**
@@ -33,6 +35,7 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway
 		),
 		'colombia_payment_methods' => array(
 			'ebanx-eft',
+			'ebanx-baloto',
 		),
 		'peru_payment_methods' => array(
 			'ebanx-safetypay',
@@ -52,9 +55,13 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway
 	 */
 	public function __construct()
 	{
+		$this->notices = new WC_EBANX_Notices_Notice();
+
 		$this->id                 = 'ebanx-global';
 		$this->method_title       = __('EBANX', 'woocommerce-gateway-ebanx');
 		$this->method_description = __('EBANX easy-to-setup checkout allows your business to accept local payments in Brazil, Mexico, Colombia, Chile & Peru.', 'woocommerce-gateway-ebanx');
+
+		$this->merchant_currency = strtoupper(get_woocommerce_currency());
 
 		$this->init_form_fields();
 		$this->init_settings();
@@ -72,6 +79,24 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway
 		return false;
 	}
 
+	/**
+	 * Error handling
+	 *
+	 */
+	public function validate_due_date_days_field() {
+		if ($_POST['woocommerce_ebanx-global_due_date_days'] < 1) {
+			$_POST['woocommerce_ebanx-global_due_date_days'] = self::$defaults['due_date_days'];
+
+			$this->notices
+				->with_message(__('Days To Expiration must be greater than or equal to 1.', 'woocommerce-gateway-ebanx'))
+				->with_type('error')
+				->display();
+
+			return;
+		}
+
+		return $_POST['woocommerce_ebanx-global_due_date_days'];
+}
 	/**
 	 * Define the fields on EBANX WooCommerce settings page and set the defaults when the plugin is installed
 	 *
@@ -172,9 +197,11 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway
 				'class'       => 'ebanx-select',
 				'options'     => array(
 					'ebanx-eft' => 'PSE - Pago Seguros en Línea (EFT)',
+					'ebanx-baloto' => 'Baloto',
 				),
 				'default'     => array(
 					'ebanx-eft',
+					'ebanx-baloto',
 				),
 			),
 			'peru_payment_methods'      => array(
@@ -219,7 +246,7 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway
 				'type'    => 'checkbox',
 				'title'   => __('Enable Auto-Capture', 'woocommerce-gateway-ebanx'),
 				'label'   => __('Capture the payment immediately', 'woocommerce-gateway-ebanx'),
-				'description' => __('Automatically capture payments from your customers. Otherwise you will need to capture the payment going to: WooCommerce -> Orders. Not captured payments will be cancelled in 4 days.', 'woocommerce-gateway-ebanx'),
+				'description' => __('Automatically capture payments from your customers, just for credit card. Otherwise you will need to capture the payment going to: WooCommerce -> Orders. Not captured payments will be cancelled in 4 days.', 'woocommerce-gateway-ebanx'),
 				'desc_tip' => true,
 				'class' => 'ebanx-payments-option'
 			),
@@ -248,6 +275,7 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway
 				'type'    => 'checkbox',
 				'title'   => __('Interest Rates', 'woocommerce-gateway-ebanx'),
 				'label'   => __('Enable Interest Rates', 'woocommerce-gateway-ebanx'),
+				'description' => __('Enable and set a custom interest rate for your customers according to the number of Installments you allow the payment.'),
 				'desc_tip' => true,
 				'class' => 'ebanx-payments-option'
 			)
@@ -279,18 +307,28 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway
 				'type'  => 'title',
 				'class' => 'ebanx-payments-option'
 			),
-			'due_date_days'             => array(
-				'title'   => __('Days to Expiration', 'woocommerce-gateway-ebanx'),
-				'type'    => 'select',
-				'class'   => 'ebanx-select ebanx-payments-option',
-				'options' => array(
-					'1' => '1',
-					'2' => '2',
-					'3' => '3',
-				),
+			'due_date_days' => array(
+				'title' => __('Days to Expiration', 'woocommerce-gateway-ebanx'),
+				'class' => 'ebanx-due-cash-date ebanx-payments-option',
 				'description' => __('Define the maximum number of days on which your customer can complete the payment of: Boleto, OXXO, Sencilito, PagoEfectivo and SafetyPay.', 'woocommerce-gateway-ebanx'),
 				'desc_tip' => true
 			),
+		));
+
+		$this->form_fields['due_date_days']['type'] = (
+			in_array($this->merchant_currency, WC_EBANX_Gateway_Utils::$LOCAL_CURRENCIES) ?
+				'number' : 'select'
+		);
+		if (!in_array($this->merchant_currency, WC_EBANX_Gateway_Utils::$LOCAL_CURRENCIES)) {
+			$this->form_fields['due_date_days']['class'] .= ' ebanx-select';
+			$this->form_fields['due_date_days']['options'] = array(
+				'1' => '1',
+				'2' => '2',
+				'3' => '3',
+				);
+		}
+
+		$this->form_fields = array_merge($this->form_fields, array(
 			'advanced_options_title' => array(
 				'title' => __('Advanced Options', 'woocommerce-gateway-ebanx'),
 				'type' => 'title'
@@ -299,12 +337,14 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway
 				'title' => __('Enable Checkout for:', 'woocommerce-gateway-ebanx'),
 				'type'        => 'multiselect',
 				'required'    => true,
-				'class'       => 'ebanx-select ebanx-advanced-option',
+				'class'       => 'ebanx-select ebanx-advanced-option brazil-taxes',
 				'options'     => array(
 					'cpf' => __('CPF - Individuals', 'woocommerce-gateway-ebanx'),
 					'cnpj' => __('CNPJ - Companies', 'woocommerce-gateway-ebanx')
 				),
-				'default' => array('cpf')
+				'default' => array('cpf'),
+				'description' => __('In order to process with the EBANX Plugin in Brazil there a few mandatory fields such as CPF identification for individuals and CNPJ for companies.'),
+				'desc_tip' => true
 			),
 			'checkout_manager_enabled' => array(
 				'title' => __('Checkout Manager', 'woocommerce-gateway-ebanx'),
@@ -341,14 +381,20 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway
 			'checkout_manager_chile_document' => array(
 				'title' => __('RUT', 'woocommerce-gateway-ebanx'),
 				'type' => 'text',
-				'class' => 'ebanx-advanced-option ebanx-checkout-manager-field always-visible',
+				'class' => 'ebanx-advanced-option ebanx-checkout-manager-field ebanx-chile-document',
 				'placeholder' => __('eg: billing_chile_document', 'woocommerce-gateway-ebanx')
 			),
 			'checkout_manager_chile_birth_date' => array(
 				'title' => __('Birthdate Chile', 'woocommerce-gateway-ebanx'),
 				'type' => 'text',
-				'class' => 'ebanx-advanced-option ebanx-checkout-manager-field always-visible',
+				'class' => 'ebanx-advanced-option ebanx-checkout-manager-field ebanx-chile-bdate',
 				'placeholder' => __('eg: billing_chile_birth_date', 'woocommerce-gateway-ebanx')
+			),
+			'checkout_manager_colombia_document' => array(
+				'title' => __('DNI', 'woocommerce-gateway-ebanx'),
+				'type' => 'text',
+				'class' => 'ebanx-advanced-option ebanx-checkout-manager-field ebanx-colombia-document',
+				'placeholder' => __('eg: billing_colombia_document', 'woocommerce-gateway-ebanx')
 			),
 		));
 
