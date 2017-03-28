@@ -726,25 +726,19 @@ if (!class_exists('WC_EBANX')) {
 			);
 		}
 
-		public function ebanx_metabox_payment_link_save ($post_id, $post) {
+		public function ebanx_metabox_payment_link_save ($post_id) {
+			//TODO: Criar uma classe para o payment by link similar ao One-Click
 
-			// Check if user has permissions to save data.
-			if ( ! current_user_can( 'edit_post', $post_id ) ) {
-				return;
-			}
-
-			// Check if not an autosave.
-			if ( wp_is_post_autosave( $post_id ) ) {
-				return;
-			}
-
-			// Check if not a revision.
-			if ( wp_is_post_revision( $post_id ) ) {
-				return;
-			}
-
-			// Check if is an EBANX request
-			if ( ! isset($_REQUEST['save_order_ebanx']) || $_REQUEST['save_order_ebanx'] !== 'Save EBANX Order' ) {
+			//TODO:Criar um método chamado can_create_payment_by_link($post_id) e usar $is_ebanx_save_order
+			/*Check if user has permissions to save data.
+			Check if not an autosave.
+			Check if not a revision.
+			Check if is an EBANX request*/
+			if ( ! current_user_can( 'edit_post', $post_id )
+				|| wp_is_post_autosave( $post_id )
+				|| wp_is_post_revision( $post_id )
+				|| ! isset($_REQUEST['save_order_ebanx'])
+				|| $_REQUEST['save_order_ebanx'] !== 'Save EBANX Order' ) {
 				return;
 			}
 
