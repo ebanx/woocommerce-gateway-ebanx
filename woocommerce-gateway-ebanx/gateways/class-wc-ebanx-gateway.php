@@ -402,6 +402,19 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
 	public function get_currency_rate($local_currency_code) {
 		$this->setup_pay_api();
 
+		$cache_key = 'EBANX_exchange_'.$local_currency_code;
+
+		// Every five minutes
+		$cache_time = date('YmdH').floor(date('i') / 5);
+
+		$cached = get_option($cache_key);
+		if ($cached !== false) {
+			list($rate, $time) = explode('|', $cached);
+			if ($time == $cache_time) {
+				return $rate;
+			}
+		}
+
 		$usd_to_local = \Ebanx\Ebanx::getExchange( array(
 				'currency_code' => WC_EBANX_Constants::CURRENCY_CODE_USD,
 				'currency_base_code' => $local_currency_code
@@ -413,7 +426,9 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
 			return 1;
 		}
 
-		return $usd_to_local->currency_rate->rate;
+		$rate = $usd_to_local->currency_rate->rate;
+		update_option($cache_key, $rate.'|'.$cache_time);
+		return $rate;
 	}
 
 	/**

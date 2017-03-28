@@ -246,7 +246,7 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway
 				'type'    => 'checkbox',
 				'title'   => __('Enable Auto-Capture', 'woocommerce-gateway-ebanx'),
 				'label'   => __('Capture the payment immediately', 'woocommerce-gateway-ebanx'),
-				'description' => __('Automatically capture payments from your customers. Otherwise you will need to capture the payment going to: WooCommerce -> Orders. Not captured payments will be cancelled in 4 days.', 'woocommerce-gateway-ebanx'),
+				'description' => __('Automatically capture payments from your customers, just for credit card. Otherwise you will need to capture the payment going to: WooCommerce -> Orders. Not captured payments will be cancelled in 4 days.', 'woocommerce-gateway-ebanx'),
 				'desc_tip' => true,
 				'class' => 'ebanx-payments-option'
 			),
@@ -275,6 +275,7 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway
 				'type'    => 'checkbox',
 				'title'   => __('Interest Rates', 'woocommerce-gateway-ebanx'),
 				'label'   => __('Enable Interest Rates', 'woocommerce-gateway-ebanx'),
+				'description' => __('Enable and set a custom interest rate for your customers according to the number of Installments you allow the payment.'),
 				'desc_tip' => true,
 				'class' => 'ebanx-payments-option'
 			)
@@ -341,13 +342,15 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway
 					'cpf' => __('CPF - Individuals', 'woocommerce-gateway-ebanx'),
 					'cnpj' => __('CNPJ - Companies', 'woocommerce-gateway-ebanx')
 				),
-				'default' => array('cpf')
+				'default' => array('cpf'),
+				'description' => __('In order to process with the EBANX Plugin in Brazil there a few mandatory fields such as CPF identification for individuals and CNPJ for companies.'),
+				'desc_tip' => true
 			),
 			'checkout_manager_enabled' => array(
 				'title' => __('Checkout Manager', 'woocommerce-gateway-ebanx'),
 				'label' => __('Use my checkout manager fields', 'woocommerce-gateway-ebanx'),
 				'type' => 'checkbox',
-				'class' => 'ebanx-advanced-option',
+				'class' => 'ebanx-advanced-option ebanx-advanced-option-enable',
 				'description' => __('If you make use of a Checkout Manager, please identify the HTML name attribute of the fields.', 'woocommerce-gateway-ebanx'),
 				'desc_tip' => true
 			),

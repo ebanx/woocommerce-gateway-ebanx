@@ -1,8 +1,8 @@
 <?php if (!empty($cards)): ?>
 
-    <h3>Your saved credit cards</h3>
+    <h3><?php _e('Your saved credit cards', 'woocommerce-gateway-ebanx'); ?></h3>
 
-    <p>The following credit cards will be listed on the checkout page. To delete a credit card, just check it and submit.</p>
+    <p><?php _e('The following credit cards will be listed on the checkout page. To delete a credit card, just check it and submit.', 'woocommerce-gateway-ebanx'); ?></p>
 
     <form method="post" action="" class="ebanx-credit-cards-form">
         <div class="ebanx-credit-cards">
@@ -20,11 +20,11 @@
             <?php endforeach ?>
         </div>
 
-        <input type="submit" class="button" value="Delete cards">
+        <input type="submit" class="button" value="<?php _e('Delete cards', 'woocommerce-gateway-ebanx'); ?>">
     </form>
 
 <?php else: ?>
-    <h3>No credit cards found</h3>
+    <h3><?php _e('No credit cards found', 'woocommerce-gateway-ebanx'); ?></h3>
 
-    <p>To save a credit card, pay an order on checkout using credit card as payment method.</p>
+    <p><?php _e('To save a credit card, pay an order on checkout using credit card as payment method.', 'woocommerce-gateway-ebanx'); ?></p>
 <?php endif ?>
