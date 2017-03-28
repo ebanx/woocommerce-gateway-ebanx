@@ -17,7 +17,7 @@
                 ?>
                 <option value="<?php echo $number ?>">
                 	<?php printf( __( '%1$dx of %2$s', 'woocommerce-gateway-ebanx' ), absint( $number ), esc_html( $installment_amount )); ?>
-                	<?= $has_tax ? __( 'with taxes', 'woocommerce-gateway-ebanx' ) : '' ?>
+                	<?= $has_tax ? __( 'with interest', 'woocommerce-gateway-ebanx' ) : '' ?>
                 </option>
             <?php endfor; ?>
         </select>
