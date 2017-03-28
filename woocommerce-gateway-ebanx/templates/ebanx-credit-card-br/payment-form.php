@@ -35,7 +35,7 @@ if (!defined('ABSPATH')) {
             					<input type="hidden" autocomplete="off" value="<?php echo $card->masked_number; ?>" class="ebanx-card-masked-number-use" />
         					</section>
 
-                            <?php include WC_EBANX::get_templates_path() . '/instalments.php'; ?>
+                            <?php include WC_EBANX::get_templates_path() . 'instalments.php'; ?>
         				</section>
         			</div>
                 </div>

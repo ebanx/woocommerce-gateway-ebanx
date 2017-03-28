@@ -4,7 +4,7 @@ if (!defined('ABSPATH')) {
 	exit;
 }
 
-include_once(INCLUDES_DIR . 'notices/class-wc-ebanx-notices-notice.php');
+include_once SERVICES_DIR . 'class-wc-ebanx-notice.php';
 
 final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway
 {
@@ -55,7 +55,7 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway
 	 */
 	public function __construct()
 	{
-		$this->notices = new WC_EBANX_Notices_Notice();
+		$this->notices = new WC_EBANX_Notice();
 
 		$this->id                 = 'ebanx-global';
 		$this->method_title       = __('EBANX', 'woocommerce-gateway-ebanx');
@@ -315,10 +315,10 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway
 		));
 
 		$this->form_fields['due_date_days']['type'] = (
-			in_array($this->merchant_currency, WC_EBANX_Gateway_Utils::$LOCAL_CURRENCIES) ?
+			in_array($this->merchant_currency, WC_EBANX_Constants::$LOCAL_CURRENCIES) ?
 				'number' : 'select'
 		);
-		if (!in_array($this->merchant_currency, WC_EBANX_Gateway_Utils::$LOCAL_CURRENCIES)) {
+		if (!in_array($this->merchant_currency, WC_EBANX_Constants::$LOCAL_CURRENCIES)) {
 			$this->form_fields['due_date_days']['class'] .= ' ebanx-select';
 			$this->form_fields['due_date_days']['options'] = array(
 				'1' => '1',
