@@ -190,6 +190,7 @@ abstract class WC_EBANX_Gateway_Utils
 
 	/**
 	 * Flatten an array
+	 *
 	 * @param  array  $array The array to flatten
 	 * @return array        The new array flatted
 	 */
