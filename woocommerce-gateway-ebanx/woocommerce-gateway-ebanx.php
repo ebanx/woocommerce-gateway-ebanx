@@ -609,17 +609,17 @@ if (!class_exists('WC_EBANX')) {
 		 * @return void
 		 */
 		public function render_static_assets() {
-			$this->hide_advanced_options_section();
+			$this->adjust_dynamic_admin_options_sections();
 			$this->resize_settings_menu_icon();
 			$this->disable_ebanx_gateways();
 		}
 
 		/**
-		 * Renders the script to manage the advanced options script part of ebanx gateway configuration
+		 * Renders the script to manage the admin options script part of ebanx gateway configuration
 		 *
 		 * @return void
 		 */
-		public function hide_advanced_options_section() {
+		public function adjust_dynamic_admin_options_sections() {
 			if (!isset($_GET['section']) || $_GET['section'] !== 'ebanx-global') {
 				return;
 			}

@@ -49,6 +49,8 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
 		$this->names = $this->get_billing_field_names();
 
 		$this->merchant_currency = strtoupper(get_woocommerce_currency());
+
+		$this->language = $this->getTransactionAddress('country');
 	}
 
 	/**
@@ -72,13 +74,13 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
 	{
 		$currency = $this->merchant_currency;
 
-		$this->language = $this->getTransactionAddress('country');
-
-		if ($this->is_sandbox_mode && !current_user_can('administrator')) {
-			return false;
-		};
-
-		return parent::is_available() && !empty($this->public_key) && !empty($this->private_key) && $this->enabled === 'yes' && ($this->currency_is_usd_eur($currency) || $this->ebanx_process_merchant_currency($currency));
+		return parent::is_available()
+			&& $this->enabled === 'yes'
+			&& !empty($this->public_key)
+			&& !empty($this->private_key)
+			&& ($this->currency_is_usd_eur($currency)
+				|| $this->ebanx_process_merchant_currency($currency)
+			);
 	}
 
 	/**
