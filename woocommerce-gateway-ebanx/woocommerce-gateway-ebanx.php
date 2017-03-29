@@ -102,6 +102,8 @@ if (!class_exists('WC_EBANX')) {
 			add_action('woocommerce_settings_saved', array($this, 'update_lead'), 20);
 			add_action('woocommerce_settings_saved', array($this, 'checker'), 20);
 
+			add_action('woocommerce_admin_order_data_after_order_details', array($this, 'ebanx_admin_order_details'), 10, 1);
+
 			/**
 			 * Payment by Link
 			 */
@@ -117,7 +119,6 @@ if (!class_exists('WC_EBANX')) {
 			add_filter('woocommerce_payment_gateways', array($this, 'add_gateway'));
 			add_filter('plugin_action_links_' . plugin_basename(__FILE__), array($this, 'plugin_action_links'));
 		}
-
 
 		/**
 		* Sets up the configuration object
@@ -223,8 +224,9 @@ if (!class_exists('WC_EBANX')) {
 		private function ebanx_dashboard_check()
 		{
 			$json = json_encode(array(
-				'ebanx' => true
-				));
+				'ebanx' => true,
+				'version' => self::VERSION
+			));
 			echo $json;
 			exit;
 		}
@@ -613,17 +615,17 @@ if (!class_exists('WC_EBANX')) {
 		 * @return void
 		 */
 		public function render_static_assets() {
-			$this->hide_advanced_options_section();
+			$this->adjust_dynamic_admin_options_sections();
 			$this->resize_settings_menu_icon();
 			$this->disable_ebanx_gateways();
 		}
 
 		/**
-		 * Renders the script to manage the advanced options script part of ebanx gateway configuration
+		 * Renders the script to manage the admin options script part of ebanx gateway configuration
 		 *
 		 * @return void
 		 */
-		public function hide_advanced_options_section() {
+		public function adjust_dynamic_admin_options_sections() {
 			if (!isset($_GET['section']) || $_GET['section'] !== 'ebanx-global') {
 				return;
 			}
@@ -809,6 +811,31 @@ if (!class_exists('WC_EBANX')) {
 					/>
 				</li>
 		<?php
+			}
+		}
+
+		/**
+		 * It inserts informations about the order on admin order details
+		 *
+		 * @param  WC_Object $order The WC order object
+		 * @return void
+		 */
+		public function ebanx_admin_order_details ($order) {
+			if (in_array($order->payment_method, WC_EBANX_Gateway_Utils::flatten(WC_EBANX_Gateway_Utils::$EBANX_GATEWAYS_BY_COUNTRY))) {
+				$payment_hash = get_post_meta($order->id, '_ebanx_payment_hash', true);
+
+				wc_get_template(
+					'admin-order-details.php',
+					array(
+						'order' => $order,
+						'payment_hash' => $payment_hash,
+						'payment_checkout_url' => get_post_meta($order->id, '_ebanx_checkout_url', true),
+						'is_sandbox_mode' => $this->is_sandbox_mode,
+						'dashboard_link' => "http://dashboard.ebanx.com/" . ($this->is_sandbox_mode ? 'test/' : '') . "payments/?hash=$payment_hash"
+					),
+					'woocommerce/ebanx/',
+					WC_EBANX::get_templates_path()
+				);
 			}
 		}
 	}

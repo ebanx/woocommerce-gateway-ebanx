@@ -67,9 +67,7 @@ class WC_EBANX_Sencillito_Gateway extends WC_EBANX_Redirect_Gateway
 
 		wc_get_template(
 			'sencillito/payment-form.php',
-			array(
-				'language' => $this->language
-			),
+			array(),
 			'woocommerce/ebanx/',
 			WC_EBANX::get_templates_path()
 		);

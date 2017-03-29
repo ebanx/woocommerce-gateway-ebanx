@@ -12,4 +12,4 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 ?>
 
-<div id="ebanx-pagoefectivo-payment" class="ebanx-payment-container ebanx-language-<?php echo $language ?>"></div>
+<div id="ebanx-pagoefectivo-payment" class="ebanx-payment-container ebanx-language-es"></div>

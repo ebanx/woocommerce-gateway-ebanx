@@ -53,9 +53,7 @@ class WC_EBANX_Servipag_Gateway extends WC_EBANX_Redirect_Gateway
 
 		wc_get_template(
 			'servipag/payment-form.php',
-			array(
-				'language' => $this->language,
-			),
+			array(),
 			'woocommerce/ebanx/',
 			WC_EBANX::get_templates_path()
 		);

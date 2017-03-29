@@ -19,6 +19,12 @@ abstract class WC_EBANX_Gateway_Utils
 	const COUNTRY_MEXICO   = 'mx';
 	const COUNTRY_COLOMBIA = 'co';
 
+	const COUNTRY_BRAZIL_NAME = 'Brazil';
+	const COUNTRY_CHILE_NAME = 'Chile';
+	const COUNTRY_COLOMBIA_NAME = 'Colombia';
+	const COUNTRY_PERU_NAME = 'Peru';
+	const COUNTRY_MEXICO_NAME = 'Mexico';
+
 	/**
 	 * Currencies that EBANX processes
 	 */
@@ -158,6 +164,37 @@ abstract class WC_EBANX_Gateway_Utils
 	public static $BRAZIL_TAXES_ALLOWED = array('cpf', 'cnpj');
 
 	/**
+	 * The gateways that plugin uses as identification
+	 *
+	 * @var array
+	 */
+	public static $EBANX_GATEWAYS_BY_COUNTRY = array(
+		self::COUNTRY_BRAZIL => array(
+			'ebanx-banking-ticket',
+			'ebanx-credit-card-br',
+			'ebanx-tef',
+			'ebanx-account'
+		),
+		self::COUNTRY_CHILE => array(
+			'ebanx-sencillito',
+			'ebanx-servipag',
+		),
+		self::COUNTRY_COLOMBIA => array(
+			'ebanx-baloto',
+			'ebanx-eft',
+		),
+		self::COUNTRY_PERU => array(
+			'ebanx-pagoefectivo',
+			'ebanx-safetypay',
+		),
+		self::COUNTRY_MEXICO => array(
+			'ebanx-credit-card-mx',
+			'ebanx-debit-card',
+			'ebanx-oxxo'
+		)
+	);
+
+	/**
 	 * Types allowed by SafetyPay
 	 *
 	 * @var array
@@ -165,6 +202,19 @@ abstract class WC_EBANX_Gateway_Utils
 	public static $TYPES_SAFETYPAY_ALLOWED = array(
 		'cash', 'online',
 	);
+
+	/**
+	 * Flatten an array
+	 *
+	 * @param  array  $array The array to flatten
+	 * @return array        The new array flatted
+	 */
+	public static function flatten(array $array) {
+		$return = array();
+		array_walk_recursive($array, function($a) use (&$return) { $return[] = $a; });
+
+		return $return;
+	}
 
 	/**
 	 * Splits address in street name, house number and addition
