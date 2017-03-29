@@ -12,7 +12,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 ?>
 
-<div id="ebanx-tef-payment" class="ebanx-payment-container ebanx-language-<?php echo $language ?>">
+<div id="ebanx-tef-payment" class="ebanx-payment-container ebanx-language-br">
 	<p>
 		<label class="ebanx-label">
 			<input type="radio" name="tef" value="itau" checked> Itaú

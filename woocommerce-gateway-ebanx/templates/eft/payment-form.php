@@ -14,7 +14,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 asort($banks);
 ?>
 
-<div id="ebanx-eft-payment" class="ebanx-payment-container ebanx-language-<?php echo $language ?>">
+<div id="ebanx-eft-payment" class="ebanx-payment-container ebanx-language-es">
     <select name="eft" class="ebanx-select-field">
         <?php foreach($banks as $key => $bank): ?>
         	<option value="<?php echo $key ?>"><?php echo $bank ?></option>

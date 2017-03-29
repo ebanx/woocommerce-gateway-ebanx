@@ -662,7 +662,7 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
 			));
 		} catch (Exception $e) {
 
-			$this->language = $this->getTransactionAddress('country');
+			$country = $this->getTransactionAddress('country');
 
 			$code = $e->getMessage();
 
@@ -673,7 +673,7 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
 				'co' => 'es',
 				'br' => 'pt-br',
 			);
-			$language = $languages[$this->language];
+			$language = $languages[$country];
 
 			$errors = array(
 				'pt-br' => array(
