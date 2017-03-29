@@ -35,6 +35,10 @@ describe('Site', () => {
       site.makePaymentBoleto(mock);
     });
 
+    it('Make a Credit Card Payment using Visa', () => {
+
+    });
+
   });
 
 });
