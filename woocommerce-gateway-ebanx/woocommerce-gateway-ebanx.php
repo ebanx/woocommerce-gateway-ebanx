@@ -800,17 +800,17 @@ if (!class_exists('WC_EBANX')) {
 			$ebanx_currencies = array('BRL', 'USD', 'EUR', 'PEN', 'CLP', 'MXN', 'COP');
 
 			if ( in_array(strtoupper(get_woocommerce_currency()), $ebanx_currencies) ) {
-		?>
-				<li class="wide">
-					<input
-						type="submit"
-						class="button save_order button-primary tips"
-						name="save_order_ebanx"
-						value="Save EBANX Order"
-						data-tip="The order will be created on your site and also sent to EBANX to generate a payment to your customer pay directly"
-					/>
-				</li>
-		<?php
+echo <<<EOT
+<li class="wide">
+	<input
+		type="submit"
+		class="button save_order button-primary tips"
+		name="save_order_ebanx"
+		value="Save EBANX Order"
+		data-tip="The order will be created on your site and also sent to EBANX to generate a payment to your customer pay directly"
+	/>
+</li>
+EOT;
 			}
 		}
 
@@ -839,6 +839,5 @@ if (!class_exists('WC_EBANX')) {
 			}
 		}
 	}
-
 	add_action('plugins_loaded', array('WC_EBANX', 'get_instance'));
 }
