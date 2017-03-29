@@ -1,6 +1,6 @@
 <?php
 
-require 'ebanx-php/src/autoload.php';
+require VENDOR_DIR. 'ebanx-php/src/autoload.php';
 
 if (!defined('ABSPATH')) {
 	exit;
@@ -97,7 +97,7 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
 	 * @return boolean          Return true if EBANX process the currency
 	 */
 	public function currency_is_usd_eur($currency) {
-		return in_array($currency, array(WC_EBANX_Gateway_Utils::CURRENCY_CODE_USD, WC_EBANX_Gateway_Utils::CURRENCY_CODE_EUR));
+		return in_array($currency, array(WC_EBANX_Constants::CURRENCY_CODE_USD, WC_EBANX_Constants::CURRENCY_CODE_EUR));
 	}
 
 	/**
@@ -320,7 +320,7 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
 	 */
 	public function admin_options()
 	{
-		include dirname(__FILE__) . '/admin/views/html-admin-page.php';
+		include TEMPLATES_DIR . 'views/html-admin-page.php';
 	}
 
 	/**
@@ -388,7 +388,7 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
 
 		$usd_to_site_rate = 1;
 
-		if ($site_currency !== WC_Ebanx_Gateway_Utils::CURRENCY_CODE_USD) {
+		if ($site_currency !== WC_EBANX_Constants::CURRENCY_CODE_USD) {
 			$usd_to_site_rate = $this->get_currency_rate($site_currency);
 		}
 
@@ -418,7 +418,7 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
 		}
 
 		$usd_to_local = \Ebanx\Ebanx::getExchange( array(
-				'currency_code' => WC_Ebanx_Gateway_Utils::CURRENCY_CODE_USD,
+				'currency_code' => WC_EBANX_Constants::CURRENCY_CODE_USD,
 				'currency_base_code' => $local_currency_code
 			) );
 
@@ -475,17 +475,17 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
 			)
 		);
 
-		if (!empty($this->configs->settings['due_date_days']) && in_array($this->api_name, array_keys(WC_EBANX_Gateway_Utils::$CASH_PAYMENTS_TIMEZONES)))
+		if (!empty($this->configs->settings['due_date_days']) && in_array($this->api_name, array_keys(WC_EBANX_Constants::$CASH_PAYMENTS_TIMEZONES)))
 		{
 			$date = new DateTime();
 
-			$date->setTimezone(new DateTimeZone(WC_EBANX_Gateway_Utils::$CASH_PAYMENTS_TIMEZONES[$this->api_name]));
+			$date->setTimezone(new DateTimeZone(WC_EBANX_Constants::$CASH_PAYMENTS_TIMEZONES[$this->api_name]));
 			$date->modify("+{$this->configs->settings['due_date_days']} day");
 
 			$data['payment']['due_date'] = $date->format('d/m/Y');
 		}
 
-		if ($this->getTransactionAddress('country') === WC_EBANX_Gateway_Utils::COUNTRY_BRAZIL) {
+		if ($this->getTransactionAddress('country') === WC_EBANX_Constants::COUNTRY_BRAZIL) {
 
 			$fields_options = array();
 			if (isset($this->configs->settings['brazil_taxes_options']) && is_array($this->configs->settings['brazil_taxes_options'])) {
@@ -525,7 +525,7 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
 			}
 		}
 
-		if ($this->getTransactionAddress('country') === WC_EBANX_Gateway_Utils::COUNTRY_CHILE) {
+		if ($this->getTransactionAddress('country') === WC_EBANX_Constants::COUNTRY_CHILE) {
 			if (empty($_POST[$this->names['ebanx_billing_chile_document']]) || empty($_POST[$this->names['ebanx_billing_chile_birth_date']])) {
 				throw new Exception('INVALID-FIELDS');
 			}
@@ -534,7 +534,7 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
 			$_POST['ebanx_billing_birth_date'] = $_POST[$this->names['ebanx_billing_chile_birth_date']];
 		}
 
-		if ($this->getTransactionAddress('country') === WC_EBANX_Gateway_Utils::COUNTRY_COLOMBIA) {
+		if ($this->getTransactionAddress('country') === WC_EBANX_Constants::COUNTRY_COLOMBIA) {
 			if (empty($_POST[$this->names['ebanx_billing_colombia_document']])) {
 				throw new Exception('INVALID-FIELDS');
 			}
@@ -548,7 +548,7 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
 			$addresses .= " - $_POST[billing_address_2]";
 		}
 
-		$addresses = WC_Ebanx_Gateway_Utils::split_street($addresses);
+		$addresses = WC_EBANX_Constants::split_street($addresses);
 
 		$street_number = empty($addresses['houseNumber']) ? 'S/N' : trim($addresses['houseNumber'] . ' ' . $addresses['additionToAddress']);
 		$street_name = $addresses['streetName'];
@@ -586,7 +586,7 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
 			$newData['payment']['state'] = $_POST['billing_state'];
 		}
 
-		if ($this->getTransactionAddress('country') === WC_EBANX_Gateway_Utils::COUNTRY_BRAZIL) {
+		if ($this->getTransactionAddress('country') === WC_EBANX_Constants::COUNTRY_BRAZIL) {
 
 			if ($person_type == 'business') {
 				$newData['payment']['responsible'] = array(
@@ -856,7 +856,7 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
 	protected function save_user_meta_fields($order)
 	{
 		if ($this->userId) {
-			if (trim(strtolower($order->billing_country)) === WC_EBANX_Gateway_Utils::COUNTRY_BRAZIL) {
+			if (trim(strtolower($order->billing_country)) === WC_EBANX_Constants::COUNTRY_BRAZIL) {
 				if (isset($_POST[$this->names['ebanx_billing_brazil_document']])) {
 					update_user_meta($this->userId, '_ebanx_billing_brazil_document', sanitize_text_field($_POST[$this->names['ebanx_billing_brazil_document']]));
 				}
@@ -874,7 +874,7 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
 				}
 			}
 
-			if (trim(strtolower($order->billing_country)) === WC_EBANX_Gateway_Utils::COUNTRY_CHILE) {
+			if (trim(strtolower($order->billing_country)) === WC_EBANX_Constants::COUNTRY_CHILE) {
 				if (isset($_POST['ebanx_billing_chile_document'])) {
 					update_user_meta($this->userId, '_ebanx_billing_chile_document', sanitize_text_field($_POST['ebanx_billing_chile_document']));
 				}
@@ -884,7 +884,7 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
 				}
 			}
 
-			if ($this->getTransactionAddress('country') === WC_EBANX_Gateway_Utils::COUNTRY_COLOMBIA) {
+			if ($this->getTransactionAddress('country') === WC_EBANX_Constants::COUNTRY_COLOMBIA) {
 				if (isset($_POST['ebanx_billing_colombia_document'])) {
 					update_user_meta($this->userId, '_ebanx_billing_colombia_document', sanitize_text_field($_POST['ebanx_billing_colombia_document']));
 				}

@@ -37,7 +37,7 @@ $i = 0;
                 </div>
 
                 <div class="ebanx-one-click-installments">
-                    <?php include WC_EBANX::get_templates_path() . '/instalments.php'; ?>
+                    <?php include WC_EBANX::get_templates_path() . 'instalments.php'; ?>
                 </div>
 
                 <button class="single_add_to_cart_button ebanx-one-click-pay button" data-processing-label="<?php _e('Processing...', 'woocommerce-gateway-ebanx') ?>" type="button"><?php _e('Pay Now', 'woocommerce-gateway-ebanx') ?></button>

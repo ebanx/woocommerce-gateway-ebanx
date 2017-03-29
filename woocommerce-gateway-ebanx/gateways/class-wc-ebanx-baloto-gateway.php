@@ -30,7 +30,7 @@ class WC_EBANX_Baloto_Gateway extends WC_EBANX_Gateway
 	 */
 	public function is_available()
 	{
-		return parent::is_available() && $this->getTransactionAddress('country') == WC_EBANX_Gateway_Utils::COUNTRY_COLOMBIA;
+		return parent::is_available() && $this->getTransactionAddress('country') == WC_EBANX_Constants::COUNTRY_COLOMBIA;
 	}
 
 	/**
@@ -40,7 +40,7 @@ class WC_EBANX_Baloto_Gateway extends WC_EBANX_Gateway
 	 * @return boolean          Return true if EBANX process the currency
 	 */
 	public function ebanx_process_merchant_currency($currency) {
-		return $currency === WC_EBANX_Gateway_Utils::CURRENCY_CODE_COP;
+		return $currency === WC_EBANX_Constants::CURRENCY_CODE_COP;
 	}
 
 	/**
