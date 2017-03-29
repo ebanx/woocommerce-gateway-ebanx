@@ -5,7 +5,7 @@ if (!defined('ABSPATH')) {
 }
 
 class WC_EBANX_Flash {
-	const KEY = 'wc_ebanx_flash';
+	const KEY = '_ebanx_wp_flash_messages';
 
 	public static function display_messages() {
 		$flash_messages = self::get_messages();
