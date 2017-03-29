@@ -1040,15 +1040,24 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
 	 */
 	public function checkout_rate_conversion($currency) {
 		if (in_array(get_woocommerce_currency(), array(WC_EBANX_Gateway_Utils::CURRENCY_CODE_USD, WC_EBANX_Gateway_Utils::CURRENCY_CODE_EUR))) {
-			
-			$rate = $this->get_local_currency_rate_for_site($currency);
-			
+
+			$country = $this->getTransactionAddress('country');
+
+			$rate = round(floatval($this->get_local_currency_rate_for_site($currency)), 2);
+
 			$amount = WC()->cart->cart_contents_total;
+
 			if (WC()->cart->prices_include_tax) {
 				$amount = WC()->cart->cart_contents_total + WC()->cart->tax_total;
 			}
+
 			$amount *= $rate;
-			
+
+			// Insert IOF in Brazil payments only
+			if ($country === WC_EBANX_Gateway_Utils::COUNTRY_BRAZIL) {
+				$amount += ($amount * WC_EBANX_Gateway_Utils::BRAZIL_TAX);
+			}
+
 			$price = wc_price($amount, array('currency' => $currency));
 
 			$languages = array(
@@ -1058,7 +1067,7 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
 				'co' => 'es',
 				'br' => 'pt-br',
 			);
-			$language = $languages[$this->language];
+			$language = $languages[$country];
 
 			$texts = array(
 				'pt-br' => array(
@@ -1075,15 +1084,15 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
 					WC_EBANX_Gateway_Utils::CURRENCY_CODE_CLP    => 'Peso chileno',
 					WC_EBANX_Gateway_Utils::CURRENCY_CODE_PEN    => 'Sol peruano',
 					WC_EBANX_Gateway_Utils::CURRENCY_CODE_COP    => 'Peso colombiano',
-					WC_EBANX_Gateway_Utils::CURRENCY_CODE_BRL    => 'Real brasileiro'
+					WC_EBANX_Gateway_Utils::CURRENCY_CODE_BRL    => 'Real brasileño'
 				),
 			);
 
 
 			$message = $texts[$language]['INTRO'];
-			$message .= $texts[$language]['INTRO'] . !empty($texts[$language][$currency]) ? $texts[$language][$currency] : $currency;
-			$message .= ': <strong>' . $price . '</strong>';
-		
+			$message .= !empty($texts[$language][$currency]) ? $texts[$language][$currency] : $currency;
+			$message .= ': <strong class="ebanx-amount-total">' . $price . '</strong>';
+
 			wc_get_template(
 				'checkout-conversion-rate.php',
 				array(
