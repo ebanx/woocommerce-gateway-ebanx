@@ -29,7 +29,7 @@ class WC_EBANX_Credit_Card_MX_Gateway extends WC_EBANX_Credit_Card_Gateway
 	 */
 	public function is_available()
 	{
-		return parent::is_available() && $this->getTransactionAddress('country') === WC_Ebanx_Gateway_Utils::COUNTRY_MEXICO;
+		return parent::is_available() && $this->getTransactionAddress('country') === WC_EBANX_Constants::COUNTRY_MEXICO;
 	}
 
 	/**
@@ -38,7 +38,7 @@ class WC_EBANX_Credit_Card_MX_Gateway extends WC_EBANX_Credit_Card_Gateway
 	 * @return boolean          Return true if EBANX process the currency
 	 */
 	public function ebanx_process_merchant_currency($currency) {
-		return $currency === WC_EBANX_Gateway_Utils::CURRENCY_CODE_MXN;
+		return $currency === WC_EBANX_Constants::CURRENCY_CODE_MXN;
 	}
 
 	/**
@@ -67,5 +67,7 @@ class WC_EBANX_Credit_Card_MX_Gateway extends WC_EBANX_Credit_Card_Gateway
 			'woocommerce/ebanx/',
 			WC_EBANX::get_templates_path()
 		);
+
+		parent::checkout_rate_conversion(WC_EBANX_Constants::CURRENCY_CODE_MXN);
 	}
 }

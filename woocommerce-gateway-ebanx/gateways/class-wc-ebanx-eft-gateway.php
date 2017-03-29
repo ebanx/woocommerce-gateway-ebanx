@@ -30,7 +30,7 @@ class WC_EBANX_Eft_Gateway extends WC_EBANX_Redirect_Gateway
 	 */
 	public function is_available()
 	{
-		return parent::is_available() && $this->getTransactionAddress('country') == WC_EBANX_Gateway_Utils::COUNTRY_COLOMBIA;
+		return parent::is_available() && $this->getTransactionAddress('country') == WC_EBANX_Constants::COUNTRY_COLOMBIA;
 	}
 
 	/**
@@ -39,7 +39,7 @@ class WC_EBANX_Eft_Gateway extends WC_EBANX_Redirect_Gateway
 	 * @return boolean          Return true if EBANX process the currency
 	 */
 	public function ebanx_process_merchant_currency($currency) {
-		return $currency === WC_EBANX_Gateway_Utils::CURRENCY_CODE_COP;
+		return $currency === WC_EBANX_Constants::CURRENCY_CODE_COP;
 	}
 
 	/**
@@ -56,11 +56,13 @@ class WC_EBANX_Eft_Gateway extends WC_EBANX_Redirect_Gateway
 			array(
 				'title'       => $this->title,
 				'description' => $this->description,
-				'banks'       => WC_EBANX_Gateway_Utils::$BANKS_EFT_ALLOWED[WC_EBANX_Gateway_Utils::COUNTRY_COLOMBIA]
+				'banks'       => WC_EBANX_Constants::$BANKS_EFT_ALLOWED[WC_EBANX_Constants::COUNTRY_COLOMBIA]
 			),
 			'woocommerce/ebanx/',
 			WC_EBANX::get_templates_path()
 		);
+
+		parent::checkout_rate_conversion(WC_EBANX_Constants::CURRENCY_CODE_COP);
 	}
 
 	/**
@@ -88,7 +90,7 @@ class WC_EBANX_Eft_Gateway extends WC_EBANX_Redirect_Gateway
 	 */
 	protected function request_data($order)
 	{
-		if (!isset($_POST['eft']) || !array_key_exists($_POST['eft'], WC_EBANX_Gateway_Utils::$BANKS_EFT_ALLOWED[WC_EBANX_Gateway_Utils::COUNTRY_COLOMBIA])) {
+		if (!isset($_POST['eft']) || !array_key_exists($_POST['eft'], WC_EBANX_Constants::$BANKS_EFT_ALLOWED[WC_EBANX_Constants::COUNTRY_COLOMBIA])) {
 			throw new Exception('MISSING-BANK-NAME');
 		}
 
