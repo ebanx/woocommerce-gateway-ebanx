@@ -12,7 +12,7 @@ if (!defined('ABSPATH')) {
 }
 ?>
 
-<div id="ebanx-credit-cart-form" class="ebanx-payment-container ebanx-language-<?php echo $language ?>">
+<div id="ebanx-credit-cart-form" class="ebanx-payment-container ebanx-language-es">
     <section class="ebanx-form-row">
     	<?php if (!empty($cards)): ?>
     		<?php foreach ($cards as $k => $card): ?>

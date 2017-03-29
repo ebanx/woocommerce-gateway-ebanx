@@ -53,7 +53,6 @@ class WC_EBANX_Tef_Gateway extends WC_EBANX_Redirect_Gateway
 		wc_get_template(
 			'tef/payment-form.php',
 			array(
-				'language' => $this->language,
 				'title'       => $this->title,
 				'description' => $this->description,
 			),
