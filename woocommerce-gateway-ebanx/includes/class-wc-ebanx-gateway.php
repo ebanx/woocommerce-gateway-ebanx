@@ -49,8 +49,6 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
 		$this->names = $this->get_billing_field_names();
 
 		$this->merchant_currency = strtoupper(get_woocommerce_currency());
-
-		$this->language = $this->getTransactionAddress('country');
 	}
 
 	/**
@@ -73,6 +71,8 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
 	public function is_available()
 	{
 		$currency = $this->merchant_currency;
+
+		$this->language = $this->getTransactionAddress('country');
 
 		return parent::is_available()
 			&& $this->enabled === 'yes'
