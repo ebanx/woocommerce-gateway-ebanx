@@ -135,7 +135,7 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
 
 		$data = parent::request_data($order);
 
-		if (in_array($this->getTransactionAddress('country'), WC_EBANX_Gateway_Utils::$CREDIT_CARD_COUNTRIES)) {
+		if (in_array($this->getTransactionAddress('country'), WC_EBANX_Constants::$CREDIT_CARD_COUNTRIES)) {
 			$data['payment']['instalments'] = '1';
 
 			if ($this->configs->settings['credit_card_instalments'] > 1 && isset($_POST['ebanx_billing_instalments'])) {
@@ -253,17 +253,17 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
 	 * @return integer
 	 */
 	public function fetch_acquirer_max_installments_for_price($price, $country = null) {
-		$max_instalments = WC_Ebanx_Gateway_Utils::MAX_INSTALMENTS;
+		$max_instalments = WC_EBANX_Constants::MAX_INSTALMENTS;
 		$country = $country ?: WC()->customer->get_country();
 
 		switch (trim(strtolower($country))) {
 			case 'br':
-				$site_to_local_rate = $this->get_local_currency_rate_for_site(WC_Ebanx_Gateway_Utils::CURRENCY_CODE_BRL);
-				$min_instalment_value = WC_Ebanx_Gateway_Utils::ACQUIRER_MIN_INSTALMENT_VALUE_BRL;
+				$site_to_local_rate = $this->get_local_currency_rate_for_site(WC_EBANX_Constants::CURRENCY_CODE_BRL);
+				$min_instalment_value = WC_EBANX_Constants::ACQUIRER_MIN_INSTALMENT_VALUE_BRL;
 				break;
 			case 'mx':
-				$site_to_local_rate = $this->get_local_currency_rate_for_site(WC_Ebanx_Gateway_Utils::CURRENCY_CODE_MXN);
-				$min_instalment_value = WC_Ebanx_Gateway_Utils::ACQUIRER_MIN_INSTALMENT_VALUE_MXN;
+				$site_to_local_rate = $this->get_local_currency_rate_for_site(WC_EBANX_Constants::CURRENCY_CODE_MXN);
+				$min_instalment_value = WC_EBANX_Constants::ACQUIRER_MIN_INSTALMENT_VALUE_MXN;
 				break;
 		}
 

@@ -5,10 +5,10 @@ if (!defined('ABSPATH')) {
 }
 
 /**
- * WC_EBANX_Gateway_Utils class.
+ * WC_EBANX_Constants class.
  *
  */
-abstract class WC_EBANX_Gateway_Utils
+abstract class WC_EBANX_Constants
 {
 	/**
 	 * Countries that EBANX process

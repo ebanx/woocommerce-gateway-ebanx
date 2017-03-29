@@ -4,23 +4,23 @@ if (!defined('ABSPATH')) {
 	exit;
 }
 
-class WC_EBANX_Oxxo_Gateway extends WC_EBANX_Gateway
+class WC_EBANX_Pagoefectivo_Gateway extends WC_EBANX_Gateway
 {
 	/**
 	 * Constructor
 	 */
 	public function __construct()
 	{
-		$this->id           = 'ebanx-oxxo';
-		$this->method_title = __('EBANX - OXXO', 'woocommerce-gateway-ebanx');
+		$this->id           = 'ebanx-pagoefectivo';
+		$this->method_title = __('EBANX - Pagoefectivo', 'woocommerce-gateway-ebanx');
 
-		$this->api_name    = 'oxxo';
-		$this->title       = __('OXXO', 'woocommerce-gateway-ebanx');
-		$this->description = __('Paga con boleta OXXO.', 'woocommerce-gateway-ebanx');
+		$this->api_name    = 'pagoefectivo';
+		$this->title       = __('PagoEfectivo', 'woocommerce-gateway-ebanx');
+		$this->description = __('Paga con PagoEfectivo.', 'woocommerce-gateway-ebanx');
 
 		parent::__construct();
 
-		$this->enabled = is_array($this->configs->settings['mexico_payment_methods']) ? in_array($this->id, $this->configs->settings['mexico_payment_methods']) ? 'yes' : false : false;
+		$this->enabled = is_array($this->configs->settings['peru_payment_methods']) ? in_array($this->id, $this->configs->settings['peru_payment_methods']) ? 'yes' : false : false;
 	}
 
 	/**
@@ -30,16 +30,16 @@ class WC_EBANX_Oxxo_Gateway extends WC_EBANX_Gateway
 	 */
 	public function is_available()
 	{
-		return parent::is_available() && $this->getTransactionAddress('country') == WC_EBANX_Gateway_Utils::COUNTRY_MEXICO;
+		return parent::is_available() && $this->getTransactionAddress('country') == WC_EBANX_Constants::COUNTRY_PERU;
 	}
 
 	/**
 	 * Check if the currency is processed by EBANX
-	 * @param  string $currency Possible currencies: MXN
+	 * @param  string $currency Possible currencies: PEN
 	 * @return boolean          Return true if EBANX process the currency
 	 */
 	public function ebanx_process_merchant_currency($currency) {
-		return $currency === WC_EBANX_Gateway_Utils::CURRENCY_CODE_MXN;
+		return $currency === WC_EBANX_Constants::CURRENCY_CODE_PEN;
 	}
 
 	/**
@@ -52,7 +52,7 @@ class WC_EBANX_Oxxo_Gateway extends WC_EBANX_Gateway
 		}
 
 		wc_get_template(
-			'oxxo/payment-form.php',
+			'pagoefectivo/payment-form.php',
 			array(),
 			'woocommerce/ebanx/',
 			WC_EBANX::get_templates_path()
@@ -70,8 +70,7 @@ class WC_EBANX_Oxxo_Gateway extends WC_EBANX_Gateway
 	{
 		parent::save_order_meta_fields($order, $request);
 
-		update_post_meta($order->id, '_oxxo_url', $request->payment->oxxo_url);
-		update_post_meta($order->id, '_payment_due_date', $request->payment->due_date);
+		update_post_meta($order->id, '_pagoefectivo_url', $request->redirect_url);
 	}
 
 	/**
@@ -82,27 +81,17 @@ class WC_EBANX_Oxxo_Gateway extends WC_EBANX_Gateway
 	 */
 	public static function thankyou_page($order)
 	{
-		$oxxo_url = get_post_meta($order->id, '_oxxo_url', true);
-		$oxxo_basic = $oxxo_url . "&format=basic";
-		$oxxo_pdf = $oxxo_url . "&format=pdf";
-		$oxxo_print = $oxxo_url . "&format=print";
-		$customer_email = get_post_meta($order->id, '_ebanx_payment_customer_email', true);
-		$oxxo_hash = get_post_meta($order->id, '_ebanx_payment_hash', true);
-		$customer_name = $order->billing_first_name;
-		$oxxo_due_date = get_post_meta($order->id, '_payment_due_date', true);
+		$pagoefectivo_url = get_post_meta($order->id, '_pagoefectivo_url', true);
+		$pagoefectivo_hash = get_post_meta($order->id, '_ebanx_payment_hash', true);
 
 		$data = array(
 			'data' => array(
-				'url_basic'      => $oxxo_basic,
-				'url_pdf'        => $oxxo_pdf,
-				'url_print'      => $oxxo_print,
-				'url_iframe'      => get_site_url() . '/?ebanx=order-received&hash=' . $oxxo_hash . '&payment_type=oxxo',
-				'customer_email' => $customer_email,
-				'customer_name'   => $customer_name,
-				'due_date'        => $oxxo_due_date
+				'url_basic' => $pagoefectivo_url,
+				'url_iframe'      => get_site_url() . '/?ebanx=order-received&hash=' . $pagoefectivo_hash . '&payment_type=cip',
+				'customer_email' => $order->billing_email
 			),
 			'order_status' => $order->get_status(),
-			'method' => 'oxxo'
+			'method' => 'pagoefectivo'
 		);
 
 		parent::thankyou_page($data);
@@ -124,6 +113,23 @@ class WC_EBANX_Oxxo_Gateway extends WC_EBANX_Gateway
 	}
 
 	/**
+	 * Process the response of request from EBANX API
+	 *
+	 * @param  Object $request The result of request
+	 * @param  WC_Order $order   The order created
+	 * @return void
+	 */
+	protected function process_response($request, $order)
+	{
+		if ($request->status == 'ERROR' || !$request->payment->cip_url) {
+			return $this->process_response_error($request, $order);
+		}
+		$request->redirect_url = $request->payment->cip_url;
+
+		return parent::process_response($request, $order);
+	}
+
+	/**
 	 * Mount the data to send to EBANX API
 	 *
 	 * @param  WC_Order $order
@@ -131,11 +137,8 @@ class WC_EBANX_Oxxo_Gateway extends WC_EBANX_Gateway
 	 */
 	protected function request_data($order)
 	{
-		/*TODO: ? if (empty($_POST['ebanx_oxxo_rfc'])) {
-		throw new Exception("Missing rfc.");
-		}*/
-
 		$data = parent::request_data($order);
+
 		$data['payment']['payment_type_code'] = $this->api_name;
 
 		return $data;

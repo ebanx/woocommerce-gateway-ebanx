@@ -4,19 +4,19 @@ if (!defined('ABSPATH')) {
 	exit;
 }
 
-class WC_EBANX_Servipag_Gateway extends WC_EBANX_Redirect_Gateway
+class WC_EBANX_Sencillito_Gateway extends WC_EBANX_Redirect_Gateway
 {
 	/**
 	 * Constructor
 	 */
 	public function __construct()
 	{
-		$this->id           = 'ebanx-servipag';
-		$this->method_title = __('EBANX - Servipag', 'woocommerce-gateway-ebanx');
+		$this->id           = 'ebanx-sencillito';
+		$this->method_title = __('EBANX - Sencillito', 'woocommerce-gateway-ebanx');
 
-		$this->api_name    = 'servipag';
-		$this->title       = __('ServiPag', 'woocommerce-gateway-ebanx');
-		$this->description = __('Paga con Servipag.', 'woocommerce-gateway-ebanx');
+		$this->api_name    = 'sencillito';
+		$this->title       = __('Sencillito', 'woocommerce-gateway-ebanx');
+		$this->description = __('Paga con Sencillito.', 'woocommerce-gateway-ebanx');
 
 		parent::__construct();
 
@@ -30,7 +30,7 @@ class WC_EBANX_Servipag_Gateway extends WC_EBANX_Redirect_Gateway
 	 */
 	public function is_available()
 	{
-		return parent::is_available() && $this->getTransactionAddress('country') == WC_EBANX_Gateway_Utils::COUNTRY_CHILE;
+		return parent::is_available() && $this->getTransactionAddress('country') == WC_EBANX_Constants::COUNTRY_CHILE;
 	}
 
 	/**
@@ -39,7 +39,21 @@ class WC_EBANX_Servipag_Gateway extends WC_EBANX_Redirect_Gateway
 	 * @return boolean          Return true if EBANX process the currency
 	 */
 	public function ebanx_process_merchant_currency($currency) {
-		return $currency === WC_EBANX_Gateway_Utils::CURRENCY_CODE_CLP;
+		return $currency === WC_EBANX_Constants::CURRENCY_CODE_CLP;
+	}
+
+	/**
+	 * Mount the data to send to EBANX API
+	 *
+	 * @param  WC_Order $order
+	 * @return array
+	 */
+	protected function request_data($order)
+	{
+		$data                                 = parent::request_data($order);
+		$data['payment']['payment_type_code'] = $this->api_name;
+
+		return $data;
 	}
 
 	/**
@@ -52,7 +66,7 @@ class WC_EBANX_Servipag_Gateway extends WC_EBANX_Redirect_Gateway
 		}
 
 		wc_get_template(
-			'servipag/payment-form.php',
+			'sencillito/payment-form.php',
 			array(),
 			'woocommerce/ebanx/',
 			WC_EBANX::get_templates_path()
@@ -70,28 +84,9 @@ class WC_EBANX_Servipag_Gateway extends WC_EBANX_Redirect_Gateway
 		$data = array(
 			'data' => array(),
 			'order_status' => $order->get_status(),
-			'method' => 'servipag'
+			'method' => 'sencillito'
 		);
 
 		parent::thankyou_page($data);
-	}
-
-	/**
-	 * Mount the data to send to EBANX API
-	 *
-	 * @param  WC_Order $order
-	 * @return array
-	 */
-	protected function request_data($order)
-	{
-		/*TODO: ? if (empty($_POST['ebanx_servipag_rut'])) {
-		throw new Exception("Missing rut.");
-		}*/
-
-		$data = parent::request_data($order);
-
-		$data['payment']['payment_type_code'] = $this->api_name;
-
-		return $data;
 	}
 }
