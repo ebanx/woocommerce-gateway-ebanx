@@ -5,7 +5,7 @@
  * Description: Offer Latin American local payment methods & increase your conversion rates with the solution used by AliExpress, AirBnB and Spotify in Brazil.
  * Author: EBANX
  * Author URI: https://www.ebanx.com/business/en
- * Version: 1.9.1
+ * Version: 1.10.1
  * License: MIT
  * Text Domain: woocommerce-gateway-ebanx
  * Domain Path: /languages
@@ -20,8 +20,12 @@ if (!defined('ABSPATH')) {
 define('WC_EBANX_MIN_PHP_VER', '5.3.0');
 define('WC_EBANX_MIN_WC_VER', '2.5.0');
 define('PLUGIN_DIR_URL', plugin_dir_url(__FILE__) . DIRECTORY_SEPARATOR);
-define('INCLUDES_DIR', __DIR__ . DIRECTORY_SEPARATOR . 'includes' . DIRECTORY_SEPARATOR);
+define('GATEWAYS_DIR', __DIR__ . DIRECTORY_SEPARATOR . 'gateways' . DIRECTORY_SEPARATOR);
 define('SERVICES_DIR', __DIR__ . DIRECTORY_SEPARATOR . 'services' . DIRECTORY_SEPARATOR);
+define('LANGUAGES_DIR', __DIR__ . DIRECTORY_SEPARATOR . 'languages' . DIRECTORY_SEPARATOR);
+define('TEMPLATES_DIR', __DIR__ . DIRECTORY_SEPARATOR . 'templates' . DIRECTORY_SEPARATOR);
+define('VENDOR_DIR', __DIR__ . DIRECTORY_SEPARATOR . 'vendor' . DIRECTORY_SEPARATOR);
+define('ASSETS_DIR', __DIR__ . DIRECTORY_SEPARATOR . 'assets' . DIRECTORY_SEPARATOR);
 
 if (!class_exists('WC_EBANX')) {
 	/**
@@ -40,7 +44,7 @@ if (!class_exists('WC_EBANX')) {
 		 *
 		 * @var string
 		 */
-		const VERSION = '1.9.1';
+		const VERSION = '1.10.1';
 
 		const DIR = __FILE__;
 
@@ -62,8 +66,9 @@ if (!class_exists('WC_EBANX')) {
 		 */
 		private function __construct()
 		{
-			include_once(INCLUDES_DIR . 'notices/class-wc-ebanx-notices-notice.php');
-			$this->notices = new WC_EBANX_Notices_Notice();
+			include_once SERVICES_DIR . 'class-wc-ebanx-notice.php';
+
+			$this->notices = new WC_EBANX_Notice();
 
 			if (!class_exists('WC_Payment_Gateway')) {
 				$this->notices
@@ -90,6 +95,7 @@ if (!class_exists('WC_EBANX')) {
 			add_action('init', array($this, 'ebanx_router'));
 			add_action('admin_footer', array($this, 'render_static_assets'), 0);
 			add_action('admin_init', array($this, 'ebanx_sidebar_shortcut'));
+			add_action('admin_init', array('WC_EBANX_Flash', 'enqueue_admin_messages'));
 
 			if ( empty( $_POST ) ) {
 				add_action('admin_init', array($this, 'setup_configs'), 10);
@@ -144,6 +150,7 @@ if (!class_exists('WC_EBANX')) {
 			WC_EBANX_Checker::check_sandbox_mode($this);
 			WC_EBANX_Checker::check_merchant_api_keys($this);
 			WC_EBANX_Checker::check_environment($this);
+			WC_EBANX_Checker::check_currency($this);
 		}
 
 		/**
@@ -488,44 +495,45 @@ if (!class_exists('WC_EBANX')) {
 		private function includes()
 		{
 			// Utils
-			include_once(INCLUDES_DIR . 'class-wc-ebanx-gateway-utils.php');
-			include_once(INCLUDES_DIR . 'notices/class-wc-ebanx-notices-notice.php');
-			include_once(INCLUDES_DIR . 'class-wc-ebanx-checker.php');
-			include_once(SERVICES_DIR . 'class-wc-ebanx-hooks.php');
+			include_once SERVICES_DIR . 'class-wc-ebanx-constants.php';
+			include_once SERVICES_DIR . 'class-wc-ebanx-notice.php';
+			include_once SERVICES_DIR . 'class-wc-ebanx-hooks.php';
+			include_once SERVICES_DIR . 'class-wc-ebanx-checker.php';
+			include_once(SERVICES_DIR . 'class-wc-ebanx-flash.php');
 
 			// Gateways
-			include_once(INCLUDES_DIR . 'class-wc-ebanx-gateway.php');
-			include_once(INCLUDES_DIR . 'class-wc-ebanx-redirect-gateway.php');
-			include_once(INCLUDES_DIR . 'class-wc-ebanx-global-gateway.php');
-			include_once(INCLUDES_DIR . 'class-wc-ebanx-credit-card-gateway.php');
+			include_once GATEWAYS_DIR . 'class-wc-ebanx-gateway.php';
+			include_once GATEWAYS_DIR . 'class-wc-ebanx-redirect-gateway.php';
+			include_once GATEWAYS_DIR . 'class-wc-ebanx-global-gateway.php';
+			include_once GATEWAYS_DIR . 'class-wc-ebanx-credit-card-gateway.php';
 
 			// Chile Gateways
-			include_once(INCLUDES_DIR . 'class-wc-ebanx-servipag-gateway.php');
-			include_once(INCLUDES_DIR . 'class-wc-ebanx-sencillito-gateway.php');
+			include_once GATEWAYS_DIR . 'class-wc-ebanx-servipag-gateway.php';
+			include_once GATEWAYS_DIR . 'class-wc-ebanx-sencillito-gateway.php';
 
 			// Brazil Gateways
-			include_once(INCLUDES_DIR . 'class-wc-ebanx-banking-ticket-gateway.php');
-			include_once(INCLUDES_DIR . 'class-wc-ebanx-credit-card-br-gateway.php');
-			include_once(INCLUDES_DIR . 'class-wc-ebanx-account-gateway.php');
-			include_once(INCLUDES_DIR . 'class-wc-ebanx-tef-gateway.php');
+			include_once GATEWAYS_DIR . 'class-wc-ebanx-banking-ticket-gateway.php';
+			include_once GATEWAYS_DIR . 'class-wc-ebanx-credit-card-br-gateway.php';
+			include_once GATEWAYS_DIR . 'class-wc-ebanx-account-gateway.php';
+			include_once GATEWAYS_DIR . 'class-wc-ebanx-tef-gateway.php';
 
 			// Mexico Gateways
-			include_once(INCLUDES_DIR . 'class-wc-ebanx-credit-card-mx-gateway.php');
-			include_once(INCLUDES_DIR . 'class-wc-ebanx-debit-card-gateway.php');
-			include_once(INCLUDES_DIR . 'class-wc-ebanx-oxxo-gateway.php');
+			include_once GATEWAYS_DIR . 'class-wc-ebanx-credit-card-mx-gateway.php';
+			include_once GATEWAYS_DIR . 'class-wc-ebanx-debit-card-gateway.php';
+			include_once GATEWAYS_DIR . 'class-wc-ebanx-oxxo-gateway.php';
 
 			// Colombia Gateways
-			include_once(INCLUDES_DIR . 'class-wc-ebanx-baloto-gateway.php');
-			include_once(INCLUDES_DIR . 'class-wc-ebanx-eft-gateway.php');
+			include_once GATEWAYS_DIR . 'class-wc-ebanx-baloto-gateway.php';
+			include_once GATEWAYS_DIR . 'class-wc-ebanx-eft-gateway.php';
 
 			// Peru Gateways
-			include_once(INCLUDES_DIR . 'class-wc-ebanx-pagoefectivo-gateway.php');
-			include_once(INCLUDES_DIR . 'class-wc-ebanx-safetypay-gateway.php');
+			include_once GATEWAYS_DIR . 'class-wc-ebanx-pagoefectivo-gateway.php';
+			include_once GATEWAYS_DIR . 'class-wc-ebanx-safetypay-gateway.php';
 
 			// Hooks/Actions
-			include_once(INCLUDES_DIR . 'class-wc-ebanx-my-account.php');
-			include_once(INCLUDES_DIR . 'class-wc-ebanx-one-click.php');
 			include_once(INCLUDES_DIR . 'class-wc-ebanx-payment-by-link.php');
+			include_once(SERVICES_DIR . 'class-wc-ebanx-my-account.php');
+			include_once(SERVICES_DIR . 'class-wc-ebanx-one-click.php');
 		}
 
 		/**
@@ -535,7 +543,7 @@ if (!class_exists('WC_EBANX')) {
 		 */
 		public static function get_templates_path()
 		{
-			return plugin_dir_path(__FILE__) . 'templates/';
+			return TEMPLATES_DIR;
 		}
 
 		/**
@@ -547,20 +555,31 @@ if (!class_exists('WC_EBANX')) {
 		 */
 		public function add_gateway($methods)
 		{
+			// Global
 			$methods[] = 'WC_EBANX_Global_Gateway';
+
+			// Brazil
 			$methods[] = 'WC_EBANX_Banking_Ticket_Gateway';
 			$methods[] = 'WC_EBANX_Credit_Card_BR_Gateway';
+			$methods[] = 'WC_EBANX_Tef_Gateway';
+			$methods[] = 'WC_EBANX_Account_Gateway';
+
+			// Mexico
 			$methods[] = 'WC_EBANX_Credit_Card_MX_Gateway';
 			$methods[] = 'WC_EBANX_Debit_Card_Gateway';
 			$methods[] = 'WC_EBANX_Oxxo_Gateway';
+
+			// Chile
 			$methods[] = 'WC_EBANX_Sencillito_Gateway';
 			$methods[] = 'WC_EBANX_Servipag_Gateway';
-			$methods[] = 'WC_EBANX_Tef_Gateway';
+
+			// Colombia
+			$methods[] = 'WC_EBANX_Baloto_Gateway';
+			$methods[] = 'WC_EBANX_Eft_Gateway';
+
+			// Peru
 			$methods[] = 'WC_EBANX_Pagoefectivo_Gateway';
 			$methods[] = 'WC_EBANX_Safetypay_Gateway';
-			$methods[] = 'WC_EBANX_Eft_Gateway';
-			$methods[] = 'WC_EBANX_Baloto_Gateway';
-			$methods[] = 'WC_EBANX_Account_Gateway';
 
 			return $methods;
 		}
@@ -589,7 +608,7 @@ if (!class_exists('WC_EBANX')) {
 		public function woocommerce_missing_notice()
 		{
 			// TODO: Others notice here
-			include dirname(self::DIR) . '/includes/admin/views/html-notice-missing-woocommerce.php';
+			include_once TEMPLATES_DIR . 'views/html-notice-missing-woocommerce.php';
 		}
 
 		/**
@@ -772,7 +791,7 @@ EOT;
 		 * @return void
 		 */
 		public function ebanx_admin_order_details ($order) {
-			if (in_array($order->payment_method, WC_EBANX_Gateway_Utils::flatten(WC_EBANX_Gateway_Utils::$EBANX_GATEWAYS_BY_COUNTRY))) {
+			if (in_array($order->payment_method, WC_EBANX_Constants::flatten(WC_EBANX_Constants::$EBANX_GATEWAYS_BY_COUNTRY))) {
 				$payment_hash = get_post_meta($order->id, '_ebanx_payment_hash', true);
 
 				wc_get_template(

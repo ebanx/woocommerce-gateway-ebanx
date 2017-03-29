@@ -4,23 +4,24 @@ if (!defined('ABSPATH')) {
 	exit;
 }
 
-class WC_EBANX_Sencillito_Gateway extends WC_EBANX_Redirect_Gateway
+class WC_EBANX_Account_Gateway extends WC_EBANX_Redirect_Gateway
 {
 	/**
 	 * Constructor
 	 */
 	public function __construct()
 	{
-		$this->id           = 'ebanx-sencillito';
-		$this->method_title = __('EBANX - Sencillito', 'woocommerce-gateway-ebanx');
+		$this->id = 'ebanx-account';
+		$this->method_title = __('EBANX - ACCOUNT', 'woocommerce-gateway-ebanx');
 
-		$this->api_name    = 'sencillito';
-		$this->title       = __('Sencillito', 'woocommerce-gateway-ebanx');
-		$this->description = __('Paga con Sencillito.', 'woocommerce-gateway-ebanx');
+		$this->api_name = 'ebanxaccount';
+		$this->title = __('Saldo EBANX', 'woocommerce-gateway-ebanx');
+		$this->description = __('Pague usando o saldo da sua conta do EBANX.', 'woocommerce-gateway-ebanx');
 
 		parent::__construct();
 
-		$this->enabled = is_array($this->configs->settings['chile_payment_methods']) ? in_array($this->id, $this->configs->settings['chile_payment_methods']) ? 'yes' : false : false;
+		// TODO: Put that to father and remove of the all children's
+		$this->enabled = is_array($this->configs->settings['brazil_payment_methods']) ? in_array($this->id, $this->configs->settings['brazil_payment_methods']) ? 'yes' : false : false;
 	}
 
 	/**
@@ -30,16 +31,16 @@ class WC_EBANX_Sencillito_Gateway extends WC_EBANX_Redirect_Gateway
 	 */
 	public function is_available()
 	{
-		return parent::is_available() && $this->getTransactionAddress('country') == WC_EBANX_Gateway_Utils::COUNTRY_CHILE;
+		return parent::is_available() && $this->getTransactionAddress('country') == WC_EBANX_Constants::COUNTRY_BRAZIL;
 	}
 
 	/**
 	 * Check if the currency is processed by EBANX
-	 * @param  string $currency Possible currencies: CLP
+	 * @param  string $currency Possible currencies: BRL
 	 * @return boolean          Return true if EBANX process the currency
 	 */
 	public function ebanx_process_merchant_currency($currency) {
-		return $currency === WC_EBANX_Gateway_Utils::CURRENCY_CODE_CLP;
+		return $currency === WC_EBANX_Constants::CURRENCY_CODE_BRL;
 	}
 
 	/**
@@ -50,7 +51,8 @@ class WC_EBANX_Sencillito_Gateway extends WC_EBANX_Redirect_Gateway
 	 */
 	protected function request_data($order)
 	{
-		$data                                 = parent::request_data($order);
+		$data = parent::request_data($order);
+
 		$data['payment']['payment_type_code'] = $this->api_name;
 
 		return $data;
@@ -66,7 +68,7 @@ class WC_EBANX_Sencillito_Gateway extends WC_EBANX_Redirect_Gateway
 		}
 
 		wc_get_template(
-			'sencillito/payment-form.php',
+			'account/payment-form.php',
 			array(),
 			'woocommerce/ebanx/',
 			WC_EBANX::get_templates_path()
@@ -84,9 +86,8 @@ class WC_EBANX_Sencillito_Gateway extends WC_EBANX_Redirect_Gateway
 		$data = array(
 			'data' => array(),
 			'order_status' => $order->get_status(),
-			'method' => 'sencillito'
+			'method' => 'account'
 		);
-
 		parent::thankyou_page($data);
 	}
 }
