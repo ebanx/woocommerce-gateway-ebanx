@@ -91,13 +91,13 @@ class WC_EBANX_Payment_By_Link {
 			'name'                  => $this->order->billing_first_name . ' ' . $this->order->billing_last_name,
 			'email'                 => $this->order->billing_email,
 			'country'               => strtolower($this->order->billing_country),
-			'payment_type_code'     => empty($this->order->payment_method) ? '_all' : $payment_type_code[$this->order->payment_method],
+			'payment_type_code'     => empty($this->order->payment_method) ? '_all' : WC_EBANX_Gateway_Utils::$GATEWAY_TO_PAYMENT_TYPE_CODE[$this->order->payment_method],
 			'merchant_payment_code' => $this->order->id . '_' . md5(time()),
 			'currency_code'         => strtoupper(get_woocommerce_currency()),
 			'amount'                => $this->order->get_total()
 		);
 
-		\Ebanx\Config::set($config);
+		\Ebanx\Config::set($this->config);
 		\Ebanx\Config::setDirectMode(false);
 
 		$request = false;
