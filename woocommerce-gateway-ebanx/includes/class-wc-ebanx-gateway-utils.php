@@ -135,6 +135,21 @@ abstract class WC_EBANX_Gateway_Utils
 		)
 	);
 
+	public static $GATEWAY_TO_PAYMENT_TYPE_CODE = array(
+		'ebanx-banking-ticket' => 'boleto',
+		'ebanx-credit-card-br' => 'creditcard',
+		'ebanx-credit-card-mx' => 'creditcard',
+		'ebanx-debit-card' => 'debitcard',
+		'ebanx-oxxo' => 'oxxo',
+		'ebanx-sencillito' => 'sencillito',
+		'ebanx-servipag' => 'servipag',
+		'ebanx-tef' => 'tef',
+		'ebanx-pagoefectivo' => 'pagoefectivo',
+		'ebanx-safetypay' => 'safetypay',
+		'ebanx-eft' => 'eft',
+		'ebanx-account' => 'ebanxaccount'
+	);
+
 	/**
 	 * The Brazil taxes available options that EBANX process
 	 *
