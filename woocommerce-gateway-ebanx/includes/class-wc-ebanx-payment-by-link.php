@@ -32,7 +32,7 @@ class WC_EBANX_Payment_By_Link {
 			return;
 		}
 
-		$this->post_request();
+		$this->post_request($request->payment->hash, $request->redirect_url);
 	}
 
 	/**
@@ -112,9 +112,9 @@ class WC_EBANX_Payment_By_Link {
 		return $request;
 	}
 
-	private function post_request() {
-		$this->order->add_order_note('Order created via EBANX.');
-		update_post_meta($post_id, '_ebanx_payment_hash', $request->payment->hash);
-		update_post_meta($post_id, '_ebanx_checkout_url', $request->redirect_url);
+	private function post_request($hash, $url) {
+		$this->order->update_status('on-hold', __('Order created via EBANX.', 'woocommerce-gateway-ebanx'));
+		update_post_meta($this->post_id, '_ebanx_payment_hash', $hash);
+		update_post_meta($this->post_id, '_ebanx_checkout_url', $url);
 	}
 }
