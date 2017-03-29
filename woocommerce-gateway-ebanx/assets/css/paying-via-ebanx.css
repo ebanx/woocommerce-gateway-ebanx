@@ -32,10 +32,7 @@ li[class*="ebanx"] .ebanx-payment-container.ebanx-language-br:after {
   background-image: url(../images/ebanx-pagando.png);
 }
 
-li[class*="ebanx"] .ebanx-payment-container.ebanx-language-mx:after,
-li[class*="ebanx"] .ebanx-payment-container.ebanx-language-pe:after,
-li[class*="ebanx"] .ebanx-payment-container.ebanx-language-co:after,
-li[class*="ebanx"] .ebanx-payment-container.ebanx-language-cl:after {
+li[class*="ebanx"] .ebanx-payment-container.ebanx-language-es:after {
   width: 168px;
 
   background-image: url(../images/ebanx-estas-pagando.png);

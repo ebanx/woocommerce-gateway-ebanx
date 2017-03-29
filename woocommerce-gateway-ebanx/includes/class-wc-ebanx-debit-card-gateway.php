@@ -69,7 +69,6 @@ class WC_EBANX_Debit_Card_Gateway extends WC_EBANX_Gateway
 		wc_get_template(
 			'debit-card/payment-form.php',
 			array(
-				'language' => $this->language,
 				'cart_total' => $this->get_order_total()
 			),
 			'woocommerce/ebanx/',

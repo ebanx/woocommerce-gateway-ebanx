@@ -100,7 +100,6 @@ class WC_EBANX_Credit_Card_BR_Gateway extends WC_EBANX_Credit_Card_Gateway
 		wc_get_template(
 			'ebanx-credit-card-br/payment-form.php',
 			array(
-				'language' => $this->language,
 				'cards' => (array) $cards,
 				'cart_total' => $cart_total,
 				'max_installment' => min($this->configs->settings['credit_card_instalments'], $max_instalments),

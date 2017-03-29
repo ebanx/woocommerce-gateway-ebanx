@@ -74,11 +74,13 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
 
 		$this->language = $this->getTransactionAddress('country');
 
-		if ($this->is_sandbox_mode && !current_user_can('administrator')) {
-			return false;
-		};
-
-		return parent::is_available() && !empty($this->public_key) && !empty($this->private_key) && $this->enabled === 'yes' && ($this->currency_is_usd_eur($currency) || $this->ebanx_process_merchant_currency($currency));
+		return parent::is_available()
+			&& $this->enabled === 'yes'
+			&& !empty($this->public_key)
+			&& !empty($this->private_key)
+			&& ($this->currency_is_usd_eur($currency)
+				|| $this->ebanx_process_merchant_currency($currency)
+			);
 	}
 
 	/**
@@ -402,6 +404,19 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
 	public function get_currency_rate($local_currency_code) {
 		$this->setup_pay_api();
 
+		$cache_key = 'EBANX_exchange_'.$local_currency_code;
+
+		// Every five minutes
+		$cache_time = date('YmdH').floor(date('i') / 5);
+
+		$cached = get_option($cache_key);
+		if ($cached !== false) {
+			list($rate, $time) = explode('|', $cached);
+			if ($time == $cache_time) {
+				return $rate;
+			}
+		}
+
 		$usd_to_local = \Ebanx\Ebanx::getExchange( array(
 				'currency_code' => WC_Ebanx_Gateway_Utils::CURRENCY_CODE_USD,
 				'currency_base_code' => $local_currency_code
@@ -413,7 +428,9 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
 			return 1;
 		}
 
-		return $usd_to_local->currency_rate->rate;
+		$rate = $usd_to_local->currency_rate->rate;
+		update_option($cache_key, $rate.'|'.$cache_time);
+		return $rate;
 	}
 
 	/**
@@ -435,8 +452,7 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
 			'payment'   => array(
 				'notification_url'      => $home_url,
 				'redirect_url'          => $home_url,
-				'user_value_1'          => 'name=plugin',
-				'user_value_2'          => 'value=woocommerce',
+				'user_value_1'          => 'from_woocommerce',
 				'user_value_3'          => 'version=' . WC_EBANX::VERSION,
 				'country'               => $order->billing_country,
 				'currency_code'         => $this->merchant_currency,
@@ -647,7 +663,7 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
 			));
 		} catch (Exception $e) {
 
-			$this->language = $this->getTransactionAddress('country');
+			$country = $this->getTransactionAddress('country');
 
 			$code = $e->getMessage();
 
@@ -658,7 +674,7 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
 				'co' => 'es',
 				'br' => 'pt-br',
 			);
-			$language = $languages[$this->language];
+			$language = $languages[$country];
 
 			$errors = array(
 				'pt-br' => array(
@@ -829,9 +845,6 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
 		if (isset($_POST['billing_address_1'])) {
 			update_post_meta($order->id, '_ebanx_payment_customer_address', sanitize_text_field($_POST['billing_address_1']));
 		}
-
-		// It shows to the merchant
-		update_post_meta($order->id, 'Payment\'s Hash', $request->payment->hash);
 	}
 
 	/**
