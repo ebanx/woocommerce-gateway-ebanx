@@ -114,8 +114,8 @@ const checkoutPage = (function (test) {
 
   const $public = {
     fillCheckout: function (data) {
-      // utils
-      //   .validate(data, checkoutSchema, () => {
+      utils
+        .validate(data, checkoutSchema, () => {
           _private.fillFirstName(data.firstName);
           _private.fillLastName(data.lastName);
           _private.fillCompany(data.company);
@@ -126,7 +126,7 @@ const checkoutPage = (function (test) {
           _private.fillCity(data.city);
           _private.fillState(data.state);
           _private.fillPostcode(data.postcode);
-        // });
+        });
     },
 
     fillToBrazil: function (data) {
@@ -140,8 +140,7 @@ const checkoutPage = (function (test) {
 
     fillBoletoGateway: function () {
       test
-        .wait(5000)
-        .get(buttons.boletoRadio)
+        .get(buttons.boletoRadio, { timeout: 5000 })
           .should('be.visible')
           .click({ force: true })
         .get(containers.boletoBox)
@@ -154,7 +153,7 @@ const checkoutPage = (function (test) {
       test
         .get(buttons.placeOrder)
           .should('be.visible')
-          .click();
+          .click({ force: true });
 
       return this;
     },
@@ -163,8 +162,7 @@ const checkoutPage = (function (test) {
       this.placeOrder();
 
       test
-        .wait(5000)
-        .get(containers.boletoBarCode)
+        .get(containers.boletoBarCode, { timeout: 10000 })
           .should('be.visible')
           .should('not.to.be.empty');
 
