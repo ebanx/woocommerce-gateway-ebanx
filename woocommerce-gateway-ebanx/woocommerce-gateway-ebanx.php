@@ -95,9 +95,7 @@ if (!class_exists('WC_EBANX')) {
 			add_action('init', array($this, 'ebanx_router'));
 			add_action('admin_footer', array($this, 'render_static_assets'), 0);
 			add_action('admin_init', array($this, 'ebanx_sidebar_shortcut'));
-			add_action('admin_notices', function(){
-				WC_EBANX_Flash::display_flash_messages();
-			});
+			add_action('admin_init', array('WC_EBANX_Flash', 'display_messages'));
 
 			if ( empty( $_POST ) ) {
 				add_action('admin_init', array($this, 'setup_configs'), 10);

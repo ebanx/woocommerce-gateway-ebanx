@@ -5,9 +5,11 @@ if (!defined('ABSPATH')) {
 }
 
 class WC_EBANX_Flash {
-	public static function display_flash_messages() {
-		$flash_messages = self::get_flash_messages();
-		$notices = new WC_EBANX_Notices_Notice();
+	const KEY = 'wc_ebanx_flash';
+
+	public static function display_messages() {
+		$flash_messages = self::get_messages();
+		$notices = new WC_EBANX_Notice();
 		foreach ($flash_messages as $flash_message) {
 			$notices
 				->with_message($flash_message['message'])
@@ -15,23 +17,23 @@ class WC_EBANX_Flash {
 			if ($flash_message['dismissible']) {
 				$notices->dismissible();
 			}
-			$notices->display();
+			$notices->enqueue();
 		}
     }
 
-    public static function enqueue_flash_message($message, $type = 'error', $dismissible = false) {
-    	$flash_messages = maybe_unserialize(get_option('wp_flash_messages', array()));
+    public static function enqueue_message($message, $type = 'error', $dismissible = false) {
+    	$flash_messages = maybe_unserialize(get_option(self::KEY, array()));
     	$flash_messages[] = [
     		'message' => $message,
     		'type' => $type,
     		'dismissible' => $dismissible
     	];
-    	update_option('wp_flash_messages', $flash_messages);
+    	update_option(self::KEY, $flash_messages);
     }
 
-    public static function get_flash_messages(){
-    	$flash_messages = maybe_unserialize(get_option('wp_flash_messages', array()));
-    	delete_option('wp_flash_messages');
+    public static function get_messages(){
+    	$flash_messages = maybe_unserialize(get_option(self::KEY, array()));
+    	delete_option(self::KEY);
     	return $flash_messages;
     }
 }
