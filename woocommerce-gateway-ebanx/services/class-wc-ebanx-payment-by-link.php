@@ -74,16 +74,9 @@ class WC_EBANX_Payment_By_Link {
 	}
 
 	private function send_errors() {
-		//TODO: MAKE IT WORK
-		$this->notices = new WC_EBANX_Notices_Notice();
 			foreach ($this->errors as $error) {
-				$this->notices
-					->with_message(__($error, 'woocommerce-gateway-ebanx'))
-					->with_type('error')
-					->persistent()
-					->display();
+				WC_EBANX_Flash::add_message(__($error, 'woocommerce-gateway-ebanx'));
 			}
-			exit;
 	}
 
 	private function send_request() {
