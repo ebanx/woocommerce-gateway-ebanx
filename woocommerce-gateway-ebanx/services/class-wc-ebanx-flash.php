@@ -11,7 +11,7 @@ class WC_EBANX_Flash {
 	const KEY = '_ebanx_wp_flash_messages';
 
 	/**
-	 * Enqueue every enqueued flash message to the admin_notices hook
+	 * Enqueue every flash message to the admin_notices hook
 	 *
 	 * @return void
 	 */
@@ -30,7 +30,7 @@ class WC_EBANX_Flash {
 	}
 
 	/**
-	 * Enqueue a message to the next admin_init
+	 * Adds a message to WP_Option
 	 *
 	 * @param  string  $message     The message to enqueue
 	 * @param  string  $type        The notice type
