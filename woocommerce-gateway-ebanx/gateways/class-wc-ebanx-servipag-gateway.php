@@ -57,8 +57,6 @@ class WC_EBANX_Servipag_Gateway extends WC_EBANX_Redirect_Gateway
 			'woocommerce/ebanx/',
 			WC_EBANX::get_templates_path()
 		);
-
-		parent::checkout_rate_conversion(WC_EBANX_Gateway_Utils::CURRENCY_CODE_CLP);
 	}
 
 	/**

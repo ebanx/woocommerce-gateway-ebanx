@@ -74,8 +74,6 @@ class WC_EBANX_Debit_Card_Gateway extends WC_EBANX_Gateway
 			'woocommerce/ebanx/',
 			WC_Ebanx::get_templates_path()
 		);
-
-		parent::checkout_rate_conversion(WC_EBANX_Gateway_Utils::CURRENCY_CODE_MXN);
 	}
 
 	/**
