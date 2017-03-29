@@ -15,9 +15,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 <hr>
 <div class="banking-ticket__desc">
-    <p class="woocommerce-thankyou-order-received">Su boleta OXXO fue generado con éxito.</p>
-    <p>Una copia de la boleta fue enviada al correo electrónico <strong><?=$customer_email ?></strong>.</p>
-    <p>Si tienes dudas, por favor escribe a <a href="mailto:soporte@ebanx.com">soporte@ebanx.com</a>.</p>
+    <p class="woocommerce-thankyou-order-received">¡Listo <?=$customer_name ?>! Tu boleta EBANX de pago en OXXO ha sido generada.</p>
+    <p>Enviamos una copia a <strong><?=$customer_email ?></strong>.</p>
+    <p>No lo olvides: tu boleta vence el día <strong><?php echo date_i18n('d/m', strtotime($due_date)) ?></strong>. Después de esa fecha no será posible realizar el pago y la boleta será cancelada automáticamente.</p>
+	<p>¿Dudas? Con gusto te <a href="https://www.ebanx.com/mx/ayuda/pagos/boleta" target="_blank">ayudaremos</a>.</p>
 </div>
 
 <hr>
