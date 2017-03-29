@@ -59,7 +59,7 @@ class WC_EBANX_Baloto_Gateway extends WC_EBANX_Gateway
 			WC_EBANX::get_templates_path()
 		);
 
-		parent::checkout_rate_conversion(WC_EBANX_Gateway_Utils::CURRENCY_CODE_COP);
+		parent::checkout_rate_conversion(WC_EBANX_Constants::CURRENCY_CODE_COP);
 	}
 
 	/**

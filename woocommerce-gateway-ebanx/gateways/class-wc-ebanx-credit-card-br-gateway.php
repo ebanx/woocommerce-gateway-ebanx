@@ -112,8 +112,8 @@ class WC_EBANX_Credit_Card_BR_Gateway extends WC_EBANX_Credit_Card_Gateway
 		);
 
 		/*
-		 * @todo increase amount with interest rates of installments 
+		 * @todo increase amount with interest rates of installments
 		*/
-		parent::checkout_rate_conversion(WC_EBANX_Gateway_Utils::CURRENCY_CODE_BRL);
+		parent::checkout_rate_conversion(WC_EBANX_Constants::CURRENCY_CODE_BRL);
 	}
 }
