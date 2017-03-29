@@ -17,10 +17,10 @@ class WC_EBANX_Checker {
 			return;
 		}
 
-		$warning_message = __('EBANX Gateway - The Sandbox Mode option is enabled, in this mode, none of your transactions will be processed.', 'woocommerce-gateway-ebanx');
+		$info_message = __('EBANX Gateway - The Sandbox Mode option is enabled, in this mode, none of your transactions will be processed.', 'woocommerce-gateway-ebanx');
 		$context->notices
-			->with_message($warning_message)
-			->with_type('warning')
+			->with_message($info_message)
+			->with_type('info')
 			->persistent()
 			->display();
 	}
