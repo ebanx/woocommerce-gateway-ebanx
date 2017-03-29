@@ -86,4 +86,26 @@ class WC_EBANX_Checker {
 				->enqueue();
 		}
 	}
+
+	/**
+	 * Check if the currency is suported
+	 *
+	 * @return void
+	 */
+	public static function check_currency($context)
+	{
+		if (!in_array(get_woocommerce_currency(), WC_EBANX_Gateway_Utils::$CURRENCIES_CODES_ALLOWED)) {
+			$message = __('EBANX Gateway - Does not support the Currency you have set on the WooCommerce settings. To process with the EBANX plugin choose one of the following: %1$s.', 'woocommerce-gateway-ebanx');
+			$message = sprintf($message, implode(', ', WC_EBANX_Gateway_Utils::$CURRENCIES_CODES_ALLOWED));
+
+			$context->notices
+				->with_message($message)
+				->with_type('warning')
+				->persistent()
+				->enqueue();
+				
+		}
+
+		return false;
+	}
 }
