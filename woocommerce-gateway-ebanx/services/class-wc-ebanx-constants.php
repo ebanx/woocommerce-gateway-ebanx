@@ -67,11 +67,6 @@ abstract class WC_EBANX_Constants
 	const MAX_INSTALMENTS = 12;
 
 	/**
-	 * Taxtes applied by country
-	 */
-	const BRAZIL_TAX = 0.0038;
-
-	/**
 	 * The list of all countries that EBANX processes
 	 *
 	 * @var array
