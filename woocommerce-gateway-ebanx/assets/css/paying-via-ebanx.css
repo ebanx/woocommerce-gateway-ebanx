@@ -54,6 +54,11 @@ li[class*="ebanx"] > label > img {
   margin-left: 5px;
 }
 
+li[class*="ebanx"] .ebanx-payment-converted-amount {
+  font-size: .9em;
+  margin-top: 20px;
+}
+
 #shop-isle-checkout-coupon .checkout_coupon .ebanx-form-row-first {
     width: 100%;
     margin-left: -200px;
@@ -275,6 +280,7 @@ li[class*="ebanx"] .payment_box .ebanx-credit-card-label > .input-radio,
 li[class*="ebanx"] .payment_box .ebanx-credit-card-label > .ebanx-credit-card-brand,
 li[class*="ebanx"] .payment_box .ebanx-credit-card-label > .ebanx-credit-card-bin {
   float: left !important;
+  margin-left: 1px;
 }
 
 .ebanx-credit-card-label > .ebanx-credit-card-bin {
