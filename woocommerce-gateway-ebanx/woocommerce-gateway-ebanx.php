@@ -95,6 +95,7 @@ if (!class_exists('WC_EBANX')) {
 			add_action('init', array($this, 'ebanx_router'));
 			add_action('admin_footer', array($this, 'render_static_assets'), 0);
 			add_action('admin_init', array($this, 'ebanx_sidebar_shortcut'));
+			add_action('admin_init', array('WC_EBANX_Flash', 'enqueue_admin_messages'));
 
 			if ( empty( $_POST ) ) {
 				add_action('admin_init', array($this, 'setup_configs'), 10);
@@ -495,6 +496,7 @@ if (!class_exists('WC_EBANX')) {
 			include_once SERVICES_DIR . 'class-wc-ebanx-notice.php';
 			include_once SERVICES_DIR . 'class-wc-ebanx-hooks.php';
 			include_once SERVICES_DIR . 'class-wc-ebanx-checker.php';
+			include_once(SERVICES_DIR . 'class-wc-ebanx-flash.php');
 
 			// Gateways
 			include_once GATEWAYS_DIR . 'class-wc-ebanx-gateway.php';
