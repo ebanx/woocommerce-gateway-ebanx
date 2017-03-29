@@ -523,6 +523,7 @@ if (!class_exists('WC_EBANX')) {
 			// Hooks/Actions
 			include_once(INCLUDES_DIR . 'class-wc-ebanx-my-account.php');
 			include_once(INCLUDES_DIR . 'class-wc-ebanx-one-click.php');
+			include_once(INCLUDES_DIR . 'class-wc-ebanx-payment-by-link.php');
 		}
 
 		/**
@@ -727,56 +728,12 @@ if (!class_exists('WC_EBANX')) {
 		}
 
 		public function ebanx_metabox_payment_link_save ($post_id) {
-			//TODO: Criar uma classe para o payment by link similar ao One-Click
-
-			//TODO:Criar um método chamado can_create_payment_by_link($post_id) e usar $is_ebanx_save_order
-			/*Check if user has permissions to save data.
-			Check if not an autosave.
-			Check if not a revision.
-			Check if is an EBANX request*/
-			if ( ! current_user_can( 'edit_post', $post_id )
-				|| wp_is_post_autosave( $post_id )
-				|| wp_is_post_revision( $post_id )
-				|| ! isset($_REQUEST['save_order_ebanx'])
-				|| $_REQUEST['save_order_ebanx'] !== 'Save EBANX Order' ) {
-				return;
+			// Check if is an EBANX request
+			if ( isset($_REQUEST['save_order_ebanx'])
+				&& $_REQUEST['save_order_ebanx'] === 'Save EBANX Order' ) {
+				new WC_EBANX_Payment_By_Link($post_id);
 			}
-
-			$has_errors = false;
-
-			$order = wc_get_order($post_id);
-
-			$ebanx_countries = array('br', 'mx', 'cl', 'co', 'pe');
-
-			if ( empty($order->billing_first_name) || empty($order->billing_last_name) ) {
-				$this->notices
-					->with_message(__('The customer name is required, please provide a valid customer name and last name.', 'woocommerce-gateway-ebanx'))
-					->with_type('error')
-					->persistent()
-					->display();
-
-				$has_errors = true;
-			}
-
-			if ( !in_array(strtolower($order->billing_country), $ebanx_countries) ) {
-				$this->notices
-					->with_message(__('EBANX only support the countries: Brazil, Mexico, Peru, Colombia and Chile. Please, use one of these.', 'woocommerce-gateway-ebanx'))
-					->with_type('error')
-					->persistent()
-					->display();
-
-				$has_errors = true;
-			}
-
-			if ( $order->get_total() < 1 ) {
-				$this->notices
-					->with_message(__('The total amount needs to be greater than $1.', 'woocommerce-gateway-ebanx'))
-					->with_type('error')
-					->persistent()
-					->display();
-
-				$has_errors = true;
-			}
+			return;
 
 			// TODO: Novo erro: Verificar se o status da ordem é 'wc-pending', só pode criar com o status de 'wc-pending'
 
@@ -785,21 +742,6 @@ if (!class_exists('WC_EBANX')) {
 			}
 
 			$home_url = esc_url( home_url() );
-
-			$payment_type_code = array(
-				'ebanx-banking-ticket' => 'boleto',
-				'ebanx-credit-card-br' => 'creditcard',
-				'ebanx-credit-card-mx' => 'creditcard',
-				'ebanx-debit-card' => 'debitcard',
-				'ebanx-oxxo' => 'oxxo',
-				'ebanx-sencillito' => 'sencillito',
-				'ebanx-servipag' => 'servipag',
-				'ebanx-tef' => 'tef',
-				'ebanx-pagoefectivo' => 'pagoefectivo',
-				'ebanx-safetypay' => 'safetypay',
-				'ebanx-eft' => 'eft',
-				'ebanx-account' => 'ebanxaccount'
-			);
 
 			$data = array(
 				'name'                  => $order->billing_first_name . ' ' . $order->billing_last_name,
