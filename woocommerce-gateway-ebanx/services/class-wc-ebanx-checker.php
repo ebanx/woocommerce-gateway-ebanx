@@ -17,10 +17,10 @@ class WC_EBANX_Checker {
 			return;
 		}
 
-		$warning_message = __('EBANX Gateway - The Sandbox Mode option is enabled, in this mode, none of your transactions will be processed.', 'woocommerce-gateway-ebanx');
+		$info_message = __('EBANX Gateway - The Sandbox Mode option is enabled, in this mode, none of your transactions will be processed.', 'woocommerce-gateway-ebanx');
 		$context->notices
-			->with_message($warning_message)
-			->with_type('warning')
+			->with_message($info_message)
+			->with_type('info')
 			->persistent()
 			->display();
 	}
@@ -85,5 +85,27 @@ class WC_EBANX_Checker {
 				->persistent()
 				->enqueue();
 		}
+	}
+
+	/**
+	 * Check if the currency is suported
+	 *
+	 * @return void
+	 */
+	public static function check_currency($context)
+	{
+		if (!in_array(get_woocommerce_currency(), WC_EBANX_Constants::$CURRENCIES_CODES_ALLOWED)) {
+			$message = __('EBANX Gateway - Does not support the Currency you have set on the WooCommerce settings. To process with the EBANX plugin choose one of the following: %1$s.', 'woocommerce-gateway-ebanx');
+			$message = sprintf($message, implode(', ', WC_EBANX_Constants::$CURRENCIES_CODES_ALLOWED));
+
+			$context->notices
+				->with_message($message)
+				->with_type('warning')
+				->persistent()
+				->enqueue();
+
+		}
+
+		return false;
 	}
 }
