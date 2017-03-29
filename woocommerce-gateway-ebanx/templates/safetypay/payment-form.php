@@ -12,7 +12,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 ?>
 
-<div id="ebanx-safetypay-payment" class="ebanx-payment-container ebanx-language-<?php echo $language ?>">
+<div id="ebanx-safetypay-payment" class="ebanx-payment-container ebanx-language-es">
   <div class="ebanx-form-row">
 		<label class="ebanx-label">
 			<input type="radio" name="safetypay" value="cash" checked> Cash

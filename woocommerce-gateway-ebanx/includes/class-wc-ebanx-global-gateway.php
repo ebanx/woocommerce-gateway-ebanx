@@ -14,9 +14,9 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway
 	 * @var array
 	 */
 	public static $defaults = array(
-		'sandbox_mode_enabled' => 'yes',
 		'sandbox_private_key' => '',
 		'sandbox_public_key' => '',
+		'sandbox_mode_enabled' => 'yes',
 		'debug_enabled' => 'yes',
 		'brazil_payment_methods' => array(
 			'ebanx-credit-card-br',
@@ -130,9 +130,8 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway
 				'title'       => __('EBANX Sandbox', 'woocommerce-gateway-ebanx'),
 				'type'        => 'checkbox',
 				'label'       => __('Enable Sandbox Mode', 'woocommerce-gateway-ebanx'),
-				'description' => __('EBANX Sandbox is a testing environment that mimics the live environment. Use it to make payment requests to see how your ecommerce processes them.'),
-				'desc_tip'    => true,
-				'default'     => 'yes',
+				'description' => __('EBANX Sandbox is a testing environment that mimics the live environment. Use it to make payment requests to see how your ecommerce processes them.', 'woocommerce-gateway-ebanx'),
+				'desc_tip'    => true
 			),
 			'debug_enabled'             => array(
 				'title'       => __('Debug Log', 'woocommerce-gateway-ebanx'),
