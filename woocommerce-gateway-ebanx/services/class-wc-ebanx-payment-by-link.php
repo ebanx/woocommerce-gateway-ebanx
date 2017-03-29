@@ -56,18 +56,18 @@ class WC_EBANX_Payment_By_Link {
 		if ( $this->order->get_total() < 1 ) {
 			$this->errors[] = 'The total amount needs to be greater than $1.';
 		}
-		if ( ! in_array(strtolower($this->order->billing_country), WC_EBANX_Gateway_Utils::$ALL_COUNTRIES) ) {
+		if ( ! in_array(strtolower($this->order->billing_country), WC_EBANX_Constants::$ALL_COUNTRIES) ) {
 			$this->errors[] = 'EBANX only support the countries: Brazil, Mexico, Peru, Colombia and Chile. Please, use one of these.';
 		}
-		if ( ! array_key_exists($this->order->payment_method, WC_EBANX_Gateway_Utils::$GATEWAY_TO_PAYMENT_TYPE_CODE) ) {
+		if ( ! array_key_exists($this->order->payment_method, WC_EBANX_Constants::$GATEWAY_TO_PAYMENT_TYPE_CODE) ) {
 			$this->errors[] = 'EBANX does not support the selected payment method.';
 		}
 		if ( empty($this->order->billing_email) ) {
 			$this->errors[] = 'The customer e-mal is required, please provide a valid customer e-mail.';
 		}
 		if ( $this->order->payment_method !== ''
-			&& array_key_exists(strtolower($this->order->billing_country), WC_EBANX_Gateway_Utils::$EBANX_GATEWAYS_BY_COUNTRY)
-			&& ! in_array($this->order->payment_method, WC_EBANX_Gateway_Utils::$EBANX_GATEWAYS_BY_COUNTRY[strtolower($this->order->billing_country)]) ) {
+			&& array_key_exists(strtolower($this->order->billing_country), WC_EBANX_Constants::$EBANX_GATEWAYS_BY_COUNTRY)
+			&& ! in_array($this->order->payment_method, WC_EBANX_Constants::$EBANX_GATEWAYS_BY_COUNTRY[strtolower($this->order->billing_country)]) ) {
 			$this->errors[] = 'The selected payment method is not available on the selected country.';
 		}
 		return count($this->errors);
@@ -84,7 +84,7 @@ class WC_EBANX_Payment_By_Link {
 			'name'                  => $this->order->billing_first_name . ' ' . $this->order->billing_last_name,
 			'email'                 => $this->order->billing_email,
 			'country'               => strtolower($this->order->billing_country),
-			'payment_type_code'     => empty($this->order->payment_method) ? '_all' : WC_EBANX_Gateway_Utils::$GATEWAY_TO_PAYMENT_TYPE_CODE[$this->order->payment_method],
+			'payment_type_code'     => empty($this->order->payment_method) ? '_all' : WC_EBANX_Constants::$GATEWAY_TO_PAYMENT_TYPE_CODE[$this->order->payment_method],
 			'merchant_payment_code' => $this->order->id . '_' . md5(time()),
 			'currency_code'         => strtoupper(get_woocommerce_currency()),
 			'amount'                => $this->order->get_total()
