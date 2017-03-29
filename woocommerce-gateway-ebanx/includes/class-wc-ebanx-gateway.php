@@ -452,8 +452,7 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
 			'payment'   => array(
 				'notification_url'      => $home_url,
 				'redirect_url'          => $home_url,
-				'user_value_1'          => 'name=plugin',
-				'user_value_2'          => 'value=woocommerce',
+				'user_value_1'          => 'from_woocommerce',
 				'user_value_3'          => 'version=' . WC_EBANX::VERSION,
 				'country'               => $order->billing_country,
 				'currency_code'         => $this->merchant_currency,

@@ -218,8 +218,9 @@ if (!class_exists('WC_EBANX')) {
 		private function ebanx_dashboard_check()
 		{
 			$json = json_encode(array(
-				'ebanx' => true
-				));
+				'ebanx' => true,
+				'version' => self::VERSION
+			));
 			echo $json;
 			exit;
 		}
