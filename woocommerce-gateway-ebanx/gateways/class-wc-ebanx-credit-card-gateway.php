@@ -17,10 +17,6 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
 
 		parent::__construct();
 
-//		add_action('woocommerce_order_actions', array($this, 'auto_capture'));
-
-//		add_action('woocommerce_order_action_custom_action', array($this, 'capture_payment_action'));
-
 		add_action('wp_ajax_capture_payment_action', array($this, 'capture_payment_action'));
 
 		add_filter('woocommerce_admin_order_actions', array($this, 'add_capture_order_actions_button'), PHP_INT_MAX, 2);
@@ -51,6 +47,13 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
 		return $actions;
 	}
 
+	/**
+	 * Check if the order can be captured
+	 *
+	 * @param $order
+	 * @return bool
+	 */
+
 	public function enable_capture($order) {
 		if ($order->get_status() != 'on-hold' || $order->get_payment_method() != $this->id) {
 			return false;
@@ -58,6 +61,14 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
 
 		return true;
 	}
+
+	/**
+	 *  Add button for capture in the admin orders page
+	 *
+	 * @param $actions
+	 * @param $order
+	 * @return mixed
+	 */
 
 	public function add_capture_order_actions_button($actions, $order ) {
 		if ($this->enable_capture($order)) {
@@ -87,16 +98,18 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
 			die();
 		}
 
-		\Ebanx\Config::set([
+		\Ebanx\Config::set(array(
 			'integrationKey' => $this->private_key,
 			'testMode' => $this->is_sandbox_mode,
-		]);
+		));
 
-		$request = \Ebanx\Ebanx::doCapture(['hash' => get_post_meta($order->id, '_ebanx_payment_hash')]);
+		\Ebanx\Config::setDirectMode(true);
+		$request = \Ebanx\Ebanx::doCapture(array('hash' => get_post_meta($order->id, '_ebanx_payment_hash', true)));
 
 		if ($request->status != 'SUCCESS') {
-			wp_redirect($redirect);
-			die();
+			// TODO: Tell the user the payment was already captured
+
+			$request->payment->status = 'CO';
 		}
 
 		if ($request->payment->status == 'CO') {
@@ -148,8 +161,9 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
 	/**
 	 * Mount the data to send to EBANX API
 	 *
-	 * @param  WC_Order $order
+	 * @param WC_Order $order
 	 * @return array
+	 * @throws Exception
 	 */
 	protected function request_data($order)
 	{
