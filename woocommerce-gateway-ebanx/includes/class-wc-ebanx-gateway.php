@@ -1042,17 +1042,52 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
 		if (in_array(get_woocommerce_currency(), array(WC_EBANX_Gateway_Utils::CURRENCY_CODE_USD, WC_EBANX_Gateway_Utils::CURRENCY_CODE_EUR))) {
 			
 			$rate = $this->get_local_currency_rate_for_site($currency);
+			
 			$amount = WC()->cart->cart_contents_total;
 			if (WC()->cart->prices_include_tax) {
 				$amount = WC()->cart->cart_contents_total + WC()->cart->tax_total;
 			}
 			$amount *= $rate;
+			
+			$price = wc_price($amount, array('currency' => $currency));
+
+			$languages = array(
+				'mx' => 'es',
+				'cl' => 'es',
+				'pe' => 'es',
+				'co' => 'es',
+				'br' => 'pt-br',
+			);
+			$language = $languages[$this->language];
+
+			$texts = array(
+				'pt-br' => array(
+					'INTRO'                                      => 'Total a pagar em ',
+					WC_EBANX_Gateway_Utils::CURRENCY_CODE_MXN    => 'Peso mexicano',
+					WC_EBANX_Gateway_Utils::CURRENCY_CODE_CLP    => 'Peso chileno',
+					WC_EBANX_Gateway_Utils::CURRENCY_CODE_PEN    => 'Sol peruano',
+					WC_EBANX_Gateway_Utils::CURRENCY_CODE_COP    => 'Peso colombiano',
+					WC_EBANX_Gateway_Utils::CURRENCY_CODE_BRL    => 'Real brasileiro'
+				),
+				'es'    => array(
+					'INTRO'                                      => 'Total a pagar en ',
+					WC_EBANX_Gateway_Utils::CURRENCY_CODE_MXN    => 'Peso mexicano',
+					WC_EBANX_Gateway_Utils::CURRENCY_CODE_CLP    => 'Peso chileno',
+					WC_EBANX_Gateway_Utils::CURRENCY_CODE_PEN    => 'Sol peruano',
+					WC_EBANX_Gateway_Utils::CURRENCY_CODE_COP    => 'Peso colombiano',
+					WC_EBANX_Gateway_Utils::CURRENCY_CODE_BRL    => 'Real brasileiro'
+				),
+			);
+
+
+			$message = $texts[$language]['INTRO'];
+			$message .= $texts[$language]['INTRO'] . !empty($texts[$language][$currency]) ? $texts[$language][$currency] : $currency;
+			$message .= ': <strong>' . $price . '</strong>';
 		
 			wc_get_template(
 				'checkout-conversion-rate.php',
 				array(
-					'currency' => $currency,
-					'amountConverted' => $amount
+					'message' => $message
 				),
 				'woocommerce/ebanx/',
 				WC_EBANX::get_templates_path()
