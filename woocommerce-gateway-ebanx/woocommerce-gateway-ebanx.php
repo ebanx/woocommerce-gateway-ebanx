@@ -531,7 +531,7 @@ if (!class_exists('WC_EBANX')) {
 			include_once GATEWAYS_DIR . 'class-wc-ebanx-safetypay-gateway.php';
 
 			// Hooks/Actions
-			include_once(INCLUDES_DIR . 'class-wc-ebanx-payment-by-link.php');
+			include_once(SERVICES_DIR . 'class-wc-ebanx-payment-by-link.php');
 			include_once(SERVICES_DIR . 'class-wc-ebanx-my-account.php');
 			include_once(SERVICES_DIR . 'class-wc-ebanx-one-click.php');
 		}
