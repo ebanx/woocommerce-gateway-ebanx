@@ -733,65 +733,16 @@ if (!class_exists('WC_EBANX')) {
 			// Check if is an EBANX request
 			if ( isset($_REQUEST['save_order_ebanx'])
 				&& $_REQUEST['save_order_ebanx'] === 'Save EBANX Order' ) {
-				new WC_EBANX_Payment_By_Link($post_id);
+
+				$this->setup_configs();
+				$config = [
+					'integrationKey' => $this->private_key,
+					'testMode'       => $this->is_sandbox_mode,
+				];
+
+				new WC_EBANX_Payment_By_Link($post_id, $config);
 			}
 			return;
-
-			// TODO: Novo erro: Verificar se o status da ordem é 'wc-pending', só pode criar com o status de 'wc-pending'
-
-			if ( $has_errors ) {
-				exit;
-			}
-
-			$home_url = esc_url( home_url() );
-
-			$data = array(
-				'name'                  => $order->billing_first_name . ' ' . $order->billing_last_name,
-				'email'                 => $order->billing_email,
-				'country'               => strtolower($order->billing_country),
-				'payment_type_code'     => $payment_type_code[$order->payment_method],
-				'merchant_payment_code' => $order->id . '_' . md5(time()),
-				'currency_code'         => strtoupper(get_woocommerce_currency()),
-				'amount'                => $order->get_total()
-			);
-
-			$this->setup_configs();
-
-			$config = [
-				'integrationKey' => $this->private_key,
-				'testMode'       => $this->is_sandbox_mode,
-			];
-
-			\Ebanx\Config::set($config);
-			\Ebanx\Config::setDirectMode(false);
-
-			$request = false;
-
-			try {
-				$request = \Ebanx\EBANX::doRequest($data);
-			} catch (Exception $e) {
-				echo $e->getMessage();
-				exit;
-			}
-
-			if ( $request->status !== 'SUCCESS' ) {
-				var_dump($request);
-				echo "<br />";
-				$this->notices
-					->with_message(__('We couldn\'t create your EBANX order. Could you review your fields and try again?', 'woocommerce-gateway-ebanx'))
-					->with_type('error')
-					->persistent()
-					->display();
-
-				exit;
-			}
-
-			$order->add_order_note('Order created via EBANX.');
-
-			update_post_meta($post_id, 'EBANX Payment\'s Hash', $request->payment->hash);
-			update_post_meta($post_id, 'EBANX Checkout URL', $request->redirect_url);
-			update_post_meta($post_id, '_ebanx_payment_hash', $request->payment->hash);
-			update_post_meta($post_id, '_ebanx_checkout_url', $request->redirect_url);
 		}
 
 		public function ebanx_metabox_save_post_render_button () {

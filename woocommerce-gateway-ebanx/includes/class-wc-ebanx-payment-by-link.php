@@ -9,19 +9,30 @@ class WC_EBANX_Payment_By_Link {
 	private $errors = array();
 	private $post_id;
 	private $order;
+	private $config;
 
-	public function __construct($post_id){
+	public function __construct($post_id, $config){
 		$this->post_id = $post_id;
 		$this->order = wc_get_order($post_id);
+		$this->config = $config;
 
 		if ( ! $this->can_create_payment() ) {
 			return;
 		}
 
 		if ( $this->validate() ) {
-			$this->send_errors($this->errors);
+			$this->send_errors();
+			return;
 		}
 
+		$request = $this->send_request();
+		if ( $request && $request->status !== 'SUCCESS' ) {
+			$this->errors[] = 'We couldn\'t create your EBANX order. Could you review your fields and try again?';
+			$this->send_errors();
+			return;
+		}
+
+		$this->post_request();
 	}
 
 	/**
@@ -62,10 +73,10 @@ class WC_EBANX_Payment_By_Link {
 		return count($this->errors);
 	}
 
-	private function send_errors($errors) {
+	private function send_errors() {
 		//TODO: MAKE IT WORK
 		$this->notices = new WC_EBANX_Notices_Notice();
-			foreach ($errors as $error) {
+			foreach ($this->errors as $error) {
 				$this->notices
 					->with_message(__($error, 'woocommerce-gateway-ebanx'))
 					->with_type('error')
@@ -73,5 +84,37 @@ class WC_EBANX_Payment_By_Link {
 					->display();
 			}
 			exit;
+	}
+
+	private function send_request() {
+		$data = array(
+			'name'                  => $this->order->billing_first_name . ' ' . $this->order->billing_last_name,
+			'email'                 => $this->order->billing_email,
+			'country'               => strtolower($this->order->billing_country),
+			'payment_type_code'     => empty($this->order->payment_method) ? '_all' : $payment_type_code[$this->order->payment_method],
+			'merchant_payment_code' => $this->order->id . '_' . md5(time()),
+			'currency_code'         => strtoupper(get_woocommerce_currency()),
+			'amount'                => $this->order->get_total()
+		);
+
+		\Ebanx\Config::set($config);
+		\Ebanx\Config::setDirectMode(false);
+
+		$request = false;
+
+		try {
+			$request = \Ebanx\EBANX::doRequest($data);
+		} catch (Exception $e) {
+			$this->errors[] = $e->getMessage();
+			$this->send_errors();
+		}
+
+		return $request;
+	}
+
+	private function post_request() {
+		$this->order->add_order_note('Order created via EBANX.');
+		update_post_meta($post_id, '_ebanx_payment_hash', $request->payment->hash);
+		update_post_meta($post_id, '_ebanx_checkout_url', $request->redirect_url);
 	}
 }
