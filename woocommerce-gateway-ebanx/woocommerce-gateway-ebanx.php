@@ -754,12 +754,12 @@ if (!class_exists('WC_EBANX')) {
 				&& $_REQUEST['save_order_ebanx'] === 'Save EBANX Order' ) {
 
 				$this->setup_configs();
-				$config = [
+				$config = array(
 					'integrationKey' => $this->private_key,
 					'testMode'       => $this->is_sandbox_mode,
-				];
+				);
 
-				new WC_EBANX_Payment_By_Link($post_id, $config);
+				WC_EBANX_Payment_By_Link::create($post_id, $config);
 			}
 			return;
 		}
