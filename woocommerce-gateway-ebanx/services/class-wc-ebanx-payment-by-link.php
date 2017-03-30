@@ -34,7 +34,9 @@ class WC_EBANX_Payment_By_Link {
 
 		$request = self::send_request();
 		if ( $request && $request->status !== 'SUCCESS' ) {
-			self::add_error(WP_DEBUG ? $request->status_code . ': ' . $request->status_message : 'We couldn\'t create your EBANX order. Could you review your fields and try again?');
+			self::add_error( WP_DEBUG
+				? $request->status_code . ': ' . $request->status_message
+				: __('We couldn\'t create your EBANX order. Could you review your fields and try again?' ) );
 			self::send_errors();
 			return;
 		}
@@ -64,6 +66,11 @@ class WC_EBANX_Payment_By_Link {
 		if ( ! self::$order->status === 'pending' ) {
 			self::add_error('You can only create payment links on pending orders.');
 			return count(self::$errors);
+		}
+		if ( get_woocommerce_currency() !== 'USD'
+			&& get_woocommerce_currency() !== 'EUR'
+			&& get_woocommerce_currency() !== WC_EBANX_Constants::$LOCAL_CURRENCIES[strtolower(self::$order->billing_country)] ) {
+			self::add_error('We can\'t proccess ' . get_woocommerce_currency() . ' in the selected country.');
 		}
 		if ( self::$order->get_total() < 1 ) {
 			self::add_error('The total amount needs to be greater than $1.');
