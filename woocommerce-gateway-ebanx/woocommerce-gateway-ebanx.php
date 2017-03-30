@@ -114,7 +114,7 @@ if (!class_exists('WC_EBANX')) {
 			 * Payment by Link
 			 */
 			add_action('woocommerce_order_actions_end', array($this, 'ebanx_metabox_save_post_render_button'));
-			add_action('save_post', array($this, 'ebanx_metabox_payment_link_save'), 10, 2);
+			add_action('save_post', array($this, 'ebanx_metabox_payment_link_save'));
 
 			/**
 			 * Filters
@@ -750,8 +750,8 @@ if (!class_exists('WC_EBANX')) {
 
 		public function ebanx_metabox_payment_link_save ($post_id) {
 			// Check if is an EBANX request
-			if ( isset($_REQUEST['save_order_ebanx'])
-				&& $_REQUEST['save_order_ebanx'] === 'Save EBANX Order' ) {
+			if ( isset($_REQUEST['create_ebanx_payment_link'])
+				&& $_REQUEST['create_ebanx_payment_link'] === __('Create EBANX Payment Link', 'woocommerce-gateway-ebanx') ) {
 
 				$this->setup_configs();
 				$config = array(
@@ -764,23 +764,22 @@ if (!class_exists('WC_EBANX')) {
 			return;
 		}
 
-		public function ebanx_metabox_save_post_render_button () {
+		public function ebanx_metabox_save_post_render_button ($post_id) {
 			// TODO: Quando criar a ordem via EBANX, mostrar o link do checkout desabilitado 'type=disabled'
 			// usar get_post_meta e procurar por _ebanx_checkout_url
 			$ebanx_currencies = array('BRL', 'USD', 'EUR', 'PEN', 'CLP', 'MXN', 'COP');
+			$order = wc_get_order($post_id);
+			$checkout_url = get_post_meta($order->id, '_ebanx_checkout_url', true);
 
-			if ( in_array(strtoupper(get_woocommerce_currency()), $ebanx_currencies) ) {
-echo <<<EOT
-<li class="wide">
-	<input
-		type="submit"
-		class="button save_order button-primary tips"
-		name="save_order_ebanx"
-		value="Save EBANX Order"
-		data-tip="The order will be created on your site and also sent to EBANX to generate a payment to your customer pay directly"
-	/>
-</li>
-EOT;
+			if ( !$checkout_url
+				&& in_array($order->status, array('auto-draft', 'pending'))
+				&& in_array(strtoupper(get_woocommerce_currency()), $ebanx_currencies) ) {
+				wc_get_template(
+					'payment-by-link-action.php',
+					array(),
+					'woocommerce/ebanx/',
+					WC_EBANX::get_templates_path()
+				);
 			}
 		}
 

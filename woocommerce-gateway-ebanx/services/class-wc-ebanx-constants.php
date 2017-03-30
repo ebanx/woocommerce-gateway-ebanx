@@ -153,6 +153,7 @@ abstract class WC_EBANX_Constants
 		'ebanx-pagoefectivo' => '_pagoefectivo',
 		'ebanx-safetypay' => '_safetypay',
 		'ebanx-eft' => '_eft',
+		'ebanx-baloto' => '_baloto'
 		//'ebanx-account' => '_ebanxaccount'
 	);
 

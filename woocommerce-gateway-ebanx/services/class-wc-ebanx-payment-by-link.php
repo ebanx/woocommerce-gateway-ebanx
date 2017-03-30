@@ -27,10 +27,8 @@ class WC_EBANX_Payment_By_Link {
 
 		$request = self::send_request();
 		if ( $request && $request->status !== 'SUCCESS' ) {
-			// self::$errors[] = 'We couldn\'t create your EBANX order. Could you review your fields and try again?';
-			// self::send_errors();
-			var_dump($request);
-			exit;
+			self::$errors[] = 'We couldn\'t create your EBANX order. Could you review your fields and try again?';
+			self::send_errors();
 			return;
 		}
 
@@ -61,14 +59,18 @@ class WC_EBANX_Payment_By_Link {
 		if ( ! in_array(strtolower(self::$order->billing_country), WC_EBANX_Constants::$ALL_COUNTRIES) ) {
 			self::$errors[] = 'EBANX only support the countries: Brazil, Mexico, Peru, Colombia and Chile. Please, use one of these.';
 		}
-		if ( empty(self::$order->billing_email) ) {
+		if ( ! filter_var(self::$order->billing_email, FILTER_VALIDATE_EMAIL) ) {
 			self::$errors[] = 'The customer e-mal is required, please provide a valid customer e-mail.';
 		}
 		if ( ! empty(self::$order->payment_method) ) {
-			if ( ! array_key_exists(self::$order->payment_method, WC_EBANX_Constants::$GATEWAY_TO_PAYMENT_TYPE_CODE) ) {
+			if ( self::$order->payment_method === 'ebanx-account' ) {
+				self::$errors[] = 'Paying with EBANX account is not avaible yet.';
+				return count(self::$errors);
+			}
+			else if ( ! array_key_exists(self::$order->payment_method, WC_EBANX_Constants::$GATEWAY_TO_PAYMENT_TYPE_CODE) ) {
 				self::$errors[] = 'EBANX does not support the selected payment method.';
 			}
-			if ( array_key_exists(strtolower(self::$order->billing_country), WC_EBANX_Constants::$EBANX_GATEWAYS_BY_COUNTRY)
+			else if ( array_key_exists(strtolower(self::$order->billing_country), WC_EBANX_Constants::$EBANX_GATEWAYS_BY_COUNTRY)
 				&& ! in_array(self::$order->payment_method, WC_EBANX_Constants::$EBANX_GATEWAYS_BY_COUNTRY[strtolower(self::$order->billing_country)]) ) {
 				self::$errors[] = 'The selected payment method is not available on the selected country.';
 			}
@@ -93,7 +95,6 @@ class WC_EBANX_Payment_By_Link {
 			'currency_code'         => strtoupper(get_woocommerce_currency()),
 			'amount'                => self::$order->get_total()
 		);
-		var_dump($data);
 
 		\Ebanx\Config::set(self::$config);
 		\Ebanx\Config::setDirectMode(false);
@@ -111,7 +112,7 @@ class WC_EBANX_Payment_By_Link {
 	}
 
 	private function post_request($hash, $url) {
-		self::$order->update_status('on-hold', __('Order created via EBANX.', 'woocommerce-gateway-ebanx'));
+		$order->add_order_note(__('Order created via EBANX.', 'woocommerce-gateway-ebanx'));
 		update_post_meta(self::$post_id, '_ebanx_payment_hash', $hash);
 		update_post_meta(self::$post_id, '_ebanx_checkout_url', $url);
 	}
