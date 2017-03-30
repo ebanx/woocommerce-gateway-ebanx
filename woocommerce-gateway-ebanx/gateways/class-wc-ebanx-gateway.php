@@ -990,10 +990,12 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
 	 */
 	final public function process_hook(array $codes, $notificationType)
 	{
-		$config = [
+		do_action('ebanx_process_hook_before', $order, $notificationType);
+
+		$config = array(
 			'integrationKey' => $this->private_key,
 			'testMode'       => $this->is_sandbox_mode,
-		];
+		);
 
 		\Ebanx\Config::set($config);
 
@@ -1063,6 +1065,8 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
 				}
 				break;
 		};
+
+		do_action('ebanx_process_hook_after', $order, $notificationType);
 
 		return $order;
 	}
