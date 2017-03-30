@@ -11,6 +11,13 @@ class WC_EBANX_Payment_By_Link {
 	private static $order;
 	private static $config;
 
+	/**
+	 * The core method. It uses the other methods to create a payment link
+	 *
+	 * @param  int $post_id The post id
+	 * @param  array $config  The config array we need to pass to ebanx-php
+	 * @return void
+	 */
 	public static function create($post_id, $config){
 		self::$post_id = $post_id;
 		self::$order = wc_get_order($post_id);
@@ -48,6 +55,11 @@ class WC_EBANX_Payment_By_Link {
 				&& ! wp_is_post_revision( self::$post_id );
 	}
 
+	/**
+	 * Apply all the input validation we need before sending the request
+	 *
+	 * @return int The number of errors it found
+	 */
 	private function validate() {
 		if ( ! self::$order->status === 'pending' ) {
 			self::$errors[] = 'You can only create payment links on pending orders.';
@@ -78,6 +90,11 @@ class WC_EBANX_Payment_By_Link {
 		return count(self::$errors);
 	}
 
+	/**
+	 * Flashes every error from self::$errors to WC_EBANX_Flash
+	 *
+	 * @return void
+	 */
 	private function send_errors() {
 		WC_EBANX_Flash::clear_messages();
 		foreach (self::$errors as $error) {
@@ -85,6 +102,11 @@ class WC_EBANX_Payment_By_Link {
 		}
 	}
 
+	/**
+	 * Requests a payment link using ebanx-php
+	 *
+	 * @return void
+	 */
 	private function send_request() {
 		$data = array(
 			'name'                  => self::$order->billing_first_name . ' ' . self::$order->billing_last_name,
@@ -111,8 +133,15 @@ class WC_EBANX_Payment_By_Link {
 		return $request;
 	}
 
+	/**
+	 * If the request was successful, this method is called before ending the proccess
+	 *
+	 * @param  string $hash The payment hash
+	 * @param  string $url  The payment url
+	 * @return void
+	 */
 	private function post_request($hash, $url) {
-		$order->add_order_note(__('Order created via EBANX.', 'woocommerce-gateway-ebanx'));
+		self::$order->add_order_note(__('Order created via EBANX.', 'woocommerce-gateway-ebanx'));
 		update_post_meta(self::$post_id, '_ebanx_payment_hash', $hash);
 		update_post_meta(self::$post_id, '_ebanx_checkout_url', $url);
 	}

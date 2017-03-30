@@ -748,6 +748,12 @@ if (!class_exists('WC_EBANX')) {
 			);
 		}
 
+		/**
+		 * Checks if this post is an EBANX Order and call WC_EBANX_Payment_By_Link
+		 *
+		 * @param  int 	  $post_id The post id
+		 * @return void
+		 */
 		public function ebanx_metabox_payment_link_save ($post_id) {
 			// Check if is an EBANX request
 			if ( isset($_REQUEST['create_ebanx_payment_link'])
@@ -764,9 +770,13 @@ if (!class_exists('WC_EBANX')) {
 			return;
 		}
 
+		/**
+		 * Checks if the button can be renderized and renders it
+		 *
+		 * @param  int   $post_id The post id
+		 * @return void
+		 */
 		public function ebanx_metabox_save_post_render_button ($post_id) {
-			// TODO: Quando criar a ordem via EBANX, mostrar o link do checkout desabilitado 'type=disabled'
-			// usar get_post_meta e procurar por _ebanx_checkout_url
 			$ebanx_currencies = array('BRL', 'USD', 'EUR', 'PEN', 'CLP', 'MXN', 'COP');
 			$order = wc_get_order($post_id);
 			$checkout_url = get_post_meta($order->id, '_ebanx_checkout_url', true);
