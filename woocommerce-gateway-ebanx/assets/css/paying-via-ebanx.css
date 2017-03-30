@@ -42,6 +42,11 @@ li[class*="ebanx"] div.payment_box > p:first-child {
   margin-bottom: 0 !important;
 }
 
+li[class*="ebanx"] .ebanx-payment-converted-amount {
+  font-size: .9em;
+  margin-top: 20px;
+}
+
 .ebanx-credit-card-label {
   overflow: hidden;
 }
@@ -275,6 +280,7 @@ li[class*="ebanx"] .payment_box .ebanx-credit-card-label > .input-radio,
 li[class*="ebanx"] .payment_box .ebanx-credit-card-label > .ebanx-credit-card-brand,
 li[class*="ebanx"] .payment_box .ebanx-credit-card-label > .ebanx-credit-card-bin {
   float: left !important;
+  margin-left: 1px;
 }
 
 .ebanx-credit-card-label > .ebanx-credit-card-bin {

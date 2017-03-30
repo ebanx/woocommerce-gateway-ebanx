@@ -1052,7 +1052,7 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
 	 * @return void
 	 */
 	public function checkout_rate_conversion($currency) {
-		if (in_array(get_woocommerce_currency(), array(WC_EBANX_Constants::CURRENCY_CODE_USD, WC_EBANX_Constants::CURRENCY_CODE_EUR))) {
+		if (in_array($this->merchant_currency, array(WC_EBANX_Constants::CURRENCY_CODE_USD, WC_EBANX_Constants::CURRENCY_CODE_EUR))) {
 
 			$country = $this->getTransactionAddress('country');
 
@@ -1066,7 +1066,7 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
 
 			$amount *= $rate;
 
-			// Insert IOF in Brazil payments only
+			// Applies IOF for Brazil payments only
 			if ($country === WC_EBANX_Constants::COUNTRY_BRAZIL) {
 				$amount += ($amount * WC_EBANX_Constants::BRAZIL_TAX);
 			}
