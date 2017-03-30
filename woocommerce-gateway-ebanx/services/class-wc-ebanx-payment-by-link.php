@@ -49,7 +49,7 @@ class WC_EBANX_Payment_By_Link {
 	 *
 	 * @return bool Can we create a payment by link now?
 	 */
-	private function can_create_payment() {
+	private static function can_create_payment() {
 		return current_user_can( 'edit_post', self::$post_id )
 				&& ! wp_is_post_autosave( self::$post_id )
 				&& ! wp_is_post_revision( self::$post_id );
@@ -60,7 +60,7 @@ class WC_EBANX_Payment_By_Link {
 	 *
 	 * @return int The number of errors it found
 	 */
-	private function validate() {
+	private static function validate() {
 		if ( ! self::$order->status === 'pending' ) {
 			self::add_error('You can only create payment links on pending orders.');
 			return count(self::$errors);
@@ -95,7 +95,7 @@ class WC_EBANX_Payment_By_Link {
 	 *
 	 * @return void
 	 */
-	private function send_errors() {
+	private static function send_errors() {
 		WC_EBANX_Flash::clear_messages();
 		foreach (self::$errors as $error) {
 			WC_EBANX_Flash::add_message(__($error, 'woocommerce-gateway-ebanx'));
@@ -107,7 +107,7 @@ class WC_EBANX_Payment_By_Link {
 	 *
 	 * @return void
 	 */
-	private function send_request() {
+	private static function send_request() {
 		$data = array(
 			'name'                  => self::$order->billing_first_name . ' ' . self::$order->billing_last_name,
 			'email'                 => self::$order->billing_email,
@@ -140,7 +140,7 @@ class WC_EBANX_Payment_By_Link {
 	 * @param  string $url  The payment url
 	 * @return void
 	 */
-	private function post_request($hash, $url) {
+	private static function post_request($hash, $url) {
 		self::$order->add_order_note(__('Order created via EBANX.', 'woocommerce-gateway-ebanx'));
 		update_post_meta(self::$post_id, '_ebanx_payment_hash', $hash);
 		update_post_meta(self::$post_id, '_ebanx_checkout_url', $url);
@@ -152,7 +152,7 @@ class WC_EBANX_Payment_By_Link {
 	 *
 	 * @param string $error The error message
 	 */
-	private function add_error($error) {
+	private static function add_error($error) {
 		if ( ! in_array($error, self::$errors) ) {
 			self::$errors[] = $error;
 		}
