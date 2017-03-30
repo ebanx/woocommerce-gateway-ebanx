@@ -53,13 +53,8 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
 	 * @param $order
 	 * @return bool
 	 */
-
 	public function enable_capture($order) {
-		if ($order->get_status() != 'on-hold' || $order->get_payment_method() != $this->id) {
-			return false;
-		}
-
-		return true;
+		return $order->get_status() == 'on-hold' && $order->payment_method == $this->id;
 	}
 
 	/**
@@ -69,13 +64,12 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
 	 * @param $order
 	 * @return mixed
 	 */
-
 	public function add_capture_order_actions_button($actions, $order ) {
-		if ($this->enable_capture($order)) {
-			$actions['capture_payment'] = array(
-				'url'       => wp_nonce_url( 'admin-ajax.php?action=capture_payment_action&order_id=' . $order->get_order_number()),
-				'name'      => __( 'Capture', 'woocommerce' ),
-				'action'    => "capture_payment_action",
+		if ($this->enable_capture($order) && current_user_can('administrator')) {
+			$actions['ebanx_capture_payment'] = array(
+				'url'       => wp_nonce_url( 'admin-ajax.php?action=capture_payment_action&order_id=' . $order->id),
+				'name'      => __( 'Capture Now', 'woocommerce' ),
+				'action'	=> 'capture_payment_action'
 			);
 		}
 
@@ -90,8 +84,7 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
 	public function capture_payment_action() {
 		$redirect = admin_url('edit.php?post_type=shop_order');
 		$order = wc_get_order($_REQUEST['order_id']);
-
-		// TODO: Check if the user really can capture a payment
+		$recapture = false;
 
 		if (!$this->enable_capture($order)) {
 			wp_redirect($redirect);
@@ -108,29 +101,36 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
 
 		if ($request->status === 'ERROR') {
 			if ($request->status_code === 'BC-CAP-3') {
-				WC_EBANX_Flash::add_message('Payment cannot be captured, changing it to Failed', 'warning', true);
+				$message = __('EBANX - Payment cannot be captured, changing it to Failed.', 'woocommerce-gateway-ebanx');
 
 				$request->payment->status = 'CA';
 			}
 			else if ($request->status_code === 'BP-CAP-4') {
-				WC_EBANX_Flash::add_message('Payment has already been captured, changing it to Processing', 'warning', true);
+				$message = __('EBANX - Payment has already been captured, changing it to Processing.', 'woocommerce-gateway-ebanx');
 
 				$request->payment->status = 'CO';
+				$recapture = true;
 			}
 			else if ($request->status_code === 'BC-CAP-5') {
-				WC_EBANX_Flash::add_message('Payment cannot be captured, changing it to Pending', 'warning', true);
+				$message = __('EBANX - Payment cannot be captured, changing it to Pending.', 'woocommerce-gateway-ebanx');
 
 				$request->payment->status = 'OP';
 			}
 			else {
-				WC_EBANX_Flash::add_message('Unknown error, enter in contact with Ebanx and inform this error code: ' . $request->payment->status_code, 'warning', true);
+				$mssage = sprintf(__('EBANX - Unknown error, enter in contact with Ebanx and inform this error code: %s.', 'woocommerce-gateway-ebanx'), $request->payment->status_code);
 			}
+
+			WC_EBANX::log($message);
+			WC_EBANX_Flash::add_message($message, 'warning', true);
 		}
 
 		if ($request->payment->status == 'CO') {
 			$order->payment_complete();
 			$order->update_status('processing');
-			$order->add_order_note(__('EBANX: Transaction captured by ' . wp_get_current_user()->data->user_email, 'woocommerce-gateway-ebanx'));
+
+			if (!$recapture) {
+				$order->add_order_note(sprintf(__('EBANX: Transaction captured by %s', 'woocommerce-gateway-ebanx'), wp_get_current_user()->data->user_email));
+			}
 		}
 		else if ($request->payment->status == 'CA') {
 			$order->payment_complete();
@@ -138,7 +138,6 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
 			$order->add_order_note(__('EBANX: Transaction Failed', 'woocommerce-gateway-ebanx'));
 		}
 		else if ($request->payment->status == 'OP') {
-			$order->payment_complete();
 			$order->update_status('pending');
 			$order->add_order_note(__('EBANX: Transaction Pending', 'woocommerce-gateway-ebanx'));
 		}

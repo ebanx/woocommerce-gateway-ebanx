@@ -4,7 +4,7 @@ if (!defined('ABSPATH')) {
 	exit;
 }
 
-include_once SERVICES_DIR . 'class-wc-ebanx-notice.php';
+include_once WC_EBANX_SERVICES_DIR . 'class-wc-ebanx-notice.php';
 
 final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway
 {

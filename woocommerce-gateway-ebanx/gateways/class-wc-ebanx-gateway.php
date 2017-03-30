@@ -1,6 +1,6 @@
 <?php
 
-require VENDOR_DIR. 'ebanx-php/src/autoload.php';
+require WC_EBANX_VENDOR_DIR . 'ebanx-php/src/autoload.php';
 
 if (!defined('ABSPATH')) {
 	exit;
@@ -320,7 +320,7 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
 	 */
 	public function admin_options()
 	{
-		include TEMPLATES_DIR . 'views/html-admin-page.php';
+		include WC_EBANX_TEMPLATES_DIR . 'views/html-admin-page.php';
 	}
 
 	/**
