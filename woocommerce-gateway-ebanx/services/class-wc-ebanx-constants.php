@@ -148,7 +148,7 @@ abstract class WC_EBANX_Constants
 		'ebanx-debit-card' => '_debitcard',
 		'ebanx-oxxo' => '_oxxo',
 		'ebanx-sencillito' => '_sencillito',
-		'ebanx-servipag' => '_servipag',
+		'ebanx-servipag' => 'servipag',
 		'ebanx-tef' => '_tef',
 		'ebanx-pagoefectivo' => '_pagoefectivo',
 		'ebanx-safetypay' => '_safetypay',
