@@ -142,18 +142,18 @@ abstract class WC_EBANX_Constants
 	);
 
 	public static $GATEWAY_TO_PAYMENT_TYPE_CODE = array(
-		'ebanx-banking-ticket' => 'boleto',
+		'ebanx-banking-ticket' => '_boleto',
 		'ebanx-credit-card-br' => '_creditcard',
 		'ebanx-credit-card-mx' => '_creditcard',
-		'ebanx-debit-card' => 'debitcard',
-		'ebanx-oxxo' => 'oxxo',
-		'ebanx-sencillito' => 'sencillito',
-		'ebanx-servipag' => 'servipag',
-		'ebanx-tef' => 'tef',
-		'ebanx-pagoefectivo' => 'pagoefectivo',
-		'ebanx-safetypay' => 'safetypay',
-		'ebanx-eft' => 'eft',
-		'ebanx-account' => 'ebanxaccount'
+		'ebanx-debit-card' => '_debitcard',
+		'ebanx-oxxo' => '_oxxo',
+		'ebanx-sencillito' => '_sencillito',
+		'ebanx-servipag' => '_servipag',
+		'ebanx-tef' => '_tef',
+		'ebanx-pagoefectivo' => '_pagoefectivo',
+		'ebanx-safetypay' => '_safetypay',
+		'ebanx-eft' => '_eft',
+		//'ebanx-account' => '_ebanxaccount'
 	);
 
 	/**
