@@ -145,7 +145,7 @@ abstract class WC_EBANX_Constants
 		'ebanx-banking-ticket' => '_boleto',
 		'ebanx-credit-card-br' => '_creditcard',
 		'ebanx-credit-card-mx' => '_creditcard',
-		'ebanx-debit-card' => '_debitcard',
+		'ebanx-debit-card' => 'debitcard',
 		'ebanx-oxxo' => '_oxxo',
 		'ebanx-sencillito' => '_sencillito',
 		'ebanx-servipag' => 'servipag',
