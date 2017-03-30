@@ -336,6 +336,8 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
 
 		$hash = get_post_meta($order->id, '_ebanx_payment_hash', true);
 
+		do_action('ebanx_process_refund_before', $order, $hash);
+
 		if (!$order || is_null($amount) || !$hash) {
 			return false;
 		}
@@ -357,6 +359,8 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
 		$request = \Ebanx\EBANX::doRefund($data);
 
 		if ($request->status !== 'SUCCESS') {
+			do_action('ebanx_process_refund_error', $order, $request);
+
 			return false;
 		}
 
@@ -369,6 +373,8 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
 		$refunds[] = $request->refund;
 
 		update_post_meta($order->id, "_ebanx_payment_refunds", $refunds);
+
+		do_action('ebanx_process_refund_after', $order, $request, $refunds);
 
 		return true;
 	}
