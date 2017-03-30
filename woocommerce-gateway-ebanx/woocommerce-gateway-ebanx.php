@@ -358,6 +358,8 @@ if (!class_exists('WC_EBANX')) {
 		public function on_save_settings() {
 			// Delete flag that check if the api is ok
 			delete_option('_ebanx_api_was_checked');
+
+			do_action('ebanx_settings_saved', $_POST);
 		}
 
 		/**
