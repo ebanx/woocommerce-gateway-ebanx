@@ -34,7 +34,7 @@ class WC_EBANX_Payment_By_Link {
 
 		$request = self::send_request();
 		if ( $request && $request->status !== 'SUCCESS' ) {
-			self::$errors[] = WP_DEBUG ? $request->status_code . ': ' . $request->status_message : 'We couldn\'t create your EBANX order. Could you review your fields and try again?';
+			self::add_error(WP_DEBUG ? $request->status_code . ': ' . $request->status_message : 'We couldn\'t create your EBANX order. Could you review your fields and try again?');
 			self::send_errors();
 			return;
 		}
@@ -62,29 +62,29 @@ class WC_EBANX_Payment_By_Link {
 	 */
 	private function validate() {
 		if ( ! self::$order->status === 'pending' ) {
-			self::$errors[] = 'You can only create payment links on pending orders.';
+			self::add_error('You can only create payment links on pending orders.');
 			return count(self::$errors);
 		}
 		if ( self::$order->get_total() < 1 ) {
-			self::$errors[] = 'The total amount needs to be greater than $1.';
+			self::add_error('The total amount needs to be greater than $1.');
 		}
 		if ( ! in_array(strtolower(self::$order->billing_country), WC_EBANX_Constants::$ALL_COUNTRIES) ) {
-			self::$errors[] = 'EBANX only support the countries: Brazil, Mexico, Peru, Colombia and Chile. Please, use one of these.';
+			self::add_error('EBANX only support the countries: Brazil, Mexico, Peru, Colombia and Chile. Please, use one of these.');
 		}
 		if ( ! filter_var(self::$order->billing_email, FILTER_VALIDATE_EMAIL) ) {
-			self::$errors[] = 'The customer e-mal is required, please provide a valid customer e-mail.';
+			self::add_error('The customer e-mal is required, please provide a valid customer e-mail.');
 		}
 		if ( ! empty(self::$order->payment_method) ) {
 			if ( self::$order->payment_method === 'ebanx-account' ) {
-				self::$errors[] = 'Paying with EBANX account is not avaible yet.';
+				self::add_error('Paying with EBANX account is not avaible yet.');
 				return count(self::$errors);
 			}
 			else if ( ! array_key_exists(self::$order->payment_method, WC_EBANX_Constants::$GATEWAY_TO_PAYMENT_TYPE_CODE) ) {
-				self::$errors[] = 'EBANX does not support the selected payment method.';
+				self::add_error('EBANX does not support the selected payment method.');
 			}
 			else if ( array_key_exists(strtolower(self::$order->billing_country), WC_EBANX_Constants::$EBANX_GATEWAYS_BY_COUNTRY)
 				&& ! in_array(self::$order->payment_method, WC_EBANX_Constants::$EBANX_GATEWAYS_BY_COUNTRY[strtolower(self::$order->billing_country)]) ) {
-				self::$errors[] = 'The selected payment method is not available on the selected country.';
+				self::add_error('The selected payment method is not available on the selected country.');
 			}
 		}
 		return count(self::$errors);
@@ -126,7 +126,7 @@ class WC_EBANX_Payment_By_Link {
 		try {
 			$request = \Ebanx\EBANX::doRequest($data);
 		} catch (Exception $e) {
-			self::$errors[] = $e->getMessage();
+			self::add_error($e->getMessage());
 			self::send_errors();
 		}
 
@@ -144,5 +144,17 @@ class WC_EBANX_Payment_By_Link {
 		self::$order->add_order_note(__('Order created via EBANX.', 'woocommerce-gateway-ebanx'));
 		update_post_meta(self::$post_id, '_ebanx_payment_hash', $hash);
 		update_post_meta(self::$post_id, '_ebanx_checkout_url', $url);
+	}
+
+	/**
+	 * Check if the error is not already in the array and add it.
+	 * To make sure it will show no duplicates.
+	 *
+	 * @param string $error The error message
+	 */
+	private function add_error($error) {
+		if ( ! in_array($error, self::$errors) ) {
+			self::$errors[] = $error;
+		}
 	}
 }
