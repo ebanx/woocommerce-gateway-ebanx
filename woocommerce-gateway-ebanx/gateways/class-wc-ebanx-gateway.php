@@ -781,7 +781,7 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
 			$message = !empty($errors[$language][$code]) ? $errors[$language][$code] : $errors[$language]['GENERAL'] . " ({$code})";
 
 			WC()->session->set('refresh_totals', true);
-			WC_Ebanx::log("EBANX Error: $message");
+			WC_EBANX::log("EBANX Error: $message");
 
 			wc_add_notice($message, 'error');
 			return;
@@ -921,7 +921,7 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
 	 */
 	protected function process_response($request, $order)
 	{
-		WC_Ebanx::log("Processing response: " . print_r($request, true));
+		WC_EBANX::log("Processing response: " . print_r($request, true));
 
 		if ($request->status == 'ERROR') {
 			return $this->process_response_error($request, $order);
@@ -929,7 +929,7 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
 
 		$message = __(sprintf('Payment approved. Hash: %s', $request->payment->hash), 'woocommerce-gateway-ebanx');
 
-		WC_Ebanx::log($message);
+		WC_EBANX::log($message);
 
 		if ($request->payment->status == 'CA') {
 			$order->add_order_note(__('EBANX: Payment failed.', 'woocommerce-gateway-ebanx'));
