@@ -98,26 +98,25 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
 		));
 
 		$request = \Ebanx\Ebanx::doCapture(array('hash' => get_post_meta($order->id, '_ebanx_payment_hash', true)));
+		$is_recapture = false;
 
 		if ($request->status === 'ERROR') {
-			if ($request->status_code === 'BC-CAP-3') {
-				$message = __('EBANX - Payment cannot be captured, changing it to Failed.', 'woocommerce-gateway-ebanx');
-
-				$request->payment->status = 'CA';
-			}
-			else if ($request->status_code === 'BP-CAP-4') {
-				$message = __('EBANX - Payment has already been captured, changing it to Processing.', 'woocommerce-gateway-ebanx');
-
-				$request->payment->status = 'CO';
-				$recapture = true;
-			}
-			else if ($request->status_code === 'BC-CAP-5') {
-				$message = __('EBANX - Payment cannot be captured, changing it to Pending.', 'woocommerce-gateway-ebanx');
-
-				$request->payment->status = 'OP';
-			}
-			else {
-				$mssage = sprintf(__('EBANX - Unknown error, enter in contact with Ebanx and inform this error code: %s.', 'woocommerce-gateway-ebanx'), $request->payment->status_code);
+			switch($request->status_code) {
+				case 'BC-CAP-3':
+					$message = __('EBANX - Payment cannot be captured, changing it to Failed.', 'woocommerce-gateway-ebanx');
+					$request->payment->status = 'CA';
+					break;
+				case 'BP-CAP-4':
+					$message = __('EBANX - Payment has already been captured, changing it to Processing.', 'woocommerce-gateway-ebanx');
+					$request->payment->status = 'CO';
+					$is_recapture = true;
+					break;
+				case 'BC-CAP-5':
+					$message = __('EBANX - Payment cannot be captured, changing it to Pending.', 'woocommerce-gateway-ebanx');
+					$request->payment->status = 'OP';
+					break;
+				default:
+					$message = sprintf(__('EBANX - Unknown error, enter in contact with Ebanx and inform this error code: %s.', 'woocommerce-gateway-ebanx'), $request->payment->status_code);
 			}
 
 			WC_EBANX::log($message);
