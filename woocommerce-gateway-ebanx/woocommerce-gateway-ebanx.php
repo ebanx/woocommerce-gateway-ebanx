@@ -391,6 +391,8 @@ if (!class_exists('WC_EBANX')) {
 			self::save_merchant_infos();
 
 			flush_rewrite_rules();
+
+			do_action('ebanx_active_plugin');
 		}
 
 		/**
@@ -400,6 +402,8 @@ if (!class_exists('WC_EBANX')) {
 		 */
 		public static function deactivate_plugin() {
 			flush_rewrite_rules();
+
+			do_action('ebanx_deactivate_plugin');
 		}
 
 		/**
