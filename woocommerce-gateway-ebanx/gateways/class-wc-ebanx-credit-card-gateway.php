@@ -101,21 +101,46 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
 		\Ebanx\Config::set(array(
 			'integrationKey' => $this->private_key,
 			'testMode' => $this->is_sandbox_mode,
+			'directMode' => true,
 		));
 
-		\Ebanx\Config::setDirectMode(true);
 		$request = \Ebanx\Ebanx::doCapture(array('hash' => get_post_meta($order->id, '_ebanx_payment_hash', true)));
 
-		if ($request->status != 'SUCCESS') {
-			// TODO: Tell the user the payment was already captured
+		if ($request->status === 'ERROR') {
+			if ($request->status_code === 'BC-CAP-3') {
+				WC_EBANX_Flash::add_message('Payment cannot be captured, changing it to Failed', 'warning', true);
 
-			$request->payment->status = 'CO';
+				$request->payment->status = 'CA';
+			}
+			else if ($request->status_code === 'BP-CAP-4') {
+				WC_EBANX_Flash::add_message('Payment has already been captured, changing it to Processing', 'warning', true);
+
+				$request->payment->status = 'CO';
+			}
+			else if ($request->status_code === 'BC-CAP-5') {
+				WC_EBANX_Flash::add_message('Payment cannot be captured, changing it to Pending', 'warning', true);
+
+				$request->payment->status = 'OP';
+			}
+			else {
+				WC_EBANX_Flash::add_message('Unknown error, enter in contact with Ebanx and inform this error code: ' . $request->payment->status_code, 'warning', true);
+			}
 		}
 
 		if ($request->payment->status == 'CO') {
 			$order->payment_complete();
 			$order->update_status('processing');
 			$order->add_order_note(__('EBANX: Transaction captured by ' . wp_get_current_user()->data->user_email, 'woocommerce-gateway-ebanx'));
+		}
+		else if ($request->payment->status == 'CA') {
+			$order->payment_complete();
+			$order->update_status('failed');
+			$order->add_order_note(__('EBANX: Transaction Failed', 'woocommerce-gateway-ebanx'));
+		}
+		else if ($request->payment->status == 'OP') {
+			$order->payment_complete();
+			$order->update_status('pending');
+			$order->add_order_note(__('EBANX: Transaction Pending', 'woocommerce-gateway-ebanx'));
 		}
 
 		wp_redirect($redirect);
