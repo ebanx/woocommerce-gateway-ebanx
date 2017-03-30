@@ -927,6 +927,8 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
 		$order->update_status('failed', $error_message);
 		$order->add_order_note($error_message);
 
+		do_action('ebanx_process_response_error', $order, $code);
+
 		throw new Exception($code);
 	}
 
@@ -975,6 +977,8 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
 
 		// Save user's fields
 		$this->save_user_meta_fields($order);
+
+		do_action('ebanx_process_response', $order);
 	}
 
 	/**
