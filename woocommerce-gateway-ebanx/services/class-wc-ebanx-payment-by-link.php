@@ -34,7 +34,7 @@ class WC_EBANX_Payment_By_Link {
 
 		$request = self::send_request();
 		if ( $request && $request->status !== 'SUCCESS' ) {
-			self::$errors[] = 'We couldn\'t create your EBANX order. Could you review your fields and try again?';
+			self::$errors[] = WP_DEBUG ? $request->status_code . ': ' . $request->status_message : 'We couldn\'t create your EBANX order. Could you review your fields and try again?';
 			self::send_errors();
 			return;
 		}
