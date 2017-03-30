@@ -645,13 +645,15 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
 		try {
 			$order = wc_get_order($order_id);
 
+			do_action('ebanx_process_payment_before', $order);
+
 			if ($order->get_total() > 0) {
 				$data = $this->request_data($order);
 
-				$config = [
+				$config = array(
 					'integrationKey' => $this->private_key,
 					'testMode'       => $this->is_sandbox_mode,
-				];
+				);
 
 				\Ebanx\Config::set($config);
 				\Ebanx\Config::setDirectMode(true);
@@ -666,6 +668,8 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
 			} else {
 				$order->payment_complete();
 			}
+
+			do_action('ebanx_process_payment_after', $order);
 
 			return $this->dispatch(array(
 				'result'   => 'success',
@@ -796,6 +800,8 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
 			WC_EBANX::log("EBANX Error: $message");
 
 			wc_add_notice($message, 'error');
+
+			do_action('ebanx_process_payment_error', $message, $code);
 			return;
 		}
 	}
