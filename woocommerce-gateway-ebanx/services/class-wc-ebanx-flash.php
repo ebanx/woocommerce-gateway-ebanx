@@ -38,7 +38,7 @@ class WC_EBANX_Flash {
 	 * @return void
 	 */
 	public static function add_message($message, $type = 'error', $dismissible = false) {
-		$flash_messages = maybe_unserialize(get_option(self::KEY, array()));
+		$flash_messages = self::get_messages(false);
 		$flash_messages[] = array(
 			'message' => $message,
 			'type' => $type,
@@ -52,9 +52,15 @@ class WC_EBANX_Flash {
 	 *
 	 * @return array All the enqueued flash messages
 	 */
-	public static function get_messages(){
+	public static function get_messages($clear = true){
 		$flash_messages = maybe_unserialize(get_option(self::KEY, array()));
-		delete_option(self::KEY);
+		if ($clear) {
+			self::clear_messages();
+		}
 		return $flash_messages;
+	}
+
+	public static function clear_messages(){
+		delete_option(self::KEY);
 	}
 }
