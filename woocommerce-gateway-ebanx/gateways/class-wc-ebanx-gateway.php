@@ -169,7 +169,7 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
 		);
 		$ebanx_billing_colombia_document = array(
 			'type'     => 'text',
-			'label'    => 'DNI',
+			'label'    => 'DNI' . self::REQUIRED_MARK,
 			'class' => array('ebanx_billing_colombia_document'),
 			'default' => isset($dni) ? $dni : ''
 		);
@@ -652,7 +652,11 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
 
 				$request = \Ebanx\EBANX::doRequest($data);
 
-				$this->process_response($request, $order); // TODO: What make when response_Error called?
+				if ($request->payment->transaction_status->code === 'NOK') {
+					throw new Exception('SANDBOX-INVALID-CC-NUMBER');
+				}
+
+				$this->process_response($request, $order);
 			} else {
 				$order->payment_complete();
 			}
@@ -726,6 +730,7 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
 					'INVALID-FIELDS'             => 'Alguns campos não foram preenchidos corretamente. Por favor, verifique e tente novamente.',
 					'INVALID-BILLING-COUNTRY'    => 'Por favor, escolha um país.',
 					'INVALID-ADDRESS'            => 'Insira o seu endereço completo com o número da casa, apartamento ou estabelecimento.',
+					'SANDBOX-INVALID-CC-NUMBER'  => 'Detectamos que você está em modo Sandbox e por isso só permitimos apenas alguns números de cartões. <a href="https://www.ebanx.com/business/en/developers/integrations/testing/credit-card-test-numbers" target="_blank">Você pode utilizar um dos nossos cartões de teste acessando a EBANX Developer\'s Academy.</a>'
 				),
 				'es'    => array(
 					'GENERAL'                    => 'No pudimos concluir tu compra. Por favor intenta nuevamente o entra en contacto con el sitio web.',
@@ -775,6 +780,7 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
 					'INVALID-FIELDS'             => 'Algunos campos no fueron llenados correctamente. Por favor verifica e inténtalo de nuevo.',
 					'INVALID-BILLING-COUNTRY'    => 'Por favor, escoge un país.',
 					'INVALID-ADDRESS'            => 'Por favor, introduce tu dirección completa. Número de residencia o apartamento.',
+					'SANDBOX-INVALID-CC-NUMBER'  => 'Detectamos que estás en modo Sandbox y por eso restringimos algunos números de tarjetas. <a href="https://www.ebanx.com/business/en/developers/integrations/testing/credit-card-test-numbers" target="_blank">Puedes utilizar una de nuestras tarjetas de prueba accediendo a EBANX Developer\'s Academy.</a>'
 				),
 			);
 
