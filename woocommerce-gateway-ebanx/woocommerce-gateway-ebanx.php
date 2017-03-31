@@ -145,6 +145,7 @@ if (!class_exists('WC_EBANX')) {
 			WC_EBANX_Checker::check_merchant_api_keys($this);
 			WC_EBANX_Checker::check_environment($this);
 			WC_EBANX_Checker::check_currency($this);
+			WC_EBANX_Checker::check_https_protocol($this);
 		}
 
 		/**

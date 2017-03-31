@@ -105,7 +105,22 @@ class WC_EBANX_Checker {
 				->enqueue();
 
 		}
+	}
 
-		return false;
+	/**
+	 * Check if the protocol is not HTTPS
+	 *
+	 * @return void
+	 */
+	public static function check_https_protocol($context) {
+		if (empty($_SERVER['HTTPS']) || $_SERVER['HTTPS'] === 'off') {
+			$message = __('EBANX - To improve the site security, we recommend the use of HTTPS protocol on site pages.', 'woocommerce-gateway-ebanx');
+
+			$context->notices
+				->with_message($message)
+				->with_type('info')
+				->persistent()
+				->enqueue();
+		}
 	}
 }
