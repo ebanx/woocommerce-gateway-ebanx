@@ -169,7 +169,7 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
 		);
 		$ebanx_billing_colombia_document = array(
 			'type'     => 'text',
-			'label'    => 'DNI',
+			'label'    => 'DNI' . self::REQUIRED_MARK,
 			'class' => array('ebanx_billing_colombia_document'),
 			'default' => isset($dni) ? $dni : ''
 		);
@@ -285,7 +285,7 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
 				'woocommerce_ebanx_checkout_fields',
 				plugins_url('assets/js/checkout-fields.js', WC_EBANX::DIR),
 				array('jquery'),
-				WC_EBANX::VERSION,
+				WC_EBANX::get_plugin_version(),
 				true
 			);
 		}
@@ -336,6 +336,8 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
 
 		$hash = get_post_meta($order->id, '_ebanx_payment_hash', true);
 
+		do_action('ebanx_before_process_refund', $order, $hash);
+
 		if (!$order || is_null($amount) || !$hash) {
 			return false;
 		}
@@ -357,6 +359,8 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
 		$request = \Ebanx\EBANX::doRefund($data);
 
 		if ($request->status !== 'SUCCESS') {
+			do_action('ebanx_process_refund_error', $order, $request);
+
 			return false;
 		}
 
@@ -369,6 +373,8 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
 		$refunds[] = $request->refund;
 
 		update_post_meta($order->id, "_ebanx_payment_refunds", $refunds);
+
+		do_action('ebanx_after_process_refund', $order, $request, $refunds);
 
 		return true;
 	}
@@ -453,7 +459,7 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
 				'notification_url'      => $home_url,
 				'redirect_url'          => $home_url,
 				'user_value_1'          => 'from_woocommerce',
-				'user_value_3'          => 'version=' . WC_EBANX::VERSION,
+				'user_value_3'          => 'version=' . WC_EBANX::get_plugin_version(),
 				'country'               => $order->billing_country,
 				'currency_code'         => $this->merchant_currency,
 				'name'                  => $order->billing_first_name . ' ' . $order->billing_last_name,
@@ -548,7 +554,7 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
 			$addresses .= " - $_POST[billing_address_2]";
 		}
 
-		$addresses = WC_EBANX_Constants::split_street($addresses);
+		$addresses = WC_EBANX_Helper::split_street($addresses);
 
 		$street_number = empty($addresses['houseNumber']) ? 'S/N' : trim($addresses['houseNumber'] . ' ' . $addresses['additionToAddress']);
 		$street_name = $addresses['streetName'];
@@ -639,23 +645,31 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
 		try {
 			$order = wc_get_order($order_id);
 
+			do_action('ebanx_before_process_payment', $order);
+
 			if ($order->get_total() > 0) {
 				$data = $this->request_data($order);
 
-				$config = [
+				$config = array(
 					'integrationKey' => $this->private_key,
 					'testMode'       => $this->is_sandbox_mode,
-				];
+				);
 
 				\Ebanx\Config::set($config);
 				\Ebanx\Config::setDirectMode(true);
 
 				$request = \Ebanx\EBANX::doRequest($data);
 
-				$this->process_response($request, $order); // TODO: What make when response_Error called?
+				if ($request->payment->transaction_status->code === 'NOK') {
+					throw new Exception('SANDBOX-INVALID-CC-NUMBER');
+				}
+
+				$this->process_response($request, $order);
 			} else {
 				$order->payment_complete();
 			}
+
+			do_action('ebanx_after_process_payment', $order);
 
 			return $this->dispatch(array(
 				'result'   => 'success',
@@ -676,114 +690,16 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
 			);
 			$language = $languages[$country];
 
-			$errors = array(
-				'pt-br' => array(
-					'GENERAL'                    => 'Não foi possível concluir a compra. Por favor, tente novamente ou entre em contato com o site.',
-					'BP-DPAR-4'                  => 'Invalid integration key.',
-					'BP-DR-13'                   => 'Informe o seu nome completo.',
-					'BP-DR-15'                   => 'Informe um email válido.',
-					'BP-DR-19'                   => 'Informe a sua data de nascimento no formato dia/mes/ano, por exemplo, 30/10/1980.',
-					'BP-DR-20'                   => 'Informe a sua data de nascimento no formato dia/mes/ano, por exemplo, 30/10/1980.',
-					'BP-DR-23'                   => 'O número de documento informado é inválido.',
-					'BP-DR-24'                   => 'Informe o seu CEP.',
-					'BP-DR-25'                   => 'Informe o seu endereço.',
-					'BP-DR-26'                   => 'O número da sua residência é obrigatório.',
-					'BP-DR-27'                   => 'Informe a sua cidade.',
-					'BP-DR-28'                   => 'Informe o seu estado.',
-					'BP-DR-29'                   => 'Informe um estado do Brasil válido.',
-					'BP-DR-30'                   => 'O país deve ser Brasil.',
-					'BP-DR-31'                   => 'Informe um telefone celular.',
-					'BP-DR-32'                   => 'O seu telefone celular deve ser um número válido.',
-					'BP-DR-39'                   => 'Seu nome, cpf e data de nascimento não coincidem, por favor, revise seus dados e tente novamente.',
-					'BP-DR-40'                   => 'Você atingiu o limite de pagamento.',
-					'BP-DR-48'                   => 'Preencha as informações de cartão de crédito.',
-					'BP-DR-49'                   => 'Insira o número do cartão de crédito.',
-					'BP-DR-51'                   => 'Insira o nome que está impresso no cartão de crédito.',
-					'BP-DR-52'                   => 'O nome do cartão deve ter até 50 caracteres.',
-					'BP-DR-54'                   => 'Digite o CVV que está impresso no cartão.',
-					'BP-DR-55'                   => 'Digite o CVV corretamente.',
-					'BP-DR-56'                   => 'Digite a data de validade do seu cartão.',
-					'BP-DR-57'                   => 'A sua data deve estar no formato mes/ano, por exemplo, 12/2020.',
-					'BP-DR-59'                   => 'A data é inferior a permitida.',
-					'BP-DR-61'                   => 'Não foi possível utilizar este cartão de crédito. Contate o site informando este código: BP-DR-61.',
-					'BP-DR-75'                   => 'O número do cartão de crédito é inválido.',
-					'BP-DR-77'                   => 'Este país não está habilitado.',
-					'BP-DR-78'                   => 'Este site não vende para este país.',
-					'BP-DR-79'                   => 'O número de parcelas não é permitido, por favor, escolha outro.',
-					'BP-DR-83'                   => 'Identificamos que seu cartão é estrangeiro, por favor, use outro.',
-					'BP-DR-84'                   => 'Identificamos que esta compra já foi processada anteriormente.',
-					'BP-DR-89'                   => 'O número de parcelas não é permitida, entre em contato com o site.',
-					'BP-DR-95'                   => 'O nome impresso no cartão não é válido, número não são permitidos.',
-					'BP-DR-97'                   => 'Compras parceladas não são permitidas em cartões pré pagos.',
-					'BP-DR-98'                   => 'O país relacionado ao email digitado não corresponde ao país do método de pagamento.',
-					'BP-DR-100'                  => 'Compras parceladas não são permitidas em cartões de débito.',
-					'MISSING-CARD-PARAMS'        => 'Verifique se os dados do cartão de crédito estão corretos.',
-					'MISSING-DEVICE-FINGERPRINT' => 'Algo aconteceu e não conseguimos concluir a sua compra. Por favor tente novamente.',
-					'MISSING-CVV'                => 'Por favor digite o CVV do seu cartão de crédito.',
-					'MISSING-INSTALMENTS'        => 'Por favor escolha em quantas parcelas você quer pagar.',
-					'MISSING-BANK-NAME'          => 'Escolha um banco que deseja efetuar a sua compra.',
-					'INVALID-SAFETYPAY-TYPE'     => 'Escolha uma opção para o método de pagamento SafetyPay.',
-					'INVALID-FIELDS'             => 'Alguns campos não foram preenchidos corretamente. Por favor, verifique e tente novamente.',
-					'INVALID-BILLING-COUNTRY'    => 'Por favor, escolha um país.',
-					'INVALID-ADDRESS'            => 'Insira o seu endereço completo com o número da casa, apartamento ou estabelecimento.',
-				),
-				'es'    => array(
-					'GENERAL'                    => 'No pudimos concluir tu compra. Por favor intenta nuevamente o entra en contacto con el sitio web.',
-					'BP-DR-13'                   => 'Por favor, escribe tu nombre completo.',
-					'BP-DR-15'                   => 'El email no es válido. ',
-					'BP-DR-19'                   => 'Escribe tu fecha de nacimiento en el formato DD/MM/AA.',
-					'BP-DR-20'                   => 'Escribe tu fecha de nacimiento en el formato DD/MM/AA.',
-					'BP-DR-23'                   => 'El numero de documento no es valido.',
-					'BP-DR-24'                   => 'Por favor, escribe tu código postal.',
-					'BP-DR-25'                   => 'Por favor, escribe tu dirección.',
-					'BP-DR-26'                   => 'Tu número de residencia es obligatorio.',
-					'BP-DR-27'                   => 'Por favor, dinos tu ciudad de residencia.',
-					'BP-DR-28'                   => 'Por favor, dinos tu estado de residencia.',
-					'BP-DR-29'                   => 'Escribe un estado válido.',
-					'BP-DR-30'                   => 'Tú país debe ser Brazil.',
-					'BP-DR-31'                   => 'Por favor, dinos tu número de celular.',
-					'BP-DR-32'                   => 'El número de teléfono no es válido. Intenta de nuevo.',
-					'BP-DR-39'                   => 'Seu nome, cpf e data de nascimento não coincidem, por favor, revise seus dados e tente novamente.',
-					'BP-DR-40'                   => 'Disculpa, has alcanzado tu límite de compra.',
-					'BP-DR-48'                   => 'Preencha as informações de cartão de crédito.',
-					'BP-DR-49'                   => 'Por favor, introduce el número de tarjeta de crédito.',
-					'BP-DR-51'                   => 'Por favor, introduce el nombre como está en tu tarjeta de crédito.',
-					'BP-DR-52'                   => 'El nombre en la tarjeta no debe superar los 50 caracteres.',
-					'BP-DR-54'                   => 'Por favor, introduce el CVV impreso en la tarjeta.',
-					'BP-DR-55'                   => 'Por favor, introduce el CVV correctamente.',
-					'BP-DR-56'                   => 'Por favor, introduce la fecha de vencimiento de tu tarjeta.',
-					'BP-DR-57'                   => 'Por favor, escribe la fecha en el formato MM/AAAA',
-					'BP-DR-59'                   => 'Por favor, introduce una fecha válida.',
-					'BP-DR-61'                   => 'Disculpa pero no fue posible procesar tu tarjeta de crédito. Contacta el sitio web informado este código: BP-DR-61.',
-					'BP-DR-75'                   => 'El número de tarjeta de crédito es inválido.',
-					'BP-DR-77'                   => 'Disculpa, el país que has declarado no está habilitado.',
-					'BP-DR-78'                   => 'Disculpa, aun no vendemos en el país que declaraste.',
-					'BP-DR-79'                   => 'Disculpa, selecciona otro número de meses sin intereses.',
-					'BP-DR-83'                   => 'Disculpa, no aceptamos tarjetas de crédito extranjeros. Por favor usa otro.',
-					'BP-DR-84'                   => 'Esta compra ya fue procesada.',
-					'BP-DR-89'                   => 'El número de meses sin intereses seleccionado es inválido. Entra en contacto con el sitio web.',
-					'BP-DR-95'                   => 'El nombre escrito en la tarjeta no es válido. Números no son permitidos.',
-					'BP-DR-97'                   => 'Disculpa, la opción de pago "meses sin intereses" no es permitida para tarjetas pre-pago.',
-					'BP-DR-98'                   => 'O país relacionada o correo electrónico digitados no corresponde el método del pago.',
-					'BP-DR-100'                  => 'Disculpa, la opción de pago "meses sin intereses" no es permitida para tarjetas de débito.',
-					'MISSING-CARD-PARAMS'        => 'Por favor, verifica que la información de la tarjeta esté correcta.',
-					'MISSING-DEVICE-FINGERPRINT' => 'Hemos encontrado un error y no fue posible concluir la compra. Por favor intenta de nuevo.',
-					'MISSING-CVV'                => 'Por favor, introduce el CVV de tu tarjeta de crédito.',
-					'MISSING-INSTALMENTS'        => 'Por favor, escoge en cuántos meses sin intereses deseas pagar.',
-					'MISSING-BANK-NAME'          => 'Por favor, escoge el banco para finalizar la compra.',
-					'INVALID-SAFETYPAY-TYPE'     => 'Por favor, escoge una opción para el método de pago SafetyPay.',
-					'INVALID-FIELDS'             => 'Algunos campos no fueron llenados correctamente. Por favor verifica e inténtalo de nuevo.',
-					'INVALID-BILLING-COUNTRY'    => 'Por favor, escoge un país.',
-					'INVALID-ADDRESS'            => 'Por favor, introduce tu dirección completa. Número de residencia o apartamento.',
-				),
-			);
+			$errors = WC_EBANX_Errors::get_errors();
 
 			$message = !empty($errors[$language][$code]) ? $errors[$language][$code] : $errors[$language]['GENERAL'] . " ({$code})";
 
 			WC()->session->set('refresh_totals', true);
-			WC_Ebanx::log("EBANX Error: $message");
+			WC_EBANX::log("EBANX Error: $message");
 
 			wc_add_notice($message, 'error');
+
+			do_action('ebanx_process_payment_error', $message, $code);
 			return;
 		}
 	}
@@ -909,6 +825,8 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
 		$order->update_status('failed', $error_message);
 		$order->add_order_note($error_message);
 
+		do_action('ebanx_process_response_error', $order, $code);
+
 		throw new Exception($code);
 	}
 
@@ -921,7 +839,7 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
 	 */
 	protected function process_response($request, $order)
 	{
-		WC_Ebanx::log("Processing response: " . print_r($request, true));
+		WC_EBANX::log("Processing response: " . print_r($request, true));
 
 		if ($request->status == 'ERROR') {
 			return $this->process_response_error($request, $order);
@@ -929,7 +847,7 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
 
 		$message = __(sprintf('Payment approved. Hash: %s', $request->payment->hash), 'woocommerce-gateway-ebanx');
 
-		WC_Ebanx::log($message);
+		WC_EBANX::log($message);
 
 		if ($request->payment->status == 'CA') {
 			$order->add_order_note(__('EBANX: Payment failed.', 'woocommerce-gateway-ebanx'));
@@ -957,6 +875,8 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
 
 		// Save user's fields
 		$this->save_user_meta_fields($order);
+
+		do_action('ebanx_process_response', $order);
 	}
 
 	/**
@@ -968,10 +888,12 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
 	 */
 	final public function process_hook(array $codes, $notificationType)
 	{
-		$config = [
+		do_action('ebanx_before_process_hook', $order, $notificationType);
+
+		$config = array(
 			'integrationKey' => $this->private_key,
 			'testMode'       => $this->is_sandbox_mode,
-		];
+		);
 
 		\Ebanx\Config::set($config);
 
@@ -1042,6 +964,8 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
 				break;
 		};
 
+		do_action('ebanx_after_process_hook', $order, $notificationType);
+
 		return $order;
 	}
 
@@ -1052,7 +976,7 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
 	 * @return void
 	 */
 	public function checkout_rate_conversion($currency) {
-		if (in_array(get_woocommerce_currency(), array(WC_EBANX_Constants::CURRENCY_CODE_USD, WC_EBANX_Constants::CURRENCY_CODE_EUR))) {
+		if (in_array($this->merchant_currency, array(WC_EBANX_Constants::CURRENCY_CODE_USD, WC_EBANX_Constants::CURRENCY_CODE_EUR))) {
 
 			$country = $this->getTransactionAddress('country');
 
@@ -1066,7 +990,7 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
 
 			$amount *= $rate;
 
-			// Insert IOF in Brazil payments only
+			// Applies IOF for Brazil payments only
 			if ($country === WC_EBANX_Constants::COUNTRY_BRAZIL) {
 				$amount += ($amount * WC_EBANX_Constants::BRAZIL_TAX);
 			}

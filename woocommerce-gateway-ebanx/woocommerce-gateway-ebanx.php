@@ -31,7 +31,7 @@ if (!class_exists('WC_EBANX')) {
 	/**
 	 * Hooks
 	 */
-	register_activation_hook(__FILE__, array('WC_EBANX', 'active_plugin'));
+	register_activation_hook(__FILE__, array('WC_EBANX', 'activate_plugin'));
 	register_deactivation_hook(__FILE__, array('WC_EBANX', 'deactivate_plugin'));
 
 	/**
@@ -44,8 +44,6 @@ if (!class_exists('WC_EBANX')) {
 		 *
 		 * @var string
 		 */
-		const VERSION = '1.10.1';
-
 		const DIR = __FILE__;
 
 		/**
@@ -142,6 +140,26 @@ if (!class_exists('WC_EBANX')) {
 		}
 
 		/**
+		 * Extract some informations from the plugin
+		 * @param  string $info The information that you want to extract, possible values: version, name, description, author, network
+		 * @return string       The value extracted
+		 */
+		public static function get_plugin_info($info = 'name') {
+			$plugin = get_file_data(__FILE__, array($info => $info));
+
+			return $plugin[$info];
+		}
+
+		/**
+		 * Extract the plugin version described on plugin's header
+		 *
+		 * @return string The plugin version
+		 */
+		public static function get_plugin_version() {
+			return self::get_plugin_info('version');
+		}
+
+		/**
 		* Performs checks on some system status
 		*
 		* @return void
@@ -151,6 +169,7 @@ if (!class_exists('WC_EBANX')) {
 			WC_EBANX_Checker::check_merchant_api_keys($this);
 			WC_EBANX_Checker::check_environment($this);
 			WC_EBANX_Checker::check_currency($this);
+			WC_EBANX_Checker::check_https_protocol($this);
 		}
 
 		/**
@@ -172,11 +191,11 @@ if (!class_exists('WC_EBANX')) {
 		 */
 		public function ebanx_router()
 		{
-			if (isset($_GET['ebanx'])) {
-				$action = $_GET['ebanx'];
-				if ($action === 'order-received' && isset($_GET['hash'])) {
-					$hash = $_GET['hash'];
-					$payment_type = isset($_GET['payment_type']) ? $_GET['payment_type'] : null;
+			if ( WC_EBANX_Request::has('ebanx') ) {
+				$action = WC_EBANX_Request::read('ebanx');
+				if ($action === 'order-received' && WC_EBANX_Request::has('hash')) {
+					$hash = WC_EBANX_Request::read('hash');
+					$payment_type = WC_EBANX_Request::read('payment_type', null);
 					$this->ebanx_order_received($hash, $payment_type);
 					return;
 				}
@@ -232,7 +251,7 @@ if (!class_exists('WC_EBANX')) {
 		{
 			$json = json_encode(array(
 				'ebanx' => true,
-				'version' => self::VERSION
+				'version' => self::get_plugin_version()
 			));
 			echo $json;
 			exit;
@@ -364,6 +383,8 @@ if (!class_exists('WC_EBANX')) {
 		public function on_save_settings() {
 			// Delete flag that check if the api is ok
 			delete_option('_ebanx_api_was_checked');
+
+			do_action('ebanx_settings_saved', $_POST);
 		}
 
 		/**
@@ -393,10 +414,12 @@ if (!class_exists('WC_EBANX')) {
 		 *
 		 * @return void
 		 */
-		public static function active_plugin() {
+		public static function activate_plugin() {
 			self::save_merchant_infos();
 
 			flush_rewrite_rules();
+
+			do_action('ebanx_activate_plugin');
 		}
 
 		/**
@@ -406,6 +429,8 @@ if (!class_exists('WC_EBANX')) {
 		 */
 		public static function deactivate_plugin() {
 			flush_rewrite_rules();
+
+			do_action('ebanx_deactivate_plugin');
 		}
 
 		/**
@@ -496,10 +521,13 @@ if (!class_exists('WC_EBANX')) {
 		{
 			// Utils
 			include_once SERVICES_DIR . 'class-wc-ebanx-constants.php';
+			include_once SERVICES_DIR . 'class-wc-ebanx-helper.php';
 			include_once SERVICES_DIR . 'class-wc-ebanx-notice.php';
 			include_once SERVICES_DIR . 'class-wc-ebanx-hooks.php';
 			include_once SERVICES_DIR . 'class-wc-ebanx-checker.php';
 			include_once(SERVICES_DIR . 'class-wc-ebanx-flash.php');
+			include_once(SERVICES_DIR . 'class-wc-ebanx-request.php');
+			include_once(SERVICES_DIR . 'class-wc-ebanx-errors.php');
 
 			// Gateways
 			include_once GATEWAYS_DIR . 'class-wc-ebanx-gateway.php';
@@ -667,14 +695,14 @@ if (!class_exists('WC_EBANX')) {
 				'woocommerce_ebanx_payments_options',
 				plugins_url('assets/js/payments-options.js', WC_EBANX::DIR),
 				array('jquery'),
-				WC_EBANX::VERSION,
+				WC_EBANX::get_plugin_version(),
 				true
 			);
 			wp_enqueue_script(
 				'woocommerce_ebanx_advanced_options',
 				plugins_url('assets/js/advanced-options.js', WC_EBANX::DIR),
 				array('jquery'),
-				WC_EBANX::VERSION,
+				WC_EBANX::get_plugin_version(),
 				true
 			);
 		}
@@ -741,7 +769,7 @@ if (!class_exists('WC_EBANX')) {
 				'administrator',
 
 				// TODO: Create a dynamic url
-				'admin.php?page=wc-settings&tab=checkout&section=ebanx-global',
+				WC_EBANX_Constants::SETTINGS_URL,
 				'',
 				'data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz48c3ZnIHdpZHRoPSIxNnB4IiBoZWlnaHQ9IjIwcHgiIHZpZXdCb3g9IjAgMCAxNiAyMCIgdmVyc2lvbj0iMS4xIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIj4gICAgICAgIDx0aXRsZT5lYmFueC1zdmc8L3RpdGxlPiAgICA8ZGVzYz5DcmVhdGVkIHdpdGggU2tldGNoLjwvZGVzYz4gICAgPGRlZnM+PC9kZWZzPiAgICA8ZyBpZD0iUGFnZS0xIiBzdHJva2U9Im5vbmUiIHN0cm9rZS13aWR0aD0iMSIgZmlsbD0ibm9uZSIgZmlsbC1ydWxlPSJldmVub2RkIj4gICAgICAgIDxnIGlkPSJlYmFueC1zdmciPiAgICAgICAgICAgIDxwb2x5Z29uIGlkPSJTaGFwZSIgZmlsbD0iIzFDNDE3OCIgcG9pbnRzPSIwLjExMTYyNzkwNyAwLjA5MDkwOTA5MDkgMTIuNTM5NTM0OSAxMCAwLjExMTYyNzkwNyAxOS45MDkwOTA5Ij48L3BvbHlnb24+ICAgICAgICAgICAgPHBvbHlnb24gaWQ9IlNoYXBlIiBmaWxsPSIjREFEQkRCIiBwb2ludHM9IjkuMTM0ODgzNzIgMTIuNzA5MDkwOSAwLjExMTYyNzkwNyAxOS45MDkwOTA5IDE1Ljk2Mjc5MDcgMTkuODkwOTA5MSI+PC9wb2x5Z29uPiAgICAgICAgICAgIDxwb2x5Z29uIGlkPSJTaGFwZSIgZmlsbD0iI0RBREJEQiIgcG9pbnRzPSIwLjExMTYyNzkwNyAwLjA5MDkwOTA5MDkgOS4xMzQ4ODM3MiA3LjI5MDkwOTA5IDE1Ljk2Mjc5MDcgMC4wOTA5MDkwOTA5Ij48L3BvbHlnb24+ICAgICAgICAgICAgPHBvbHlnb24gaWQ9IlNoYXBlIiBmaWxsPSIjMDA5M0QwIiBwb2ludHM9IjAuMTExNjI3OTA3IDE5LjkwOTA5MDkgOS4xMzQ4ODM3MiAxMi43MDkwOTA5IDYuNzUzNDg4MzcgMTAgMC4xMTE2Mjc5MDcgMTcuMiI+PC9wb2x5Z29uPiAgICAgICAgICAgIDxwb2x5Z29uIGlkPSJTaGFwZSIgZmlsbD0iIzAwQkNFNCIgcG9pbnRzPSIwLjExMTYyNzkwNyAyLjggMC4xMTE2Mjc5MDcgMTcuMiA2Ljc1MzQ4ODM3IDEwIj48L3BvbHlnb24+ICAgICAgICAgICAgPHBvbHlnb24gaWQ9IlNoYXBlIiBmaWxsPSIjMDA5M0QwIiBwb2ludHM9IjAuMTExNjI3OTA3IDAuMDkwOTA5MDkwOSA5LjEzNDg4MzcyIDcuMjkwOTA5MDkgNi43NTM0ODgzNyAxMCAwLjExMTYyNzkwNyAyLjgiPjwvcG9seWdvbj4gICAgICAgIDwvZz4gICAgPC9nPjwvc3ZnPg==',
 				21
@@ -806,6 +834,7 @@ if (!class_exists('WC_EBANX')) {
 		public function ebanx_admin_order_details ($order) {
 			$payment_hash = get_post_meta($order->id, '_ebanx_payment_hash', true);
 			if ($payment_hash) {
+
 				wc_get_template(
 					'admin-order-details.php',
 					array(

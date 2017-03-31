@@ -36,6 +36,7 @@ class WC_EBANX_Account_Gateway extends WC_EBANX_Redirect_Gateway
 
 	/**
 	 * Check if the currency is processed by EBANX
+	 *
 	 * @param  string $currency Possible currencies: BRL
 	 * @return boolean          Return true if EBANX process the currency
 	 */
@@ -73,6 +74,8 @@ class WC_EBANX_Account_Gateway extends WC_EBANX_Redirect_Gateway
 			'woocommerce/ebanx/',
 			WC_EBANX::get_templates_path()
 		);
+
+		parent::checkout_rate_conversion(WC_EBANX_Constants::CURRENCY_CODE_BRL);
 	}
 
 	/**

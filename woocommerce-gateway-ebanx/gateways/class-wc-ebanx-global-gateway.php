@@ -74,14 +74,12 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway
 	 *
 	 * @return boolean Always return false
 	 */
-	public function is_available()
-	{
+	public function is_available() {
 		return false;
 	}
 
 	/**
 	 * Error handling
-	 *
 	 */
 	public function validate_due_date_days_field() {
 		if ($_POST['woocommerce_ebanx-global_due_date_days'] < 1) {
@@ -96,15 +94,15 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway
 		}
 
 		return $_POST['woocommerce_ebanx-global_due_date_days'];
-}
+	}
+
 	/**
 	 * Define the fields on EBANX WooCommerce settings page and set the defaults when the plugin is installed
 	 *
 	 * @return void
 	 */
-	public function init_form_fields()
-	{
-		$this->form_fields = array(
+	public function init_form_fields() {
+		$fields = array(
 			'integration_title' => array(
 				'title' => __('Integration', 'woocommerce-gateway-ebanx'),
 				'type' => 'title',
@@ -298,9 +296,9 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway
 			);
 		}
 
-		$this->form_fields = array_merge($this->form_fields, $interest_rates_array);
+		$fields = array_merge($fields, $interest_rates_array);
 
-		$this->form_fields = array_merge($this->form_fields, array(
+		$fields = array_merge($fields, array(
 			'cash_options_title'        => array(
 				'title' => __('Cash Payments', 'woocommerce-gateway-ebanx'),
 				'type'  => 'title',
@@ -314,20 +312,20 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway
 			),
 		));
 
-		$this->form_fields['due_date_days']['type'] = (
+		$fields['due_date_days']['type'] = (
 			in_array($this->merchant_currency, WC_EBANX_Constants::$LOCAL_CURRENCIES) ?
 				'number' : 'select'
 		);
 		if (!in_array($this->merchant_currency, WC_EBANX_Constants::$LOCAL_CURRENCIES)) {
-			$this->form_fields['due_date_days']['class'] .= ' ebanx-select';
-			$this->form_fields['due_date_days']['options'] = array(
+			$fields['due_date_days']['class'] .= ' ebanx-select';
+			$fields['due_date_days']['options'] = array(
 				'1' => '1',
 				'2' => '2',
 				'3' => '3',
 				);
 		}
 
-		$this->form_fields = array_merge($this->form_fields, array(
+		$fields = array_merge($fields, array(
 			'advanced_options_title' => array(
 				'title' => __('Advanced Options', 'woocommerce-gateway-ebanx'),
 				'type' => 'title'
@@ -396,6 +394,8 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway
 				'placeholder' => __('eg: billing_colombia_document', 'woocommerce-gateway-ebanx')
 			),
 		));
+
+		$this->form_fields = apply_filters('ebanx_settings_form_fields', $fields);
 
 		$this->inject_defaults();
 	}
