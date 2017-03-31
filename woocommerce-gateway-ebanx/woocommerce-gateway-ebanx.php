@@ -31,7 +31,7 @@ if (!class_exists('WC_EBANX')) {
 	/**
 	 * Hooks
 	 */
-	register_activation_hook(__FILE__, array('WC_EBANX', 'active_plugin'));
+	register_activation_hook(__FILE__, array('WC_EBANX', 'activate_plugin'));
 	register_deactivation_hook(__FILE__, array('WC_EBANX', 'deactivate_plugin'));
 
 	/**
@@ -389,12 +389,12 @@ if (!class_exists('WC_EBANX')) {
 		 *
 		 * @return void
 		 */
-		public static function active_plugin() {
+		public static function activate_plugin() {
 			self::save_merchant_infos();
 
 			flush_rewrite_rules();
 
-			do_action('ebanx_active_plugin');
+			do_action('ebanx_activate_plugin');
 		}
 
 		/**
