@@ -185,11 +185,11 @@ if (!class_exists('WC_EBANX')) {
 		 */
 		public function ebanx_router()
 		{
-			if (isset($_GET['ebanx'])) {
-				$action = $_GET['ebanx'];
-				if ($action === 'order-received' && isset($_GET['hash'])) {
-					$hash = $_GET['hash'];
-					$payment_type = isset($_GET['payment_type']) ? $_GET['payment_type'] : null;
+			if ( WC_EBANX_Request::has('ebanx') ) {
+				$action = WC_EBANX_Request::read('ebanx');
+				if ($action === 'order-received' && WC_EBANX_Request::has('hash')) {
+					$hash = WC_EBANX_Request::read('hash');
+					$payment_type = WC_EBANX_Request::read('payment_type', null);
 					$this->ebanx_order_received($hash, $payment_type);
 					return;
 				}
@@ -245,7 +245,7 @@ if (!class_exists('WC_EBANX')) {
 		{
 			$json = json_encode(array(
 				'ebanx' => true,
-				'version' => self::VERSION
+				'version' => self::get_plugin_version()
 			));
 			echo $json;
 			exit;
@@ -522,6 +522,8 @@ if (!class_exists('WC_EBANX')) {
 			include_once SERVICES_DIR . 'class-wc-ebanx-hooks.php';
 			include_once SERVICES_DIR . 'class-wc-ebanx-checker.php';
 			include_once(SERVICES_DIR . 'class-wc-ebanx-flash.php');
+			include_once(SERVICES_DIR . 'class-wc-ebanx-request.php');
+			include_once(SERVICES_DIR . 'class-wc-ebanx-errors.php');
 
 			// Gateways
 			include_once GATEWAYS_DIR . 'class-wc-ebanx-gateway.php';
