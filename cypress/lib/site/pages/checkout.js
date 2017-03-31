@@ -162,7 +162,7 @@ const checkoutPage = (function (test) {
       this.placeOrder();
 
       test
-        .get(containers.boletoBarCode, { timeout: 10000 })
+        .get(containers.boletoBarCode, { timeout: 5000 })
           .should('be.visible')
           .should('not.to.be.empty');
 

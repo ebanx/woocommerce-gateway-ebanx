@@ -28,6 +28,7 @@ const homePage = (function (test) {
       test
         .get(anchors.product)
           .should('be.visible')
+          .first()
           .click()
         .get(buttons.addToCart)
           .should('be.visible');

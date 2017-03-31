@@ -18,8 +18,6 @@ const ebmngOperator = (function (test) {
     checkHasPayment: function (hash) {
       search
         .searchPaymentByHash(hash);
-
-
     }
   };
 

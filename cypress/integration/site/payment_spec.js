@@ -2,6 +2,7 @@ const Faker = require('faker');
 const CPF = require('cpf_cnpj').CPF;
 const CNPJ = require('cpf_cnpj').CNPJ;
 let site = {};
+let ebmng = {};
 let mock = {};
 
 describe('Site', () => {
@@ -11,6 +12,8 @@ describe('Site', () => {
       Faker.locale = 'pt_BR';
 
       site = require('../../lib/site/site_operator')(cy);
+      ebmng = require('../../lib/ebmng/ebmng_operator')(cy);
+
       mock = {
         firstName: Faker.name.firstName(),
         lastName: Faker.name.lastName(),
@@ -33,6 +36,8 @@ describe('Site', () => {
       mock.postcode = '80010010';
 
       site.makePaymentBoleto(mock);
+
+      ebmng.checkPaymentWasCreated('sdasdasd');
     });
 
     it('Make a Credit Card Payment using Visa', () => {
