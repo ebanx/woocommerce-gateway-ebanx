@@ -85,6 +85,7 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
 
 	/**
 	 * Check if the currency is processed by EBANX
+	 *
 	 * @param  string $currency Possible currencies: BRL, USD, EUR, PEN, CLP, COP, MXN
 	 * @return boolean          Return true if EBANX process the currency
 	 */
@@ -325,6 +326,7 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
 
 	/**
 	 * Process a refund created by the merchant
+	 *
 	 * @param  integer $order_id    The id of the order created
 	 * @param  int $amount          The amount of the refund
 	 * @param  string $reason       Optional description

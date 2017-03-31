@@ -35,6 +35,7 @@ class WC_EBANX_Oxxo_Gateway extends WC_EBANX_Gateway
 
 	/**
 	 * Check if the currency is processed by EBANX
+	 *
 	 * @param  string $currency Possible currencies: MXN
 	 * @return boolean          Return true if EBANX process the currency
 	 */

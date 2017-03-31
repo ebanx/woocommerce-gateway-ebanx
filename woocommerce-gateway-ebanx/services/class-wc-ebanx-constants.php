@@ -4,10 +4,6 @@ if (!defined('ABSPATH')) {
 	exit;
 }
 
-/**
- * WC_EBANX_Constants class.
- *
- */
 abstract class WC_EBANX_Constants
 {
 	/**
