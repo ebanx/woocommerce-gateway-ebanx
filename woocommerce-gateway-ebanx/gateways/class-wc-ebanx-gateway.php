@@ -336,7 +336,7 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
 
 		$hash = get_post_meta($order->id, '_ebanx_payment_hash', true);
 
-		do_action('ebanx_process_refund_before', $order, $hash);
+		do_action('ebanx_before_process_refund', $order, $hash);
 
 		if (!$order || is_null($amount) || !$hash) {
 			return false;
@@ -374,7 +374,7 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
 
 		update_post_meta($order->id, "_ebanx_payment_refunds", $refunds);
 
-		do_action('ebanx_process_refund_after', $order, $request, $refunds);
+		do_action('ebanx_after_process_refund', $order, $request, $refunds);
 
 		return true;
 	}
@@ -645,7 +645,7 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
 		try {
 			$order = wc_get_order($order_id);
 
-			do_action('ebanx_process_payment_before', $order);
+			do_action('ebanx_before_process_payment', $order);
 
 			if ($order->get_total() > 0) {
 				$data = $this->request_data($order);
@@ -669,7 +669,7 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
 				$order->payment_complete();
 			}
 
-			do_action('ebanx_process_payment_after', $order);
+			do_action('ebanx_after_process_payment', $order);
 
 			return $this->dispatch(array(
 				'result'   => 'success',
@@ -990,7 +990,7 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
 	 */
 	final public function process_hook(array $codes, $notificationType)
 	{
-		do_action('ebanx_process_hook_before', $order, $notificationType);
+		do_action('ebanx_before_process_hook', $order, $notificationType);
 
 		$config = array(
 			'integrationKey' => $this->private_key,
@@ -1066,7 +1066,7 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
 				break;
 		};
 
-		do_action('ebanx_process_hook_after', $order, $notificationType);
+		do_action('ebanx_after_process_hook', $order, $notificationType);
 
 		return $order;
 	}
