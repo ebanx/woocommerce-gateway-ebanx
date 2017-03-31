@@ -74,14 +74,12 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway
 	 *
 	 * @return boolean Always return false
 	 */
-	public function is_available()
-	{
+	public function is_available() {
 		return false;
 	}
 
 	/**
 	 * Error handling
-	 *
 	 */
 	public function validate_due_date_days_field() {
 		if ($_POST['woocommerce_ebanx-global_due_date_days'] < 1) {
@@ -96,14 +94,14 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway
 		}
 
 		return $_POST['woocommerce_ebanx-global_due_date_days'];
-}
+	}
+
 	/**
 	 * Define the fields on EBANX WooCommerce settings page and set the defaults when the plugin is installed
 	 *
 	 * @return void
 	 */
-	public function init_form_fields()
-	{
+	public function init_form_fields() {
 		$fields = array(
 			'integration_title' => array(
 				'title' => __('Integration', 'woocommerce-gateway-ebanx'),

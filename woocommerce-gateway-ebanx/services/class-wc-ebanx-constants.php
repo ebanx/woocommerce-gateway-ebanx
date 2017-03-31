@@ -4,14 +4,10 @@ if (!defined('ABSPATH')) {
 	exit;
 }
 
-/**
- * WC_EBANX_Constants class.
- *
- */
 abstract class WC_EBANX_Constants
 {
 	/**
-	 * Countries that EBANX process
+	 * Countries that EBANX processes
 	 */
 	const COUNTRY_PERU     = 'pe';
 	const COUNTRY_CHILE    = 'cl';
@@ -19,12 +15,18 @@ abstract class WC_EBANX_Constants
 	const COUNTRY_MEXICO   = 'mx';
 	const COUNTRY_COLOMBIA = 'co';
 
+	/**
+	 * The full name of countries that EBANX processes
+	 */
 	const COUNTRY_BRAZIL_NAME = 'Brazil';
 	const COUNTRY_CHILE_NAME = 'Chile';
 	const COUNTRY_COLOMBIA_NAME = 'Colombia';
 	const COUNTRY_PERU_NAME = 'Peru';
 	const COUNTRY_MEXICO_NAME = 'Mexico';
 
+	/**
+	 * The fixed URL to our settings page, always use this one if you want to redirect to it
+	 */
 	const SETTINGS_URL = 'admin.php?page=wc-settings&tab=checkout&section=ebanx-global';
 
 	/**
@@ -69,7 +71,7 @@ abstract class WC_EBANX_Constants
 	const MAX_INSTALMENTS = 12;
 
 	/**
-	* Taxtes applied by country
+	* Taxes applied by country
 	*/
 	const BRAZIL_TAX = 0.0038;
 
