@@ -327,11 +327,9 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
 			}
 
 			$instalment_price = $cart_total / $number;
-			$instalment_amount = strip_tags( wc_price( $instalment_price ) );
 
 			$instalments[] = array(
 				'price' => $instalment_price,
-				'amount' => $instalment_amount,
 				'has_interest' => $has_interest,
 				'number' => $number
 			);
