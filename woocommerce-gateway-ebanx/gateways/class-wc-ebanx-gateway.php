@@ -336,6 +336,8 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
 
 		$hash = get_post_meta($order->id, '_ebanx_payment_hash', true);
 
+		do_action('ebanx_before_process_refund', $order, $hash);
+
 		if (!$order || is_null($amount) || !$hash) {
 			return false;
 		}
@@ -357,6 +359,8 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
 		$request = \Ebanx\EBANX::doRefund($data);
 
 		if ($request->status !== 'SUCCESS') {
+			do_action('ebanx_process_refund_error', $order, $request);
+
 			return false;
 		}
 
@@ -369,6 +373,8 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
 		$refunds[] = $request->refund;
 
 		update_post_meta($order->id, "_ebanx_payment_refunds", $refunds);
+
+		do_action('ebanx_after_process_refund', $order, $request, $refunds);
 
 		return true;
 	}
@@ -639,13 +645,15 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
 		try {
 			$order = wc_get_order($order_id);
 
+			do_action('ebanx_before_process_payment', $order);
+
 			if ($order->get_total() > 0) {
 				$data = $this->request_data($order);
 
-				$config = [
+				$config = array(
 					'integrationKey' => $this->private_key,
 					'testMode'       => $this->is_sandbox_mode,
-				];
+				);
 
 				\Ebanx\Config::set($config);
 				\Ebanx\Config::setDirectMode(true);
@@ -660,6 +668,8 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
 			} else {
 				$order->payment_complete();
 			}
+
+			do_action('ebanx_after_process_payment', $order);
 
 			return $this->dispatch(array(
 				'result'   => 'success',
@@ -790,6 +800,8 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
 			WC_EBANX::log("EBANX Error: $message");
 
 			wc_add_notice($message, 'error');
+
+			do_action('ebanx_process_payment_error', $message, $code);
 			return;
 		}
 	}
@@ -915,6 +927,8 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
 		$order->update_status('failed', $error_message);
 		$order->add_order_note($error_message);
 
+		do_action('ebanx_process_response_error', $order, $code);
+
 		throw new Exception($code);
 	}
 
@@ -963,6 +977,8 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
 
 		// Save user's fields
 		$this->save_user_meta_fields($order);
+
+		do_action('ebanx_process_response', $order);
 	}
 
 	/**
@@ -974,10 +990,12 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
 	 */
 	final public function process_hook(array $codes, $notificationType)
 	{
-		$config = [
+		do_action('ebanx_before_process_hook', $order, $notificationType);
+
+		$config = array(
 			'integrationKey' => $this->private_key,
 			'testMode'       => $this->is_sandbox_mode,
-		];
+		);
 
 		\Ebanx\Config::set($config);
 
@@ -1047,6 +1065,8 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
 				}
 				break;
 		};
+
+		do_action('ebanx_after_process_hook', $order, $notificationType);
 
 		return $order;
 	}
