@@ -245,7 +245,7 @@ if (!class_exists('WC_EBANX')) {
 		{
 			$json = json_encode(array(
 				'ebanx' => true,
-				'version' => self::VERSION
+				'version' => self::get_plugin_version()
 			));
 			echo $json;
 			exit;
