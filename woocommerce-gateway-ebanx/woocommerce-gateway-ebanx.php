@@ -776,7 +776,7 @@ if (!class_exists('WC_EBANX')) {
 		 * @return void
 		 */
 		public function ebanx_admin_order_details ($order) {
-			if (in_array($order->payment_method, WC_EBANX_Constants::flatten(WC_EBANX_Constants::$EBANX_GATEWAYS_BY_COUNTRY))) {
+			if (in_array($order->payment_method, WC_EBANX_Helper::flatten(WC_EBANX_Constants::$EBANX_GATEWAYS_BY_COUNTRY))) {
 				$payment_hash = get_post_meta($order->id, '_ebanx_payment_hash', true);
 
 				wc_get_template(
