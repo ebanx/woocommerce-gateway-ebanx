@@ -518,6 +518,7 @@ if (!class_exists('WC_EBANX')) {
 
 			// Utils
 			include_once SERVICES_DIR . 'class-wc-ebanx-constants.php';
+			include_once SERVICES_DIR . 'class-wc-ebanx-helper.php';
 			include_once SERVICES_DIR . 'class-wc-ebanx-notice.php';
 			include_once SERVICES_DIR . 'class-wc-ebanx-hooks.php';
 			include_once SERVICES_DIR . 'class-wc-ebanx-checker.php';
