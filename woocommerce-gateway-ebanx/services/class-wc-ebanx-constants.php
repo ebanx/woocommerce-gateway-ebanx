@@ -25,6 +25,8 @@ abstract class WC_EBANX_Constants
 	const COUNTRY_PERU_NAME = 'Peru';
 	const COUNTRY_MEXICO_NAME = 'Mexico';
 
+	const SETTINGS_URL = 'admin.php?page=wc-settings&tab=checkout&section=ebanx-global';
+
 	/**
 	 * Currencies that EBANX processes
 	 */

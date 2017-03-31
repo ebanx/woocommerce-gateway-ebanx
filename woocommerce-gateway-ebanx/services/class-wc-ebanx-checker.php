@@ -17,7 +17,7 @@ class WC_EBANX_Checker {
 			return;
 		}
 
-		$info_message = __('EBANX Gateway - The Sandbox Mode option is enabled, in this mode, none of your transactions will be processed.', 'woocommerce-gateway-ebanx');
+		$info_message = __('EBANX - The Sandbox Mode option is enabled, in this mode, none of your transactions will be processed.', 'woocommerce-gateway-ebanx');
 		$context->notices
 			->with_message($info_message)
 			->with_type('info')
@@ -33,6 +33,16 @@ class WC_EBANX_Checker {
 	public static function check_merchant_api_keys($context)
 	{
 		try {
+			if (empty($context->public_key) && empty($context->private_key)) {
+				$context->notices
+					->with_message(sprintf(__('EBANX - We are almost there. To start selling, <a href="%s">set your integration keys.</a>', 'woocommerce-gateway-ebanx'), admin_url( WC_EBANX_Constants::SETTINGS_URL )))
+					->with_type('warning')
+					->persistent()
+					->enqueue();
+
+				return;
+			}
+
 			if (get_option('_ebanx_api_was_checked') === 'success') {
 				return;
 			}
@@ -56,7 +66,7 @@ class WC_EBANX_Checker {
 
 			$api_url = 'https://api.ebanx.com';
 
-			$message = sprintf('Could not connect to EBANX servers. Please check if your server can reach our API (<a href="%1$s">%1$s</a>) and your integrations keys are correct.', $api_url);
+			$message = sprintf('EBANX - Could not connect to our servers. Please check if your server can reach our API (<a href="%1$s">%1$s</a>) and your integrations keys are correct.', $api_url);
 			$context->notices
 				->with_message($message)
 				->with_type('error')
