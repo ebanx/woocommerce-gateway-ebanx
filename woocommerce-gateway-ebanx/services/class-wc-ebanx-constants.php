@@ -11,7 +11,7 @@ if (!defined('ABSPATH')) {
 abstract class WC_EBANX_Constants
 {
 	/**
-	 * Countries that EBANX process
+	 * Countries that EBANX processes
 	 */
 	const COUNTRY_PERU     = 'pe';
 	const COUNTRY_CHILE    = 'cl';
@@ -19,6 +19,9 @@ abstract class WC_EBANX_Constants
 	const COUNTRY_MEXICO   = 'mx';
 	const COUNTRY_COLOMBIA = 'co';
 
+	/**
+	 * The full name of countries that EBANX processes
+	 */
 	const COUNTRY_BRAZIL_NAME = 'Brazil';
 	const COUNTRY_CHILE_NAME = 'Chile';
 	const COUNTRY_COLOMBIA_NAME = 'Colombia';
