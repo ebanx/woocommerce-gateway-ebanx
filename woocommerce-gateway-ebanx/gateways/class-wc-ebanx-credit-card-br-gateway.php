@@ -43,20 +43,6 @@ class WC_EBANX_Credit_Card_BR_Gateway extends WC_EBANX_Credit_Card_Gateway
 	}
 
 	/**
-	 * Check the Auto Capture
-	 *
-	 * @param  array $actions
-	 * @return array
-	 */
-	public function auto_capture($actions) {
-		if (is_array($actions)) {
-			$actions['custom_action'] = __('Capture by EBANX');
-		}
-
-		return $actions;
-	}
-
-	/**
 	 * Action to capture the payment
 	 *
 	 * @param  WC_Order $order WooCommerce Order
