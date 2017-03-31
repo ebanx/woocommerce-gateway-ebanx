@@ -229,6 +229,14 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
 		}
 	}
 
+	/**
+	 * The main method to process the payment came from WooCommerce checkout
+	 * This method check the informations sent by WooCommerce and if them are fine, it sends the request to EBANX API
+	 * The catch captures the errors and check the code sent by EBANX API and then show to the users the right error message
+	 *
+	 * @param  integer $order_id    The ID of the order created
+	 * @return void
+	 */
 	public function process_payment($order_id)
 	{
 		if ( isset( $_POST['ebanx_billing_instalments'] ) ) {
