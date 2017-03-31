@@ -51,7 +51,7 @@ class WC_EBANX_Debit_Card_Gateway extends WC_EBANX_Gateway
 	{
 		if (is_checkout()) {
 			wp_enqueue_script('wc-debit-card-form');
-			wp_enqueue_script('woocommerce_ebanx_debit', plugins_url('assets/js/debit-card.js', WC_EBANX::DIR), array('jquery-payment'), WC_EBANX::VERSION, true);
+			wp_enqueue_script('woocommerce_ebanx_debit', plugins_url('assets/js/debit-card.js', WC_EBANX::DIR), array('jquery-payment'), WC_EBANX::get_plugin_version(), true);
 		}
 
 		parent::checkout_assets();

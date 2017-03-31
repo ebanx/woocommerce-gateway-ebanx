@@ -88,8 +88,8 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
 			wp_enqueue_script('wc-credit-card-form');
 			// Using // to avoid conflicts between http and https protocols
 			wp_enqueue_script('ebanx', '//js.ebanx.com/ebanx-1.5.min.js', '', null, true);
-			wp_enqueue_script('woocommerce_ebanx_jquery_mask', plugins_url('assets/js/jquery-mask.js', WC_EBANX::DIR), array('jquery'), WC_EBANX::VERSION, true);
-			wp_enqueue_script('woocommerce_ebanx', plugins_url('assets/js/credit-card.js', WC_EBANX::DIR), array('jquery-payment', 'ebanx'), WC_EBANX::VERSION, true);
+			wp_enqueue_script('woocommerce_ebanx_jquery_mask', plugins_url('assets/js/jquery-mask.js', WC_EBANX::DIR), array('jquery'), WC_EBANX::get_plugin_version(), true);
+			wp_enqueue_script('woocommerce_ebanx', plugins_url('assets/js/credit-card.js', WC_EBANX::DIR), array('jquery-payment', 'ebanx'), WC_EBANX::get_plugin_version(), true);
 
 			// If we're on the checkout page we need to pass ebanx.js the address of the order.
 			if (is_checkout_pay_page() && isset($_GET['order']) && isset($_GET['order_id'])) {

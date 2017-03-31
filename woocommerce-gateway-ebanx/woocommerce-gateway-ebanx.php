@@ -44,8 +44,6 @@ if (!class_exists('WC_EBANX')) {
 		 *
 		 * @var string
 		 */
-		const VERSION = '1.10.1';
-
 		const DIR = __FILE__;
 
 		/**
@@ -133,6 +131,26 @@ if (!class_exists('WC_EBANX')) {
 			$this->is_sandbox_mode = $this->configs->settings['sandbox_mode_enabled'] === 'yes';
 			$this->private_key = $this->is_sandbox_mode ? $this->configs->settings['sandbox_private_key'] : $this->configs->settings['live_private_key'];
 			$this->public_key = $this->is_sandbox_mode ? $this->configs->settings['sandbox_public_key'] : $this->configs->settings['live_public_key'];
+		}
+
+		/**
+		 * Extract some informations from the plugin
+		 * @param  string $info The information that you want to extract, possible values: version, name, description, author, network
+		 * @return string       The value extracted
+		 */
+		public static function get_plugin_info($info = 'name') {
+			$plugin = get_file_data(__FILE__, array($info => $info));
+
+			return $plugin[$info];
+		}
+
+		/**
+		 * Extract the plugin version described on plugin's header
+		 *
+		 * @return string The plugin version
+		 */
+		public static function get_plugin_version() {
+			return self::get_plugin_info('version');
 		}
 
 		/**
@@ -670,14 +688,14 @@ if (!class_exists('WC_EBANX')) {
 				'woocommerce_ebanx_payments_options',
 				plugins_url('assets/js/payments-options.js', WC_EBANX::DIR),
 				array('jquery'),
-				WC_EBANX::VERSION,
+				WC_EBANX::get_plugin_version(),
 				true
 			);
 			wp_enqueue_script(
 				'woocommerce_ebanx_advanced_options',
 				plugins_url('assets/js/advanced-options.js', WC_EBANX::DIR),
 				array('jquery'),
-				WC_EBANX::VERSION,
+				WC_EBANX::get_plugin_version(),
 				true
 			);
 		}
