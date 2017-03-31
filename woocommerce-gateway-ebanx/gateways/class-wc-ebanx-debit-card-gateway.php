@@ -30,7 +30,7 @@ class WC_EBANX_Debit_Card_Gateway extends WC_EBANX_Gateway
 	 */
 	public function is_available()
 	{
-		return parent::is_available() && $this->getTransactionAddress('country') === WC_Ebanx_Gateway_Utils::COUNTRY_MEXICO;
+		return parent::is_available() && $this->getTransactionAddress('country') === WC_EBANX_Constants::COUNTRY_MEXICO;
 	}
 
 	/**
@@ -39,7 +39,7 @@ class WC_EBANX_Debit_Card_Gateway extends WC_EBANX_Gateway
 	 * @return boolean          Return true if EBANX process the currency
 	 */
 	public function ebanx_process_merchant_currency($currency) {
-		return $currency === WC_EBANX_Gateway_Utils::CURRENCY_CODE_MXN;
+		return $currency === WC_EBANX_Constants::CURRENCY_CODE_MXN;
 	}
 
 	/**
@@ -69,12 +69,13 @@ class WC_EBANX_Debit_Card_Gateway extends WC_EBANX_Gateway
 		wc_get_template(
 			'debit-card/payment-form.php',
 			array(
-				'language' => $this->language,
 				'cart_total' => $this->get_order_total()
 			),
 			'woocommerce/ebanx/',
-			WC_Ebanx::get_templates_path()
+			WC_EBANX::get_templates_path()
 		);
+
+		parent::checkout_rate_conversion(WC_EBANX_Constants::CURRENCY_CODE_MXN);
 	}
 
 	/**

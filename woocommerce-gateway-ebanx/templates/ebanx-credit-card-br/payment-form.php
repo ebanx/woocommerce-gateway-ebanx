@@ -12,7 +12,7 @@ if (!defined('ABSPATH')) {
 }
 ?>
 
-<div id="ebanx-credit-cart-form" class="ebanx-payment-container ebanx-language-<?php echo $language ?>">
+<div id="ebanx-credit-cart-form" class="ebanx-payment-container ebanx-language-br">
     <section class="ebanx-form-row">
     	<?php if (!empty($cards)): ?>
     		<?php foreach ($cards as $k => $card): ?>
@@ -35,7 +35,7 @@ if (!defined('ABSPATH')) {
             					<input type="hidden" autocomplete="off" value="<?php echo $card->masked_number; ?>" class="ebanx-card-masked-number-use" />
         					</section>
 
-                            <?php include WC_EBANX::get_templates_path() . '/instalments.php'; ?>
+                            <?php include WC_EBANX::get_templates_path() . 'instalments.php'; ?>
         				</section>
         			</div>
                 </div>

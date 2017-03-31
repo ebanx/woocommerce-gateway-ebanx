@@ -1,4 +1,4 @@
-<div class="ebanx-credit-card-template ebanx-language-<?php echo $language ?>">
+<div class="ebanx-credit-card-template ebanx-language-es">
     <section class="ebanx-form-row">
         <label for="ebanx-card-holder-name"><?php _e('Titular de la tarjeta', 'woocommerce-gateway-ebanx'); ?><span class="required">*</span></label>
         <input id="ebanx-card-holder-name" class="wc-credit-card-form-card-name input-text" type="text" autocomplete="off" />
@@ -18,7 +18,7 @@
         <input id="ebanx-card-cvv" class="input-text wc-credit-card-form-card-cvc" type="tel" autocomplete="off" placeholder="<?php _e('CVV', 'woocommerce-gateway-ebanx');?>" />
     </section>
 
-    <?php include WC_EBANX::get_templates_path() . '/instalments.php'; ?>
+    <?php include WC_EBANX::get_templates_path() . 'instalments.php'; ?>
 
     <?php if ($place_order_enabled) : ?>
         <section class="ebanx-form-row">

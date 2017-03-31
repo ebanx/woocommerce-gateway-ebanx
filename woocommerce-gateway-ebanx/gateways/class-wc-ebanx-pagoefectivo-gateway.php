@@ -30,7 +30,7 @@ class WC_EBANX_Pagoefectivo_Gateway extends WC_EBANX_Gateway
 	 */
 	public function is_available()
 	{
-		return parent::is_available() && $this->getTransactionAddress('country') == WC_EBANX_Gateway_Utils::COUNTRY_PERU;
+		return parent::is_available() && $this->getTransactionAddress('country') == WC_EBANX_Constants::COUNTRY_PERU;
 	}
 
 	/**
@@ -39,7 +39,7 @@ class WC_EBANX_Pagoefectivo_Gateway extends WC_EBANX_Gateway
 	 * @return boolean          Return true if EBANX process the currency
 	 */
 	public function ebanx_process_merchant_currency($currency) {
-		return $currency === WC_EBANX_Gateway_Utils::CURRENCY_CODE_PEN;
+		return $currency === WC_EBANX_Constants::CURRENCY_CODE_PEN;
 	}
 
 	/**
@@ -53,12 +53,12 @@ class WC_EBANX_Pagoefectivo_Gateway extends WC_EBANX_Gateway
 
 		wc_get_template(
 			'pagoefectivo/payment-form.php',
-			array(
-				'language'    => $this->language,
-			),
+			array(),
 			'woocommerce/ebanx/',
 			WC_EBANX::get_templates_path()
 		);
+
+		parent::checkout_rate_conversion(WC_EBANX_Constants::CURRENCY_CODE_PEN);
 	}
 
 	/**

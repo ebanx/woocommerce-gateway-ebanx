@@ -4,7 +4,7 @@ if (!defined('ABSPATH')) {
 	exit;
 }
 
-class WC_EBANX_Notices_Notice {
+class WC_EBANX_Notice {
 
 	/**
 	 * The message of the notice
@@ -128,7 +128,7 @@ class WC_EBANX_Notices_Notice {
 		if (isset($this->view)) {
 			$view = $this->view;
 			add_action('admin_notices', function () use ($view) {
-				include INCLUDES_DIR . 'admin/views/html-notice-'.$view.'.php';
+				include TEMPLATES_DIR . 'views/html-notice-'.$view.'.php';
 			});
 			$this->view = null;
 			return $this;
@@ -159,7 +159,7 @@ class WC_EBANX_Notices_Notice {
 	public function display() {
 		if (isset($this->view)) {
 			$view = $this->view;
-			include INCLUDES_DIR . 'admin/views/html-notice-'.$view.'.php';
+			include TEMPLATES_DIR . 'views/html-notice-'.$view.'.php';
 			$this->view = null;
 			return $this;
 		}

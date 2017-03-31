@@ -30,7 +30,7 @@ class WC_EBANX_Oxxo_Gateway extends WC_EBANX_Gateway
 	 */
 	public function is_available()
 	{
-		return parent::is_available() && $this->getTransactionAddress('country') == WC_EBANX_Gateway_Utils::COUNTRY_MEXICO;
+		return parent::is_available() && $this->getTransactionAddress('country') == WC_EBANX_Constants::COUNTRY_MEXICO;
 	}
 
 	/**
@@ -39,7 +39,7 @@ class WC_EBANX_Oxxo_Gateway extends WC_EBANX_Gateway
 	 * @return boolean          Return true if EBANX process the currency
 	 */
 	public function ebanx_process_merchant_currency($currency) {
-		return $currency === WC_EBANX_Gateway_Utils::CURRENCY_CODE_MXN;
+		return $currency === WC_EBANX_Constants::CURRENCY_CODE_MXN;
 	}
 
 	/**
@@ -53,12 +53,12 @@ class WC_EBANX_Oxxo_Gateway extends WC_EBANX_Gateway
 
 		wc_get_template(
 			'oxxo/payment-form.php',
-			array(
-				'language' => $this->language,
-			),
+			array(),
 			'woocommerce/ebanx/',
 			WC_EBANX::get_templates_path()
 		);
+
+		parent::checkout_rate_conversion(WC_EBANX_Constants::CURRENCY_CODE_MXN);
 	}
 
 	/**
@@ -73,6 +73,7 @@ class WC_EBANX_Oxxo_Gateway extends WC_EBANX_Gateway
 		parent::save_order_meta_fields($order, $request);
 
 		update_post_meta($order->id, '_oxxo_url', $request->payment->oxxo_url);
+		update_post_meta($order->id, '_payment_due_date', $request->payment->due_date);
 	}
 
 	/**
@@ -89,6 +90,8 @@ class WC_EBANX_Oxxo_Gateway extends WC_EBANX_Gateway
 		$oxxo_print = $oxxo_url . "&format=print";
 		$customer_email = get_post_meta($order->id, '_ebanx_payment_customer_email', true);
 		$oxxo_hash = get_post_meta($order->id, '_ebanx_payment_hash', true);
+		$customer_name = $order->billing_first_name;
+		$oxxo_due_date = get_post_meta($order->id, '_payment_due_date', true);
 
 		$data = array(
 			'data' => array(
@@ -96,7 +99,9 @@ class WC_EBANX_Oxxo_Gateway extends WC_EBANX_Gateway
 				'url_pdf'        => $oxxo_pdf,
 				'url_print'      => $oxxo_print,
 				'url_iframe'      => get_site_url() . '/?ebanx=order-received&hash=' . $oxxo_hash . '&payment_type=oxxo',
-				'customer_email' => $customer_email
+				'customer_email' => $customer_email,
+				'customer_name'   => $customer_name,
+				'due_date'        => $oxxo_due_date
 			),
 			'order_status' => $order->get_status(),
 			'method' => 'oxxo'
@@ -133,7 +138,6 @@ class WC_EBANX_Oxxo_Gateway extends WC_EBANX_Gateway
 		}*/
 
 		$data = parent::request_data($order);
-
 		$data['payment']['payment_type_code'] = $this->api_name;
 
 		return $data;

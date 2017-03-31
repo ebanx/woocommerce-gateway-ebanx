@@ -5,7 +5,7 @@
  * Description: Offer Latin American local payment methods & increase your conversion rates with the solution used by AliExpress, AirBnB and Spotify in Brazil.
  * Author: EBANX
  * Author URI: https://www.ebanx.com/business/en
- * Version: 1.8.1
+ * Version: 1.10.1
  * License: MIT
  * Text Domain: woocommerce-gateway-ebanx
  * Domain Path: /languages
@@ -20,14 +20,18 @@ if (!defined('ABSPATH')) {
 define('WC_EBANX_MIN_PHP_VER', '5.3.0');
 define('WC_EBANX_MIN_WC_VER', '2.5.0');
 define('PLUGIN_DIR_URL', plugin_dir_url(__FILE__) . DIRECTORY_SEPARATOR);
-define('INCLUDES_DIR', __DIR__ . DIRECTORY_SEPARATOR . 'includes' . DIRECTORY_SEPARATOR);
+define('GATEWAYS_DIR', __DIR__ . DIRECTORY_SEPARATOR . 'gateways' . DIRECTORY_SEPARATOR);
 define('SERVICES_DIR', __DIR__ . DIRECTORY_SEPARATOR . 'services' . DIRECTORY_SEPARATOR);
+define('LANGUAGES_DIR', __DIR__ . DIRECTORY_SEPARATOR . 'languages' . DIRECTORY_SEPARATOR);
+define('TEMPLATES_DIR', __DIR__ . DIRECTORY_SEPARATOR . 'templates' . DIRECTORY_SEPARATOR);
+define('VENDOR_DIR', __DIR__ . DIRECTORY_SEPARATOR . 'vendor' . DIRECTORY_SEPARATOR);
+define('ASSETS_DIR', __DIR__ . DIRECTORY_SEPARATOR . 'assets' . DIRECTORY_SEPARATOR);
 
 if (!class_exists('WC_EBANX')) {
 	/**
 	 * Hooks
 	 */
-	register_activation_hook(__FILE__, array('WC_EBANX', 'active_plugin'));
+	register_activation_hook(__FILE__, array('WC_EBANX', 'activate_plugin'));
 	register_deactivation_hook(__FILE__, array('WC_EBANX', 'deactivate_plugin'));
 
 	/**
@@ -40,7 +44,7 @@ if (!class_exists('WC_EBANX')) {
 		 *
 		 * @var string
 		 */
-		const VERSION = '1.8.1';
+		const VERSION = '1.10.1';
 
 		const DIR = __FILE__;
 
@@ -62,8 +66,9 @@ if (!class_exists('WC_EBANX')) {
 		 */
 		private function __construct()
 		{
-			include_once(INCLUDES_DIR . 'notices/class-wc-ebanx-notices-notice.php');
-			$this->notices = new WC_EBANX_Notices_Notice();
+			include_once SERVICES_DIR . 'class-wc-ebanx-notice.php';
+
+			$this->notices = new WC_EBANX_Notice();
 
 			if (!class_exists('WC_Payment_Gateway')) {
 				$this->notices
@@ -72,25 +77,38 @@ if (!class_exists('WC_EBANX')) {
 				return;
 			}
 			/**
+			 * i18n
+			 */
+			$this->enable_i18n();
+
+			/**
+			 * Includes
+			 */
+			$this->includes();
+
+			/**
 			 * Actions
 			 */
 			add_action('plugins_loaded', array($this, 'plugins_loaded'));
 
 			add_action('init', array($this, 'my_account_endpoint'));
 			add_action('init', array($this, 'ebanx_router'));
-
 			add_action('admin_footer', array($this, 'render_static_assets'), 0);
-
-			add_action('admin_init', array($this, 'check_environment'));
 			add_action('admin_init', array($this, 'ebanx_sidebar_shortcut'));
+			add_action('admin_init', array('WC_EBANX_Flash', 'enqueue_admin_messages'));
 
 			if ( empty( $_POST ) ) {
 				add_action('admin_init', array($this, 'setup_configs'), 10);
-				add_action('admin_init', array($this, 'check_merchant_api_keys'), 20);
 				add_action('admin_init', array($this, 'checker'), 30);
 			}
 
 			add_action('woocommerce_account_' . self::$endpoint . '_endpoint', array($this, 'my_account_template'));
+			add_action('woocommerce_settings_saved', array($this, 'setup_configs'), 10);
+			add_action('woocommerce_settings_saved', array($this, 'on_save_settings'), 10);
+			add_action('woocommerce_settings_saved', array($this, 'update_lead'), 20);
+			add_action('woocommerce_settings_saved', array($this, 'checker'), 20);
+
+			add_action('woocommerce_admin_order_data_after_order_details', array($this, 'ebanx_admin_order_details'), 10, 1);
 
 			/**
 			 * Filters
@@ -98,23 +116,9 @@ if (!class_exists('WC_EBANX')) {
 			add_filter('query_vars', array($this, 'my_account_query_vars'), 0);
 			add_filter('woocommerce_account_menu_items', array($this, 'my_account_menus'));
 			add_filter('the_title', array($this, 'my_account_menus_title'));
-
-			/**
-			 * i18n
-			 */
-			$this->enable_i18n();
-
-			$this->includes();
-
 			add_filter('woocommerce_payment_gateways', array($this, 'add_gateway'));
 			add_filter('plugin_action_links_' . plugin_basename(__FILE__), array($this, 'plugin_action_links'));
-
-			add_action('woocommerce_settings_saved', array($this, 'setup_configs'), 10);
-			add_action('woocommerce_settings_saved', array($this, 'update_lead'), 20);
-			add_action('woocommerce_settings_saved', array($this, 'check_merchant_api_keys'), 20);
-			add_action('woocommerce_settings_saved', array($this, 'checker'), 30);
 		}
-
 
 		/**
 		* Sets up the configuration object
@@ -137,9 +141,10 @@ if (!class_exists('WC_EBANX')) {
 		* @return void
 		*/
 		public function checker() {
-
 			WC_EBANX_Checker::check_sandbox_mode($this);
-
+			WC_EBANX_Checker::check_merchant_api_keys($this);
+			WC_EBANX_Checker::check_environment($this);
+			WC_EBANX_Checker::check_currency($this);
 		}
 
 		/**
@@ -149,7 +154,7 @@ if (!class_exists('WC_EBANX')) {
 		 */
 		public function plugins_loaded()
 		{
-			if (self::get_environment_warning()) {
+			if ($this->get_environment_warning()) {
 				return;
 			}
 		}
@@ -220,8 +225,9 @@ if (!class_exists('WC_EBANX')) {
 		private function ebanx_dashboard_check()
 		{
 			$json = json_encode(array(
-				'ebanx' => true
-				));
+				'ebanx' => true,
+				'version' => self::VERSION
+			));
 			echo $json;
 			exit;
 		}
@@ -345,6 +351,18 @@ if (!class_exists('WC_EBANX')) {
 		}
 
 		/**
+		 * A method that will be called every time settings are saved
+		 *
+		 * @return void
+		 */
+		public function on_save_settings() {
+			// Delete flag that check if the api is ok
+			delete_option('_ebanx_api_was_checked');
+
+			do_action('ebanx_settings_saved', $_POST);
+		}
+
+		/**
 		 * Update and inegrate the lead to the merchant using the merchant's integration key
 		 *
 		 * @return void
@@ -371,10 +389,12 @@ if (!class_exists('WC_EBANX')) {
 		 *
 		 * @return void
 		 */
-		public static function active_plugin() {
+		public static function activate_plugin() {
 			self::save_merchant_infos();
 
 			flush_rewrite_rules();
+
+			do_action('ebanx_activate_plugin');
 		}
 
 		/**
@@ -384,6 +404,8 @@ if (!class_exists('WC_EBANX')) {
 		 */
 		public static function deactivate_plugin() {
 			flush_rewrite_rules();
+
+			do_action('ebanx_deactivate_plugin');
 		}
 
 		/**
@@ -427,62 +449,11 @@ if (!class_exists('WC_EBANX')) {
 		}
 
 		/**
-		 * Check if the merchant environment
-		 *
-		 * @return void
-		 */
-		public function check_environment()
-		{
-			$environment_warning = self::get_environment_warning();
-
-			if ($environment_warning && is_plugin_active(plugin_basename(__FILE__))) {
-				$this->notices
-					->with_message($environment_warning)
-					->with_type('error')
-					->persistent()
-					->enqueue();
-			}
-		}
-
-		/**
-		 * Check if the merchant's integration keys are valid
-		 *
-		 * @return boolean
-		 */
-		public function check_merchant_api_keys()
-		{
-			\Ebanx\Config::set(array('integrationKey' => $this->private_key, 'testMode' => $this->is_sandbox_mode));
-
-			try {
-				$res = \Ebanx\Ebanx::getMerchantIntegrationProperties(array('integrationKey' => $this->private_key));
-				$res_public = \Ebanx\Ebanx::getMerchantIntegrationPublicProperties(array('public_integration_key' => $this->public_key));
-
-				if ( $res->status !== 'SUCCESS' || $res_public->status !== 'SUCCESS' ) {
-					throw new Exception('CONNECTION-ERROR');
-				}
-			} catch (Exception $e) {
-				$api_url = 'https://api.ebanx.com';
-
-				$message = sprintf('Could not connect to EBANX servers. Please check if your server can reach our API (<a href="%1$s">%1$s</a>) and your integrations keys are correct.', $api_url);
-				$this->notices
-					->with_message($message)
-					->with_type('error')
-					->persistent();
-				if (empty($_POST)) {
-					$this->notices->enqueue();
-					return;
-				}
-				$this->notices->display();
-			}
-		}
-
-
-		/**
 		 * Check if the merchant's environment meets the requirements
 		 *
 		 * @return boolean|string
 		 */
-		public static function get_environment_warning()
+		public function get_environment_warning()
 		{
 			if (version_compare(phpversion(), WC_EBANX_MIN_PHP_VER, '<')) {
 				$message = __('EBANX Payment Gateway for WooCommerce - The minimum PHP version required for this plugin is %1$s. You are running %2$s.', 'woocommerce-gateway-ebanx', 'woocommerce-gateway-ebanx');
@@ -523,30 +494,48 @@ if (!class_exists('WC_EBANX')) {
 		 */
 		private function includes()
 		{
-			include_once(INCLUDES_DIR . 'class-wc-ebanx-custom-order.php');
-			include_once(INCLUDES_DIR . 'class-wc-ebanx-gateway-utils.php');
-			include_once(INCLUDES_DIR . 'class-wc-ebanx-gateway.php');
-			include_once(INCLUDES_DIR . 'class-wc-ebanx-redirect-gateway.php');
-			include_once(INCLUDES_DIR . 'class-wc-ebanx-pagoefectivo-gateway.php');
-			include_once(INCLUDES_DIR . 'class-wc-ebanx-sencillito-gateway.php');
-			include_once(INCLUDES_DIR . 'class-wc-ebanx-account-gateway.php');
-			include_once(INCLUDES_DIR . 'class-wc-ebanx-safetypay-gateway.php');
-			include_once(INCLUDES_DIR . 'class-wc-ebanx-my-account.php');
-			include_once(INCLUDES_DIR . 'class-wc-ebanx-banking-ticket-gateway.php');
-			include_once(INCLUDES_DIR . 'class-wc-ebanx-global-gateway.php');
-			include_once(INCLUDES_DIR . 'class-wc-ebanx-credit-card-gateway.php');
-			include_once(INCLUDES_DIR . 'class-wc-ebanx-credit-card-br-gateway.php');
-			include_once(INCLUDES_DIR . 'class-wc-ebanx-credit-card-mx-gateway.php');
-			include_once(INCLUDES_DIR . 'class-wc-ebanx-debit-card-gateway.php');
-			include_once(INCLUDES_DIR . 'class-wc-ebanx-oxxo-gateway.php');
-			include_once(INCLUDES_DIR . 'class-wc-ebanx-servipag-gateway.php');
-			include_once(INCLUDES_DIR . 'class-wc-ebanx-tef-gateway.php');
-			include_once(INCLUDES_DIR . 'class-wc-ebanx-eft-gateway.php');
-			include_once(INCLUDES_DIR . 'class-wc-ebanx-baloto-gateway.php');
-			include_once(INCLUDES_DIR . 'class-wc-ebanx-one-click.php');
-			include_once(SERVICES_DIR . 'class-wc-ebanx-hooks.php');
-			include_once(INCLUDES_DIR . 'notices/class-wc-ebanx-notices-notice.php');
-			include_once(INCLUDES_DIR . 'class-wc-ebanx-checker.php');
+			// Custom Order
+			include_once SERVICES_DIR . 'class-wc-ebanx-custom-order.php';
+
+			// Utils
+			include_once SERVICES_DIR . 'class-wc-ebanx-constants.php';
+			include_once SERVICES_DIR . 'class-wc-ebanx-notice.php';
+			include_once SERVICES_DIR . 'class-wc-ebanx-hooks.php';
+			include_once SERVICES_DIR . 'class-wc-ebanx-checker.php';
+			include_once(SERVICES_DIR . 'class-wc-ebanx-flash.php');
+
+			// Gateways
+			include_once GATEWAYS_DIR . 'class-wc-ebanx-gateway.php';
+			include_once GATEWAYS_DIR . 'class-wc-ebanx-redirect-gateway.php';
+			include_once GATEWAYS_DIR . 'class-wc-ebanx-global-gateway.php';
+			include_once GATEWAYS_DIR . 'class-wc-ebanx-credit-card-gateway.php';
+
+			// Chile Gateways
+			include_once GATEWAYS_DIR . 'class-wc-ebanx-servipag-gateway.php';
+			include_once GATEWAYS_DIR . 'class-wc-ebanx-sencillito-gateway.php';
+
+			// Brazil Gateways
+			include_once GATEWAYS_DIR . 'class-wc-ebanx-banking-ticket-gateway.php';
+			include_once GATEWAYS_DIR . 'class-wc-ebanx-credit-card-br-gateway.php';
+			include_once GATEWAYS_DIR . 'class-wc-ebanx-account-gateway.php';
+			include_once GATEWAYS_DIR . 'class-wc-ebanx-tef-gateway.php';
+
+			// Mexico Gateways
+			include_once GATEWAYS_DIR . 'class-wc-ebanx-credit-card-mx-gateway.php';
+			include_once GATEWAYS_DIR . 'class-wc-ebanx-debit-card-gateway.php';
+			include_once GATEWAYS_DIR . 'class-wc-ebanx-oxxo-gateway.php';
+
+			// Colombia Gateways
+			include_once GATEWAYS_DIR . 'class-wc-ebanx-baloto-gateway.php';
+			include_once GATEWAYS_DIR . 'class-wc-ebanx-eft-gateway.php';
+
+			// Peru Gateways
+			include_once GATEWAYS_DIR . 'class-wc-ebanx-pagoefectivo-gateway.php';
+			include_once GATEWAYS_DIR . 'class-wc-ebanx-safetypay-gateway.php';
+
+			// Hooks/Actions
+			include_once(SERVICES_DIR . 'class-wc-ebanx-my-account.php');
+			include_once(SERVICES_DIR . 'class-wc-ebanx-one-click.php');
 		}
 
 		/**
@@ -556,7 +545,7 @@ if (!class_exists('WC_EBANX')) {
 		 */
 		public static function get_templates_path()
 		{
-			return plugin_dir_path(__FILE__) . 'templates/';
+			return TEMPLATES_DIR;
 		}
 
 		/**
@@ -568,20 +557,31 @@ if (!class_exists('WC_EBANX')) {
 		 */
 		public function add_gateway($methods)
 		{
+			// Global
 			$methods[] = 'WC_EBANX_Global_Gateway';
+
+			// Brazil
 			$methods[] = 'WC_EBANX_Banking_Ticket_Gateway';
 			$methods[] = 'WC_EBANX_Credit_Card_BR_Gateway';
+			$methods[] = 'WC_EBANX_Tef_Gateway';
+			$methods[] = 'WC_EBANX_Account_Gateway';
+
+			// Mexico
 			$methods[] = 'WC_EBANX_Credit_Card_MX_Gateway';
 			$methods[] = 'WC_EBANX_Debit_Card_Gateway';
 			$methods[] = 'WC_EBANX_Oxxo_Gateway';
+
+			// Chile
 			$methods[] = 'WC_EBANX_Sencillito_Gateway';
 			$methods[] = 'WC_EBANX_Servipag_Gateway';
-			$methods[] = 'WC_EBANX_Tef_Gateway';
+
+			// Colombia
+			$methods[] = 'WC_EBANX_Baloto_Gateway';
+			$methods[] = 'WC_EBANX_Eft_Gateway';
+
+			// Peru
 			$methods[] = 'WC_EBANX_Pagoefectivo_Gateway';
 			$methods[] = 'WC_EBANX_Safetypay_Gateway';
-			$methods[] = 'WC_EBANX_Eft_Gateway';
-			$methods[] = 'WC_EBANX_Baloto_Gateway';
-			$methods[] = 'WC_EBANX_Account_Gateway';
 
 			return $methods;
 		}
@@ -610,7 +610,7 @@ if (!class_exists('WC_EBANX')) {
 		public function woocommerce_missing_notice()
 		{
 			// TODO: Others notice here
-			include dirname(self::DIR) . '/includes/admin/views/html-notice-missing-woocommerce.php';
+			include_once TEMPLATES_DIR . 'views/html-notice-missing-woocommerce.php';
 		}
 
 		/**
@@ -636,17 +636,17 @@ if (!class_exists('WC_EBANX')) {
 		 * @return void
 		 */
 		public function render_static_assets() {
-			$this->hide_advanced_options_section();
+			$this->adjust_dynamic_admin_options_sections();
 			$this->resize_settings_menu_icon();
 			$this->disable_ebanx_gateways();
 		}
 
 		/**
-		 * Renders the script to manage the advanced options script part of ebanx gateway configuration
+		 * Renders the script to manage the admin options script part of ebanx gateway configuration
 		 *
 		 * @return void
 		 */
-		public function hide_advanced_options_section() {
+		public function adjust_dynamic_admin_options_sections() {
 			if (!isset($_GET['section']) || $_GET['section'] !== 'ebanx-global') {
 				return;
 			}
@@ -743,11 +743,36 @@ if (!class_exists('WC_EBANX')) {
 				'administrator',
 
 				// TODO: Create a dynamic url
-				'admin.php?page=wc-settings&tab=checkout&section=ebanx-global',
+				WC_EBANX_Constants::SETTINGS_URL,
 				'',
 				'data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz48c3ZnIHdpZHRoPSIxNnB4IiBoZWlnaHQ9IjIwcHgiIHZpZXdCb3g9IjAgMCAxNiAyMCIgdmVyc2lvbj0iMS4xIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIj4gICAgICAgIDx0aXRsZT5lYmFueC1zdmc8L3RpdGxlPiAgICA8ZGVzYz5DcmVhdGVkIHdpdGggU2tldGNoLjwvZGVzYz4gICAgPGRlZnM+PC9kZWZzPiAgICA8ZyBpZD0iUGFnZS0xIiBzdHJva2U9Im5vbmUiIHN0cm9rZS13aWR0aD0iMSIgZmlsbD0ibm9uZSIgZmlsbC1ydWxlPSJldmVub2RkIj4gICAgICAgIDxnIGlkPSJlYmFueC1zdmciPiAgICAgICAgICAgIDxwb2x5Z29uIGlkPSJTaGFwZSIgZmlsbD0iIzFDNDE3OCIgcG9pbnRzPSIwLjExMTYyNzkwNyAwLjA5MDkwOTA5MDkgMTIuNTM5NTM0OSAxMCAwLjExMTYyNzkwNyAxOS45MDkwOTA5Ij48L3BvbHlnb24+ICAgICAgICAgICAgPHBvbHlnb24gaWQ9IlNoYXBlIiBmaWxsPSIjREFEQkRCIiBwb2ludHM9IjkuMTM0ODgzNzIgMTIuNzA5MDkwOSAwLjExMTYyNzkwNyAxOS45MDkwOTA5IDE1Ljk2Mjc5MDcgMTkuODkwOTA5MSI+PC9wb2x5Z29uPiAgICAgICAgICAgIDxwb2x5Z29uIGlkPSJTaGFwZSIgZmlsbD0iI0RBREJEQiIgcG9pbnRzPSIwLjExMTYyNzkwNyAwLjA5MDkwOTA5MDkgOS4xMzQ4ODM3MiA3LjI5MDkwOTA5IDE1Ljk2Mjc5MDcgMC4wOTA5MDkwOTA5Ij48L3BvbHlnb24+ICAgICAgICAgICAgPHBvbHlnb24gaWQ9IlNoYXBlIiBmaWxsPSIjMDA5M0QwIiBwb2ludHM9IjAuMTExNjI3OTA3IDE5LjkwOTA5MDkgOS4xMzQ4ODM3MiAxMi43MDkwOTA5IDYuNzUzNDg4MzcgMTAgMC4xMTE2Mjc5MDcgMTcuMiI+PC9wb2x5Z29uPiAgICAgICAgICAgIDxwb2x5Z29uIGlkPSJTaGFwZSIgZmlsbD0iIzAwQkNFNCIgcG9pbnRzPSIwLjExMTYyNzkwNyAyLjggMC4xMTE2Mjc5MDcgMTcuMiA2Ljc1MzQ4ODM3IDEwIj48L3BvbHlnb24+ICAgICAgICAgICAgPHBvbHlnb24gaWQ9IlNoYXBlIiBmaWxsPSIjMDA5M0QwIiBwb2ludHM9IjAuMTExNjI3OTA3IDAuMDkwOTA5MDkwOSA5LjEzNDg4MzcyIDcuMjkwOTA5MDkgNi43NTM0ODgzNyAxMCAwLjExMTYyNzkwNyAyLjgiPjwvcG9seWdvbj4gICAgICAgIDwvZz4gICAgPC9nPjwvc3ZnPg==',
 				21
 			);
+		}
+
+		/**
+		 * It inserts informations about the order on admin order details
+		 *
+		 * @param  WC_Object $order The WC order object
+		 * @return void
+		 */
+		public function ebanx_admin_order_details ($order) {
+			if (in_array($order->payment_method, WC_EBANX_Constants::flatten(WC_EBANX_Constants::$EBANX_GATEWAYS_BY_COUNTRY))) {
+				$payment_hash = get_post_meta($order->id, '_ebanx_payment_hash', true);
+
+				wc_get_template(
+					'admin-order-details.php',
+					array(
+						'order' => $order,
+						'payment_hash' => $payment_hash,
+						'payment_checkout_url' => get_post_meta($order->id, '_ebanx_checkout_url', true),
+						'is_sandbox_mode' => $this->is_sandbox_mode,
+						'dashboard_link' => "http://dashboard.ebanx.com/" . ($this->is_sandbox_mode ? 'test/' : '') . "payments/?hash=$payment_hash"
+					),
+					'woocommerce/ebanx/',
+					WC_EBANX::get_templates_path()
+				);
+			}
 		}
 	}
 
