@@ -28,6 +28,9 @@ abstract class WC_EBANX_Constants
 	const COUNTRY_PERU_NAME = 'Peru';
 	const COUNTRY_MEXICO_NAME = 'Mexico';
 
+	/**
+	 * The fixed URL to our settings page, always use this one if you want to redirect to it
+	 */
 	const SETTINGS_URL = 'admin.php?page=wc-settings&tab=checkout&section=ebanx-global';
 
 	/**
