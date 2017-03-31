@@ -304,4 +304,70 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
 
 		parent::thankyou_page($data);
 	}
+
+	/**
+	 * Calculates the interests and values of items based on interest rates settings
+	 *
+	 * @param  int $cart_total      The total of the user cart
+	 * @param  int $max_instalments The max number of instalments based on settings
+	 * @return filtered array       An array of instalment with price, amount, if it has interests and the number
+	 */
+	public function get_payment_terms($cart_total, $max_instalments) {
+		$instalments = array();
+		$instalment_taxes = $this->instalment_rates;
+
+		for ($number = 1; $number <= $max_instalments; ++$number) {
+			$has_interest = false;
+
+			if (isset($instalment_taxes) && array_key_exists($number, $instalment_taxes)) {
+				$cart_total += $cart_total * $instalment_taxes[$number];
+				if ($instalment_taxes[$number] > 0) {
+					$has_interest = true;
+				}
+			}
+
+			$instalment_price = $cart_total / $number;
+			$instalment_amount = strip_tags( wc_price( $instalment_price ) );
+
+			$instalments[] = array(
+				'price' => $instalment_price,
+				'amount' => $instalment_amount,
+				'has_interest' => $has_interest,
+				'number' => $number
+			);
+		}
+
+		return apply_filters('ebanx_get_payment_terms', $instalments);
+	}
+
+	/**
+	 * The HTML structure on checkout page
+	 */
+	public function payment_fields() {
+		$cart_total = $this->get_order_total();
+
+		$cards = array_filter((array) get_user_meta($this->userId, '_ebanx_credit_card_token', true), function ($card) {
+			return !empty($card->brand) && !empty($card->token) && !empty($card->masked_number);
+		});
+
+		$max_instalments = min($this->configs->settings['credit_card_instalments'], $this->fetch_acquirer_max_installments_for_price($cart_total, 'br'));
+
+		$instalments_terms = $this->get_payment_terms($cart_total, $max_instalments);
+
+		$country = $this->getTransactionAddress('country');
+
+		wc_get_template(
+			$this->id . '/payment-form.php',
+			array(
+				'instalments_terms' => $instalments_terms,
+				'cards' => (array) $cards,
+				'cart_total' => $cart_total,
+				'max_instalments' => $max_instalments,
+				'place_order_enabled' => (isset($this->configs->settings['save_card_data']) && $this->configs->settings['save_card_data'] === 'yes'),
+				'instalments' => $country === WC_EBANX_Constants::COUNTRY_BRAZIL ? 'Número de parcelas' :  'Meses sin intereses',
+			),
+			'woocommerce/ebanx/',
+			WC_EBANX::get_templates_path()
+		);
+	}
 }
