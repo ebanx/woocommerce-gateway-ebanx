@@ -522,6 +522,7 @@ if (!class_exists('WC_EBANX')) {
 			include_once SERVICES_DIR . 'class-wc-ebanx-hooks.php';
 			include_once SERVICES_DIR . 'class-wc-ebanx-checker.php';
 			include_once(SERVICES_DIR . 'class-wc-ebanx-flash.php');
+			include_once(SERVICES_DIR . 'class-wc-ebanx-request.php');
 
 			// Gateways
 			include_once GATEWAYS_DIR . 'class-wc-ebanx-gateway.php';
