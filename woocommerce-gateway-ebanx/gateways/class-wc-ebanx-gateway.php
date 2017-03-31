@@ -554,7 +554,7 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
 			$addresses .= " - $_POST[billing_address_2]";
 		}
 
-		$addresses = WC_EBANX_Constants::split_street($addresses);
+		$addresses = WC_EBANX_Helper::split_street($addresses);
 
 		$street_number = empty($addresses['houseNumber']) ? 'S/N' : trim($addresses['houseNumber'] . ' ' . $addresses['additionToAddress']);
 		$street_name = $addresses['streetName'];
