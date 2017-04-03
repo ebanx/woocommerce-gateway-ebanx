@@ -493,14 +493,14 @@ if (!class_exists('WC_EBANX')) {
 			include_once WC_EBANX_SERVICES_DIR . 'class-wc-ebanx-custom-order.php';
 
 			// Utils
-			include_once SERVICES_DIR . 'class-wc-ebanx-constants.php';
-			include_once SERVICES_DIR . 'class-wc-ebanx-helper.php';
-			include_once SERVICES_DIR . 'class-wc-ebanx-notice.php';
-			include_once SERVICES_DIR . 'class-wc-ebanx-hooks.php';
-			include_once SERVICES_DIR . 'class-wc-ebanx-checker.php';
-			include_once(SERVICES_DIR . 'class-wc-ebanx-flash.php');
-			include_once(SERVICES_DIR . 'class-wc-ebanx-request.php');
-			include_once(SERVICES_DIR . 'class-wc-ebanx-errors.php');
+			include_once WC_EBANX_SERVICES_DIR . 'class-wc-ebanx-constants.php';
+			include_once WC_EBANX_SERVICES_DIR . 'class-wc-ebanx-helper.php';
+			include_once WC_EBANX_SERVICES_DIR . 'class-wc-ebanx-notice.php';
+			include_once WC_EBANX_SERVICES_DIR . 'class-wc-ebanx-hooks.php';
+			include_once WC_EBANX_SERVICES_DIR . 'class-wc-ebanx-checker.php';
+			include_once WC_EBANX_SERVICES_DIR . 'class-wc-ebanx-flash.php';
+			include_once WC_EBANX_SERVICES_DIR . 'class-wc-ebanx-request.php';
+			include_once WC_EBANX_SERVICES_DIR . 'class-wc-ebanx-errors.php';
 
 			// Gateways
 			include_once WC_EBANX_GATEWAYS_DIR . 'class-wc-ebanx-gateway.php';
@@ -532,8 +532,8 @@ if (!class_exists('WC_EBANX')) {
 			include_once WC_EBANX_GATEWAYS_DIR . 'class-wc-ebanx-safetypay-gateway.php';
 
 			// Hooks/Actions
-			include_once(WC_EBANX_SERVICES_DIR . 'class-wc-ebanx-my-account.php');
-			include_once(WC_EBANX_SERVICES_DIR . 'class-wc-ebanx-one-click.php');
+			include_once WC_EBANX_SERVICES_DIR . 'class-wc-ebanx-my-account.php';
+			include_once WC_EBANX_SERVICES_DIR . 'class-wc-ebanx-one-click.php';
 		}
 
 		/**
