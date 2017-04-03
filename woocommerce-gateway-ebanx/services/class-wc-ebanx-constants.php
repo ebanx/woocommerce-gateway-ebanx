@@ -4,14 +4,10 @@ if (!defined('ABSPATH')) {
 	exit;
 }
 
-/**
- * WC_EBANX_Constants class.
- *
- */
 abstract class WC_EBANX_Constants
 {
 	/**
-	 * Countries that EBANX process
+	 * Countries that EBANX processes
 	 */
 	const COUNTRY_PERU     = 'pe';
 	const COUNTRY_CHILE    = 'cl';
@@ -19,11 +15,19 @@ abstract class WC_EBANX_Constants
 	const COUNTRY_MEXICO   = 'mx';
 	const COUNTRY_COLOMBIA = 'co';
 
+	/**
+	 * The full name of countries that EBANX processes
+	 */
 	const COUNTRY_BRAZIL_NAME = 'Brazil';
 	const COUNTRY_CHILE_NAME = 'Chile';
 	const COUNTRY_COLOMBIA_NAME = 'Colombia';
 	const COUNTRY_PERU_NAME = 'Peru';
 	const COUNTRY_MEXICO_NAME = 'Mexico';
+
+	/**
+	 * The fixed URL to our settings page, always use this one if you want to redirect to it
+	 */
+	const SETTINGS_URL = 'admin.php?page=wc-settings&tab=checkout&section=ebanx-global';
 
 	/**
 	 * Currencies that EBANX processes
@@ -67,7 +71,7 @@ abstract class WC_EBANX_Constants
 	const MAX_INSTALMENTS = 12;
 
 	/**
-	* Taxtes applied by country
+	* Taxes applied by country
 	*/
 	const BRAZIL_TAX = 0.0038;
 
@@ -192,54 +196,4 @@ abstract class WC_EBANX_Constants
 	public static $TYPES_SAFETYPAY_ALLOWED = array(
 		'cash', 'online',
 	);
-
-	/**
-	 * Flatten an array
-	 *
-	 * @param  array  $array The array to flatten
-	 * @return array        The new array flatted
-	 */
-	public static function flatten(array $array) {
-		$return = array();
-		array_walk_recursive($array, function($a) use (&$return) { $return[] = $a; });
-
-		return $return;
-	}
-
-	/**
-	 * Splits address in street name, house number and addition
-	 *
-	 * @param  string $address Address to be split
-	 * @return array
-	 */
-	public static function split_street($address) {
-		$result = preg_match('/^([^,\-\/\#0-9]*)\s*[,\-\/\#]?\s*([0-9]+)\s*[,\-\/]?\s*([^,\-\/]*)(\s*[,\-\/]?\s*)([^,\-\/]*)$/', $address, $matches);
-
-		if ($result === false) {
-			throw new \RuntimeException(sprintf('Problems trying to parse address: \'%s\'', $address));
-		}
-
-		if ($result === 0) {
-			return array(
-				'streetName' => $address,
-				'houseNumber' => '',
-				'additionToAddress' => ''
-			);
-		}
-
-		$street_name = $matches[1];
-		$house_number = $matches[2];
-		$addition_to_address = $matches[3] . $matches[4] . $matches[5];
-
-		if (empty($street_name)) {
-			$street_name = $matches[3];
-			$addition_to_address = $matches[5];
-		}
-
-		return array(
-			'streetName' => $street_name,
-			'houseNumber' => $house_number,
-			'additionToAddress' => $addition_to_address
-		);
-	}
 }

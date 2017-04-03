@@ -359,7 +359,7 @@ class WC_EBANX_One_Click {
 			'woocommerce_ebanx_one_click_script',
 			plugins_url( 'assets/js/one-click.js', WC_EBANX::DIR ),
 			array(),
-			WC_EBANX::VERSION,
+			WC_EBANX::get_plugin_version(),
 			true
 		);
 
