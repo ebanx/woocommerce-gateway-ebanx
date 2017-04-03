@@ -17,15 +17,17 @@ if (!defined('ABSPATH')) {
 	exit;
 }
 
-define('WC_EBANX_MIN_PHP_VER', '5.3.0');
-define('WC_EBANX_MIN_WC_VER', '2.5.0');
-define('PLUGIN_DIR_URL', plugin_dir_url(__FILE__) . DIRECTORY_SEPARATOR);
-define('GATEWAYS_DIR', __DIR__ . DIRECTORY_SEPARATOR . 'gateways' . DIRECTORY_SEPARATOR);
-define('SERVICES_DIR', __DIR__ . DIRECTORY_SEPARATOR . 'services' . DIRECTORY_SEPARATOR);
-define('LANGUAGES_DIR', __DIR__ . DIRECTORY_SEPARATOR . 'languages' . DIRECTORY_SEPARATOR);
-define('TEMPLATES_DIR', __DIR__ . DIRECTORY_SEPARATOR . 'templates' . DIRECTORY_SEPARATOR);
-define('VENDOR_DIR', __DIR__ . DIRECTORY_SEPARATOR . 'vendor' . DIRECTORY_SEPARATOR);
-define('ASSETS_DIR', __DIR__ . DIRECTORY_SEPARATOR . 'assets' . DIRECTORY_SEPARATOR);
+define('WC_EBANX_MIN_PHP_VER', '5.6.0');
+define('WC_EBANX_MIN_WC_VER', '2.6.0');
+define('WC_EBANX_MIN_WP_VER', '4.0.0');
+define('WC_EBANX_PLUGIN_DIR_URL', plugin_dir_url(__FILE__) . DIRECTORY_SEPARATOR);
+define('WC_EBANX_PLUGIN_NAME', WC_EBANX_PLUGIN_DIR_URL . basename(__FILE__));
+define('WC_EBANX_GATEWAYS_DIR', __DIR__ . DIRECTORY_SEPARATOR . 'gateways' . DIRECTORY_SEPARATOR);
+define('WC_EBANX_SERVICES_DIR', __DIR__ . DIRECTORY_SEPARATOR . 'services' . DIRECTORY_SEPARATOR);
+define('WC_EBANX_LANGUAGES_DIR', __DIR__ . DIRECTORY_SEPARATOR . 'languages' . DIRECTORY_SEPARATOR);
+define('WC_EBANX_TEMPLATES_DIR', __DIR__ . DIRECTORY_SEPARATOR . 'templates' . DIRECTORY_SEPARATOR);
+define('WC_EBANX_VENDOR_DIR', __DIR__ . DIRECTORY_SEPARATOR . 'vendor' . DIRECTORY_SEPARATOR);
+define('WC_EBANX_ASSETS_DIR', __DIR__ . DIRECTORY_SEPARATOR . 'assets' . DIRECTORY_SEPARATOR);
 
 if (!class_exists('WC_EBANX')) {
 	/**
@@ -64,7 +66,7 @@ if (!class_exists('WC_EBANX')) {
 		 */
 		private function __construct()
 		{
-			include_once SERVICES_DIR . 'class-wc-ebanx-notice.php';
+			include_once WC_EBANX_SERVICES_DIR . 'class-wc-ebanx-notice.php';
 
 			$this->notices = new WC_EBANX_Notice();
 
@@ -258,7 +260,7 @@ if (!class_exists('WC_EBANX')) {
 		 */
 		public function enable_i18n()
 		{
-			load_plugin_textdomain('woocommerce-gateway-ebanx', false, dirname( plugin_basename(__FILE__) ) . '/languages/');
+			load_plugin_textdomain('woocommerce-gateway-ebanx', false, WC_EBANX_LANGUAGES_DIR);
 		}
 
 		/**
@@ -468,32 +470,6 @@ if (!class_exists('WC_EBANX')) {
 		}
 
 		/**
-		 * Check if the merchant's environment meets the requirements
-		 *
-		 * @return boolean|string
-		 */
-		public function get_environment_warning()
-		{
-			if (version_compare(phpversion(), WC_EBANX_MIN_PHP_VER, '<')) {
-				$message = __('EBANX Payment Gateway for WooCommerce - The minimum PHP version required for this plugin is %1$s. You are running %2$s.', 'woocommerce-gateway-ebanx', 'woocommerce-gateway-ebanx');
-
-				return sprintf($message, WC_EBANX_MIN_PHP_VER, phpversion());
-			}
-
-			if (!defined('WC_VERSION')) {
-				return __('EBANX Payment Gateway for WooCommerce - It requires WooCommerce to be activated to work.', 'woocommerce-gateway-ebanx');
-			}
-
-			if (version_compare(WC_VERSION, WC_EBANX_MIN_WC_VER, '<')) {
-				$message = __('EBANX Payment Gateway for WooCommerce - The minimum WooCommerce version required for this plugin is %1$s. You are running %2$s.', 'woocommerce-gateway-ebanx', 'woocommerce-gateway-ebanx');
-
-				return sprintf($message, WC_EBANX_MIN_WC_VER, WC_VERSION);
-			}
-
-			return false;
-		}
-
-		/**
 		 * Return an instance of this class.
 		 *
 		 * @return object A single instance of this class.
@@ -514,50 +490,50 @@ if (!class_exists('WC_EBANX')) {
 		private function includes()
 		{
 			// Custom Order
-			include_once SERVICES_DIR . 'class-wc-ebanx-custom-order.php';
+			include_once WC_EBANX_SERVICES_DIR . 'class-wc-ebanx-custom-order.php';
 
 			// Utils
-			include_once SERVICES_DIR . 'class-wc-ebanx-constants.php';
-			include_once SERVICES_DIR . 'class-wc-ebanx-helper.php';
-			include_once SERVICES_DIR . 'class-wc-ebanx-notice.php';
-			include_once SERVICES_DIR . 'class-wc-ebanx-hooks.php';
-			include_once SERVICES_DIR . 'class-wc-ebanx-checker.php';
-			include_once(SERVICES_DIR . 'class-wc-ebanx-flash.php');
-			include_once(SERVICES_DIR . 'class-wc-ebanx-request.php');
-			include_once(SERVICES_DIR . 'class-wc-ebanx-errors.php');
+			include_once WC_EBANX_SERVICES_DIR . 'class-wc-ebanx-constants.php';
+			include_once WC_EBANX_SERVICES_DIR . 'class-wc-ebanx-helper.php';
+			include_once WC_EBANX_SERVICES_DIR . 'class-wc-ebanx-notice.php';
+			include_once WC_EBANX_SERVICES_DIR . 'class-wc-ebanx-hooks.php';
+			include_once WC_EBANX_SERVICES_DIR . 'class-wc-ebanx-checker.php';
+			include_once WC_EBANX_SERVICES_DIR . 'class-wc-ebanx-flash.php';
+			include_once WC_EBANX_SERVICES_DIR . 'class-wc-ebanx-request.php';
+			include_once WC_EBANX_SERVICES_DIR . 'class-wc-ebanx-errors.php';
 
 			// Gateways
-			include_once GATEWAYS_DIR . 'class-wc-ebanx-gateway.php';
-			include_once GATEWAYS_DIR . 'class-wc-ebanx-redirect-gateway.php';
-			include_once GATEWAYS_DIR . 'class-wc-ebanx-global-gateway.php';
-			include_once GATEWAYS_DIR . 'class-wc-ebanx-credit-card-gateway.php';
+			include_once WC_EBANX_GATEWAYS_DIR . 'class-wc-ebanx-gateway.php';
+			include_once WC_EBANX_GATEWAYS_DIR . 'class-wc-ebanx-redirect-gateway.php';
+			include_once WC_EBANX_GATEWAYS_DIR . 'class-wc-ebanx-global-gateway.php';
+			include_once WC_EBANX_GATEWAYS_DIR . 'class-wc-ebanx-credit-card-gateway.php';
 
 			// Chile Gateways
-			include_once GATEWAYS_DIR . 'class-wc-ebanx-servipag-gateway.php';
-			include_once GATEWAYS_DIR . 'class-wc-ebanx-sencillito-gateway.php';
+			include_once WC_EBANX_GATEWAYS_DIR . 'class-wc-ebanx-servipag-gateway.php';
+			include_once WC_EBANX_GATEWAYS_DIR . 'class-wc-ebanx-sencillito-gateway.php';
 
 			// Brazil Gateways
-			include_once GATEWAYS_DIR . 'class-wc-ebanx-banking-ticket-gateway.php';
-			include_once GATEWAYS_DIR . 'class-wc-ebanx-credit-card-br-gateway.php';
-			include_once GATEWAYS_DIR . 'class-wc-ebanx-account-gateway.php';
-			include_once GATEWAYS_DIR . 'class-wc-ebanx-tef-gateway.php';
+			include_once WC_EBANX_GATEWAYS_DIR . 'class-wc-ebanx-banking-ticket-gateway.php';
+			include_once WC_EBANX_GATEWAYS_DIR . 'class-wc-ebanx-credit-card-br-gateway.php';
+			include_once WC_EBANX_GATEWAYS_DIR . 'class-wc-ebanx-account-gateway.php';
+			include_once WC_EBANX_GATEWAYS_DIR . 'class-wc-ebanx-tef-gateway.php';
 
 			// Mexico Gateways
-			include_once GATEWAYS_DIR . 'class-wc-ebanx-credit-card-mx-gateway.php';
-			include_once GATEWAYS_DIR . 'class-wc-ebanx-debit-card-gateway.php';
-			include_once GATEWAYS_DIR . 'class-wc-ebanx-oxxo-gateway.php';
+			include_once WC_EBANX_GATEWAYS_DIR . 'class-wc-ebanx-credit-card-mx-gateway.php';
+			include_once WC_EBANX_GATEWAYS_DIR . 'class-wc-ebanx-debit-card-gateway.php';
+			include_once WC_EBANX_GATEWAYS_DIR . 'class-wc-ebanx-oxxo-gateway.php';
 
 			// Colombia Gateways
-			include_once GATEWAYS_DIR . 'class-wc-ebanx-baloto-gateway.php';
-			include_once GATEWAYS_DIR . 'class-wc-ebanx-eft-gateway.php';
+			include_once WC_EBANX_GATEWAYS_DIR . 'class-wc-ebanx-baloto-gateway.php';
+			include_once WC_EBANX_GATEWAYS_DIR . 'class-wc-ebanx-eft-gateway.php';
 
 			// Peru Gateways
-			include_once GATEWAYS_DIR . 'class-wc-ebanx-pagoefectivo-gateway.php';
-			include_once GATEWAYS_DIR . 'class-wc-ebanx-safetypay-gateway.php';
+			include_once WC_EBANX_GATEWAYS_DIR . 'class-wc-ebanx-pagoefectivo-gateway.php';
+			include_once WC_EBANX_GATEWAYS_DIR . 'class-wc-ebanx-safetypay-gateway.php';
 
 			// Hooks/Actions
-			include_once(SERVICES_DIR . 'class-wc-ebanx-my-account.php');
-			include_once(SERVICES_DIR . 'class-wc-ebanx-one-click.php');
+			include_once WC_EBANX_SERVICES_DIR . 'class-wc-ebanx-my-account.php';
+			include_once WC_EBANX_SERVICES_DIR . 'class-wc-ebanx-one-click.php';
 		}
 
 		/**
@@ -567,7 +543,7 @@ if (!class_exists('WC_EBANX')) {
 		 */
 		public static function get_templates_path()
 		{
-			return TEMPLATES_DIR;
+			return WC_EBANX_TEMPLATES_DIR;
 		}
 
 		/**
@@ -632,7 +608,7 @@ if (!class_exists('WC_EBANX')) {
 		public function woocommerce_missing_notice()
 		{
 			// TODO: Others notice here
-			include_once TEMPLATES_DIR . 'views/html-notice-missing-woocommerce.php';
+			include_once WC_EBANX_TEMPLATES_DIR . 'views/html-notice-missing-woocommerce.php';
 		}
 
 		/**
