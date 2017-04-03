@@ -1037,12 +1037,8 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
 
 		$texts = array(
 			'pt-br' => array(
-				'INTRO'                                      => 'Total a pagar em ',
-				WC_EBANX_Constants::CURRENCY_CODE_MXN    => 'Peso mexicano',
-				WC_EBANX_Constants::CURRENCY_CODE_CLP    => 'Peso chileno',
-				WC_EBANX_Constants::CURRENCY_CODE_PEN    => 'Sol peruano',
-				WC_EBANX_Constants::CURRENCY_CODE_COP    => 'Peso colombiano',
-				WC_EBANX_Constants::CURRENCY_CODE_BRL    => 'Real brasileiro'
+				'INTRO'                                      => 'Total a pagar ',
+				WC_EBANX_Constants::CURRENCY_CODE_BRL    => 'com IOF (0.38%)'
 			),
 			'es'    => array(
 				'INTRO'                                      => 'Total a pagar en ',
