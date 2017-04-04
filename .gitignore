@@ -5,4 +5,3 @@ woocommerce-gateway-ebanx/travis/vendor/
 *.log
 *.gz
 *.gz.*
-.vscode
