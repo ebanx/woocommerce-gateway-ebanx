@@ -359,7 +359,7 @@ class WC_EBANX_One_Click {
 			'woocommerce_ebanx_one_click_script',
 			plugins_url( 'assets/js/one-click.js', WC_EBANX::DIR ),
 			array(),
-			WC_EBANX::VERSION,
+			WC_EBANX::get_plugin_version(),
 			true
 		);
 
@@ -482,15 +482,20 @@ class WC_EBANX_One_Click {
 				break;
 		}
 
-		$max_instalments = $this->gateway->fetch_acquirer_max_installments_for_price($product->price);
+		$cart_total = $product->price;
+
+		$max_instalments = min($this->gateway->configs->settings['credit_card_instalments'], $this->gateway->fetch_acquirer_max_installments_for_price($cart_total, 'br'));
+
+		$instalments_terms = $this->gateway->get_payment_terms($cart_total, $max_instalments);
 
 		$args = apply_filters( 'ebanx_template_args', array(
 				'cards' => $this->cards,
-				'cart_total' => $product->price,
-				'max_installment' => min($this->gateway->configs->settings['credit_card_instalments'], $max_instalments),
+				'cart_total' => $cart_total,
+				'max_instalments' => $max_instalments,
 				'installment_taxes' => $this->instalment_rates,
 				'label' => __( 'Pay with one click', 'woocommerce-gateway-ebanx' ),
-				'instalments' => $messages['instalments']
+				'instalments' => $messages['instalments'],
+				'instalments_terms' => $instalments_terms
 			) );
 
 		wc_get_template( 'one-click.php', $args, '', WC_EBANX::get_templates_path() . 'one-click/' );

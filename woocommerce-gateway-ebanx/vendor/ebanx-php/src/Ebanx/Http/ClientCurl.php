@@ -49,13 +49,11 @@ class ClientCurl extends AbstractClient
         try {
             $this->_setupCurl();
 
-            if(in_array($this->get_http_response_code($this->uri), $this->ignoredStatusCodes)) {
-                return (object) array('status' => 'HTTP_STATUS_CODE_IGNORED');
-            }
-
             $response = curl_exec($this->curl);
 
-            if (curl_getinfo($this->curl, CURLINFO_HTTP_CODE) !== 200) {
+            $allowed_status_codes = array_merge(array(200), $this->ignoredStatusCodes);
+
+            if (!in_array(curl_getinfo($this->curl, CURLINFO_HTTP_CODE), $allowed_status_codes)) {
                 if (curl_errno($this->curl)) {
                     throw new \RuntimeException('The HTTP request failed: ' . curl_error($this->curl));
                 }

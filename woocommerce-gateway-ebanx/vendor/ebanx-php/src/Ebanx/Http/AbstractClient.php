@@ -84,22 +84,6 @@ abstract class AbstractClient
     abstract public function send();
 
     /**
-     * Returns HTTP response code
-     * @return string
-     */
-    protected function get_http_response_code($url) {
-		stream_context_set_default( [
-			'ssl' => [
-				'verify_peer' => false,
-				'verify_peer_name' => false,
-			],
-		]);
-
-        $headers = get_headers($url);
-        return substr($headers[0], 9, 3);
-    }
-
-    /**
      * Set the request target URI
      * @param string $action The target URI
      * @return Ebanx\Http\AbstractClient A "Ebanx\Http\AbstractClient" subclass object

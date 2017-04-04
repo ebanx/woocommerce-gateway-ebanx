@@ -35,6 +35,7 @@ class WC_EBANX_Banking_Ticket_Gateway extends WC_EBANX_Gateway
 
 	/**
 	 * Check if the currency is processed by EBANX
+	 *
 	 * @param  string $currency Possible currencies: BRL
 	 * @return boolean          Return true if EBANX process the currency
 	 */
@@ -157,14 +158,14 @@ class WC_EBANX_Banking_Ticket_Gateway extends WC_EBANX_Gateway
 			'woocommerce_ebanx_clipboard',
 			plugins_url('assets/js/vendor/clipboard.min.js', WC_EBANX::DIR),
 			array(),
-			WC_EBANX::VERSION,
+			WC_EBANX::get_plugin_version(),
 			true
 		);
 		wp_enqueue_script(
 			'woocommerce_ebanx_order_received',
 			plugins_url('assets/js/order-received.js', WC_EBANX::DIR),
 			array('jquery'),
-			WC_EBANX::VERSION,
+			WC_EBANX::get_plugin_version(),
 			true
 		);
 	}

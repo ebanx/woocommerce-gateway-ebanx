@@ -17,9 +17,7 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
 
 		parent::__construct();
 
-		add_action('woocommerce_order_actions', array($this, 'auto_capture'));
-
-		add_action('woocommerce_order_action_custom_action', array($this, 'capture_payment_action'));
+		add_action('woocommerce_order_edit_status', array($this, 'capture_payment_action'));
 
 		if ($this->get_setting_or_default('interest_rates_enabled', 'no') == 'yes') {
 			$max_instalments = $this->configs->settings['credit_card_instalments'];
@@ -50,31 +48,88 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
 	/**
 	 * Action to capture the payment
 	 *
-	 * @param  WC_Order $order WooCommerce Order
 	 * @return void
 	 */
-	public function capture_payment_action($order)
-	{
-		if ($order->get_status() != 'pending' || $order->payment_method != $this->id) {
+	public function capture_payment_action() {
+		$order = wc_get_order($_REQUEST['order_id']);
+		$status = $_REQUEST['status'];
+		$recapture = false;
+
+		if ( $order->payment_method !== $this->id || $status !== 'processing') {
 			return;
 		}
 
-		\Ebanx\Config::set([
+		\Ebanx\Config::set(array(
 			'integrationKey' => $this->private_key,
 			'testMode' => $this->is_sandbox_mode,
-		]);
+			'directMode' => true,
+		));
 
-		$request = \Ebanx\Ebanx::doCapture(['hash' => get_post_meta($order->id, '_ebanx_payment_hash')]);
+		$response = \Ebanx\Ebanx::doCapture(array('hash' => get_post_meta($order->id, '_ebanx_payment_hash', true)));
+		$error = $this->check_capture_errors($response);
 
-		if ($request->status != 'SUCCESS') {
-			return;
+		$is_recapture = false;
+		if($error){
+			$is_recapture = $error->code === 'BP-CAP-4';
+			$response->payment->status = $error->status;
+
+			WC_EBANX::log($error->message);
+			WC_EBANX_Flash::add_message($error->message, 'warning', true);
 		}
 
-		if ($request->payment->status == 'CO') {
+		if ($response->payment->status == 'CO') {
 			$order->payment_complete();
-			$order->update_status('processing');
-			$order->add_order_note(__('EBANX: Transaction captured by ' . wp_get_current_user()->data->user_email, 'woocommerce-gateway-ebanx'));
+
+			if (!$is_recapture) {
+				$order->add_order_note(sprintf(__('EBANX: Transaction captured by %s', 'woocommerce-gateway-ebanx'), wp_get_current_user()->data->user_email));
+			}
 		}
+		else if ($response->payment->status == 'CA') {
+			$order->payment_complete();
+			$order->update_status('failed');
+			$order->add_order_note(__('EBANX: Transaction Failed', 'woocommerce-gateway-ebanx'));
+		}
+		else if ($response->payment->status == 'OP') {
+			$order->update_status('pending');
+			$order->add_order_note(__('EBANX: Transaction Pending', 'woocommerce-gateway-ebanx'));
+		}
+	}
+
+	/**
+	 * Checks for errors during capture action
+	 * Returns an object with error code, message and target status
+	 *
+	 * @return stdClass
+	 */
+	public function check_capture_errors($response) {
+		if ($response->status !== 'ERROR') {
+			return null;
+		}
+
+		$code = $response->code;
+		$message = sprintf(__('EBANX - Unknown error, enter in contact with Ebanx and inform this error code: %s.', 'woocommerce-gateway-ebanx'), $response->payment->status_code);
+		$status = $response->payment->status;
+
+		switch($response->status_code) {
+			case 'BC-CAP-3':
+				$message = __('EBANX - Payment cannot be captured, changing it to Failed.', 'woocommerce-gateway-ebanx');
+				$status = 'CA';
+				break;
+			case 'BP-CAP-4':
+				$message = __('EBANX - Payment has already been captured, changing it to Processing.', 'woocommerce-gateway-ebanx');
+				$status = 'CO';
+				break;
+			case 'BC-CAP-5':
+				$message = __('EBANX - Payment cannot be captured, changing it to Pending.', 'woocommerce-gateway-ebanx');
+				$status = 'OP';
+				break;
+		}
+
+		return (object)array(
+			'code' => $code,
+			'message' => $message,
+			'status' => $status
+		);
 	}
 
 	/**
@@ -88,8 +143,8 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
 			wp_enqueue_script('wc-credit-card-form');
 			// Using // to avoid conflicts between http and https protocols
 			wp_enqueue_script('ebanx', '//js.ebanx.com/ebanx-1.5.min.js', '', null, true);
-			wp_enqueue_script('woocommerce_ebanx_jquery_mask', plugins_url('assets/js/jquery-mask.js', WC_EBANX::DIR), array('jquery'), WC_EBANX::VERSION, true);
-			wp_enqueue_script('woocommerce_ebanx', plugins_url('assets/js/credit-card.js', WC_EBANX::DIR), array('jquery-payment', 'ebanx'), WC_EBANX::VERSION, true);
+			wp_enqueue_script('woocommerce_ebanx_jquery_mask', plugins_url('assets/js/jquery-mask.js', WC_EBANX::DIR), array('jquery'), WC_EBANX::get_plugin_version(), true);
+			wp_enqueue_script('woocommerce_ebanx', plugins_url('assets/js/credit-card.js', WC_EBANX::DIR), array('jquery-payment', 'ebanx'), WC_EBANX::get_plugin_version(), true);
 
 			// If we're on the checkout page we need to pass ebanx.js the address of the order.
 			if (is_checkout_pay_page() && isset($_GET['order']) && isset($_GET['order_id'])) {
@@ -116,8 +171,9 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
 	/**
 	 * Mount the data to send to EBANX API
 	 *
-	 * @param  WC_Order $order
+	 * @param WC_Order $order
 	 * @return array
+	 * @throws Exception
 	 */
 	protected function request_data($order)
 	{
@@ -229,6 +285,14 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
 		}
 	}
 
+	/**
+	 * The main method to process the payment came from WooCommerce checkout
+	 * This method check the informations sent by WooCommerce and if them are fine, it sends the request to EBANX API
+	 * The catch captures the errors and check the code sent by EBANX API and then show to the users the right error message
+	 *
+	 * @param  integer $order_id    The ID of the order created
+	 * @return void
+	 */
 	public function process_payment($order_id)
 	{
 		if ( isset( $_POST['ebanx_billing_instalments'] ) ) {
