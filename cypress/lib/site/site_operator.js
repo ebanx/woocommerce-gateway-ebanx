@@ -34,14 +34,22 @@ const siteOperator = (function (test) {
       return this;
     },
 
-    makePaymentBoleto: function (data) {
+    makePaymentBoleto: function (data, cb) {
       this.makePaymentToBrazil(data);
 
       checkout
         .fillBoletoGateway()
-        .placeOrderBoleto();
+        .placeOrderBoleto(cb);
 
       return this;
+    },
+
+    makePaymentCreditCardToBrazil: function (data, cc_data, cb) {
+      this.makePaymentToBrazil(data);
+
+      checkout
+        .fillCreditCardBrazilGateway(cc_data)
+        .placeOrderCreditCardBrazil(cc_data, cb);
     }
   };
 

@@ -2,6 +2,12 @@
 # yarn lockfile v1
 
 
+async@^2.3.0:
+  version "2.3.0"
+  resolved "https://registry.yarnpkg.com/async/-/async-2.3.0.tgz#1013d1051047dd320fe24e494d5c66ecaf6147d9"
+  dependencies:
+    lodash "^4.14.0"
+
 cpf_cnpj@^0.2.0:
   version "0.2.0"
   resolved "https://registry.yarnpkg.com/cpf_cnpj/-/cpf_cnpj-0.2.0.tgz#a032c19242a38e8363edce4e78bb1fbe9d664aa5"
@@ -30,6 +36,10 @@ joi@^10.3.1:
     isemail "2.x.x"
     items "2.x.x"
     topo "2.x.x"
+
+lodash@^4.14.0:
+  version "4.17.4"
+  resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.4.tgz#78203a4d1c328ae1d86dca6460e369b57f4055ae"
 
 topo@2.x.x:
   version "2.0.2"

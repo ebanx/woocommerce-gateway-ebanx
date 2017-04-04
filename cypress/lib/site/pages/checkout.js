@@ -6,11 +6,14 @@ const checkoutPage = (function (test) {
     elements: {
       buttons: {
         placeOrder: '#place_order',
-        boletoRadio: '.payment_method_ebanx-banking-ticket label'
+        boletoRadio: '.payment_method_ebanx-banking-ticket label',
+        ccRadio: '.payment_method_ebanx-credit-card-br > label',
       },
       containers: {
         boletoBox: '.payment_box.payment_method_ebanx-banking-ticket',
-        boletoBarCode: '.banking-ticket__barcode-code'
+        boletoBarCode: '.banking-ticket__barcode-code',
+        checkoutForm: 'form.checkout',
+        paymentType: '.ebanx-payment-type'
       },
       fields: {
         firstName: '#billing_first_name',
@@ -23,12 +26,14 @@ const checkoutPage = (function (test) {
         postcode: '#billing_postcode',
         brazilDocument: '#ebanx_billing_brazil_document',
         brazilBirthdate: '#ebanx_billing_brazil_birth_date',
-        country: '#s2id_billing_country > a.select2-choice',
-        countryLabel: '.select2-result-label',
-        countrySelected: '#s2id_billing_country span.select2-chosen',
-        state: '#s2id_billing_state > a.select2-choice',
-        stateLabel: '.select2-result-label',
-        stateSelected: '#s2id_billing_state span.select2-chosen',
+        country: '#billing_country',
+        state: '#billing_state',
+        hash: 'input[name="ebanx_payment_hash"]',
+        ccName: '#ebanx-card-holder-name',
+        ccNumber: '#ebanx-card-number',
+        ccDueDate: '#ebanx-card-expiry',
+        ccCVV: '#ebanx-card-cvv',
+        ccInstalments: '#ebanx-container-new-credit-card .ebanx-instalments',
       }
     }
   };
@@ -39,7 +44,7 @@ const checkoutPage = (function (test) {
     test
       .get(field)
         .should('be.visible')
-        .clear()
+        // .clear()
         .type(value)
         .should('have.value', value);
   };
@@ -84,32 +89,26 @@ const checkoutPage = (function (test) {
     this.fillField(birthdate, fields.brazilBirthdate);
   };
 
-  _private.fillCountry = function (country) {
+  _private.fillSelect = function (field, value) {
     test
-      .get(fields.country)
-        .should('be.visible')
-        .click()
-      .get(fields.countryLabel)
-        .should('be.visible')
-        .contains(country)
-        .click()
-      .get(fields.countrySelected)
-        .should('be.visible')
-        .should('have.text', country);
+      .get(field, { timeout: 10000 })
+        .select(value, { force: true })
+        .then($select => {
+          $select.change();
+        })
+        .should('contain', value);
+  };
+
+  _private.fillCountry = function (country) {
+    _private.fillSelect(fields.country, country);
   };
 
   _private.fillState = function (state) {
-    test
-      .get(fields.state)
-        .should('be.visible')
-        .click()
-      .get(fields.stateLabel)
-        .should('be.visible')
-        .contains(state)
-        .click()
-      .get(fields.stateSelected)
-        .should('be.visible')
-        .should('have.text', state);
+    _private.fillSelect(fields.state, state);
+  };
+
+  _private.fillInstalments = function (instalments = '1') {
+    _private.fillSelect(fields.ccInstalments, instalments);
   };
 
   const $public = {
@@ -140,7 +139,8 @@ const checkoutPage = (function (test) {
 
     fillBoletoGateway: function () {
       test
-        .get(buttons.boletoRadio, { timeout: 5000 })
+        .wait(500)
+        .get(buttons.boletoRadio, { timeout: 10000 })
           .should('be.visible')
           .click({ force: true })
         .get(containers.boletoBox)
@@ -149,24 +149,68 @@ const checkoutPage = (function (test) {
       return this;
     },
 
-    placeOrder: function () {
+    fillCreditCardBrazilGateway: function (cc_data) {
       test
-        .get(buttons.placeOrder)
+        .wait(1000)
+        .get(buttons.ccRadio, { timeout: 10000 })
           .should('be.visible')
-          .click({ force: true });
+          .click({ force: true })
+          .then(() => {
+            _private.fillField(cc_data.number, fields.ccNumber);
+            _private.fillField(cc_data.due_date, fields.ccDueDate);
+            _private.fillField(cc_data.cvv, fields.ccCVV);
+            
+            if (cc_data.instalments) {
+              _private.fillInstalments(cc_data.instalments);
+            }
+          });
 
       return this;
     },
 
-    placeOrderBoleto: function () {
+    placeOrder: function () {
+      test
+        .get(buttons.placeOrder, { timeout: 10000 })
+          .should('be.visible')
+          .click({ force: true })
+
+      return this;
+    },
+
+    extractHash: function (cb) {
+      test
+        .get(fields.hash, { timeout: 10000 })
+          .should('be.hidden')
+          .and('have.attr', 'value')
+          .then(cb);
+    },
+
+    placeOrderBoleto: function (cb) {
       this.placeOrder();
 
       test
-        .get(containers.boletoBarCode, { timeout: 5000 })
+        .get(containers.boletoBarCode, { timeout: 10000 })
           .should('be.visible')
-          .should('not.to.be.empty');
+          .and('not.to.be.empty');
 
-      return this;
+      return this.extractHash(cb);   
+    },
+
+    placeOrderCreditCardBrazil: function (data, cb) {
+      this.placeOrder();
+
+      test
+        .get(containers.paymentType, { timeout: 10000 })
+          .should('be.visible')
+          .and('not.to.be.empty');
+
+      if (data.instalments) {
+        test
+          .get(containers.paymentType, { timeout: 10000 })
+            .should('contain', data.instalments);
+      }
+
+      return this.extractHash(cb);   
     }
   };
 
