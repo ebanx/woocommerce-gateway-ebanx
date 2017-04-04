@@ -67,7 +67,7 @@ class WC_EBANX_Payment_By_Link {
 	 */
 	private static function send_errors() {
 		WC_EBANX_Flash::clear_messages();
-		foreach (self::$errors as $error) {
+		foreach (array_unique(self::$errors) as $error) {
 			WC_EBANX_Flash::add_message($error);
 		}
 	}

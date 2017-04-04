@@ -536,6 +536,7 @@ if (!class_exists('WC_EBANX')) {
 
 			// Hooks/Actions
 			include_once WC_EBANX_SERVICES_DIR . 'class-wc-ebanx-payment-by-link.php';
+			include_once WC_EBANX_SERVICES_DIR . 'class-wc-ebanx-payment-validator.php';
 			include_once WC_EBANX_SERVICES_DIR . 'class-wc-ebanx-my-account.php';
 			include_once WC_EBANX_SERVICES_DIR . 'class-wc-ebanx-one-click.php';
 		}
@@ -764,7 +765,7 @@ if (!class_exists('WC_EBANX')) {
 
 			// Check if is an EBANX request
 			if ( WC_EBANX_Request::has('create_ebanx_payment_link')
-				&& WC_EBANX_Request::get('create_ebanx_payment_link') === __('Create EBANX Payment Link', 'woocommerce-gateway-ebanx')
+				&& WC_EBANX_Request::read('create_ebanx_payment_link') === __('Create EBANX Payment Link', 'woocommerce-gateway-ebanx')
 				&& ! $checkout_url ) {
 
 				$this->setup_configs();

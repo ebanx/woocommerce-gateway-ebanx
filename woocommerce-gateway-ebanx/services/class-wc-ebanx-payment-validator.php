@@ -8,6 +8,15 @@ class WC_EBANX_Payment_Validator {
 
 	private $errors = array();
 
+	private $order;
+
+	/**
+	 * Construct
+	 */
+	public function __construct($order) {
+		$this->order = $order;
+	}
+
 	/**
 	 * Check if the error is not already in the array and add it.
 	 * To make sure it will show no duplicates.
@@ -44,12 +53,12 @@ class WC_EBANX_Payment_Validator {
 	 * @return int The number of errors it found
 	 */
 	public function validate() {
-		$this->validate_status() && return true;
+		if ($this->validate_status()) return true;
 		$this->validate_currency();
 		$this->validate_amount();
 		$this->validate_country();
 		$this->validate_email();
-		$this->validate_payment_method() && return true;
+		if ($this->validate_payment_method()) return true;
 
 		return $this->get_error_count() > 0;
 	}
@@ -129,9 +138,9 @@ class WC_EBANX_Payment_Validator {
 		}
 
 		// true: Leave and stop validating other fields
-		$this->validate_payment_method_is_ebanx_account() && return true;
+		if ($this->validate_payment_method_is_ebanx_account()) return true;
 
-		$this->validate_payment_method_is_ebanx_payment() && return false;
+		if ($this->validate_payment_method_is_ebanx_payment()) return false;
 
 		$this->validate_payment_method_country();
 
