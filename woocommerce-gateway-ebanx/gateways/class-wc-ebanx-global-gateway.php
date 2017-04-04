@@ -82,8 +82,8 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway
 	 * Error handling
 	 */
 	public function validate_due_date_days_field() {
-		if ($_POST['woocommerce_ebanx-global_due_date_days'] < 1) {
-			$_POST['woocommerce_ebanx-global_due_date_days'] = self::$defaults['due_date_days'];
+		if (WC_EBANX_Request::read('woocommerce_ebanx-global_due_date_days') < 1) {
+			WC_EBANX_Request::set('woocommerce_ebanx-global_due_date_days', self::$defaults['due_date_days']);
 
 			$this->notices
 				->with_message(__('Days To Expiration must be greater than or equal to 1.', 'woocommerce-gateway-ebanx'))
