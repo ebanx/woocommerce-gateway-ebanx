@@ -10,6 +10,7 @@ class WC_EBANX_Payment_By_Link {
 	private static $post_id;
 	private static $order;
 	private static $config;
+	private static $validator;
 
 	/**
 	 * The core method. It uses the other methods to create a payment link
@@ -22,12 +23,14 @@ class WC_EBANX_Payment_By_Link {
 		self::$post_id = $post_id;
 		self::$order = wc_get_order($post_id);
 		self::$config = $config;
+		self::$validator = new WC_EBANX_Payment_Validator(self::$order);
 
 		if ( ! self::can_create_payment() ) {
 			return;
 		}
 
-		if ( self::validate() ) {
+		if ( self::$validator->validate() ) {
+			self::$errors = array_merge(self::$errors, self::$validator->get_errors());
 			self::send_errors();
 			return;
 		}
@@ -55,46 +58,6 @@ class WC_EBANX_Payment_By_Link {
 		return current_user_can( 'edit_post', self::$post_id )
 				&& ! wp_is_post_autosave( self::$post_id )
 				&& ! wp_is_post_revision( self::$post_id );
-	}
-
-	/**
-	 * Apply all the input validation we need before sending the request
-	 *
-	 * @return int The number of errors it found
-	 */
-	private static function validate() {
-		if ( ! self::$order->status === 'pending' ) {
-			self::add_error(__('You can only create payment links on pending orders.', 'woocommerce-gateway-ebanx'));
-			return count(self::$errors);
-		}
-		if ( get_woocommerce_currency() !== 'USD'
-			&& get_woocommerce_currency() !== 'EUR'
-			&& get_woocommerce_currency() !== WC_EBANX_Constants::$LOCAL_CURRENCIES[strtolower(self::$order->billing_country)] ) {
-			self::add_error(sprintf(__('We can\'t proccess %s in the selected country.', 'woocommerce-gateway-ebanx'), get_woocommerce_currency()));
-		}
-		if ( self::$order->get_total() < 1 ) {
-			self::add_error(__('The total amount needs to be greater than $1.', 'woocommerce-gateway-ebanx'));
-		}
-		if ( ! in_array(strtolower(self::$order->billing_country), WC_EBANX_Constants::$ALL_COUNTRIES) ) {
-			self::add_error(__('EBANX only support the countries: Brazil, Mexico, Peru, Colombia and Chile. Please, use one of these.', 'woocommerce-gateway-ebanx'));
-		}
-		if ( ! filter_var(self::$order->billing_email, FILTER_VALIDATE_EMAIL) ) {
-			self::add_error(__('The customer e-mal is required, please provide a valid customer e-mail.', 'woocommerce-gateway-ebanx'));
-		}
-		if ( ! empty(self::$order->payment_method) ) {
-			if ( self::$order->payment_method === 'ebanx-account' ) {
-				self::add_error(__('Paying with EBANX account is not avaible yet.', 'woocommerce-gateway-ebanx'));
-				return count(self::$errors);
-			}
-			else if ( ! array_key_exists(self::$order->payment_method, WC_EBANX_Constants::$GATEWAY_TO_PAYMENT_TYPE_CODE) ) {
-				self::add_error(__('EBANX does not support the selected payment method.', 'woocommerce-gateway-ebanx'));
-			}
-			else if ( array_key_exists(strtolower(self::$order->billing_country), WC_EBANX_Constants::$EBANX_GATEWAYS_BY_COUNTRY)
-				&& ! in_array(self::$order->payment_method, WC_EBANX_Constants::$EBANX_GATEWAYS_BY_COUNTRY[strtolower(self::$order->billing_country)]) ) {
-				self::add_error(__('The selected payment method is not available on the selected country.', 'woocommerce-gateway-ebanx'));
-			}
-		}
-		return count(self::$errors);
 	}
 
 	/**
