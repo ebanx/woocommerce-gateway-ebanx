@@ -660,14 +660,6 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
 
 				$request = \Ebanx\EBANX::doRequest($data);
 
-				if (
-					$request->payment->transaction_status->code === 'NOK'
-					&& $request->payment->transaction_status->acquirer === 'EBANX'
-					&& $this->is_sandbox_mode
-				) {
-					throw new Exception('SANDBOX-INVALID-CC-NUMBER');
-				}
-
 				$this->process_response($request, $order);
 			} else {
 				$order->payment_complete();
@@ -847,6 +839,14 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
 
 		if ($request->status == 'ERROR') {
 			return $this->process_response_error($request, $order);
+		}
+
+		if (
+			$request->payment->transaction_status->code === 'NOK'
+			&& $request->payment->transaction_status->acquirer === 'EBANX'
+			&& $this->is_sandbox_mode
+		) {
+			throw new Exception('SANDBOX-INVALID-CC-NUMBER');
 		}
 
 		$message = __(sprintf('Payment approved. Hash: %s', $request->payment->hash), 'woocommerce-gateway-ebanx');
