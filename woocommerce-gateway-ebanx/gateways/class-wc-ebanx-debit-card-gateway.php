@@ -87,7 +87,8 @@ class WC_EBANX_Debit_Card_Gateway extends WC_EBANX_Gateway
 	 */
 	protected function request_data($order)
 	{
-		if (empty($_POST['ebanx_debit_token']) || empty($_POST['ebanx_billing_cvv'])) {
+		if ( empty(WC_EBANX_Request::read('ebanx_debit_token'))
+			|| empty(WC_EBANX_Request::read('ebanx_billing_cvv')) ) {
 			throw new Exception("Missing ebanx card params.");
 		}
 
@@ -98,8 +99,8 @@ class WC_EBANX_Debit_Card_Gateway extends WC_EBANX_Gateway
 		// TODO: need fingerprint ?
 
 		$data['payment']['card'] = array(
-			'token'    => $_POST['ebanx_debit_token'],
-			'card_cvv' => $_POST['ebanx_billing_cvv'],
+			'token'    => WC_EBANX_Request::read('ebanx_debit_token'),
+			'card_cvv' => WC_EBANX_Request::read('ebanx_billing_cvv'),
 		);
 
 		return $data;
@@ -133,7 +134,7 @@ class WC_EBANX_Debit_Card_Gateway extends WC_EBANX_Gateway
 		parent::save_order_meta_fields($order, $request);
 
 		update_post_meta($order->id, '_cards_brand_name', $request->payment->payment_type_code);
-		update_post_meta($order->id, '_masked_card_number', $_POST['ebanx_masked_card_number']);
+		update_post_meta($order->id, '_masked_card_number', WC_EBANX_Request::read('ebanx_masked_card_number'));
 	}
 
 	/**
