@@ -980,68 +980,84 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
 	 * @return void
 	 */
 	public function checkout_rate_conversion($currency) {
-		if (in_array($this->merchant_currency, array(WC_EBANX_Constants::CURRENCY_CODE_USD, WC_EBANX_Constants::CURRENCY_CODE_EUR))) {
+		if ( ! in_array($this->merchant_currency, array(
+			WC_EBANX_Constants::CURRENCY_CODE_USD,
+			WC_EBANX_Constants::CURRENCY_CODE_EUR,
+			WC_EBANX_Constants::CURRENCY_CODE_BRL) ) ){
+			return;
+		}
 
-			$country = $this->getTransactionAddress('country');
+		$amount = WC()->cart->cart_contents_total;
+		$country = $this->getTransactionAddress('country');
 
+		if ( in_array($this->merchant_currency, array(
+			WC_EBANX_Constants::CURRENCY_CODE_USD,
+			WC_EBANX_Constants::CURRENCY_CODE_EUR) ) ) {
 			$rate = round(floatval($this->get_local_currency_rate_for_site($currency)), 2);
 
-			$amount = WC()->cart->cart_contents_total;
-
-			if (WC()->cart->prices_include_tax) {
+			if ( WC()->cart->prices_include_tax ) {
 				$amount = WC()->cart->cart_contents_total + WC()->cart->tax_total;
 			}
 
 			$amount *= $rate;
-
-			// Applies IOF for Brazil payments only
-			if ($country === WC_EBANX_Constants::COUNTRY_BRAZIL) {
-				$amount += ($amount * WC_EBANX_Constants::BRAZIL_TAX);
-			}
-
-			$price = wc_price($amount, array('currency' => $currency));
-
-			$languages = array(
-				'mx' => 'es',
-				'cl' => 'es',
-				'pe' => 'es',
-				'co' => 'es',
-				'br' => 'pt-br',
-			);
-			$language = $languages[$country];
-
-			$texts = array(
-				'pt-br' => array(
-					'INTRO'                                      => 'Total a pagar em ',
-					WC_EBANX_Constants::CURRENCY_CODE_MXN    => 'Peso mexicano',
-					WC_EBANX_Constants::CURRENCY_CODE_CLP    => 'Peso chileno',
-					WC_EBANX_Constants::CURRENCY_CODE_PEN    => 'Sol peruano',
-					WC_EBANX_Constants::CURRENCY_CODE_COP    => 'Peso colombiano',
-					WC_EBANX_Constants::CURRENCY_CODE_BRL    => 'Real brasileiro'
-				),
-				'es'    => array(
-					'INTRO'                                      => 'Total a pagar en ',
-					WC_EBANX_Constants::CURRENCY_CODE_MXN    => 'Peso mexicano',
-					WC_EBANX_Constants::CURRENCY_CODE_CLP    => 'Peso chileno',
-					WC_EBANX_Constants::CURRENCY_CODE_PEN    => 'Sol peruano',
-					WC_EBANX_Constants::CURRENCY_CODE_COP    => 'Peso colombiano',
-					WC_EBANX_Constants::CURRENCY_CODE_BRL    => 'Real brasileño'
-				),
-			);
-
-
-			$message = $texts[$language]['INTRO'];
-			$message .= !empty($texts[$language][$currency]) ? $texts[$language][$currency] : $currency;
-			$message .= ': <strong class="ebanx-amount-total">' . $price . '</strong>';
-
-			wc_get_template(
-				'checkout-conversion-rate.php',
-				array(
-					'message' => $message
-				),
-				'woocommerce/ebanx/',
-				WC_EBANX::get_templates_path()
-			);
 		}
+
+		// Applies IOF for Brazil payments only
+		if ( $country === WC_EBANX_Constants::COUNTRY_BRAZIL ) {
+			$amount += ($amount * WC_EBANX_Constants::BRAZIL_TAX);
+		}
+
+		$message = $this->get_checkout_message($amount, $currency, $country);
+
+		wc_get_template(
+			'checkout-conversion-rate.php',
+			array(
+				'message' => $message
+			),
+			'woocommerce/ebanx/',
+			WC_EBANX::get_templates_path()
+		);
+	}
+
+	/**
+	 * Generates the checkout message
+	 *
+	 * @param int $amount The total price of the order
+	 * @param  string $currency Possible currencies: BRL, USD, EUR, PEN, CLP, COP, MXN
+	 * @param string $country The country code
+	 * @return void
+	 */
+	public function get_checkout_message($amount, $currency, $country) {
+		$price = wc_price($amount, array('currency' => $currency));
+
+		$languages = array(
+			'mx' => 'es',
+			'cl' => 'es',
+			'pe' => 'es',
+			'co' => 'es',
+			'br' => 'pt-br',
+		);
+		$language = $languages[$country];
+
+		$texts = array(
+			'pt-br' => array(
+				'INTRO'                                      => 'Total a pagar ',
+				WC_EBANX_Constants::CURRENCY_CODE_BRL    => 'com IOF (0.38%)'
+			),
+			'es'    => array(
+				'INTRO'                                      => 'Total a pagar en ',
+				WC_EBANX_Constants::CURRENCY_CODE_MXN    => 'Peso mexicano',
+				WC_EBANX_Constants::CURRENCY_CODE_CLP    => 'Peso chileno',
+				WC_EBANX_Constants::CURRENCY_CODE_PEN    => 'Sol peruano',
+				WC_EBANX_Constants::CURRENCY_CODE_COP    => 'Peso colombiano',
+				WC_EBANX_Constants::CURRENCY_CODE_BRL    => 'Real brasileño'
+			),
+		);
+
+		$message = $texts[$language]['INTRO'];
+		$message .= !empty($texts[$language][$currency]) ? $texts[$language][$currency] : $currency;
+		$message .= ': <strong class="ebanx-amount-total">' . $price . '</strong>';
+
+		return $message;
 	}
 }
