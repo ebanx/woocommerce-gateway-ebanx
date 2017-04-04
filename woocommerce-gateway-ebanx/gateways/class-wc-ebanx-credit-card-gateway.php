@@ -320,7 +320,7 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
 	 * @param  int $max_instalments The max number of instalments based on settings
 	 * @return filtered array       An array of instalment with price, amount, if it has interests and the number
 	 */
-	public function get_payment_terms($cart_total, $max_instalments) {
+	public function get_payment_terms($cart_total, $max_instalments, $tax = 0) {
 		$instalments = array();
 		$instalment_taxes = $this->instalment_rates;
 
@@ -335,6 +335,7 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
 			}
 
 			$instalment_price = $cart_total / $number;
+			$instalment_price += $instalment_price * $tax;
 
 			$instalments[] = array(
 				'price' => $instalment_price,
@@ -358,7 +359,8 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
 
 		$max_instalments = min($this->configs->settings['credit_card_instalments'], $this->fetch_acquirer_max_installments_for_price($cart_total, 'br'));
 
-		$instalments_terms = $this->get_payment_terms($cart_total, $max_instalments);
+		$tax = get_woocommerce_currency() === WC_EBANX_Constants::CURRENCY_CODE_BRL ? WC_EBANX_Constants::BRAZIL_TAX : 0;
+		$instalments_terms = $this->get_payment_terms($cart_total, $max_instalments, $tax);
 
 		$country = $this->getTransactionAddress('country');
 
