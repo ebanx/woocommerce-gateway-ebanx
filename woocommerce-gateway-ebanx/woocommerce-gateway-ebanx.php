@@ -97,7 +97,7 @@ if (!class_exists('WC_EBANX')) {
 			add_action('admin_init', array($this, 'ebanx_sidebar_shortcut'));
 			add_action('admin_init', array('WC_EBANX_Flash', 'enqueue_admin_messages'));
 
-			if ( empty( $_POST ) ) {
+			if ( WC_EBANX_Request::is_post_empty() ) {
 				add_action('admin_init', array($this, 'setup_configs'), 10);
 				add_action('admin_init', array($this, 'checker'), 30);
 			}
@@ -270,12 +270,13 @@ if (!class_exists('WC_EBANX')) {
 		 */
 		public function my_account_template()
 		{
-			if (isset($_POST['credit-card-delete']) && is_account_page()) {
+			if ( WC_EBANX_Request::has('credit-card-delete')
+				&& is_account_page() ) {
 				// Find credit cards saved and delete the selected
 				$cards = get_user_meta(get_current_user_id(), '_ebanx_credit_card_token', true);
 
 				foreach ($cards as $k => $cd) {
-					if ($cd && in_array($cd->masked_number, $_POST['credit-card-delete'])) {
+					if ($cd && in_array($cd->masked_number, WC_EBANX_Request::read('credit-card-delete'))) {
 						unset($cards[$k]);
 					}
 				}
@@ -645,7 +646,8 @@ if (!class_exists('WC_EBANX')) {
 		 * @return void
 		 */
 		public function adjust_dynamic_admin_options_sections() {
-			if (!isset($_GET['section']) || $_GET['section'] !== 'ebanx-global') {
+			if ( ! WC_EBANX_Request::has('section')
+				|| WC_EBANX_Request::read('section') !== 'ebanx-global') {
 				return;
 			}
 
