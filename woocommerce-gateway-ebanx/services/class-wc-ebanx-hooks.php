@@ -16,10 +16,12 @@ class WC_EBANX_Hooks {
 	 * @return boolean
 	 */
 	private static function is_url_response() {
-		$urlResponse = ( isset( $_REQUEST['hash'] ) && isset( $_REQUEST['merchant_payment_code'] ) && isset( $_REQUEST['payment_type_code'] ) );
+		$urlResponse = ( WC_EBANX_Request::has('hash')
+			&& WC_EBANX_Request::has('merchant_payment_code')
+			&& WC_EBANX_Request::has('payment_type_code') );
 
 		if ( $urlResponse ) {
-			$_REQUEST['notification_type'] = 'UPDATE';
+			WC_EBANX_Request::set('notification_type', 'UPDATE');
 		}
 
 		return $urlResponse;
@@ -36,30 +38,33 @@ class WC_EBANX_Hooks {
 		// $myfile = fopen("/var/www/checkout-woocommerce/test.txt", "a") or die("Unable to open file!");
 		// fwrite($myfile, json_encode(array('get' => $_GET, 'post' => $_REQUEST, 'request' => $_REQUEST)));
 
-		if ( ( isset( $_REQUEST['operation'] ) && $_REQUEST['operation'] == 'payment_status_change'
-				&& isset( $_REQUEST['notification_type'] ) && ( isset( $_REQUEST['hash_codes'] )||isset( $_REQUEST['codes'] ) ) )
+		if ( ( WC_EBANX_Request::has('operation')
+			&& WC_EBANX_Request::read('operation') == 'payment_status_change'
+			&& WC_EBANX_Request::has('notification_type')
+			&& ( WC_EBANX_Request::has('hash_codes')
+			|| WC_EBANX_Request::has('codes') ) )
 			|| self::is_url_response()
 		) {
 			$codes = array();
 
-			if ( isset( $_REQUEST['hash_codes'] ) ) {
-				$codes['hash'] = $_REQUEST['hash_codes'];
+			if ( WC_EBANX_Request::has('hash_codes') ) {
+				$codes['hash'] = WC_EBANX_Request::read('hash_codes');
 			}
 
-			if ( isset( $_REQUEST['hash'] ) ) {
-				$codes['hash'] = $_REQUEST['hash'];
+			if ( WC_EBANX_Request::has('hash') ) {
+				$codes['hash'] = WC_EBANX_Request::read('hash');
 			}
 
-			if ( isset( $_REQUEST['codes'] ) ) {
-				$codes['merchant_payment_code'] = $_REQUEST['codes'];
+			if ( WC_EBANX_Request::has('codes') ) {
+				$codes['merchant_payment_code'] = WC_EBANX_Request::read('codes');
 			}
 
-			if ( isset( $_REQUEST['merchant_payment_code'] ) ) {
-				$codes['merchant_payment_code'] = $_REQUEST['merchant_payment_code'];
+			if ( WC_EBANX_Request::has('merchant_payment_code') ) {
+				$codes['merchant_payment_code'] = WC_EBANX_Request::read('merchant_payment_code');
 			}
 
 			$ebanx = new WC_EBANX_Tef_Gateway();
-			$order = $ebanx->process_hook( $codes, $_REQUEST['notification_type'] );
+			$order = $ebanx->process_hook( $codes, WC_EBANX_Request::read('notification_type') );
 
 			if ( self::is_url_response() ) {
 				wp_redirect( $order->get_checkout_order_received_url() );
