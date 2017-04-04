@@ -763,8 +763,8 @@ if (!class_exists('WC_EBANX')) {
 			$checkout_url = get_post_meta($order->id, '_ebanx_checkout_url', true);
 
 			// Check if is an EBANX request
-			if ( isset($_REQUEST['create_ebanx_payment_link'])
-				&& $_REQUEST['create_ebanx_payment_link'] === __('Create EBANX Payment Link', 'woocommerce-gateway-ebanx')
+			if ( WC_EBANX_Request::has('create_ebanx_payment_link')
+				&& WC_EBANX_Request::get('create_ebanx_payment_link') === __('Create EBANX Payment Link', 'woocommerce-gateway-ebanx')
 				&& ! $checkout_url ) {
 
 				$this->setup_configs();
