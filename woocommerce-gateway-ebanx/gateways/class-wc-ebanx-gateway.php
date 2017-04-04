@@ -364,7 +364,7 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
 			return false;
 		}
 
-		$order->add_order_note(sprintf('Refund requested to EBANX %s - Refund ID: %s - Reason: %s', wc_price($amount), $request->refund->id, $reason));
+		$order->add_order_note(sprintf(__('Refund requested to EBANX %s - Refund ID: %s - Reason: %s', 'woocommerce-gateway-ebanx'), wc_price($amount), $request->refund->id, $reason));
 
 		$refunds = current(get_post_meta((int) $order_id, "_ebanx_payment_refunds"));
 
@@ -929,10 +929,10 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
 					foreach ($data->payment->refunds as $refund) {
 						if ($ref->id == $refund->id) {
 							if ($refund->status == 'CO' && $refunds[$k]->status != 'CO') {
-								$order->add_order_note(sprintf('Refund confirmed to EBANX - Refund ID: %s', $refund->id));
+								$order->add_order_note(sprintf(__('Refund confirmed to EBANX - Refund ID: %s', 'woocommerce-gateway-ebanx'), $refund->id));
 							}
 							if ($refund->status == 'CA' && $refunds[$k]->status != 'CA') {
-								$order->add_order_note(sprintf('Refund canceled to EBANX - Refund ID: %s', $refund->id));
+								$order->add_order_note(sprintf(__('Refund canceled to EBANX - Refund ID: %s', 'woocommerce-gateway-ebanx'), $refund->id));
 							}
 
 							$refunds[$k]->status       = $refund->status; // status == co save note
