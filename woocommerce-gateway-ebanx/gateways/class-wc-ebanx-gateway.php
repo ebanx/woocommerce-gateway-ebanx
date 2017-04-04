@@ -615,14 +615,14 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
 	 */
 	protected function getTransactionAddress($attr = '')
 	{
-		if (empty(WC()->customer) || is_admin() || (empty($_POST['billing_country']) && empty(WC()->customer->get_country()))) {
+		if (empty(WC()->customer) || is_admin() || (empty($_POST['billing_country']) && empty(WC()->customer->get_billing_country()))) {
 			return false;
 		}
 
 		if (!empty($_POST['billing_country'])) {
 			$this->address['country'] = trim(strtolower($_POST['billing_country']));
 		} else {
-			$this->address['country'] = trim(strtolower(WC()->customer->get_country()));
+			$this->address['country'] = trim(strtolower(WC()->customer->get_billing_country()));
 		}
 
 		if ($attr !== '' && !empty($this->address[$attr])) {
@@ -661,7 +661,7 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
 				$request = \Ebanx\EBANX::doRequest($data);
 
 				if (
-					$request->payment->transaction_status->code === 'NOK' 
+					$request->payment->transaction_status->code === 'NOK'
 					&& $request->payment->transaction_status->acquirer === 'EBANX'
 					&& $this->is_sandbox_mode
 				) {
