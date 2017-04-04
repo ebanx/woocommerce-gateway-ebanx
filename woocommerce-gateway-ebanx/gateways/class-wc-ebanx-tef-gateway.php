@@ -93,7 +93,7 @@ class WC_EBANX_Tef_Gateway extends WC_EBANX_Redirect_Gateway
 	 */
 	protected function save_order_meta_fields($order, $request)
 	{
-		update_post_meta($order->id, '_ebanx_tef_bank', sanitize_text_field($_POST['tef']));
+		update_post_meta($order->id, '_ebanx_tef_bank', sanitize_text_field(WC_EBANX_Request::read('tef')));
 
 		parent::save_order_meta_fields($order, $request);
 	}
@@ -106,13 +106,14 @@ class WC_EBANX_Tef_Gateway extends WC_EBANX_Redirect_Gateway
 	 */
 	protected function request_data($order)
 	{
-		if (!isset($_POST['tef']) || !in_array($_POST['tef'], WC_EBANX_Constants::$BANKS_TEF_ALLOWED[WC_EBANX_Constants::COUNTRY_BRAZIL])) {
+		if ( ! WC_EBANX_Request::has('tef')
+			|| ! in_array(WC_EBANX_Request::read('tef'), WC_EBANX_Constants::$BANKS_TEF_ALLOWED[WC_EBANX_Constants::COUNTRY_BRAZIL])) {
 			throw new Exception('MISSING-BANK-NAME');
 		}
 
 		$data = parent::request_data($order);
 
-		$data['payment']['payment_type_code'] = $_POST['tef'];
+		$data['payment']['payment_type_code'] = WC_EBANX_Request::read('tef');
 
 		return $data;
 	}
