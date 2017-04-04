@@ -8,12 +8,21 @@ class WC_EBANX_Payment_Validator {
 
 	private $errors = array();
 
-	private $order;
+	private $order = null;
 
 	/**
 	 * Construct
 	 */
 	public function __construct($order) {
+		$this->set_order($order);
+	}
+
+	/**
+	 * Order setter
+	 *
+	 * @param WC_Order $order The order to validate
+	 */
+	public function set_order($order) {
 		$this->order = $order;
 	}
 
@@ -24,9 +33,8 @@ class WC_EBANX_Payment_Validator {
 	 * @param string $error The error message
 	 */
 	private function add_error($error) {
-		if ( ! in_array($error, $this->errors) ) {
-			$this->errors[] = $error;
-		}
+		$this->errors[] = $error;
+		$this->errors = array_unique($this->errors);
 	}
 
 	/**
@@ -53,6 +61,8 @@ class WC_EBANX_Payment_Validator {
 	 * @return int The number of errors it found
 	 */
 	public function validate() {
+		$this->errors = array();
+
 		if ($this->validate_status()) return true;
 		$this->validate_currency();
 		$this->validate_amount();
