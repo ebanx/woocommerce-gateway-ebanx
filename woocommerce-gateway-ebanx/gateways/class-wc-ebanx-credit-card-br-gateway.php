@@ -43,36 +43,6 @@ class WC_EBANX_Credit_Card_BR_Gateway extends WC_EBANX_Credit_Card_Gateway
 	}
 
 	/**
-	 * Action to capture the payment
-	 *
-	 * @param  WC_Order $order WooCommerce Order
-	 * @return void
-	 */
-	public function capture_payment_action($order)
-	{
-		if ($order->get_status() != 'pending' || $order->payment_method != $this->id) {
-			return;
-		}
-
-		\Ebanx\Config::set([
-			'integrationKey' => $this->private_key,
-			'testMode' => $this->is_sandbox_mode,
-		]);
-
-		$request = \Ebanx\Ebanx::doCapture(['hash' => get_post_meta($order->id, '_ebanx_payment_hash')]);
-
-		if ($request->status != 'SUCCESS') {
-			return;
-		}
-
-		if ($request->payment->status == 'CO') {
-			$order->payment_complete();
-			$order->update_status('processing');
-			$order->add_order_note(sprintf(__('EBANX: Transaction captured by %s', 'woocommerce-gateway-ebanx'), wp_get_current_user()->data->user_email));
-		}
-	}
-
-	/**
 	 * The HTML structure on checkout page
 	 */
 	public function payment_fields() {

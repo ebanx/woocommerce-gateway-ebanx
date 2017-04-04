@@ -128,7 +128,7 @@ class WC_EBANX_Notice {
 		if (isset($this->view)) {
 			$view = $this->view;
 			add_action('admin_notices', function () use ($view) {
-				include TEMPLATES_DIR . 'views/html-notice-'.$view.'.php';
+				include WC_EBANX_TEMPLATES_DIR . 'views/html-notice-'.$view.'.php';
 			});
 			$this->view = null;
 			return $this;
@@ -159,7 +159,7 @@ class WC_EBANX_Notice {
 	public function display() {
 		if (isset($this->view)) {
 			$view = $this->view;
-			include TEMPLATES_DIR . 'views/html-notice-'.$view.'.php';
+			include WC_EBANX_TEMPLATES_DIR . 'views/html-notice-'.$view.'.php';
 			$this->view = null;
 			return $this;
 		}

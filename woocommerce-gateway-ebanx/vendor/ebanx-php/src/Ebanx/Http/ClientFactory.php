@@ -54,11 +54,7 @@ class ClientFactory
             return new ClientCurl();
         }
 
-        if (ini_get('allow_url_fopen')) {
-            return new ClientStream();
-        }
-
         throw new \RuntimeException('No supported HTTP request method on this server.'.
-                                    ' Please enable curl or allow_url_fopen.');
+                                    ' Please enable curl.');
     }
 }

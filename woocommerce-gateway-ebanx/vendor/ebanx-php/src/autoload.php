@@ -34,7 +34,6 @@ require_once 'Ebanx/Config.php';
 require_once 'Ebanx/Http/AbstractClient.php';
 require_once 'Ebanx/Http/ClientFactory.php';
 require_once 'Ebanx/Http/ClientCurl.php';
-require_once 'Ebanx/Http/ClientStream.php';
 require_once 'Ebanx/Command/AbstractCommand.php';
 require_once 'Ebanx/Command/BankList.php';
 require_once 'Ebanx/Command/Factory.php';
