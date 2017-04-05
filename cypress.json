@@ -3,5 +3,6 @@
     "admin": "admin",
     "site": "site"
   },
-  "projectId": "ff45ju"
+  "projectId": "ff45ju",
+  "chromeWebSecurity": false
 }

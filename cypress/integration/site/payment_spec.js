@@ -26,7 +26,7 @@ describe('Site', () => {
         country: Faker.address.country(),
         address: Faker.address.streetAddress(),
         state: Faker.address.state(),
-        postcode: Faker.address.zipCode(),
+        postcode: Faker.address.zipCode('########'),
         city: Faker.address.city()
       };
 
@@ -34,38 +34,61 @@ describe('Site', () => {
       mock.state = 'Paraná';
       mock.brazilDocument = CPF.generate(true);
       mock.brazilBirthdate = '01/01/1970';
-      mock.postcode = '80010010';
     });
 
-    it('Make a Boleto Payment', () => {
-      site.makePaymentBoleto(mock, hash => {
-        api.assertPaymentStatus(hash, 'PE');
-      });
-    });
+    // it('Make a Boleto Payment', () => {
+    //   site.makeBoletoPayment(mock, hash => {
+    //     api.assertPaymentStatus(hash, 'PE');
+    //   });
+    // });
 
-    it('Make a Credit Card Payment using Visa', () => {
-      let cc_data = {
-        cvv: Faker.random.number({ min: 100, max: 999 }).toString(),
-        due_date: '02 / 25',
-        card_name: `${Faker.name.firstName} ${Faker.name.lastName}`,
-        number: defaults.site.payments.credit_card.visa
-      };
+    // it('Make a Credit Card Payment using Visa', () => {
+    //   let cc_data = {
+    //     cvv: Faker.random.number({ min: 100, max: 999 }).toString(),
+    //     due_date: `02 / ${Faker.random.number({ min: 20, max: 30 }) }`,
+    //     card_name: `${Faker.name.firstName} ${Faker.name.lastName}`,
+    //     number: defaults.site.payments.credit_card.visa
+    //   };
 
-      site.makePaymentCreditCardToBrazil(mock, cc_data, hash => {
+    //   site.makeCreditCardToBrazilPayment(mock, cc_data, hash => {
+    //     api.assertPaymentStatus(hash, 'CO');
+    //   });
+    // });
+
+    // it('Make a Credit Card Payment using Visa with Instalments', () => {
+    //   let cc_data = {
+    //     cvv: Faker.random.number({ min: 100, max: 999 }).toString(),
+    //     due_date: `02 / ${Faker.random.number({ min: 20, max: 30 }) }`,
+    //     card_name: `${Faker.name.firstName} ${Faker.name.lastName}`,
+    //     number: defaults.site.payments.credit_card.visa,
+    //     instalments: Faker.random.number({ min: 2, max: 12 }).toString()
+    //   };
+
+    //   site.makeCreditCardToBrazilPayment(mock, cc_data, hash => {
+    //     api.assertPaymentStatus(hash, 'CO');
+    //   });
+    // });
+
+    it('Make a TEF Payment using Itau', () => {
+      site.makeItauPayment(mock, hash => {
         api.assertPaymentStatus(hash, 'CO');
       });
     });
 
-    it('Make a Credit Card Payment using Visa with Instalments', () => {
-      let cc_data = {
-        cvv: Faker.random.number({ min: 100, max: 999 }).toString(),
-        due_date: `02 / ${Faker.random.number({ min: 20, max: 30 }) }`,
-        card_name: `${Faker.name.firstName} ${Faker.name.lastName}`,
-        number: defaults.site.payments.credit_card.visa,
-        instalments: Faker.random.number({ min: 2, max: 12 }).toString()
-      };
+    it('Make a TEF Payment using Bradesco', () => {
+      site.makeBradescoPayment(mock, hash => {
+        api.assertPaymentStatus(hash, 'CO');
+      });
+    });
 
-      site.makePaymentCreditCardToBrazil(mock, cc_data, hash => {
+    it('Make a TEF Payment using Banco do Brasil', () => {
+      site.makeBBPayment(mock, hash => {
+        api.assertPaymentStatus(hash, 'CO');
+      });
+    });
+
+    it('Make a TEF Payment using Banrisul', () => {
+      site.makeBanrisulPayment(mock, hash => {
         api.assertPaymentStatus(hash, 'CO');
       });
     });

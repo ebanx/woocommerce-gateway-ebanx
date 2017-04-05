@@ -8,6 +8,11 @@ const checkoutPage = (function (test) {
         placeOrder: '#place_order',
         boletoRadio: '.payment_method_ebanx-banking-ticket label',
         ccRadio: '.payment_method_ebanx-credit-card-br > label',
+        tefRadio: '.payment_method_ebanx-tef > label',
+        itauRadio: '#ebanx-tef-payment .ebanx-label input[value="itau"]',
+        bradescoRadio: '#ebanx-tef-payment .ebanx-label input[value="bradesco"]',
+        bbRadio: '#ebanx-tef-payment .ebanx-label input[value="bancodobrasil"]',
+        banrisulRadio: '#ebanx-tef-payment .ebanx-label input[value="banrisul"]',
       },
       containers: {
         boletoBox: '.payment_box.payment_method_ebanx-banking-ticket',
@@ -115,16 +120,16 @@ const checkoutPage = (function (test) {
     fillCheckout: function (data) {
       utils
         .validate(data, checkoutSchema, () => {
+          _private.fillCountry(data.country);
+          _private.fillState(data.state);
+          _private.fillPostcode(data.postcode);
+          _private.fillCity(data.city);
+          _private.fillAddress(data.address);
           _private.fillFirstName(data.firstName);
           _private.fillLastName(data.lastName);
           _private.fillCompany(data.company);
           _private.fillEmail(data.email);
           _private.fillPhone(data.phone);
-          _private.fillCountry(data.country);
-          _private.fillAddress(data.address);
-          _private.fillCity(data.city);
-          _private.fillState(data.state);
-          _private.fillPostcode(data.postcode);
         });
     },
 
@@ -168,6 +173,62 @@ const checkoutPage = (function (test) {
       return this;
     },
 
+    fillTef: function () {
+      test
+        .wait(500)
+        .get(buttons.tefRadio, { timeout: 10000 })
+          .should('be.visible')
+          .click({ force: true })
+        .get(containers.boletoBox)
+          .should('be.visible');
+
+      return this;
+    },
+
+    fillItauGateway: function () {
+      this.fillTef();
+
+      test
+        .get(buttons.itauRadio, { timeout: 10000 })
+          .should('be.visible')
+          .click({ force: true });
+
+      return this;
+    },
+
+    fillBradescoGateway: function () {
+      this.fillTef();
+
+      test
+        .get(buttons.bradescoRadio, { timeout: 10000 })
+          .should('be.visible')
+          .click({ force: true });
+
+      return this;
+    },
+
+    fillBBGateway: function () {
+      this.fillTef();
+
+      test
+        .get(buttons.bbRadio, { timeout: 10000 })
+          .should('be.visible')
+          .click({ force: true });
+
+      return this;
+    },
+
+    fillBanrisulGateway: function () {
+      this.fillTef();
+
+      test
+        .get(buttons.banrisulRadio, { timeout: 10000 })
+          .should('be.visible')
+          .click({ force: true });
+
+      return this;
+    },
+
     placeOrder: function () {
       test
         .get(buttons.placeOrder, { timeout: 10000 })
@@ -178,7 +239,7 @@ const checkoutPage = (function (test) {
     },
 
     extractHash: function (cb) {
-      test
+      return test
         .get(fields.hash, { timeout: 10000 })
           .should('be.hidden')
           .and('have.attr', 'value')

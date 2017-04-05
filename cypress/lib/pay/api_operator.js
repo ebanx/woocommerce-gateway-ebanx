@@ -13,7 +13,8 @@ const apiOperator = (function (test) {
             integration_key: defaults.api.integration_key,
             hash
           },
-          url: defaults.api.host
+          url: defaults.api.host,
+          timeout: 20000
         })
         .then(res => {
           if (res.status != 200 || res.body.status !== 'SUCCESS') {

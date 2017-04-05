@@ -4,11 +4,12 @@ const siteOperator = (function (test) {
       home: require('./pages/home')(test),
       product: require('./pages/product')(test),
       cart: require('./pages/cart')(test),
-      checkout: require('./pages/checkout')(test)
+      checkout: require('./pages/checkout')(test),
+      tef: require('./pages/tef')(test)
     }
   };
 
-  const { home, product, cart, checkout } = _private.pages;
+  const { home, product, cart, checkout, tef } = _private.pages;
 
   const $public = {
     makePayment: function () {
@@ -34,7 +35,7 @@ const siteOperator = (function (test) {
       return this;
     },
 
-    makePaymentBoleto: function (data, cb) {
+    makeBoletoPayment: function (data, cb) {
       this.makePaymentToBrazil(data);
 
       checkout
@@ -44,13 +45,57 @@ const siteOperator = (function (test) {
       return this;
     },
 
-    makePaymentCreditCardToBrazil: function (data, cc_data, cb) {
+    makeCreditCardToBrazilPayment: function (data, cc_data, cb) {
       this.makePaymentToBrazil(data);
 
       checkout
         .fillCreditCardBrazilGateway(cc_data)
         .placeOrderCreditCardBrazil(cc_data, cb);
-    }
+    },
+
+    makeItauPayment: function (data, cb) {
+      this.makePaymentToBrazil(data);
+
+      checkout
+        .fillItauGateway()
+        .placeOrder();
+
+      tef
+        .fillYes();
+    },
+
+    makeBradescoPayment: function (data, cb) {
+      this.makePaymentToBrazil(data);
+
+      checkout
+        .fillBradescoGateway()
+        .placeOrder();
+
+      tef
+        .fillYes();
+    },
+
+    makeBBPayment: function (data, cb) {
+      this.makePaymentToBrazil(data);
+
+      checkout
+        .fillBBGateway()
+        .placeOrder();
+
+      tef
+        .fillYes();
+    },
+
+    makeBanrisulPayment: function (data, cb) {
+      this.makePaymentToBrazil(data);
+
+      checkout
+        .fillBanrisulGateway()
+        .placeOrder();
+
+      tef
+        .fillYes();
+    },
   };
 
   return $public;
