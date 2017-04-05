@@ -134,7 +134,7 @@ class WC_EBANX_One_Click {
 			if ( is_wp_error( $order ) ) {
 				throw new Exception( sprintf( __( 'Error %d: Unable to create the order. Please try again.', 'woocommerce-gateway-ebanx' ), 400 ) );
 			} else {
-				$order_id = $order->id;
+				$order_id = $order->get_id();
 				do_action( 'woocommerce_new_order', $order_id );
 			}
 
@@ -229,7 +229,7 @@ class WC_EBANX_One_Click {
 			$order->set_total( WC()->cart->total );
 			$order->set_payment_method( $this->gateway );
 
-			$data = $this->gateway->process_payment( $order->id );
+			$data = $this->gateway->process_payment( $order->get_id() );
 
 			if ( $data['result'] !== 'success' ) {
 				throw new Exception( 'Error.' );
@@ -380,7 +380,7 @@ class WC_EBANX_One_Click {
 		}
 
 		if (
-			$product->product_type == 'external' ||
+			$product->is_type('external') ||
 			!$this->customer_can() ||
 			!$this->gateway->is_available() ||
 			$this->gateway->configs->settings['one_click'] !== 'yes'
@@ -388,7 +388,7 @@ class WC_EBANX_One_Click {
 			return;
 		}
 
-		if ( $product->product_type == 'variable' ) {
+		if ( $product->is_type('variable') ) {
 			add_action( 'woocommerce_after_single_variation', array( $this, 'print_button' ) );
 		} else {
 			add_action( 'woocommerce_after_add_to_cart_button', array( $this, 'print_button' ) );
@@ -482,7 +482,7 @@ class WC_EBANX_One_Click {
 				break;
 		}
 
-		$cart_total = $product->price;
+		$cart_total = $product->get_price();
 
 		$max_instalments = min($this->gateway->configs->settings['credit_card_instalments'], $this->gateway->fetch_acquirer_max_installments_for_price($cart_total, 'br'));
 

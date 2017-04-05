@@ -51,8 +51,8 @@ class WC_EBANX_My_Account
 	 */
 	public function my_orders_banking_ticket_link($actions, $order)
 	{
-		if ($order->payment_method === 'ebanx-banking-ticket' && in_array($order->get_status(), array('pending', 'on-hold'))) {
-			$url = get_post_meta($order->id, 'Banking Ticket URL', true);
+		if ($order->get_payment_method() === 'ebanx-banking-ticket' && in_array($order->get_status(), array('pending', 'on-hold'))) {
+			$url = get_post_meta($order->get_id(), 'Banking Ticket URL', true);
 
 			if (!empty($url)) {
 				$actions[] = array(
@@ -84,7 +84,7 @@ class WC_EBANX_My_Account
 
 		printf('<input type="hidden" name="ebanx_payment_hash" value="%s" />', $hash);
 
-		switch ($order->payment_method) {
+		switch ($order->get_payment_method()) {
 			case 'ebanx-credit-card-br':
 				WC_EBANX_Credit_Card_BR_Gateway::thankyou_page($order);
 				break;

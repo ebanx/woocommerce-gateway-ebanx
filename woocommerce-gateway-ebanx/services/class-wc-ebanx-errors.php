@@ -7,7 +7,7 @@ class WC_EBANX_Errors {
 	 * @return array An error array by user country
 	 */
 	public static function get_errors() {
-		return $errors = array(
+		return array(
 			'pt-br' => array(
 				'GENERAL'                    => 'Não foi possível concluir a compra. Por favor, tente novamente ou entre em contato com o site.',
 				'BP-DPAR-4'                  => 'Invalid integration key.',
