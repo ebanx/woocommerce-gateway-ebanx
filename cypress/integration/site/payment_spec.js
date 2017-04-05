@@ -23,6 +23,7 @@ describe('Site', () => {
         company: Faker.company.companyName(),
         email: Faker.internet.email(),
         phone: Faker.phone.phoneNumber(),
+        country: Faker.address.country(),
         address: Faker.address.streetAddress(),
         state: Faker.address.state(),
         postcode: Faker.address.zipCode(),
@@ -58,10 +59,10 @@ describe('Site', () => {
     it('Make a Credit Card Payment using Visa with Instalments', () => {
       let cc_data = {
         cvv: Faker.random.number({ min: 100, max: 999 }).toString(),
-        due_date: '02 / 25',
+        due_date: `02 / ${Faker.random.number({ min: 20, max: 30 }) }`,
         card_name: `${Faker.name.firstName} ${Faker.name.lastName}`,
         number: defaults.site.payments.credit_card.visa,
-        instalments: '2'
+        instalments: Faker.random.number({ min: 2, max: 12 }).toString()
       };
 
       site.makePaymentCreditCardToBrazil(mock, cc_data, hash => {
