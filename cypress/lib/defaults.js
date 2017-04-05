@@ -1,6 +1,6 @@
 module.exports = {
   site: {
-    host: 'http://localhost:3000/',
+    host: Cypress.env('WC_PLUGIN_SITE_HOST') || 'http://localhost:3000/',
     payments: {
       credit_card: {
         visa: '4111 1111 1111 1111',
@@ -15,11 +15,11 @@ module.exports = {
   },
 
   admin: {
-    host: 'http://localhost:3000/wp-admin/'
+    host: Cypress.env('WC_PLUGIN_ADMIN_HOST') || 'http://localhost:3000/wp-admin/'
   },
 
   api: {
-    integration_key: '1231000',
+    integration_key: Cypress.env('WC_PLUGIN_INTEGRATION_KEY'),
     host: `https://sandbox.ebanx.com/ws/query`
   }
 };

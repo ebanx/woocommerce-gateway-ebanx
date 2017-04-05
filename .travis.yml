@@ -1,0 +1,52 @@
+language: php
+php:
+  - '5.6'
+  - '7.0'
+  - '7.1'
+
+services: docker
+
+env:
+  - WC_PLUGIN_DB_NAME=wordpress WC_PLUGIN_DB_USER=root WC_PLUGIN_DB_PASSWORD=root WC_PLUGIN_DB_PREFIX=wp_
+  - WC_PLUGIN_SITE_HOST=http://localhost:3000 WC_PLUGIN_ADMIN_HOST=http://localhost:3000/wp-admin
+
+cache:
+  directories:
+    - /home/travis/.cypress/Cypress
+
+before_install:
+  - sudo apt-get update
+  # INSTALL WP DOCKER IMAGE
+  - echo INSTALLING WORDPRESS IMAGES
+  - docker run --name woocommerce-gateway-ebanx-wordpress --link woocommerce-gateway-ebanx-link:mysql -p 3000:80 -e WORDPRESS_DB_USER=$WC_PLUGIN_DB_USER -e WORDPRESS_DB_PASSWORD=$WC_PLUGIN_DB_PASSWORD -e WORDPRESS_TABLE_PREFIX=$WC_PLUGIN_DB_PREFIX -e WORDPRESS_DB_NAME=$WC_PLUGIN_DB_NAME -d wordpress
+  - docker ps -a
+  # INSTALL CYPRESS DEPENDENCIES
+  - echo INSTALLING OS DEPENDENCIES
+  - sudo apt-get install xvfb libgtk2.0-0 libnotify-dev libgconf-2-4 libnss3 libxss1
+  # INSTALL NODE TO RUN CYPRESS
+  - echo INSTALLING NODEJS
+  - sudo apt-get install node
+  ## INSTALL NPM DEPENDENCIES
+  - echo INSTALLING NPM DEPENDENCIES
+  - npm install -g yarn
+  - npm install -g cypress-cli
+  # Install WP-CLI
+  - echo INSTALLING WP-CLI
+  - curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
+  - php wp-cli.phar --info
+  - chmod +x wp-cli.phar
+  - sudo mv wp-cli.phar /usr/local/bin/wp
+  - wp --info --allow-root
+  # INSTALL WP DEPENDENCIES
+  - echo INSTALLING WP PLUGINS
+  - wp plugin install woocommerce -version=3.0.0 --activate --allow-root
+  # INSTALL EBANX PLUGIN
+  - echo INSTALLING EBANX PLUGIN
+  - cd ~/
+  - git clone git@github.com:ebanx/woocommerce-gateway-ebanx.git -b $TRAVIS_BRANCH --verbose --progress
+  - ln ~/woocommerce-gateway-ebanx/woocommerce-gateway-ebanx /var/www/html/wp-content/plugins
+
+install:
+  - cd ~/woocommerce-gateway-ebanx && yarn
+
+script: cd ~/woocommerce-gateway-ebanx && cypress run
