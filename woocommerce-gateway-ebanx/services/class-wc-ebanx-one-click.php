@@ -134,7 +134,7 @@ class WC_EBANX_One_Click {
 			if ( is_wp_error( $order ) ) {
 				throw new Exception( sprintf( __( 'Error %d: Unable to create the order. Please try again.', 'woocommerce-gateway-ebanx' ), 400 ) );
 			} else {
-				$order_id = $order->id;
+				$order_id = $order->get_id();
 				do_action( 'woocommerce_new_order', $order_id );
 			}
 
@@ -229,7 +229,7 @@ class WC_EBANX_One_Click {
 			$order->set_total( WC()->cart->total );
 			$order->set_payment_method( $this->gateway );
 
-			$data = $this->gateway->process_payment( $order->id );
+			$data = $this->gateway->process_payment( $order->get_id() );
 
 			if ( $data['result'] !== 'success' ) {
 				throw new Exception( 'Error.' );
