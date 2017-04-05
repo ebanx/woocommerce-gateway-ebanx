@@ -4,5 +4,6 @@
     "site": "site"
   },
   "projectId": "ff45ju",
-  "chromeWebSecurity": false
+  "chromeWebSecurity": false,
+  "videoRecording": false
 }

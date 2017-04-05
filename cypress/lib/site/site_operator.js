@@ -61,7 +61,9 @@ const siteOperator = (function (test) {
         .placeOrder();
 
       tef
-        .fillYes();
+        .fillYes(cb);
+
+      return this;
     },
 
     makeBradescoPayment: function (data, cb) {
@@ -72,7 +74,9 @@ const siteOperator = (function (test) {
         .placeOrder();
 
       tef
-        .fillYes();
+        .fillYes(cb);
+
+      return this;
     },
 
     makeBBPayment: function (data, cb) {
@@ -83,7 +87,9 @@ const siteOperator = (function (test) {
         .placeOrder();
 
       tef
-        .fillYes();
+        .fillYes(cb);
+
+      return this;
     },
 
     makeBanrisulPayment: function (data, cb) {
@@ -94,7 +100,22 @@ const siteOperator = (function (test) {
         .placeOrder();
 
       tef
-        .fillYes();
+        .fillYes(cb);
+
+      return this;
+    },
+
+    makeAccountPayment: function (data, cb) {
+      this.makePaymentToBrazil(data);
+
+      checkout
+        .fillEbanxAccountGateway()
+        .placeOrder();
+
+      tef
+        .fillYes(cb);
+
+      return this;
     },
   };
 

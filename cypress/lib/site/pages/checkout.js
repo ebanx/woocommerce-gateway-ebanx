@@ -13,9 +13,12 @@ const checkoutPage = (function (test) {
         bradescoRadio: '#ebanx-tef-payment .ebanx-label input[value="bradesco"]',
         bbRadio: '#ebanx-tef-payment .ebanx-label input[value="bancodobrasil"]',
         banrisulRadio: '#ebanx-tef-payment .ebanx-label input[value="banrisul"]',
+        ebanxAccountRadio: '.payment_method_ebanx-account > label'
       },
       containers: {
         boletoBox: '.payment_box.payment_method_ebanx-banking-ticket',
+        tefBox: '.payment_box.payment_method_ebanx-tef',
+        accountBox: '.payment_box.payment_method_ebanx-account',
         boletoBarCode: '.banking-ticket__barcode-code',
         checkoutForm: 'form.checkout',
         paymentType: '.ebanx-payment-type'
@@ -144,7 +147,6 @@ const checkoutPage = (function (test) {
 
     fillBoletoGateway: function () {
       test
-        .wait(500)
         .get(buttons.boletoRadio, { timeout: 10000 })
           .should('be.visible')
           .click({ force: true })
@@ -175,11 +177,10 @@ const checkoutPage = (function (test) {
 
     fillTef: function () {
       test
-        .wait(500)
         .get(buttons.tefRadio, { timeout: 10000 })
           .should('be.visible')
           .click({ force: true })
-        .get(containers.boletoBox)
+        .get(containers.tefBox)
           .should('be.visible');
 
       return this;
@@ -229,6 +230,20 @@ const checkoutPage = (function (test) {
       return this;
     },
 
+    fillEbanxAccountGateway: function () {
+      test
+        .get(buttons.ebanxAccountRadio, { timeout: 10000 })
+          .should('be.visible')
+          .click({ force: true })
+        .get(containers.accountBox)
+          .should('be.visible')
+        .get(buttons.ebanxAccountRadio, { timeout: 10000 })
+          .should('be.visible')
+          .click({ force: true });
+
+      return this;
+    },
+
     placeOrder: function () {
       test
         .get(buttons.placeOrder, { timeout: 10000 })
@@ -272,7 +287,7 @@ const checkoutPage = (function (test) {
       }
 
       return this.extractHash(cb);   
-    }
+    },
   };
 
   return $public;

@@ -6,22 +6,23 @@ const tefPage = (function (test) {
       },
       containers: {
         thankYou: '.woocommerce-thankyou-order-received'
+      },
+      fields: {
+        hash: 'input[name="ebanx_payment_hash"]',
       }
     }
   };
 
-  const { buttons, containers } = _private.elements;
+  const { buttons, containers, fields } = _private.elements;
 
   const $public = {
-    fillYes: function () {
+    fillYes: function (cb) {
       test
         .get(buttons.yes, { timeout: 10000 })
           .should('be.visible')
           .click({ force: true })
         .get(containers.thankYou, { timeout: 10000 })
           .should('be.visible');
-
-      return this;
     }
   };
 

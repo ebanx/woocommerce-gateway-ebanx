@@ -65,6 +65,12 @@ class WC_EBANX_My_Account
 		return $actions;
 	}
 
+	public function add_payment_hash_input ($text) {
+		
+
+		return $text;
+	}
+
 	/**
 	 * Call thankyou pages on order details page on My Account by gateway method
 	 *
