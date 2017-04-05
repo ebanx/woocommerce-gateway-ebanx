@@ -757,15 +757,15 @@ if (!class_exists('WC_EBANX')) {
 		 * @return void
 		 */
 		public function ebanx_admin_order_details ($order) {
-			if (in_array($order->payment_method, WC_EBANX_Helper::flatten(WC_EBANX_Constants::$EBANX_GATEWAYS_BY_COUNTRY))) {
-				$payment_hash = get_post_meta($order->id, '_ebanx_payment_hash', true);
+			if (in_array($order->get_payment_method(), WC_EBANX_Helper::flatten(WC_EBANX_Constants::$EBANX_GATEWAYS_BY_COUNTRY))) {
+				$payment_hash = get_post_meta($order->get_id(), '_ebanx_payment_hash', true);
 
 				wc_get_template(
 					'admin-order-details.php',
 					array(
 						'order' => $order,
 						'payment_hash' => $payment_hash,
-						'payment_checkout_url' => get_post_meta($order->id, '_ebanx_checkout_url', true),
+						'payment_checkout_url' => get_post_meta($order->get_id(), '_ebanx_checkout_url', true),
 						'is_sandbox_mode' => $this->is_sandbox_mode,
 						'dashboard_link' => "http://dashboard.ebanx.com/" . ($this->is_sandbox_mode ? 'test/' : '') . "payments/?hash=$payment_hash"
 					),
