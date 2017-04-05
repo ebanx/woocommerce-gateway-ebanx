@@ -91,13 +91,14 @@ class WC_EBANX_Eft_Gateway extends WC_EBANX_Redirect_Gateway
 	 */
 	protected function request_data($order)
 	{
-		if (!isset($_POST['eft']) || !array_key_exists($_POST['eft'], WC_EBANX_Constants::$BANKS_EFT_ALLOWED[WC_EBANX_Constants::COUNTRY_COLOMBIA])) {
+		if ( ! WC_EBANX_Request::has('eft')
+			|| ! array_key_exists(WC_EBANX_Request::read('eft'), WC_EBANX_Constants::$BANKS_EFT_ALLOWED[WC_EBANX_Constants::COUNTRY_COLOMBIA])) {
 			throw new Exception('MISSING-BANK-NAME');
 		}
 
 		$data = parent::request_data($order);
 
-		$data['payment']['eft_code']          = $_POST['eft'];
+		$data['payment']['eft_code']          = WC_EBANX_Request::read('eft');
 		$data['payment']['payment_type_code'] = $this->api_name;
 
 		return $data;

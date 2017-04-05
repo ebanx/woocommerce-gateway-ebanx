@@ -71,7 +71,7 @@ class WC_EBANX_Checker {
 				->with_message($message)
 				->with_type('error')
 				->persistent();
-			if (empty($_POST)) {
+			if ( WC_EBANX_Request::is_post_empty() ) {
 				$context->notices->enqueue();
 				return;
 			}
@@ -86,22 +86,22 @@ class WC_EBANX_Checker {
 	 */
 	public static function check_environment($context)
 	{
-		$n = $context->notices;
+		$notice = $context->notices;
 
-		$n->with_type('error')->persistent();
+		$notice->with_type('error')->persistent();
 
 		if (version_compare(phpversion(), WC_EBANX_MIN_PHP_VER, '<')) {
 			$message = __('EBANX - The minimum PHP version required for this plugin is %1$s. You are running %2$s.', 'woocommerce-gateway-ebanx', 'woocommerce-gateway-ebanx');
 
 			$message = sprintf($message, WC_EBANX_MIN_PHP_VER, phpversion());
 
-			$n->with_message($message)->enqueue();
+			$notice->with_message($message)->enqueue();
 		}
 
 		if (!defined('WC_VERSION')) {
 			$message = __('EBANX - It requires WooCommerce to be activated to work.', 'woocommerce-gateway-ebanx');
 
-			$n->with_message($message)->enqueue();
+			$notice->with_message($message)->enqueue();
 		}
 
 		if (version_compare(WC_VERSION, WC_EBANX_MIN_WC_VER, '<')) {
@@ -109,7 +109,7 @@ class WC_EBANX_Checker {
 
 			$message = sprintf($message, WC_EBANX_MIN_WC_VER, WC_VERSION);
 
-			$n->with_message($message)->enqueue();
+			$notice->with_message($message)->enqueue();
 		}
 
 		if (version_compare(get_bloginfo('version'), WC_EBANX_MIN_WP_VER, '<')) {
@@ -117,7 +117,7 @@ class WC_EBANX_Checker {
 
 			$message = sprintf($message, WC_EBANX_MIN_WP_VER, get_bloginfo('version'));
 
-			$n->with_message($message)->enqueue();
+			$notice->with_message($message)->enqueue();
 		}
 	}
 
