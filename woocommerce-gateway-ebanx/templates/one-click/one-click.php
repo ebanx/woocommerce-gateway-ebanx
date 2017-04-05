@@ -25,7 +25,7 @@ $i = 0;
                     <?php foreach ($cards as $key => $card): ?>
                         <label class="ebanx-one-click-card">
                             <input type="radio" class="ebanx-one-click-card-radio" name="ebanx_one_click_token" value="<?php echo $card->token ?>" <?php echo $i === 0 ? 'checked="checked"' : '' ?> />
-                            <img src="<?php echo PLUGIN_DIR_URL . "assets/images/icons/$card->brand.png" ?>" height="20" />
+                            <img src="<?php echo WC_EBANX_PLUGIN_DIR_URL . "assets/images/icons/$card->brand.png" ?>" height="20" />
                             <span>&bull;&bull;&bull;&bull; <?php echo substr($card->masked_number, -4) ?></span>
                         </label>
                     <?php $i++; endforeach; ?>
@@ -37,7 +37,7 @@ $i = 0;
                 </div>
 
                 <div class="ebanx-one-click-installments">
-                    <?php include WC_EBANX::get_templates_path() . '/instalments.php'; ?>
+                    <?php include WC_EBANX::get_templates_path() . 'instalments.php'; ?>
                 </div>
 
                 <button class="single_add_to_cart_button ebanx-one-click-pay button" data-processing-label="<?php _e('Processing...', 'woocommerce-gateway-ebanx') ?>" type="button"><?php _e('Pay Now', 'woocommerce-gateway-ebanx') ?></button>

@@ -5,7 +5,7 @@ if (!defined('ABSPATH')) {
 }
 ?>
 
-<div id="ebanx-debit-cart-form" class="ebanx-payment-container ebanx-language-<?php echo $language ?>">
+<div id="ebanx-debit-cart-form" class="ebanx-payment-container ebanx-language-es">
 	<div id="ebanx-container-new-debit-card">
 		<section class="ebanx-form-row">
 			<label for="ebanx-debit-card-holder-name"><?php _e('Titular de la tarjeta', 'woocommerce-gateway-ebanx') ?> <span class="required">*</span></label>

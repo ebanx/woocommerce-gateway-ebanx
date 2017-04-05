@@ -12,7 +12,7 @@ if (!defined('ABSPATH')) {
 }
 ?>
 
-<div id="ebanx-credit-cart-form" class="ebanx-payment-container ebanx-language-<?php echo $language ?>">
+<div id="ebanx-credit-cart-form" class="ebanx-payment-container ebanx-language-br">
     <section class="ebanx-form-row">
     	<?php if (!empty($cards)): ?>
     		<?php foreach ($cards as $k => $card): ?>
@@ -20,7 +20,7 @@ if (!defined('ABSPATH')) {
                     <label class="ebanx-credit-card-label">
         				<input type="radio" <?php if ($k===0): ?>checked="checked"<?php endif; ?> class="input-radio <?php echo trim($card->brand . "-" . $card->masked_number); ?>" value="<?php echo $card->token; ?>" name="ebanx-credit-card-use" />
         				<span class="ebanx-credit-card-brand">
-                            <img src="<?php echo PLUGIN_DIR_URL . "assets/images/icons/$card->brand.png" ?>" height="20" style="height: 20px; margin-left: 0; margin-right: 7px; float: none;" alt="<?php echo $card->brand ?>">
+                            <img src="<?php echo WC_EBANX_PLUGIN_DIR_URL . "assets/images/icons/$card->brand.png" ?>" height="20" style="height: 20px; margin-left: 0; margin-right: 7px; float: none;" alt="<?php echo $card->brand ?>">
                         </span>
                         <span class="ebanx-credit-card-bin">&bull;&bull;&bull;&bull; <?php echo substr($card->masked_number, -4) ?></span>
         			</label>
@@ -35,7 +35,7 @@ if (!defined('ABSPATH')) {
             					<input type="hidden" autocomplete="off" value="<?php echo $card->masked_number; ?>" class="ebanx-card-masked-number-use" />
         					</section>
 
-                            <?php include WC_EBANX::get_templates_path() . '/instalments.php'; ?>
+                            <?php include WC_EBANX::get_templates_path() . 'instalments.php'; ?>
         				</section>
         			</div>
                 </div>

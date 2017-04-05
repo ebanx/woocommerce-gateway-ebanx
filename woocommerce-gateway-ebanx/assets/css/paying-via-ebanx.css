@@ -32,10 +32,7 @@ li[class*="ebanx"] .ebanx-payment-container.ebanx-language-br:after {
   background-image: url(../images/ebanx-pagando.png);
 }
 
-li[class*="ebanx"] .ebanx-payment-container.ebanx-language-mx:after,
-li[class*="ebanx"] .ebanx-payment-container.ebanx-language-pe:after,
-li[class*="ebanx"] .ebanx-payment-container.ebanx-language-co:after,
-li[class*="ebanx"] .ebanx-payment-container.ebanx-language-cl:after {
+li[class*="ebanx"] .ebanx-payment-container.ebanx-language-es:after {
   width: 168px;
 
   background-image: url(../images/ebanx-estas-pagando.png);
@@ -43,6 +40,11 @@ li[class*="ebanx"] .ebanx-payment-container.ebanx-language-cl:after {
 
 li[class*="ebanx"] div.payment_box > p:first-child {
   margin-bottom: 0 !important;
+}
+
+li[class*="ebanx"] .ebanx-payment-converted-amount {
+  font-size: .9em;
+  margin-top: 20px;
 }
 
 .ebanx-credit-card-label {
@@ -278,6 +280,7 @@ li[class*="ebanx"] .payment_box .ebanx-credit-card-label > .input-radio,
 li[class*="ebanx"] .payment_box .ebanx-credit-card-label > .ebanx-credit-card-brand,
 li[class*="ebanx"] .payment_box .ebanx-credit-card-label > .ebanx-credit-card-bin {
   float: left !important;
+  margin-left: 1px;
 }
 
 .ebanx-credit-card-label > .ebanx-credit-card-bin {
