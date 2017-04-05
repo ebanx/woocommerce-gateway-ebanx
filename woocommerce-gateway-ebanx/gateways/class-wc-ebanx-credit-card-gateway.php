@@ -153,14 +153,14 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
 				$order = wc_get_order($order_id);
 
 				if ($order->get_id() === $order_id && $order->order_key === $order_key) {
-					static::$ebanx_params['billing_first_name'] = $order->get_billing_first_name();
-					static::$ebanx_params['billing_last_name'] = $order->get_billing_last_name();
+					static::$ebanx_params['billing_first_name'] = $order->billing_first_name;
+					static::$ebanx_params['billing_last_name'] = $order->billing_last_name;
 					static::$ebanx_params['billing_address_1'] = $order->billing_address_1;
 					static::$ebanx_params['billing_address_2'] = $order->billing_address_2;
 					static::$ebanx_params['billing_state'] = $order->billing_state;
 					static::$ebanx_params['billing_city'] = $order->billing_city;
 					static::$ebanx_params['billing_postcode'] = $order->billing_postcode;
-					static::$ebanx_params['billing_country'] = $order->get_billing_country();
+					static::$ebanx_params['billing_country'] = $order->billing_country;
 				}
 			}
 		}
