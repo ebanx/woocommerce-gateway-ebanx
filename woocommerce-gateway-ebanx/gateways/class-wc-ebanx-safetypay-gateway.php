@@ -19,7 +19,10 @@ class WC_EBANX_Safetypay_Gateway extends WC_EBANX_Redirect_Gateway
 
 		parent::__construct();
 
-		$this->enabled = is_array($this->configs->settings['peru_payment_methods']) ? in_array($this->id, $this->configs->settings['peru_payment_methods']) ? 'yes' : false : false;
+		$this->enabled = is_array($this->configs->settings['peru_payment_methods'])
+			&& in_array($this->id, $this->configs->settings['peru_payment_methods'])
+				? 'yes'
+				: false;
 	}
 
 	/**
@@ -93,9 +96,9 @@ class WC_EBANX_Safetypay_Gateway extends WC_EBANX_Redirect_Gateway
 			throw new Exception('INVALID-SAFETYPAY-TYPE');
 		}
 
+		$this->api_name = 'safetypay-' . $_POST['safetypay'];
 		$data = parent::request_data($order);
-
-		$data['payment']['payment_type_code'] = 'safetypay-' . $_POST['safetypay'];
+		$data['payment']['payment_type_code'] = $this->api_name;
 
 		return $data;
 	}
