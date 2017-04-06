@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
-"POT-Creation-Date: 2017-04-06 09:13-0300\n"
-"PO-Revision-Date: 2017-04-06 09:14-0300\n"
+"POT-Creation-Date: 2017-04-06 11:42-0300\n"
+"PO-Revision-Date: 2017-04-06 11:43-0300\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: es\n"
@@ -692,11 +692,23 @@ msgstr "%1$dx de %2$s"
 msgid "with interest"
 msgstr "con intereses"
 
+#: templates/my-account/ebanx-cards.php:2
+msgid "No credit cards found."
+msgstr "Ninguna tarjeta encontrada."
+
 #: templates/my-account/ebanx-cards.php:3
+msgid ""
+"To save a debit or credit card, pay an order on checkout using a card as "
+"payment method."
+msgstr ""
+"Para guardar una tarjeta de crédito o débito, termina una compra "
+"seleccionando tarjeta como medio de pago."
+
+#: templates/my-account/ebanx-cards.php:8
 msgid "Your saved credit cards"
 msgstr "Sus tarjetas de crédito guardados"
 
-#: templates/my-account/ebanx-cards.php:5
+#: templates/my-account/ebanx-cards.php:10
 msgid ""
 "The following credit cards will be listed on the checkout page. To delete a "
 "credit card, just check it and submit."
@@ -705,28 +717,16 @@ msgstr ""
 "borrar una tarjeta de crédito, seleccionarlo y haga clic en \"Borrar tarjetas"
 "\"."
 
-#: templates/my-account/ebanx-cards.php:23
-#: templates/my-account/ebanx-cards.php:54
+#: templates/my-account/ebanx-cards.php:28
+#: templates/my-account/ebanx-cards.php:55
 msgid "Delete cards"
 msgstr "Borrar tarjetas"
 
-#: templates/my-account/ebanx-cards.php:27
-msgid "No credit cards found"
-msgstr "Ninguna tarjeta de crédito encontrada"
-
-#: templates/my-account/ebanx-cards.php:29
-msgid ""
-"To save a credit card, pay an order on checkout using credit card as payment "
-"method."
-msgstr ""
-"Para guardar una tarjeta de crédito, termina una compra seleccionando "
-"tarjeta de crédito como medio de pago."
-
-#: templates/my-account/ebanx-cards.php:34
+#: templates/my-account/ebanx-cards.php:35
 msgid "Your saved debit cards"
 msgstr "Sus tarjetas de débito guardados"
 
-#: templates/my-account/ebanx-cards.php:36
+#: templates/my-account/ebanx-cards.php:37
 msgid ""
 "The following debit cards will be listed on the checkout page. To delete a "
 "debit card, just check it and submit."
@@ -734,18 +734,6 @@ msgstr ""
 "Las tarjetas de débito siguientes se mostrarán en la página de pago. Para "
 "borrar una tarjeta de débito, seleccionarlo y haga clic en \"Borrar tarjetas"
 "\"."
-
-#: templates/my-account/ebanx-cards.php:58
-msgid "No debit cards found"
-msgstr "Ninguna tarjeta de débito encontrada"
-
-#: templates/my-account/ebanx-cards.php:60
-msgid ""
-"To save a debit card, pay an order on checkout using debit card as payment "
-"method."
-msgstr ""
-"Para guardar una tarjeta de débito, termina una compra seleccionando tarjeta "
-"de débito como medio de pago."
 
 #: templates/one-click/one-click.php:18
 msgid "One-Click Purchase"
@@ -811,6 +799,26 @@ msgstr ""
 #: woocommerce-gateway-ebanx.php:614
 msgid "Settings"
 msgstr ""
+
+#~ msgid "No credit cards found"
+#~ msgstr "Ninguna tarjeta de crédito encontrada"
+
+#~ msgid ""
+#~ "To save a credit card, pay an order on checkout using credit card as "
+#~ "payment method."
+#~ msgstr ""
+#~ "Para guardar una tarjeta de crédito, termina una compra seleccionando "
+#~ "tarjeta de crédito como medio de pago."
+
+#~ msgid "No debit cards found"
+#~ msgstr "Ninguna tarjeta de débito encontrada"
+
+#~ msgid ""
+#~ "To save a debit card, pay an order on checkout using debit card as "
+#~ "payment method."
+#~ msgstr ""
+#~ "Para guardar una tarjeta de débito, termina una compra seleccionando "
+#~ "tarjeta de débito como medio de pago."
 
 #~ msgid "MM / YY"
 #~ msgstr "MM / AA"

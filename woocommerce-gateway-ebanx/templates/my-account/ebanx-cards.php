@@ -1,3 +1,8 @@
+<?php if (empty($credit_cards) && empty($debit_cards)): ?>
+    <h1><?php _e('No credit cards found.', 'woocommerce-gateway-ebanx'); ?></h1>
+    <p><?php _e('To save a debit or credit card, pay an order on checkout using a card as payment method.', 'woocommerce-gateway-ebanx'); ?></p>
+<?php endif ?>
+
 <?php if (!empty($credit_cards)): ?>
 
     <h3><?php _e('Your saved credit cards', 'woocommerce-gateway-ebanx'); ?></h3>
@@ -23,10 +28,6 @@
         <input type="submit" class="button" value="<?php _e('Delete cards', 'woocommerce-gateway-ebanx'); ?>">
     </form>
 
-<?php else: ?>
-    <h3><?php _e('No credit cards found', 'woocommerce-gateway-ebanx'); ?></h3>
-
-    <p><?php _e('To save a credit card, pay an order on checkout using credit card as payment method.', 'woocommerce-gateway-ebanx'); ?></p>
 <?php endif ?>
 
 <?php if (!empty($debit_cards)): ?>
@@ -53,9 +54,4 @@
 
         <input type="submit" class="button" value="<?php _e('Delete cards', 'woocommerce-gateway-ebanx'); ?>">
     </form>
-
-<?php else: ?>
-    <h3><?php _e('No debit cards found', 'woocommerce-gateway-ebanx'); ?></h3>
-
-    <p><?php _e('To save a debit card, pay an order on checkout using debit card as payment method.', 'woocommerce-gateway-ebanx'); ?></p>
 <?php endif ?>

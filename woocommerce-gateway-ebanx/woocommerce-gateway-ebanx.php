@@ -251,28 +251,28 @@ if (!class_exists('WC_EBANX')) {
 		{
 			if (isset($_POST['credit-card-delete']) && is_account_page()) {
 				// Find credit cards saved and delete the selected
-				$cards = get_user_meta(get_current_user_id(), '_ebanx_credit_card_token', true);
+				$credit_cards = get_user_meta(get_current_user_id(), '_ebanx_credit_card_token', true);
 
-				foreach ($cards as $k => $cd) {
+				foreach ($credit_cards as $k => $cd) {
 					if ($cd && in_array($cd->masked_number, $_POST['credit-card-delete'])) {
-						unset($cards[$k]);
+						unset($credit_cards[$k]);
 					}
 				}
 
-				update_user_meta(get_current_user_id(), '_ebanx_credit_card_token', $cards);
+				update_user_meta(get_current_user_id(), '_ebanx_credit_card_token', $credit_cards);
 			}
 			
 			if (isset($_POST['debit-card-delete']) && is_account_page()) {
 				// Find debit cards saved and delete the selected
-				$cards = get_user_meta(get_current_user_id(), '_ebanx_debit_card_token', true);
+				$debit_cards = get_user_meta(get_current_user_id(), '_ebanx_debit_card_token', true);
 
-				foreach ($cards as $k => $cd) {
+				foreach ($debit_cards as $k => $cd) {
 					if ($cd && in_array($cd->masked_number, $_POST['debit-card-delete'])) {
-						unset($cards[$k]);
+						unset($debit_cards[$k]);
 					}
 				}
 
-				update_user_meta(get_current_user_id(), '_ebanx_credit_card_token', $cards);
+				update_user_meta(get_current_user_id(), '_ebanx_debit_card_token', $debit_cards);
 			}
 
 			$credit_cards = array_filter((array) get_user_meta(get_current_user_id(), '_ebanx_credit_card_token', true), function ($card) {
@@ -433,7 +433,7 @@ if (!class_exists('WC_EBANX')) {
 			$is_endpoint = isset($wp_query->query_vars[self::$endpoint]);
 
 			if ($is_endpoint && !is_admin() && is_main_query() && in_the_loop() && is_account_page()) {
-				$title = __(self::$menu_name, 'woocommerce-gateway-ebanx');
+				$title = __('EBANX - Cards', 'woocommerce-gateway-ebanx');
 				remove_filter('the_title', array($this, 'my_account_menus_title'));
 			}
 

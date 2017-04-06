@@ -87,7 +87,7 @@ jQuery( function($) {
 
 				if (cardUse && cardUse.val() && cardUse.val() !== 'new') {
 					debitcard.token = cardUse.val();
-					debitcard.card_cvv = $(cardUse).parents('.ebanx-debit-card-option').find('.wc-debit-card-form-card-cvc').val();
+					debitcard.card_cvv = $(cardUse).parents('.ebanx-debit-card-option').find('.wc-credit-card-form-card-cvc').val();
 					debitcard.brand = $(cardUse).parents('.ebanx-debit-card-option').find('.ebanx-card-brand-use').val();
 					debitcard.masked_number = $(cardUse).parents('.ebanx-debit-card-option').find('.ebanx-card-masked-number-use').val();
 
@@ -100,6 +100,10 @@ jQuery( function($) {
 							masked_card_number: debitcard.masked_number
 						}
 					};
+
+					console.log(response);
+					console.log(cardUse);
+					console.log(debitcard);
 
 					wc_ebanx_form.renderCvv(debitcard.card_cvv);
 

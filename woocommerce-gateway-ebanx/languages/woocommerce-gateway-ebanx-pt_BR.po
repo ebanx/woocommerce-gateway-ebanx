@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
-"POT-Creation-Date: 2017-04-06 09:12-0300\n"
-"PO-Revision-Date: 2017-04-06 09:12-0300\n"
+"POT-Creation-Date: 2017-04-06 11:39-0300\n"
+"PO-Revision-Date: 2017-04-06 11:40-0300\n"
 "Last-Translator: \n"
 "Language-Team: EBANX\n"
 "Language: pt_BR\n"
@@ -693,11 +693,23 @@ msgstr "%1$dx de %2$s"
 msgid "with interest"
 msgstr "com juros"
 
+#: templates/my-account/ebanx-cards.php:2
+msgid "No credit cards found."
+msgstr "Nenhum cartão encontrado."
+
 #: templates/my-account/ebanx-cards.php:3
+msgid ""
+"To save a debit or credit card, pay an order on checkout using a card as "
+"payment method."
+msgstr ""
+"Para salvar um cartão de credito ou débito, finalize uma compra selecionando "
+"cartão como forma de pagamento."
+
+#: templates/my-account/ebanx-cards.php:8
 msgid "Your saved credit cards"
 msgstr "Seus cartões de crédito salvos"
 
-#: templates/my-account/ebanx-cards.php:5
+#: templates/my-account/ebanx-cards.php:10
 msgid ""
 "The following credit cards will be listed on the checkout page. To delete a "
 "credit card, just check it and submit."
@@ -706,28 +718,16 @@ msgstr ""
 "compra. Para apagar um cartão de credito, marque o mesmo e clique em "
 "\"Apagar cartões\"."
 
-#: templates/my-account/ebanx-cards.php:23
-#: templates/my-account/ebanx-cards.php:54
+#: templates/my-account/ebanx-cards.php:28
+#: templates/my-account/ebanx-cards.php:55
 msgid "Delete cards"
 msgstr "Apagar cartões"
 
-#: templates/my-account/ebanx-cards.php:27
-msgid "No credit cards found"
-msgstr "Nenhum cartão de crédito encontrado"
-
-#: templates/my-account/ebanx-cards.php:29
-msgid ""
-"To save a credit card, pay an order on checkout using credit card as payment "
-"method."
-msgstr ""
-"Para salvar um cartão de credito, finalize uma compra selecionando cartão de "
-"credito como forma de pagamento."
-
-#: templates/my-account/ebanx-cards.php:34
+#: templates/my-account/ebanx-cards.php:35
 msgid "Your saved debit cards"
 msgstr "Seus cartões de débito salvos"
 
-#: templates/my-account/ebanx-cards.php:36
+#: templates/my-account/ebanx-cards.php:37
 msgid ""
 "The following debit cards will be listed on the checkout page. To delete a "
 "debit card, just check it and submit."
@@ -735,18 +735,6 @@ msgstr ""
 "Os seguintes cartões de débitos serão listados na página de finalizar "
 "compra. Para apagar um cartão de débito, marque o mesmo e clique em \"Apagar "
 "cartões\"."
-
-#: templates/my-account/ebanx-cards.php:58
-msgid "No debit cards found"
-msgstr "Nenhum cartão de débito encontrado"
-
-#: templates/my-account/ebanx-cards.php:60
-msgid ""
-"To save a debit card, pay an order on checkout using debit card as payment "
-"method."
-msgstr ""
-"Para salvar um cartão de débito, finalize uma compra selecionando cartão de "
-"débito como forma de pagamento."
 
 #: templates/one-click/one-click.php:18
 msgid "One-Click Purchase"
@@ -785,10 +773,6 @@ msgstr ""
 msgid "Currency %s is not supported. Works only with Brazilian Real."
 msgstr "A moeda %s não é suportada. Funciona apenas como Real Brasileiro."
 
-#: woocommerce-gateway-ebanx.php:436
-msgid "EBANX - Cards"
-msgstr "EBANX - Cartões"
-
 #: woocommerce-gateway-ebanx.php:471
 #, php-format
 msgid ""
@@ -812,6 +796,29 @@ msgstr ""
 #: woocommerce-gateway-ebanx.php:614
 msgid "Settings"
 msgstr ""
+
+#~ msgid "No credit cards found"
+#~ msgstr "Nenhum cartão de crédito encontrado"
+
+#~ msgid ""
+#~ "To save a credit card, pay an order on checkout using credit card as "
+#~ "payment method."
+#~ msgstr ""
+#~ "Para salvar um cartão de credito, finalize uma compra selecionando cartão "
+#~ "de credito como forma de pagamento."
+
+#~ msgid "No debit cards found"
+#~ msgstr "Nenhum cartão de débito encontrado"
+
+#~ msgid ""
+#~ "To save a debit card, pay an order on checkout using debit card as "
+#~ "payment method."
+#~ msgstr ""
+#~ "Para salvar um cartão de débito, finalize uma compra selecionando cartão "
+#~ "de débito como forma de pagamento."
+
+#~ msgid "EBANX - Cards"
+#~ msgstr "EBANX - Cartões"
 
 #~ msgid "MM / YY"
 #~ msgstr "MM / AA"
