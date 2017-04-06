@@ -318,7 +318,7 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
 	 */
 	public function fetch_acquirer_max_installments_for_price($price, $country = null) {
 		$max_instalments = WC_EBANX_Constants::MAX_INSTALMENTS;
-		$country = $country ?: WC()->customer->get_billing_country();
+		$country = $country ?: WC()->customer->get_country();
 
 		switch (trim(strtolower($country))) {
 			case 'br':
