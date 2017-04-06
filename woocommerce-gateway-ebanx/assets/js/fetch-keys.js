@@ -80,7 +80,8 @@
 
 	var clickFetchKeys = function(e){
 		e.preventDefault();
-		modal.open('//localhost/fetchkeys.php');
+		var base = document.location.toString().split('/').slice(0,-1).join('/');
+		modal.open(base + '/?ebanx=fetch-keys');
 	};
 
 	var receiveIframeMessage = function(e){

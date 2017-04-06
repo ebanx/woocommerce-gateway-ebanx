@@ -199,6 +199,10 @@ if (!class_exists('WC_EBANX')) {
 					$this->ebanx_dashboard_check();
 					return;
 				}
+				if ($action === 'fetch-keys') {
+					$this->ebanx_fetch_keys_modal();
+					return;
+				}
 			}
 		}
 
@@ -251,6 +255,18 @@ if (!class_exists('WC_EBANX')) {
 			));
 			echo $json;
 			exit;
+		}
+
+		/**
+		 * Responds to the fetch keys action with an external url using our lead id
+		 *
+		 * @return void
+		 */
+		private function ebanx_fetch_keys_modal() {
+			$lead_id = get_option('_ebanx_lead_id');
+			$url = "http://localhost/fetchkeys.php?lead_id=".$lead_id;
+			header('Location: '.$url);
+			exit();
 		}
 
 		/**
@@ -669,7 +685,7 @@ if (!class_exists('WC_EBANX')) {
 				'woocommerce_ebanx_fetch_keys',
 				plugins_url('assets/js/fetch-keys.js', WC_EBANX::DIR),
 				array('jquery'),
-				WC_EBANX::VERSION,
+				WC_EBANX::get_plugin_version(),
 				true
 			);
 
