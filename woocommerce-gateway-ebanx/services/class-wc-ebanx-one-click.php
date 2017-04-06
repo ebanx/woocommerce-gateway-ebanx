@@ -85,7 +85,6 @@ class WC_EBANX_One_Click {
 				'customer_id' => $this->userId
 			));
 
-			$product_price = WC_EBANX_Request::read('ebanx-cart-total');
 			$product_id = WC_EBANX_Request::read('ebanx-product-id');
 
 			$user = array(
@@ -103,7 +102,6 @@ class WC_EBANX_One_Click {
 			);
 
 			$product_to_add = get_product( $product_id );
-			$sale_price = $product_to_add->get_price();
 
 			$order->add_product( $product_to_add, 1 );
 			$order->set_billing_email($user['email']);
