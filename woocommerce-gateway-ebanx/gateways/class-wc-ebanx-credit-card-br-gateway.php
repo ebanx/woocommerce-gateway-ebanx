@@ -4,13 +4,11 @@ if (!defined('ABSPATH')) {
 	exit;
 }
 
-class WC_EBANX_Credit_Card_BR_Gateway extends WC_EBANX_Credit_Card_Gateway
-{
+class WC_EBANX_Credit_Card_BR_Gateway extends WC_EBANX_Credit_Card_Gateway {
 	/**
 	 * Constructor
 	 */
-	public function __construct()
-	{
+	public function __construct() {
 		$this->id = 'ebanx-credit-card-br';
 		$this->method_title = __('EBANX - Credit Card Brazil', 'woocommerce-gateway-ebanx');
 
@@ -19,7 +17,10 @@ class WC_EBANX_Credit_Card_BR_Gateway extends WC_EBANX_Credit_Card_Gateway
 
 		parent::__construct();
 
-		$this->enabled = is_array($this->configs->settings['brazil_payment_methods']) ? in_array($this->id, $this->configs->settings['brazil_payment_methods']) ? 'yes' : false : false;
+		$this->enabled = is_array($this->configs->settings['brazil_payment_methods'])
+			&& in_array($this->id, $this->configs->settings['brazil_payment_methods'])
+			? 'yes'
+			: false;
 	}
 
 	/**
@@ -27,8 +28,7 @@ class WC_EBANX_Credit_Card_BR_Gateway extends WC_EBANX_Credit_Card_Gateway
 	 *
 	 * @return boolean
 	 */
-	public function is_available()
-	{
+	public function is_available() {
 		return parent::is_available() && $this->getTransactionAddress('country') == WC_EBANX_Constants::COUNTRY_BRAZIL;
 	}
 
