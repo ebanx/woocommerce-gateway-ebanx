@@ -57,9 +57,9 @@ if (!class_exists('WC_EBANX')) {
 
 		private static $log;
 
-		private static $endpoint = 'ebanx-credit-cards';
+		private static $endpoint = 'ebanx-cards';
 
-		private static $menu_name = 'EBANX - Credit Cards';
+		private static $menu_name = 'EBANX - Cards';
 
 		/**
 		 * Initialize the plugin public actions.
@@ -261,15 +261,33 @@ if (!class_exists('WC_EBANX')) {
 
 				update_user_meta(get_current_user_id(), '_ebanx_credit_card_token', $cards);
 			}
+			
+			if (isset($_POST['debit-card-delete']) && is_account_page()) {
+				// Find debit cards saved and delete the selected
+				$cards = get_user_meta(get_current_user_id(), '_ebanx_debit_card_token', true);
 
-			$cards = array_filter((array) get_user_meta(get_current_user_id(), '_ebanx_credit_card_token', true), function ($card) {
+				foreach ($cards as $k => $cd) {
+					if ($cd && in_array($cd->masked_number, $_POST['debit-card-delete'])) {
+						unset($cards[$k]);
+					}
+				}
+
+				update_user_meta(get_current_user_id(), '_ebanx_credit_card_token', $cards);
+			}
+
+			$credit_cards = array_filter((array) get_user_meta(get_current_user_id(), '_ebanx_credit_card_token', true), function ($card) {
+				return !empty($card->brand) && !empty($card->token) && !empty($card->masked_number); // TODO: Implement token due date
+			});
+
+			$debit_cards = array_filter((array) get_user_meta(get_current_user_id(), '_ebanx_debit_card_token', true), function ($card) {
 				return !empty($card->brand) && !empty($card->token) && !empty($card->masked_number); // TODO: Implement token due date
 			});
 
 			wc_get_template(
-				'my-account/ebanx-credit-cards.php',
+				'my-account/ebanx-cards.php',
 				array(
-					'cards' => (array) $cards,
+					'credit_cards' => (array) $credit_cards,
+					'debit_cards' => (array) $debit_cards
 				),
 				'woocommerce/ebanx/',
 				WC_EBANX::get_templates_path()
