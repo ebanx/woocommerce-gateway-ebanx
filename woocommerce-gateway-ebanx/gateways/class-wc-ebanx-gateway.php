@@ -138,39 +138,39 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
 		$ebanx_billing_brazil_birth_date = array(
 			'type'  => 'text',
 			'label' => __('Birth Date', 'woocommerce-gateway-ebanx') . self::REQUIRED_MARK,
-			'class' => array('ebanx_billing_brazil_birth_date', 'ebanx_billing_brazil_cpf', 'ebanx_billing_brazil_selector_option', 'form-row-wide'),
+			'class' => array('ebanx_billing_brazil_birth_date', 'ebanx_billing_brazil_cpf', 'ebanx_billing_brazil_selector_option'),
 			'default' => isset($birth_date_br) ? $birth_date_br : ''
 		);
 		$ebanx_billing_brazil_document = array(
 			'type'     => 'text',
 			'label'    => 'CPF' . self::REQUIRED_MARK,
-			'class' => array('ebanx_billing_brazil_document', 'ebanx_billing_brazil_cpf', 'ebanx_billing_brazil_selector_option', 'form-row-wide'),
+			'class' => array('ebanx_billing_brazil_document', 'ebanx_billing_brazil_cpf', 'ebanx_billing_brazil_selector_option'),
 			'default' => isset($cpf) ? $cpf : ''
 		);
 
 		$ebanx_billing_brazil_cnpj = array(
 			'type'     => 'text',
 			'label'    => 'CNPJ' . self::REQUIRED_MARK,
-			'class' => array('ebanx_billing_brazil_cnpj', 'ebanx_billing_brazil_cnpj', 'ebanx_billing_brazil_selector_option', 'form-row-wide'),
+			'class' => array('ebanx_billing_brazil_cnpj', 'ebanx_billing_brazil_cnpj', 'ebanx_billing_brazil_selector_option'),
 			'default' => isset($cnpj) ? $cnpj : ''
 		);
 
 		$ebanx_billing_chile_birth_date = array(
 			'type'  => 'text',
 			'label' => __('Birth Date', 'woocommerce-gateway-ebanx') . self::REQUIRED_MARK,
-			'class' => array('ebanx_billing_chile_birth_date', 'form-row-wide'),
+			'class' => array('ebanx_billing_chile_birth_date'),
 			'default' => isset($birth_date_cl) ? $birth_date_cl : ''
 		);
 		$ebanx_billing_chile_document = array(
 			'type'     => 'text',
 			'label'    => 'RUT' . self::REQUIRED_MARK,
-			'class' => array('ebanx_billing_chile_document', 'form-row-wide'),
+			'class' => array('ebanx_billing_chile_document'),
 			'default' => isset($rut) ? $rut : ''
 		);
 		$ebanx_billing_colombia_document = array(
 			'type'     => 'text',
 			'label'    => 'DNI' . self::REQUIRED_MARK,
-			'class' => array('ebanx_billing_colombia_document', 'form-row-wide'),
+			'class' => array('ebanx_billing_colombia_document'),
 			'default' => isset($dni) ? $dni : ''
 		);
 
