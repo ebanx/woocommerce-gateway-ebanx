@@ -451,6 +451,7 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
 
 		$has_cpf = false;
 		$has_cnpj = false;
+		$person_type = 'personal';
 
 		$data = array(
 			'mode'      => 'full',
@@ -495,8 +496,6 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
 			if (isset($this->configs->settings['brazil_taxes_options']) && is_array($this->configs->settings['brazil_taxes_options'])) {
 				$fields_options = $this->configs->settings['brazil_taxes_options'];
 			}
-
-			$person_type = 'personal';
 
 			if (count($fields_options) === 1 && $fields_options[0] === 'cnpj') {
 				$person_type = 'business';
