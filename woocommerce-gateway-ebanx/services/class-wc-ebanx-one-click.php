@@ -56,13 +56,15 @@ class WC_EBANX_One_Click {
 	 * @return string      The new URL
 	 */
 	public function one_click_url( $url ) {
-		if ( !isset( $_REQUEST['add-to-cart'] ) || !isset( $_REQUEST['ebanx_one_click_cvv'] )
+		global $post;
+		
+		if ( !isset( $post ) || !isset( $_REQUEST['ebanx_one_click_cvv'] )
 			|| !isset( $_REQUEST['ebanx_one_click_token'] )
 		) {
 			return $url;
 		}
 
-		$product_id = intval( $_REQUEST['add-to-cart'] );
+		$product_id = intval( $post->ID );
 
 		$instalments = '1';
 
@@ -102,10 +104,15 @@ class WC_EBANX_One_Click {
 	 */
 	public function one_click_handler() {
 		if ( is_admin()
-			|| ! isset( $_GET['_ebanx_one_click_action'] ) || $_GET['_ebanx_one_click_action'] != $this->orderAction
-			|| ! isset( $_GET['_ebanx_nonce'] ) || ! wp_verify_nonce( $_GET['_ebanx_nonce'], $this->orderAction )
-			|| !isset( $_GET['_ebanx_one_click_token'] ) || !isset( $_GET['_ebanx_one_click_cvv'] ) || !isset( $_GET['_ebanx_one_click_installments'] )
-			|| ! $this->customer_can() || ! $this->customer_has_ebanx_required_data()
+			|| ! WC_EBANX_Request::has('_ebanx_one_click_action')
+			|| WC_EBANX_Request::read('_ebanx_one_click_action') !== $this->orderAction
+			|| ! WC_EBANX_Request::has('_ebanx_nonce') 
+			|| ! wp_verify_nonce( WC_EBANX_Request::read('_ebanx_nonce'), $this->orderAction )
+			|| ! WC_EBANX_Request::has('_ebanx_one_click_token') 
+			|| ! WC_EBANX_Request::has('_ebanx_one_click_cvv') 
+			|| ! WC_EBANX_Request::has('_ebanx_one_click_installments')
+			|| ! $this->customer_can() 
+			|| ! $this->customer_has_ebanx_required_data()
 		) {
 			return;
 		}
@@ -290,13 +297,13 @@ class WC_EBANX_One_Click {
 		);
 
 		if ( ! empty( $billing['country'] ) ) {
-			WC()->customer->set_country( $billing['country'] );
+			WC()->customer->set_billing_country( $billing['country'] );
 		}
 		if ( ! empty( $billing['state'] ) ) {
-			WC()->customer->set_state( $billing['state'] );
+			WC()->customer->set_billing_state( $billing['state'] );
 		}
 		if ( ! empty( $billing['postcode'] ) ) {
-			WC()->customer->set_postcode( $billing['postcode'] );
+			WC()->customer->set_billing_postcode( $billing['postcode'] );
 		}
 
 		return apply_filters( 'ebanx_customer_billing', array_filter( $billing ) );
@@ -339,13 +346,13 @@ class WC_EBANX_One_Click {
 
 		// Update customer location to posted location so we can correctly check available shipping methods
 		if ( ! empty( $values['country'] ) ) {
-			WC()->customer->set_shipping_country( $values['country'] );
+			WC()->customer->set_billing_shipping_country( $values['country'] );
 		}
 		if ( ! empty( $values['state'] ) ) {
-			WC()->customer->set_shipping_state( $values['state'] );
+			WC()->customer->set_billing_shipping_state( $values['state'] );
 		}
 		if ( ! empty( $values['postcode'] ) ) {
-			WC()->customer->set_shipping_postcode( $values['postcode'] );
+			WC()->customer->set_billing_shipping_postcode( $values['postcode'] );
 		}
 	}
 
@@ -402,16 +409,16 @@ class WC_EBANX_One_Click {
 	 */
 	protected function customer_has_ebanx_required_data() {
 		$card = current( array_filter( (array) array_filter( get_user_meta( $this->userId, '_ebanx_credit_card_token', true ) ), function ( $card ) {
-					return $card->token == $_GET['_ebanx_one_click_token'];
+					return $card->token == WC_EBANX_Request::read('_ebanx_one_click_token');
 				} ) );
 		$names = $this->gateway->names;
 
 		$_POST['ebanx_token'] = $card->token;
 		$_POST['ebanx_masked_card_number'] = $card->masked_number;
 		$_POST['ebanx_brand'] = $card->brand;
-		$_POST['ebanx_billing_cvv'] = $_GET['_ebanx_one_click_cvv'];
+		$_POST['ebanx_billing_cvv'] = WC_EBANX_Request::read('_ebanx_one_click_cvv');
 		$_POST['ebanx_is_one_click'] = true;
-		$_POST['ebanx_billing_instalments'] = $_GET['_ebanx_one_click_installments'];
+		$_POST['ebanx_billing_instalments'] = WC_EBANX_Request::read('_ebanx_one_click_installments');
 
 		$_POST[$names['ebanx_billing_brazil_document']] = get_user_meta( $this->userId, '_ebanx_billing_brazil_document', true );
 		$_POST[$names['ebanx_billing_brazil_birth_date']] = get_user_meta( $this->userId, '_ebanx_billing_brazil_birth_date', true );

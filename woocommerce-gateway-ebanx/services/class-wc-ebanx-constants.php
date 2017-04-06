@@ -53,10 +53,11 @@ abstract class WC_EBANX_Constants
 	 *  Local currencies that EBANX processes
 	 */
 	public static $LOCAL_CURRENCIES = array(
-		self::CURRENCY_CODE_BRL,
-		self::CURRENCY_CODE_CLP,
-		self::CURRENCY_CODE_COP,
-		self::CURRENCY_CODE_MXN
+		self::COUNTRY_BRAZIL => self::CURRENCY_CODE_BRL,
+		self::COUNTRY_CHILE => self::CURRENCY_CODE_CLP,
+		self::COUNTRY_COLOMBIA => self::CURRENCY_CODE_COP,
+		self::COUNTRY_MEXICO => self::CURRENCY_CODE_MXN,
+		self::COUNTRY_PERU => self::CURRENCY_CODE_PEN
 	);
 
 	/**
@@ -148,6 +149,22 @@ abstract class WC_EBANX_Constants
 			'citibank_' => 'Citibank',
 			'helm_bank_s.a.' => 'Helm Bank',
 		)
+	);
+
+	public static $GATEWAY_TO_PAYMENT_TYPE_CODE = array(
+		'ebanx-banking-ticket' => '_boleto',
+		'ebanx-credit-card-br' => '_creditcard',
+		'ebanx-credit-card-mx' => '_creditcard',
+		'ebanx-debit-card' => 'debitcard',
+		'ebanx-oxxo' => '_oxxo',
+		'ebanx-sencillito' => '_sencillito',
+		'ebanx-servipag' => 'servipag',
+		'ebanx-tef' => '_tef',
+		'ebanx-pagoefectivo' => '_pagoefectivo',
+		'ebanx-safetypay' => '_safetypay',
+		'ebanx-eft' => 'eft',
+		'ebanx-baloto' => '_baloto'
+		//'ebanx-account' => '_ebanxaccount'
 	);
 
 	/**

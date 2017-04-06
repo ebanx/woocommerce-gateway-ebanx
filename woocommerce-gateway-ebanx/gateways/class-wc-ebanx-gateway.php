@@ -364,7 +364,7 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
 			return false;
 		}
 
-		$order->add_order_note(sprintf('Refund requested to EBANX %s - Refund ID: %s - Reason: %s', wc_price($amount), $request->refund->id, $reason));
+		$order->add_order_note(sprintf(__('Refund requested to EBANX %s - Refund ID: %s - Reason: %s', 'woocommerce-gateway-ebanx'), wc_price($amount), $request->refund->id, $reason));
 
 		$refunds = current(get_post_meta((int) $order_id, "_ebanx_payment_refunds"));
 
@@ -451,6 +451,7 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
 
 		$has_cpf = false;
 		$has_cnpj = false;
+		$person_type = 'personal';
 
 		$data = array(
 			'mode'      => 'full',
@@ -464,19 +465,17 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
 				'currency_code'         => $this->merchant_currency,
 				'name'                  => $order->billing_first_name . ' ' . $order->billing_last_name,
 				'email'                 => $order->billing_email,
-				"phone_number"          => $order->billing_phone,
+				'phone_number'          => $order->billing_phone,
 				'amount_total'          => $order->get_total(),
 				'order_number'          => $order->id,
 				'merchant_payment_code' => $order->id . '-' . md5(rand(123123, 9999999)),
-				'items' => array_map(function($prd) {
-					$p = new \stdClass();
-
-					$p->name = $prd['name'];
-					$p->unit_price = $prd['line_subtotal'];
-					$p->quantity = $prd['qty'];
-					$p->type = $prd['type'];
-
-					return $p;
+				'items' => array_map(function($product) {
+					return array(
+						'name' => $product['name'],
+						'unit_price' => $product['line_subtotal'],
+					  'quantity' => $product['qty'],
+						'type' => $product['type']
+					);
 				}, $order->get_items()),
 			)
 		);
@@ -497,8 +496,6 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
 			if (isset($this->configs->settings['brazil_taxes_options']) && is_array($this->configs->settings['brazil_taxes_options'])) {
 				$fields_options = $this->configs->settings['brazil_taxes_options'];
 			}
-
-			$person_type = 'personal';
 
 			if (count($fields_options) === 1 && $fields_options[0] === 'cnpj') {
 				$person_type = 'business';
@@ -892,7 +889,7 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
 	 */
 	final public function process_hook(array $codes, $notificationType)
 	{
-		do_action('ebanx_before_process_hook', $order, $notificationType);
+		do_action('ebanx_before_process_hook', $codes, $notificationType);
 
 		$config = array(
 			'integrationKey' => $this->private_key,
@@ -910,17 +907,9 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
 
 		$data = \Ebanx\EBANX::doQuery($codes);
 
-		$order = reset(get_posts(array(
-			'meta_query' => array(
-				array(
-					'key'   => '_ebanx_payment_hash',
-					'value' => $data->payment->hash,
-				),
-			),
-			'post_type'  => 'shop_order',
-		)));
+		$order_id = WC_EBANX_Helper::get_post_id_by_meta_key_and_value('_ebanx_payment_hash', $data->payment->hash);
 
-		$order = new WC_Order($order->ID);
+		$order = new WC_Order($order_id);
 
 		// TODO: if (empty($order)) {}
 		// TODO: if ($data->status != "SUCCESS")
@@ -933,10 +922,10 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
 					foreach ($data->payment->refunds as $refund) {
 						if ($ref->id == $refund->id) {
 							if ($refund->status == 'CO' && $refunds[$k]->status != 'CO') {
-								$order->add_order_note(sprintf('Refund confirmed to EBANX - Refund ID: %s', $refund->id));
+								$order->add_order_note(sprintf(__('Refund confirmed to EBANX - Refund ID: %s', 'woocommerce-gateway-ebanx'), $refund->id));
 							}
 							if ($refund->status == 'CA' && $refunds[$k]->status != 'CA') {
-								$order->add_order_note(sprintf('Refund canceled to EBANX - Refund ID: %s', $refund->id));
+								$order->add_order_note(sprintf(__('Refund canceled to EBANX - Refund ID: %s', 'woocommerce-gateway-ebanx'), $refund->id));
 							}
 
 							$refunds[$k]->status       = $refund->status; // status == co save note
