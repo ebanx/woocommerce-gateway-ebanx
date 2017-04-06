@@ -380,7 +380,7 @@ class WC_EBANX_One_Click {
 		}
 
 		if (
-			$product->is_type('external') ||
+			$product->product_type == 'external' ||
 			!$this->customer_can() ||
 			!$this->gateway->is_available() ||
 			$this->gateway->configs->settings['one_click'] !== 'yes'
@@ -388,7 +388,7 @@ class WC_EBANX_One_Click {
 			return;
 		}
 
-		if ( $product->is_type('variable') ) {
+		if ( $product->product_type == 'variable' ) {
 			add_action( 'woocommerce_after_single_variation', array( $this, 'print_button' ) );
 		} else {
 			add_action( 'woocommerce_after_add_to_cart_button', array( $this, 'print_button' ) );
