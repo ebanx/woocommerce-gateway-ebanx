@@ -765,7 +765,7 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
 	protected function save_user_meta_fields($order)
 	{
 		if ($this->userId) {
-			if (trim(strtolower($order->billing_country) === WC_EBANX_Constants::COUNTRY_BRAZIL) {
+			if (trim(strtolower($order->billing_country) === WC_EBANX_Constants::COUNTRY_BRAZIL)) {
 				if (isset($_POST[$this->names['ebanx_billing_brazil_document']])) {
 					update_user_meta($this->userId, '_ebanx_billing_brazil_document', sanitize_text_field($_POST[$this->names['ebanx_billing_brazil_document']]));
 				}
@@ -783,7 +783,7 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
 				}
 			}
 
-			if (trim(strtolower($order->billing_country) === WC_EBANX_Constants::COUNTRY_CHILE) {
+			if (trim(strtolower($order->billing_country) === WC_EBANX_Constants::COUNTRY_CHILE)) {
 				if (isset($_POST['ebanx_billing_chile_document'])) {
 					update_user_meta($this->userId, '_ebanx_billing_chile_document', sanitize_text_field($_POST['ebanx_billing_chile_document']));
 				}
@@ -889,7 +889,7 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
 	 */
 	final public function process_hook(array $codes, $notificationType)
 	{
-		do_action('ebanx_before_process_hook', $order, $notificationType);
+		do_action('ebanx_before_process_hook', $codes, $notificationType);
 
 		$config = array(
 			'integrationKey' => $this->private_key,
@@ -907,17 +907,9 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
 
 		$data = \Ebanx\EBANX::doQuery($codes);
 
-		$order = reset(get_posts(array(
-			'meta_query' => array(
-				array(
-					'key'   => '_ebanx_payment_hash',
-					'value' => $data->payment->hash,
-				),
-			),
-			'post_type'  => 'shop_order',
-		)));
+		$order_id = WC_EBANX_Helper::get_post_id_by_meta_key_and_value('_ebanx_payment_hash', $data->payment->hash);
 
-		$order = new WC_Order($order->get_id());
+		$order = new WC_Order($order_id);
 
 		// TODO: if (empty($order)) {}
 		// TODO: if ($data->status != "SUCCESS")

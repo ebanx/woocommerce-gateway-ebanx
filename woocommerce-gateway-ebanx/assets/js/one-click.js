@@ -50,7 +50,7 @@ jQuery(document).ready(function ($) {
 
       isProcessing = true;
     }
-  }
+  };
 
   formCart.on('submit', pay);
 
