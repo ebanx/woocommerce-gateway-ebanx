@@ -447,6 +447,7 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
 	 */
 	protected function request_data($order)
 	{
+		
 		$home_url = esc_url( home_url() );
 
 		$has_cpf = false;
@@ -479,6 +480,8 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
 				}, $order->get_items()),
 			)
 		);
+
+		
 
 		if (!empty($this->configs->settings['due_date_days']) && in_array($this->api_name, array_keys(WC_EBANX_Constants::$CASH_PAYMENTS_TIMEZONES)))
 		{
