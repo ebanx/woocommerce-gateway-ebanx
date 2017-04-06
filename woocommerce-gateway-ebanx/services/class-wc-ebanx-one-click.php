@@ -482,7 +482,7 @@ class WC_EBANX_One_Click {
 				break;
 		}
 
-		$cart_total = $product->get_price();
+		$cart_total = $product->price;
 
 		$max_instalments = min($this->gateway->configs->settings['credit_card_instalments'], $this->gateway->fetch_acquirer_max_installments_for_price($cart_total, 'br'));
 
