@@ -377,6 +377,13 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
 	 * @return filtered array       An array of instalment with price, amount, if it has interests and the number
 	 */
 	public function get_payment_terms($cart_total, $max_instalments, $tax = 0) {
+		$product = null;
+
+		if (is_a($cart_total, "WC_Product")) {
+			$product = $cart_total;
+			$cart_total = $product->price;
+		}
+
 		$instalments = array();
 		$instalment_taxes = $this->instalment_rates;
 
@@ -393,11 +400,18 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
 			$instalment_price = $cart_total / $number;
 			$instalment_price += $instalment_price * $tax;
 
-			$instalments[] = array(
+			$instalment = array(
 				'price' => $instalment_price,
 				'has_interest' => $has_interest,
 				'number' => $number
 			);
+
+			if (isset($product)) {
+				$instalment["product_id"] = $product->id;
+				$instalment["quantity"] = 1;
+			}
+
+			$instalments[] = $instalment;
 		}
 
 		return apply_filters('ebanx_get_payment_terms', $instalments);

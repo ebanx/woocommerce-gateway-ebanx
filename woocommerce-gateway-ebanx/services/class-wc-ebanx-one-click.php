@@ -57,7 +57,7 @@ class WC_EBANX_One_Click {
 	 */
 	public function one_click_url( $url ) {
 		global $post;
-		
+
 		if ( !isset( $post ) || !isset( $_REQUEST['ebanx_one_click_cvv'] )
 			|| !isset( $_REQUEST['ebanx_one_click_token'] )
 		) {
@@ -106,12 +106,12 @@ class WC_EBANX_One_Click {
 		if ( is_admin()
 			|| ! WC_EBANX_Request::has('_ebanx_one_click_action')
 			|| WC_EBANX_Request::read('_ebanx_one_click_action') !== $this->orderAction
-			|| ! WC_EBANX_Request::has('_ebanx_nonce') 
+			|| ! WC_EBANX_Request::has('_ebanx_nonce')
 			|| ! wp_verify_nonce( WC_EBANX_Request::read('_ebanx_nonce'), $this->orderAction )
-			|| ! WC_EBANX_Request::has('_ebanx_one_click_token') 
-			|| ! WC_EBANX_Request::has('_ebanx_one_click_cvv') 
+			|| ! WC_EBANX_Request::has('_ebanx_one_click_token')
+			|| ! WC_EBANX_Request::has('_ebanx_one_click_cvv')
 			|| ! WC_EBANX_Request::has('_ebanx_one_click_installments')
-			|| ! $this->customer_can() 
+			|| ! $this->customer_can()
 			|| ! $this->customer_has_ebanx_required_data()
 		) {
 			return;
@@ -493,7 +493,7 @@ class WC_EBANX_One_Click {
 
 		$max_instalments = min($this->gateway->configs->settings['credit_card_instalments'], $this->gateway->fetch_acquirer_max_installments_for_price($cart_total, 'br'));
 
-		$instalments_terms = $this->gateway->get_payment_terms($cart_total, $max_instalments);
+		$instalments_terms = $this->gateway->get_payment_terms($product, $max_instalments);
 
 		$args = apply_filters( 'ebanx_template_args', array(
 				'cards' => $this->cards,
