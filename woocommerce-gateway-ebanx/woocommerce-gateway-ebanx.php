@@ -819,7 +819,7 @@ if (!class_exists('WC_EBANX')) {
 					array(
 						'order' => $order,
 						'payment_hash' => $payment_hash,
-						'payment_checkout_url' => get_post_meta($order->get_id(), '_ebanx_checkout_url', true),
+						'payment_checkout_url' => get_post_meta($order->id, '_ebanx_checkout_url', true),
 						'is_sandbox_mode' => $this->is_sandbox_mode,
 						'dashboard_link' => "http://dashboard.ebanx.com/" . ($this->is_sandbox_mode ? 'test/' : '') . "payments/?hash=$payment_hash"
 					),

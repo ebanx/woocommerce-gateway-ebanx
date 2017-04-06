@@ -55,7 +55,7 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
 		$status = $_REQUEST['status'];
 		$recapture = false;
 
-		if ( $order->get_payment_method() !== $this->id || $status !== 'processing') {
+		if ( $order->payment_method !== $this->id || $status !== 'processing') {
 			return;
 		}
 
@@ -65,7 +65,7 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
 			'directMode' => true,
 		));
 
-		$response = \Ebanx\Ebanx::doCapture(array('hash' => get_post_meta($order->get_id(), '_ebanx_payment_hash', true)));
+		$response = \Ebanx\Ebanx::doCapture(array('hash' => get_post_meta($order->id, '_ebanx_payment_hash', true)));
 		$error = $this->check_capture_errors($response);
 
 		$is_recapture = false;
@@ -152,7 +152,7 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
 				$order_id = absint($_GET['order_id']);
 				$order = wc_get_order($order_id);
 
-				if ($order->get_id() === $order_id && $order->order_key === $order_key) {
+				if ($order->id === $order_id && $order->order_key === $order_key) {
 					static::$ebanx_params['billing_first_name'] = $order->billing_first_name;
 					static::$ebanx_params['billing_last_name'] = $order->billing_last_name;
 					static::$ebanx_params['billing_address_1'] = $order->billing_address_1;
@@ -240,9 +240,9 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
 	{
 		parent::save_order_meta_fields($order, $request);
 
-		update_post_meta($order->get_id(), '_cards_brand_name', $request->payment->payment_type_code);
-		update_post_meta($order->get_id(), '_instalments_number', $request->payment->instalments);
-		update_post_meta($order->get_id(), '_masked_card_number', $_POST['ebanx_masked_card_number']);
+		update_post_meta($order->id, '_cards_brand_name', $request->payment->payment_type_code);
+		update_post_meta($order->id, '_instalments_number', $request->payment->instalments);
+		update_post_meta($order->id, '_masked_card_number', $_POST['ebanx_masked_card_number']);
 	}
 
 	/**
@@ -318,7 +318,7 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
 	 */
 	public function fetch_acquirer_max_installments_for_price($price, $country = null) {
 		$max_instalments = WC_EBANX_Constants::MAX_INSTALMENTS;
-		$country = $country ?: WC()->customer->get_billing_country();
+		$country = $country ?: WC()->customer->get_country();
 
 		switch (trim(strtolower($country))) {
 			case 'br':
@@ -348,22 +348,22 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
 	public static function thankyou_page($order)
 	{
 		$order_amount = $order->get_total();
-		$instalments_number = get_post_meta($order->get_id(), '_instalments_number', true) ?: 1;
+		$instalments_number = get_post_meta($order->id, '_instalments_number', true) ?: 1;
 
 		$data = array(
 			'data' => array(
-				'card_brand_name' => get_post_meta($order->get_id(), '_cards_brand_name', true),
+				'card_brand_name' => get_post_meta($order->id, '_cards_brand_name', true),
 				'order_amount' => $order_amount,
 				'instalments_number' => $instalments_number,
 				'instalments_amount' => round($order_amount / $instalments_number, 2),
-				'masked_card' => substr(get_post_meta($order->get_id(), '_masked_card_number', true), -4),
-				'customer_email' => $order->get_billing_email(),
-				'customer_name' => $order->get_billing_first_name(),
+				'masked_card' => substr(get_post_meta($order->id, '_masked_card_number', true), -4),
+				'customer_email' => $order->billing_email,
+				'customer_name' => $order->billing_first_name,
 				'order_total' => $order->get_formatted_order_total(),
-				'order_currency' => $order->get_currency()
+				'order_currency' => $order->get_order_currency()
 			),
 			'order_status' => $order->get_status(),
-			'method' => $order->get_payment_method()
+			'method' => $order->payment_method
 		);
 
 		parent::thankyou_page($data);
