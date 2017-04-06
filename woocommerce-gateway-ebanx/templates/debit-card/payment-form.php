@@ -6,25 +6,51 @@ if (!defined('ABSPATH')) {
 ?>
 
 <div id="ebanx-debit-cart-form" class="ebanx-payment-container ebanx-language-es">
-	<div id="ebanx-container-new-debit-card">
-		<section class="ebanx-form-row">
-			<label for="ebanx-debit-card-holder-name"><?php _e('Titular de la tarjeta', 'woocommerce-gateway-ebanx') ?> <span class="required">*</span></label>
-			<input id="ebanx-debit-card-holder-name" class="wc-credit-card-form-card-name input-text" type="text" autocomplete="off" />
-		</section>
-		<section class="ebanx-form-row">
-			<label for="ebanx-debit-card-number"><?php _e('Número de la tarjeta', 'woocommerce-gateway-ebanx') ?> <span class="required">*</span></label>
-			<input id="ebanx-debit-card-number" class="input-text wc-credit-card-form-card-number" type="tel" maxlength="20" autocomplete="off" placeholder="&bull;&bull;&bull;&bull; &bull;&bull;&bull;&bull; &bull;&bull;&bull;&bull; &bull;&bull;&bull;&bull;" />
-		</section>
-		<div class="clear"></div>
-		<section class="ebanx-form-row ebanx-form-row-first">
-			<label for="ebanx-debit-card-expiry"><?php _e('Fecha de expiración (MM / AA)', 'woocommerce-gateway-ebanx') ?> <span class="required">*</span></label>
-			<input id="ebanx-debit-card-expiry" class="input-text wc-credit-card-form-card-expiry" type="tel" autocomplete="off" placeholder="<?php _e('MM / AA', 'woocommerce-gateway-ebanx');?>" maxlength="7" />
-		</section>
-		<section class="ebanx-form-row ebanx-form-row-last">
-			<label for="ebanx-debit-card-cvv"><?php _e('Código de verificación', 'woocommerce-gateway-ebanx') ?> <span class="required">*</span></label>
-			<input id="ebanx-debit-card-cvv" class="input-text wc-credit-card-form-card-cvc" type="tel" autocomplete="off" placeholder="<?php _e('CVV', 'woocommerce-gateway-ebanx');?>" />
-		</section>
+    <section class="ebanx-form-row">
+    	<?php if (!empty($cards)): ?>
+    		<?php foreach ($cards as $k => $card): ?>
+                <div class="ebanx-debit-card-option">
+                    <label class="ebanx-debit-card-label">
+        				<input type="radio" <?php if ($k===0): ?>checked="checked"<?php endif; ?> class="input-radio <?php echo trim($card->brand . "-" . $card->masked_number); ?>" value="<?php echo $card->token; ?>" name="ebanx-debit-card-use" />
+        				<span class="ebanx-debit-card-brand">
+                            <img src="<?php echo PLUGIN_DIR_URL . "assets/images/icons/$card->brand.png" ?>" height="20" style="height: 20px; margin-left: 0; margin-right: 7px; float: none;" alt="<?php echo $card->brand ?>">
+                        </span>
+                        <span class="ebanx-debit-card-bin">&bull;&bull;&bull;&bull; <?php echo substr($card->masked_number, -4) ?></span>
+        			</label>
+                    <div class="clear"></div>
+        			<div class="ebanx-container-debit-card" style="<?php if ($k!==0): ?>display: none;<?php endif; ?>">
+        				<section class="ebanx-form-row">
+        					<section class="ebanx-form-row">
+        					    <label for="ebanx-card-cvv"><?php _e('Código de verificación', 'woocommerce-gateway-ebanx') ?> <span class="required">*</span></label>
 
-		<div class="clear"></div>
-	</div>
+            					<input class="input-text wc-credit-card-form-card-cvc" type="text" autocomplete="off" placeholder="<?php _e('CVV', 'woocommerce-gateway-ebanx');?>" style="float: none;" />
+            					<input type="hidden" autocomplete="off" value="<?php echo $card->brand; ?>" class="ebanx-card-brand-use" />
+            					<input type="hidden" autocomplete="off" value="<?php echo $card->masked_number; ?>" class="ebanx-card-masked-number-use" />
+        					</section>
+        				</section>
+        			</div>
+                </div>
+    		<?php endforeach;?>
+
+            <div class="ebanx-debit-card-option">
+                <label class="ebanx-debit-card-label">
+        			<input type="radio" class="input-radio" value="new" <?php if (empty($cards)): ?>checked="checked"<?php endif; ?> name="ebanx-debit-card-use"> <?php _e('Otra tarjeta de crédito', 'woocommerce-gateway-ebanx'); ?>
+                </label>
+    			<div class="ebanx-container-debit-card" id="ebanx-container-new-debit-card" style="<?php if (!empty($cards)): ?>display: none;<?php endif; ?>">
+    				<?php include_once 'card-template.php';?>
+    			</div>
+            </div>
+    	<?php else: ?>
+            <div id="ebanx-container-new-debit-card">
+        		<?php include_once 'card-template.php';?>
+            </div>
+    	<?php endif;?>
+    </section>
 </div>
+
+<script>
+	// Custom select fields
+	if ('jQuery' in window && 'select2' in jQuery.fn) {
+		jQuery('select.ebanx-select-field').select2();
+	}
+</script>

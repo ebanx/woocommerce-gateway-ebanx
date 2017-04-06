@@ -66,10 +66,16 @@ class WC_EBANX_Debit_Card_Gateway extends WC_EBANX_Gateway
 			echo wp_kses_post(wpautop(wptexturize($description)));
 		}
 
+		$cards = array_filter((array) get_user_meta($this->userId, '_ebanx_debit_card_token', true), function ($card) {
+			return !empty($card->brand) && !empty($card->token) && !empty($card->masked_number);
+		});
+
 		wc_get_template(
 			'debit-card/payment-form.php',
 			array(
-				'cart_total' => $this->get_order_total()
+				'cards' => (array) $cards,
+				'cart_total' => $this->get_order_total(),
+				'place_order_enabled' => (isset($this->configs->settings['save_card_data']) && $this->configs->settings['save_card_data'] === 'yes')
 			),
 			'woocommerce/ebanx/',
 			WC_EBANX::get_templates_path()
@@ -132,7 +138,47 @@ class WC_EBANX_Debit_Card_Gateway extends WC_EBANX_Gateway
 		parent::save_order_meta_fields($order, $request);
 
 		update_post_meta($order->id, '_cards_brand_name', $request->payment->payment_type_code);
-		update_post_meta($order->id, '_masked_card_number', $_POST['ebanx_masked_card_number']);
+		update_post_meta($order->id, '_masked_card_number', $_POST['ebanx_debit_masked_card_number']);
+	}
+
+	/**
+	 * Save user's meta fields for future use
+	 *
+	 * @param  WC_Order $order The order created
+	 * @return void
+	 */
+	protected function save_user_meta_fields($order)
+	{
+		parent::save_user_meta_fields($order);
+
+		if ($this->userId && $this->configs->settings['save_card_data'] === 'yes' && isset($_POST['ebanx-save-debit-card']) && $_POST['ebanx-save-debit-card'] === 'yes') {
+			$cards = get_user_meta($this->userId, '_ebanx_debit_card_token', true);
+			$cards = !empty($cards) ? $cards : [];
+
+			$card = new \stdClass();
+
+			$card->brand = $_POST['ebanx_debit_brand'];
+			$card->token = $_POST['ebanx_debit_token'];
+			$card->masked_number = $_POST['ebanx_debit_masked_card_number'];
+
+			foreach ($cards as $cd) {
+				if (empty($cd)) {
+					continue;
+				}
+
+				if ($cd->masked_number == $card->masked_number && $cd->brand == $card->brand) {
+					$cd->token = $card->token;
+					unset($card);
+				}
+			}
+
+			// TODO: Implement token due date
+			if (isset($card)) {
+				$cards[] = $card;
+			}
+
+			update_user_meta($this->userId, '_ebanx_debit_card_token', $cards);
+		}
 	}
 
 	/**
