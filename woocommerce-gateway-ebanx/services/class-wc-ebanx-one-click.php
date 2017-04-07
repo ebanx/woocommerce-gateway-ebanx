@@ -89,7 +89,6 @@ class WC_EBANX_One_Click {
 			);
 
 			$product_to_add = get_product( $product_id );
-			$sale_price = $product_to_add->get_price();
 
 			$order->add_product( $product_to_add, 1 );
 			$order->set_billing_email($user['email']);
