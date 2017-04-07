@@ -295,7 +295,7 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
 	 */
 	public function process_payment($order_id)
 	{
-		if ( isset( $_POST['ebanx_billing_instalments'] ) ) {
+		if ( WC_EBANX_Request::has('ebanx_billing_instalments') ) {
 			$order = wc_get_order( $order_id );
 			$total_price = $order->get_total();
 			$tax_rate = 0;
@@ -306,6 +306,7 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
 			$total_price += $total_price * $tax_rate;
 			$order->set_total($total_price);
 		}
+		
 		return parent::process_payment($order_id);
 	}
 
