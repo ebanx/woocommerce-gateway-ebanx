@@ -34,6 +34,7 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway
 			'ebanx-servipag',
 		),
 		'colombia_payment_methods' => array(
+			'ebanx-credit-card-co',
 			'ebanx-eft',
 			'ebanx-baloto',
 		),
@@ -193,10 +194,12 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway
 				'type'        => 'multiselect',
 				'class'       => 'ebanx-select',
 				'options'     => array(
+					'ebanx-credit-card-co' => 'Credit Card',
 					'ebanx-eft' => 'PSE - Pago Seguros en Línea (EFT)',
 					'ebanx-baloto' => 'Baloto',
 				),
 				'default'     => array(
+					'ebanx-credit-card-co',
 					'ebanx-eft',
 					'ebanx-baloto',
 				),

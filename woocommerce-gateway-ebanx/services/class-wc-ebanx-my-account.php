@@ -80,6 +80,9 @@ class WC_EBANX_My_Account
 			case 'ebanx-credit-card-mx':
 				WC_EBANX_Credit_Card_MX_Gateway::thankyou_page($order);
 				break;
+			case 'ebanx-credit-card-co':
+				WC_EBANX_Credit_Card_CO_Gateway::thankyou_page($order);
+				break;
 			case 'ebanx-banking-ticket':
 				WC_EBANX_Banking_Ticket_Gateway::thankyou_page($order);
 				break;

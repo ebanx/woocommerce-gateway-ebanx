@@ -17,7 +17,8 @@ jQuery( function($) {
 			$(this.form)
 				.on('click', '#place_order', this.onSubmit)
         .on('submit checkout_place_order_ebanx-credit-card-br')
-				.on('submit checkout_place_order_ebanx-credit-card-mx');
+				.on('submit checkout_place_order_ebanx-credit-card-mx')
+				.on('submit checkout_place_order_ebanx-credit-card-co');
 
 			$(document)
 				.on(
