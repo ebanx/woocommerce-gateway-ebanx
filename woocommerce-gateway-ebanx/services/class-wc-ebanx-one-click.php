@@ -21,9 +21,11 @@ class WC_EBANX_One_Click {
 
 		$this->gateway = $this->userCountry ? ($this->userCountry === WC_EBANX_Constants::COUNTRY_BRAZIL ? new WC_EBANX_Credit_Card_BR_Gateway() : new WC_EBANX_Credit_Card_MX_Gateway()) : false;
 
+		/**
+		 * Actions
+		 */
 		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ), 100 );
 		add_action( 'woocommerce_after_add_to_cart_form', array( $this, 'print_button' ) );
-
 		add_action( 'wp_loaded', array( $this, 'one_click_handler' ), 99 );
 
 		$cards = get_user_meta( $this->userId, '_ebanx_credit_card_token', true );
@@ -40,18 +42,6 @@ class WC_EBANX_One_Click {
 				}
 			}
 		}
-	}
-
-	/**
-	 * It cleans the cart after generate a new URL
-	 *
-	 * @return void
-	 */
-	public function empty_cart() {
-		$cart = WC()->session->get( 'cart' );
-		update_user_meta( $this->userId, '_ebanx_persistent_cart', $cart );
-
-		WC()->cart->empty_cart( true );
 	}
 
 	/**
@@ -197,53 +187,6 @@ class WC_EBANX_One_Click {
 	}
 
 	/**
-	 * Get the user's shipping address by user id
-	 *
-	 * @param integer $id User ID
-	 * @return array
-	 */
-	public function get_user_shipping_address( $id ) {
-
-		if ( ! WC()->cart->needs_shipping_address() ) {
-			return array();
-		}
-
-		// Formatted Addresses
-		$shipping = array(
-			'first_name' => get_user_meta( $id, 'shipping_first_name', true ),
-			'last_name'  => get_user_meta( $id, 'shipping_last_name', true ),
-			'company'    => get_user_meta( $id, 'shipping_company', true ),
-			'address_1'  => get_user_meta( $id, 'shipping_address_1', true ),
-			'address_2'  => get_user_meta( $id, 'shipping_address_2', true ),
-			'city'       => get_user_meta( $id, 'shipping_city', true ),
-			'state'      => get_user_meta( $id, 'shipping_state', true ),
-			'postcode'   => get_user_meta( $id, 'shipping_postcode', true ),
-			'country'    => get_user_meta( $id, 'shipping_country', true )
-		);
-
-		return apply_filters( 'ebanx_customer_shipping', array_filter( $shipping ) );
-	}
-
-	/**
-	 * Set shipping info by user's information
-	 *
-	 * @param array   $values The user's information
-	 */
-	public function set_shipping_info( $values ) {
-
-		// Update customer location to posted location so we can correctly check available shipping methods
-		if ( ! empty( $values['country'] ) ) {
-			WC()->customer->set_billing_shipping_country( $values['country'] );
-		}
-		if ( ! empty( $values['state'] ) ) {
-			WC()->customer->set_billing_shipping_state( $values['state'] );
-		}
-		if ( ! empty( $values['postcode'] ) ) {
-			WC()->customer->set_billing_shipping_postcode( $values['postcode'] );
-		}
-	}
-
-	/**
 	 * Set the assets necessary by one click works
 	 *
 	 * @return void
@@ -302,7 +245,7 @@ class WC_EBANX_One_Click {
 	/**
 	 * Check if the customer is ready
 	 *
-	 * @return [type] [description]
+	 * @return boolean Returns if the customer has a minimal requirement
 	 */
 	public function customer_can() {
 		return !is_user_logged_in() || !get_user_meta( $this->userId, '_billing_email', true ) && !empty( $this->cards );
