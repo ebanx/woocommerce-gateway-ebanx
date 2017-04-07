@@ -68,9 +68,6 @@ class WC_EBANX_One_Click {
 			|| WC_EBANX_Request::read('ebanx-action') !== $this->orderAction
 			|| ! WC_EBANX_Request::has('ebanx-nonce') 
 			|| ! wp_verify_nonce( WC_EBANX_Request::read('ebanx-nonce'), $this->orderAction )
-			|| ! WC_EBANX_Request::has('ebanx-one-click-token') 
-			|| ! WC_EBANX_Request::has('ebanx-one-click-cvv') 
-			|| ! WC_EBANX_Request::has('ebanx-credit-card-installments')
 			|| ! WC_EBANX_Request::has('ebanx-cart-total')
 			|| ! WC_EBANX_Request::has('ebanx-product-id')
 			|| ! $this->customer_can() 
@@ -102,6 +99,7 @@ class WC_EBANX_One_Click {
 			);
 
 			$product_to_add = get_product( $product_id );
+			$sale_price = $product_to_add->get_price();
 
 			$order->add_product( $product_to_add, 1 );
 			$order->set_billing_email($user['email']);
@@ -295,7 +293,6 @@ class WC_EBANX_One_Click {
 		return empty( WC_EBANX_Request::read('ebanx-one-click-token') )
 			|| empty( WC_EBANX_Request::read('ebanx-credit-card-installments') )
 			|| empty( WC_EBANX_Request::read('ebanx-one-click-cvv') )
-			|| empty( WC_EBANX_Request::read('ebanx-action') )
 			|| ! WC_EBANX_Request::has($names['ebanx_billing_brazil_document'])
 			|| ! WC_EBANX_Request::has($names['ebanx_billing_brazil_birth_date'])
 			|| empty( WC_EBANX_Request::read($names['ebanx_billing_brazil_document']) )
