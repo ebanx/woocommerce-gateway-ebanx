@@ -109,8 +109,9 @@ class WC_EBANX_One_Click {
 			$order->set_total( WC()->cart->shipping_tax_total, 'shipping_tax' );
 			$order->set_total( WC()->cart->total );
 			$order->calculate_totals();
+			$order->save();
 
-			$response = $this->gateway->process_payment($order->get_id());
+			$response = $this->gateway->process_payment($order->id);
 
 			if ($response['result'] !== 'success') {
 				$message = __('EBANX: Unable to create the payment via one click.', 'woocommerce-gateway-ebanx');
@@ -284,7 +285,7 @@ class WC_EBANX_One_Click {
 				break;
 		}
 
-		$cart_total = $product->get_price();
+		$cart_total = $product->price;
 
 		$max_instalments = min($this->gateway->configs->settings['credit_card_instalments'], $this->gateway->fetch_acquirer_max_installments_for_price($cart_total, 'br'));
 
@@ -293,7 +294,7 @@ class WC_EBANX_One_Click {
 		$args = apply_filters( 'ebanx_template_args', array(
 				'cards' => $this->cards,
 				'cart_total' => $cart_total,
-				'product_id' => $product->get_id(),
+				'product_id' => $product->id,
 				'max_instalments' => $max_instalments,
 				'installment_taxes' => $this->instalment_rates,
 				'label' => __( 'Pay with one click', 'woocommerce-gateway-ebanx' ),
@@ -301,7 +302,7 @@ class WC_EBANX_One_Click {
 				'instalments_terms' => $instalments_terms,
 				'nonce' => wp_create_nonce( $this->orderAction ),
 				'action' => $this->orderAction,
-				'permalink' => get_permalink($product->get_id())
+				'permalink' => get_permalink($product->id)
 			) );
 
 		wc_get_template( 'one-click.php', $args, '', WC_EBANX::get_templates_path() . 'one-click/' );

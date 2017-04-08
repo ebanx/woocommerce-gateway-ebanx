@@ -74,8 +74,8 @@ class WC_EBANX_Tef_Gateway extends WC_EBANX_Redirect_Gateway
 	{
 		$data = array(
 			'data' => array(
-				'bank_name' => get_post_meta($order->get_id(), '_ebanx_tef_bank', true),
-				'customer_name' => get_post_meta($order->get_id(), '_billing_first_name', true)
+				'bank_name' => get_post_meta($order->id, '_ebanx_tef_bank', true),
+				'customer_name' => get_post_meta($order->id, '_billing_first_name', true)
 			),
 			'order_status' => $order->get_status(),
 			'method' => 'tef'
