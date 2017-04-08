@@ -191,7 +191,7 @@ jQuery( function($) {
 		var country = self.attr('data-country');
 		var amount = self.attr('data-amount');
 		var currency = self.attr('data-currency');
-		var text = self.parents('.payment_box').find('.ebanx-payment-converted-amount p');
+		var text = self.parents('.payment_box').find('.ebanx-payment-converted-amount span');
 		var spinner = self.parents('.payment_box').find('.ebanx-spinner');
 
 		spinner.fadeIn();
