@@ -194,24 +194,25 @@ jQuery( function($) {
 		var text = self.parents('.payment_box').find('.ebanx-payment-converted-amount p');
 		var spinner = self.parents('.payment_box').find('.ebanx-spinner');
 
-		$.post(woocommerce_params.ajax_url, {
-			action: 'wc_ebanx_update_converted_value',
-			instalments: instalments,
-			country: country,
-			amount: amount,
-			currency: currency,
-			beforeSend: function () {
-				text.addClass('ebanx-updating');
+		text.addClass('ebanx-updating');
+		spinner.fadeIn();
 
-				spinner.fadeIn();
-			}
+		$.ajax({
+      url: woocommerce_params.ajax_url,
+      type: 'POST',
+			data: {
+        action: 'ebanx_update_converted_value',
+        instalments: instalments,
+        country: country,
+        amount: amount,
+        currency: currency
+      }
 		})
 			.done(function (data) {
 				text.html(data);
 			})
 			.always(function () {
 				text.removeClass('ebanx-updating');
-
 				spinner.fadeOut();
 			});
 	};

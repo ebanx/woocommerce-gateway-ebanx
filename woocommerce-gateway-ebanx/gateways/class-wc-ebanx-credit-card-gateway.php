@@ -20,7 +20,8 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
 		add_action('woocommerce_order_edit_status', array($this, 'capture_payment_action'));
 
 		// Update converted value via ajax
-		add_action('wp_ajax_wc_ebanx_update_converted_value', array($this, 'update_converted_value'));
+		add_action('wp_ajax_nopriv_ebanx_update_converted_value', array($this, 'update_converted_value'));
+		add_action('wp_ajax_ebanx_update_converted_value', array($this, 'update_converted_value'));
 
 		if ($this->get_setting_or_default('interest_rates_enabled', 'no') == 'yes') {
 			$max_instalments = $this->configs->settings['credit_card_instalments'];
@@ -49,7 +50,7 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
 
 		echo $message;
 
-		die();
+		wp_die();
 	}
 
 	/**

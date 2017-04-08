@@ -13,7 +13,7 @@ class WC_EBANX_Checker {
 	*/
 	public static function check_sandbox_mode($context) {
 
-		if (!$context->is_sandbox_mode) {
+		if (!$context->is_sandbox_mode || WC_EBANX_Request::has('action') ) {
 			return;
 		}
 
@@ -21,7 +21,7 @@ class WC_EBANX_Checker {
 		$context->notices
 			->with_message($info_message)
 			->with_type('info')
-			->persistent()
+			->enqueue()
 			->display();
 	}
 

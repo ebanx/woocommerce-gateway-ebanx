@@ -999,7 +999,7 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
 
 		// Applies instalments taxes
 		if ( $instalments !== null ) {
-			$interest_rate = $this->configs->settings['interest_rates_0' . $instalments];
+			$interest_rate = $this->configs->settings['interest_rates_' . sprintf("%02d", $instalments)];
 
 			$amount += ($amount * $interest_rate / 100);
 		}
