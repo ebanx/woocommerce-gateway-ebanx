@@ -118,7 +118,7 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway
 			&& !empty($this->public_key)
 			&& !empty($this->private_key)
 			&& ($this->currency_is_usd_eur($currency)
-				|| $this->ebanx_process_merchant_currency($currency)
+			|| $this->ebanx_process_merchant_currency($currency)
 			);
 	}
 
@@ -128,7 +128,7 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway
 	 * @return boolean          Return true if EBANX process the currency
 	 */
 	public function ebanx_process_merchant_currency($currency) {
-		return;
+		return $currency;
 	}
 
 	/**
