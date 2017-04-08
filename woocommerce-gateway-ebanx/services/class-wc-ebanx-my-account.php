@@ -73,7 +73,7 @@ class WC_EBANX_My_Account
 	 */
 	public static function order_details($order)
 	{
-		switch ($order->payment_method) {
+		switch ($order->get_payment_method()) {
 			case 'ebanx-credit-card-br':
 				WC_EBANX_Credit_Card_BR_Gateway::thankyou_page($order);
 				break;
