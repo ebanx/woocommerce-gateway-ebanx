@@ -256,6 +256,10 @@ class WC_EBANX_One_Click {
 	 * @return void
 	 */
 	public function print_button() {
+		if ( ! $this->userCountry ) {
+			return;
+		}
+		
 		global $product;
 
 		switch ( get_locale() ) {
