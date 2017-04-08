@@ -19,10 +19,6 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
 
 		add_action('woocommerce_order_edit_status', array($this, 'capture_payment_action'));
 
-		// Update converted value via ajax
-		add_action('wp_ajax_nopriv_ebanx_update_converted_value', array($this, 'update_converted_value'));
-		add_action('wp_ajax_ebanx_update_converted_value', array($this, 'update_converted_value'));
-
 		if ($this->get_setting_or_default('interest_rates_enabled', 'no') == 'yes') {
 			$max_instalments = $this->configs->settings['credit_card_instalments'];
 			for ($i=1; $i <= $max_instalments; $i++) {
@@ -33,24 +29,6 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
 				}
 			}
 		}
-	}
-
-	/**
-	 * Receives values from instalments and show an updated message with new values
-	 *
-	 * @return void
-	 */
-	public function update_converted_value () {
-		$message = $this->checkout_rate_conversion(
-			WC_EBANX_Request::read('currency'),
-			false,
-			WC_EBANX_Request::read('country'),
-			WC_EBANX_Request::read('instalments')
-		);
-
-		echo $message;
-
-		wp_die();
 	}
 
 	/**
@@ -166,7 +144,7 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
 			// Using // to avoid conflicts between http and https protocols
 			wp_enqueue_script('ebanx', '//js.ebanx.com/ebanx-1.5.min.js', '', null, true);
 			wp_enqueue_script('woocommerce_ebanx_jquery_mask', plugins_url('assets/js/jquery-mask.js', WC_EBANX::DIR), array('jquery'), WC_EBANX::get_plugin_version(), true);
-			wp_enqueue_script('woocommerce_ebanx', plugins_url('assets/js/credit-card.js', WC_EBANX::DIR), array('jquery-payment', 'ebanx'), WC_EBANX::get_plugin_version(), true);
+			wp_enqueue_script('woocommerce_ebanx_credit_card', plugins_url('assets/js/credit-card.js', WC_EBANX::DIR), array('jquery-payment', 'ebanx'), WC_EBANX::get_plugin_version(), true);
 
 			// If we're on the checkout page we need to pass ebanx.js the address of the order.
 			if (is_checkout_pay_page() && isset($_GET['order']) && isset($_GET['order_id'])) {

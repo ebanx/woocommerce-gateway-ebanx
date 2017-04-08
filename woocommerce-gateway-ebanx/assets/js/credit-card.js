@@ -198,7 +198,7 @@ jQuery( function($) {
 		spinner.fadeIn();
 
 		$.ajax({
-      url: woocommerce_params.ajax_url,
+      url: wc_ebanx_params.ajaxurl,
       type: 'POST',
 			data: {
         action: 'ebanx_update_converted_value',

@@ -8,7 +8,8 @@ class WC_EBANX_Credit_Card_BR_Gateway extends WC_EBANX_Credit_Card_Gateway {
 	/**
 	 * Constructor
 	 */
-	public function __construct() {
+	public function __construct() 
+	{
 		$this->id = 'ebanx-credit-card-br';
 		$this->method_title = __('EBANX - Credit Card Brazil', 'woocommerce-gateway-ebanx');
 
