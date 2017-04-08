@@ -21,8 +21,8 @@ class WC_EBANX_Checker {
 		$context->notices
 			->with_message($info_message)
 			->with_type('info')
-			->enqueue()
-			->display();
+			->persistent()
+			->enqueue();
 	}
 
 	/**
