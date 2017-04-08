@@ -34,6 +34,11 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
 		}
 	}
 
+	/**
+	 * Receives values from instalments and show an updated message with new values
+	 *
+	 * @return void
+	 */
 	public function update_converted_value () {
 		$message = $this->checkout_rate_conversion(
 			WC_EBANX_Request::read('currency'),
