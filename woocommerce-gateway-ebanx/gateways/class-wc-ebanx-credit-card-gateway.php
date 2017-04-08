@@ -442,7 +442,7 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
 
 		$country = $this->getTransactionAddress('country');
 
-		$currency = $country === WC_EBANX_Constants::COUNTRY_BRAZIL ? WC_EBANX_Constants::CURRENCY_CODE_BRL : CURRENCY_CODE_MXN;
+		$currency = $country === WC_EBANX_Constants::COUNTRY_BRAZIL ? WC_EBANX_Constants::CURRENCY_CODE_BRL : WC_EBANX_Constants::CURRENCY_CODE_MXN;
 
 		wc_get_template(
 			$this->id . '/payment-form.php',
