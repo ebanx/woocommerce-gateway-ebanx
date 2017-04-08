@@ -47,6 +47,11 @@ class WC_EBANX_Credit_Card_MX_Gateway extends WC_EBANX_Credit_Card_Gateway
 	public function payment_fields() {
 		parent::payment_fields();
 
-		parent::checkout_rate_conversion(WC_EBANX_Constants::CURRENCY_CODE_MXN);
+		parent::checkout_rate_conversion(
+			WC_EBANX_Constants::CURRENCY_CODE_MXN,
+			true,
+			null,
+			1
+		);
 	}
 }

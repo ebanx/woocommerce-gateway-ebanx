@@ -5,7 +5,7 @@
  * Description: Offer Latin American local payment methods & increase your conversion rates with the solution used by AliExpress, AirBnB and Spotify in Brazil.
  * Author: EBANX
  * Author URI: https://www.ebanx.com/business/en
- * Version: 1.11.0
+ * Version: 1.11.1
  * License: MIT
  * Text Domain: woocommerce-gateway-ebanx
  * Domain Path: /languages
@@ -24,7 +24,7 @@ define('WC_EBANX_PLUGIN_DIR_URL', plugin_dir_url(__FILE__) . DIRECTORY_SEPARATOR
 define('WC_EBANX_PLUGIN_NAME', WC_EBANX_PLUGIN_DIR_URL . basename(__FILE__));
 define('WC_EBANX_GATEWAYS_DIR', __DIR__ . DIRECTORY_SEPARATOR . 'gateways' . DIRECTORY_SEPARATOR);
 define('WC_EBANX_SERVICES_DIR', __DIR__ . DIRECTORY_SEPARATOR . 'services' . DIRECTORY_SEPARATOR);
-define('WC_EBANX_LANGUAGES_DIR', __DIR__ . DIRECTORY_SEPARATOR . 'languages' . DIRECTORY_SEPARATOR);
+define('WC_EBANX_LANGUAGES_DIR', dirname( plugin_basename(__FILE__) ) . '/languages/');
 define('WC_EBANX_TEMPLATES_DIR', __DIR__ . DIRECTORY_SEPARATOR . 'templates' . DIRECTORY_SEPARATOR);
 define('WC_EBANX_VENDOR_DIR', __DIR__ . DIRECTORY_SEPARATOR . 'vendor' . DIRECTORY_SEPARATOR);
 define('WC_EBANX_ASSETS_DIR', __DIR__ . DIRECTORY_SEPARATOR . 'assets' . DIRECTORY_SEPARATOR);
@@ -76,10 +76,6 @@ if (!class_exists('WC_EBANX')) {
 					->enqueue();
 				return;
 			}
-			/**
-			 * i18n
-			 */
-			$this->enable_i18n();
 
 			/**
 			 * Includes
@@ -90,6 +86,7 @@ if (!class_exists('WC_EBANX')) {
 			 * Actions
 			 */
 			add_action('plugins_loaded', array($this, 'plugins_loaded'));
+			add_action('wp_loaded', array($this, 'enable_i18n'));
 
 			add_action('init', array($this, 'my_account_endpoint'));
 			add_action('init', array($this, 'ebanx_router'));
@@ -264,8 +261,7 @@ if (!class_exists('WC_EBANX')) {
 		 *
 		 * @return void
 		 */
-		public function enable_i18n()
-		{
+		public function enable_i18n() {
 			load_plugin_textdomain('woocommerce-gateway-ebanx', false, WC_EBANX_LANGUAGES_DIR);
 		}
 
@@ -829,5 +825,6 @@ if (!class_exists('WC_EBANX')) {
 			}
 		}
 	}
+
 	add_action('plugins_loaded', array('WC_EBANX', 'get_instance'));
 }

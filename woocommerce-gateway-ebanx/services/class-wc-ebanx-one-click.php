@@ -109,6 +109,7 @@ class WC_EBANX_One_Click {
 			$order->set_total( WC()->cart->shipping_tax_total, 'shipping_tax' );
 			$order->set_total( WC()->cart->total );
 			$order->calculate_totals();
+			$order->save();
 
 			$response = $this->gateway->process_payment($order->id);
 
@@ -256,6 +257,10 @@ class WC_EBANX_One_Click {
 	 * @return void
 	 */
 	public function print_button() {
+		if ( ! $this->userCountry || version_compare(WC_VERSION, '3.0.0', '<') ) {
+			return;
+		}
+		
 		global $product;
 
 		switch ( get_locale() ) {
