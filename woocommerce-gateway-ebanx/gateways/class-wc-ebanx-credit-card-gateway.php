@@ -19,6 +19,9 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
 
 		add_action('woocommerce_order_edit_status', array($this, 'capture_payment_action'));
 
+		// Update converted value via ajax
+		add_action('wp_ajax_wc_ebanx_update_converted_value', array($this, 'update_converted_value'));
+
 		if ($this->get_setting_or_default('interest_rates_enabled', 'no') == 'yes') {
 			$max_instalments = $this->configs->settings['credit_card_instalments'];
 			for ($i=1; $i <= $max_instalments; $i++) {
@@ -29,6 +32,19 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
 				}
 			}
 		}
+	}
+
+	public function update_converted_value () {
+		$message = $this->checkout_rate_conversion(
+			WC_EBANX_Request::read('currency'),
+			false,
+			WC_EBANX_Request::read('country'),
+			WC_EBANX_Request::read('instalments')
+		);
+
+		echo $message;
+
+		die();
 	}
 
 	/**
@@ -421,9 +437,13 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
 
 		$country = $this->getTransactionAddress('country');
 
+		$currency = $country === WC_EBANX_Constants::COUNTRY_BRAZIL ? WC_EBANX_Constants::CURRENCY_CODE_BRL : CURRENCY_CODE_MXN;
+
 		wc_get_template(
 			$this->id . '/payment-form.php',
 			array(
+				'currency' => $currency,
+				'country' => $country,
 				'instalments_terms' => $instalments_terms,
 				'cards' => (array) $cards,
 				'cart_total' => $cart_total,

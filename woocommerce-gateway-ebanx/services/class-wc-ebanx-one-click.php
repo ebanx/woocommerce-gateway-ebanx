@@ -256,7 +256,7 @@ class WC_EBANX_One_Click {
 	 * @return void
 	 */
 	public function print_button() {
-		if ( ! $this->userCountry ) {
+		if ( ! $this->userCountry || version_compare(WC_VERSION, '3.0.0', '<') ) {
 			return;
 		}
 		

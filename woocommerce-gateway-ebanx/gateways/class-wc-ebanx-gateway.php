@@ -971,7 +971,7 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
 	 * @param  string $currency Possible currencies: BRL, USD, EUR, PEN, CLP, COP, MXN
 	 * @return void
 	 */
-	public function checkout_rate_conversion($currency) {
+	public function checkout_rate_conversion($currency, $template = true, $country = null, $instalments = null) {
 		if ( ! in_array($this->merchant_currency, array(
 			WC_EBANX_Constants::CURRENCY_CODE_USD,
 			WC_EBANX_Constants::CURRENCY_CODE_EUR,
@@ -980,7 +980,10 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
 		}
 
 		$amount = WC()->cart->cart_contents_total;
-		$country = $this->getTransactionAddress('country');
+
+		if ($country === null) {
+			$country = $this->getTransactionAddress('country');
+		}
 
 		if ( in_array($this->merchant_currency, array(
 			WC_EBANX_Constants::CURRENCY_CODE_USD,
@@ -994,6 +997,13 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
 			$amount *= $rate;
 		}
 
+		// Applies instalments taxes
+		if ( $instalments !== null ) {
+			$interest_rate = $this->configs->settings['interest_rates_0' . $instalments];
+
+			$amount += ($amount * $interest_rate / 100);
+		}
+
 		// Applies IOF for Brazil payments only
 		if ( $country === WC_EBANX_Constants::COUNTRY_BRAZIL ) {
 			$amount += ($amount * WC_EBANX_Constants::BRAZIL_TAX);
@@ -1001,14 +1011,18 @@ abstract class WC_EBANX_Gateway extends WC_Payment_Gateway
 
 		$message = $this->get_checkout_message($amount, $currency, $country);
 
-		wc_get_template(
-			'checkout-conversion-rate.php',
-			array(
-				'message' => $message
-			),
-			'woocommerce/ebanx/',
-			WC_EBANX::get_templates_path()
-		);
+		if ($template) {
+			wc_get_template(
+				'checkout-conversion-rate.php',
+				array(
+					'message' => $message
+				),
+				'woocommerce/ebanx/',
+				WC_EBANX::get_templates_path()
+			);
+		}
+
+		return $message;
 	}
 
 	/**

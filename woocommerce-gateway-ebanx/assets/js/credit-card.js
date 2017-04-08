@@ -184,4 +184,46 @@ jQuery( function($) {
 	wc_ebanx_form.init( $( "form.checkout, form#order_review, form#add_payment_method, form.woocommerce-checkout" ) );
 
 	wc_ebanx_form.toggleCardUse();
+
+	// Update IOF value when instalments is changed
+	var update_converted = function (self) {
+		var instalments = self.val();
+		var country = self.attr('data-country');
+		var amount = self.attr('data-amount');
+		var currency = self.attr('data-currency');
+		var text = self.parents('.payment_box').find('.ebanx-payment-converted-amount p');
+		var spinner = self.parents('.payment_box').find('.ebanx-spinner');
+
+		$.post(woocommerce_params.ajax_url, {
+			action: 'wc_ebanx_update_converted_value',
+			instalments: instalments,
+			country: country,
+			amount: amount,
+			currency: currency,
+			beforeSend: function () {
+				text.addClass('ebanx-updating');
+
+				spinner.fadeIn();
+			}
+		})
+			.done(function (data) {
+				text.html(data);
+			})
+			.always(function () {
+				text.removeClass('ebanx-updating');
+
+				spinner.fadeOut();
+			});
+	};
+
+	$(document).on('change', 'select.ebanx-instalments', function (){
+		update_converted($(this));
+	});
+
+	$(document).on('change', 'input[name="ebanx-credit-card-use"]', function () {
+		update_converted($(this)
+				.parents('.ebanx-credit-card-option')
+				.find('select.ebanx-instalments'));
+	});
+
 } );
