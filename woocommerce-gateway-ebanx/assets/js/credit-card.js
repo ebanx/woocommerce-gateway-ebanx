@@ -194,7 +194,6 @@ jQuery( function($) {
 		var text = self.parents('.payment_box').find('.ebanx-payment-converted-amount p');
 		var spinner = self.parents('.payment_box').find('.ebanx-spinner');
 
-		text.addClass('ebanx-updating');
 		spinner.fadeIn();
 
 		$.ajax({
@@ -212,7 +211,6 @@ jQuery( function($) {
 				text.html(data);
 			})
 			.always(function () {
-				text.removeClass('ebanx-updating');
 				spinner.fadeOut();
 			});
 	};
