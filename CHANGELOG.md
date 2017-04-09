@@ -1,5 +1,8 @@
 # CHANGELOG
 
+# 1.11.3
+* Fix - Fixed a problem that was incrementing the previous value by instalment [#463](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/463)
+
 # 1.11.2
 * Fix - Fixed translation paths [#462](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/462)
 * Fix - Fixed converted value message when instalments is changed [#462](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/462)

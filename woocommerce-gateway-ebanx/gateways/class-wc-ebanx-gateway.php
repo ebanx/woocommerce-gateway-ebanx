@@ -522,7 +522,7 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway
 			)
 		);
 
-
+		
 
 		if (!empty($this->configs->settings['due_date_days']) && in_array($this->api_name, array_keys(WC_EBANX_Constants::$CASH_PAYMENTS_TIMEZONES)))
 		{
