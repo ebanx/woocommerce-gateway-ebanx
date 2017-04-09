@@ -522,7 +522,7 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway
 			)
 		);
 
-		
+
 
 		if (!empty($this->configs->settings['due_date_days']) && in_array($this->api_name, array_keys(WC_EBANX_Constants::$CASH_PAYMENTS_TIMEZONES)))
 		{
@@ -1039,7 +1039,7 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway
 		}
 
 		// Applies instalments taxes
-		if ( $instalments !== null ) {
+		if ( $this->configs->settings['interest_rates_enabled'] === 'yes' && $instalments !== null ) {
 			$interest_rate = $this->configs->settings['interest_rates_' . sprintf("%02d", $instalments)];
 
 			$amount += ($amount * $interest_rate / 100);
@@ -1048,6 +1048,12 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway
 		// Applies IOF for Brazil payments only
 		if ( $country === WC_EBANX_Constants::COUNTRY_BRAZIL ) {
 			$amount += ($amount * WC_EBANX_Constants::BRAZIL_TAX);
+		}
+
+		if ($instalments !== null) {
+			$instalment_price = $amount / $instalments;
+			$instalment_price = round(floatval($instalment_price), 2);
+			$amount = $instalment_price * $instalments;
 		}
 
 		$message = $this->get_checkout_message($amount, $currency, $country);
