@@ -400,6 +400,7 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
 
 			$instalment_price = $cart_total / $number;
 			$instalment_price += $instalment_price * $tax;
+			$instalment_price = round(floatval($instalment_price), 2);
 
 			$instalments[] = array(
 				'price' => $instalment_price,
