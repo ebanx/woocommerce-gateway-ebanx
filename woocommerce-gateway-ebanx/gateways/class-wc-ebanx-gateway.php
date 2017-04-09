@@ -522,7 +522,7 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway
 			)
 		);
 
-		
+
 
 		if (!empty($this->configs->settings['due_date_days']) && in_array($this->api_name, array_keys(WC_EBANX_Constants::$CASH_PAYMENTS_TIMEZONES)))
 		{
@@ -1039,7 +1039,7 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway
 		}
 
 		// Applies instalments taxes
-		if ( $this->configs->settings['interest_rates_enabled'] === 'yes' && $instalments !== null ) {
+		if ( $instalments !== null ) {
 			$interest_rate = $this->configs->settings['interest_rates_' . sprintf("%02d", $instalments)];
 
 			$amount += ($amount * $interest_rate / 100);
