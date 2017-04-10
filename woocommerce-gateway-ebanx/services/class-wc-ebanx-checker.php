@@ -101,7 +101,7 @@ class WC_EBANX_Checker {
 			}
 
 			$message = sprintf(
-				'EBANX - Your %s private integration key is invalid, please <a href="%s">adjust your settings</a>.',
+				__('EBANX - Your %s private integration key is invalid, please <a href="%s">adjust your settings</a>.', 'woocommerce-gateway-ebanx'),
 				$context->is_sandbox_mode ? "sandbox" : "live",
 				WC_EBANX_Constants::SETTINGS_URL
 			);
@@ -137,7 +137,7 @@ class WC_EBANX_Checker {
 			}
 
 			$message = sprintf(
-				'EBANX - Your %s public integration key is invalid, please <a href="%s">adjust your settings</a>.',
+				__('EBANX - Your %s public integration key is invalid, please <a href="%s">adjust your settings</a>.', 'woocommerce-gateway-ebanx'),
 				$context->is_sandbox_mode ? "sandbox" : "live",
 				WC_EBANX_Constants::SETTINGS_URL
 			);
@@ -162,7 +162,9 @@ class WC_EBANX_Checker {
 	private static function connection_error($context) {
 		$api_url = 'https://api.ebanx.com';
 
-		$message = sprintf('EBANX - Could not connect to our servers. Please check if your server can reach our API (<a href="%1$s">%1$s</a>).', $api_url);
+		$message = sprintf(
+			__('EBANX - Could not connect to our servers. Please check if your server can reach our API (<a href="%1$s">%1$s</a>).', 'woocommerce-gateway-ebanx'),
+			$api_url);
 		$context->notices
 			->with_message($message)
 			->with_type('error')
