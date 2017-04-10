@@ -53,10 +53,18 @@ class WC_EBANX_Checker {
 		if (!self::check_api_key_pair_empty($context)) {
 			return false;
 		}
-		if (!self::check_private_key($context)) {
+
+		$private_check = self::check_private_key($context);
+		if ($private_check === null) {
 			return false;
 		}
-		if (!self::check_public_key($context)) {
+
+		$public_check = self::check_public_key($context);
+		if ($public_check === null) {
+			return false;
+		}
+
+		if (!$private_check || !$public_check) {
 			return false;
 		}
 
@@ -120,7 +128,7 @@ class WC_EBANX_Checker {
 		catch (RuntimeException $e) {
 			self::connection_error($context);
 		}
-		return false;
+		return null;
 	}
 
 	/**
@@ -156,7 +164,7 @@ class WC_EBANX_Checker {
 		catch (RuntimeException $e) {
 			self::connection_error($context);
 		}
-		return false;
+		return null;
 	}
 
 	private static function connection_error($context) {
