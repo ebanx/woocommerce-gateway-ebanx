@@ -111,7 +111,7 @@ class WC_EBANX_Payment_By_Link {
 	 * @return void
 	 */
 	private static function post_request($hash, $url) {
-		self::$order->add_order_note(__('Order created via EBANX.', 'woocommerce-gateway-ebanx'));
+		self::$order->add_order_note(__('EBANX: Your order was created via EBANX.', 'woocommerce-gateway-ebanx'));
 		update_post_meta(self::$post_id, '_ebanx_payment_hash', $hash);
 		update_post_meta(self::$post_id, '_ebanx_checkout_url', $url);
 	}
