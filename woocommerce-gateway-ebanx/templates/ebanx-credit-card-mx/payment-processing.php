@@ -16,7 +16,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 <p><strong><?php _e('Resumo de la compra:', 'woocommerce-gateway-ebanx') ?></strong></p>
 <p><?php _e('Valor:', 'woocommerce-gateway-ebanx') ?> <?php echo WC_EBANX_Constants::CURRENCY_CODE_USD ?> <?php echo $order_amount ?></p>
 <?php if ($instalments_number > 1) : ?>
-    <p><?php $instalments_number ?> <?php _e('meses sen intereses de', 'woocommerce-gateway-ebanx') ?> <?php WC_EBANX_Constants::CURRENCY_CODE_USD ?> <?php echo $instalments_amount ?></p>
+    <p><?php echo $instalments_number ?> <?php _e('meses sen intereses de', 'woocommerce-gateway-ebanx') ?> <?php WC_EBANX_Constants::CURRENCY_CODE_USD ?> <?php echo $instalments_amount ?></p>
 <?php else : ?>
     <p><?php _e('Pago realizado en una sola exhibición', 'woocommerce-gateway-ebanx') ?></p>
 <?php endif; ?>
