@@ -101,7 +101,7 @@ class WC_EBANX_Checker {
 			}
 
 			$message = sprintf(
-				__('EBANX - Your %s private integration key is invalid, please <a href="%s">adjust your settings</a>.', 'woocommerce-gateway-ebanx'),
+				__('EBANX - Your <strong>%s integration key</strong> is invalid, please <a href="%s">adjust your settings</a>.', 'woocommerce-gateway-ebanx'),
 				$context->is_sandbox_mode ? "sandbox" : "live",
 				WC_EBANX_Constants::SETTINGS_URL
 			);
@@ -137,7 +137,7 @@ class WC_EBANX_Checker {
 			}
 
 			$message = sprintf(
-				__('EBANX - Your %s public integration key is invalid, please <a href="%s">adjust your settings</a>.', 'woocommerce-gateway-ebanx'),
+				__('EBANX - Your <strong>%s public integration key</strong> is invalid, please <a href="%s">adjust your settings</a>.', 'woocommerce-gateway-ebanx'),
 				$context->is_sandbox_mode ? "sandbox" : "live",
 				WC_EBANX_Constants::SETTINGS_URL
 			);
