@@ -10,7 +10,7 @@
 		<br>
 		<input type="text" value="<?php echo $payment_hash ?>" onfocus="this.select();" onmouseup="return false;" readonly>
 	</p>
-	<?php if ($order->status === 'on-hold' && $payment_checkout_url): ?>
+	<?php if ($order->status === 'pending' && $payment_checkout_url): ?>
 		<p>
 			<strong><?php _e('Customer Payment Link', 'woocommerce-gateway-ebanx') ?></strong>
 			<br>

@@ -474,3 +474,7 @@ li[class*="ebanx"] .payment_box .ebanx-credit-card-label > .ebanx-credit-card-bi
   display: inline-block;
   margin-left: 32px;
 }
+
+.ebanx-form-row .select2.select2-container {
+  width: 100% !important;
+}

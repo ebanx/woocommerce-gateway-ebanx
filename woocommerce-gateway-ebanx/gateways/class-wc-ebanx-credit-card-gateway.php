@@ -55,7 +55,7 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
 		$status = $_REQUEST['status'];
 		$recapture = false;
 
-		if ( $order->get_payment_method() !== $this->id || $status !== 'processing') {
+		if ( $order->payment_method !== $this->id || $status !== 'processing') {
 			return;
 		}
 
@@ -65,7 +65,7 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
 			'directMode' => true,
 		));
 
-		$response = \Ebanx\Ebanx::doCapture(array('hash' => get_post_meta($order->get_id(), '_ebanx_payment_hash', true)));
+		$response = \Ebanx\Ebanx::doCapture(array('hash' => get_post_meta($order->id, '_ebanx_payment_hash', true)));
 		$error = $this->check_capture_errors($response);
 
 		$is_recapture = false;
@@ -144,7 +144,7 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
 			// Using // to avoid conflicts between http and https protocols
 			wp_enqueue_script('ebanx', '//js.ebanx.com/ebanx-1.5.min.js', '', null, true);
 			wp_enqueue_script('woocommerce_ebanx_jquery_mask', plugins_url('assets/js/jquery-mask.js', WC_EBANX::DIR), array('jquery'), WC_EBANX::get_plugin_version(), true);
-			wp_enqueue_script('woocommerce_ebanx', plugins_url('assets/js/credit-card.js', WC_EBANX::DIR), array('jquery-payment', 'ebanx'), WC_EBANX::get_plugin_version(), true);
+			wp_enqueue_script('woocommerce_ebanx_credit_card', plugins_url('assets/js/credit-card.js', WC_EBANX::DIR), array('jquery-payment', 'ebanx'), WC_EBANX::get_plugin_version(), true);
 
 			// If we're on the checkout page we need to pass ebanx.js the address of the order.
 			if (is_checkout_pay_page() && isset($_GET['order']) && isset($_GET['order_id'])) {
@@ -152,15 +152,15 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
 				$order_id = absint($_GET['order_id']);
 				$order = wc_get_order($order_id);
 
-				if ($order->get_id() === $order_id && $order->order_key === $order_key) {
-					static::$ebanx_params['billing_first_name'] = $order->get_billing_first_name();
-					static::$ebanx_params['billing_last_name'] = $order->get_billing_last_name();
+				if ($order->id === $order_id && $order->order_key === $order_key) {
+					static::$ebanx_params['billing_first_name'] = $order->billing_first_name;
+					static::$ebanx_params['billing_last_name'] = $order->billing_last_name;
 					static::$ebanx_params['billing_address_1'] = $order->billing_address_1;
 					static::$ebanx_params['billing_address_2'] = $order->billing_address_2;
 					static::$ebanx_params['billing_state'] = $order->billing_state;
 					static::$ebanx_params['billing_city'] = $order->billing_city;
 					static::$ebanx_params['billing_postcode'] = $order->billing_postcode;
-					static::$ebanx_params['billing_country'] = $order->get_billing_country();
+					static::$ebanx_params['billing_country'] = $order->billing_country;
 				}
 			}
 		}
@@ -240,9 +240,9 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
 	{
 		parent::save_order_meta_fields($order, $request);
 
-		update_post_meta($order->get_id(), '_cards_brand_name', $request->payment->payment_type_code);
-		update_post_meta($order->get_id(), '_instalments_number', $request->payment->instalments);
-		update_post_meta($order->get_id(), '_masked_card_number', $_POST['ebanx_masked_card_number']);
+		update_post_meta($order->id, '_cards_brand_name', $request->payment->payment_type_code);
+		update_post_meta($order->id, '_instalments_number', $request->payment->instalments);
+		update_post_meta($order->id, '_masked_card_number', $_POST['ebanx_masked_card_number']);
 	}
 
 	/**
@@ -295,17 +295,24 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
 	 */
 	public function process_payment($order_id)
 	{
-		if ( isset( $_POST['ebanx_billing_instalments'] ) ) {
+		$has_instalments = (WC_EBANX_Request::has('ebanx_billing_instalments') || WC_EBANX_Request::has('ebanx-credit-card-installments'));
+
+		if ( $has_instalments ) {
+
 			$order = wc_get_order( $order_id );
-			$total_price = $order->get_total();
+
+			$total_price = get_post_meta($order_id, '_order_total', true);
 			$tax_rate = 0;
-			$instalments = $_POST['ebanx_billing_instalments'];
+			$instalments = WC_EBANX_Request::has('ebanx_billing_instalments') ? WC_EBANX_Request::read('ebanx_billing_instalments') : WC_EBANX_Request::read('ebanx-credit-card-installments');
+
 			if ( array_key_exists( $instalments, $this->instalment_rates ) ) {
 				$tax_rate = $this->instalment_rates[$instalments];
 			}
+
 			$total_price += $total_price * $tax_rate;
-			$order->set_total($total_price);
+			update_post_meta($order_id, '_order_total', $total_price);
 		}
+
 		return parent::process_payment($order_id);
 	}
 
@@ -318,7 +325,7 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
 	 */
 	public function fetch_acquirer_max_installments_for_price($price, $country = null) {
 		$max_instalments = WC_EBANX_Constants::MAX_INSTALMENTS;
-		$country = $country ?: WC()->customer->get_billing_country();
+		$country = $country ?: WC()->customer->get_country();
 
 		switch (trim(strtolower($country))) {
 			case 'br':
@@ -348,22 +355,22 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
 	public static function thankyou_page($order)
 	{
 		$order_amount = $order->get_total();
-		$instalments_number = get_post_meta($order->get_id(), '_instalments_number', true) ?: 1;
+		$instalments_number = get_post_meta($order->id, '_instalments_number', true) ?: 1;
 
 		$data = array(
 			'data' => array(
-				'card_brand_name' => get_post_meta($order->get_id(), '_cards_brand_name', true),
+				'card_brand_name' => get_post_meta($order->id, '_cards_brand_name', true),
 				'order_amount' => $order_amount,
 				'instalments_number' => $instalments_number,
 				'instalments_amount' => round($order_amount / $instalments_number, 2),
-				'masked_card' => substr(get_post_meta($order->get_id(), '_masked_card_number', true), -4),
-				'customer_email' => $order->get_billing_email(),
-				'customer_name' => $order->get_billing_first_name(),
+				'masked_card' => substr(get_post_meta($order->id, '_masked_card_number', true), -4),
+				'customer_email' => $order->billing_email,
+				'customer_name' => $order->billing_first_name,
 				'order_total' => $order->get_formatted_order_total(),
-				'order_currency' => $order->get_currency()
+				'order_currency' => $order->get_order_currency()
 			),
 			'order_status' => $order->get_status(),
-			'method' => $order->get_payment_method()
+			'method' => $order->payment_method
 		);
 
 		parent::thankyou_page($data);
@@ -372,16 +379,17 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
 	/**
 	 * Calculates the interests and values of items based on interest rates settings
 	 *
-	 * @param  int $cart_total      The total of the user cart
+	 * @param  int $amount      The total of the user cart
 	 * @param  int $max_instalments The max number of instalments based on settings
 	 * @return filtered array       An array of instalment with price, amount, if it has interests and the number
 	 */
-	public function get_payment_terms($cart_total, $max_instalments, $tax = 0) {
+	public function get_payment_terms($amount, $max_instalments, $tax = 0) {
 		$instalments = array();
 		$instalment_taxes = $this->instalment_rates;
 
 		for ($number = 1; $number <= $max_instalments; ++$number) {
 			$has_interest = false;
+			$cart_total = $amount;
 
 			if (isset($instalment_taxes) && array_key_exists($number, $instalment_taxes)) {
 				$cart_total += $cart_total * $instalment_taxes[$number];
@@ -392,6 +400,7 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
 
 			$instalment_price = $cart_total / $number;
 			$instalment_price += $instalment_price * $tax;
+			$instalment_price = round(floatval($instalment_price), 2);
 
 			$instalments[] = array(
 				'price' => $instalment_price,
@@ -420,9 +429,13 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
 
 		$country = $this->getTransactionAddress('country');
 
+		$currency = $country === WC_EBANX_Constants::COUNTRY_BRAZIL ? WC_EBANX_Constants::CURRENCY_CODE_BRL : WC_EBANX_Constants::CURRENCY_CODE_MXN;
+
 		wc_get_template(
 			$this->id . '/payment-form.php',
 			array(
+				'currency' => $currency,
+				'country' => $country,
 				'instalments_terms' => $instalments_terms,
 				'cards' => (array) $cards,
 				'cart_total' => $cart_total,

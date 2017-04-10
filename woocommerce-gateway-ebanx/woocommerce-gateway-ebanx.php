@@ -5,7 +5,7 @@
  * Description: Offer Latin American local payment methods & increase your conversion rates with the solution used by AliExpress, AirBnB and Spotify in Brazil.
  * Author: EBANX
  * Author URI: https://www.ebanx.com/business/en
- * Version: 1.10.1
+ * Version: 1.11.3
  * License: MIT
  * Text Domain: woocommerce-gateway-ebanx
  * Domain Path: /languages
@@ -24,7 +24,7 @@ define('WC_EBANX_PLUGIN_DIR_URL', plugin_dir_url(__FILE__) . DIRECTORY_SEPARATOR
 define('WC_EBANX_PLUGIN_NAME', WC_EBANX_PLUGIN_DIR_URL . basename(__FILE__));
 define('WC_EBANX_GATEWAYS_DIR', __DIR__ . DIRECTORY_SEPARATOR . 'gateways' . DIRECTORY_SEPARATOR);
 define('WC_EBANX_SERVICES_DIR', __DIR__ . DIRECTORY_SEPARATOR . 'services' . DIRECTORY_SEPARATOR);
-define('WC_EBANX_LANGUAGES_DIR', __DIR__ . DIRECTORY_SEPARATOR . 'languages' . DIRECTORY_SEPARATOR);
+define('WC_EBANX_LANGUAGES_DIR', dirname( plugin_basename(__FILE__) ) . '/languages/');
 define('WC_EBANX_TEMPLATES_DIR', __DIR__ . DIRECTORY_SEPARATOR . 'templates' . DIRECTORY_SEPARATOR);
 define('WC_EBANX_VENDOR_DIR', __DIR__ . DIRECTORY_SEPARATOR . 'vendor' . DIRECTORY_SEPARATOR);
 define('WC_EBANX_ASSETS_DIR', __DIR__ . DIRECTORY_SEPARATOR . 'assets' . DIRECTORY_SEPARATOR);
@@ -76,10 +76,6 @@ if (!class_exists('WC_EBANX')) {
 					->enqueue();
 				return;
 			}
-			/**
-			 * i18n
-			 */
-			$this->enable_i18n();
 
 			/**
 			 * Includes
@@ -90,6 +86,7 @@ if (!class_exists('WC_EBANX')) {
 			 * Actions
 			 */
 			add_action('plugins_loaded', array($this, 'plugins_loaded'));
+			add_action('wp_loaded', array($this, 'enable_i18n'));
 
 			add_action('init', array($this, 'my_account_endpoint'));
 			add_action('init', array($this, 'ebanx_router'));
@@ -109,6 +106,12 @@ if (!class_exists('WC_EBANX')) {
 			add_action('woocommerce_settings_saved', array($this, 'checker'), 20);
 
 			add_action('woocommerce_admin_order_data_after_order_details', array($this, 'ebanx_admin_order_details'), 10, 1);
+
+			/**
+			 * Payment by Link
+			 */
+			add_action('woocommerce_order_actions_end', array($this, 'ebanx_metabox_save_post_render_button'));
+			add_action('save_post', array($this, 'ebanx_metabox_payment_link_save'));
 
 			/**
 			 * Filters
@@ -274,8 +277,7 @@ if (!class_exists('WC_EBANX')) {
 		 *
 		 * @return void
 		 */
-		public function enable_i18n()
-		{
+		public function enable_i18n() {
 			load_plugin_textdomain('woocommerce-gateway-ebanx', false, WC_EBANX_LANGUAGES_DIR);
 		}
 
@@ -506,9 +508,6 @@ if (!class_exists('WC_EBANX')) {
 		 */
 		private function includes()
 		{
-			// Custom Order
-			include_once WC_EBANX_SERVICES_DIR . 'class-wc-ebanx-custom-order.php';
-
 			// Utils
 			include_once WC_EBANX_SERVICES_DIR . 'class-wc-ebanx-constants.php';
 			include_once WC_EBANX_SERVICES_DIR . 'class-wc-ebanx-helper.php';
@@ -549,6 +548,8 @@ if (!class_exists('WC_EBANX')) {
 			include_once WC_EBANX_GATEWAYS_DIR . 'class-wc-ebanx-safetypay-gateway.php';
 
 			// Hooks/Actions
+			include_once WC_EBANX_SERVICES_DIR . 'class-wc-ebanx-payment-by-link.php';
+			include_once WC_EBANX_SERVICES_DIR . 'class-wc-ebanx-payment-validator.php';
 			include_once WC_EBANX_SERVICES_DIR . 'class-wc-ebanx-my-account.php';
 			include_once WC_EBANX_SERVICES_DIR . 'class-wc-ebanx-one-click.php';
 		}
@@ -775,21 +776,70 @@ if (!class_exists('WC_EBANX')) {
 		}
 
 		/**
+		 * Checks if this post is an EBANX Order and call WC_EBANX_Payment_By_Link
+		 *
+		 * @param  int 	  $post_id The post id
+		 * @return void
+		 */
+		public function ebanx_metabox_payment_link_save ($post_id) {
+			$order = wc_get_order($post_id);
+			$checkout_url = get_post_meta($order->id, '_ebanx_checkout_url', true);
+
+			// Check if is an EBANX request
+			if ( WC_EBANX_Request::has('create_ebanx_payment_link')
+				&& WC_EBANX_Request::read('create_ebanx_payment_link') === __('Create EBANX Payment Link', 'woocommerce-gateway-ebanx')
+				&& ! $checkout_url ) {
+
+				$this->setup_configs();
+				$config = array(
+					'integrationKey' => $this->private_key,
+					'testMode'       => $this->is_sandbox_mode,
+				);
+
+				WC_EBANX_Payment_By_Link::create($post_id, $config);
+			}
+			return;
+		}
+
+		/**
+		 * Checks if the button can be renderized and renders it
+		 *
+		 * @param  int   $post_id The post id
+		 * @return void
+		 */
+		public function ebanx_metabox_save_post_render_button ($post_id) {
+			$ebanx_currencies = array('BRL', 'USD', 'EUR', 'PEN', 'CLP', 'MXN', 'COP');
+			$order = wc_get_order($post_id);
+			$checkout_url = get_post_meta($order->id, '_ebanx_checkout_url', true);
+
+			if ( !$checkout_url
+				&& in_array($order->status, array('auto-draft', 'pending'))
+				&& in_array(strtoupper(get_woocommerce_currency()), $ebanx_currencies) ) {
+				wc_get_template(
+					'payment-by-link-action.php',
+					array(),
+					'woocommerce/ebanx/',
+					WC_EBANX::get_templates_path()
+				);
+			}
+		}
+
+		/**
 		 * It inserts informations about the order on admin order details
 		 *
 		 * @param  WC_Object $order The WC order object
 		 * @return void
 		 */
 		public function ebanx_admin_order_details ($order) {
-			if (in_array($order->get_payment_method(), WC_EBANX_Helper::flatten(WC_EBANX_Constants::$EBANX_GATEWAYS_BY_COUNTRY))) {
-				$payment_hash = get_post_meta($order->get_id(), '_ebanx_payment_hash', true);
+			$payment_hash = get_post_meta($order->id, '_ebanx_payment_hash', true);
+			if ($payment_hash) {
 
 				wc_get_template(
 					'admin-order-details.php',
 					array(
 						'order' => $order,
 						'payment_hash' => $payment_hash,
-						'payment_checkout_url' => get_post_meta($order->get_id(), '_ebanx_checkout_url', true),
+						'payment_checkout_url' => get_post_meta($order->id, '_ebanx_checkout_url', true),
 						'is_sandbox_mode' => $this->is_sandbox_mode,
 						'dashboard_link' => "http://dashboard.ebanx.com/" . ($this->is_sandbox_mode ? 'test/' : '') . "payments/?hash=$payment_hash"
 					),
