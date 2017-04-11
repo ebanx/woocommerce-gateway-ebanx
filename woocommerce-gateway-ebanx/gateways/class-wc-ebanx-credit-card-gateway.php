@@ -362,12 +362,11 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
 				'card_brand_name' => get_post_meta($order->id, '_cards_brand_name', true),
 				'order_amount' => $order_amount,
 				'instalments_number' => $instalments_number,
-				'instalments_amount' => round($order_amount / $instalments_number, 2),
+				'instalments_amount' => wc_price(round($order_amount / $instalments_number, 2), array('currency' => $order->get_order_currency())),
 				'masked_card' => substr(get_post_meta($order->id, '_masked_card_number', true), -4),
 				'customer_email' => $order->billing_email,
 				'customer_name' => $order->billing_first_name,
-				'order_total' => $order->get_formatted_order_total(),
-				'order_currency' => $order->get_order_currency()
+				'order_total' => $order->get_formatted_order_total()
 			),
 			'order_status' => $order->get_status(),
 			'method' => $order->payment_method
