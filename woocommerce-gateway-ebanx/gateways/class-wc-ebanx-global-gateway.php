@@ -215,7 +215,7 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway
 				),
 			),
 			'payments_options_title'     => array(
-				'title' => __('Payments Options', 'woocommerce-gateway-ebanx'),
+				'title' => __('Payment Options', 'woocommerce-gateway-ebanx'),
 				'type'  => 'title'
 			),
 			'credit_card_options_title' => array(
