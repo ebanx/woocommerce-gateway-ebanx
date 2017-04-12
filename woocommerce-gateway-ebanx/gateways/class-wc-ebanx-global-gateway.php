@@ -47,7 +47,8 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway
 		'credit_card_instalments' => '1',
 		'due_date_days' => '3',
 		'brazil_taxes_options' => 'cpf',
-		'interest_rates_enabled' => 'no'
+		'interest_rates_enabled' => 'no',
+		'min_instalment_value' => '20'
 	);
 
 	/**
@@ -267,6 +268,12 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway
 				),
 				'description' => __('Establish the maximum number of installments in which your customer can pay, as consented on your contract.', 'woocommerce-gateway-ebanx'),
 				'desc_tip' => true
+			),
+			'min_instalment_value' => array(
+				'title' => __('Minimum istalment value', 'woocommerce-gateway-ebanx'),
+				'type' => 'number',
+				'class' => 'ebanx-payments-option',
+				'placeholder' => __('The default is 20', 'woocommerce-gateway-ebanx')
 			),
 			'interest_rates_enabled' => array(
 				'type'    => 'checkbox',
