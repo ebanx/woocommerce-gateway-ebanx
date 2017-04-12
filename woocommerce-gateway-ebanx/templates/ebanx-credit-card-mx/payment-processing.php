@@ -14,7 +14,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 <p><strong><?php _e(sprintf('Pago aprobado con éxito, %s.', $customer_name), 'woocommerce-gateway-ebanx') ?></strong></p>
 <p><strong><?php _e('Resumo de la compra:', 'woocommerce-gateway-ebanx') ?></strong></p>
-<p><?php _e('Valor:', 'woocommerce-gateway-ebanx') ?> <?php echo WC_EBANX_Constants::CURRENCY_CODE_USD ?> <?php echo $order_amount ?></p>
+<p><?php _e('Valor:', 'woocommerce-gateway-ebanx') ?> <?php echo $total ?></p>
 <?php if ($instalments_number > 1) : ?>
     <p><?php echo $instalments_number ?> <?php _e('meses sen intereses de', 'woocommerce-gateway-ebanx') ?> <?php WC_EBANX_Constants::CURRENCY_CODE_USD ?> <?php echo $instalments_amount ?></p>
 <?php else : ?>
