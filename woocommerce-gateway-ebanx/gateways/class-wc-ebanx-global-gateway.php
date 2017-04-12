@@ -48,7 +48,10 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway
 		'due_date_days' => '3',
 		'brazil_taxes_options' => 'cpf',
 		'interest_rates_enabled' => 'no',
-		'min_instalment_value' => '20'
+		'min_instalment_value_brl' => '20',
+		'min_instalment_value_usd' => '20',
+		'min_instalment_value_eur' => '20',
+		'min_instalment_value_mxn' => '100'
 	);
 
 	/**
@@ -268,13 +271,43 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway
 				),
 				'description' => __('Establish the maximum number of installments in which your customer can pay, as consented on your contract.', 'woocommerce-gateway-ebanx'),
 				'desc_tip' => true
-			),
-			'min_instalment_value' => array(
-				'title' => __('Minimum istalment value', 'woocommerce-gateway-ebanx'),
+			)
+		);
+		$min_instalment_value_array = array();
+		if (strtoupper(get_woocommerce_currency()) === WC_EBANX_Constants::CURRENCY_CODE_BRL) {
+			$min_instalment_value_array['min_instalment_value_brl'] = array(
+				'title' => __('Minimum istalment value in BRL', 'woocommerce-gateway-ebanx'),
 				'type' => 'number',
 				'class' => 'ebanx-payments-option',
 				'placeholder' => __('The default is 20', 'woocommerce-gateway-ebanx')
-			),
+			);
+		}
+		if (strtoupper(get_woocommerce_currency()) === WC_EBANX_Constants::CURRENCY_CODE_MXN) {
+			$min_instalment_value_array['min_instalment_value_mxn'] = array(
+				'title' => __('Minimum istalment value in MXN', 'woocommerce-gateway-ebanx'),
+				'type' => 'number',
+				'class' => 'ebanx-payments-option',
+				'placeholder' => __('The default is 100', 'woocommerce-gateway-ebanx')
+			);
+		}
+		if (strtoupper(get_woocommerce_currency()) === WC_EBANX_Constants::CURRENCY_CODE_USD) {
+			$min_instalment_value_array['min_instalment_value_usd'] = array(
+				'title' => __('Minimum istalment value in USD', 'woocommerce-gateway-ebanx'),
+				'type' => 'number',
+				'class' => 'ebanx-payments-option',
+				'placeholder' => __('The default is 20', 'woocommerce-gateway-ebanx')
+			);
+		}
+		if (strtoupper(get_woocommerce_currency()) === WC_EBANX_Constants::CURRENCY_CODE_EUR) {
+			$min_instalment_value_array['min_instalment_value_eur'] = array(
+				'title' => __('Minimum istalment value in EUR', 'woocommerce-gateway-ebanx'),
+				'type' => 'number',
+				'class' => 'ebanx-payments-option',
+				'placeholder' => __('The default is 20', 'woocommerce-gateway-ebanx')
+			);
+		}
+		$fields = array_merge($fields, $min_instalment_value_array);
+		$fields = array_merge($fields, array(
 			'interest_rates_enabled' => array(
 				'type'    => 'checkbox',
 				'title'   => __('Interest Rates', 'woocommerce-gateway-ebanx'),
@@ -283,7 +316,7 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway
 				'desc_tip' => true,
 				'class' => 'ebanx-payments-option'
 			)
-		);
+		));
 		$interest_rates_array = array();
 		$interest_rates_array['interest_rates_01'] = array(
 			'title' => __('1x Interest Rate in %', 'woocommerce-gateway-ebanx'),
