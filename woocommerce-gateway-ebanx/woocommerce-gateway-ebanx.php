@@ -724,8 +724,6 @@ if (!class_exists('WC_EBANX')) {
 						var last = subsub.filter(function () { return jQuery(this).css('display') === 'inline-block' }).last();
 
 						last.html(last.html().replace(/ \| ?/g, ''));
-
-						jQuery('.ebanx-select').select2();
 					}
 				</script>
 			";
