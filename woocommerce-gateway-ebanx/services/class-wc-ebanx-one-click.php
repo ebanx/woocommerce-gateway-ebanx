@@ -16,14 +16,14 @@ class WC_EBANX_One_Click {
 	 * Constructor
 	 */
 	public function __construct() {
-		if ( $this->gateway->configs->settings['one_click'] !== 'yes' ) {
-			return;
-		}
-
 		$this->userId  = get_current_user_id();
 		$this->userCountry = trim(strtolower(get_user_meta( $this->userId, 'billing_country', true )));
-
 		$this->gateway = $this->userCountry ? ($this->userCountry === WC_EBANX_Constants::COUNTRY_BRAZIL ? new WC_EBANX_Credit_Card_BR_Gateway() : new WC_EBANX_Credit_Card_MX_Gateway()) : false;
+
+		if ( !$this->gateway 
+			|| $this->gateway->get_setting_or_default('one_click', 'no') !== 'yes' ) {
+			return;
+		}
 
 		/**
 		 * Active the one click purchase when the settings is enabled
@@ -36,14 +36,27 @@ class WC_EBANX_One_Click {
 
 		$this->cards = is_array( $cards ) ? array_filter( $cards ) : array();
 
-		if ($this->gateway && $this->gateway->get_setting_or_default('interest_rates_enabled', 'no') == 'yes') {
-			$max_instalments = $this->gateway->configs->settings['credit_card_instalments'];
-			for ($i=1; $i <= $max_instalments; $i++) {
-				$field = 'interest_rates_' . sprintf("%02d", $i);
-				$this->instalment_rates[$i] = 0;
-				if (is_numeric($this->gateway->configs->settings[$field])) {
-					$this->instalment_rates[$i] = $this->gateway->configs->settings[$field] / 100;
-				}
+		$this->generate_instalments_rates();
+	}
+
+	/**
+	 * Generate the properties for each interest rates
+	 *
+	 * @return void
+	 */
+	public function generate_instalments_rates () {
+		if (!$this->gateway 
+			|| $this->gateway->get_setting_or_default('interest_rates_enabled', 'no') !== 'yes') {
+			return;
+		}
+
+		$max_instalments = $this->gateway->configs->settings['credit_card_instalments'];
+		
+		for ($i=1; $i <= $max_instalments; $i++) {
+			$field = 'interest_rates_' . sprintf("%02d", $i);
+			$this->instalment_rates[$i] = 0;
+			if (is_numeric($this->gateway->configs->settings[$field])) {
+				$this->instalment_rates[$i] = $this->gateway->configs->settings[$field] / 100;
 			}
 		}
 	}
@@ -95,26 +108,31 @@ class WC_EBANX_One_Click {
 			$product_to_add = get_product( $product_id );
 
 			$order->add_product( $product_to_add, 1 );
-			
-			update_post_meta($order->id, '_billing_email', $user['email']);
-			update_post_meta($order->id, '_billing_country', $user['country']);
-			update_post_meta($order->id, '_billing_first_name', $user['first_name']);
-			update_post_meta($order->id, '_billing_last_name', $user['last_name']);
-			update_post_meta($order->id, '_billing_company', $user['company']);
-			update_post_meta($order->id, '_billing_address_1', $user['address_1']);
-			update_post_meta($order->id, '_billing_address_2', $user['address_2']);
-			update_post_meta($order->id, '_billing_city', $user['city']);
-			update_post_meta($order->id, '_billing_state', $user['state']);
-			update_post_meta($order->id, '_billing_phone', $user['phone']);
 
 			$order->set_payment_method($this->gateway);
-			
-			update_post_meta($order->id, '_order_shipping', WC()->cart->shipping_total );
-			update_post_meta($order->id, '_cart_discount', WC()->cart->get_cart_discount_total() );
-			update_post_meta($order->id, '_cart_discount_tax', WC()->cart->get_cart_discount_tax_total() );
-			update_post_meta($order->id, '_order_tax', WC()->cart->tax_total );
-			update_post_meta($order->id, '_order_shipping_tax', WC()->cart->shipping_tax_total );
-			update_post_meta($order->id, '_order_total', WC()->cart->total );
+
+			$meta = array(
+				'_billing_email' => $user['email'],
+				'_billing_country' => $user['country'],
+				'_billing_first_name' => $user['first_name'],
+				'_billing_last_name' => $user['last_name'],
+				'_billing_company' => $user['company'],
+				'_billing_address_1' => $user['address_1'],
+				'_billing_address_2' => $user['address_2'],
+				'_billing_city' => $user['city'],
+				'_billing_state' => $user['state'],
+				'_billing_phone' => $user['phone'],
+				'_order_shipping' => WC()->cart->shipping_total,
+				'_cart_discount' => WC()->cart->get_cart_discount_total(),
+				'_cart_discount_tax' => WC()->cart->get_cart_discount_tax_total(),
+				'_order_tax' => WC()->cart->tax_total,
+				'_order_shipping_tax' => WC()->cart->shipping_tax_total,
+				'_order_total' => WC()->cart->total,
+			);
+
+			foreach ($meta as $meta_key => $meta_value) {
+				update_post_meta($order->id, $meta_key, $meta_value );
+			}
 			
 			$order->calculate_totals();
 
