@@ -90,7 +90,6 @@ if (!class_exists('WC_EBANX')) {
 
 			add_action('init', array($this, 'my_account_endpoint'));
 			add_action('init', array($this, 'ebanx_router'));
-			add_action('admin_footer', array($this, 'render_static_assets'), 0);
 			add_action('admin_init', array($this, 'ebanx_sidebar_shortcut'));
 			add_action('admin_init', array('WC_EBANX_Flash', 'enqueue_admin_messages'));
 
@@ -98,6 +97,8 @@ if (!class_exists('WC_EBANX')) {
 				add_action('admin_init', array($this, 'setup_configs'), 10);
 				add_action('admin_init', array($this, 'checker'), 30);
 			}
+
+			add_action('admin_footer', array('WC_EBANX_Assets', 'render'), 0);
 
 			add_action('woocommerce_account_' . self::$endpoint . '_endpoint', array($this, 'my_account_template'));
 			add_action('woocommerce_settings_saved', array($this, 'setup_configs'), 10);
@@ -517,6 +518,7 @@ if (!class_exists('WC_EBANX')) {
 			include_once WC_EBANX_SERVICES_DIR . 'class-wc-ebanx-flash.php';
 			include_once WC_EBANX_SERVICES_DIR . 'class-wc-ebanx-request.php';
 			include_once WC_EBANX_SERVICES_DIR . 'class-wc-ebanx-errors.php';
+			include_once WC_EBANX_SERVICES_DIR . 'class-wc-ebanx-assets.php';
 
 			// Gateways
 			include_once WC_EBANX_GATEWAYS_DIR . 'class-wc-ebanx-gateway.php';
@@ -647,115 +649,6 @@ if (!class_exists('WC_EBANX')) {
 		}
 
 		/**
-		 * Renders the static assets needed to change admin panel to desired behavior
-		 *
-		 * @return void
-		 */
-		public function render_static_assets() {
-			$this->adjust_dynamic_admin_options_sections();
-			$this->resize_settings_menu_icon();
-			$this->disable_ebanx_gateways();
-		}
-
-		/**
-		 * Renders the script to manage the admin options script part of ebanx gateway configuration
-		 *
-		 * @return void
-		 */
-		public function adjust_dynamic_admin_options_sections() {
-			if ( ! WC_EBANX_Request::has('section')
-				|| WC_EBANX_Request::read('section') !== 'ebanx-global') {
-				return;
-			}
-
-			echo "
-			<style>
-				.wc-settings-sub-title.togglable {
-					cursor: pointer;
-					font-size: larger;
-				}
-				.wc-settings-sub-title.togglable:after {
-					content: ' ▲';
-				}
-				.wc-settings-sub-title.togglable.closed:after {
-					content: ' ▼';
-				}
-			</style>";
-
-			wp_enqueue_script(
-				'woocommerce_ebanx_fetch_keys',
-				plugins_url('assets/js/fetch-keys.js', WC_EBANX::DIR),
-				array('jquery'),
-				WC_EBANX::get_plugin_version(),
-				true
-			);
-
-			wp_enqueue_script(
-				'woocommerce_ebanx_payments_options',
-				plugins_url('assets/js/payments-options.js', WC_EBANX::DIR),
-				array('jquery'),
-				WC_EBANX::get_plugin_version(),
-				true
-			);
-			wp_enqueue_script(
-				'woocommerce_ebanx_advanced_options',
-				plugins_url('assets/js/advanced-options.js', WC_EBANX::DIR),
-				array('jquery'),
-				WC_EBANX::get_plugin_version(),
-				true
-			);
-		}
-
-		/**
-		 * Renders the style tag to resize the menu icon to the correct size
-		 *
-		 * @return void
-		 */
-		public function resize_settings_menu_icon() {
-			echo "<style> #adminmenu div.wp-menu-image.svg { background-size: auto 18px !important; } </style>";
-		}
-
-		/**
-		 * Disabled all other EBANX gateways
-		 *
-		 * @return void
-		 */
-		public function disable_ebanx_gateways()
-		{
-			echo "
-				<style>
-					.woocommerce_page_wc-settings .subsubsub > li { display: none; }
-					.woocommerce_page_wc-settings .woocommerce .form-table th { width: 250px !important; }
-				</style>
-
-				<script>
-					var woocommerceSettings = jQuery('.woocommerce_page_wc-settings');
-
-					if (woocommerceSettings.length) {
-						var subsub = jQuery('.subsubsub > li');
-
-						for (var i = 0, t = subsub.length; i < t; ++i) {
-							var s = jQuery(subsub[i]);
-							var sub = jQuery(s).find('a');
-
-							if (sub.text().indexOf('EBANX -') === -1) {
-								s.css({
-									display: 'inline-block'
-								});
-							}
-						}
-
-						var last = subsub.filter(function () { return jQuery(this).css('display') === 'inline-block' }).last();
-
-						last.html(last.html().replace(/ \| ?/g, ''));
-
-						jQuery('.ebanx-select').select2();
-					}
-				</script>
-			";
-		}
-
-		/**
 		 * It inserts a EBANX Settings shortcut on Wordpress sidebar
 		 *
 		 * @return void
@@ -770,7 +663,7 @@ if (!class_exists('WC_EBANX')) {
 				// TODO: Create a dynamic url
 				WC_EBANX_Constants::SETTINGS_URL,
 				'',
-				'data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz48c3ZnIHdpZHRoPSIxNnB4IiBoZWlnaHQ9IjIwcHgiIHZpZXdCb3g9IjAgMCAxNiAyMCIgdmVyc2lvbj0iMS4xIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIj4gICAgICAgIDx0aXRsZT5lYmFueC1zdmc8L3RpdGxlPiAgICA8ZGVzYz5DcmVhdGVkIHdpdGggU2tldGNoLjwvZGVzYz4gICAgPGRlZnM+PC9kZWZzPiAgICA8ZyBpZD0iUGFnZS0xIiBzdHJva2U9Im5vbmUiIHN0cm9rZS13aWR0aD0iMSIgZmlsbD0ibm9uZSIgZmlsbC1ydWxlPSJldmVub2RkIj4gICAgICAgIDxnIGlkPSJlYmFueC1zdmciPiAgICAgICAgICAgIDxwb2x5Z29uIGlkPSJTaGFwZSIgZmlsbD0iIzFDNDE3OCIgcG9pbnRzPSIwLjExMTYyNzkwNyAwLjA5MDkwOTA5MDkgMTIuNTM5NTM0OSAxMCAwLjExMTYyNzkwNyAxOS45MDkwOTA5Ij48L3BvbHlnb24+ICAgICAgICAgICAgPHBvbHlnb24gaWQ9IlNoYXBlIiBmaWxsPSIjREFEQkRCIiBwb2ludHM9IjkuMTM0ODgzNzIgMTIuNzA5MDkwOSAwLjExMTYyNzkwNyAxOS45MDkwOTA5IDE1Ljk2Mjc5MDcgMTkuODkwOTA5MSI+PC9wb2x5Z29uPiAgICAgICAgICAgIDxwb2x5Z29uIGlkPSJTaGFwZSIgZmlsbD0iI0RBREJEQiIgcG9pbnRzPSIwLjExMTYyNzkwNyAwLjA5MDkwOTA5MDkgOS4xMzQ4ODM3MiA3LjI5MDkwOTA5IDE1Ljk2Mjc5MDcgMC4wOTA5MDkwOTA5Ij48L3BvbHlnb24+ICAgICAgICAgICAgPHBvbHlnb24gaWQ9IlNoYXBlIiBmaWxsPSIjMDA5M0QwIiBwb2ludHM9IjAuMTExNjI3OTA3IDE5LjkwOTA5MDkgOS4xMzQ4ODM3MiAxMi43MDkwOTA5IDYuNzUzNDg4MzcgMTAgMC4xMTE2Mjc5MDcgMTcuMiI+PC9wb2x5Z29uPiAgICAgICAgICAgIDxwb2x5Z29uIGlkPSJTaGFwZSIgZmlsbD0iIzAwQkNFNCIgcG9pbnRzPSIwLjExMTYyNzkwNyAyLjggMC4xMTE2Mjc5MDcgMTcuMiA2Ljc1MzQ4ODM3IDEwIj48L3BvbHlnb24+ICAgICAgICAgICAgPHBvbHlnb24gaWQ9IlNoYXBlIiBmaWxsPSIjMDA5M0QwIiBwb2ludHM9IjAuMTExNjI3OTA3IDAuMDkwOTA5MDkwOSA5LjEzNDg4MzcyIDcuMjkwOTA5MDkgNi43NTM0ODgzNyAxMCAwLjExMTYyNzkwNyAyLjgiPjwvcG9seWdvbj4gICAgICAgIDwvZz4gICAgPC9nPjwvc3ZnPg==',
+				WC_EBANX_Assets::get_logo(),
 				21
 			);
 		}
