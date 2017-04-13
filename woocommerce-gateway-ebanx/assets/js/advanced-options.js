@@ -31,7 +31,7 @@
       enableFields(fieldBrazilTaxes);
     }
 
-    if (fieldsToggler[0].checked) {
+    if (fieldsToggler.length == 1 && fieldsToggler[0].checked) {
 
       enableFields(fields.filter('.always-visible'));
       if (brazilVal != null && brazilVal.length > 0 && modes != null) {
