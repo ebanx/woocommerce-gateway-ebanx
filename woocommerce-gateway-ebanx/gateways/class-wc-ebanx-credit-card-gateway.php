@@ -423,9 +423,15 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
 	public function payment_fields() {
 		$cart_total = $this->get_order_total();
 
-		$cards = array_filter((array) get_user_meta($this->userId, '_ebanx_credit_card_token', true), function ($card) {
-			return !empty($card->brand) && !empty($card->token) && !empty($card->masked_number);
-		});
+		$cards = array();
+
+		$save_card = $this->get_setting_or_default('save_card_data', 'no');
+
+		if ( $save_card && $save_card === 'yes' ) {
+			$cards = array_filter((array) get_user_meta($this->userId, '_ebanx_credit_card_token', true), function ($card) {
+				return !empty($card->brand) && !empty($card->token) && !empty($card->masked_number);
+			});
+		}
 
 		$max_instalments = min($this->configs->settings['credit_card_instalments'], $this->fetch_acquirer_max_installments_for_price($cart_total, 'br'));
 
@@ -445,7 +451,7 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
 				'cards' => (array) $cards,
 				'cart_total' => $cart_total,
 				'max_instalments' => $max_instalments,
-				'place_order_enabled' => (isset($this->configs->settings['save_card_data']) && $this->configs->settings['save_card_data'] === 'yes'),
+				'place_order_enabled' => (isset($save_card) && $save_card === 'yes'),
 				'instalments' => $country === WC_EBANX_Constants::COUNTRY_BRAZIL ? 'Número de parcelas' :  'Meses sin intereses',
 			),
 			'woocommerce/ebanx/',
