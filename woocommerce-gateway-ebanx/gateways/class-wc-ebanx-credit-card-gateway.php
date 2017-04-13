@@ -258,7 +258,7 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
 		if ($this->userId
 			|| $this->get_setting_or_default('save_card_data', 'no') !== 'yes'
 			|| ! WC_EBANX_Request::has(['ebanx-save-credit-card'])
-			|| ! WC_EBANX_Request::read('ebanx-save-credit-card') !== 'yes') {
+			|| WC_EBANX_Request::read('ebanx-save-credit-card') !== 'yes') {
 			return;
 		}
 
