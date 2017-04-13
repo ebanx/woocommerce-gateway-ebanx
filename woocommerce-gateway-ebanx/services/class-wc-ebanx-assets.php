@@ -52,7 +52,7 @@ SVG;
 	 */
 	private static function disable_ebanx_gateways() {
 		self::render_stylesheet('disable-ebanx-gateways');
-		self::render_script('disable-ebanx-gateways', array('jquery'));
+		self::render_inline_script('disable-ebanx-gateways');
 	}
 
 	/**
@@ -97,5 +97,11 @@ SVG;
 			WC_EBANX::get_plugin_version(),
 			true
 		);
+	}
+
+	private static function render_inline_script($filename) {
+		$file_path = plugins_url('assets/js/'.$filename.'.js', WC_EBANX::DIR);
+		$contents = file_get_contents($file_path);
+		echo '<script>'.$contents.'</script>';
 	}
 }
