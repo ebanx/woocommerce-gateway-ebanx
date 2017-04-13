@@ -16,6 +16,10 @@ class WC_EBANX_One_Click {
 	 * Constructor
 	 */
 	public function __construct() {
+		if ( $this->gateway->configs->settings['one_click'] !== 'yes' ) {
+			return;
+		}
+
 		$this->userId  = get_current_user_id();
 		$this->userCountry = trim(strtolower(get_user_meta( $this->userId, 'billing_country', true )));
 
@@ -24,23 +28,21 @@ class WC_EBANX_One_Click {
 		/**
 		 * Active the one click purchase when the settings is enabled
 		 */
-		if ( $this->gateway->configs->settings['one_click'] === 'yes' ) {
-			add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ), 100 );
-			add_action( 'woocommerce_after_add_to_cart_form', array( $this, 'print_button' ) );
-			add_action( 'wp_loaded', array( $this, 'one_click_handler' ), 99 );
-		
-			$cards = get_user_meta( $this->userId, '_ebanx_credit_card_token', true );
+		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ), 100 );
+		add_action( 'woocommerce_after_add_to_cart_form', array( $this, 'print_button' ) );
+		add_action( 'wp_loaded', array( $this, 'one_click_handler' ), 99 );
+	
+		$cards = get_user_meta( $this->userId, '_ebanx_credit_card_token', true );
 
-			$this->cards = is_array( $cards ) ? array_filter( $cards ) : array();
+		$this->cards = is_array( $cards ) ? array_filter( $cards ) : array();
 
-			if ($this->gateway && $this->gateway->get_setting_or_default('interest_rates_enabled', 'no') == 'yes') {
-				$max_instalments = $this->gateway->configs->settings['credit_card_instalments'];
-				for ($i=1; $i <= $max_instalments; $i++) {
-					$field = 'interest_rates_' . sprintf("%02d", $i);
-					$this->instalment_rates[$i] = 0;
-					if (is_numeric($this->gateway->configs->settings[$field])) {
-						$this->instalment_rates[$i] = $this->gateway->configs->settings[$field] / 100;
-					}
+		if ($this->gateway && $this->gateway->get_setting_or_default('interest_rates_enabled', 'no') == 'yes') {
+			$max_instalments = $this->gateway->configs->settings['credit_card_instalments'];
+			for ($i=1; $i <= $max_instalments; $i++) {
+				$field = 'interest_rates_' . sprintf("%02d", $i);
+				$this->instalment_rates[$i] = 0;
+				if (is_numeric($this->gateway->configs->settings[$field])) {
+					$this->instalment_rates[$i] = $this->gateway->configs->settings[$field] / 100;
 				}
 			}
 		}
