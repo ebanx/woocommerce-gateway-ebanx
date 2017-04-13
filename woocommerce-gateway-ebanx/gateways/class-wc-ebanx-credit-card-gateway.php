@@ -255,34 +255,39 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
 	{
 		parent::save_user_meta_fields($order);
 
-		if ($this->userId && $this->configs->settings['save_card_data'] === 'yes' && isset($_POST['ebanx-save-credit-card']) && $_POST['ebanx-save-credit-card'] === 'yes') {
-			$cards = get_user_meta($this->userId, '_ebanx_credit_card_token', true);
-			$cards = !empty($cards) ? $cards : [];
-
-			$card = new \stdClass();
-
-			$card->brand = $_POST['ebanx_brand'];
-			$card->token = $_POST['ebanx_token'];
-			$card->masked_number = $_POST['ebanx_masked_card_number'];
-
-			foreach ($cards as $cd) {
-				if (empty($cd)) {
-					continue;
-				}
-
-				if ($cd->masked_number == $card->masked_number && $cd->brand == $card->brand) {
-					$cd->token = $card->token;
-					unset($card);
-				}
-			}
-
-			// TODO: Implement token due date
-			if (isset($card)) {
-				$cards[] = $card;
-			}
-
-			update_user_meta($this->userId, '_ebanx_credit_card_token', $cards);
+		if ($this->userId
+			|| $this->get_setting_or_default('save_card_data', 'no') !== 'yes'
+			|| ! WC_EBANX_Request::has(['ebanx-save-credit-card'])
+			|| ! WC_EBANX_Request::read('ebanx-save-credit-card') !== 'yes') {
+			return;
 		}
+
+		$cards = get_user_meta($this->userId, '_ebanx_credit_card_token', true);
+		$cards = !empty($cards) ? $cards : [];
+
+		$card = new \stdClass();
+
+		$card->brand = $_POST['ebanx_brand'];
+		$card->token = $_POST['ebanx_token'];
+		$card->masked_number = $_POST['ebanx_masked_card_number'];
+
+		foreach ($cards as $cd) {
+			if (empty($cd)) {
+				continue;
+			}
+
+			if ($cd->masked_number == $card->masked_number && $cd->brand == $card->brand) {
+				$cd->token = $card->token;
+				unset($card);
+			}
+		}
+
+		// TODO: Implement token due date
+		if (isset($card)) {
+			$cards[] = $card;
+		}
+
+		update_user_meta($this->userId, '_ebanx_credit_card_token', $cards);
 	}
 
 	/**
