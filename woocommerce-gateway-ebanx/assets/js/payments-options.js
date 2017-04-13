@@ -17,7 +17,7 @@
     var maxInstalments = maxInstalmentsField.val();
     disableFields(fields);
 
-    if (fieldsToggler[0].checked) {
+    if (fieldsToggler.length == 1 && fieldsToggler[0].checked) {
       fields.each(function() {
         var $this = $(this);
         var idnum = parseInt($this.attr('id').substr(-2));
