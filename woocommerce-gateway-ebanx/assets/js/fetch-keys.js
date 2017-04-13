@@ -8,21 +8,32 @@
 			var _self = this;
 
 			var frame = $(document.createElement('iframe'))
-				.attr('width', '500')
-				.attr('height', '200')
+				.attr('width', '99%')
+				.attr('height', '98%')
 				.css({
 					'display': 'block',
-					'margin': '20px auto',
-					'background-color': '#ffffff'
+					'margin': '0.5% auto',
+					'background-color': '#ffffff',
+					'overflow': 'hidden',
+					'border-radius': '5px'
 				});
 
 			var closeButton = $(document.createElement('button'))
 				.css({
 					'display': 'block',
-					'width': '100px',
-					'margin': '170px auto 0px auto'
+					'position': 'absolute',
+					'width': '32px',
+					'height': '32px',
+					'background-color': '#2699d6',
+					'color': '#ffffff',
+					'font-size': '20px',
+					'font-weight': 'normal',
+					'top': '10px',
+					'right': '10px',
+					'border': '1px solid black',
+					'border-radius': '16px'
 				})
-				.text('Close');
+				.text('X');
 
 			this.element = $(document.createElement('div'))
 				.css({
@@ -31,7 +42,8 @@
 					'height': '100%',
 					'top': '0px',
 					'left': '0px',
-					'background-color': 'rgba(0,0,0,0.5)'
+					'background-color': 'rgba(0,0,0,0.5)',
+					'z-index': '700000'
 				})
 				.append(closeButton)
 				.append(frame)
