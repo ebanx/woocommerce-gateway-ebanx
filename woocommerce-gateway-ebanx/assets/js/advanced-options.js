@@ -1,28 +1,4 @@
 ;(function($){
-  // Cookie management
-  var createCookie = function(name, value) {
-    document.cookie = name + "=" + value + "; path=/";
-  };
-
-  var getCookie = function(name) {
-    if (document.cookie.length == 0) {
-      return "";
-    }
-
-    var start = document.cookie.indexOf(name + "=");
-    if (start == -1) {
-      return "";
-    }
-
-    var start = start + name.length + 1;
-    var end = document.cookie.indexOf(";", start);
-    if (end == -1) {
-      end = document.cookie.length;
-    }
-
-    return unescape(document.cookie.substring(start, end));
-  };
-
   // Checkout manager managed fields
   var modesField = $('#woocommerce_ebanx-global_brazil_taxes_options');
   var fields = $('.ebanx-checkout-manager-field');
@@ -56,7 +32,7 @@
     }
 
     if (fieldsToggler[0].checked) {
-      
+
       enableFields(fields.filter('.always-visible'));
       if (brazilVal != null && brazilVal.length > 0 && modes != null) {
         for (var i in modes) {
@@ -83,7 +59,7 @@
       }
 
       else {
-        $('#woocommerce_ebanx-global_advanced_options_title').css('display', 'table'); 
+        $('#woocommerce_ebanx-global_advanced_options_title').css('display', 'table');
         enableFields(ebanxAdvancedOptionEnable);
       }
 
@@ -120,13 +96,13 @@
       updateFields();
     }
 
-    createCookie('ebanx_advanced_options_toggle', wasClosed?"open":"closed");
+    localStorage.setItem('ebanx_advanced_options_toggle', wasClosed?"open":"closed");
   };
   optionsToggler
     .addClass('togglable')
     .click(toggleElements);
 
-    if(getCookie('ebanx_advanced_options_toggle') != 'open'){
+    if(localStorage.getItem('ebanx_advanced_options_toggle') != 'open'){
       toggleElements();
     } else {
       //Extra call to update checkout manager stuff if it's already open
