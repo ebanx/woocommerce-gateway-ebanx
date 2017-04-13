@@ -273,40 +273,16 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway
 				'desc_tip' => true
 			)
 		);
-		$min_instalment_value_array = array();
-		if (strtoupper(get_woocommerce_currency()) === WC_EBANX_Constants::CURRENCY_CODE_BRL) {
-			$min_instalment_value_array['min_instalment_value_brl'] = array(
-				'title' => __('Minimum istalment value in BRL', 'woocommerce-gateway-ebanx'),
+		$currency_code = get_woocommerce_currency();
+		if ( in_array(strtoupper($currency_code), WC_EBANX_Constants::$CREDIT_CARD_CURRENCIES) ) {
+			$fields["min_instalment_value_$currency_code"] = array(
+				'title' => sprintf(__('Minimum istalment value in %s', 'woocommerce-gateway-ebanx'), strtoupper($currency_code)),
 				'type' => 'number',
 				'class' => 'ebanx-payments-option',
-				'placeholder' => __('The default is 20', 'woocommerce-gateway-ebanx')
+				'placeholder' => sprintf(__('The default is %d', 'woocommerce-gateway-ebanx'), 
+					$currency_code === WC_EBANX_Constants::CURRENCY_CODE_MXN ? 100 : 20)
 			);
 		}
-		if (strtoupper(get_woocommerce_currency()) === WC_EBANX_Constants::CURRENCY_CODE_MXN) {
-			$min_instalment_value_array['min_instalment_value_mxn'] = array(
-				'title' => __('Minimum istalment value in MXN', 'woocommerce-gateway-ebanx'),
-				'type' => 'number',
-				'class' => 'ebanx-payments-option',
-				'placeholder' => __('The default is 100', 'woocommerce-gateway-ebanx')
-			);
-		}
-		if (strtoupper(get_woocommerce_currency()) === WC_EBANX_Constants::CURRENCY_CODE_USD) {
-			$min_instalment_value_array['min_instalment_value_usd'] = array(
-				'title' => __('Minimum istalment value in USD', 'woocommerce-gateway-ebanx'),
-				'type' => 'number',
-				'class' => 'ebanx-payments-option',
-				'placeholder' => __('The default is 20', 'woocommerce-gateway-ebanx')
-			);
-		}
-		if (strtoupper(get_woocommerce_currency()) === WC_EBANX_Constants::CURRENCY_CODE_EUR) {
-			$min_instalment_value_array['min_instalment_value_eur'] = array(
-				'title' => __('Minimum istalment value in EUR', 'woocommerce-gateway-ebanx'),
-				'type' => 'number',
-				'class' => 'ebanx-payments-option',
-				'placeholder' => __('The default is 20', 'woocommerce-gateway-ebanx')
-			);
-		}
-		$fields = array_merge($fields, $min_instalment_value_array);
 		$fields = array_merge($fields, array(
 			'interest_rates_enabled' => array(
 				'type'    => 'checkbox',
