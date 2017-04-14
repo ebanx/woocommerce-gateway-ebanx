@@ -177,8 +177,7 @@ if (!class_exists('WC_EBANX')) {
 		 *
 		 * @return void
 		 */
-		public function plugins_loaded()
-		{
+		public function plugins_loaded() {
 			if ($this->get_environment_warning()) {
 				return;
 			}
@@ -189,8 +188,7 @@ if (!class_exists('WC_EBANX')) {
 		 *
 		 * @return void
 		 */
-		public function ebanx_router()
-		{
+		public function ebanx_router() {
 			if ( WC_EBANX_Request::has('ebanx') ) {
 				$action = WC_EBANX_Request::read('ebanx');
 				if ($action === 'order-received' && WC_EBANX_Request::has('hash')) {
@@ -215,8 +213,7 @@ if (!class_exists('WC_EBANX')) {
 		 *
 		 * @return void
 		 */
-		private function ebanx_order_received($hash, $payment_type)
-		{
+		private function ebanx_order_received($hash, $payment_type) {
 			$this->setup_configs();
 			$subdomain = $this->is_sandbox_mode ? 'sandbox' : 'print';
 			$url = "https://{$subdomain}.ebanx.com/";
@@ -251,8 +248,7 @@ if (!class_exists('WC_EBANX')) {
 		 *
 		 * @return void
 		 */
-		private function ebanx_dashboard_check()
-		{
+		private function ebanx_dashboard_check() {
 			$json = json_encode(array(
 				'ebanx' => true,
 				'version' => self::get_plugin_version()
@@ -268,8 +264,10 @@ if (!class_exists('WC_EBANX')) {
 		 */
 		private function ebanx_fetch_keys_modal() {
 			$lead_id = get_option('_ebanx_lead_id');
-			$url = "http://localhost/fetchkeys.php?lead_id=".$lead_id;
-			header('Location: '.$url);
+			//$url = "http://localhost/fetchkeys.php?lead_id=".$lead_id;
+			$url = "http://dev-everest.ebanx.com/";
+			echo '<img style="display: block; margin: 15% auto; width: 400px; height: 300px;" src="'.WC_EBANX_Assets::get_logo().'" />';
+			echo '<script type="text/javascript">setTimeout(function(){ document.location.href = "'.$url.'"; }, 300);</script>';
 			exit();
 		}
 
@@ -663,7 +661,7 @@ if (!class_exists('WC_EBANX')) {
 				// TODO: Create a dynamic url
 				WC_EBANX_Constants::SETTINGS_URL,
 				'',
-				WC_EBANX_Assets::get_logo(),
+				WC_EBANX_Assets::get_small_logo(),
 				21
 			);
 		}
