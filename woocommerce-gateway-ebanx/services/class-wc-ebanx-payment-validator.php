@@ -79,7 +79,7 @@ class WC_EBANX_Payment_Validator {
 	 */
 	private function validate_status() {
 		if ( ! $this->order->status === 'pending' ) {
-			$this->add_error(__('You can only create payment links on pending orders.', 'woocommerce-gateway-ebanx'));
+			$this->add_error(__('Payment links can only be created when the order status is selected as Pending Payments.', 'woocommerce-gateway-ebanx'));
 			return true;
 		}
 		return false;
@@ -93,7 +93,7 @@ class WC_EBANX_Payment_Validator {
 		if ( get_woocommerce_currency() !== 'USD'
 			&& get_woocommerce_currency() !== 'EUR'
 			&& get_woocommerce_currency() !== WC_EBANX_Constants::$LOCAL_CURRENCIES[strtolower($this->order->billing_country)] ) {
-			$this->add_error(sprintf(__('We can\'t proccess %s in the selected country.', 'woocommerce-gateway-ebanx'), get_woocommerce_currency()));
+			$this->add_error(sprintf(__('The selected Country doesn\'t support the chosen Currency (%s).', 'woocommerce-gateway-ebanx'), get_woocommerce_currency()));
 			return true;
 		}
 
@@ -106,7 +106,7 @@ class WC_EBANX_Payment_Validator {
 	 */
 	private function validate_amount() {
 		if ( $this->order->get_total() < 1 ) {
-			$this->add_error(__('The total amount needs to be greater than $1.', 'woocommerce-gateway-ebanx'));
+			$this->add_error(__('The minimum total amount is $1, please pick a greater value.', 'woocommerce-gateway-ebanx'));
 			return true;
 		}
 
@@ -119,7 +119,7 @@ class WC_EBANX_Payment_Validator {
 	 */
 	private function validate_country() {
 		if ( ! in_array(strtolower($this->order->billing_country), WC_EBANX_Constants::$ALL_COUNTRIES) ) {
-			$this->add_error(__('EBANX only support the countries: Brazil, Mexico, Peru, Colombia and Chile. Please, use one of these.', 'woocommerce-gateway-ebanx'));
+			$this->add_error(__('EBANX only support the following Countries: Brazil, Mexico, Peru, Colombia and Chile. Select one of these to complete your order.', 'woocommerce-gateway-ebanx'));
 			return true;
 		}
 		return false;
@@ -131,7 +131,7 @@ class WC_EBANX_Payment_Validator {
 	 */
 	private function validate_email() {
 		if ( ! filter_var($this->order->billing_email, FILTER_VALIDATE_EMAIL) ) {
-			$this->add_error(__('The customer e-mal is required, please provide a valid customer e-mail.', 'woocommerce-gateway-ebanx'));
+			$this->add_error(__('The customer email is a required field. Please provide a valid customer e-mail.', 'woocommerce-gateway-ebanx'));
 			return true;
 		}
 
@@ -165,7 +165,7 @@ class WC_EBANX_Payment_Validator {
 	 */
 	private function validate_payment_method_is_ebanx_account() {
 		if ( $this->order->payment_method === 'ebanx-account' ) {
-			$this->add_error(__('Paying with EBANX account is not avaible yet.', 'woocommerce-gateway-ebanx'));
+			$this->add_error(__('The EBANX account is not available yet as payment method, you will hear about that soon!', 'woocommerce-gateway-ebanx'));
 			return true;
 		}
 
@@ -194,7 +194,7 @@ class WC_EBANX_Payment_Validator {
 	private function validate_payment_method_country() {
 		if ( array_key_exists(strtolower($this->order->billing_country), WC_EBANX_Constants::$EBANX_GATEWAYS_BY_COUNTRY)
 			&& ! in_array($this->order->payment_method, WC_EBANX_Constants::$EBANX_GATEWAYS_BY_COUNTRY[strtolower($this->order->billing_country)]) ) {
-			$this->add_error(__('The selected payment method is not available on the selected country.', 'woocommerce-gateway-ebanx'));
+			$this->add_error(__('The selected payment method is not available on the chosen Country.', 'woocommerce-gateway-ebanx'));
 			return true;
 		}
 
