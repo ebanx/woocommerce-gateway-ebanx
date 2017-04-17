@@ -489,7 +489,7 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway
 	 */
 	protected function request_data($order)
 	{
-		$home_url = esc_url( rtrim ( home_url(), '/' ) . '/' );
+		$home_url = esc_url( home_url( '/' ) );
 
 		$has_cpf = false;
 		$has_cnpj = false;
