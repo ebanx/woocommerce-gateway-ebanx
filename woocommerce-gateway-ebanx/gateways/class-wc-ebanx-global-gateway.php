@@ -281,6 +281,10 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway
 				'class' => 'ebanx-payments-option',
 				'placeholder' => sprintf(__('The default is %d', 'woocommerce-gateway-ebanx'), 
 					$currency_code === WC_EBANX_Constants::CURRENCY_CODE_MXN ? WC_EBANX_Constants::ACQUIRER_MIN_INSTALMENT_VALUE_MXN : WC_EBANX_Constants::ACQUIRER_MIN_INSTALMENT_VALUE_BRL),
+				'custom_attributes' => array(
+					'min' => $currency_code === WC_EBANX_Constants::CURRENCY_CODE_MXN ? WC_EBANX_Constants::ACQUIRER_MIN_INSTALMENT_VALUE_MXN : ( $currency_code === WC_EBANX_Constants::CURRENCY_CODE_MXN ? WC_EBANX_Constants::ACQUIRER_MIN_INSTALMENT_VALUE_BRL : 0),
+					'step' => '0.01'
+				),
 				'desc_tip' => true,
 				'description' => __('The minimum instalment value supported by EBANX is $20 BRL and $100 MXN. If you put a value lower than these the value used will be the EBANX\'s ones', 'woocommerce-gateway-ebanx')
 			);
