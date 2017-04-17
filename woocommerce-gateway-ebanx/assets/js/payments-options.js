@@ -13,7 +13,7 @@
     jqElementList.closest('tr').show();
   };
 
-  var updateFields = function(){
+  var updateFields = function () {
     var maxInstalments = maxInstalmentsField.val();
     disableFields(fields);
 
@@ -29,11 +29,11 @@
   };
 
   fieldsToggler
-    .click(function(){
+    .click(function () {
       updateFields();
     });
 
-  maxInstalmentsField.change(function(){
+  maxInstalmentsField.change(function () {
     updateFields();
   });
 
@@ -51,18 +51,18 @@
       .slideToggle('fast');
 
     //Extra call to update checkout manager stuff on open
-    if(wasClosed) {
+    if (wasClosed) {
       updateFields();
     }
 
-    localStorage.setItem('ebanx_payments_options_toggle', wasClosed?"open":"closed");
+    localStorage.setItem('ebanx_payments_options_toggle', wasClosed ? 'open' : 'closed');
   };
 
   optionsToggler
     .addClass('togglable')
     .click(toggleElements);
 
-  if(localStorage.getItem('ebanx_payments_options_toggle') != 'open'){
+  if (localStorage.getItem('ebanx_payments_options_toggle') != 'open'){
     toggleElements();
   } else {
     //Extra call to update checkout manager stuff if it's already open

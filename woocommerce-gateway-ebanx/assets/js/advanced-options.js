@@ -1,4 +1,4 @@
-;(function($){
+;(function($) {
   // Checkout manager managed fields
   var modesField = $('#woocommerce_ebanx-global_brazil_taxes_options');
   var fields = $('.ebanx-checkout-manager-field');
@@ -11,15 +11,15 @@
     colombia: $('#woocommerce_ebanx-global_colombia_payment_methods')
   };
 
-  var disableFields = function(jqElementList){
+  var disableFields = function(jqElementList) {
     jqElementList.closest('tr').hide();
   };
 
-  var enableFields = function(jqElementList){
+  var enableFields = function(jqElementList) {
     jqElementList.closest('tr').show();
   };
 
-  var updateFields = function(){
+  var updateFields = function () {
     var modes = modesField.val();
     var brazilVal = countryPayments.brazil.val();
     var chileVal = countryPayments.chile.val();
@@ -67,16 +67,16 @@
   };
 
   fieldsToggler
-    .click(function(){
+    .click(function () {
       updateFields();
     });
 
-  modesField.change(function(){
+  modesField.change(function () {
     updateFields();
   });
 
   for (var i in countryPayments) {
-    countryPayments[i].change(function(){
+    countryPayments[i].change(function () {
       updateFields();
     });
   }
@@ -84,7 +84,7 @@
   // Advanced options toggler
   var optionsToggler = $('#woocommerce_ebanx-global_advanced_options_title');
 
-  var toggleElements = function() {
+  var toggleElements = function () {
     var wasClosed = optionsToggler.hasClass('closed');
     optionsToggler.toggleClass('closed');
     $('.ebanx-advanced-option')
@@ -92,17 +92,17 @@
       .slideToggle('fast');
 
     //Extra call to update checkout manager stuff on open
-    if(wasClosed) {
+    if (wasClosed) {
       updateFields();
     }
 
-    localStorage.setItem('ebanx_advanced_options_toggle', wasClosed?"open":"closed");
+    localStorage.setItem('ebanx_advanced_options_toggle', wasClosed ? 'open':'closed');
   };
   optionsToggler
     .addClass('togglable')
     .click(toggleElements);
 
-    if(localStorage.getItem('ebanx_advanced_options_toggle') != 'open'){
+    if (localStorage.getItem('ebanx_advanced_options_toggle') != 'open') {
       toggleElements();
     } else {
       //Extra call to update checkout manager stuff if it's already open
