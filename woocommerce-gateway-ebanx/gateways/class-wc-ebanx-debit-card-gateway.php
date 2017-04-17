@@ -138,7 +138,7 @@ class WC_EBANX_Debit_Card_Gateway extends WC_EBANX_Gateway
 		parent::save_order_meta_fields($order, $request);
 
 		update_post_meta($order->id, '_cards_brand_name', $request->payment->payment_type_code);
-		update_post_meta($order->id, '_masked_card_number', $_POST['ebanx_debit_masked_card_number']);
+		update_post_meta($order->id, '_masked_card_number', WC_EBANX_Request::read('ebanx_debit_masked_card_number'));
 	}
 
 	/**
@@ -151,15 +151,15 @@ class WC_EBANX_Debit_Card_Gateway extends WC_EBANX_Gateway
 	{
 		parent::save_user_meta_fields($order);
 
-		if ($this->userId && $this->configs->settings['save_card_data'] === 'yes' && isset($_POST['ebanx-save-debit-card']) && $_POST['ebanx-save-debit-card'] === 'yes') {
+		if ($this->userId && $this->configs->settings['save_card_data'] === 'yes' && WC_EBANX_Request::has('ebanx-save-debit-card') && WC_EBANX_Request::read('ebanx-save-debit-card') === 'yes') {
 			$cards = get_user_meta($this->userId, '_ebanx_debit_card_token', true);
 			$cards = !empty($cards) ? $cards : [];
 
 			$card = new \stdClass();
 
-			$card->brand = $_POST['ebanx_debit_brand'];
-			$card->token = $_POST['ebanx_debit_token'];
-			$card->masked_number = $_POST['ebanx_debit_masked_card_number'];
+			$card->brand = WC_EBANX_Request::read('ebanx_debit_brand');
+			$card->token = WC_EBANX_Request::read('ebanx_debit_token');
+			$card->masked_number = WC_EBANX_Request::read('ebanx_debit_masked_card_number');
 
 			foreach ($cards as $cd) {
 				if (empty($cd)) {

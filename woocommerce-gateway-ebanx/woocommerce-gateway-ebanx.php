@@ -262,12 +262,12 @@ if (!class_exists('WC_EBANX')) {
 				update_user_meta(get_current_user_id(), '_ebanx_credit_card_token', $credit_cards);
 			}
 			
-			if (isset($_POST['debit-card-delete']) && is_account_page()) {
+			if (WC_EBANX_Request::has('debit-card-delete') && is_account_page()) {
 				// Find debit cards saved and delete the selected
 				$debit_cards = get_user_meta(get_current_user_id(), '_ebanx_debit_card_token', true);
 
 				foreach ($debit_cards as $k => $cd) {
-					if ($cd && in_array($cd->masked_number, $_POST['debit-card-delete'])) {
+					if ($cd && in_array($cd->masked_number, WC_EBANX_Request::read('debit-card-delete'))) {
 						unset($debit_cards[$k]);
 					}
 				}
