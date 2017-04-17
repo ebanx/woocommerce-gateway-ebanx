@@ -96,7 +96,7 @@
       updateFields();
     }
 
-    localStorage.setItem('ebanx_advanced_options_toggle', wasClosed ? 'open':'closed');
+    localStorage.setItem('ebanx_advanced_options_toggle', wasClosed ? 'open' : 'closed');
   };
   optionsToggler
     .addClass('togglable')
