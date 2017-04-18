@@ -1020,7 +1020,7 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway
 			return;
 		}
 
-		$amount = WC()->cart->cart_contents_total;
+		$amount = WC()->cart->total;
 
 		if ($country === null) {
 			$country = $this->getTransactionAddress('country');
@@ -1032,7 +1032,7 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway
 			$rate = round(floatval($this->get_local_currency_rate_for_site($currency)), 2);
 
 			if ( WC()->cart->prices_include_tax ) {
-				$amount = WC()->cart->cart_contents_total + WC()->cart->tax_total;
+				$amount = WC()->cart->total + WC()->cart->tax_total;
 			}
 
 			$amount *= $rate;
