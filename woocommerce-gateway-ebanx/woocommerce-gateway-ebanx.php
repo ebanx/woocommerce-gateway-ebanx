@@ -264,8 +264,8 @@ if (!class_exists('WC_EBANX')) {
 		 */
 		private function ebanx_fetch_keys_modal() {
 			$lead_id = get_option('_ebanx_lead_id');
-			//$url = "http://localhost/fetchkeys.php?lead_id=".$lead_id;
-			$url = "http://dev-everest.ebanx.com/";
+			//$url = "http://everest.ebanx.com/api/fetch_keys/{$lead_id}";
+			$url = "http://dev-everest.ebanx.com/api/fetch_keys/c11e2065-9023-4d19-84d3-2fb86491670a";
 			echo '<img style="display: block; margin: 15% auto; width: 400px; height: 300px;" src="'.WC_EBANX_Assets::get_logo().'" />';
 			echo '<script type="text/javascript">setTimeout(function(){ document.location.href = "'.$url.'"; }, 300);</script>';
 			exit();

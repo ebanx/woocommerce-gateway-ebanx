@@ -19,6 +19,7 @@
 	var Keys = {
 		allow_origin: [
 			'https://dashboard.ebanx.com',
+			'http://dev-everest.ebanx.com',
 			'http://localhost'
 		],
 
@@ -33,7 +34,6 @@
 
 		validateMessage: function(message) {
 			var origin = message.origin || message.originalEvent.origin;
-			console.log('origin: '+origin);
 
 			if (!Keys.allow_origin.includes(origin))
 				return false;
