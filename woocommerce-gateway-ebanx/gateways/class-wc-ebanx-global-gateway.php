@@ -146,7 +146,7 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway
 			'brazil_payment_methods'    => array(
 				'title'       => __('Brazil', 'woocommerce-gateway-ebanx'),
 				'type'        => 'multiselect',
-				'class'       => 'ebanx-select',
+				'class'       => 'wc-enhanced-select',
 				'options'     => array(
 					'ebanx-credit-card-br' => 'Credit Card',
 					'ebanx-banking-ticket' => 'Boleto EBANX',
@@ -163,7 +163,7 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway
 			'mexico_payment_methods'    => array(
 				'title'       => __('Mexico', 'woocommerce-gateway-ebanx'),
 				'type'        => 'multiselect',
-				'class'       => 'ebanx-select',
+				'class'       => 'wc-enhanced-select',
 				'options'     => array(
 					'ebanx-credit-card-mx' => 'Credit Card',
 					'ebanx-debit-card'  => 'Debit Card',
@@ -178,7 +178,7 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway
 			'chile_payment_methods'     => array(
 				'title'       => __('Chile', 'woocommerce-gateway-ebanx'),
 				'type'        => 'multiselect',
-				'class'       => 'ebanx-select',
+				'class'       => 'wc-enhanced-select',
 				'options'     => array(
 					'ebanx-sencillito' => 'Sencillito',
 					'ebanx-servipag'   => 'Servipag',
@@ -191,7 +191,7 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway
 			'colombia_payment_methods'  => array(
 				'title'       => __('Colombia', 'woocommerce-gateway-ebanx'),
 				'type'        => 'multiselect',
-				'class'       => 'ebanx-select',
+				'class'       => 'wc-enhanced-select',
 				'options'     => array(
 					'ebanx-eft' => 'PSE - Pago Seguros en Línea (EFT)',
 					'ebanx-baloto' => 'Baloto',
@@ -204,7 +204,7 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway
 			'peru_payment_methods'      => array(
 				'title'       => __('Peru', 'woocommerce-gateway-ebanx'),
 				'type'        => 'multiselect',
-				'class'       => 'ebanx-select',
+				'class'       => 'wc-enhanced-select',
 				'options'     => array(
 					'ebanx-safetypay'    => 'SafetyPay',
 					'ebanx-pagoefectivo' => 'PagoEfectivo',
@@ -215,7 +215,7 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway
 				),
 			),
 			'payments_options_title'     => array(
-				'title' => __('Payments Options', 'woocommerce-gateway-ebanx'),
+				'title' => __('Payment Options', 'woocommerce-gateway-ebanx'),
 				'type'  => 'title'
 			),
 			'credit_card_options_title' => array(
@@ -250,7 +250,7 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway
 			'credit_card_instalments'   => array(
 				'title'       => __('Maximum nº of Installments', 'woocommerce-gateway-ebanx'),
 				'type'        => 'select',
-				'class'       => 'ebanx-select ebanx-payments-option',
+				'class'       => 'wc-enhanced-select ebanx-payments-option',
 				'options'     => array(
 					'1'  => '1',
 					'2'  => '2',
@@ -312,7 +312,7 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway
 			),
 			'due_date_days' => array(
 				'title' => __('Days to Expiration', 'woocommerce-gateway-ebanx'),
-				'class' => 'ebanx-due-cash-date ebanx-payments-option',
+				'class' => 'wc-enhanced-select ebanx-due-cash-date ebanx-payments-option',
 				'description' => __('Define the maximum number of days on which your customer can complete the payment of: Boleto, OXXO, Sencilito, PagoEfectivo and SafetyPay.', 'woocommerce-gateway-ebanx'),
 				'desc_tip' => true
 			),
@@ -323,7 +323,7 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway
 				'number' : 'select'
 		);
 		if (!in_array($this->merchant_currency, WC_EBANX_Constants::$LOCAL_CURRENCIES)) {
-			$fields['due_date_days']['class'] .= ' ebanx-select';
+			$fields['due_date_days']['class'] .= ' wc-enhanced-select';
 			$fields['due_date_days']['options'] = array(
 				'1' => '1',
 				'2' => '2',
@@ -340,7 +340,7 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway
 				'title' => __('Enable Checkout for:', 'woocommerce-gateway-ebanx'),
 				'type'        => 'multiselect',
 				'required'    => true,
-				'class'       => 'ebanx-select ebanx-advanced-option brazil-taxes',
+				'class'       => 'wc-enhanced-select ebanx-advanced-option brazil-taxes',
 				'options'     => array(
 					'cpf' => __('CPF - Individuals', 'woocommerce-gateway-ebanx'),
 					'cnpj' => __('CNPJ - Companies', 'woocommerce-gateway-ebanx')
