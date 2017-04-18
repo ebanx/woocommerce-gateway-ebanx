@@ -49,8 +49,8 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway
 		'brazil_taxes_options' => 'cpf',
 		'interest_rates_enabled' => 'no',
 		'min_instalment_value_brl' => '20',
-		'min_instalment_value_usd' => '20',
-		'min_instalment_value_eur' => '20',
+		'min_instalment_value_usd' => '0',
+		'min_instalment_value_eur' => '0',
 		'min_instalment_value_mxn' => '100'
 	);
 
