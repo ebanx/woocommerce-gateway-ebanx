@@ -1,5 +1,9 @@
 # CHANGELOG
 
+# 1.11.4
+* Fix - Fixed float values not being accepted in interest rates [#480](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/480)
+* Fix - Added '/' to Notification URL to prevent Response Code 301 [#480](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/480)
+
 # 1.11.3
 * Fix - Fixed a problem that was incrementing the previous value by instalment [#463](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/463)
 
