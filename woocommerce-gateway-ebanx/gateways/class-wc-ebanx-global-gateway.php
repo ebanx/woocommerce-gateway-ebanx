@@ -286,7 +286,7 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway
 					'step' => '0.01'
 				),
 				'desc_tip' => true,
-				'description' => __('The minimum instalment value supported by EBANX is $20 BRL and $100 MXN. If you put a value lower than these the value used will be the EBANX\'s ones', 'woocommerce-gateway-ebanx')
+				'description' => __('The minimum instalment value supported by EBANX is $20 BRL and $100 MXN. If you insert a lower value the EBANX pattern ones will be used.', 'woocommerce-gateway-ebanx')
 			);
 		}
 		$fields = array_merge($fields, array(
