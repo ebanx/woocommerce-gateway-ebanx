@@ -281,7 +281,10 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway
 		$interest_rates_array['interest_rates_01'] = array(
 			'title' => __('1x Interest Rate in %', 'woocommerce-gateway-ebanx'),
 			'type' => 'number',
-			'step' => 'any',
+			'custom_attributes' => array(
+				'min'  => '0',
+				'step' => 'any',
+			),
 			'class' => 'interest-rates-fields ebanx-payments-option',
 			'placeholder' => __('eg: 15.7%', 'woocommerce-gateway-ebanx')
 		);
@@ -290,7 +293,10 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway
 			$interest_rates_array['interest_rates_'.sprintf("%02d", $i)] = array(
 				'title' => __($i.'x Interest Rate', 'woocommerce-gateway-ebanx'),
 				'type' => 'number',
-				'step' => 'any',
+				'custom_attributes' => array(
+					'min'  => '0',
+					'step' => 'any',
+				),
 				'class' => 'interest-rates-fields ebanx-payments-option',
 				'placeholder' => __('eg: 15.7%', 'woocommerce-gateway-ebanx')
 			);
