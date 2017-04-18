@@ -5,13 +5,18 @@
 
 		var frame = $(document.createElement('iframe'));
 
+
 		var closeButton = $(document.createElement('a'))
 			.html('&times;');
 
+		var container = $(document.createElement('div'))
+			.addClass('container')
+			.append(closeButton)
+			.append(frame);
+
 		this.element = $(document.createElement('div'))
 			.attr('id', 'ebanx-settings-modal')
-			.append(closeButton)
-			.append(frame)
+			.append(container)
 			.hide();
 
 		var _self = this;

@@ -9,16 +9,24 @@
 
 	background-color: rgba(0, 0, 0, 0.5);
 }
+#ebanx-settings-modal > div.container {
+	position: relative;
 
-#ebanx-settings-modal > a {
+	width: 960px;
+	height: 800px;
+	margin: 20px auto;
+}
+
+#ebanx-settings-modal > div.container > a {
 	position: absolute;
-	top: 25px;
-	right: 25px;
+
+	top: 10px;
+	right: 10px;
 
 	display: block;
-	width: 56px;
-	height: 56px;
-	border-radius: 28px;
+	width: 60px;
+	height: 60px;
+	border-radius: 30px;
 
 	color: #cccccc;
 
@@ -27,22 +35,24 @@
 	font-weight: normal;
 
 	text-align: center;
-	line-height: 54px;
+	line-height: 60px;
 
 	cursor: pointer;
 
 	transition: all 0.4s;
+	z-index: 100;
 }
-#ebanx-settings-modal > a:hover {
+#ebanx-settings-modal > div.container > a:hover {
 	color: #202020;
 }
 
-#ebanx-settings-modal > iframe {
+#ebanx-settings-modal > div.container > iframe {
+	position: absolute;
 	display: block;
-	width: 98%;
-	height: 96%;
+
+	width: 960px;
+	height: 650px;
 	border-radius: 5px;
-	margin: 1% auto;
 
 	background-color: #ffffff;
 
