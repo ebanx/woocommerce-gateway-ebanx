@@ -1034,12 +1034,14 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway
 		}
 
 		$message = $this->get_checkout_message($amount, $currency, $country);
+		$home_url = esc_url( home_url() );
 
 		if ($template) {
 			wc_get_template(
 				'checkout-conversion-rate.php',
 				array(
-					'message' => $message
+					'message' => $message,
+					'home_url' => $home_url
 				),
 				'woocommerce/ebanx/',
 				WC_EBANX::get_templates_path()
