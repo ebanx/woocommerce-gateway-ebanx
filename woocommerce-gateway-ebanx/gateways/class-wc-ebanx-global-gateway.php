@@ -420,4 +420,19 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway
 			$properties['default'] = self::$defaults[$field];
 		}
 	}
+
+	/**
+	 * Fetches a single setting from the gateway settings if found, otherwise it returns an optional default value
+	 *
+	 * @param  string $name    The setting name to fetch
+	 * @param  mixed  $default The default value in case setting is not present
+	 * @return mixed
+	 */
+	public function get_setting_or_default($name, $default=null) {
+		if (!isset($this->settings[$name]) || empty($this->settings[$name])) {
+			return $default;
+		}
+
+		return $this->settings[$name];
+	}
 }
