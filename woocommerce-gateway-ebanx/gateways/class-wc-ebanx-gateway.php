@@ -19,7 +19,12 @@ add_action('wp_ajax_ebanx_update_converted_value', 'ebanx_update_converted_value
 function ebanx_update_converted_value () {
 	$gateway = new WC_EBANX_Gateway();
 
-	echo $gateway->ebanx_update_converted_value();
+	echo $gateway->checkout_rate_conversion(
+		WC_EBANX_Request::read('currency'),
+		false,
+		WC_EBANX_Request::read('country'),
+		WC_EBANX_Request::read('instalments')
+	);
 
 	wp_die();
 }
@@ -67,27 +72,6 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway
 		$this->names = $this->get_billing_field_names();
 
 		$this->merchant_currency = strtoupper(get_woocommerce_currency());
-	}
-
-	/**
-	 * Receives values from instalments and show an updated message with new values
-	 *
-	 * @return void
-	 */
-	public function ebanx_update_converted_value () {
-		try {
-			$message = $this->checkout_rate_conversion(
-				WC_EBANX_Request::read('currency'),
-				false,
-				WC_EBANX_Request::read('country'),
-				WC_EBANX_Request::read('instalments')
-			);
-
-			return $message;
-		}
-		catch (Exception $e) {
-			echo $e->getMessage();
-		}
 	}
 
 	/**
