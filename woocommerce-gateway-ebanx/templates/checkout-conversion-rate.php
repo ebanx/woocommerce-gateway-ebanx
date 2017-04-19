@@ -13,7 +13,7 @@ if (!defined('ABSPATH')) {
 	<span style="float: left;"><?php echo $message; ?></span>
 	<img
 		class="ebanx-spinner" 
-		src="<?= $home_url ?>/wp-admin/images/spinner-2x.gif" 
+		src="<?= esc_url( admin_url('/images/spinner-2x.gif') ) ?>" 
 		width="20"
 		height="20"
 		style="display: none; margin-left: 10px; float: left;"
