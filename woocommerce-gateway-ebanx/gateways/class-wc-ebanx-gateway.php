@@ -282,11 +282,7 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway
 			return $default;
 		}
 
-		if (!isset($this->configs->settings[$name]) || empty($this->configs->settings[$name])) {
-			return $default;
-		}
-
-		return $this->configs->settings[$name];
+		return $this->get_setting_or_default($name, $default);
 	}
 
 	/**
@@ -297,11 +293,7 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway
 	 * @return mixed
 	 */
 	public function get_setting_or_default($name, $default=null) {
-		if (!isset($this->configs->settings[$name]) || empty($this->configs->settings[$name])) {
-			return $default;
-		}
-
-		return $this->configs->settings[$name];
+		return $this->configs->get_setting_or_default($name, $default);
 	}
 
 	/**

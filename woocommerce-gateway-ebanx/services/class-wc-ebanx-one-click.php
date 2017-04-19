@@ -20,8 +20,9 @@ class WC_EBANX_One_Click {
 		$this->userCountry = trim(strtolower(get_user_meta( $this->userId, 'billing_country', true )));
 		$this->gateway = $this->userCountry ? ($this->userCountry === WC_EBANX_Constants::COUNTRY_BRAZIL ? new WC_EBANX_Credit_Card_BR_Gateway() : new WC_EBANX_Credit_Card_MX_Gateway()) : false;
 
-		if ( !$this->gateway 
-			|| $this->gateway->get_setting_or_default('one_click', 'no') !== 'yes' ) {
+		if ( !$this->gateway
+			|| $this->gateway->get_setting_or_default('one_click', 'no') !== 'yes'
+			|| $this->gateway->get_setting_or_default('save_card_data', 'no') !== 'yes' ) {
 			return;
 		}
 
@@ -31,7 +32,7 @@ class WC_EBANX_One_Click {
 		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ), 100 );
 		add_action( 'woocommerce_after_add_to_cart_form', array( $this, 'print_button' ) );
 		add_action( 'wp_loaded', array( $this, 'one_click_handler' ), 99 );
-	
+
 		$cards = get_user_meta( $this->userId, '_ebanx_credit_card_token', true );
 
 		$this->cards = is_array( $cards ) ? array_filter( $cards ) : array();
@@ -45,13 +46,13 @@ class WC_EBANX_One_Click {
 	 * @return void
 	 */
 	public function generate_instalments_rates () {
-		if (!$this->gateway 
+		if (!$this->gateway
 			|| $this->gateway->get_setting_or_default('interest_rates_enabled', 'no') !== 'yes') {
 			return;
 		}
 
 		$max_instalments = $this->gateway->configs->settings['credit_card_instalments'];
-		
+
 		for ($i=1; $i <= $max_instalments; $i++) {
 			$field = 'interest_rates_' . sprintf("%02d", $i);
 			$this->instalment_rates[$i] = 0;
@@ -73,11 +74,11 @@ class WC_EBANX_One_Click {
 			|| ! WC_EBANX_Request::has('product')
 			|| ! WC_EBANX_Request::has('ebanx-action')
 			|| WC_EBANX_Request::read('ebanx-action') !== $this->orderAction
-			|| ! WC_EBANX_Request::has('ebanx-nonce') 
+			|| ! WC_EBANX_Request::has('ebanx-nonce')
 			|| ! wp_verify_nonce( WC_EBANX_Request::read('ebanx-nonce'), $this->orderAction )
 			|| ! WC_EBANX_Request::has('ebanx-cart-total')
 			|| ! WC_EBANX_Request::has('ebanx-product-id')
-			|| ! $this->customer_can() 
+			|| ! $this->customer_can()
 			|| ! $this->customer_has_ebanx_required_data()
 		) {
 			return;
@@ -92,7 +93,7 @@ class WC_EBANX_One_Click {
 			$product_id = WC_EBANX_Request::read('ebanx-product-id');
 
 			$user = array(
-				'email' => get_user_meta($this->userId, 'billing_email', true),	
+				'email' => get_user_meta($this->userId, 'billing_email', true),
 				'country' => get_user_meta($this->userId, 'billing_country', true),
 				'first_name' => get_user_meta($this->userId, 'billing_first_name', true),
 				'last_name' => get_user_meta($this->userId, 'billing_last_name', true),
@@ -133,7 +134,7 @@ class WC_EBANX_One_Click {
 			foreach ($meta as $meta_key => $meta_value) {
 				update_post_meta($order->id, $meta_key, $meta_value );
 			}
-			
+
 			$order->calculate_totals();
 
 			$response = $this->gateway->process_payment($order->id);
@@ -142,7 +143,7 @@ class WC_EBANX_One_Click {
 				$message = __('EBANX: Unable to create the payment via one click.', 'woocommerce-gateway-ebanx');
 
 				$order->add_order_note($message);
-				
+
 				throw new Exception($message);
 			}
 
@@ -285,7 +286,7 @@ class WC_EBANX_One_Click {
 		if ( ! $this->userCountry ) {
 			return;
 		}
-		
+
 		global $product;
 
 		switch ( get_locale() ) {

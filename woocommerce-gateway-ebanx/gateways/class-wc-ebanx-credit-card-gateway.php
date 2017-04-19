@@ -242,7 +242,7 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
 
 		update_post_meta($order->id, '_cards_brand_name', $request->payment->payment_type_code);
 		update_post_meta($order->id, '_instalments_number', $request->payment->instalments);
-		update_post_meta($order->id, '_masked_card_number', $_POST['ebanx_masked_card_number']);
+		update_post_meta($order->id, '_masked_card_number', WC_EBANX_Request::read('ebanx_masked_card_number'));
 	}
 
 	/**
@@ -255,34 +255,39 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
 	{
 		parent::save_user_meta_fields($order);
 
-		if ($this->userId && $this->configs->settings['save_card_data'] === 'yes' && isset($_POST['ebanx-save-credit-card']) && $_POST['ebanx-save-credit-card'] === 'yes') {
-			$cards = get_user_meta($this->userId, '_ebanx_credit_card_token', true);
-			$cards = !empty($cards) ? $cards : [];
-
-			$card = new \stdClass();
-
-			$card->brand = $_POST['ebanx_brand'];
-			$card->token = $_POST['ebanx_token'];
-			$card->masked_number = $_POST['ebanx_masked_card_number'];
-
-			foreach ($cards as $cd) {
-				if (empty($cd)) {
-					continue;
-				}
-
-				if ($cd->masked_number == $card->masked_number && $cd->brand == $card->brand) {
-					$cd->token = $card->token;
-					unset($card);
-				}
-			}
-
-			// TODO: Implement token due date
-			if (isset($card)) {
-				$cards[] = $card;
-			}
-
-			update_user_meta($this->userId, '_ebanx_credit_card_token', $cards);
+		if ($this->userId
+			|| $this->get_setting_or_default('save_card_data', 'no') !== 'yes'
+			|| ! WC_EBANX_Request::has(['ebanx-save-credit-card'])
+			|| WC_EBANX_Request::read('ebanx-save-credit-card') !== 'yes') {
+			return;
 		}
+
+		$cards = get_user_meta($this->userId, '_ebanx_credit_card_token', true);
+		$cards = !empty($cards) ? $cards : [];
+
+		$card = new \stdClass();
+
+		$card->brand = WC_EBANX_Request::read('ebanx_brand');
+		$card->token = WC_EBANX_Request::read('ebanx_token');
+		$card->masked_number = WC_EBANX_Request::read('ebanx_masked_card_number');
+
+		foreach ($cards as $cd) {
+			if (empty($cd)) {
+				continue;
+			}
+
+			if ($cd->masked_number == $card->masked_number && $cd->brand == $card->brand) {
+				$cd->token = $card->token;
+				unset($card);
+			}
+		}
+
+		// TODO: Implement token due date
+		if (isset($card)) {
+			$cards[] = $card;
+		}
+
+		update_user_meta($this->userId, '_ebanx_credit_card_token', $cards);
 	}
 
 	/**
@@ -418,9 +423,15 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
 	public function payment_fields() {
 		$cart_total = $this->get_order_total();
 
-		$cards = array_filter((array) get_user_meta($this->userId, '_ebanx_credit_card_token', true), function ($card) {
-			return !empty($card->brand) && !empty($card->token) && !empty($card->masked_number);
-		});
+		$cards = array();
+
+		$save_card = $this->get_setting_or_default('save_card_data', 'no') === 'yes';
+
+		if ( $save_card ) {
+			$cards = array_filter((array) get_user_meta($this->userId, '_ebanx_credit_card_token', true), function ($card) {
+				return !empty($card->brand) && !empty($card->token) && !empty($card->masked_number);
+			});
+		}
 
 		$max_instalments = min($this->configs->settings['credit_card_instalments'], $this->fetch_acquirer_max_installments_for_price($cart_total, 'br'));
 
@@ -440,7 +451,7 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
 				'cards' => (array) $cards,
 				'cart_total' => $cart_total,
 				'max_instalments' => $max_instalments,
-				'place_order_enabled' => (isset($this->configs->settings['save_card_data']) && $this->configs->settings['save_card_data'] === 'yes'),
+				'place_order_enabled' => $save_card,
 				'instalments' => $country === WC_EBANX_Constants::COUNTRY_BRAZIL ? 'Número de parcelas' :  'Meses sin intereses',
 			),
 			'woocommerce/ebanx/',

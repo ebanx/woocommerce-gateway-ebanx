@@ -57,9 +57,9 @@ if (!class_exists('WC_EBANX')) {
 
 		private static $log;
 
-		private static $endpoint = 'ebanx-credit-cards';
+		private static $my_account_endpoint = 'ebanx-saved-cards';
 
-		private static $menu_name = 'EBANX - Credit Cards';
+		private static $my_account_menu_name = 'EBANX - Saved Cards';
 
 		/**
 		 * Initialize the plugin public actions.
@@ -82,13 +82,14 @@ if (!class_exists('WC_EBANX')) {
 			 */
 			$this->includes();
 
+			$configs = new WC_EBANX_Global_Gateway();
+
 			/**
 			 * Actions
 			 */
 			add_action('plugins_loaded', array($this, 'plugins_loaded'));
 			add_action('wp_loaded', array($this, 'enable_i18n'));
 
-			add_action('init', array($this, 'my_account_endpoint'));
 			add_action('init', array($this, 'ebanx_router'));
 			add_action('admin_init', array($this, 'ebanx_sidebar_shortcut'));
 			add_action('admin_init', array('WC_EBANX_Flash', 'enqueue_admin_messages'));
@@ -100,7 +101,6 @@ if (!class_exists('WC_EBANX')) {
 
 			add_action('admin_footer', array('WC_EBANX_Assets', 'render'), 0);
 
-			add_action('woocommerce_account_' . self::$endpoint . '_endpoint', array($this, 'my_account_template'));
 			add_action('woocommerce_settings_saved', array($this, 'setup_configs'), 10);
 			add_action('woocommerce_settings_saved', array($this, 'on_save_settings'), 10);
 			add_action('woocommerce_settings_saved', array($this, 'update_lead'), 20);
@@ -115,11 +115,22 @@ if (!class_exists('WC_EBANX')) {
 			add_action('save_post', array($this, 'ebanx_metabox_payment_link_save'));
 
 			/**
+			 * My account
+			 */
+			if ( $configs
+				&& $configs->get_setting_or_default('save_card_data', 'no') === 'yes' ) {
+
+				add_action('init', array($this, 'my_account_endpoint'));
+				add_action('woocommerce_account_' . self::$my_account_endpoint . '_endpoint', array($this, 'my_account_template'));
+
+				add_filter('query_vars', array($this, 'my_account_query_vars'), 0);
+				add_filter('woocommerce_account_menu_items', array($this, 'my_account_menus'));
+				add_filter('the_title', array($this, 'my_account_menus_title'));
+			}
+
+			/**
 			 * Filters
 			 */
-			add_filter('query_vars', array($this, 'my_account_query_vars'), 0);
-			add_filter('woocommerce_account_menu_items', array($this, 'my_account_menus'));
-			add_filter('the_title', array($this, 'my_account_menus_title'));
 			add_filter('woocommerce_payment_gateways', array($this, 'add_gateway'));
 			add_filter('plugin_action_links_' . plugin_basename(__FILE__), array($this, 'plugin_action_links'));
 		}
@@ -309,7 +320,7 @@ if (!class_exists('WC_EBANX')) {
 		 */
 		public function my_account_query_vars($vars)
 		{
-			$vars[] = self::$endpoint;
+			$vars[] = self::$my_account_endpoint;
 
 			return $vars;
 		}
@@ -322,7 +333,7 @@ if (!class_exists('WC_EBANX')) {
 		public function my_account_endpoint()
 		{
 			// My account endpoint
-			add_rewrite_endpoint(self::$endpoint, EP_ROOT | EP_PAGES);
+			add_rewrite_endpoint(self::$my_account_endpoint, EP_ROOT | EP_PAGES);
 
 			add_option('woocommerce_ebanx-global_settings', WC_EBANX_Global_Gateway::$defaults);
 
@@ -443,10 +454,10 @@ if (!class_exists('WC_EBANX')) {
 		{
 			global $wp_query;
 
-			$is_endpoint = isset($wp_query->query_vars[self::$endpoint]);
+			$is_endpoint = isset($wp_query->query_vars[self::$my_account_endpoint]);
 
 			if ($is_endpoint && !is_admin() && is_main_query() && in_the_loop() && is_account_page()) {
-				$title = __(self::$menu_name, 'woocommerce-gateway-ebanx');
+				$title = __(self::$my_account_menu_name, 'woocommerce-gateway-ebanx');
 				remove_filter('the_title', array($this, 'my_account_menus_title'));
 			}
 
@@ -465,7 +476,7 @@ if (!class_exists('WC_EBANX')) {
 			$logout = $menu['customer-logout'];
 			unset($menu['customer-logout']);
 
-			$menu[self::$endpoint] = __(self::$menu_name, 'woocommerce-gateway-ebanx');
+			$menu[self::$my_account_endpoint] = __(self::$my_account_menu_name, 'woocommerce-gateway-ebanx');
 
 			// Insert back the logout item.
 			$menu['customer-logout'] = $logout;
