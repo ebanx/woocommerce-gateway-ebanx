@@ -406,7 +406,7 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway
 			return false;
 		}
 
-		$order->add_order_note(sprintf(__('Refund requested to EBANX %s - Refund ID: %s - Reason: %s', 'woocommerce-gateway-ebanx'), wc_price($amount), $request->refund->id, $reason));
+		$order->add_order_note(sprintf(__('EBANX: Refund requested to EBANX %s - Refund ID: %s - Reason: %s.', 'woocommerce-gateway-ebanx'), wc_price($amount), $request->refund->id, $reason));
 
 		$refunds = current(get_post_meta((int) $order_id, "_ebanx_payment_refunds"));
 
@@ -489,7 +489,7 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway
 	 */
 	protected function request_data($order)
 	{
-		$home_url = esc_url( home_url() );
+		$home_url = esc_url( home_url( '/' ) );
 
 		$has_cpf = false;
 		$has_cnpj = false;
@@ -895,22 +895,22 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway
 		WC_EBANX::log($message);
 
 		if ($request->payment->status == 'CA') {
-			$order->add_order_note(__('EBANX: Payment failed.', 'woocommerce-gateway-ebanx'));
+			$order->add_order_note(__('EBANX: The payment has failed.', 'woocommerce-gateway-ebanx'));
 			$order->update_status('failed');
 		}
 
 		if ($request->payment->status == 'OP') {
-			$order->add_order_note(__('EBANX: Payment opened.', 'woocommerce-gateway-ebanx'));
+			$order->add_order_note(__('EBANX: The payment was opened.', 'woocommerce-gateway-ebanx'));
 			$order->update_status('pending');
 		}
 
 		if ($request->payment->status == 'PE') {
-			$order->add_order_note(__('EBANX: Waiting payment.', 'woocommerce-gateway-ebanx'));
+			$order->add_order_note(__('EBANX: The order is awaiting payment.', 'woocommerce-gateway-ebanx'));
 			$order->update_status('on-hold');
 		}
 
 		if ($request->payment->pre_approved && $request->payment->status == 'CO') {
-			$order->add_order_note(__('EBANX: Transaction paid.', 'woocommerce-gateway-ebanx'));
+			$order->add_order_note(__('EBANX: The transaction was paid.', 'woocommerce-gateway-ebanx'));
 			$order->payment_complete($request->payment->hash);
 			$order->update_status('processing');
 		}
@@ -966,10 +966,10 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway
 					foreach ($data->payment->refunds as $refund) {
 						if ($ref->id == $refund->id) {
 							if ($refund->status == 'CO' && $refunds[$k]->status != 'CO') {
-								$order->add_order_note(sprintf(__('Refund confirmed to EBANX - Refund ID: %s', 'woocommerce-gateway-ebanx'), $refund->id));
+								$order->add_order_note(sprintf(__('EBANX: Your Refund was confirmed to EBANX - Refund ID: %s', 'woocommerce-gateway-ebanx'), $refund->id));
 							}
 							if ($refund->status == 'CA' && $refunds[$k]->status != 'CA') {
-								$order->add_order_note(sprintf(__('Refund canceled to EBANX - Refund ID: %s', 'woocommerce-gateway-ebanx'), $refund->id));
+								$order->add_order_note(sprintf(__('EBANX: Your Refund was canceled to EBANX - Refund ID: %s', 'woocommerce-gateway-ebanx'), $refund->id));
 							}
 
 							$refunds[$k]->status       = $refund->status; // status == co save note
@@ -1020,7 +1020,7 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway
 			return;
 		}
 
-		$amount = WC()->cart->cart_contents_total;
+		$amount = WC()->cart->total;
 
 		if ($country === null) {
 			$country = $this->getTransactionAddress('country');
@@ -1032,7 +1032,7 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway
 			$rate = round(floatval($this->get_local_currency_rate_for_site($currency)), 2);
 
 			if ( WC()->cart->prices_include_tax ) {
-				$amount = WC()->cart->cart_contents_total + WC()->cart->tax_total;
+				$amount = WC()->cart->total + WC()->cart->tax_total;
 			}
 
 			$amount *= $rate;
