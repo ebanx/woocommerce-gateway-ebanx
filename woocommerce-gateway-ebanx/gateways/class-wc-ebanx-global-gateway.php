@@ -252,7 +252,7 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway
 				'class' => 'ebanx-payments-option'
 			),
 			'credit_card_instalments'   => array(
-				'title'       => __('Maximum nº of Installments', 'woocommerce-gateway-ebanx'),
+				'title'       => __('Maximum nº of Instalments', 'woocommerce-gateway-ebanx'),
 				'type'        => 'select',
 				'class'       => 'ebanx-select ebanx-payments-option',
 				'options'     => array(
@@ -269,14 +269,14 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway
 					'11' => '11',
 					'12' => '12',
 				),
-				'description' => __('Establish the maximum number of installments in which your customer can pay, as consented on your contract.', 'woocommerce-gateway-ebanx'),
+				'description' => __('Establish the maximum number of instalments in which your customer can pay, as consented on your contract.', 'woocommerce-gateway-ebanx'),
 				'desc_tip' => true
 			)
 		);
 		$currency_code = strtolower($this->merchant_currency);
 		if ( in_array(strtoupper($currency_code), WC_EBANX_Constants::$CREDIT_CARD_CURRENCIES) ) {
 			$fields["min_instalment_value_$currency_code"] = array(
-				'title' => sprintf(__('Minimum istalment value in %s', 'woocommerce-gateway-ebanx'), strtoupper($currency_code)),
+				'title' => sprintf(__('Minimum instalment value in %s', 'woocommerce-gateway-ebanx'), strtoupper($currency_code)),
 				'type' => 'number',
 				'class' => 'ebanx-payments-option',
 				'placeholder' => sprintf(__('The default is %d', 'woocommerce-gateway-ebanx'), 
@@ -294,7 +294,7 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway
 				'type'    => 'checkbox',
 				'title'   => __('Interest Rates', 'woocommerce-gateway-ebanx'),
 				'label'   => __('Enable Interest Rates', 'woocommerce-gateway-ebanx'),
-				'description' => __('Enable and set a custom interest rate for your customers according to the number of Installments you allow the payment.'),
+				'description' => __('Enable and set a custom interest rate for your customers according to the number of Instalments you allow the payment.'),
 				'desc_tip' => true,
 				'class' => 'ebanx-payments-option'
 			)
