@@ -1,6 +1,6 @@
 <?php
 
-if (!defined('ABSPATH')) {
+if ( ! defined('ABSPATH') ) {
 	exit;
 }
 
@@ -40,7 +40,7 @@ class WC_EBANX_Query_Router {
 	 */
 	public function serve() {
 		$route = $this->find_route_for_key();
-		if ($route === null) {
+		if ( $route === null ) {
 			// Not found, carry on
 			return;
 		}
@@ -62,13 +62,13 @@ class WC_EBANX_Query_Router {
 	 */
 	private function find_route_for_key($search_key = null) {
 		$key = $this->key;
-		if ($search_key !== null) {
+		if ( $search_key !== null ) {
 			$key = $search_key;
 		}
 
 		self::validate_key($key);
 
-		if (!WC_EBANX_Request::has($key)) {
+		if ( ! WC_EBANX_Request::has($key) ) {
 			// Not set, not found
 			return null;
 		}
@@ -78,7 +78,7 @@ class WC_EBANX_Query_Router {
 		self::validate_key_value($value);
 
 		// Not found
-		if (!isset($this->routes[$value])) {
+		if ( ! isset($this->routes[$value]) ) {
 			return null;
 		}
 
@@ -101,7 +101,7 @@ class WC_EBANX_Query_Router {
 		$params = array();
 		foreach($list as $arg) {
 			$name = $arg->name;
-			if (!WC_EBANX_Request::has($name)) {
+			if ( ! WC_EBANX_Request::has($name) ) {
 				$params[$name] = null;
 				continue;
 			}
@@ -117,10 +117,11 @@ class WC_EBANX_Query_Router {
 	 *
 	 * @param  string $subject Routing key
 	 * @return void
+	 * @throws InvalidArgumentException
 	 */
 	private static function validate_key($subject) {
-		if (!is_string($subject)) {
-			throw new Exception("A query route key must be a string!");
+		if ( ! is_string($subject) ) {
+			throw new InvalidArgumentException("A query route key must be a string!");
 		}
 	}
 
@@ -129,10 +130,11 @@ class WC_EBANX_Query_Router {
 	 *
 	 * @param  string $subject Key value
 	 * @return void
+	 * @throws InvalidArgumentException
 	 */
 	private static function validate_key_value($subject) {
-		if (!is_string($subject)) {
-			throw new Exception("A query route key value must be a string!");
+		if ( ! is_string($subject) ) {
+			throw new InvalidArgumentException("A query route key value must be a string!");
 		}
 	}
 
@@ -141,10 +143,11 @@ class WC_EBANX_Query_Router {
 	 *
 	 * @param  array $subject Route handler callable array
 	 * @return void
+	 * @throws InvalidArgumentException
 	 */
 	private static function validate_route($subject) {
-		if (!is_callable($subject)) {
-			throw new Exception("Specified route is not callable!");
+		if ( ! is_callable($subject) ) {
+			throw new InvalidArgumentException("Specified route is not callable!");
 		}
 	}
 }
