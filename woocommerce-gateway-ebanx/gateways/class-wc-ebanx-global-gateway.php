@@ -276,7 +276,7 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway
 		$currency_code = strtolower($this->merchant_currency);
 		if ( in_array(strtoupper($currency_code), WC_EBANX_Constants::$CREDIT_CARD_CURRENCIES) ) {
 			$fields["min_instalment_value_$currency_code"] = array(
-				'title' => sprintf(__('Minimum instalment value in %s', 'woocommerce-gateway-ebanx'), strtoupper($currency_code)),
+				'title' => sprintf(__('Minimum instalment (%s)', 'woocommerce-gateway-ebanx'), strtoupper($currency_code)),
 				'type' => 'number',
 				'class' => 'ebanx-payments-option',
 				'placeholder' => sprintf(__('The default is %d', 'woocommerce-gateway-ebanx'), 
@@ -286,7 +286,7 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway
 					'step' => '0.01'
 				),
 				'desc_tip' => true,
-				'description' => __('The minimum instalment value supported by EBANX is BRL 20 and MXN 100. If you insert a lower value the EBANX standard ones will be used.', 'woocommerce-gateway-ebanx')
+				'description' => __('Set the minimum instalment value during checkout. The minimum EBANX allows for BRL is 20 and MXN is 100, lower values in these currencies will be ignored.', 'woocommerce-gateway-ebanx')
 			);
 		}
 		$fields = array_merge($fields, array(
