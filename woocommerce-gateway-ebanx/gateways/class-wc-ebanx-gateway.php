@@ -859,7 +859,8 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway
 		}
 
 		if (
-			$request->payment->transaction_status->code === 'NOK'
+			isset($request->payment->transaction_status)
+			&& $request->payment->transaction_status->code === 'NOK'
 			&& $request->payment->transaction_status->acquirer === 'EBANX'
 			&& $this->is_sandbox_mode
 		) {
