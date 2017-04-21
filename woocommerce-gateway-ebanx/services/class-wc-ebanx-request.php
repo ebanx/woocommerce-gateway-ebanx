@@ -26,6 +26,13 @@ class WC_EBANX_Request {
 	}
 
 	/**
+	 * Reads the request body
+	 */
+	public static function read_body() {
+		return file_get_contents('php://input');
+	}
+
+	/**
 	 * Sets $value in $_REQUEST[$param]
 	 *
 	 * @param string $param The key from _REQUEST
@@ -46,7 +53,8 @@ class WC_EBANX_Request {
 	 */
 	public static function read_values($params, $default=self::DEFAULT_VALUE) {
 		return array_map(function($param) use ($default) {
-			return self::read($param, $default[$param]);
+			$local_default = is_array($default) ? $default[$param] : $default;
+			return self::read($param, $local_default);
 		}, $params);
 	}
 
@@ -58,6 +66,45 @@ class WC_EBANX_Request {
 	 */
 	public static function has($key) {
 		return array_key_exists($key, $_REQUEST);
+	}
+
+	/**
+	 * Gets the http method used in the request
+	 *
+	 * @return string
+	 */
+	public static function get_method() {
+		return getenv('REQUEST_METHOD');
+	}
+
+	/**
+	 * Gets the http request origin
+	 *
+	 * @return string
+	 */
+	public static function get_origin() {
+		return isset($_SERVER['HTTP_ORIGIN'])
+			? $_SERVER['HTTP_ORIGIN']
+			: '';
+	}
+
+	/**
+	 * Restricts the request origin
+	 *
+	 * @param  array $origins List of allowed origins
+	 * @return void
+	 */
+	public static function restrict_origin($origins) {
+		// Oh cache, why do you work too well?
+		header('Vary: Origin');
+
+		if ( in_array(self::get_origin(), $origins) ) {
+			header('Access-Control-Allow-Origin: '.self::get_origin());
+			return;
+		}
+
+		header('Access-Control-Allow-Origin: none');
+		die('Thou shall not pass!');
 	}
 
 	/**

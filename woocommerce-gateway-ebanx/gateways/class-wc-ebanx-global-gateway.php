@@ -8,6 +8,8 @@ include_once WC_EBANX_SERVICES_DIR . 'class-wc-ebanx-notice.php';
 
 final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway
 {
+	const SETTINGS_KEY = "woocommerce_ebanx-global_settings";
+
 	/**
 	 * Mock to insert when plugin is installed
 	 *
@@ -419,6 +421,15 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway
 
 			$properties['default'] = self::$defaults[$field];
 		}
+	}
+
+	/**
+	 * Persists current settings to database
+	 *
+	 * @return void
+	 */
+	public function save_current_settings() {
+		update_option(self::SETTINGS_KEY, $this->settings, false);
 	}
 
 	/**
