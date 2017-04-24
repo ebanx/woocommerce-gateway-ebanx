@@ -280,9 +280,9 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway
 				'type' => 'number',
 				'class' => 'ebanx-payments-option',
 				'placeholder' => sprintf(__('The default is %d', 'woocommerce-gateway-ebanx'), 
-					$currency_code === WC_EBANX_Constants::CURRENCY_CODE_MXN ? WC_EBANX_Constants::ACQUIRER_MIN_INSTALMENT_VALUE_MXN : WC_EBANX_Constants::ACQUIRER_MIN_INSTALMENT_VALUE_BRL),
+					$this->get_min_instalment_value_for_currency($currency_code) ),
 				'custom_attributes' => array(
-					'min' => $currency_code === WC_EBANX_Constants::CURRENCY_CODE_MXN ? WC_EBANX_Constants::ACQUIRER_MIN_INSTALMENT_VALUE_MXN : ( $currency_code === WC_EBANX_Constants::CURRENCY_CODE_MXN ? WC_EBANX_Constants::ACQUIRER_MIN_INSTALMENT_VALUE_BRL : 0),
+					'min' => $this->get_min_instalment_value_for_currency($currency_code),
 					'step' => '0.01'
 				),
 				'desc_tip' => true,
@@ -435,5 +435,28 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway
 
 			$properties['default'] = self::$defaults[$field];
 		}
+	}
+
+	private function get_min_instalment_value_for_currency($currency_code = null) {
+		if ($currency_code === null) {
+			$currency_code = strtolower($this->merchant_currency);
+		}
+		if ( ! in_array(strtoupper($currency_code), WC_EBANX_Constants::$CREDIT_CARD_CURRENCIES) ) {
+			throw new InvalidArgumentException("The provided country doesn't accept Credit Card payment", 1);
+		}
+		
+		switch ($currency_code) {
+			case WC_EBANX_Constants::CURRENCY_CODE_BRL:
+				$min_instalmente_value = WC_EBANX_Constants::ACQUIRER_MIN_INSTALMENT_VALUE_BRL;
+				break;
+			case WC_EBANX_Constants::CURRENCY_CODE_MXN:
+				$min_instalmente_value = WC_EBANX_Constants::ACQUIRER_MIN_INSTALMENT_VALUE_MXN;
+				break;
+			default:
+				$min_instalmente_value = 0;
+				break;
+		}
+
+		return $min_instalmente_value;
 	}
 }
