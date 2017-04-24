@@ -465,6 +465,7 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway
 			default:
 				return 0;
 		}
+	}
 
 	/**
 	 * Fetches a single setting from the gateway settings if found, otherwise it returns an optional default value
