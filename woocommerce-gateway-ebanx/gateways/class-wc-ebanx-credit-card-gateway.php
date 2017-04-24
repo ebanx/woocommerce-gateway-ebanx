@@ -6,6 +6,11 @@ if (!defined('ABSPATH')) {
 
 abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
 {
+	/**
+	 * The rates for each instalment
+	 *
+	 * @var array
+	 */
 	protected $instalment_rates = array();
 
 	/**
