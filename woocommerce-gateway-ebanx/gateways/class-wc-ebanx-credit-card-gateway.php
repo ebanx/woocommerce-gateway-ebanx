@@ -326,7 +326,8 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
 	 * Calculates the max instalments allowed based on price, country and minimal instalment value
 	 * given by the credit-card acquirer
 	 *
-	 * @param  $price double Product price used as base
+	 * @param double $price Product price used as base
+	 * @param string|null $country The customer country
 	 * @return integer
 	 */
 	public function fetch_acquirer_max_installments_for_price($price, $country = null) {
