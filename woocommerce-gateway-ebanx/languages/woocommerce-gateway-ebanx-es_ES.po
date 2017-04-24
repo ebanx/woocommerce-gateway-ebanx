@@ -1,15 +1,15 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
-"POT-Creation-Date: 2017-04-08 12:41-0300\n"
-"PO-Revision-Date: 2017-04-08 12:42-0300\n"
+"POT-Creation-Date: 2017-04-11 12:19-0300\n"
+"PO-Revision-Date: 2017-04-11 12:19-0300\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.0\n"
+"X-Generator: Poedit 2.0.1\n"
 "X-Poedit-Basepath: ..\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -56,15 +56,15 @@ msgstr ""
 msgid "Pague com boleto bancário."
 msgstr ""
 
-#: gateways/class-wc-ebanx-credit-card-br-gateway.php:13
+#: gateways/class-wc-ebanx-credit-card-br-gateway.php:14
 msgid "EBANX - Credit Card Brazil"
 msgstr "EBANX - Tarjetas de Crédito"
 
-#: gateways/class-wc-ebanx-credit-card-br-gateway.php:15
+#: gateways/class-wc-ebanx-credit-card-br-gateway.php:16
 msgid "Cartão de Crédito"
 msgstr ""
 
-#: gateways/class-wc-ebanx-credit-card-br-gateway.php:16
+#: gateways/class-wc-ebanx-credit-card-br-gateway.php:17
 msgid "Pague com cartão de crédito."
 msgstr ""
 
@@ -142,52 +142,52 @@ msgstr ""
 msgid "Paga con PSE - Pago Seguros en Línea."
 msgstr ""
 
-#: gateways/class-wc-ebanx-gateway.php:129
+#: gateways/class-wc-ebanx-gateway.php:170
 msgid "Select an option"
 msgstr ""
 
-#: gateways/class-wc-ebanx-gateway.php:133
+#: gateways/class-wc-ebanx-gateway.php:174
 #: gateways/class-wc-ebanx-global-gateway.php:339
 msgid "CPF - Individuals"
 msgstr ""
 
-#: gateways/class-wc-ebanx-gateway.php:134
+#: gateways/class-wc-ebanx-gateway.php:175
 #: gateways/class-wc-ebanx-global-gateway.php:340
 msgid "CNPJ - Companies"
 msgstr ""
 
-#: gateways/class-wc-ebanx-gateway.php:140
-#: gateways/class-wc-ebanx-gateway.php:160
+#: gateways/class-wc-ebanx-gateway.php:181
+#: gateways/class-wc-ebanx-gateway.php:201
 msgid "Birth Date"
 msgstr "Fecha de Nacimiento"
 
-#: gateways/class-wc-ebanx-gateway.php:367
+#: gateways/class-wc-ebanx-gateway.php:409
 #, php-format
 msgid "Refund requested to EBANX %s - Refund ID: %s - Reason: %s"
 msgstr ""
 
-#: gateways/class-wc-ebanx-gateway.php:857
+#: gateways/class-wc-ebanx-gateway.php:898
 msgid "EBANX: Payment failed."
 msgstr ""
 
-#: gateways/class-wc-ebanx-gateway.php:862
+#: gateways/class-wc-ebanx-gateway.php:903
 msgid "EBANX: Payment opened."
 msgstr ""
 
-#: gateways/class-wc-ebanx-gateway.php:867
+#: gateways/class-wc-ebanx-gateway.php:908
 msgid "EBANX: Waiting payment."
 msgstr ""
 
-#: gateways/class-wc-ebanx-gateway.php:872
+#: gateways/class-wc-ebanx-gateway.php:913
 msgid "EBANX: Transaction paid."
 msgstr ""
 
-#: gateways/class-wc-ebanx-gateway.php:928
+#: gateways/class-wc-ebanx-gateway.php:969
 #, php-format
 msgid "Refund confirmed to EBANX - Refund ID: %s"
 msgstr ""
 
-#: gateways/class-wc-ebanx-gateway.php:931
+#: gateways/class-wc-ebanx-gateway.php:972
 #, php-format
 msgid "Refund canceled to EBANX - Refund ID: %s"
 msgstr ""
@@ -290,7 +290,7 @@ msgid "Peru"
 msgstr ""
 
 #: gateways/class-wc-ebanx-global-gateway.php:218
-msgid "Payments Options"
+msgid "Payment Options"
 msgstr ""
 
 #: gateways/class-wc-ebanx-global-gateway.php:222
@@ -609,11 +609,11 @@ msgstr ""
 msgid "View Banking Ticket"
 msgstr ""
 
-#: services/class-wc-ebanx-one-click.php:116
+#: services/class-wc-ebanx-one-click.php:122
 msgid "EBANX: Unable to create the payment via one click."
 msgstr ""
 
-#: services/class-wc-ebanx-one-click.php:299
+#: services/class-wc-ebanx-one-click.php:305
 msgid "Pay with one click"
 msgstr ""
 
