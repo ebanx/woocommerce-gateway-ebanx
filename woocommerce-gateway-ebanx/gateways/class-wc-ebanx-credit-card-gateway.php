@@ -99,6 +99,7 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
 	 * Checks for errors during capture action
 	 * Returns an object with error code, message and target status
 	 *
+	 * @param object $response The response from EBANX API
 	 * @return stdClass
 	 */
 	public function check_capture_errors($response) {
