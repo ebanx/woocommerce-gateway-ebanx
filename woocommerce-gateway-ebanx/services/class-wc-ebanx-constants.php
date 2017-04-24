@@ -151,6 +151,11 @@ abstract class WC_EBANX_Constants
 		)
 	);
 
+	/**
+	 * Payment type API codes for each plugin payment gateway
+	 *
+	 * @var array
+	 */
 	public static $GATEWAY_TO_PAYMENT_TYPE_CODE = array(
 		'ebanx-banking-ticket' => '_boleto',
 		'ebanx-credit-card-br' => '_creditcard',
