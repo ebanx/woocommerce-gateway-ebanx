@@ -39,6 +39,12 @@ abstract class WC_EBANX_Constants
 	const CURRENCY_CODE_MXN = 'MXN'; // Mexico
 	const CURRENCY_CODE_COP = 'COP'; // Colombia
 	const CURRENCY_CODE_CLP = 'CLP'; // Chile
+
+	/**
+	 * Only the currencies allowed and processed by EBANX
+	 *
+	 * @var array
+	 */
 	public static $CURRENCIES_CODES_ALLOWED = array(
 		self::CURRENCY_CODE_BRL,
 		self::CURRENCY_CODE_USD,
