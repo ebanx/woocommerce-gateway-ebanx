@@ -442,21 +442,19 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway
 			$currency_code = strtolower($this->merchant_currency);
 		}
 		if ( ! in_array(strtoupper($currency_code), WC_EBANX_Constants::$CREDIT_CARD_CURRENCIES) ) {
-			throw new InvalidArgumentException("The provided country doesn't accept Credit Card payment", 1);
-		}
-		
-		switch ($currency_code) {
-			case WC_EBANX_Constants::CURRENCY_CODE_BRL:
-				$min_instalmente_value = WC_EBANX_Constants::ACQUIRER_MIN_INSTALMENT_VALUE_BRL;
-				break;
-			case WC_EBANX_Constants::CURRENCY_CODE_MXN:
-				$min_instalmente_value = WC_EBANX_Constants::ACQUIRER_MIN_INSTALMENT_VALUE_MXN;
-				break;
-			default:
-				$min_instalmente_value = 0;
-				break;
+			throw new InvalidArgumentException("The provided currency code doesn't accept Credit Card payment", 1);
 		}
 
-		return $min_instalmente_value;
+		switch ($currency_code) {
+			case WC_EBANX_Constants::CURRENCY_CODE_BRL:
+				return WC_EBANX_Constants::ACQUIRER_MIN_INSTALMENT_VALUE_BRL;
+				break;
+			case WC_EBANX_Constants::CURRENCY_CODE_MXN:
+				return WC_EBANX_Constants::ACQUIRER_MIN_INSTALMENT_VALUE_MXN;
+				break;
+			default:
+				return 0;
+				break;
+		}
 	}
 }
