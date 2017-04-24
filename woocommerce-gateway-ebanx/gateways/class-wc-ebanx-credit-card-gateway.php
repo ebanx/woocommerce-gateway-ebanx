@@ -390,8 +390,9 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
 	/**
 	 * Calculates the interests and values of items based on interest rates settings
 	 *
-	 * @param  int $amount      The total of the user cart
-	 * @param  int $max_instalments The max number of instalments based on settings
+	 * @param int $amount      The total of the user cart
+	 * @param int $max_instalments The max number of instalments based on settings
+	 * @param int $tax The tax applied
 	 * @return filtered array       An array of instalment with price, amount, if it has interests and the number
 	 */
 	public function get_payment_terms($amount, $max_instalments, $tax = 0) {
