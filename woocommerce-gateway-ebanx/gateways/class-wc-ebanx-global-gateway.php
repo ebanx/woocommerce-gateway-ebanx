@@ -448,13 +448,10 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway
 		switch ($currency_code) {
 			case WC_EBANX_Constants::CURRENCY_CODE_BRL:
 				return WC_EBANX_Constants::ACQUIRER_MIN_INSTALMENT_VALUE_BRL;
-				break;
 			case WC_EBANX_Constants::CURRENCY_CODE_MXN:
 				return WC_EBANX_Constants::ACQUIRER_MIN_INSTALMENT_VALUE_MXN;
-				break;
 			default:
 				return 0;
-				break;
 		}
 	}
 }
