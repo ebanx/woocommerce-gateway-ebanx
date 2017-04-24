@@ -321,7 +321,6 @@ class WC_EBANX_One_Click {
 				'cards' => $this->cards,
 				'cart_total' => $cart_total,
 				'product_id' => $product->id,
-				'max_instalments' => $max_instalments,
 				'installment_taxes' => $this->instalment_rates,
 				'label' => __( 'Pay with one click', 'woocommerce-gateway-ebanx' ),
 				'instalments' => $messages['instalments'],
