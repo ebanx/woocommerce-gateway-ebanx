@@ -1,0 +1,1133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
+    <meta charset="utf-8"/>
+    <title>API Documentation</title>
+    <meta name="author" content=""/>
+    <meta name="description" content=""/>
+
+    <link href="../css/bootstrap-combined.no-icons.min.css" rel="stylesheet">
+    <link href="../css/font-awesome.min.css" rel="stylesheet">
+    <link href="../css/prism.css" rel="stylesheet" media="all"/>
+    <link href="../css/template.css" rel="stylesheet" media="all"/>
+    
+    <!--[if lt IE 9]>
+    <script src="../js/html5.js"></script>
+    <![endif]-->
+    <script src="../js/jquery-1.11.0.min.js"></script>
+    <script src="../js/ui/1.10.4/jquery-ui.min.js"></script>
+    <script src="../js/bootstrap.min.js"></script>
+    <script src="../js/jquery.smooth-scroll.js"></script>
+    <script src="../js/prism.min.js"></script>
+    <!-- TODO: Add http://jscrollpane.kelvinluck.com/ to style the scrollbars for browsers not using webkit-->
+    <script type="text/javascript">
+    function loadExternalCodeSnippets() {
+        Array.prototype.slice.call(document.querySelectorAll('pre[data-src]')).forEach(function (pre) {
+            var src = pre.getAttribute('data-src');
+            var extension = (src.match(/\.(\w+)$/) || [, ''])[1];
+            var language = 'php';
+
+            var code = document.createElement('code');
+            code.className = 'language-' + language;
+
+            pre.textContent = '';
+
+            code.textContent = 'Loading…';
+
+            pre.appendChild(code);
+
+            var xhr = new XMLHttpRequest();
+
+            xhr.open('GET', src, true);
+
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState == 4) {
+
+                    if (xhr.status < 400 && xhr.responseText) {
+                        code.textContent = xhr.responseText;
+
+                        Prism.highlightElement(code);
+                    }
+                    else if (xhr.status >= 400) {
+                        code.textContent = '✖ Error ' + xhr.status + ' while fetching file: ' + xhr.statusText;
+                    }
+                    else {
+                        code.textContent = '✖ Error: File does not exist or is empty';
+                    }
+                }
+            };
+
+            xhr.send(null);
+        });
+    }
+
+    $(document).ready(function(){
+        loadExternalCodeSnippets();
+    });
+    $('#source-view').on('shown', function () {
+        loadExternalCodeSnippets();
+    })
+</script>
+
+    <link rel="shortcut icon" href="../images/favicon.ico"/>
+    <link rel="apple-touch-icon" href="../images/apple-touch-icon.png"/>
+    <link rel="apple-touch-icon" sizes="72x72" href="../images/apple-touch-icon-72x72.png"/>
+    <link rel="apple-touch-icon" sizes="114x114" href="../images/apple-touch-icon-114x114.png"/>
+</head>
+<body>
+
+<div class="navbar navbar-fixed-top">
+    <div class="navbar-inner">
+        <div class="container">
+            <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                <i class="icon-ellipsis-vertical"></i>
+            </a>
+            <a class="brand" href="../index.html">API Documentation</a>
+
+            <div class="nav-collapse">
+                <ul class="nav pull-right">
+                                        <li class="dropdown" id="charts-menu">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            Charts <b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a href="../graphs/class.html">
+                                    <i class="icon-list-alt"></i>&#160;Class hierarchy diagram
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="dropdown" id="reports-menu">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            Reports <b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a href="../reports/errors.html">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        <i class="icon-list-alt"></i>&#160;Errors <span class="label label-info pull-right">112</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="../reports/markers.html">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        <i class="icon-list-alt"></i>&#160;Markers <span class="label label-info pull-right">9</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="../reports/deprecated.html">
+                                                                                                            <i class="icon-list-alt"></i>&#160;Deprecated <span class="label label-info pull-right">0</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!--<div class="go_to_top">-->
+    <!--<a href="#___" style="color: inherit">Back to top&#160;&#160;<i class="icon-upload icon-white"></i></a>-->
+    <!--</div>-->
+</div>
+
+<div id="___" class="container-fluid">
+        <section class="row-fluid">
+        <div class="span2 sidebar">
+                                <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle " data-toggle="collapse" data-target="#namespace-2003136049"></a>
+                                <a href="../namespaces/default.html" style="margin-left: 30px; padding-left: 0">\</a>
+            </div>
+            <div id="namespace-2003136049" class="accordion-body collapse in">
+                <div class="accordion-inner">
+
+                    
+                    <ul>
+                                                                                                    <li class="class"><a href="../classes/WC_EBANX.html">WC_EBANX</a></li>
+                                                    <li class="class"><a href="../classes/WC_EBANX_Account_Gateway.html">WC_EBANX_Account_Gateway</a></li>
+                                                    <li class="class"><a href="../classes/WC_EBANX_Api_Controller.html">WC_EBANX_Api_Controller</a></li>
+                                                    <li class="class"><a href="../classes/WC_EBANX_Assets.html">WC_EBANX_Assets</a></li>
+                                                    <li class="class"><a href="../classes/WC_EBANX_Baloto_Gateway.html">WC_EBANX_Baloto_Gateway</a></li>
+                                                    <li class="class"><a href="../classes/WC_EBANX_Banking_Ticket_Gateway.html">WC_EBANX_Banking_Ticket_Gateway</a></li>
+                                                    <li class="class"><a href="../classes/WC_EBANX_Checker.html">WC_EBANX_Checker</a></li>
+                                                    <li class="class"><a href="../classes/WC_EBANX_Constants.html">WC_EBANX_Constants</a></li>
+                                                    <li class="class"><a href="../classes/WC_EBANX_Credit_Card_BR_Gateway.html">WC_EBANX_Credit_Card_BR_Gateway</a></li>
+                                                    <li class="class"><a href="../classes/WC_EBANX_Credit_Card_Gateway.html">WC_EBANX_Credit_Card_Gateway</a></li>
+                                                    <li class="class"><a href="../classes/WC_EBANX_Credit_Card_MX_Gateway.html">WC_EBANX_Credit_Card_MX_Gateway</a></li>
+                                                    <li class="class"><a href="../classes/WC_EBANX_Debit_Card_Gateway.html">WC_EBANX_Debit_Card_Gateway</a></li>
+                                                    <li class="class"><a href="../classes/WC_EBANX_Eft_Gateway.html">WC_EBANX_Eft_Gateway</a></li>
+                                                    <li class="class"><a href="../classes/WC_EBANX_Errors.html">WC_EBANX_Errors</a></li>
+                                                    <li class="class"><a href="../classes/WC_EBANX_Flash.html">WC_EBANX_Flash</a></li>
+                                                    <li class="class"><a href="../classes/WC_EBANX_Gateway.html">WC_EBANX_Gateway</a></li>
+                                                    <li class="class"><a href="../classes/WC_EBANX_Global_Gateway.html">WC_EBANX_Global_Gateway</a></li>
+                                                    <li class="class"><a href="../classes/WC_EBANX_Helper.html">WC_EBANX_Helper</a></li>
+                                                    <li class="class"><a href="../classes/WC_EBANX_Hooks.html">WC_EBANX_Hooks</a></li>
+                                                    <li class="class"><a href="../classes/WC_EBANX_My_Account.html">WC_EBANX_My_Account</a></li>
+                                                    <li class="class"><a href="../classes/WC_EBANX_Notice.html">WC_EBANX_Notice</a></li>
+                                                    <li class="class"><a href="../classes/WC_EBANX_One_Click.html">WC_EBANX_One_Click</a></li>
+                                                    <li class="class"><a href="../classes/WC_EBANX_Oxxo_Gateway.html">WC_EBANX_Oxxo_Gateway</a></li>
+                                                    <li class="class"><a href="../classes/WC_EBANX_Pagoefectivo_Gateway.html">WC_EBANX_Pagoefectivo_Gateway</a></li>
+                                                    <li class="class"><a href="../classes/WC_EBANX_Payment_By_Link.html">WC_EBANX_Payment_By_Link</a></li>
+                                                    <li class="class"><a href="../classes/WC_EBANX_Payment_Validator.html">WC_EBANX_Payment_Validator</a></li>
+                                                    <li class="class"><a href="../classes/WC_EBANX_Query_Router.html">WC_EBANX_Query_Router</a></li>
+                                                    <li class="class"><a href="../classes/WC_EBANX_Redirect_Gateway.html">WC_EBANX_Redirect_Gateway</a></li>
+                                                    <li class="class"><a href="../classes/WC_EBANX_Request.html">WC_EBANX_Request</a></li>
+                                                    <li class="class"><a href="../classes/WC_EBANX_Safetypay_Gateway.html">WC_EBANX_Safetypay_Gateway</a></li>
+                                                    <li class="class"><a href="../classes/WC_EBANX_Sencillito_Gateway.html">WC_EBANX_Sencillito_Gateway</a></li>
+                                                    <li class="class"><a href="../classes/WC_EBANX_Servipag_Gateway.html">WC_EBANX_Servipag_Gateway</a></li>
+                                                    <li class="class"><a href="../classes/WC_EBANX_Tef_Gateway.html">WC_EBANX_Tef_Gateway</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+        </div>
+    </section>
+    <section class="row-fluid">
+        <div class="span10 offset2">
+            <div class="row-fluid">
+                <div class="span8 content class">
+                    <nav>
+                                                <a href="../namespaces/default.html">\</a> <i class="icon-level-up"></i>
+                                            </nav>
+                    <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal"><i class="icon-code"></i></a>
+
+                    <h1><small>\</small>WC_EBANX_Constants</h1>
+                    <p><em></em></p>
+                    
+                    
+                                        
+                    <section id="summary">
+                        <h2>Summary</h2>
+                        <section class="row-fluid heading">
+                            <section class="span4">
+                                <a href="#methods">Methods</a>
+                            </section>
+                            <section class="span4">
+                                <a href="#properties">Properties</a>
+                            </section>
+                            <section class="span4">
+                                <a href="#constants">Constants</a>
+                            </section>
+                        </section>
+                        <section class="row-fluid public">
+                            <section class="span4">
+                                                                    <em>No public methods found</em>
+                                                            </section>
+                            <section class="span4">
+                                                                    <a href="../classes/WC_EBANX_Constants.html#property_CURRENCIES_CODES_ALLOWED" class="">$CURRENCIES_CODES_ALLOWED</a><br />
+                                                                    <a href="../classes/WC_EBANX_Constants.html#property_LOCAL_CURRENCIES" class="">$LOCAL_CURRENCIES</a><br />
+                                                                    <a href="../classes/WC_EBANX_Constants.html#property_ALL_COUNTRIES" class="">$ALL_COUNTRIES</a><br />
+                                                                    <a href="../classes/WC_EBANX_Constants.html#property_CREDIT_CARD_COUNTRIES" class="">$CREDIT_CARD_COUNTRIES</a><br />
+                                                                    <a href="../classes/WC_EBANX_Constants.html#property_CREDIT_CARD_CURRENCIES" class="">$CREDIT_CARD_CURRENCIES</a><br />
+                                                                    <a href="../classes/WC_EBANX_Constants.html#property_CASH_PAYMENTS_TIMEZONES" class="">$CASH_PAYMENTS_TIMEZONES</a><br />
+                                                                    <a href="../classes/WC_EBANX_Constants.html#property_BANKS_TEF_ALLOWED" class="">$BANKS_TEF_ALLOWED</a><br />
+                                                                    <a href="../classes/WC_EBANX_Constants.html#property_BANKS_EFT_ALLOWED" class="">$BANKS_EFT_ALLOWED</a><br />
+                                                                    <a href="../classes/WC_EBANX_Constants.html#property_GATEWAY_TO_PAYMENT_TYPE_CODE" class="">$GATEWAY_TO_PAYMENT_TYPE_CODE</a><br />
+                                                                    <a href="../classes/WC_EBANX_Constants.html#property_BRAZIL_TAXES_ALLOWED" class="">$BRAZIL_TAXES_ALLOWED</a><br />
+                                                                    <a href="../classes/WC_EBANX_Constants.html#property_EBANX_GATEWAYS_BY_COUNTRY" class="">$EBANX_GATEWAYS_BY_COUNTRY</a><br />
+                                                                    <a href="../classes/WC_EBANX_Constants.html#property_TYPES_SAFETYPAY_ALLOWED" class="">$TYPES_SAFETYPAY_ALLOWED</a><br />
+                                                            </section>
+                            <section class="span4">
+                                                                    <a href="../classes/WC_EBANX_Constants.html#constant_COUNTRY_PERU" class="">COUNTRY_PERU</a><br />
+                                                                    <a href="../classes/WC_EBANX_Constants.html#constant_COUNTRY_CHILE" class="">COUNTRY_CHILE</a><br />
+                                                                    <a href="../classes/WC_EBANX_Constants.html#constant_COUNTRY_BRAZIL" class="">COUNTRY_BRAZIL</a><br />
+                                                                    <a href="../classes/WC_EBANX_Constants.html#constant_COUNTRY_MEXICO" class="">COUNTRY_MEXICO</a><br />
+                                                                    <a href="../classes/WC_EBANX_Constants.html#constant_COUNTRY_COLOMBIA" class="">COUNTRY_COLOMBIA</a><br />
+                                                                    <a href="../classes/WC_EBANX_Constants.html#constant_COUNTRY_BRAZIL_NAME" class="">COUNTRY_BRAZIL_NAME</a><br />
+                                                                    <a href="../classes/WC_EBANX_Constants.html#constant_COUNTRY_CHILE_NAME" class="">COUNTRY_CHILE_NAME</a><br />
+                                                                    <a href="../classes/WC_EBANX_Constants.html#constant_COUNTRY_COLOMBIA_NAME" class="">COUNTRY_COLOMBIA_NAME</a><br />
+                                                                    <a href="../classes/WC_EBANX_Constants.html#constant_COUNTRY_PERU_NAME" class="">COUNTRY_PERU_NAME</a><br />
+                                                                    <a href="../classes/WC_EBANX_Constants.html#constant_COUNTRY_MEXICO_NAME" class="">COUNTRY_MEXICO_NAME</a><br />
+                                                                    <a href="../classes/WC_EBANX_Constants.html#constant_SETTINGS_URL" class="">SETTINGS_URL</a><br />
+                                                                    <a href="../classes/WC_EBANX_Constants.html#constant_CURRENCY_CODE_BRL" class="">CURRENCY_CODE_BRL</a><br />
+                                                                    <a href="../classes/WC_EBANX_Constants.html#constant_CURRENCY_CODE_USD" class="">CURRENCY_CODE_USD</a><br />
+                                                                    <a href="../classes/WC_EBANX_Constants.html#constant_CURRENCY_CODE_EUR" class="">CURRENCY_CODE_EUR</a><br />
+                                                                    <a href="../classes/WC_EBANX_Constants.html#constant_CURRENCY_CODE_PEN" class="">CURRENCY_CODE_PEN</a><br />
+                                                                    <a href="../classes/WC_EBANX_Constants.html#constant_CURRENCY_CODE_MXN" class="">CURRENCY_CODE_MXN</a><br />
+                                                                    <a href="../classes/WC_EBANX_Constants.html#constant_CURRENCY_CODE_COP" class="">CURRENCY_CODE_COP</a><br />
+                                                                    <a href="../classes/WC_EBANX_Constants.html#constant_CURRENCY_CODE_CLP" class="">CURRENCY_CODE_CLP</a><br />
+                                                                    <a href="../classes/WC_EBANX_Constants.html#constant_ACQUIRER_MIN_INSTALMENT_VALUE_MXN" class="">ACQUIRER_MIN_INSTALMENT_VALUE_MXN</a><br />
+                                                                    <a href="../classes/WC_EBANX_Constants.html#constant_ACQUIRER_MIN_INSTALMENT_VALUE_BRL" class="">ACQUIRER_MIN_INSTALMENT_VALUE_BRL</a><br />
+                                                                    <a href="../classes/WC_EBANX_Constants.html#constant_MAX_INSTALMENTS" class="">MAX_INSTALMENTS</a><br />
+                                                                    <a href="../classes/WC_EBANX_Constants.html#constant_BRAZIL_TAX" class="">BRAZIL_TAX</a><br />
+                                                            </section>
+                        </section>
+                        <section class="row-fluid protected">
+                            <section class="span4">
+                                                                    <em>No protected methods found</em>
+                                                            </section>
+                            <section class="span4">
+                                                                    <em>No protected properties found</em>
+                                                            </section>
+                            <section class="span4">
+                                <em>N/A</em>
+                            </section>
+                        </section>
+                        <section class="row-fluid private">
+                            <section class="span4">
+                                                                    <em>No private methods found</em>
+                                                            </section>
+                            <section class="span4">
+                                                                    <em>No private properties found</em>
+                                                            </section>
+                            <section class="span4">
+                                <em>N/A</em>
+                            </section>
+                        </section>
+                    </section>
+                </div>
+                <aside class="span4 detailsbar">
+                                            <span class="label label-info">abstract</span>
+                                        
+                    
+                    <dl>
+                        <dt>File</dt>
+                            <dd><a href="../files/services.class-wc-ebanx-constants.html"><div class="path-wrapper">services/class-wc-ebanx-constants.php</div></a></dd>
+                                                <dt>Package</dt>
+                            <dd><div class="namespace-wrapper">Default</div></dd>
+                                                <dt>Class hierarchy</dt>
+                            <dd class="hierarchy">
+                                                                                                                                                                    <div class="namespace-wrapper">\WC_EBANX_Constants</div>
+                            </dd>
+
+                        
+                        
+                        
+                        
+                                                                        </dl>
+                    <h2>Tags</h2>
+                    <table class="table table-condensed">
+                                            <tr><td colspan="2"><em>None found</em></td></tr>
+                                        </table>
+                </aside>
+            </div>
+
+                                    <a id="constants" name="constants"></a>
+            <div class="row-fluid">
+                <div class="span8 content class">
+                    <h2>Constants</h2>
+                </div>
+                <aside class="span4 detailsbar"></aside>
+            </div>
+
+                                <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="constant_COUNTRY_PERU" name="constant_COUNTRY_PERU" class="anchor"></a>
+            <article id="constant_COUNTRY_PERU" class="constant">
+                <h3 class="">COUNTRY_PERU</h3>
+                <pre class="signature">COUNTRY_PERU</pre>
+                <p><em>Countries that EBANX processes</em></p>
+                
+            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="constant_COUNTRY_CHILE" name="constant_COUNTRY_CHILE" class="anchor"></a>
+            <article id="constant_COUNTRY_CHILE" class="constant">
+                <h3 class="">COUNTRY_CHILE</h3>
+                <pre class="signature">COUNTRY_CHILE</pre>
+                <p><em></em></p>
+                
+            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="constant_COUNTRY_BRAZIL" name="constant_COUNTRY_BRAZIL" class="anchor"></a>
+            <article id="constant_COUNTRY_BRAZIL" class="constant">
+                <h3 class="">COUNTRY_BRAZIL</h3>
+                <pre class="signature">COUNTRY_BRAZIL</pre>
+                <p><em></em></p>
+                
+            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="constant_COUNTRY_MEXICO" name="constant_COUNTRY_MEXICO" class="anchor"></a>
+            <article id="constant_COUNTRY_MEXICO" class="constant">
+                <h3 class="">COUNTRY_MEXICO</h3>
+                <pre class="signature">COUNTRY_MEXICO</pre>
+                <p><em></em></p>
+                
+            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="constant_COUNTRY_COLOMBIA" name="constant_COUNTRY_COLOMBIA" class="anchor"></a>
+            <article id="constant_COUNTRY_COLOMBIA" class="constant">
+                <h3 class="">COUNTRY_COLOMBIA</h3>
+                <pre class="signature">COUNTRY_COLOMBIA</pre>
+                <p><em></em></p>
+                
+            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="constant_COUNTRY_BRAZIL_NAME" name="constant_COUNTRY_BRAZIL_NAME" class="anchor"></a>
+            <article id="constant_COUNTRY_BRAZIL_NAME" class="constant">
+                <h3 class="">COUNTRY_BRAZIL_NAME</h3>
+                <pre class="signature">COUNTRY_BRAZIL_NAME</pre>
+                <p><em>The full name of countries that EBANX processes</em></p>
+                
+            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="constant_COUNTRY_CHILE_NAME" name="constant_COUNTRY_CHILE_NAME" class="anchor"></a>
+            <article id="constant_COUNTRY_CHILE_NAME" class="constant">
+                <h3 class="">COUNTRY_CHILE_NAME</h3>
+                <pre class="signature">COUNTRY_CHILE_NAME</pre>
+                <p><em></em></p>
+                
+            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="constant_COUNTRY_COLOMBIA_NAME" name="constant_COUNTRY_COLOMBIA_NAME" class="anchor"></a>
+            <article id="constant_COUNTRY_COLOMBIA_NAME" class="constant">
+                <h3 class="">COUNTRY_COLOMBIA_NAME</h3>
+                <pre class="signature">COUNTRY_COLOMBIA_NAME</pre>
+                <p><em></em></p>
+                
+            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="constant_COUNTRY_PERU_NAME" name="constant_COUNTRY_PERU_NAME" class="anchor"></a>
+            <article id="constant_COUNTRY_PERU_NAME" class="constant">
+                <h3 class="">COUNTRY_PERU_NAME</h3>
+                <pre class="signature">COUNTRY_PERU_NAME</pre>
+                <p><em></em></p>
+                
+            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="constant_COUNTRY_MEXICO_NAME" name="constant_COUNTRY_MEXICO_NAME" class="anchor"></a>
+            <article id="constant_COUNTRY_MEXICO_NAME" class="constant">
+                <h3 class="">COUNTRY_MEXICO_NAME</h3>
+                <pre class="signature">COUNTRY_MEXICO_NAME</pre>
+                <p><em></em></p>
+                
+            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="constant_SETTINGS_URL" name="constant_SETTINGS_URL" class="anchor"></a>
+            <article id="constant_SETTINGS_URL" class="constant">
+                <h3 class="">SETTINGS_URL</h3>
+                <pre class="signature">SETTINGS_URL</pre>
+                <p><em>The fixed URL to our settings page, always use this one if you want to redirect to it</em></p>
+                
+            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="constant_CURRENCY_CODE_BRL" name="constant_CURRENCY_CODE_BRL" class="anchor"></a>
+            <article id="constant_CURRENCY_CODE_BRL" class="constant">
+                <h3 class="">CURRENCY_CODE_BRL</h3>
+                <pre class="signature">CURRENCY_CODE_BRL</pre>
+                <p><em>Currencies that EBANX processes</em></p>
+                
+            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="constant_CURRENCY_CODE_USD" name="constant_CURRENCY_CODE_USD" class="anchor"></a>
+            <article id="constant_CURRENCY_CODE_USD" class="constant">
+                <h3 class="">CURRENCY_CODE_USD</h3>
+                <pre class="signature">CURRENCY_CODE_USD</pre>
+                <p><em></em></p>
+                
+            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="constant_CURRENCY_CODE_EUR" name="constant_CURRENCY_CODE_EUR" class="anchor"></a>
+            <article id="constant_CURRENCY_CODE_EUR" class="constant">
+                <h3 class="">CURRENCY_CODE_EUR</h3>
+                <pre class="signature">CURRENCY_CODE_EUR</pre>
+                <p><em></em></p>
+                
+            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="constant_CURRENCY_CODE_PEN" name="constant_CURRENCY_CODE_PEN" class="anchor"></a>
+            <article id="constant_CURRENCY_CODE_PEN" class="constant">
+                <h3 class="">CURRENCY_CODE_PEN</h3>
+                <pre class="signature">CURRENCY_CODE_PEN</pre>
+                <p><em></em></p>
+                
+            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="constant_CURRENCY_CODE_MXN" name="constant_CURRENCY_CODE_MXN" class="anchor"></a>
+            <article id="constant_CURRENCY_CODE_MXN" class="constant">
+                <h3 class="">CURRENCY_CODE_MXN</h3>
+                <pre class="signature">CURRENCY_CODE_MXN</pre>
+                <p><em></em></p>
+                
+            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="constant_CURRENCY_CODE_COP" name="constant_CURRENCY_CODE_COP" class="anchor"></a>
+            <article id="constant_CURRENCY_CODE_COP" class="constant">
+                <h3 class="">CURRENCY_CODE_COP</h3>
+                <pre class="signature">CURRENCY_CODE_COP</pre>
+                <p><em></em></p>
+                
+            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="constant_CURRENCY_CODE_CLP" name="constant_CURRENCY_CODE_CLP" class="anchor"></a>
+            <article id="constant_CURRENCY_CODE_CLP" class="constant">
+                <h3 class="">CURRENCY_CODE_CLP</h3>
+                <pre class="signature">CURRENCY_CODE_CLP</pre>
+                <p><em></em></p>
+                
+            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="constant_ACQUIRER_MIN_INSTALMENT_VALUE_MXN" name="constant_ACQUIRER_MIN_INSTALMENT_VALUE_MXN" class="anchor"></a>
+            <article id="constant_ACQUIRER_MIN_INSTALMENT_VALUE_MXN" class="constant">
+                <h3 class="">ACQUIRER_MIN_INSTALMENT_VALUE_MXN</h3>
+                <pre class="signature">ACQUIRER_MIN_INSTALMENT_VALUE_MXN</pre>
+                <p><em>Minimal instalment value for acquirers to approve based on currency</em></p>
+                
+            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="constant_ACQUIRER_MIN_INSTALMENT_VALUE_BRL" name="constant_ACQUIRER_MIN_INSTALMENT_VALUE_BRL" class="anchor"></a>
+            <article id="constant_ACQUIRER_MIN_INSTALMENT_VALUE_BRL" class="constant">
+                <h3 class="">ACQUIRER_MIN_INSTALMENT_VALUE_BRL</h3>
+                <pre class="signature">ACQUIRER_MIN_INSTALMENT_VALUE_BRL</pre>
+                <p><em></em></p>
+                
+            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="constant_MAX_INSTALMENTS" name="constant_MAX_INSTALMENTS" class="anchor"></a>
+            <article id="constant_MAX_INSTALMENTS" class="constant">
+                <h3 class="">MAX_INSTALMENTS</h3>
+                <pre class="signature">MAX_INSTALMENTS</pre>
+                <p><em>Max supported credit-card instalments</em></p>
+                
+            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="constant_BRAZIL_TAX" name="constant_BRAZIL_TAX" class="anchor"></a>
+            <article id="constant_BRAZIL_TAX" class="constant">
+                <h3 class="">BRAZIL_TAX</h3>
+                <pre class="signature">BRAZIL_TAX</pre>
+                <p><em>Taxes applied by country</em></p>
+                
+            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                            
+                                    <a id="properties" name="properties"></a>
+            <div class="row-fluid">
+                <div class="span8 content class">
+                    <h2>Properties</h2>
+                </div>
+                <aside class="span4 detailsbar"></aside>
+            </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_CURRENCIES_CODES_ALLOWED" name="property_CURRENCIES_CODES_ALLOWED" class="anchor"></a>
+            <article class="property">
+                <h3 class="public ">$CURRENCIES_CODES_ALLOWED</h3>
+                <pre class="signature">$CURRENCIES_CODES_ALLOWED : array</pre>
+                <p><em>Only the currencies allowed and processed by EBANX</em></p>
+                
+
+                                <h4>Type</h4>
+                array
+                                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_LOCAL_CURRENCIES" name="property_LOCAL_CURRENCIES" class="anchor"></a>
+            <article class="property">
+                <h3 class="public ">$LOCAL_CURRENCIES</h3>
+                <pre class="signature">$LOCAL_CURRENCIES : </pre>
+                <p><em>Local currencies that EBANX processes</em></p>
+                
+
+                                <h4>Type</h4>
+                
+                                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_ALL_COUNTRIES" name="property_ALL_COUNTRIES" class="anchor"></a>
+            <article class="property">
+                <h3 class="public ">$ALL_COUNTRIES</h3>
+                <pre class="signature">$ALL_COUNTRIES : array</pre>
+                <p><em>The list of all countries that EBANX processes</em></p>
+                
+
+                                <h4>Type</h4>
+                array
+                                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_CREDIT_CARD_COUNTRIES" name="property_CREDIT_CARD_COUNTRIES" class="anchor"></a>
+            <article class="property">
+                <h3 class="public ">$CREDIT_CARD_COUNTRIES</h3>
+                <pre class="signature">$CREDIT_CARD_COUNTRIES : array</pre>
+                <p><em>The countries that credit cards are processed by EBANX</em></p>
+                
+
+                                <h4>Type</h4>
+                array
+                                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_CREDIT_CARD_CURRENCIES" name="property_CREDIT_CARD_CURRENCIES" class="anchor"></a>
+            <article class="property">
+                <h3 class="public ">$CREDIT_CARD_CURRENCIES</h3>
+                <pre class="signature">$CREDIT_CARD_CURRENCIES : array</pre>
+                <p><em>The countries that credit cards are processed by EBANX</em></p>
+                
+
+                                <h4>Type</h4>
+                array
+                                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_CASH_PAYMENTS_TIMEZONES" name="property_CASH_PAYMENTS_TIMEZONES" class="anchor"></a>
+            <article class="property">
+                <h3 class="public ">$CASH_PAYMENTS_TIMEZONES</h3>
+                <pre class="signature">$CASH_PAYMENTS_TIMEZONES : array</pre>
+                <p><em>The timezones of the countries processed by EBANX</em></p>
+                
+
+                                <h4>Type</h4>
+                array
+                                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_BANKS_TEF_ALLOWED" name="property_BANKS_TEF_ALLOWED" class="anchor"></a>
+            <article class="property">
+                <h3 class="public ">$BANKS_TEF_ALLOWED</h3>
+                <pre class="signature">$BANKS_TEF_ALLOWED : array</pre>
+                <p><em>The banks that EBANX process in Brazil</em></p>
+                
+
+                                <h4>Type</h4>
+                array
+                                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_BANKS_EFT_ALLOWED" name="property_BANKS_EFT_ALLOWED" class="anchor"></a>
+            <article class="property">
+                <h3 class="public ">$BANKS_EFT_ALLOWED</h3>
+                <pre class="signature">$BANKS_EFT_ALLOWED : array</pre>
+                <p><em>The banks that EBANX process in Colombia</em></p>
+                
+
+                                <h4>Type</h4>
+                array
+                                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_GATEWAY_TO_PAYMENT_TYPE_CODE" name="property_GATEWAY_TO_PAYMENT_TYPE_CODE" class="anchor"></a>
+            <article class="property">
+                <h3 class="public ">$GATEWAY_TO_PAYMENT_TYPE_CODE</h3>
+                <pre class="signature">$GATEWAY_TO_PAYMENT_TYPE_CODE : array</pre>
+                <p><em>Payment type API codes for each plugin payment gateway</em></p>
+                
+
+                                <h4>Type</h4>
+                array
+                                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_BRAZIL_TAXES_ALLOWED" name="property_BRAZIL_TAXES_ALLOWED" class="anchor"></a>
+            <article class="property">
+                <h3 class="public ">$BRAZIL_TAXES_ALLOWED</h3>
+                <pre class="signature">$BRAZIL_TAXES_ALLOWED : array</pre>
+                <p><em>The Brazil taxes available options that EBANX process</em></p>
+                
+
+                                <h4>Type</h4>
+                array
+                                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_EBANX_GATEWAYS_BY_COUNTRY" name="property_EBANX_GATEWAYS_BY_COUNTRY" class="anchor"></a>
+            <article class="property">
+                <h3 class="public ">$EBANX_GATEWAYS_BY_COUNTRY</h3>
+                <pre class="signature">$EBANX_GATEWAYS_BY_COUNTRY : array</pre>
+                <p><em>The gateways that plugin uses as identification</em></p>
+                
+
+                                <h4>Type</h4>
+                array
+                                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_TYPES_SAFETYPAY_ALLOWED" name="property_TYPES_SAFETYPAY_ALLOWED" class="anchor"></a>
+            <article class="property">
+                <h3 class="public ">$TYPES_SAFETYPAY_ALLOWED</h3>
+                <pre class="signature">$TYPES_SAFETYPAY_ALLOWED : array</pre>
+                <p><em>Types allowed by SafetyPay</em></p>
+                
+
+                                <h4>Type</h4>
+                array
+                                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                                            
+                                </div>
+    </section>
+
+    <div id="source-view" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="source-view-label" aria-hidden="true">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <h3 id="source-view-label">class-wc-ebanx-constants.php</h3>
+        </div>
+        <div class="modal-body">
+            <pre data-src="../files/services/class-wc-ebanx-constants.php.txt" class="language-php line-numbers"></pre>
+        </div>
+    </div>
+
+    <footer class="row-fluid">
+        <section class="span10 offset2">
+            <section class="row-fluid">
+                <section class="span10 offset1">
+                    <section class="row-fluid footer-sections">
+                        <section class="span4">
+                                                        <h1><i class="icon-code"></i></h1>
+                            <div>
+                                <ul>
+                                                                    </ul>
+                            </div>
+                        </section>
+                        <section class="span4">
+                                                        <h1><i class="icon-bar-chart"></i></h1>
+                            <div>
+                                <ul>
+                                    <li><a href="../graphs/class.html">Class Hierarchy Diagram</a></li>
+                                </ul>
+                            </div>
+                        </section>
+                        <section class="span4">
+                                                        <h1><i class="icon-pushpin"></i></h1>
+                            <div>
+                                <ul>
+                                    <li><a href="../reports/errors.html">Errors</a></li>
+                                    <li><a href="../reports/markers.html">Markers</a></li>
+                                </ul>
+                            </div>
+                        </section>
+                    </section>
+                </section>
+            </section>
+            <section class="row-fluid">
+                <section class="span10 offset1">
+                    <hr />
+                    Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor </a> and authored
+                    on April 25th, 2017 at 16:14.
+                </section>
+            </section>
+        </section>
+    </footer>
+</div>
+
+</body>
+</html>

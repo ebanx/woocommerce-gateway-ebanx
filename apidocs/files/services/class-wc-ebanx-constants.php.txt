@@ -237,3 +237,4 @@ abstract class WC_EBANX_Constants
 		'cash', 'online',
 	);
 }
+
