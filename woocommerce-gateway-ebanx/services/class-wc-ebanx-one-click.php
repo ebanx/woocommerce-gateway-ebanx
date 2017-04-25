@@ -313,9 +313,12 @@ class WC_EBANX_One_Click {
 
 		$cart_total = $product->price;
 
-		$max_instalments = min($this->gateway->configs->settings['credit_card_instalments'], $this->gateway->fetch_acquirer_max_installments_for_price($cart_total, 'br'));
+		$max_instalments = min($this->gateway->configs->settings['credit_card_instalments'], WC_EBANX_Constants::MAX_INSTALMENTS);
 
 		$instalments_terms = $this->gateway->get_payment_terms($cart_total, $max_instalments);
+		$tax = get_woocommerce_currency() === WC_EBANX_Constants::CURRENCY_CODE_BRL ? WC_EBANX_Constants::BRAZIL_TAX : 0;
+
+		$instalments_terms = $this->gateway->get_payment_terms($cart_total, $max_instalments, $tax);
 
 		$args = apply_filters( 'ebanx_template_args', array(
 				'cards' => $this->cards,
