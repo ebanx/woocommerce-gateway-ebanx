@@ -178,15 +178,15 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
 	protected function request_data($order)
 	{
 		
-		if (!WC_EBANX_Request::has('ebanx_token') ||
-			!WC_EBANX_Request::has('ebanx_masked_card_number') ||
-			!WC_EBANX_Request::has('ebanx_brand') ||
-			!WC_EBANX_Request::has('ebanx_billing_cvv')
+		if (empty(WC_EBANX_Request::read('ebanx_token', null))
+			|| empty(WC_EBANX_Request::read('ebanx_masked_card_number', null))
+			|| empty(WC_EBANX_Request::read('ebanx_brand', null))
+			|| empty(WC_EBANX_Request::read('ebanx_billing_cvv', null))
 		) {
 			throw new Exception('MISSING-CARD-PARAMS');
 		}
 
-		if (!WC_EBANX_Request::has('ebanx_is_one_click') && !WC_EBANX_Request::has('ebanx_device_fingerprint')) {
+		if (empty(WC_EBANX_Request::read('ebanx_is_one_click', null)) && empty(WC_EBANX_Request::read('ebanx_device_fingerprint', null))) {
 			throw new Exception('MISSING-DEVICE-FINGERPRINT');
 		}
 
