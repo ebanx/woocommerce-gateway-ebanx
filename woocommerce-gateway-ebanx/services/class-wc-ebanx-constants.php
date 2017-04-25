@@ -100,6 +100,18 @@ abstract class WC_EBANX_Constants
 	);
 
 	/**
+	 * The countries that credit cards are processed by EBANX
+	 *
+	 * @var array
+	 */
+	public static $CREDIT_CARD_CURRENCIES = array(
+		self::CURRENCY_CODE_BRL,
+		self::CURRENCY_CODE_MXN,
+		self::CURRENCY_CODE_USD,
+		self::CURRENCY_CODE_EUR
+	);
+
+	/**
 	 * The timezones of the countries processed by EBANX
 	 *
 	 * @var array
