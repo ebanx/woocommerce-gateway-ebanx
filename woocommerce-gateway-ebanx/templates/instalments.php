@@ -1,5 +1,5 @@
 <!-- Installments -->
-<?php if ($max_instalments > 1) : ?>
+<?php if ( count($instalments_terms) > 1 ) : ?>
 	<section class="ebanx-form-row">
 		<label for="ebanx-card-installments"><?php echo $instalments; ?> <span class="required">*</span></label>
 		<select data-country="<?php echo $country ?>" data-amount="<?php echo $cart_total ?>" data-currency="<?php echo $currency ?>" class="ebanx-instalments ebanx-select-field" name="ebanx-credit-card-installments">

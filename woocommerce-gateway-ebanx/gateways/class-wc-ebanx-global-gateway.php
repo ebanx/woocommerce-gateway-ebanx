@@ -47,7 +47,11 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway
 		'credit_card_instalments' => '1',
 		'due_date_days' => '3',
 		'brazil_taxes_options' => 'cpf',
-		'interest_rates_enabled' => 'no'
+		'interest_rates_enabled' => 'no',
+		'min_instalment_value_brl' => '20',
+		'min_instalment_value_usd' => '0',
+		'min_instalment_value_eur' => '0',
+		'min_instalment_value_mxn' => '100'
 	);
 
 	/**
@@ -248,7 +252,7 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway
 				'class' => 'ebanx-payments-option'
 			),
 			'credit_card_instalments'   => array(
-				'title'       => __('Maximum nº of Installments', 'woocommerce-gateway-ebanx'),
+				'title'       => __('Maximum nº of Instalments', 'woocommerce-gateway-ebanx'),
 				'type'        => 'select',
 				'class'       => 'wc-enhanced-select ebanx-payments-option',
 				'options'     => array(
@@ -265,18 +269,36 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway
 					'11' => '11',
 					'12' => '12',
 				),
-				'description' => __('Establish the maximum number of installments in which your customer can pay, as consented on your contract.', 'woocommerce-gateway-ebanx'),
+				'description' => __('Establish the maximum number of instalments in which your customer can pay, as consented on your contract.', 'woocommerce-gateway-ebanx'),
 				'desc_tip' => true
-			),
+			)
+		);
+		$currency_code = strtolower($this->merchant_currency);
+		if ( in_array(strtoupper($currency_code), WC_EBANX_Constants::$CREDIT_CARD_CURRENCIES) ) {
+			$fields["min_instalment_value_$currency_code"] = array(
+				'title' => sprintf(__('Minimum instalment (%s)', 'woocommerce-gateway-ebanx'), strtoupper($currency_code)),
+				'type' => 'number',
+				'class' => 'ebanx-payments-option',
+				'placeholder' => sprintf(__('The default is %d', 'woocommerce-gateway-ebanx'), 
+					$this->get_min_instalment_value_for_currency($currency_code) ),
+				'custom_attributes' => array(
+					'min' => $this->get_min_instalment_value_for_currency($currency_code),
+					'step' => '0.01'
+				),
+				'desc_tip' => true,
+				'description' => __('Set the minimum instalment value during checkout. The minimum EBANX allows for BRL is 20 and MXN is 100, lower values in these currencies will be ignored.', 'woocommerce-gateway-ebanx')
+			);
+		}
+		$fields = array_merge($fields, array(
 			'interest_rates_enabled' => array(
 				'type'    => 'checkbox',
 				'title'   => __('Interest Rates', 'woocommerce-gateway-ebanx'),
 				'label'   => __('Enable Interest Rates', 'woocommerce-gateway-ebanx'),
-				'description' => __('Enable and set a custom interest rate for your customers according to the number of Installments you allow the payment.'),
+				'description' => __('Enable and set a custom interest rate for your customers according to the number of Instalments you allow the payment.'),
 				'desc_tip' => true,
 				'class' => 'ebanx-payments-option'
 			)
-		);
+		));
 		$interest_rates_array = array();
 		$interest_rates_array['interest_rates_01'] = array(
 			'title' => __('1x Interest Rate in %', 'woocommerce-gateway-ebanx'),
@@ -418,6 +440,30 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway
 			}
 
 			$properties['default'] = self::$defaults[$field];
+		}
+	}
+
+	/**
+	 * Gets the min instalment value for the provided currency
+	 * 
+	 * @param  $currency_code string The lower-cased currency code
+	 * @return double
+	 */
+	private function get_min_instalment_value_for_currency($currency_code = null) {
+		if ($currency_code === null) {
+			$currency_code = strtolower($this->merchant_currency);
+		}
+		if ( ! in_array(strtoupper($currency_code), WC_EBANX_Constants::$CREDIT_CARD_CURRENCIES) ) {
+			throw new InvalidArgumentException("The provided currency code doesn't accept Credit Card payment", 1);
+		}
+
+		switch ($currency_code) {
+			case WC_EBANX_Constants::CURRENCY_CODE_BRL:
+				return WC_EBANX_Constants::ACQUIRER_MIN_INSTALMENT_VALUE_BRL;
+			case WC_EBANX_Constants::CURRENCY_CODE_MXN:
+				return WC_EBANX_Constants::ACQUIRER_MIN_INSTALMENT_VALUE_MXN;
+			default:
+				return 0;
 		}
 	}
 
