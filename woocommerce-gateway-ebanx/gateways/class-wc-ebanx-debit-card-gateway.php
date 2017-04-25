@@ -87,8 +87,8 @@ class WC_EBANX_Debit_Card_Gateway extends WC_EBANX_Gateway
 	 */
 	protected function request_data($order)
 	{
-		if ( empty(WC_EBANX_Request::read('ebanx_debit_token'))
-			|| empty(WC_EBANX_Request::read('ebanx_billing_cvv')) ) {
+		if ( empty(WC_EBANX_Request::read('ebanx_debit_token', null))
+			|| empty(WC_EBANX_Request::read('ebanx_billing_cvv', null)) ) {
 			throw new Exception("Missing ebanx card params.");
 		}
 
