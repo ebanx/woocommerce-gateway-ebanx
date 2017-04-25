@@ -244,28 +244,28 @@ class WC_EBANX_One_Click {
 
 		$names = $this->gateway->names;
 
-		$_POST['ebanx_token'] = $card->token;
-		$_POST['ebanx_masked_card_number'] = $card->masked_number;
-		$_POST['ebanx_brand'] = $card->brand;
-		$_POST['ebanx_billing_cvv'] = WC_EBANX_Request::read('ebanx-one-click-cvv');
-		$_POST['ebanx_is_one_click'] = true;
-		$_POST['ebanx_billing_instalments'] = WC_EBANX_Request::read('ebanx-credit-card-installments');
+		WC_EBANX_Request::set('ebanx_token', $card->token);
+		WC_EBANX_Request::set('ebanx_masked_card_number', $card->masked_number);
+		WC_EBANX_Request::set('ebanx_brand', $card->brand);
+		WC_EBANX_Request::set('ebanx_billing_cvv', WC_EBANX_Request::read('ebanx-one-click-cvv'));
+		WC_EBANX_Request::set('ebanx_is_one_click', true);
+		WC_EBANX_Request::set('ebanx_billing_instalments', WC_EBANX_Request::read('ebanx-credit-card-installments'));
 
-		$_POST[$names['ebanx_billing_brazil_document']] = get_user_meta( $this->userId, '_ebanx_billing_brazil_document', true );
-		$_POST[$names['ebanx_billing_brazil_birth_date']] = get_user_meta( $this->userId, '_ebanx_billing_brazil_birth_date', true );
+		WC_EBANX_Request::set($names['ebanx_billing_brazil_document'], get_user_meta( $this->userId, '_ebanx_billing_brazil_document', true ));
+		WC_EBANX_Request::set($names['ebanx_billing_brazil_birth_date'], get_user_meta( $this->userId, '_ebanx_billing_brazil_birth_date', true ));
 
-		$_POST['billing_postcode']  = $this->get_user_billing_address()['postcode'];
-		$_POST['billing_address_1'] = $this->get_user_billing_address()['address_1'];
-		$_POST['billing_city']      = $this->get_user_billing_address()['city'];
-		$_POST['billing_state']     = $this->get_user_billing_address()['state'];
+		WC_EBANX_Request::set('billing_postcode', $this->get_user_billing_address()['postcode']);
+		WC_EBANX_Request::set('billing_address_1', $this->get_user_billing_address()['address_1']);
+		WC_EBANX_Request::set('billing_city', $this->get_user_billing_address()['city']);
+		WC_EBANX_Request::set('billing_state', $this->get_user_billing_address()['state']);
 
-		return empty( WC_EBANX_Request::read('ebanx-one-click-token') )
-			|| empty( WC_EBANX_Request::read('ebanx-credit-card-installments') )
-			|| empty( WC_EBANX_Request::read('ebanx-one-click-cvv') )
-			|| ! WC_EBANX_Request::has($names['ebanx_billing_brazil_document'])
-			|| ! WC_EBANX_Request::has($names['ebanx_billing_brazil_birth_date'])
-			|| empty( WC_EBANX_Request::read($names['ebanx_billing_brazil_document']) )
-			|| empty( WC_EBANX_Request::read($names['ebanx_billing_brazil_birth_date']) );
+		return ! empty(WC_EBANX_Request::read('ebanx-one-click-token', null))
+			&& ! empty(WC_EBANX_Request::read('ebanx-credit-card-installments', null))
+			&& ! empty(WC_EBANX_Request::read('ebanx-one-click-cvv', null))
+			&& WC_EBANX_Request::has($names['ebanx_billing_brazil_document'])
+			&& WC_EBANX_Request::has($names['ebanx_billing_brazil_birth_date'])
+			&& ! empty(WC_EBANX_Request::read($names['ebanx_billing_brazil_document'], null))
+			&& ! empty(WC_EBANX_Request::read($names['ebanx_billing_brazil_birth_date'], null));
 	}
 
 	/**
@@ -306,7 +306,7 @@ class WC_EBANX_One_Click {
 				break;
 			default:
 				$messages = array(
-					'instalments' => 'Number of installments',
+					'instalments' => 'Number of instalments',
 				);
 				break;
 		}
@@ -320,6 +320,10 @@ class WC_EBANX_One_Click {
 
 		$instalments_terms = $this->gateway->get_payment_terms($cart_total, $max_instalments, $tax);
 
+		$country = $this->gateway->getTransactionAddress('country');
+
+		$currency = $country === WC_EBANX_Constants::COUNTRY_BRAZIL ? WC_EBANX_Constants::CURRENCY_CODE_BRL : WC_EBANX_Constants::CURRENCY_CODE_MXN;
+
 		$args = apply_filters( 'ebanx_template_args', array(
 				'cards' => $this->cards,
 				'cart_total' => $cart_total,
@@ -330,7 +334,9 @@ class WC_EBANX_One_Click {
 				'instalments_terms' => $instalments_terms,
 				'nonce' => wp_create_nonce( $this->orderAction ),
 				'action' => $this->orderAction,
-				'permalink' => get_permalink($product->id)
+				'permalink' => get_permalink($product->id),
+				'country' => $country,
+				'currency' => $currency
 			) );
 
 		wc_get_template( 'one-click.php', $args, '', WC_EBANX::get_templates_path() . 'one-click/' );
