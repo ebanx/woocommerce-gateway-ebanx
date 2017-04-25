@@ -259,13 +259,13 @@ class WC_EBANX_One_Click {
 		WC_EBANX_Request::set('billing_city', $this->get_user_billing_address()['city']);
 		WC_EBANX_Request::set('billing_state', $this->get_user_billing_address()['state']);
 
-		return WC_EBANX_Request::has('ebanx-one-click-token')
-			&& WC_EBANX_Request::has('ebanx-credit-card-installments')
-			&& WC_EBANX_Request::has('ebanx-one-click-cvv')
+		return ! empty(WC_EBANX_Request::read('ebanx-one-click-token', null))
+			&& ! empty(WC_EBANX_Request::read('ebanx-credit-card-installments', null))
+			&& ! empty(WC_EBANX_Request::read('ebanx-one-click-cvv', null))
 			&& WC_EBANX_Request::has($names['ebanx_billing_brazil_document'])
 			&& WC_EBANX_Request::has($names['ebanx_billing_brazil_birth_date'])
-			&& WC_EBANX_Request::has($names['ebanx_billing_brazil_document'])
-			&& WC_EBANX_Request::has($names['ebanx_billing_brazil_birth_date']);
+			&& ! empty(WC_EBANX_Request::read($names['ebanx_billing_brazil_document'], null))
+			&& ! empty(WC_EBANX_Request::read($names['ebanx_billing_brazil_birth_date'], null));
 	}
 
 	/**

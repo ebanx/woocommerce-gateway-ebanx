@@ -200,7 +200,7 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
 			}
 		}
 
-		if (WC_EBANX_Request::has('ebanx_device_fingerprint')) {
+		if (!empty(WC_EBANX_Request::read('ebanx_device_fingerprint', null))) {
 			$data['device_id'] = WC_EBANX_Request::read('ebanx_device_fingerprint');
 		}
 
