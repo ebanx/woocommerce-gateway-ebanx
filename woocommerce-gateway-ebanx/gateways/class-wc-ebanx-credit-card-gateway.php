@@ -331,9 +331,9 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
 	/**
 	 * Checks if the payment term is allowed based on price, country and minimal instalment value
 	 *
-	 * @param  double $price Product price used as base
-	 * @param  int $instalment_number Number of instalments
-	 * @param  string $country Costumer country
+	 * @param doubloe $price Product price used as base
+	 * @param int $instalment_number Number of instalments
+	 * @param string $country Costumer country
 	 * @return integer
 	 */
 	public function is_valid_instalment_amount($price, $instalment_number, $country = null) {
