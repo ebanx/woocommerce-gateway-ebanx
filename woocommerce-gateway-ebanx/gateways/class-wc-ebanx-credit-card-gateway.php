@@ -323,14 +323,18 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
 	}
 
 	/**
-	 * Calculates the max instalments allowed based on price, country and minimal instalment value
-	 * given by the credit-card acquirer
+	 * Checks if the payment term is allowed based on price, country and minimal instalment value
 	 *
 	 * @param  $price double Product price used as base
+	 * @param  $instalment_number int Number of instalments
+	 * @param  $country string Costumer country
 	 * @return integer
 	 */
-	public function fetch_acquirer_max_installments_for_price($price, $country = null) {
-		$max_instalments = WC_EBANX_Constants::MAX_INSTALMENTS;
+	public function is_valid_instalment_amount($price, $instalment_number, $country = null) {
+		if ($instalment_number === 1) {
+			return true;
+		}
+
 		$country = $country ?: WC()->customer->get_country();
 		$currency_code = strtolower($this->merchant_currency);
 
@@ -353,10 +357,11 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
 
 		if (isset($site_to_local_rate) && isset($min_instalment_value)) {
 			$local_value = $price * $site_to_local_rate;
-			$max_instalments = floor($local_value / $min_instalment_value);
+			$instalment_value = $local_value / $instalment_number;
+			return $instalment_value >= $min_instalment_value;
 		}
 
-		return $max_instalments;
+		return false;
 	}
 
 	/**
@@ -410,20 +415,22 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
 
 			if (isset($instalment_taxes) && array_key_exists($number, $instalment_taxes)) {
 				$cart_total += $cart_total * $instalment_taxes[$number];
+				$cart_total += $cart_total * $tax;
 				if ($instalment_taxes[$number] > 0) {
 					$has_interest = true;
 				}
 			}
 
-			$instalment_price = $cart_total / $number;
-			$instalment_price += $instalment_price * $tax;
-			$instalment_price = round(floatval($instalment_price), 2);
+			if ( $this->is_valid_instalment_amount($cart_total, $number) ) {
+				$instalment_price = $cart_total / $number;
+				$instalment_price = round(floatval($instalment_price), 2);
 
-			$instalments[] = array(
-				'price' => $instalment_price,
-				'has_interest' => $has_interest,
-				'number' => $number
-			);
+				$instalments[] = array(
+					'price' => $instalment_price,
+					'has_interest' => $has_interest,
+					'number' => $number
+				);
+			}
 		}
 
 		return apply_filters('ebanx_get_payment_terms', $instalments);
@@ -445,7 +452,7 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
 			});
 		}
 
-		$max_instalments = min($this->configs->settings['credit_card_instalments'], $this->fetch_acquirer_max_installments_for_price($cart_total, 'br'));
+		$max_instalments = min($this->configs->settings['credit_card_instalments'], WC_EBANX_Constants::MAX_INSTALMENTS);
 
 		$tax = get_woocommerce_currency() === WC_EBANX_Constants::CURRENCY_CODE_BRL ? WC_EBANX_Constants::BRAZIL_TAX : 0;
 		$instalments_terms = $this->get_payment_terms($cart_total, $max_instalments, $tax);
@@ -462,7 +469,6 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
 				'instalments_terms' => $instalments_terms,
 				'cards' => (array) $cards,
 				'cart_total' => $cart_total,
-				'max_instalments' => $max_instalments,
 				'place_order_enabled' => $save_card,
 				'instalments' => $country === WC_EBANX_Constants::COUNTRY_BRAZIL ? 'Número de parcelas' :  'Meses sin intereses',
 			),
