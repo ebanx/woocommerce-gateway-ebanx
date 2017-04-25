@@ -331,15 +331,22 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
 	public function fetch_acquirer_max_installments_for_price($price, $country = null) {
 		$max_instalments = WC_EBANX_Constants::MAX_INSTALMENTS;
 		$country = $country ?: WC()->customer->get_country();
+		$currency_code = strtolower($this->merchant_currency);
 
 		switch (trim(strtolower($country))) {
 			case 'br':
 				$site_to_local_rate = $this->get_local_currency_rate_for_site(WC_EBANX_Constants::CURRENCY_CODE_BRL);
-				$min_instalment_value = WC_EBANX_Constants::ACQUIRER_MIN_INSTALMENT_VALUE_BRL;
+				$merchant_min_instalment_value = $this->get_setting_or_default("min_instalment_value_$currency_code", 0) * $site_to_local_rate;
+				$min_instalment_value = max(
+					WC_EBANX_Constants::ACQUIRER_MIN_INSTALMENT_VALUE_BRL,
+					$merchant_min_instalment_value);
 				break;
 			case 'mx':
 				$site_to_local_rate = $this->get_local_currency_rate_for_site(WC_EBANX_Constants::CURRENCY_CODE_MXN);
-				$min_instalment_value = WC_EBANX_Constants::ACQUIRER_MIN_INSTALMENT_VALUE_MXN;
+				$merchant_min_instalment_value = $this->get_setting_or_default("min_instalment_value_$currency_code", 0) * $site_to_local_rate;
+				$min_instalment_value = max(
+					WC_EBANX_Constants::ACQUIRER_MIN_INSTALMENT_VALUE_MXN,
+					$merchant_min_instalment_value);
 				break;
 		}
 
