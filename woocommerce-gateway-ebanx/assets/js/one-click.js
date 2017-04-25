@@ -7,8 +7,8 @@ jQuery(document).ready(function ($) {
   var cvv = $('#ebanx-one-click-cvv-input');
   var payButton = $('.ebanx-one-click-pay');
   var instalments = $('.ebanx-instalments');
+  var form = $('#ebanx-one-click-form');
   var isProcessing = false;
-  var formCart = $('form.cart');
 
   var addError = function (el) {
     $(el).addClass('is-invalid');
@@ -28,34 +28,10 @@ jQuery(document).ready(function ($) {
     tooltip.removeClass('is-active');
   });
 
-  var pay = function (e) {
-    var value = cvv.val();
-
-    if (isProcessing) {
-      e.preventDefault();
-      return false;
-    }
-
-    if (tooltip.hasClass('is-active') && !(value.length >= 3 && value.length <= 4)) {
-      addError(cvv);
-      e.preventDefault();
-    }
-
-    if (tooltip.hasClass('is-active') && (value.length >= 3 && value.length <= 4)) {
-      hidden.val('is_one_click');
-      removeError(cvv);
-
-      payButton.text(payButton.attr('data-processing-label')).attr('disabled', 'disabled');
-
-
-      isProcessing = true;
-    }
-  }
-
-  formCart.on('submit', pay);
-
-  $('.ebanx-one-click-pay').on('click', function (e) {
-    formCart.submit();
+  payButton.on('click', function () {
+    payButton.text(payButton.attr('data-processing-label')).attr('disabled', 'disabled');
+  
+    form.submit();
   });
 
   cvv.on('keyup', function () {

@@ -73,7 +73,7 @@ class WC_EBANX_Baloto_Gateway extends WC_EBANX_Gateway
 	{
 		parent::save_order_meta_fields($order, $request);
 
-		update_post_meta($order->get_id(), '_baloto_url', $request->payment->baloto_url);
+		update_post_meta($order->id, '_baloto_url', $request->payment->baloto_url);
 	}
 
 	/**
@@ -84,12 +84,12 @@ class WC_EBANX_Baloto_Gateway extends WC_EBANX_Gateway
 	 */
 	public static function thankyou_page($order)
 	{
-		$baloto_url = get_post_meta($order->get_id(), '_baloto_url', true);
+		$baloto_url = get_post_meta($order->id, '_baloto_url', true);
 		$baloto_basic = $baloto_url . "&format=basic";
 		$baloto_pdf = $baloto_url . "&format=pdf";
 		$baloto_print = $baloto_url . "&format=print";
-		$customer_email = get_post_meta($order->get_id(), '_ebanx_payment_customer_email', true);
-		$baloto_hash = get_post_meta($order->get_id(), '_ebanx_payment_hash', true);
+		$customer_email = get_post_meta($order->id, '_ebanx_payment_customer_email', true);
+		$baloto_hash = get_post_meta($order->id, '_ebanx_payment_hash', true);
 
 		$data = array(
 			'data' => array(

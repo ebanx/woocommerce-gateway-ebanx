@@ -21,7 +21,7 @@ abstract class WC_EBANX_Redirect_Gateway extends WC_EBANX_Gateway
 			return $this->process_response_error($request, $order);
 		}
 
-		update_post_meta($order->get_id(), '_ebanx_payment_hash', $request->payment->hash);
+		update_post_meta($order->id, '_ebanx_payment_hash', $request->payment->hash);
 
 		$this->redirect_url = $request->redirect_url;
 	}

@@ -47,7 +47,11 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway
 		'credit_card_instalments' => '1',
 		'due_date_days' => '3',
 		'brazil_taxes_options' => 'cpf',
-		'interest_rates_enabled' => 'no'
+		'interest_rates_enabled' => 'no',
+		'min_instalment_value_brl' => '20',
+		'min_instalment_value_usd' => '0',
+		'min_instalment_value_eur' => '0',
+		'min_instalment_value_mxn' => '100'
 	);
 
 	/**
@@ -146,7 +150,7 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway
 			'brazil_payment_methods'    => array(
 				'title'       => __('Brazil', 'woocommerce-gateway-ebanx'),
 				'type'        => 'multiselect',
-				'class'       => 'ebanx-select',
+				'class'       => 'wc-enhanced-select',
 				'options'     => array(
 					'ebanx-credit-card-br' => 'Credit Card',
 					'ebanx-banking-ticket' => 'Boleto EBANX',
@@ -163,7 +167,7 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway
 			'mexico_payment_methods'    => array(
 				'title'       => __('Mexico', 'woocommerce-gateway-ebanx'),
 				'type'        => 'multiselect',
-				'class'       => 'ebanx-select',
+				'class'       => 'wc-enhanced-select',
 				'options'     => array(
 					'ebanx-credit-card-mx' => 'Credit Card',
 					'ebanx-debit-card'  => 'Debit Card',
@@ -178,7 +182,7 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway
 			'chile_payment_methods'     => array(
 				'title'       => __('Chile', 'woocommerce-gateway-ebanx'),
 				'type'        => 'multiselect',
-				'class'       => 'ebanx-select',
+				'class'       => 'wc-enhanced-select',
 				'options'     => array(
 					'ebanx-sencillito' => 'Sencillito',
 					'ebanx-servipag'   => 'Servipag',
@@ -191,7 +195,7 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway
 			'colombia_payment_methods'  => array(
 				'title'       => __('Colombia', 'woocommerce-gateway-ebanx'),
 				'type'        => 'multiselect',
-				'class'       => 'ebanx-select',
+				'class'       => 'wc-enhanced-select',
 				'options'     => array(
 					'ebanx-eft' => 'PSE - Pago Seguros en Línea (EFT)',
 					'ebanx-baloto' => 'Baloto',
@@ -204,7 +208,7 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway
 			'peru_payment_methods'      => array(
 				'title'       => __('Peru', 'woocommerce-gateway-ebanx'),
 				'type'        => 'multiselect',
-				'class'       => 'ebanx-select',
+				'class'       => 'wc-enhanced-select',
 				'options'     => array(
 					'ebanx-safetypay'    => 'SafetyPay',
 					'ebanx-pagoefectivo' => 'PagoEfectivo',
@@ -215,7 +219,7 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway
 				),
 			),
 			'payments_options_title'     => array(
-				'title' => __('Payments Options', 'woocommerce-gateway-ebanx'),
+				'title' => __('Payment Options', 'woocommerce-gateway-ebanx'),
 				'type'  => 'title'
 			),
 			'credit_card_options_title' => array(
@@ -248,9 +252,9 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway
 				'class' => 'ebanx-payments-option'
 			),
 			'credit_card_instalments'   => array(
-				'title'       => __('Maximum nº of Installments', 'woocommerce-gateway-ebanx'),
+				'title'       => __('Maximum nº of Instalments', 'woocommerce-gateway-ebanx'),
 				'type'        => 'select',
-				'class'       => 'ebanx-select ebanx-payments-option',
+				'class'       => 'wc-enhanced-select ebanx-payments-option',
 				'options'     => array(
 					'1'  => '1',
 					'2'  => '2',
@@ -265,23 +269,44 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway
 					'11' => '11',
 					'12' => '12',
 				),
-				'description' => __('Establish the maximum number of installments in which your customer can pay, as consented on your contract.', 'woocommerce-gateway-ebanx'),
+				'description' => __('Establish the maximum number of instalments in which your customer can pay, as consented on your contract.', 'woocommerce-gateway-ebanx'),
 				'desc_tip' => true
-			),
+			)
+		);
+		$currency_code = strtolower($this->merchant_currency);
+		if ( in_array(strtoupper($currency_code), WC_EBANX_Constants::$CREDIT_CARD_CURRENCIES) ) {
+			$fields["min_instalment_value_$currency_code"] = array(
+				'title' => sprintf(__('Minimum instalment (%s)', 'woocommerce-gateway-ebanx'), strtoupper($currency_code)),
+				'type' => 'number',
+				'class' => 'ebanx-payments-option',
+				'placeholder' => sprintf(__('The default is %d', 'woocommerce-gateway-ebanx'), 
+					$this->get_min_instalment_value_for_currency($currency_code) ),
+				'custom_attributes' => array(
+					'min' => $this->get_min_instalment_value_for_currency($currency_code),
+					'step' => '0.01'
+				),
+				'desc_tip' => true,
+				'description' => __('Set the minimum instalment value during checkout. The minimum EBANX allows for BRL is 20 and MXN is 100, lower values in these currencies will be ignored.', 'woocommerce-gateway-ebanx')
+			);
+		}
+		$fields = array_merge($fields, array(
 			'interest_rates_enabled' => array(
 				'type'    => 'checkbox',
 				'title'   => __('Interest Rates', 'woocommerce-gateway-ebanx'),
 				'label'   => __('Enable Interest Rates', 'woocommerce-gateway-ebanx'),
-				'description' => __('Enable and set a custom interest rate for your customers according to the number of Installments you allow the payment.'),
+				'description' => __('Enable and set a custom interest rate for your customers according to the number of Instalments you allow the payment.'),
 				'desc_tip' => true,
 				'class' => 'ebanx-payments-option'
 			)
-		);
+		));
 		$interest_rates_array = array();
 		$interest_rates_array['interest_rates_01'] = array(
 			'title' => __('1x Interest Rate in %', 'woocommerce-gateway-ebanx'),
 			'type' => 'number',
-			'step' => 'any',
+			'custom_attributes' => array(
+				'min'  => '0',
+				'step' => 'any',
+			),
 			'class' => 'interest-rates-fields ebanx-payments-option',
 			'placeholder' => __('eg: 15.7%', 'woocommerce-gateway-ebanx')
 		);
@@ -290,7 +315,10 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway
 			$interest_rates_array['interest_rates_'.sprintf("%02d", $i)] = array(
 				'title' => __($i.'x Interest Rate', 'woocommerce-gateway-ebanx'),
 				'type' => 'number',
-				'step' => 'any',
+				'custom_attributes' => array(
+					'min'  => '0',
+					'step' => 'any',
+				),
 				'class' => 'interest-rates-fields ebanx-payments-option',
 				'placeholder' => __('eg: 15.7%', 'woocommerce-gateway-ebanx')
 			);
@@ -306,7 +334,7 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway
 			),
 			'due_date_days' => array(
 				'title' => __('Days to Expiration', 'woocommerce-gateway-ebanx'),
-				'class' => 'ebanx-due-cash-date ebanx-payments-option',
+				'class' => 'wc-enhanced-select ebanx-due-cash-date ebanx-payments-option',
 				'description' => __('Define the maximum number of days on which your customer can complete the payment of: Boleto, OXXO, Sencilito, PagoEfectivo and SafetyPay.', 'woocommerce-gateway-ebanx'),
 				'desc_tip' => true
 			),
@@ -317,7 +345,7 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway
 				'number' : 'select'
 		);
 		if (!in_array($this->merchant_currency, WC_EBANX_Constants::$LOCAL_CURRENCIES)) {
-			$fields['due_date_days']['class'] .= ' ebanx-select';
+			$fields['due_date_days']['class'] .= ' wc-enhanced-select';
 			$fields['due_date_days']['options'] = array(
 				'1' => '1',
 				'2' => '2',
@@ -334,7 +362,7 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway
 				'title' => __('Enable Checkout for:', 'woocommerce-gateway-ebanx'),
 				'type'        => 'multiselect',
 				'required'    => true,
-				'class'       => 'ebanx-select ebanx-advanced-option brazil-taxes',
+				'class'       => 'wc-enhanced-select ebanx-advanced-option brazil-taxes',
 				'options'     => array(
 					'cpf' => __('CPF - Individuals', 'woocommerce-gateway-ebanx'),
 					'cnpj' => __('CNPJ - Companies', 'woocommerce-gateway-ebanx')
@@ -413,5 +441,44 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway
 
 			$properties['default'] = self::$defaults[$field];
 		}
+	}
+
+	/**
+	 * Gets the min instalment value for the provided currency
+	 * 
+	 * @param  $currency_code string The lower-cased currency code
+	 * @return double
+	 */
+	private function get_min_instalment_value_for_currency($currency_code = null) {
+		if ($currency_code === null) {
+			$currency_code = strtolower($this->merchant_currency);
+		}
+		if ( ! in_array(strtoupper($currency_code), WC_EBANX_Constants::$CREDIT_CARD_CURRENCIES) ) {
+			throw new InvalidArgumentException("The provided currency code doesn't accept Credit Card payment", 1);
+		}
+
+		switch ($currency_code) {
+			case WC_EBANX_Constants::CURRENCY_CODE_BRL:
+				return WC_EBANX_Constants::ACQUIRER_MIN_INSTALMENT_VALUE_BRL;
+			case WC_EBANX_Constants::CURRENCY_CODE_MXN:
+				return WC_EBANX_Constants::ACQUIRER_MIN_INSTALMENT_VALUE_MXN;
+			default:
+				return 0;
+		}
+	}
+
+	/**
+	 * Fetches a single setting from the gateway settings if found, otherwise it returns an optional default value
+	 *
+	 * @param  string $name    The setting name to fetch
+	 * @param  mixed  $default The default value in case setting is not present
+	 * @return mixed
+	 */
+	public function get_setting_or_default($name, $default=null) {
+		if (!isset($this->settings[$name]) || empty($this->settings[$name])) {
+			return $default;
+		}
+
+		return $this->settings[$name];
 	}
 }

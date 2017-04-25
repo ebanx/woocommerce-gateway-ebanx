@@ -39,6 +39,12 @@ abstract class WC_EBANX_Constants
 	const CURRENCY_CODE_MXN = 'MXN'; // Mexico
 	const CURRENCY_CODE_COP = 'COP'; // Colombia
 	const CURRENCY_CODE_CLP = 'CLP'; // Chile
+
+	/**
+	 * Only the currencies allowed and processed by EBANX
+	 *
+	 * @var array
+	 */
 	public static $CURRENCIES_CODES_ALLOWED = array(
 		self::CURRENCY_CODE_BRL,
 		self::CURRENCY_CODE_USD,
@@ -53,10 +59,11 @@ abstract class WC_EBANX_Constants
 	 *  Local currencies that EBANX processes
 	 */
 	public static $LOCAL_CURRENCIES = array(
-		self::CURRENCY_CODE_BRL,
-		self::CURRENCY_CODE_CLP,
-		self::CURRENCY_CODE_COP,
-		self::CURRENCY_CODE_MXN
+		self::COUNTRY_BRAZIL => self::CURRENCY_CODE_BRL,
+		self::COUNTRY_CHILE => self::CURRENCY_CODE_CLP,
+		self::COUNTRY_COLOMBIA => self::CURRENCY_CODE_COP,
+		self::COUNTRY_MEXICO => self::CURRENCY_CODE_MXN,
+		self::COUNTRY_PERU => self::CURRENCY_CODE_PEN
 	);
 
 	/**
@@ -96,6 +103,18 @@ abstract class WC_EBANX_Constants
 	public static $CREDIT_CARD_COUNTRIES = array(
 		self::COUNTRY_BRAZIL => self::COUNTRY_BRAZIL,
 		self::COUNTRY_MEXICO => self::COUNTRY_MEXICO,
+	);
+
+	/**
+	 * The countries that credit cards are processed by EBANX
+	 *
+	 * @var array
+	 */
+	public static $CREDIT_CARD_CURRENCIES = array(
+		self::CURRENCY_CODE_BRL,
+		self::CURRENCY_CODE_MXN,
+		self::CURRENCY_CODE_USD,
+		self::CURRENCY_CODE_EUR
 	);
 
 	/**
@@ -148,6 +167,27 @@ abstract class WC_EBANX_Constants
 			'citibank_' => 'Citibank',
 			'helm_bank_s.a.' => 'Helm Bank',
 		)
+	);
+
+	/**
+	 * Payment type API codes for each plugin payment gateway
+	 *
+	 * @var array
+	 */
+	public static $GATEWAY_TO_PAYMENT_TYPE_CODE = array(
+		'ebanx-banking-ticket' => '_boleto',
+		'ebanx-credit-card-br' => '_creditcard',
+		'ebanx-credit-card-mx' => '_creditcard',
+		'ebanx-debit-card' => 'debitcard',
+		'ebanx-oxxo' => '_oxxo',
+		'ebanx-sencillito' => '_sencillito',
+		'ebanx-servipag' => 'servipag',
+		'ebanx-tef' => '_tef',
+		'ebanx-pagoefectivo' => '_pagoefectivo',
+		'ebanx-safetypay' => '_safetypay',
+		'ebanx-eft' => 'eft',
+		'ebanx-baloto' => '_baloto'
+		//'ebanx-account' => '_ebanxaccount'
 	);
 
 	/**

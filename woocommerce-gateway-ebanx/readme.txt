@@ -3,7 +3,7 @@ Contributors: ebanxwp
 Tags: credit card, boleto, ebanx, woocommerce, approval rate, conversion rate, brazil, mexico, peru, colombia, chile, oxxo, baloto, cash payment, local payment one-click payment, installments, alternative payments, accept more payments
 Requires at least: 4.0
 Tested up to: 4.7
-Stable tag: 1.10.1
+Stable tag: 1.11.4
 License: MIT
 License URI: https://opensource.org/licenses/MIT
 
@@ -135,6 +135,33 @@ Yes, you can.
 4. There you go, you’re all set!
 
 == Changelog ==
+
+== 1.11.4 ==
+* Fix - Fixed float values not being accepted in interest rates [#480](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/480)
+* Fix - Added '/' to Notification URL to prevent Response Code 301 [#480](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/480)
+
+== 1.11.3 ==
+* Fix - Fixed a problem that it was incrementing a value by instalment [#463](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/463)
+
+== 1.11.2 ==
+* Fix - Fixed translation paths [#462](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/462)
+* Fix - Fixed converted value message when instalments is changed [#462](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/462)
+* Fix - Fixed problems with newer version of WooCommerce [#462](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/462)
+
+= 1.11.0 =
+* Feature - Showing the prices with IOF for Brazil before on gateways [#441](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/441)
+* Feature - Alert the merchants when HTTPS isn't present [#427](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/427)
+* Feature - Show a message to fill the integration keys when empty [#426](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/426)
+* Feature - Hooks implemented to facilitate the future integrations [#423](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/423)
+* Feature - Capture payment manually clicking on "Processing" button [#421](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/421)
+* Feature - Show a message when credit card is invalid on sandbox mode [#420](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/420)
+* Feature - Created a flash message management helper class [#414](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/414)
+* Improvement - Assets optimization by 62% faster [#429](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/429)
+* Fix - Refactored and fixed bugs of one click feature [#457](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/457)
+* Fix - Reverts the WC3 update keeping backward compatibility [#455](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/455)
+* Fix - SafetyPay Notices [#450](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/450)
+
+These are the most importante fixes and features, but another fixes and quality issues were resolved too.
 
 = 1.10.1 =
 * Fix - Removed methods to prevent fatal error [#412](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/412)

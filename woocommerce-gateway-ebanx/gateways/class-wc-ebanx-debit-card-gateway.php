@@ -87,8 +87,8 @@ class WC_EBANX_Debit_Card_Gateway extends WC_EBANX_Gateway
 	 */
 	protected function request_data($order)
 	{
-		if ( empty(WC_EBANX_Request::read('ebanx_debit_token'))
-			|| empty(WC_EBANX_Request::read('ebanx_billing_cvv')) ) {
+		if ( empty(WC_EBANX_Request::read('ebanx_debit_token', null))
+			|| empty(WC_EBANX_Request::read('ebanx_billing_cvv', null)) ) {
 			throw new Exception("Missing ebanx card params.");
 		}
 
@@ -133,8 +133,8 @@ class WC_EBANX_Debit_Card_Gateway extends WC_EBANX_Gateway
 	{
 		parent::save_order_meta_fields($order, $request);
 
-		update_post_meta($order->get_id(), '_cards_brand_name', $request->payment->payment_type_code);
-		update_post_meta($order->get_id(), '_masked_card_number', WC_EBANX_Request::read('ebanx_masked_card_number'));
+		update_post_meta($order->id, '_cards_brand_name', $request->payment->payment_type_code);
+		update_post_meta($order->id, '_masked_card_number', WC_EBANX_Request::read('ebanx_masked_card_number'));
 	}
 
 	/**
@@ -149,11 +149,11 @@ class WC_EBANX_Debit_Card_Gateway extends WC_EBANX_Gateway
 
 		$data = array(
 			'data' => array(
-				'card_brand_name' => get_post_meta($order->get_id(), '_cards_brand_name', true),
+				'card_brand_name' => get_post_meta($order->id, '_cards_brand_name', true),
 				'order_amount' => $order_amount,
-				'masked_card' => substr(get_post_meta($order->get_id(), '_masked_card_number', true), -4),
-				'customer_email' => $order->get_billing_email(),
-				'customer_name' => $order->get_billing_first_name()
+				'masked_card' => substr(get_post_meta($order->id, '_masked_card_number', true), -4),
+				'customer_email' => $order->billing_email,
+				'customer_name' => $order->billing_first_name
 			),
 			'order_status' => $order->get_status(),
 			'method' => 'debit-card'
