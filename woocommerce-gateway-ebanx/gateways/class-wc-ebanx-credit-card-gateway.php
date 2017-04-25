@@ -51,8 +51,8 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
 	 * @return void
 	 */
 	public function capture_payment_action() {
-		$order = wc_get_order($_REQUEST['order_id']);
-		$status = $_REQUEST['status'];
+		$order = wc_get_order(WC_EBANX_Request::read('order_id'));
+		$status = WC_EBANX_Request::read('status');
 		$recapture = false;
 
 		if ( $order->payment_method !== $this->id || $status !== 'processing') {
@@ -177,15 +177,16 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
 	 */
 	protected function request_data($order)
 	{
-		if (empty($_POST['ebanx_token']) ||
-			empty($_POST['ebanx_masked_card_number']) ||
-			empty($_POST['ebanx_brand']) ||
-			empty($_POST['ebanx_billing_cvv'])
+		
+		if (!WC_EBANX_Request::has('ebanx_token') ||
+			!WC_EBANX_Request::has('ebanx_masked_card_number') ||
+			!WC_EBANX_Request::has('ebanx_brand') ||
+			!WC_EBANX_Request::has('ebanx_billing_cvv')
 		) {
 			throw new Exception('MISSING-CARD-PARAMS');
 		}
 
-		if (empty($_POST['ebanx_is_one_click']) && empty($_POST['ebanx_device_fingerprint'])) {
+		if (!WC_EBANX_Request::has('ebanx_is_one_click') && !WC_EBANX_Request::has('ebanx_device_fingerprint')) {
 			throw new Exception('MISSING-DEVICE-FINGERPRINT');
 		}
 
@@ -194,19 +195,19 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
 		if (in_array($this->getTransactionAddress('country'), WC_EBANX_Constants::$CREDIT_CARD_COUNTRIES)) {
 			$data['payment']['instalments'] = '1';
 
-			if ($this->configs->settings['credit_card_instalments'] > 1 && isset($_POST['ebanx_billing_instalments'])) {
-				$data['payment']['instalments'] = $_POST['ebanx_billing_instalments'];
+			if ($this->configs->settings['credit_card_instalments'] > 1 && WC_EBANX_Request::has('ebanx_billing_instalments')) {
+				$data['payment']['instalments'] = WC_EBANX_Request::read('ebanx_billing_instalments');
 			}
 		}
 
-		if (!empty($_POST['ebanx_device_fingerprint'])) {
-			$data['device_id'] = $_POST['ebanx_device_fingerprint'];
+		if (WC_EBANX_Request::has('ebanx_device_fingerprint')) {
+			$data['device_id'] = WC_EBANX_Request::read('ebanx_device_fingerprint');
 		}
 
-		$data['payment']['payment_type_code'] = $_POST['ebanx_brand'];
+		$data['payment']['payment_type_code'] = WC_EBANX_Request::read('ebanx_brand');
 		$data['payment']['creditcard'] = array(
-			'token' => $_POST['ebanx_token'],
-			'card_cvv' => $_POST['ebanx_billing_cvv'],
+			'token' => WC_EBANX_Request::read('ebanx_token'),
+			'card_cvv' => WC_EBANX_Request::read('ebanx_billing_cvv'),
 			'auto_capture' => ($this->configs->settings['capture_enabled'] === 'yes'),
 		);
 

@@ -491,14 +491,12 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway
 					return array(
 						'name' => $product['name'],
 						'unit_price' => $product['line_subtotal'],
-					  'quantity' => $product['qty'],
+					  	'quantity' => $product['qty'],
 						'type' => $product['type']
 					);
 				}, $order->get_items()),
 			)
 		);
-
-
 
 		if (!empty($this->configs->settings['due_date_days']) && in_array($this->api_name, array_keys(WC_EBANX_Constants::$CASH_PAYMENTS_TIMEZONES)))
 		{
@@ -511,7 +509,6 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway
 		}
 
 		if ($this->getTransactionAddress('country') === WC_EBANX_Constants::COUNTRY_BRAZIL) {
-
 			$fields_options = array();
 			if (isset($this->configs->settings['brazil_taxes_options']) && is_array($this->configs->settings['brazil_taxes_options'])) {
 				$fields_options = $this->configs->settings['brazil_taxes_options'];
@@ -521,50 +518,49 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway
 				$person_type = 'business';
 			}
 			if (in_array('cpf', $fields_options) && in_array('cnpj', $fields_options)) {
-				$person_type = $_POST[$this->names['ebanx_billing_brazil_person_type']] == 'cnpj' ? 'business' : 'personal';
+				$person_type = WC_EBANX_Request::read($this->names['ebanx_billing_brazil_person_type']) == 'cnpj' ? 'business' : 'personal';
 			}
 
 
-			$has_cpf = !empty($_POST[$this->names['ebanx_billing_brazil_document']]);
-			$has_cnpj = !empty($_POST[$this->names['ebanx_billing_brazil_cnpj']]);
+			$has_cpf = !empty(WC_EBANX_Request::read($this->names['ebanx_billing_brazil_document'], null));
+			$has_cnpj = !empty(WC_EBANX_Request::read($this->names['ebanx_billing_brazil_cnpj'], null));
 
 			if (
-				empty($_POST['billing_postcode']) ||
-				empty($_POST['billing_address_1']) ||
-				empty($_POST['billing_city']) ||
-				empty($_POST['billing_state']) ||
-				($person_type == 'business' && (!$has_cnpj || empty($_POST['billing_company']))) ||
+				empty(WC_EBANX_Request::read('billing_postcode', null)) ||
+				empty(WC_EBANX_Request::read('billing_address_1', null)) ||
+				empty(WC_EBANX_Request::read('billing_city', null)) ||
+				empty(WC_EBANX_Request::read('billing_state', null)) ||
+				($person_type == 'business' && (!$has_cnpj || empty(WC_EBANX_Request::read('billing_company', null)))) ||
 				($person_type == 'personal' && !$has_cpf)
 			) {
 				throw new Exception('INVALID-FIELDS');
 			}
 
-
 			if ($person_type == 'business') {
-				$_POST['ebanx_billing_document'] = $_POST[$this->names['ebanx_billing_brazil_cnpj']];
+				WC_EBANX_Request::set('ebanx_billing_document', WC_EBANX_Request::read($this->names['ebanx_billing_brazil_cnpj']));
 			} else {
-				$_POST['ebanx_billing_document'] = $_POST[$this->names['ebanx_billing_brazil_document']];
-				$_POST['ebanx_billing_birth_date'] = $_POST[$this->names['ebanx_billing_brazil_birth_date']];
+				WC_EBANX_Request::set('ebanx_billing_document', WC_EBANX_Request::read($this->names['ebanx_billing_brazil_document']));
+				WC_EBANX_Request::set('ebanx_billing_birth_date', WC_EBANX_Request::read($this->names['ebanx_billing_brazil_birth_date']));
 			}
 		}
 
 		if ($this->getTransactionAddress('country') === WC_EBANX_Constants::COUNTRY_CHILE) {
-			if (empty($_POST[$this->names['ebanx_billing_chile_document']]) || empty($_POST[$this->names['ebanx_billing_chile_birth_date']])) {
+			if (empty(WC_EBANX_Request::read($this->names['ebanx_billing_chile_document'], null)) || empty(WC_EBANX_Request::read($this->names['ebanx_billing_chile_birth_date'], null))) {
 				throw new Exception('INVALID-FIELDS');
 			}
 
-			$_POST['ebanx_billing_document'] = $_POST[$this->names['ebanx_billing_chile_document']];
-			$_POST['ebanx_billing_birth_date'] = $_POST[$this->names['ebanx_billing_chile_birth_date']];
+			WC_EBANX_Request::set('ebanx_billing_document', WC_EBANX_Request::read($this->names['ebanx_billing_chile_document']));
+			WC_EBANX_Request::set('ebanx_billing_birth_date', WC_EBANX_Request::read($this->names['ebanx_billing_chile_birth_date']));
 		}
 
 		if ($this->getTransactionAddress('country') === WC_EBANX_Constants::COUNTRY_COLOMBIA) {
-			$_POST['ebanx_billing_document'] = $_POST[$this->names['ebanx_billing_colombia_document']];
+			WC_EBANX_Request::set('ebanx_billing_document', WC_EBANX_Request::read($this->names['ebanx_billing_colombia_document']));
 		}
 
-		$addresses = $_POST['billing_address_1'];
+		$addresses = WC_EBANX_Request::read('billing_address_1');
 
-		if (!empty($_POST['billing_address_2'])) {
-			$addresses .= " - $_POST[billing_address_2]";
+		if (!empty(WC_EBANX_Request::read('billing_address_2', null))) {
+			$addresses .= " - " . WC_EBANX_Request::read('billing_address_2');
 		}
 
 		$addresses = WC_EBANX_Helper::split_street($addresses);
@@ -577,19 +573,19 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway
 
 		$newData['payment']['person_type'] = $person_type;
 
-		if (!empty($_POST['ebanx_billing_document'])) {
-			$newData['payment']['document'] = $_POST['ebanx_billing_document'];
+		if (!empty(WC_EBANX_Request::read('ebanx_billing_document', null))) {
+			$newData['payment']['document'] = WC_EBANX_Request::read('ebanx_billing_document');
 		}
 
-		if (!empty($_POST['ebanx_billing_birth_date'])) {
-			$newData['payment']['birth_date'] = $_POST['ebanx_billing_birth_date'];
+		if (!empty(WC_EBANX_Request::read('ebanx_billing_birth_date', null))) {
+			$newData['payment']['birth_date'] = WC_EBANX_Request::read('ebanx_billing_birth_date');
 		}
 
-		if (!empty($_POST['billing_postcode'])) {
-			$newData['payment']['zipcode'] = $_POST['billing_postcode'];
+		if (!empty(WC_EBANX_Request::read('billing_postcode', null))) {
+			$newData['payment']['zipcode'] = WC_EBANX_Request::read('billing_postcode');
 		}
 
-		if (!empty($_POST['billing_address_1'])) {
+		if (!empty(WC_EBANX_Request::read('billing_address_1', null))) {
 			$newData['payment']['address'] = $street_name;
 		}
 
@@ -597,12 +593,12 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway
 			$newData['payment']['street_number'] = $street_number;
 		}
 
-		if (!empty($_POST['billing_city'])) {
-			$newData['payment']['city'] = $_POST['billing_city'];
+		if (!empty(WC_EBANX_Request::read('billing_city', null))) {
+			$newData['payment']['city'] = WC_EBANX_Request::read('billing_city');
 		}
 
-		if (!empty($_POST['billing_state'])) {
-			$newData['payment']['state'] = $_POST['billing_state'];
+		if (!empty(WC_EBANX_Request::read('billing_state', null))) {
+			$newData['payment']['state'] = WC_EBANX_Request::read('billing_state');
 		}
 
 		if ($this->getTransactionAddress('country') === WC_EBANX_Constants::COUNTRY_BRAZIL) {
@@ -611,7 +607,7 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway
 				$newData['payment']['responsible'] = array(
 					"name" => $data['payment']['name']
 				);
-				$newData['payment']['name'] = $_POST['billing_company'];
+				$newData['payment']['name'] = WC_EBANX_Request::read('billing_company');
 			}
 		}
 
@@ -626,14 +622,19 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway
 	 * @param  string $attr
 	 * @return boolean|string
 	 */
-	protected function getTransactionAddress($attr = '')
+	public function getTransactionAddress($attr = '')
 	{
-		if (empty(WC()->customer) || is_admin() || (empty($_POST['billing_country']) && empty(WC()->customer->get_country()))) {
+		if ( 
+			!isset(WC()->customer) 
+			|| is_admin() 
+			|| empty(WC_EBANX_Request::read('billing_country', null)) 
+			&& empty(WC()->customer->get_country())
+		) {
 			return false;
 		}
 
-		if (!empty($_POST['billing_country'])) {
-			$this->address['country'] = trim(strtolower($_POST['billing_country']));
+		if (!empty(WC_EBANX_Request::read('billing_country', null))) {
+			$this->address['country'] = trim(strtolower(WC_EBANX_Request::read('billing_country')));
 		} else {
 			$this->address['country'] = trim(strtolower(WC()->customer->get_country()));
 		}
@@ -759,16 +760,16 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway
 		update_post_meta($order->id, '_ebanx_payment_hash', $request->payment->hash);
 		update_post_meta($order->id, '_ebanx_payment_open_date', $request->payment->open_date);
 
-		if (isset($_POST['billing_email'])) {
-			update_post_meta($order->id, '_ebanx_payment_customer_email', sanitize_email($_POST['billing_email']));
+		if (WC_EBANX_Request::has('billing_email')) {
+			update_post_meta($order->id, '_ebanx_payment_customer_email', sanitize_email(WC_EBANX_Request::read('billing_email')));
 		}
 
-		if (isset($_POST['billing_phone'])) {
-			update_post_meta($order->id, '_ebanx_payment_customer_phone', sanitize_text_field($_POST['billing_phone']));
+		if (WC_EBANX_Request::has('billing_phone')) {
+			update_post_meta($order->id, '_ebanx_payment_customer_phone', sanitize_text_field(WC_EBANX_Request::read('billing_phone')));
 		}
 
-		if (isset($_POST['billing_address_1'])) {
-			update_post_meta($order->id, '_ebanx_payment_customer_address', sanitize_text_field($_POST['billing_address_1']));
+		if (WC_EBANX_Request::has('billing_address_1')) {
+			update_post_meta($order->id, '_ebanx_payment_customer_address', sanitize_text_field(WC_EBANX_Request::read('billing_address_1')));
 		}
 	}
 
@@ -782,36 +783,36 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway
 	{
 		if ($this->userId) {
 			if (trim(strtolower($order->billing_country)) === WC_EBANX_Constants::COUNTRY_BRAZIL) {
-				if (isset($_POST[$this->names['ebanx_billing_brazil_document']])) {
-					update_user_meta($this->userId, '_ebanx_billing_brazil_document', sanitize_text_field($_POST[$this->names['ebanx_billing_brazil_document']]));
+				if (WC_EBANX_Request::has($this->names['ebanx_billing_brazil_document'])) {
+					update_user_meta($this->userId, '_ebanx_billing_brazil_document', sanitize_text_field(WC_EBANX_Request::read($this->names['ebanx_billing_brazil_document'])));
 				}
 
-				if (isset($_POST[$this->names['ebanx_billing_brazil_birth_date']])) {
-					update_user_meta($this->userId, '_ebanx_billing_brazil_birth_date', sanitize_text_field($_POST[$this->names['ebanx_billing_brazil_birth_date']]));
+				if (WC_EBANX_Request::has($this->names['ebanx_billing_brazil_birth_date'])) {
+					update_user_meta($this->userId, '_ebanx_billing_brazil_birth_date', sanitize_text_field(WC_EBANX_Request::read($this->names['ebanx_billing_brazil_birth_date'])));
 				}
 
-				if (isset($_POST[$this->names['ebanx_billing_brazil_cnpj']])) {
-					update_user_meta($this->userId, '_ebanx_billing_brazil_cnpj', sanitize_text_field($_POST[$this->names['ebanx_billing_brazil_cnpj']]));
+				if (WC_EBANX_Request::has($this->names['ebanx_billing_brazil_cnpj'])) {
+					update_user_meta($this->userId, '_ebanx_billing_brazil_cnpj', sanitize_text_field(WC_EBANX_Request::read($this->names['ebanx_billing_brazil_cnpj'])));
 				}
 
-				if (isset($_POST[$this->names['ebanx_billing_brazil_person_type']])) {
-					update_user_meta($this->userId, '_ebanx_billing_brazil_person_type', sanitize_text_field($_POST[$this->names['ebanx_billing_brazil_person_type']]));
+				if (WC_EBANX_Request::has($this->names['ebanx_billing_brazil_person_type'])) {
+					update_user_meta($this->userId, '_ebanx_billing_brazil_person_type', sanitize_text_field(WC_EBANX_Request::read($this->names['ebanx_billing_brazil_person_type'])));
 				}
 			}
 
 			if (trim(strtolower($order->billing_country)) === WC_EBANX_Constants::COUNTRY_CHILE) {
-				if (isset($_POST['ebanx_billing_chile_document'])) {
-					update_user_meta($this->userId, '_ebanx_billing_chile_document', sanitize_text_field($_POST['ebanx_billing_chile_document']));
+				if (WC_EBANX_Request::has('ebanx_billing_chile_document')) {
+					update_user_meta($this->userId, '_ebanx_billing_chile_document', sanitize_text_field(WC_EBANX_Request::read('ebanx_billing_chile_document')));
 				}
 
-				if (isset($_POST['ebanx_billing_chile_birth_date'])) {
-					update_user_meta($this->userId, '_ebanx_billing_chile_birth_date', sanitize_text_field($_POST['ebanx_billing_chile_birth_date']));
+				if (WC_EBANX_Request::has('ebanx_billing_chile_birth_date')) {
+					update_user_meta($this->userId, '_ebanx_billing_chile_birth_date', sanitize_text_field(WC_EBANX_Request::read('ebanx_billing_chile_birth_date')));
 				}
 			}
 
 			if ($this->getTransactionAddress('country') === WC_EBANX_Constants::COUNTRY_COLOMBIA) {
-				if (isset($_POST['ebanx_billing_colombia_document'])) {
-					update_user_meta($this->userId, '_ebanx_billing_colombia_document', sanitize_text_field($_POST['ebanx_billing_colombia_document']));
+				if (WC_EBANX_Request::has('ebanx_billing_colombia_document')) {
+					update_user_meta($this->userId, '_ebanx_billing_colombia_document', sanitize_text_field(WC_EBANX_Request::read('ebanx_billing_colombia_document')));
 				}
 			}
 		}
