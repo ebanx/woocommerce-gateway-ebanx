@@ -78,7 +78,7 @@ SVG;
 	 * @return void
 	 */
 	private static function render_stylesheet($filename) {
-		$file_path = plugins_url('assets/css/'.$filename.'.css', WC_EBANX::DIR);
+		$file_path = WC_EBANX_DIR . 'assets/css/'.$filename.'.css';
 		$contents = file_get_contents($file_path);
 		echo '<style>'.$contents.'</style>';
 	}
@@ -105,7 +105,7 @@ SVG;
 	}
 
 	private static function render_inline_script($filename) {
-		$file_path = plugins_url('assets/js/'.$filename.'.js', WC_EBANX::DIR);
+		$file_path = WC_EBANX_DIR . 'assets/js/'.$filename.'.js';
 		$contents = file_get_contents($file_path);
 		echo '<script>'.$contents.'</script>';
 	}
