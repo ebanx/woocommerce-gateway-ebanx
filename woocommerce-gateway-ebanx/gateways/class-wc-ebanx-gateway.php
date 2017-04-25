@@ -558,10 +558,6 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway
 		}
 
 		if ($this->getTransactionAddress('country') === WC_EBANX_Constants::COUNTRY_COLOMBIA) {
-			if (empty($_POST[$this->names['ebanx_billing_colombia_document']])) {
-				throw new Exception('INVALID-FIELDS');
-			}
-
 			$_POST['ebanx_billing_document'] = $_POST[$this->names['ebanx_billing_colombia_document']];
 		}
 
@@ -859,7 +855,8 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway
 		}
 
 		if (
-			$request->payment->transaction_status->code === 'NOK'
+			isset($request->payment->transaction_status)
+			&& $request->payment->transaction_status->code === 'NOK'
 			&& $request->payment->transaction_status->acquirer === 'EBANX'
 			&& $this->is_sandbox_mode
 		) {
