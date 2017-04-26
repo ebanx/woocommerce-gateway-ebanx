@@ -361,7 +361,7 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway
 		}
 
 		if ( empty($reason) ) {
-			$reason = 'No reason specified';
+			$reason = __('No reason specified.', 'woocommerce-gateway-ebanx');
 		}
 
 		$data = array(
