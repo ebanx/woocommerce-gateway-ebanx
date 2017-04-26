@@ -333,7 +333,7 @@ class WC_EBANX_One_Click {
 				'instalments' => $messages['instalments'],
 				'instalments_terms' => $instalments_terms,
 				'nonce' => wp_create_nonce( self::CREATE_ORDER_ACTION ),
-				'action' => $this->orderAction,
+				'action' => self::CREATE_ORDER_ACTION,
 				'permalink' => get_permalink($product->id),
 				'country' => $country,
 				'currency' => $currency
