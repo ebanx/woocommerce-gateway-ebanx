@@ -35,3 +35,9 @@ You can create a new [Issue](https://github.com/ebanx/woocommerce-gateway-ebanx/
 ## So you want to code...
 
 If you want to code (and you are not an ebanker [yet](https://ebanx.recruiterbox.com/)) all you have to do is fork our repo create a [well named]branch from develop and make a [pull request](https://github.com/ebanx/woocommerce-gateway-ebanx/compare) to our develop.
+
+## Documentation
+
+Documentation is in `apidocs` folder.
+
+To generate a new documentation, install `phpdoc` and run at root folder `phpdoc --template="clean" -d . -i "travis/*,woocommerce-gateway-ebanx/vendor/*,woocommerce-gateway-ebanx/templates/*" -t apidocs`

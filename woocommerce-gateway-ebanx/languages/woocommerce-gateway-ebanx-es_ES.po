@@ -1,15 +1,15 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
-"POT-Creation-Date: 2017-04-08 12:41-0300\n"
-"PO-Revision-Date: 2017-04-08 12:42-0300\n"
+"POT-Creation-Date: 2017-04-25 13:30-0300\n"
+"PO-Revision-Date: 2017-04-25 13:30-0300\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.0\n"
+"X-Generator: Poedit 2.0.1\n"
 "X-Poedit-Basepath: ..\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -56,51 +56,51 @@ msgstr ""
 msgid "Pague com boleto bancário."
 msgstr ""
 
-#: gateways/class-wc-ebanx-credit-card-br-gateway.php:13
+#: gateways/class-wc-ebanx-credit-card-br-gateway.php:14
 msgid "EBANX - Credit Card Brazil"
 msgstr "EBANX - Tarjetas de Crédito"
 
-#: gateways/class-wc-ebanx-credit-card-br-gateway.php:15
+#: gateways/class-wc-ebanx-credit-card-br-gateway.php:16
 msgid "Cartão de Crédito"
 msgstr ""
 
-#: gateways/class-wc-ebanx-credit-card-br-gateway.php:16
+#: gateways/class-wc-ebanx-credit-card-br-gateway.php:17
 msgid "Pague com cartão de crédito."
 msgstr ""
 
-#: gateways/class-wc-ebanx-credit-card-gateway.php:42
+#: gateways/class-wc-ebanx-credit-card-gateway.php:47
 msgid "Capture by EBANX"
 msgstr ""
 
-#: gateways/class-wc-ebanx-credit-card-gateway.php:84
+#: gateways/class-wc-ebanx-credit-card-gateway.php:89
 #, php-format
-msgid "EBANX: Transaction captured by %s"
+msgid "EBANX: The transaction was captured with the following: %s"
 msgstr ""
 
-#: gateways/class-wc-ebanx-credit-card-gateway.php:90
+#: gateways/class-wc-ebanx-credit-card-gateway.php:95
 msgid "EBANX: Transaction Failed"
 msgstr ""
 
-#: gateways/class-wc-ebanx-credit-card-gateway.php:94
+#: gateways/class-wc-ebanx-credit-card-gateway.php:99
 msgid "EBANX: Transaction Pending"
 msgstr ""
 
-#: gateways/class-wc-ebanx-credit-card-gateway.php:110
+#: gateways/class-wc-ebanx-credit-card-gateway.php:116
 #, php-format
 msgid ""
 "EBANX - Unknown error, enter in contact with Ebanx and inform this error "
 "code: %s."
 msgstr ""
 
-#: gateways/class-wc-ebanx-credit-card-gateway.php:115
+#: gateways/class-wc-ebanx-credit-card-gateway.php:121
 msgid "EBANX - Payment cannot be captured, changing it to Failed."
 msgstr ""
 
-#: gateways/class-wc-ebanx-credit-card-gateway.php:119
+#: gateways/class-wc-ebanx-credit-card-gateway.php:125
 msgid "EBANX - Payment has already been captured, changing it to Processing."
 msgstr ""
 
-#: gateways/class-wc-ebanx-credit-card-gateway.php:123
+#: gateways/class-wc-ebanx-credit-card-gateway.php:129
 msgid "EBANX - Payment cannot be captured, changing it to Pending."
 msgstr ""
 
@@ -142,340 +142,357 @@ msgstr ""
 msgid "Paga con PSE - Pago Seguros en Línea."
 msgstr ""
 
-#: gateways/class-wc-ebanx-gateway.php:129
+#: gateways/class-wc-ebanx-gateway.php:154
 msgid "Select an option"
 msgstr ""
 
-#: gateways/class-wc-ebanx-gateway.php:133
-#: gateways/class-wc-ebanx-global-gateway.php:339
+#: gateways/class-wc-ebanx-gateway.php:158
+#: gateways/class-wc-ebanx-global-gateway.php:367
 msgid "CPF - Individuals"
 msgstr ""
 
-#: gateways/class-wc-ebanx-gateway.php:134
-#: gateways/class-wc-ebanx-global-gateway.php:340
+#: gateways/class-wc-ebanx-gateway.php:159
+#: gateways/class-wc-ebanx-global-gateway.php:368
 msgid "CNPJ - Companies"
 msgstr ""
 
-#: gateways/class-wc-ebanx-gateway.php:140
-#: gateways/class-wc-ebanx-gateway.php:160
+#: gateways/class-wc-ebanx-gateway.php:165
+#: gateways/class-wc-ebanx-gateway.php:185
 msgid "Birth Date"
 msgstr "Fecha de Nacimiento"
 
-#: gateways/class-wc-ebanx-gateway.php:367
+#: gateways/class-wc-ebanx-gateway.php:385
 #, php-format
-msgid "Refund requested to EBANX %s - Refund ID: %s - Reason: %s"
-msgstr ""
-
-#: gateways/class-wc-ebanx-gateway.php:857
-msgid "EBANX: Payment failed."
-msgstr ""
-
-#: gateways/class-wc-ebanx-gateway.php:862
-msgid "EBANX: Payment opened."
-msgstr ""
-
-#: gateways/class-wc-ebanx-gateway.php:867
-msgid "EBANX: Waiting payment."
+msgid "EBANX: Refund requested to EBANX %s - Refund ID: %s - Reason: %s."
 msgstr ""
 
 #: gateways/class-wc-ebanx-gateway.php:872
-msgid "EBANX: Transaction paid."
+msgid "EBANX: The payment has failed."
 msgstr ""
 
-#: gateways/class-wc-ebanx-gateway.php:928
+#: gateways/class-wc-ebanx-gateway.php:877
+msgid "EBANX: The payment was opened."
+msgstr ""
+
+#: gateways/class-wc-ebanx-gateway.php:882
+msgid "EBANX: The order is awaiting payment."
+msgstr ""
+
+#: gateways/class-wc-ebanx-gateway.php:887
+msgid "EBANX: The transaction was paid."
+msgstr ""
+
+#: gateways/class-wc-ebanx-gateway.php:943
 #, php-format
-msgid "Refund confirmed to EBANX - Refund ID: %s"
+msgid "EBANX: Your Refund was confirmed to EBANX - Refund ID: %s"
 msgstr ""
 
-#: gateways/class-wc-ebanx-gateway.php:931
+#: gateways/class-wc-ebanx-gateway.php:946
 #, php-format
-msgid "Refund canceled to EBANX - Refund ID: %s"
+msgid "EBANX: Your Refund was canceled to EBANX - Refund ID: %s"
 msgstr ""
 
-#: gateways/class-wc-ebanx-global-gateway.php:61
+#: gateways/class-wc-ebanx-global-gateway.php:65
 msgid "EBANX"
 msgstr ""
 
-#: gateways/class-wc-ebanx-global-gateway.php:62
+#: gateways/class-wc-ebanx-global-gateway.php:66
 msgid ""
 "EBANX easy-to-setup checkout allows your business to accept local payments "
 "in Brazil, Mexico, Colombia, Chile & Peru."
 msgstr ""
 
-#: gateways/class-wc-ebanx-global-gateway.php:89
+#: gateways/class-wc-ebanx-global-gateway.php:93
 msgid "Days To Expiration must be greater than or equal to 1."
 msgstr ""
 
-#: gateways/class-wc-ebanx-global-gateway.php:107
+#: gateways/class-wc-ebanx-global-gateway.php:111
 msgid "Integration"
 msgstr ""
 
-#: gateways/class-wc-ebanx-global-gateway.php:109
+#: gateways/class-wc-ebanx-global-gateway.php:113
 msgid ""
 "You can obtain the integration keys in the settings section, logging in to "
 "the <a href=\"https://www.ebanx.com/business/en/dashboard\">EBANX Dashboard."
 "</a>"
 msgstr ""
 
-#: gateways/class-wc-ebanx-global-gateway.php:112
+#: gateways/class-wc-ebanx-global-gateway.php:116
 msgid "Sandbox Integration Key"
 msgstr ""
 
-#: gateways/class-wc-ebanx-global-gateway.php:116
+#: gateways/class-wc-ebanx-global-gateway.php:120
 msgid "Sandbox Public Integration Key"
 msgstr ""
 
-#: gateways/class-wc-ebanx-global-gateway.php:120
+#: gateways/class-wc-ebanx-global-gateway.php:124
 msgid "Live Integration Key"
 msgstr ""
 
-#: gateways/class-wc-ebanx-global-gateway.php:124
+#: gateways/class-wc-ebanx-global-gateway.php:128
 msgid "Live Public Integration Key"
 msgstr ""
 
-#: gateways/class-wc-ebanx-global-gateway.php:128
+#: gateways/class-wc-ebanx-global-gateway.php:132
 msgid "EBANX Sandbox"
 msgstr ""
 
-#: gateways/class-wc-ebanx-global-gateway.php:130
+#: gateways/class-wc-ebanx-global-gateway.php:134
 msgid "Enable Sandbox Mode"
 msgstr ""
 
-#: gateways/class-wc-ebanx-global-gateway.php:131
+#: gateways/class-wc-ebanx-global-gateway.php:135
 msgid ""
 "EBANX Sandbox is a testing environment that mimics the live environment. Use "
 "it to make payment requests to see how your ecommerce processes them."
 msgstr ""
 
-#: gateways/class-wc-ebanx-global-gateway.php:135
+#: gateways/class-wc-ebanx-global-gateway.php:139
 msgid "Debug Log"
 msgstr ""
 
-#: gateways/class-wc-ebanx-global-gateway.php:136
+#: gateways/class-wc-ebanx-global-gateway.php:140
 msgid "Enable Debug Log"
 msgstr ""
 
-#: gateways/class-wc-ebanx-global-gateway.php:137
+#: gateways/class-wc-ebanx-global-gateway.php:141
 msgid "Record all errors that occur when executing a transaction."
 msgstr ""
 
-#: gateways/class-wc-ebanx-global-gateway.php:142
+#: gateways/class-wc-ebanx-global-gateway.php:146
 msgid "Enable Payment Methods"
 msgstr ""
 
-#: gateways/class-wc-ebanx-global-gateway.php:144
+#: gateways/class-wc-ebanx-global-gateway.php:148
 msgid ""
 "Set up payment methods for your checkout. Confirm that method is enabled on "
 "your contract."
 msgstr ""
 
-#: gateways/class-wc-ebanx-global-gateway.php:147
+#: gateways/class-wc-ebanx-global-gateway.php:151
 msgid "Brazil"
 msgstr ""
 
-#: gateways/class-wc-ebanx-global-gateway.php:164
+#: gateways/class-wc-ebanx-global-gateway.php:168
 msgid "Mexico"
 msgstr ""
 
-#: gateways/class-wc-ebanx-global-gateway.php:179
+#: gateways/class-wc-ebanx-global-gateway.php:183
 msgid "Chile"
 msgstr ""
 
-#: gateways/class-wc-ebanx-global-gateway.php:192
+#: gateways/class-wc-ebanx-global-gateway.php:196
 msgid "Colombia"
 msgstr ""
 
-#: gateways/class-wc-ebanx-global-gateway.php:205
+#: gateways/class-wc-ebanx-global-gateway.php:209
 msgid "Peru"
 msgstr ""
 
-#: gateways/class-wc-ebanx-global-gateway.php:218
-msgid "Payments Options"
+#: gateways/class-wc-ebanx-global-gateway.php:222
+msgid "Payment Options"
 msgstr ""
 
-#: gateways/class-wc-ebanx-global-gateway.php:222
+#: gateways/class-wc-ebanx-global-gateway.php:226
 msgid "Credit Card"
 msgstr ""
 
-#: gateways/class-wc-ebanx-global-gateway.php:227
+#: gateways/class-wc-ebanx-global-gateway.php:231
 msgid "Save Card Data"
 msgstr ""
 
-#: gateways/class-wc-ebanx-global-gateway.php:229
+#: gateways/class-wc-ebanx-global-gateway.php:233
 msgid "Enable saving card data"
 msgstr ""
 
-#: gateways/class-wc-ebanx-global-gateway.php:230
+#: gateways/class-wc-ebanx-global-gateway.php:234
 msgid ""
 "Allow your customer to save credit card and debit card data for future "
 "purchases."
 msgstr ""
 
-#: gateways/class-wc-ebanx-global-gateway.php:236
+#: gateways/class-wc-ebanx-global-gateway.php:240
 msgid "One-Click Payment"
 msgstr ""
 
-#: gateways/class-wc-ebanx-global-gateway.php:237
+#: gateways/class-wc-ebanx-global-gateway.php:241
 msgid "Enable one-click-payment"
 msgstr ""
 
-#: gateways/class-wc-ebanx-global-gateway.php:238
+#: gateways/class-wc-ebanx-global-gateway.php:242
 msgid ""
 "Allow your customer to complete payments in one-click using credit cards "
 "saved."
 msgstr ""
 
-#: gateways/class-wc-ebanx-global-gateway.php:244
+#: gateways/class-wc-ebanx-global-gateway.php:248
 msgid "Enable Auto-Capture"
 msgstr ""
 
-#: gateways/class-wc-ebanx-global-gateway.php:245
+#: gateways/class-wc-ebanx-global-gateway.php:249
 msgid "Capture the payment immediately"
 msgstr ""
 
-#: gateways/class-wc-ebanx-global-gateway.php:246
+#: gateways/class-wc-ebanx-global-gateway.php:250
 msgid ""
 "Automatically capture payments from your customers, just for credit card. "
 "Otherwise you will need to capture the payment going to: WooCommerce -> "
 "Orders. Not captured payments will be cancelled in 4 days."
 msgstr ""
 
-#: gateways/class-wc-ebanx-global-gateway.php:251
-msgid "Maximum nº of Installments"
+#: gateways/class-wc-ebanx-global-gateway.php:255
+msgid "Maximum nº of Instalments"
 msgstr ""
 
-#: gateways/class-wc-ebanx-global-gateway.php:268
+#: gateways/class-wc-ebanx-global-gateway.php:272
 msgid ""
-"Establish the maximum number of installments in which your customer can pay, "
+"Establish the maximum number of instalments in which your customer can pay, "
 "as consented on your contract."
 msgstr ""
 
-#: gateways/class-wc-ebanx-global-gateway.php:273
-msgid "Interest Rates"
-msgstr ""
-
-#: gateways/class-wc-ebanx-global-gateway.php:274
-msgid "Enable Interest Rates"
-msgstr ""
-
-#: gateways/class-wc-ebanx-global-gateway.php:275
-msgid ""
-"Enable and set a custom interest rate for your customers according to the "
-"number of Installments you allow the payment."
+#: gateways/class-wc-ebanx-global-gateway.php:279
+#, php-format
+msgid "Minimum instalment (%s)"
 msgstr ""
 
 #: gateways/class-wc-ebanx-global-gateway.php:282
+#, php-format
+msgid "The default is %d"
+msgstr ""
+
+#: gateways/class-wc-ebanx-global-gateway.php:289
+msgid ""
+"Set the minimum instalment value during checkout. The minimum EBANX allows "
+"for BRL is 20 and MXN is 100, lower values in these currencies will be "
+"ignored."
+msgstr ""
+
+#: gateways/class-wc-ebanx-global-gateway.php:295
+msgid "Interest Rates"
+msgstr ""
+
+#: gateways/class-wc-ebanx-global-gateway.php:296
+msgid "Enable Interest Rates"
+msgstr ""
+
+#: gateways/class-wc-ebanx-global-gateway.php:297
+msgid ""
+"Enable and set a custom interest rate for your customers according to the "
+"number of Instalments you allow the payment."
+msgstr ""
+
+#: gateways/class-wc-ebanx-global-gateway.php:304
 msgid "1x Interest Rate in %"
 msgstr ""
 
-#: gateways/class-wc-ebanx-global-gateway.php:286
-#: gateways/class-wc-ebanx-global-gateway.php:295
+#: gateways/class-wc-ebanx-global-gateway.php:311
+#: gateways/class-wc-ebanx-global-gateway.php:323
 msgid "eg: 15.7%"
 msgstr ""
 
-#: gateways/class-wc-ebanx-global-gateway.php:291
+#: gateways/class-wc-ebanx-global-gateway.php:316
 msgid "x Interest Rate"
 msgstr ""
 
-#: gateways/class-wc-ebanx-global-gateway.php:303
+#: gateways/class-wc-ebanx-global-gateway.php:331
 msgid "Cash Payments"
 msgstr ""
 
-#: gateways/class-wc-ebanx-global-gateway.php:308
+#: gateways/class-wc-ebanx-global-gateway.php:336
 msgid "Days to Expiration"
 msgstr ""
 
-#: gateways/class-wc-ebanx-global-gateway.php:310
+#: gateways/class-wc-ebanx-global-gateway.php:338
 msgid ""
 "Define the maximum number of days on which your customer can complete the "
 "payment of: Boleto, OXXO, Sencilito, PagoEfectivo and SafetyPay."
 msgstr ""
 
-#: gateways/class-wc-ebanx-global-gateway.php:330
+#: gateways/class-wc-ebanx-global-gateway.php:358
 msgid "Advanced Options"
 msgstr ""
 
-#: gateways/class-wc-ebanx-global-gateway.php:334
+#: gateways/class-wc-ebanx-global-gateway.php:362
 msgid "Enable Checkout for:"
 msgstr ""
 
-#: gateways/class-wc-ebanx-global-gateway.php:343
+#: gateways/class-wc-ebanx-global-gateway.php:371
 msgid ""
 "In order to process with the EBANX Plugin in Brazil there a few mandatory "
 "fields such as CPF identification for individuals and CNPJ for companies."
 msgstr ""
 
-#: gateways/class-wc-ebanx-global-gateway.php:347
+#: gateways/class-wc-ebanx-global-gateway.php:375
 msgid "Checkout Manager"
 msgstr ""
 
-#: gateways/class-wc-ebanx-global-gateway.php:348
+#: gateways/class-wc-ebanx-global-gateway.php:376
 msgid "Use my checkout manager fields"
 msgstr ""
 
-#: gateways/class-wc-ebanx-global-gateway.php:351
+#: gateways/class-wc-ebanx-global-gateway.php:379
 msgid ""
 "If you make use of a Checkout Manager, please identify the HTML name "
 "attribute of the fields."
 msgstr ""
 
-#: gateways/class-wc-ebanx-global-gateway.php:355
+#: gateways/class-wc-ebanx-global-gateway.php:383
 msgid "Entity Type Selector"
 msgstr ""
 
-#: gateways/class-wc-ebanx-global-gateway.php:358
+#: gateways/class-wc-ebanx-global-gateway.php:386
 msgid "eg: billing_brazil_entity"
 msgstr ""
 
-#: gateways/class-wc-ebanx-global-gateway.php:361
+#: gateways/class-wc-ebanx-global-gateway.php:389
 msgid "CPF"
 msgstr ""
 
-#: gateways/class-wc-ebanx-global-gateway.php:364
+#: gateways/class-wc-ebanx-global-gateway.php:392
 msgid "eg: billing_brazil_cpf"
 msgstr ""
 
-#: gateways/class-wc-ebanx-global-gateway.php:367
+#: gateways/class-wc-ebanx-global-gateway.php:395
 #, fuzzy
 #| msgid "Birth Date"
 msgid "Birthdate Brazil"
 msgstr "Fecha de Nacimiento"
 
-#: gateways/class-wc-ebanx-global-gateway.php:370
+#: gateways/class-wc-ebanx-global-gateway.php:398
 msgid "eg: billing_brazil_birth_date"
 msgstr ""
 
-#: gateways/class-wc-ebanx-global-gateway.php:373
+#: gateways/class-wc-ebanx-global-gateway.php:401
 msgid "CNPJ"
 msgstr ""
 
-#: gateways/class-wc-ebanx-global-gateway.php:376
+#: gateways/class-wc-ebanx-global-gateway.php:404
 msgid "eg: billing_brazil_cnpj"
 msgstr ""
 
-#: gateways/class-wc-ebanx-global-gateway.php:379
+#: gateways/class-wc-ebanx-global-gateway.php:407
 msgid "RUT"
 msgstr ""
 
-#: gateways/class-wc-ebanx-global-gateway.php:382
+#: gateways/class-wc-ebanx-global-gateway.php:410
 msgid "eg: billing_chile_document"
 msgstr ""
 
-#: gateways/class-wc-ebanx-global-gateway.php:385
+#: gateways/class-wc-ebanx-global-gateway.php:413
 #, fuzzy
 #| msgid "Birth Date"
 msgid "Birthdate Chile"
 msgstr "Fecha de Nacimiento"
 
-#: gateways/class-wc-ebanx-global-gateway.php:388
+#: gateways/class-wc-ebanx-global-gateway.php:416
 msgid "eg: billing_chile_birth_date"
 msgstr ""
 
-#: gateways/class-wc-ebanx-global-gateway.php:391
+#: gateways/class-wc-ebanx-global-gateway.php:419
 msgid "DNI"
 msgstr ""
 
-#: gateways/class-wc-ebanx-global-gateway.php:394
+#: gateways/class-wc-ebanx-global-gateway.php:422
 msgid "eg: billing_colombia_document"
 msgstr ""
 
@@ -559,39 +576,60 @@ msgid ""
 "transactions will be processed."
 msgstr ""
 
-#: services/class-wc-ebanx-checker.php:38
+#: services/class-wc-ebanx-checker.php:85
 #, php-format
 msgid ""
 "EBANX - We are almost there. To start selling, <a href=\"%s\">set your "
 "integration keys.</a>"
 msgstr ""
 
-#: services/class-wc-ebanx-checker.php:94
+#: services/class-wc-ebanx-checker.php:112
+#, php-format
+msgid ""
+"EBANX - Your <strong>%s Integration Key</strong> is invalid, please <a href="
+"\"%s\">adjust your settings</a>."
+msgstr ""
+
+#: services/class-wc-ebanx-checker.php:148
+#, php-format
+msgid ""
+"EBANX - Your <strong>%s Public Integration Key</strong> is invalid, please "
+"<a href=\"%s\">adjust your settings</a>."
+msgstr ""
+
+#: services/class-wc-ebanx-checker.php:174
+#, php-format
+msgid ""
+"EBANX - Could not connect to our servers. Please check if your server can "
+"reach our API (<a href=\"%1$s\">%1$s</a>)."
+msgstr ""
+
+#: services/class-wc-ebanx-checker.php:201
 #, php-format
 msgid ""
 "EBANX - The minimum PHP version required for this plugin is %1$s. You are "
 "running %2$s."
 msgstr ""
 
-#: services/class-wc-ebanx-checker.php:102
+#: services/class-wc-ebanx-checker.php:209
 msgid "EBANX - It requires WooCommerce to be activated to work."
 msgstr ""
 
-#: services/class-wc-ebanx-checker.php:108
+#: services/class-wc-ebanx-checker.php:215
 #, php-format
 msgid ""
 "EBANX - The minimum WooCommerce version required for this plugin is %1$s. "
 "You are running %2$s."
 msgstr ""
 
-#: services/class-wc-ebanx-checker.php:116
+#: services/class-wc-ebanx-checker.php:223
 #, php-format
 msgid ""
 "EBANX - The minimum WordPress version required for this plugin is %1$s. You "
 "are running %2$s."
 msgstr ""
 
-#: services/class-wc-ebanx-checker.php:132
+#: services/class-wc-ebanx-checker.php:239
 #, php-format
 msgid ""
 "EBANX Gateway - Does not support the Currency you have set on the "
@@ -599,7 +637,7 @@ msgid ""
 "following: %1$s."
 msgstr ""
 
-#: services/class-wc-ebanx-checker.php:151
+#: services/class-wc-ebanx-checker.php:258
 msgid ""
 "EBANX - To improve the site security, we recommend the use of HTTPS protocol "
 "on site pages."
@@ -609,11 +647,11 @@ msgstr ""
 msgid "View Banking Ticket"
 msgstr ""
 
-#: services/class-wc-ebanx-one-click.php:116
+#: services/class-wc-ebanx-one-click.php:143
 msgid "EBANX: Unable to create the payment via one click."
 msgstr ""
 
-#: services/class-wc-ebanx-one-click.php:299
+#: services/class-wc-ebanx-one-click.php:332
 msgid "Pay with one click"
 msgstr ""
 
@@ -624,34 +662,40 @@ msgid ""
 msgstr ""
 
 #: services/class-wc-ebanx-payment-by-link.php:114
-msgid "Order created via EBANX."
+msgid "EBANX: Your order was created via EBANX."
 msgstr ""
 
 #: services/class-wc-ebanx-payment-validator.php:82
-msgid "You can only create payment links on pending orders."
+msgid ""
+"Payment links can only be created when the order status is selected as "
+"Pending Payments."
 msgstr ""
 
 #: services/class-wc-ebanx-payment-validator.php:96
 #, php-format
-msgid "We can't proccess %s in the selected country."
+msgid "The selected Country doesn't support the chosen Currency (%s)."
 msgstr ""
 
 #: services/class-wc-ebanx-payment-validator.php:109
-msgid "The total amount needs to be greater than $1."
+msgid "The minimum total amount is $1, please pick a greater value."
 msgstr ""
 
 #: services/class-wc-ebanx-payment-validator.php:122
 msgid ""
-"EBANX only support the countries: Brazil, Mexico, Peru, Colombia and Chile. "
-"Please, use one of these."
+"EBANX only support the following Countries: Brazil, Mexico, Peru, Colombia "
+"and Chile. Select one of these to complete your order."
 msgstr ""
 
 #: services/class-wc-ebanx-payment-validator.php:134
-msgid "The customer e-mal is required, please provide a valid customer e-mail."
+msgid ""
+"The customer email is a required field. Please provide a valid customer e-"
+"mail."
 msgstr ""
 
 #: services/class-wc-ebanx-payment-validator.php:168
-msgid "Paying with EBANX account is not avaible yet."
+msgid ""
+"The EBANX account is not available yet as payment method, you will hear "
+"about that soon!"
 msgstr ""
 
 #: services/class-wc-ebanx-payment-validator.php:182
@@ -659,7 +703,7 @@ msgid "EBANX does not support the selected payment method."
 msgstr ""
 
 #: services/class-wc-ebanx-payment-validator.php:197
-msgid "The selected payment method is not available on the selected country."
+msgid "The selected payment method is not available on the chosen Country."
 msgstr ""
 
 #: templates/admin-order-details.php:2
@@ -725,7 +769,6 @@ msgid "Resumo de la compra:"
 msgstr ""
 
 #: templates/debit-card/payment-processing.php:17
-#: templates/ebanx-credit-card-br/payment-processing.php:17
 #: templates/ebanx-credit-card-mx/payment-processing.php:17
 msgid "Valor:"
 msgstr ""
@@ -762,18 +805,18 @@ msgid "Usar um outro cartão"
 msgstr ""
 
 #: templates/ebanx-credit-card-br/payment-processing.php:16
-msgid "Resumo da compra:"
+msgid "Valor a pagar com IOF (0.38%):"
 msgstr ""
 
-#: templates/ebanx-credit-card-br/payment-processing.php:19
+#: templates/ebanx-credit-card-br/payment-processing.php:18
 msgid "parcelas de"
 msgstr ""
 
-#: templates/ebanx-credit-card-br/payment-processing.php:21
+#: templates/ebanx-credit-card-br/payment-processing.php:20
 msgid "Pagamento à vista"
 msgstr ""
 
-#: templates/ebanx-credit-card-br/payment-processing.php:24
+#: templates/ebanx-credit-card-br/payment-processing.php:23
 msgid "Obrigado por ter comprado conosco."
 msgstr ""
 
@@ -853,7 +896,7 @@ msgstr "Procesando..."
 msgid "Pay Now"
 msgstr "Pagar"
 
-#: templates/payment-by-link-action.php:6 woocommerce-gateway-ebanx.php:766
+#: templates/payment-by-link-action.php:6 woocommerce-gateway-ebanx.php:628
 msgid "Create EBANX Payment Link"
 msgstr ""
 
@@ -880,6 +923,6 @@ msgstr "Pago realizado con Servipag."
 msgid "Currency %s is not supported. Works only with Brazilian Real."
 msgstr ""
 
-#: woocommerce-gateway-ebanx.php:602
+#: woocommerce-gateway-ebanx.php:565
 msgid "Settings"
 msgstr ""
