@@ -15,7 +15,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 <p><strong><?php _e(sprintf('Seu pagamento foi confirmado, %s.', $customer_name), 'woocommerce-gateway-ebanx') ?></strong></p>
 <p><?php _e('Valor a pagar com IOF (0.38%):', 'woocommerce-gateway-ebanx') ?> <?php echo $total ?></p>
 <?php if ($instalments_number > 1) : ?>
-    <p><?php echo $instalments_number ?> <?php _e('parcelas de', 'woocommerce-gateway-ebanx') ?> <?php echo $instalments_amount ?></p>
+    <p class="ebanx-payment-type"><?php echo $instalments_number ?> <?php _e('parcelas de', 'woocommerce-gateway-ebanx') ?> <?php echo $instalments_amount ?></p>
 <?php else : ?>
     <p class="ebanx-payment-type"><?php _e('Pagamento à vista', 'woocommerce-gateway-ebanx') ?></p>
 <?php endif; ?>

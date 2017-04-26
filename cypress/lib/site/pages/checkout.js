@@ -41,7 +41,7 @@ const checkoutPage = (function (test) {
         ccNumber: '#ebanx-card-number',
         ccDueDate: '#ebanx-card-expiry',
         ccCVV: '#ebanx-card-cvv',
-        ccInstalments: '#ebanx-container-new-credit-card .ebanx-instalments',
+        ccInstalments: '#ebanx-container-new-credit-card select.ebanx-instalments',
       }
     }
   };
