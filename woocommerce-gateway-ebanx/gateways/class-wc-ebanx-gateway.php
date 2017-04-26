@@ -360,6 +360,10 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway
 			return false;
 		}
 
+		if ( empty($reason) ) {
+			$reason = __('No reason specified.', 'woocommerce-gateway-ebanx');
+		}
+
 		$data = array(
 			'hash'        => $hash,
 			'amount'      => $amount,
