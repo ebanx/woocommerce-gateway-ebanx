@@ -108,7 +108,7 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
 	 * @return stdClass
 	 */
 	public function check_capture_errors($response) {
-		if ($response->status !== 'ERROR') {
+		if ( $response->status !== 'ERROR' ) {
 			return null;
 		}
 
@@ -183,7 +183,7 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
 	 */
 	protected function request_data($order)
 	{
-		
+
 		if (empty(WC_EBANX_Request::read('ebanx_token', null))
 			|| empty(WC_EBANX_Request::read('ebanx_masked_card_number', null))
 			|| empty(WC_EBANX_Request::read('ebanx_brand', null))
@@ -262,9 +262,9 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
 	{
 		parent::save_user_meta_fields($order);
 
-		if ($this->userId
+		if ( ! $this->userId
 			|| $this->get_setting_or_default('save_card_data', 'no') !== 'yes'
-			|| ! WC_EBANX_Request::has(['ebanx-save-credit-card'])
+			|| ! WC_EBANX_Request::has('ebanx-save-credit-card')
 			|| WC_EBANX_Request::read('ebanx-save-credit-card') !== 'yes') {
 			return;
 		}
