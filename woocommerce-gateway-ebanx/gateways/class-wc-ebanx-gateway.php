@@ -360,6 +360,10 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway
 			return false;
 		}
 
+		if ( empty($reason) ) {
+			$reason = 'No reason specified';
+		}
+
 		$data = array(
 			'hash'        => $hash,
 			'amount'      => $amount,
