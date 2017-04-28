@@ -360,6 +360,10 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway
 			return false;
 		}
 
+		if ( empty($reason) ) {
+			$reason = __('No reason specified.', 'woocommerce-gateway-ebanx');
+		}
+
 		$data = array(
 			'hash'        => $hash,
 			'amount'      => $amount,
@@ -518,7 +522,7 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway
 				$person_type = 'business';
 			}
 			if (in_array('cpf', $fields_options) && in_array('cnpj', $fields_options)) {
-				$person_type = WC_EBANX_Request::read($this->names['ebanx_billing_brazil_person_type']) == 'cnpj' ? 'business' : 'personal';
+				$person_type = WC_EBANX_Request::read($this->names['ebanx_billing_brazil_person_type'], 'cpf') == 'cnpj' ? 'business' : 'personal';
 			}
 
 
@@ -624,10 +628,10 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway
 	 */
 	public function getTransactionAddress($attr = '')
 	{
-		if ( 
-			!isset(WC()->customer) 
-			|| is_admin() 
-			|| empty(WC_EBANX_Request::read('billing_country', null)) 
+		if (
+			!isset(WC()->customer)
+			|| is_admin()
+			|| empty(WC_EBANX_Request::read('billing_country', null))
 			&& empty(WC()->customer->get_country())
 		) {
 			return false;

@@ -5,10 +5,11 @@ if ( !defined( 'ABSPATH' ) ) {
 }
 
 class WC_EBANX_One_Click {
+	const CREATE_ORDER_ACTION = 'ebanx_create_order';
+
 	private $cards;
 	private $userId;
 	private $gateway;
-	private $orderAction = 'ebanx_create_order';
 
 	protected $instalment_rates = array();
 
@@ -71,13 +72,12 @@ class WC_EBANX_One_Click {
 		ob_start();
 
 		if ( is_admin()
-			|| ! WC_EBANX_Request::has('product')
 			|| ! WC_EBANX_Request::has('ebanx-action')
-			|| WC_EBANX_Request::read('ebanx-action') !== $this->orderAction
 			|| ! WC_EBANX_Request::has('ebanx-nonce')
-			|| ! wp_verify_nonce( WC_EBANX_Request::read('ebanx-nonce'), $this->orderAction )
-			|| ! WC_EBANX_Request::has('ebanx-cart-total')
 			|| ! WC_EBANX_Request::has('ebanx-product-id')
+			|| ! WC_EBANX_Request::has('ebanx-cart-total')
+			|| WC_EBANX_Request::read('ebanx-action') !== self::CREATE_ORDER_ACTION
+			|| ! wp_verify_nonce( WC_EBANX_Request::read('ebanx-nonce'), self::CREATE_ORDER_ACTION )
 			|| ! $this->customer_can()
 			|| ! $this->customer_has_ebanx_required_data()
 		) {
@@ -153,7 +153,7 @@ class WC_EBANX_One_Click {
 			exit;
 		}
 		catch (Exception $e) {
-			// TODO: Make a caucght exception
+			// TODO: Make a caught exception
 		}
 
 		$this->restore_cart();
@@ -332,8 +332,8 @@ class WC_EBANX_One_Click {
 				'label' => __( 'Pay with one click', 'woocommerce-gateway-ebanx' ),
 				'instalments' => $messages['instalments'],
 				'instalments_terms' => $instalments_terms,
-				'nonce' => wp_create_nonce( $this->orderAction ),
-				'action' => $this->orderAction,
+				'nonce' => wp_create_nonce( self::CREATE_ORDER_ACTION ),
+				'action' => self::CREATE_ORDER_ACTION,
 				'permalink' => get_permalink($product->id),
 				'country' => $country,
 				'currency' => $currency
