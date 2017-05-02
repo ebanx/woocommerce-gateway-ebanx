@@ -276,7 +276,7 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway
 		$currency_code = strtolower($this->merchant_currency);
 		if ( in_array(strtoupper($currency_code), WC_EBANX_Constants::$CREDIT_CARD_CURRENCIES) ) {
 			$fields["min_instalment_value_$currency_code"] = array(
-				'title' => sprintf(__('Minimum instalment (%s)', 'woocommerce-gateway-ebanx'), strtoupper($currency_code)),
+				'title' => sprintf(__('Minimum Instalment (%s)', 'woocommerce-gateway-ebanx'), strtoupper($currency_code)),
 				'type' => 'number',
 				'class' => 'ebanx-payments-option',
 				'placeholder' => sprintf(__('The default is %d', 'woocommerce-gateway-ebanx'), 
