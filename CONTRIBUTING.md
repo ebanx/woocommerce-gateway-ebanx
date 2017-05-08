@@ -15,7 +15,7 @@ Don't you know what is Docker? [Know here](https://www.docker.com/what-docker).
 
 You need to install Docker on your machine before start. [Please install the CE Edition of your OS](https://www.docker.com/community-edition). 
 
-### Disable built-in Apache server (Mac OS only)
+#### Disable built-in Apache server (Mac OS only)
 
 ```
 sudo launchctl unload -w /System/Library/LaunchDaemons/org.apache.httpd.plist
