@@ -15,13 +15,21 @@ Don't you know what is Docker? [Know here](https://www.docker.com/what-docker).
 
 You need to install Docker on your machine before start. [Please install the CE Edition of your OS](https://www.docker.com/community-edition). 
 
-After installed Docker, clone this repo, go to root folder and run:
+### Disable built-in Apache server (Mac OS only)
+
+```
+sudo launchctl unload -w /System/Library/LaunchDaemons/org.apache.httpd.plist
+```
+
+#### Create the containers
+
+After installed Docker and disabled apache, clone this repo, go to root folder and run:
 
 ```
 docker-compose up
 ```
 
-**The first installation may take up to 5 minutes. After that, visit `http://localhost` on your browser. We use the port 80.**
+**The first installation may take up to 5 minutes. After that, visit `http://localhost` on your browser. We use the port 80 and 3306. So, check if you are not using these ports.**
 
 Every time that you want to go back to plugin development, just run `docker-compose up`.
 

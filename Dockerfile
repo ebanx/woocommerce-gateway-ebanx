@@ -10,11 +10,7 @@ ARG WORDPRESS_DB_HOST
 # install the PHP extensions we need
 RUN set -ex; \
     \
-    apt-get purge mysql*; \
-    apt-get autoremove; \
-    apt-get autoclean; \
     apt-get update; \
-    apt-get dist-upgrade -y; \
     apt-get install -y \
       libjpeg-dev \
       libpng12-dev \
