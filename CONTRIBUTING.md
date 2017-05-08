@@ -9,24 +9,58 @@ Please, visit the [official plugin page on WordPress store](https://wordpress.or
 ## Introduction
 We've put together all the information you'll need on this file. Also, we always try to keep this file updated and with as much information as possible. If you want to help us with this file or with any coding issue, we would really appreciate it. :heart:
 
-## Getting Started
+## Getting Started with Docker
 
-If you want to contribute to our repository the best way is to clone it and then create a symbolic link:
+Don't you know what is Docker? [Know here](https://www.docker.com/what-docker).
 
-1. Install [WordPress](https://codex.wordpress.org/Installing_WordPress) to your prefered location:
-	1. With your terminal `cd` into your web root folder:  `cd /path/to/public_html`
-	2. Download the latest WordPress build: `wget https://wordpress.org/latest.tar.gz`
-	3. Unzip the just downloaded file: `tar -xzvf latest.tar.gz`
-	4. Delete that file since we don't need it anymore: `rm latest.tar.gz`
-	5. Create the Database and a User
-	6. Access `http://localhost/wordpress`(it might be different depending on the folder you've downloaded WordPress) and follow its steps.
-2. Install [WooCommerce](https://docs.woocommerce.com/document/installing-uninstalling-woocommerce/). If you've configured FTP you can access WordPress Admin Dashboard and install it automatically. Otherwise, you can follow these steps:
-	1. Go to the plugins folder on your WordPress: `cd /path/to/wordpress/wp-content/plugins`
-	2. Download the lastest WooCommerce build: `git clone https://github.com/woocommerce/woocommerce.git`
-	3. Configure it on WordPress Admin Dashboard
-3. Clone this repository to your projects folder (not inside WordPress folder): `git clone https://github.com/ebanx/woocommerce-gateway-ebanx`
-4. Create a symlink from the inner folder to your wordpress plugins folder: `ln -s /path/to/clone/directory/woocommerce-gateway-ebanx/woocommerce-gateway-ebanx /path/to/wordpress/wp-content/plugins/woocommerce-gateway-ebanx`
-5. Let the coding begin!
+You need to install Docker on your machine before start. [Please install the CE Edition of your OS](https://www.docker.com/community-edition). 
+
+After installed Docker, clone this repo, go to root folder and run:
+
+```
+docker-compose up
+```
+
+**The first installation may take up to 5 minutes. After that, visit `http://localhost` on your browser. We use the port 80.**
+
+Every time that you want to go back to plugin development, just run `docker-compose up`.
+
+To run docker in background, execute `docker-compose up -d`, and `docker-compose stop` to stop the application.
+
+To login into Wordpress, visit `http://localhost/wp-admin/`.
+
+The credentials are: 
+
+```
+Username: ebanx
+Password: ebanx
+```
+
+**To change these informations, you can edit the environments on file `docker-compose.yml`.**
+
+The defaults are:
+
+```
+MYSQL_DATABASE: wordpress
+MYSQL_ROOT_PASSWORD: root
+
+WORDPRESS_DB_NAME: wordpress
+WORDPRESS_DB_USER: root
+WORDPRESS_DB_PASSWORD: root
+WORDPRESS_DB_HOST: mysql
+
+EBANX_WC_PLUGIN_VERSION: 3.0.5
+EBANX_ADMIN_USERNAME: ebanx
+EBANX_ADMIN_PASSWORD: ebanx
+EBANX_SITE_TITLE: EBANX
+EBANX_SITE_EMAIL: plugin@ebanx.com
+```
+
+#### What did we do here?
+
+The Docker installed Wordpress, MySQL, PHP, WooCommerce, create some products and pages, installed the EBANX plugin and another things.
+
+To know more about the Docker commands, [please read this gist](https://gist.github.com/cezarlz/cf9ecbd8be33562b16d07fc1bc04b150).
 
 ## Have you found a bug?
 
@@ -35,9 +69,3 @@ You can create a new [Issue](https://github.com/ebanx/woocommerce-gateway-ebanx/
 ## So you want to code...
 
 If you want to code (and you are not an ebanker [yet](https://ebanx.recruiterbox.com/)) all you have to do is fork our repo create a [well named]branch from develop and make a [pull request](https://github.com/ebanx/woocommerce-gateway-ebanx/compare) to our develop.
-
-## Documentation
-
-Documentation is in `apidocs` folder.
-
-To generate a new documentation, install `phpdoc` and run at root folder `phpdoc --template="clean" -d . -i "travis/*,woocommerce-gateway-ebanx/vendor/*,woocommerce-gateway-ebanx/templates/*" -t apidocs`

@@ -1,8 +1,8 @@
 .idea/
 wordpress/
-woocommerce-gateway-ebanx/travis/vendor/
 .DS_Store
 *.log
 *.gz
 *.gz.*
 apidocs/phpdoc-cache-*
+.data
