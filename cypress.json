@@ -1,0 +1,9 @@
+{
+  "env": {
+    "admin": "admin",
+    "site": "site"
+  },
+  "projectId": "ff45ju",
+  "chromeWebSecurity": false,
+  "videoRecording": false
+}

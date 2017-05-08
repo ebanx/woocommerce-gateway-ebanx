@@ -4,6 +4,10 @@ wordpress/
 *.log
 *.gz
 *.gz.*
+cypress/videos
+cypress/screenshots
+node_modules
+.vscode
 apidocs/phpdoc-cache-*
 .data
 .plugins
