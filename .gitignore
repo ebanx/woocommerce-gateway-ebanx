@@ -6,3 +6,4 @@ wordpress/
 *.gz.*
 apidocs/phpdoc-cache-*
 .data
+.plugins

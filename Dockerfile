@@ -46,8 +46,8 @@ RUN curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli
     wp core download --allow-root --force --debug; \
     wp core config --dbname=$WORDPRESS_DB_NAME --dbuser=$WORDPRESS_DB_USER --dbpass=$WORDPRESS_DB_PASSWORD --dbhost=$WORDPRESS_DB_HOST --force --allow-root --debug --skip-check;
 
-ADD wait-for-it.sh /usr/local/bin/
-ADD entrypoint.sh /usr/local/bin/
+COPY wait-for-it.sh /usr/local/bin/
+COPY entrypoint.sh /usr/local/bin/
 
 RUN chmod +x /usr/local/bin/wait-for-it.sh
 RUN chmod +x /usr/local/bin/entrypoint.sh
