@@ -1,6 +1,6 @@
 module.exports = {
   site: {
-    host: Cypress.env('WC_PLUGIN_SITE_HOST') || 'http://localhost:3000/shop/',
+    host: Cypress.env('WC_PLUGIN_SITE_HOST') || 'http://localhost/shop/',
     payments: {
       credit_card: {
         visa: '4111 1111 1111 1111',
@@ -15,7 +15,7 @@ module.exports = {
   },
 
   admin: {
-    host: Cypress.env('WC_PLUGIN_ADMIN_HOST') || 'http://localhost:3000/wp-login.php',
+    host: Cypress.env('WC_PLUGIN_ADMIN_HOST') || 'http://localhost/wp-login.php',
     login: 'ebanx',
     password: 'ebanx'
   },

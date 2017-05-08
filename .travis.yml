@@ -6,5 +6,16 @@ php:
 
 services:
   - docker
+  
+before_install:
+  - curl -L https://github.com/docker/compose/releases/download/1.13.0/docker-compose-`uname -s`-`uname -m` > docker-compose
+  - chmod +x docker-compose
+  - sudo mv docker-compose /usr/local/bin
+  - docker-compose up -d
 
+install:
+  - npm install -g cypress
+  - npm install
 
+script:
+  - cypress run
