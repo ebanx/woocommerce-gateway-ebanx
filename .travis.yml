@@ -21,7 +21,8 @@ before_install:
   - sudo apt-get install -y nodejs
 
 install:
-  - npm install -g cypress
+  - npm install -g cypress-cli
+  - cypress install
   - npm install
 
 script:
