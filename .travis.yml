@@ -6,7 +6,6 @@ services:
   
 before_install:
   - sudo service mysql stop
-  - sudo service apache2 stop
   - sudo apt-get update
   - sudo apt-key update
   - sudo apt-get install -y docker-engine
