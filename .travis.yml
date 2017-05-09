@@ -1,14 +1,12 @@
-sudo: required
-
 language: php
+
+sudo: required
 
 env:
   DOCKER_COMPOSE_VERSION: 1.13.0
-
-services:
-  - docker
   
 before_install:
+  - sudo service mysql stop
   - sudo apt-get update
   - curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.2/install.sh | bash
   - nvm install node 7
