@@ -21,7 +21,7 @@ describe('Admin', () => {
         .saveSettings();
     });
 
-    it('Fill instalments number and save settings', () => {
+    it('Fill instalment number and save settings', () => {
       admin
         .openAdmin()
         .openEbanxSettings()
