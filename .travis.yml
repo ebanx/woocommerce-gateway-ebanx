@@ -20,9 +20,7 @@ before_install:
   - npm install -g kill-port
   - kill-port --port 80
   - kill-port --port 3306
-  - docker-compose pull
-  - docker-compose build
-  - docker-compose start
+  - docker-compose up -d
   - docker ps
 
 install:
