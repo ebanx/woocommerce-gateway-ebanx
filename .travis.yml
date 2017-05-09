@@ -1,7 +1,3 @@
-language: php
-
-sudo: required
-
 env:
   DOCKER_COMPOSE_VERSION: 1.13.0
 
@@ -10,18 +6,19 @@ services:
   
 before_install:
   - sudo service mysql stop
+  - sudo service apache2 stop
   - sudo apt-get update
-  - curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.2/install.sh | bash
-  - nvm install node 7
-  - nvm alias default node 7
-  - npm install -g kill-port
-  - sudo apt-get install -o Dpkg::Options::="--force-confold" --force-yes -y docker-engine
-  - docker-compose --version
+  - sudo apt-key update
+  - sudo apt-get install -y docker-engine
   - sudo rm /usr/local/bin/docker-compose
   - curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
   - chmod +x docker-compose
   - sudo mv docker-compose /usr/local/bin
   - docker-compose --version
+  - curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.2/install.sh | bash
+  - nvm install node 7
+  - nvm alias default node 7
+  - npm install -g kill-port
   - kill-port --port 80
   - kill-port --port 3306
   - docker-compose pull
