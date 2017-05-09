@@ -11,7 +11,7 @@ ARG WORDPRESS_DB_HOST
 RUN set -ex; \
     \
     apt-get update; \
-    apt-get install -y \
+    apt-get install -y --no-install-recommends \
       libjpeg-dev \
       libpng12-dev \
       mysql-client \
@@ -35,7 +35,7 @@ RUN a2enmod rewrite expires
 WORKDIR /var/www/html
 
 # Download WP-CLI, install and configure Wordpress
-RUN curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar; \
+RUN curl -O "https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar"; \
     chmod +x wp-cli.phar; \
     mv wp-cli.phar /usr/local/bin/wp; \
     wp --info --allow-root --debug; \
