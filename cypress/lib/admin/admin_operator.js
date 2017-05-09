@@ -31,6 +31,13 @@ const adminOperator = (function (test) {
       return this;
     },
 
+    fillInstalments: function (number) {
+      settings
+        .fillInstalments(number);
+
+      return this;
+    },
+
     saveSettings: function () {
       settings
         .saveSettings();

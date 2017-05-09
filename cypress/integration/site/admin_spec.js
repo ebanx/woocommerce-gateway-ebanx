@@ -20,6 +20,14 @@ describe('Admin', () => {
         })
         .saveSettings();
     });
+
+    it('Fill instalments number and save settings', () => {
+      admin
+        .openAdmin()
+        .openEbanxSettings()
+        .fillInstalments(defaults.admin.instalments)
+        .saveSettings();
+    });
   });
 
 });

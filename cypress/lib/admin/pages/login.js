@@ -5,7 +5,8 @@ const loginPage = (function (test) {
     elements: {
       buttons: {
         login: '#wp-submit',
-        ebanxSettings: '#toplevel_page_admin-page-wc-settings-tab-checkout-section-ebanx-global a'
+        ebanxSettings: '#toplevel_page_admin-page-wc-settings-tab-checkout-section-ebanx-global a',
+        skipSetup: 'body.wc-setup > div > p.wc-setup-actions.step > a:nth-child(2)'
       },
       fields: {
         user_login: '#user_login',
@@ -43,6 +44,15 @@ const loginPage = (function (test) {
           .should('be.visible')
         .get(buttons.login, { timeout: 10000 })
           .click({ force: true })
+        .location()
+          .its('search')
+          .then(function (search) {
+            if (search === '?page=wc-setup') {
+              test
+                .get(buttons.skipSetup)
+                .click({ force: true });
+            }
+          })
         .get(containers.sidebar, { timeout: 10000 })
           .should('be.visible')
         .get(buttons.ebanxSettings, { timeout: 10000 })

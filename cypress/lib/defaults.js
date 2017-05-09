@@ -17,7 +17,8 @@ module.exports = {
   admin: {
     host: Cypress.env('WC_PLUGIN_ADMIN_HOST') || 'http://localhost/wp-login.php',
     login: 'ebanx',
-    password: 'ebanx'
+    password: 'ebanx',
+    instalments: '12'
   },
 
   api: {
