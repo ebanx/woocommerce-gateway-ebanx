@@ -31,4 +31,4 @@ install:
 script:
   - ./wait-for-it.sh -t 300 localhost:3306 -- echo "MySQL is alive!"
   - ./wait-for-it.sh -t 300 localhost:80 -- echo "Plugin is alive!"
-  - cypress run
+  - cypress run --record --key f54e0f8d-46b4-47a4-b331-10a8e4731c3b
