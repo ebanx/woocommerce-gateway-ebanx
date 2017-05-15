@@ -1,6 +1,6 @@
 FROM php:5-apache
 
-MAINTAINER Cezar Luiz <cezarluiz.c@gmail.com>
+MAINTAINER Cezar Luiz <cezar@ebanx.com>
 
 ARG WORDPRESS_DB_USER
 ARG WORDPRESS_DB_PASSWORD
@@ -40,7 +40,7 @@ RUN curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli
     mv wp-cli.phar /usr/local/bin/wp; \
     wp --info --allow-root --debug; \
     wp core download --allow-root --force --debug; \
-    wp core config --dbname=$WORDPRESS_DB_NAME --dbuser=$WORDPRESS_DB_USER --dbpass=$WORDPRESS_DB_PASSWORD --dbhost=$WORDPRESS_DB_HOST --force --allow-root --debug --skip-check;
+    wp core config --dbname=$WORDPRESS_DB_NAME --dbuser=$WORDPRESS_DB_USER --dbpass=$WORDPRESS_DB_PASSWORD --dbhost=$WORDPRESS_DB_HOST --force --allow-root --debug --skip-check --extra-php="define( 'WP_DEBUG', true );define( 'WP_DEBUG_LOG', true );define( 'FS_METHOD', 'direct' );";
 
 COPY wait-for-it.sh /usr/local/bin/
 COPY entrypoint.sh /usr/local/bin/
