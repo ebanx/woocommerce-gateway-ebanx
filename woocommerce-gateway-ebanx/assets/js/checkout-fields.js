@@ -6,12 +6,12 @@ jQuery (function ($) {
   }
 
   // Masks
-	$(document).find(".ebanx_billing_chile_birth_date input").mask('00/00/0000');
+  $(document).find(".ebanx_billing_chile_birth_date input").mask('00/00/0000');
   $(document).find(".ebanx_billing_brazil_birth_date input").mask('00/00/0000');
   $(document).find(".ebanx_billing_brazil_document input").mask('000.000.000-00');
   $(document).find(".ebanx_billing_brazil_cnpj input").mask('00.000.000/0000-00');
 
-	var getBillingFields = function (filter) {
+  var getBillingFields = function (filter) {
     filter = filter || '';
 
     switch (filter) {
@@ -65,10 +65,15 @@ jQuery (function ($) {
 
   $('#billing_country')
     .on('change',function() {
+      var country = this.value.toLowerCase();
+      
       disableFields(getBillingFields());
-      enableFields(getBillingFields(this.value.toLowerCase()));
+      
+      if (country) {
+        enableFields(getBillingFields(country));
+      }
 
-      if (this.value.toLowerCase() === 'br') {
+      if (country === 'br') {
         taxes.change();
       }
     })
