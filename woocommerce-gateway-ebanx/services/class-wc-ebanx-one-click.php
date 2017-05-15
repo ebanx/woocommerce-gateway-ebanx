@@ -5,10 +5,11 @@ if ( !defined( 'ABSPATH' ) ) {
 }
 
 class WC_EBANX_One_Click {
+	const CREATE_ORDER_ACTION = 'ebanx_create_order';
+
 	private $cards;
 	private $userId;
 	private $gateway;
-	private $orderAction = 'ebanx_create_order';
 
 	protected $instalment_rates = array();
 
@@ -18,83 +19,48 @@ class WC_EBANX_One_Click {
 	public function __construct() {
 		$this->userId  = get_current_user_id();
 		$this->userCountry = trim(strtolower(get_user_meta( $this->userId, 'billing_country', true )));
-
 		$this->gateway = $this->userCountry ? ($this->userCountry === WC_EBANX_Constants::COUNTRY_BRAZIL ? new WC_EBANX_Credit_Card_BR_Gateway() : new WC_EBANX_Credit_Card_MX_Gateway()) : false;
 
-		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ), 100 );
-		add_action( 'woocommerce_before_add_to_cart_form', array( $this, 'add_button' ) );
-
-		if ( isset( $_REQUEST['ebanx_one_click'] ) && $_REQUEST['ebanx_one_click'] == 'is_one_click' ) {
-
-			add_action( 'wp_loaded', array( $this, 'empty_cart' ), 1 );
-
-			add_filter( 'woocommerce_add_to_cart_redirect', array( $this, 'one_click_url' ), 99, 1 );
+		if ( !$this->gateway
+			|| $this->gateway->get_setting_or_default('one_click', 'no') !== 'yes'
+			|| $this->gateway->get_setting_or_default('save_card_data', 'no') !== 'yes' ) {
+			return;
 		}
 
+		/**
+		 * Active the one click purchase when the settings is enabled
+		 */
+		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ), 100 );
+		add_action( 'woocommerce_after_add_to_cart_form', array( $this, 'print_button' ) );
 		add_action( 'wp_loaded', array( $this, 'one_click_handler' ), 99 );
 
 		$cards = get_user_meta( $this->userId, '_ebanx_credit_card_token', true );
 
 		$this->cards = is_array( $cards ) ? array_filter( $cards ) : array();
 
-		if ($this->gateway && $this->gateway->get_setting_or_default('interest_rates_enabled', 'no') == 'yes') {
-			$max_instalments = $this->gateway->configs->settings['credit_card_instalments'];
-			for ($i=1; $i <= $max_instalments; $i++) {
-				$field = 'interest_rates_' . sprintf("%02d", $i);
-				$this->instalment_rates[$i] = 0;
-				if (is_numeric($this->gateway->configs->settings[$field])) {
-					$this->instalment_rates[$i] = $this->gateway->configs->settings[$field] / 100;
-				}
-			}
-		}
+		$this->generate_instalments_rates();
 	}
 
 	/**
-	 * It generates the URL for one click process the order
-	 *
-	 * @param string  $url The default URL
-	 * @return string      The new URL
-	 */
-	public function one_click_url( $url ) {
-		global $post;
-		
-		if ( !isset( $post ) || !isset( $_REQUEST['ebanx_one_click_cvv'] )
-			|| !isset( $_REQUEST['ebanx_one_click_token'] )
-		) {
-			return $url;
-		}
-
-		$product_id = intval( $post->ID );
-
-		$instalments = '1';
-
-		if (!empty($_REQUEST['ebanx-credit-card-installments'])) {
-			$instalments = $_REQUEST['ebanx-credit-card-installments'];
-		}
-
-		// create nonce
-		$nonce = wp_create_nonce( $this->orderAction );
-		$args = apply_filters( 'ebanx_one_click_url_args', array(
-			'_ebanx_one_click_action' => $this->orderAction,
-			'_ebanx_nonce' => $nonce,
-			'_ebanx_one_click_token' => $_REQUEST['ebanx_one_click_token'],
-			'_ebanx_one_click_cvv' => $_REQUEST['ebanx_one_click_cvv'],
-			'_ebanx_one_click_installments' => $instalments
-		));
-
-		return esc_url_raw( add_query_arg( $args, get_permalink( $product_id ) ) );
-	}
-
-	/**
-	 * It cleans the cart after generate a new URL
+	 * Generate the properties for each interest rates
 	 *
 	 * @return void
 	 */
-	public function empty_cart() {
-		$cart = WC()->session->get( 'cart' );
-		update_user_meta( $this->userId, '_ebanx_persistent_cart', $cart );
+	public function generate_instalments_rates () {
+		if (!$this->gateway
+			|| $this->gateway->get_setting_or_default('interest_rates_enabled', 'no') !== 'yes') {
+			return;
+		}
 
-		WC()->cart->empty_cart( true );
+		$max_instalments = $this->gateway->configs->settings['credit_card_instalments'];
+
+		for ($i=1; $i <= $max_instalments; $i++) {
+			$field = 'interest_rates_' . sprintf("%02d", $i);
+			$this->instalment_rates[$i] = 0;
+			if (is_numeric($this->gateway->configs->settings[$field])) {
+				$this->instalment_rates[$i] = $this->gateway->configs->settings[$field] / 100;
+			}
+		}
 	}
 
 	/**
@@ -103,154 +69,91 @@ class WC_EBANX_One_Click {
 	 * @return void
 	 */
 	public function one_click_handler() {
+		ob_start();
+
 		if ( is_admin()
-			|| ! WC_EBANX_Request::has('_ebanx_one_click_action')
-			|| WC_EBANX_Request::read('_ebanx_one_click_action') !== $this->orderAction
-			|| ! WC_EBANX_Request::has('_ebanx_nonce') 
-			|| ! wp_verify_nonce( WC_EBANX_Request::read('_ebanx_nonce'), $this->orderAction )
-			|| ! WC_EBANX_Request::has('_ebanx_one_click_token') 
-			|| ! WC_EBANX_Request::has('_ebanx_one_click_cvv') 
-			|| ! WC_EBANX_Request::has('_ebanx_one_click_installments')
-			|| ! $this->customer_can() 
+			|| ! WC_EBANX_Request::has('ebanx-action')
+			|| ! WC_EBANX_Request::has('ebanx-nonce')
+			|| ! WC_EBANX_Request::has('ebanx-product-id')
+			|| ! WC_EBANX_Request::has('ebanx-cart-total')
+			|| WC_EBANX_Request::read('ebanx-action') !== self::CREATE_ORDER_ACTION
+			|| ! wp_verify_nonce( WC_EBANX_Request::read('ebanx-nonce'), self::CREATE_ORDER_ACTION )
+			|| ! $this->customer_can()
 			|| ! $this->customer_has_ebanx_required_data()
 		) {
 			return;
 		}
 
-		global $wpdb;
-		$order = false;
-		$url = '';
+		try {
+			$order = wc_create_order(array(
+				'status' => 'pending',
+				'customer_id' => $this->userId
+			));
 
-		wc_clear_notices();
+			$product_id = WC_EBANX_Request::read('ebanx-product-id');
 
-		WC()->session->__unset( 'chosen_shipping_methods' );
-		WC()->shipping();
+			$user = array(
+				'email' => get_user_meta($this->userId, 'billing_email', true),
+				'country' => get_user_meta($this->userId, 'billing_country', true),
+				'first_name' => get_user_meta($this->userId, 'billing_first_name', true),
+				'last_name' => get_user_meta($this->userId, 'billing_last_name', true),
+				'company' => get_user_meta($this->userId, 'billing_company', true),
+				'address_1' => get_user_meta($this->userId, 'billing_address_1', true),
+				'address_2' => get_user_meta($this->userId, 'billing_address_2', true),
+				'city' => get_user_meta($this->userId, 'billing_city', true),
+				'state' => get_user_meta($this->userId, 'billing_state', true),
+				'postcode' => get_user_meta($this->userId, 'billing_postcode', true),
+				'phone' => get_user_meta($this->userId, 'billing_phone', true)
+			);
 
-		if ( ! defined( 'WOOCOMMERCE_CHECKOUT' ) ) {
-			define( 'WOOCOMMERCE_CHECKOUT', true );
-		}
+			$product_to_add = get_product( $product_id );
 
-		try{
-			$wpdb->query( 'START TRANSACTION' );
+			$order->add_product( $product_to_add, 1 );
 
-			$order = wc_create_order( array(
-					'status'        => apply_filters( 'woocommerce_default_order_status', 'pending' ),
-					'customer_id'   => $this->userId
-				) );
+			$order->set_payment_method($this->gateway);
 
-			if ( is_wp_error( $order ) ) {
-				throw new Exception( sprintf( __( 'Error %d: Unable to create the order. Please try again.', 'woocommerce-gateway-ebanx' ), 400 ) );
-			} else {
-				$order_id = $order->id;
-				do_action( 'woocommerce_new_order', $order_id );
+			$meta = array(
+				'_billing_email' => $user['email'],
+				'_billing_country' => $user['country'],
+				'_billing_first_name' => $user['first_name'],
+				'_billing_last_name' => $user['last_name'],
+				'_billing_company' => $user['company'],
+				'_billing_address_1' => $user['address_1'],
+				'_billing_address_2' => $user['address_2'],
+				'_billing_city' => $user['city'],
+				'_billing_state' => $user['state'],
+				'_billing_phone' => $user['phone'],
+				'_order_shipping' => WC()->cart->shipping_total,
+				'_cart_discount' => WC()->cart->get_cart_discount_total(),
+				'_cart_discount_tax' => WC()->cart->get_cart_discount_tax_total(),
+				'_order_tax' => WC()->cart->tax_total,
+				'_order_shipping_tax' => WC()->cart->shipping_tax_total,
+				'_order_total' => WC()->cart->total,
+			);
+
+			foreach ($meta as $meta_key => $meta_value) {
+				update_post_meta($order->id, $meta_key, $meta_value );
 			}
 
-			$billing_address = apply_filters( 'ebanx_filter_billing_address', $this->get_user_billing_address(), $this->userId );
+			$order->calculate_totals();
 
-			if ( WC()->cart->needs_shipping() ) {
-				$shipping_address = apply_filters( 'ebanx_filter_shipping_address', $this->get_user_shipping_address( $this->userId ), $this->userId );
-				$shipping_address = empty( $shipping_address ) ? $billing_address : $shipping_address;
+			$response = $this->gateway->process_payment($order->id);
 
-				$this->set_shipping_info( $shipping_address );
+			if ($response['result'] !== 'success') {
+				$message = __('EBANX: Unable to create the payment via one click.', 'woocommerce-gateway-ebanx');
+
+				$order->add_order_note($message);
+
+				throw new Exception($message);
 			}
-			else {
-				$shipping_address = array();
-			}
-
-			WC()->cart->calculate_totals();
-
-			foreach ( WC()->cart->get_cart() as $item_cart_key => $item ) {
-				$url = get_permalink( $item['product_id'] );
-
-				$item_id = $order->add_product(
-					$item['data'],
-					$item['quantity'],
-					array(
-						'variation' => $item['variation'],
-						'totals'    => array(
-							'subtotal'     => $item['line_subtotal'],
-							'subtotal_tax' => $item['line_subtotal_tax'],
-							'total'        => $item['line_total'],
-							'tax'          => $item['line_tax'],
-							'tax_data'     => $item['line_tax_data']
-						)
-					)
-				);
-
-				if ( ! $item_id ) {
-					throw new Exception( sprintf( __( 'Error %d: Unable to create the order. Please try again.', 'woocommerce-gateway-ebanx' ), 402 ) );
-				}
-
-				do_action( 'woocommerce_add_order_item_meta', $item_id, $item, $item_cart_key );
-			}
-
-			foreach ( WC()->cart->get_fees() as $fee_key => $fee ) {
-				$item_id = $order->add_fee( $fee );
-
-				if ( ! $item_id ) {
-					throw new Exception( sprintf( __( 'Error %d: Unable to create the order. Please try again.', 'woocommerce-gateway-ebanx' ), 403 ) );
-				}
-				// Allow plugins to add order item meta to fees
-				do_action( 'woocommerce_add_order_fee_meta', $order_id, $item_id, $fee, $fee_key );
-			}
-
-			if ( WC()->cart->needs_shipping() ) {
-				if ( ! in_array( WC()->customer->get_shipping_country(), array_keys( WC()->countries->get_shipping_countries() ) ) ) {
-					throw new Exception( sprintf( __( 'Unfortunately <strong>we do not ship to %s</strong>. Please enter an alternative shipping address.', 'woocommerce-gateway-ebanx' ), WC()->countries->shipping_to_prefix() . ' ' . WC()->customer->get_shipping_country() ) );
-				}
-
-				$packages        = WC()->shipping->get_packages();
-				$shipping_method = apply_filters( 'ebanx_filter_shipping_methods', WC()->session->get( 'chosen_shipping_methods' ) );
-
-				foreach ( $packages as $package_key => $package ) {
-
-					if ( isset( $package['rates'][ $shipping_method [ $package_key ] ] ) ) {
-
-						$item_id = $order->add_shipping( $package['rates'][ $shipping_method[ $package_key ] ] );
-
-						if ( ! $item_id ) {
-							throw new Exception( sprintf( __( 'Error %d: Unable to create the order. Please try again.', 'woocommerce-gateway-ebanx' ), 404 ) );
-						}
-
-						do_action( 'woocommerce_add_shipping_order_item', $order_id, $item_id, $package_key );
-					}
-					else {
-						throw new Exception( __( 'Sorry, invalid shipping method.', 'woocommerce-gateway-ebanx' ) );
-					}
-				}
-			}
-
-			foreach ( array_keys( WC()->cart->taxes + WC()->cart->shipping_taxes ) as $tax_rate_id ) {
-				if ( $tax_rate_id && ! $order->add_tax( $tax_rate_id, WC()->cart->get_tax_amount( $tax_rate_id ), WC()->cart->get_shipping_tax_amount( $tax_rate_id ) ) && apply_filters( 'woocommerce_cart_remove_taxes_zero_rate_id', 'zero-rated' ) !== $tax_rate_id ) {
-					throw new Exception( sprintf( __( 'Error %d: Unable to create the order. Please try again.', 'woocommerce-gateway-ebanx' ), 405 ) );
-				}
-			}
-
-			$order->set_address( $billing_address, 'billing' );
-			$order->set_address( $shipping_address, 'shipping' );
-			$order->set_total( WC()->cart->shipping_total, 'shipping' );
-			$order->set_total( WC()->cart->get_cart_discount_total(), 'cart_discount' );
-			$order->set_total( WC()->cart->get_cart_discount_tax_total(), 'cart_discount_tax' );
-			$order->set_total( WC()->cart->tax_total, 'tax' );
-			$order->set_total( WC()->cart->shipping_tax_total, 'shipping_tax' );
-			$order->set_total( WC()->cart->total );
-			$order->set_payment_method( $this->gateway );
-
-			$data = $this->gateway->process_payment( $order->id );
-
-			if ( $data['result'] !== 'success' ) {
-				throw new Exception( 'Error.' );
-			}
-
-			$wpdb->query( 'COMMIT' );
 
 			$this->restore_cart();
-			wp_redirect( $order->get_checkout_order_received_url() );
-			exit;
-		} catch ( Exception $e ) {
-			$wpdb->query( 'ROLLBACK' );
 
-			$order = false;
+			wp_safe_redirect($response['redirect']);
+			exit;
+		}
+		catch (Exception $e) {
+			// TODO: Make a caught exception
 		}
 
 		$this->restore_cart();
@@ -297,63 +200,16 @@ class WC_EBANX_One_Click {
 		);
 
 		if ( ! empty( $billing['country'] ) ) {
-			WC()->customer->set_billing_country( $billing['country'] );
+			update_user_meta($this->userId, 'billing_country', $billing['country'] );
 		}
 		if ( ! empty( $billing['state'] ) ) {
-			WC()->customer->set_billing_state( $billing['state'] );
+			update_user_meta($this->userId, 'billing_state', $billing['state'] );
 		}
 		if ( ! empty( $billing['postcode'] ) ) {
-			WC()->customer->set_billing_postcode( $billing['postcode'] );
+			update_user_meta($this->userId, 'billing_postcode', $billing['postcode'] );
 		}
 
 		return apply_filters( 'ebanx_customer_billing', array_filter( $billing ) );
-	}
-
-	/**
-	 * Get the user's shipping address by user id
-	 *
-	 * @param integer $id User ID
-	 * @return array
-	 */
-	public function get_user_shipping_address( $id ) {
-
-		if ( ! WC()->cart->needs_shipping_address() ) {
-			return array();
-		}
-
-		// Formatted Addresses
-		$shipping = array(
-			'first_name' => get_user_meta( $id, 'shipping_first_name', true ),
-			'last_name'  => get_user_meta( $id, 'shipping_last_name', true ),
-			'company'    => get_user_meta( $id, 'shipping_company', true ),
-			'address_1'  => get_user_meta( $id, 'shipping_address_1', true ),
-			'address_2'  => get_user_meta( $id, 'shipping_address_2', true ),
-			'city'       => get_user_meta( $id, 'shipping_city', true ),
-			'state'      => get_user_meta( $id, 'shipping_state', true ),
-			'postcode'   => get_user_meta( $id, 'shipping_postcode', true ),
-			'country'    => get_user_meta( $id, 'shipping_country', true )
-		);
-
-		return apply_filters( 'ebanx_customer_shipping', array_filter( $shipping ) );
-	}
-
-	/**
-	 * Set shipping info by user's information
-	 *
-	 * @param array   $values The user's information
-	 */
-	public function set_shipping_info( $values ) {
-
-		// Update customer location to posted location so we can correctly check available shipping methods
-		if ( ! empty( $values['country'] ) ) {
-			WC()->customer->set_billing_shipping_country( $values['country'] );
-		}
-		if ( ! empty( $values['state'] ) ) {
-			WC()->customer->set_billing_shipping_state( $values['state'] );
-		}
-		if ( ! empty( $values['postcode'] ) ) {
-			WC()->customer->set_billing_shipping_postcode( $values['postcode'] );
-		}
 	}
 
 	/**
@@ -377,86 +233,48 @@ class WC_EBANX_One_Click {
 	}
 
 	/**
-	 * Add the "One-click Purchase" button below "Add Cart" on Product Page
-	 */
-	public function add_button() {
-		global $product;
-
-		if ($this->gateway === false) {
-			return;
-		}
-
-		if (
-			$product->product_type == 'external' ||
-			!$this->customer_can() ||
-			!$this->gateway->is_available() ||
-			$this->gateway->configs->settings['one_click'] !== 'yes'
-		) {
-			return;
-		}
-
-		if ( $product->product_type == 'variable' ) {
-			add_action( 'woocommerce_after_single_variation', array( $this, 'print_button' ) );
-		} else {
-			add_action( 'woocommerce_after_add_to_cart_button', array( $this, 'print_button' ) );
-		}
-	}
-
-	/**
 	 * Check if the custom has all required data required by EBANX
 	 *
 	 * @return boolean If the user has all required data, return true
 	 */
 	protected function customer_has_ebanx_required_data() {
 		$card = current( array_filter( (array) array_filter( get_user_meta( $this->userId, '_ebanx_credit_card_token', true ) ), function ( $card ) {
-					return $card->token == WC_EBANX_Request::read('_ebanx_one_click_token');
-				} ) );
+			return $card->token == WC_EBANX_Request::read('ebanx-one-click-token');
+		} ) );
+
 		$names = $this->gateway->names;
 
-		$_POST['ebanx_token'] = $card->token;
-		$_POST['ebanx_masked_card_number'] = $card->masked_number;
-		$_POST['ebanx_brand'] = $card->brand;
-		$_POST['ebanx_billing_cvv'] = WC_EBANX_Request::read('_ebanx_one_click_cvv');
-		$_POST['ebanx_is_one_click'] = true;
-		$_POST['ebanx_billing_instalments'] = WC_EBANX_Request::read('_ebanx_one_click_installments');
+		WC_EBANX_Request::set('ebanx_token', $card->token);
+		WC_EBANX_Request::set('ebanx_masked_card_number', $card->masked_number);
+		WC_EBANX_Request::set('ebanx_brand', $card->brand);
+		WC_EBANX_Request::set('ebanx_billing_cvv', WC_EBANX_Request::read('ebanx-one-click-cvv'));
+		WC_EBANX_Request::set('ebanx_is_one_click', true);
+		WC_EBANX_Request::set('ebanx_billing_instalments', WC_EBANX_Request::read('ebanx-credit-card-installments'));
 
-		$_POST[$names['ebanx_billing_brazil_document']] = get_user_meta( $this->userId, '_ebanx_billing_brazil_document', true );
-		$_POST[$names['ebanx_billing_brazil_birth_date']] = get_user_meta( $this->userId, '_ebanx_billing_brazil_birth_date', true );
+		WC_EBANX_Request::set($names['ebanx_billing_brazil_document'], get_user_meta( $this->userId, '_ebanx_billing_brazil_document', true ));
+		WC_EBANX_Request::set($names['ebanx_billing_brazil_birth_date'], get_user_meta( $this->userId, '_ebanx_billing_brazil_birth_date', true ));
 
-		$_POST['billing_postcode']  = $this->get_user_billing_address()['postcode'];
-		$_POST['billing_address_1'] = $this->get_user_billing_address()['address_1'];
-		$_POST['billing_city']      = $this->get_user_billing_address()['city'];
-		$_POST['billing_state']     = $this->get_user_billing_address()['state'];
+		WC_EBANX_Request::set('billing_postcode', $this->get_user_billing_address()['postcode']);
+		WC_EBANX_Request::set('billing_address_1', $this->get_user_billing_address()['address_1']);
+		WC_EBANX_Request::set('billing_city', $this->get_user_billing_address()['city']);
+		WC_EBANX_Request::set('billing_state', $this->get_user_billing_address()['state']);
 
-		if ( empty( $_POST['ebanx_token'] ) ||
-			empty( $_POST['ebanx_masked_card_number'] ) ||
-			empty( $_POST['ebanx_brand'] ) ||
-			empty( $_POST['ebanx_billing_instalments'] ) ||
-			empty( $_POST['ebanx_billing_cvv'] ) ||
-			empty( $_POST['ebanx_is_one_click'] ) ||
-			!isset( $_POST[$names['ebanx_billing_brazil_document']] ) ||
-			empty( $_POST[$names['ebanx_billing_brazil_document']] ) ||
-			empty( $_POST['ebanx_billing_brazil_birth_date'] )
-		) {
-			return false;
-		}
-
-		return true;
+		return ! empty(WC_EBANX_Request::read('ebanx-one-click-token', null))
+			&& ! empty(WC_EBANX_Request::read('ebanx-credit-card-installments', null))
+			&& ! empty(WC_EBANX_Request::read('ebanx-one-click-cvv', null))
+			&& WC_EBANX_Request::has($names['ebanx_billing_brazil_document'])
+			&& WC_EBANX_Request::has($names['ebanx_billing_brazil_birth_date'])
+			&& ! empty(WC_EBANX_Request::read($names['ebanx_billing_brazil_document'], null))
+			&& ! empty(WC_EBANX_Request::read($names['ebanx_billing_brazil_birth_date'], null));
 	}
 
 	/**
 	 * Check if the customer is ready
 	 *
-	 * @return [type] [description]
+	 * @return boolean Returns if the customer has a minimal requirement
 	 */
 	public function customer_can() {
-		$return = true;
-
-		if ( !is_user_logged_in() || !get_user_meta( $this->userId, 'billing_email', true ) && !empty( $this->cards ) ) {
-			$return = false;
-		}
-
-		return apply_filters( 'ebanx_customerCan', $return );
+		return !is_user_logged_in() || !get_user_meta( $this->userId, '_billing_email', true ) && !empty( $this->cards );
 	}
 
 	/**
@@ -465,6 +283,10 @@ class WC_EBANX_One_Click {
 	 * @return void
 	 */
 	public function print_button() {
+		if ( ! $this->userCountry ) {
+			return;
+		}
+
 		global $product;
 
 		switch ( get_locale() ) {
@@ -484,25 +306,37 @@ class WC_EBANX_One_Click {
 				break;
 			default:
 				$messages = array(
-					'instalments' => 'Number of installments',
+					'instalments' => 'Number of instalments',
 				);
 				break;
 		}
 
 		$cart_total = $product->price;
 
-		$max_instalments = min($this->gateway->configs->settings['credit_card_instalments'], $this->gateway->fetch_acquirer_max_installments_for_price($cart_total, 'br'));
+		$max_instalments = min($this->gateway->configs->settings['credit_card_instalments'], WC_EBANX_Constants::MAX_INSTALMENTS);
 
 		$instalments_terms = $this->gateway->get_payment_terms($cart_total, $max_instalments);
+		$tax = get_woocommerce_currency() === WC_EBANX_Constants::CURRENCY_CODE_BRL ? WC_EBANX_Constants::BRAZIL_TAX : 0;
+
+		$instalments_terms = $this->gateway->get_payment_terms($cart_total, $max_instalments, $tax);
+
+		$country = $this->gateway->getTransactionAddress('country');
+
+		$currency = $country === WC_EBANX_Constants::COUNTRY_BRAZIL ? WC_EBANX_Constants::CURRENCY_CODE_BRL : WC_EBANX_Constants::CURRENCY_CODE_MXN;
 
 		$args = apply_filters( 'ebanx_template_args', array(
 				'cards' => $this->cards,
 				'cart_total' => $cart_total,
-				'max_instalments' => $max_instalments,
+				'product_id' => $product->id,
 				'installment_taxes' => $this->instalment_rates,
 				'label' => __( 'Pay with one click', 'woocommerce-gateway-ebanx' ),
 				'instalments' => $messages['instalments'],
-				'instalments_terms' => $instalments_terms
+				'instalments_terms' => $instalments_terms,
+				'nonce' => wp_create_nonce( self::CREATE_ORDER_ACTION ),
+				'action' => self::CREATE_ORDER_ACTION,
+				'permalink' => get_permalink($product->id),
+				'country' => $country,
+				'currency' => $currency
 			) );
 
 		wc_get_template( 'one-click.php', $args, '', WC_EBANX::get_templates_path() . 'one-click/' );

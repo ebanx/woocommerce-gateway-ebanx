@@ -2,14 +2,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "POT-Creation-Date: 2016-12-30 14:07-0200\n"
-"PO-Revision-Date: 2016-12-30 19:01-0200\n"
+"PO-Revision-Date: 2017-04-25 13:30-0300\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 1.8.11\n"
+"X-Generator: Poedit 2.0.1\n"
 "X-Poedit-Basepath: .\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
@@ -46,8 +46,7 @@ msgstr ""
 msgid "EBANX - Credit Card"
 msgstr ""
 
-#: includes/class-wc-ebanx-credit-card-gateway.php:15
-#: includes/class-wc-ebanx-global-gateway.php:163
+#: includes/class-wc-ebanx-credit-card-gateway.php:15 includes/class-wc-ebanx-global-gateway.php:163
 msgid "Credit Card"
 msgstr ""
 
@@ -91,8 +90,7 @@ msgstr ""
 msgid "Paga con PSE - Pago Seguros en Línea."
 msgstr ""
 
-#: includes/class-wc-ebanx-gateway.php:38
-#: includes/class-wc-ebanx-gateway.php:48
+#: includes/class-wc-ebanx-gateway.php:38 includes/class-wc-ebanx-gateway.php:48
 msgid "Birth Date"
 msgstr "Fecha de Nacimiento"
 
@@ -105,9 +103,7 @@ msgid "EBANX"
 msgstr ""
 
 #: includes/class-wc-ebanx-global-gateway.php:14
-msgid ""
-"EBANX easy-to-setup checkout allows your business to accept local payments "
-"in Brazil, Mexico, Colombia, Chile & Peru."
+msgid "EBANX easy-to-setup checkout allows your business to accept local payments in Brazil, Mexico, Colombia, Chile & Peru."
 msgstr ""
 
 #: includes/class-wc-ebanx-global-gateway.php:49
@@ -115,10 +111,7 @@ msgid "Integration"
 msgstr ""
 
 #: includes/class-wc-ebanx-global-gateway.php:51
-msgid ""
-"You can obtain the integration keys in the settings section, logging in to "
-"the <a href=\"https://www.ebanx.com/business/en/dashboard\">EBANX Dashboard."
-"</a>"
+msgid "You can obtain the integration keys in the settings section, logging in to the <a href=\"https://www.ebanx.com/business/en/dashboard\">EBANX Dashboard.</a>"
 msgstr ""
 
 #: includes/class-wc-ebanx-global-gateway.php:54
@@ -146,9 +139,7 @@ msgid "Enable Sandbox Mode"
 msgstr ""
 
 #: includes/class-wc-ebanx-global-gateway.php:73
-msgid ""
-"EBANX Sandbox is a testing environment that mimics the live environment. Use "
-"it to make payment requests to see how your ecommerce processes them."
+msgid "EBANX Sandbox is a testing environment that mimics the live environment. Use it to make payment requests to see how your ecommerce processes them."
 msgstr ""
 
 #: includes/class-wc-ebanx-global-gateway.php:78
@@ -168,9 +159,7 @@ msgid "Enable Payment Methods"
 msgstr ""
 
 #: includes/class-wc-ebanx-global-gateway.php:87
-msgid ""
-"Set up payment methods for your checkout. Confirm that method is enabled on "
-"your contract."
+msgid "Set up payment methods for your checkout. Confirm that method is enabled on your contract."
 msgstr ""
 
 #: includes/class-wc-ebanx-global-gateway.php:90
@@ -206,9 +195,7 @@ msgid "Enable saving card data"
 msgstr ""
 
 #: includes/class-wc-ebanx-global-gateway.php:171
-msgid ""
-"Allow your customer to save credit card and debit card data for future "
-"purchases."
+msgid "Allow your customer to save credit card and debit card data for future purchases."
 msgstr ""
 
 #: includes/class-wc-ebanx-global-gateway.php:176
@@ -220,9 +207,7 @@ msgid "Enable one-click-payment"
 msgstr ""
 
 #: includes/class-wc-ebanx-global-gateway.php:179
-msgid ""
-"Allow your customer to complete payments in one-click using credit cards "
-"saved."
+msgid "Allow your customer to complete payments in one-click using credit cards saved."
 msgstr ""
 
 #: includes/class-wc-ebanx-global-gateway.php:184
@@ -235,9 +220,8 @@ msgstr ""
 
 #: includes/class-wc-ebanx-global-gateway.php:187
 msgid ""
-"Automatically capture payments from your customers. Otherwise you will need "
-"to capture the payment going to: WooCommerce -> Orders. Not captured "
-"payments will be cancelled in 4 days."
+"Automatically capture payments from your customers. Otherwise you will need to capture the payment going to: WooCommerce -> Orders. Not captured payments will be "
+"cancelled in 4 days."
 msgstr ""
 
 #: includes/class-wc-ebanx-global-gateway.php:191
@@ -245,9 +229,7 @@ msgid "Maximum nº of Installments"
 msgstr ""
 
 #: includes/class-wc-ebanx-global-gateway.php:209
-msgid ""
-"Establish the maximum number of installments in which your customer can pay, "
-"as consented on your contract."
+msgid "Establish the maximum number of installments in which your customer can pay, as consented on your contract."
 msgstr ""
 
 #: includes/class-wc-ebanx-global-gateway.php:213
@@ -259,29 +241,22 @@ msgid "Days to Expiration"
 msgstr ""
 
 #: includes/class-wc-ebanx-global-gateway.php:226
-msgid ""
-"Define the maximum number of days on which your customer can complete the "
-"payment of: Boleto, OXXO, Sencilito, PagoEfectivo and SafetyPay."
+msgid "Define the maximum number of days on which your customer can complete the payment of: Boleto, OXXO, Sencilito, PagoEfectivo and SafetyPay."
 msgstr ""
 
 #: includes/class-wc-ebanx-my-account.php:52
 msgid "View Banking Ticket"
 msgstr ""
 
-#: includes/class-wc-ebanx-one-click.php:102
-#: includes/class-wc-ebanx-one-click.php:141
-#: includes/class-wc-ebanx-one-click.php:151
-#: includes/class-wc-ebanx-one-click.php:172
-#: includes/class-wc-ebanx-one-click.php:185
+#: includes/class-wc-ebanx-one-click.php:102 includes/class-wc-ebanx-one-click.php:141 includes/class-wc-ebanx-one-click.php:151
+#: includes/class-wc-ebanx-one-click.php:172 includes/class-wc-ebanx-one-click.php:185
 #, php-format
 msgid "Error %d: Unable to create the order. Please try again."
 msgstr ""
 
 #: includes/class-wc-ebanx-one-click.php:159
 #, php-format
-msgid ""
-"Unfortunately <strong>we do not ship to %s</strong>. Please enter an "
-"alternative shipping address."
+msgid "Unfortunately <strong>we do not ship to %s</strong>. Please enter an alternative shipping address."
 msgstr ""
 
 #: includes/class-wc-ebanx-one-click.php:178
@@ -361,25 +336,18 @@ msgid "Débito Online"
 msgstr ""
 
 #: includes/class-wc-ebanx-tef-gateway.php:16
-msgid ""
-"Selecione o seu banco. A seguir, você será redirecionado para concluir o "
-"pagamento pelo seu internet banking."
+msgid "Selecione o seu banco. A seguir, você será redirecionado para concluir o pagamento pelo seu internet banking."
 msgstr ""
 
-#: templates/credit-card/card-template.php:16
-#: templates/debit-card/payment-form.php:21
+#: templates/credit-card/card-template.php:16 templates/debit-card/payment-form.php:21
 msgid "MM / YY"
 msgstr ""
 
-#: templates/credit-card/card-template.php:20
-#: templates/credit-card/payment-form.php:33
-#: templates/debit-card/payment-form.php:25
+#: templates/credit-card/card-template.php:20 templates/credit-card/payment-form.php:33 templates/debit-card/payment-form.php:25
 msgid "CVV"
 msgstr ""
 
-#: templates/credit-card/emails/html-instructions.php:17
-#: templates/credit-card/payment-instructions.php:18
-#: templates/oxxo/emails/html-instructions.php:17
+#: templates/credit-card/emails/html-instructions.php:17 templates/credit-card/payment-instructions.php:18 templates/oxxo/emails/html-instructions.php:17
 #, php-format
 msgid "Payment successfully made using %1$s credit card in %2$s."
 msgstr "Pago realizado con tarjeta de crédito %1$s (%2$s meses sin intereses)"
@@ -398,9 +366,7 @@ msgstr "con intereses"
 msgid "One-Click Purchase"
 msgstr ""
 
-#: templates/eft/payment-instructions.php:17
-#: templates/servipag/payment-instructions.php:17
-#: templates/tef/payment-instructions.php:17
+#: templates/eft/payment-instructions.php:17 templates/servipag/payment-instructions.php:17 templates/tef/payment-instructions.php:17
 #, php-format
 msgid "Payment successfully made using %1$s oxxo in %2$s."
 msgstr ""
@@ -417,9 +383,7 @@ msgstr ""
 
 #: woocommerce-gateway-ebanx.php:199
 #, php-format
-msgid ""
-"WooCommerce EBANX Gateway - The minimum PHP version required for this plugin "
-"is %1$s. You are running %2$s."
+msgid "WooCommerce EBANX Gateway - The minimum PHP version required for this plugin is %1$s. You are running %2$s."
 msgstr ""
 
 #: woocommerce-gateway-ebanx.php:203
@@ -428,9 +392,7 @@ msgstr ""
 
 #: woocommerce-gateway-ebanx.php:206
 #, php-format
-msgid ""
-"WooCommerce EBANX Gateway - The minimum WooCommerce version required for "
-"this plugin is %1$s. You are running %2$s."
+msgid "WooCommerce EBANX Gateway - The minimum WooCommerce version required for this plugin is %1$s. You are running %2$s."
 msgstr ""
 
 #: woocommerce-gateway-ebanx.php:301

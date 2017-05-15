@@ -65,6 +65,12 @@ class WC_EBANX_My_Account
 		return $actions;
 	}
 
+	public function add_payment_hash_input ($text) {
+		
+
+		return $text;
+	}
+
 	/**
 	 * Call thankyou pages on order details page on My Account by gateway method
 	 *
@@ -73,6 +79,11 @@ class WC_EBANX_My_Account
 	 */
 	public static function order_details($order)
 	{
+		// For test purpose
+		$hash = get_post_meta($order->id, '_ebanx_payment_hash', true);
+
+		printf('<input type="hidden" name="ebanx_payment_hash" value="%s" />', $hash);
+
 		switch ($order->payment_method) {
 			case 'ebanx-credit-card-br':
 				WC_EBANX_Credit_Card_BR_Gateway::thankyou_page($order);

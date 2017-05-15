@@ -185,4 +185,45 @@ jQuery( function($) {
 	wc_ebanx_form.init( $( "form.checkout, form#order_review, form#add_payment_method, form.woocommerce-checkout" ) );
 
 	wc_ebanx_form.toggleCardUse();
+
+	// Update IOF value when instalments is changed
+	var update_converted = function (self) {
+		var instalments = self.val();
+		var country = self.attr('data-country');
+		var amount = self.attr('data-amount');
+		var currency = self.attr('data-currency');
+		var text = self.parents('.payment_box').find('.ebanx-payment-converted-amount span');
+		var spinner = self.parents('.payment_box').find('.ebanx-spinner');
+
+		spinner.fadeIn();
+
+		$.ajax({
+      url: wc_ebanx_params.ajaxurl,
+      type: 'POST',
+			data: {
+        action: 'ebanx_update_converted_value',
+        instalments: instalments,
+        country: country,
+        amount: amount,
+        currency: currency
+      }
+		})
+			.done(function (data) {
+				text.html(data);
+			})
+			.always(function () {
+				spinner.fadeOut();
+			});
+	};
+
+	$(document).on('change', 'select.ebanx-instalments', function (){
+		update_converted($(this));
+	});
+
+	$(document).on('change', 'input[name="ebanx-credit-card-use"]', function () {
+		update_converted($(this)
+				.parents('.ebanx-credit-card-option')
+				.find('select.ebanx-instalments'));
+	});
+
 } );
