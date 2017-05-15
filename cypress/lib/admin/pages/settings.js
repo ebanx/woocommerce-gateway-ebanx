@@ -7,7 +7,8 @@ const settingsPage = (function (test) {
       },
       fields: {
         sandboxIntegrationKey: '#woocommerce_ebanx-global_sandbox_private_key',
-        sandboxPublickKey: '#woocommerce_ebanx-global_sandbox_public_key'
+        sandboxPublickKey: '#woocommerce_ebanx-global_sandbox_public_key',
+        instalmentsSelect: '#woocommerce_ebanx-global_credit_card_instalments'
       },
       containers: {
         successMessage: '#message',
@@ -17,6 +18,16 @@ const settingsPage = (function (test) {
   };
 
   const { buttons, fields, containers } = _private.elements;
+
+  _private.fillSelect = function (field, value) {
+    test
+      .get(field, { timeout: 10000 })
+        .select(value, { force: true })
+        .then($select => {
+          $select.change();
+        })
+        .should('contain', value);
+  };
 
   const $public = {
     open: function () {
@@ -39,6 +50,12 @@ const settingsPage = (function (test) {
           .clear()
           .type(keys.public_key);
         
+      return this;
+    },
+
+    fillInstalments: function (number) {
+      _private.fillSelect(fields.instalmentsSelect, number);
+
       return this;
     },
 

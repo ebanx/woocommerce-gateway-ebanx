@@ -1,25 +1,29 @@
 language: php
-php:
-  - '5.6'
-  - '7.0'
-  - '7.1'
+
+env:
+  DOCKER_COMPOSE_VERSION: 1.13.0
 
 services:
   - docker
   
 before_install:
-  - sudo sh -c 'echo "deb https://apt.dockerproject.org/repo ubuntu-precise main" > /etc/apt/sources.list.d/docker.list'
-  - sudo apt-key adv --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys 58118E89F3A912897C070ADBF76221572C52609D
+  - sudo service mysql stop
   - sudo apt-get update
   - sudo apt-key update
   - sudo apt-get install -y docker-engine
-  - curl -L https://github.com/docker/compose/releases/download/1.13.0/docker-compose-`uname -s`-`uname -m` > docker-compose
+  - sudo rm /usr/local/bin/docker-compose
+  - curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
   - chmod +x docker-compose
   - sudo mv docker-compose /usr/local/bin
-  - docker-compose -v
-  - docker -v
-  - sudo apt-get install -y nodejs
+  - docker-compose --version
+  - curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.2/install.sh | bash
+  - nvm install node 7
+  - nvm alias default node 7
+  - npm install -g kill-port
+  - kill-port --port 80
+  - kill-port --port 3306
   - docker-compose up -d
+  - docker ps
 
 install:
   - npm install -g cypress-cli
@@ -27,4 +31,6 @@ install:
   - npm install
 
 script:
-  - cypress run
+  - ./wait-for-it.sh -t 300 localhost:3306 -- echo "MySQL is alive!"
+  - ./wait-for-it.sh -t 300 localhost:80 -- echo "Plugin is alive!"
+  - cypress run --record --key f54e0f8d-46b4-47a4-b331-10a8e4731c3b
