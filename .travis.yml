@@ -1,7 +1,13 @@
 language: php
 
 env:
-  DOCKER_COMPOSE_VERSION: 1.13.0
+  EBANX_WC_PLUGIN_VERSION: 3.0.6
+  EBANX_ADMIN_USERNAME: ebanx
+  EBANX_ADMIN_PASSWORD: ebanx
+  EBANX_SITE_TITLE: EBANX
+  EBANX_SITE_EMAIL: plugin@ebanx.com
+  EBANX_DB: wordpress
+  EBANX_PASSWORD: root
 
 services:
   - docker
@@ -11,19 +17,14 @@ before_install:
   - sudo apt-get update
   - sudo apt-key update
   - sudo apt-get install -y docker-engine
-  - sudo rm /usr/local/bin/docker-compose
-  - curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
-  - chmod +x docker-compose
-  - sudo mv docker-compose /usr/local/bin
-  - docker-compose --version
   - curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.2/install.sh | bash
   - nvm install node 7
   - nvm alias default node 7
   - npm install -g kill-port
   - kill-port --port 80
   - kill-port --port 3306
-  - docker-compose up -d
-  - docker ps
+  - docker run --name mysql -p 3306:3306 -e MYSQL_ROOT_PASSWORD=${EBANX_PASSWORD} -e MYSQL_DATABASE=${EBANX_DB} -d mariadb:5
+  - docker run --name ebanx-woocommerce -p 80:80 --link mysql:mysql --volume="${TRAVIS_BUILD_DIR}/woocommerce-gateway-ebanx/:/var/www/html/wp-content/plugins/woocommerce-gateway-ebanx/" -e EBANX_WC_PLUGIN_VERSION=${EBANX_WC_PLUGIN_VERSION} -e EBANX_ADMIN_USERNAME=${EBANX_ADMIN_USERNAME} -e EBANX_ADMIN_PASSWORD=${EBANX_ADMIN_PASSWORD} -e EBANX_SITE_TITLE=${EBANX_SITE_TITLE} -e EBANX_SITE_EMAIL=${EBANX_SITE_EMAIL} -d ebanx/ebanx-woocommerce
 
 install:
   - npm install -g cypress-cli
