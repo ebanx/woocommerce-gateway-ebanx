@@ -12,6 +12,7 @@ services:
       - ./.data:/var/lib/mysql
 
   plugin:
+    image: ebanx/ebanx-woocommerce
     build:
       context: .
       args:
