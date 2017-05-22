@@ -350,55 +350,62 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway
 	 */
 	public function process_refund($order_id, $amount = null, $reason = '')
 	{
-		$order = wc_get_order($order_id);
+		try {
+			$order = wc_get_order($order_id);
 
-		$hash = get_post_meta($order->id, '_ebanx_payment_hash', true);
+			$hash = get_post_meta($order->id, '_ebanx_payment_hash', true);
 
-		do_action('ebanx_before_process_refund', $order, $hash);
+			do_action('ebanx_before_process_refund', $order, $hash);
 
-		if (!$order || is_null($amount) || !$hash) {
-			return false;
+			if (!$order || is_null($amount) || !$hash) {
+				return false;
+			}
+
+			if ( empty($reason) ) {
+				$reason = __('No reason specified.', 'woocommerce-gateway-ebanx');
+			}
+
+			$data = array(
+				'hash'        => $hash,
+				'amount'      => $amount,
+				'operation'   => 'request',
+				'description' => $reason,
+			);
+
+			$config = array(
+				'integrationKey' => $this->private_key,
+				'testMode'       => $this->is_sandbox_mode,
+			);
+
+			\Ebanx\Config::set($config);
+
+			$request = \Ebanx\EBANX::doRefund($data);
+
+			if ($request->status !== 'SUCCESS') {
+				do_action('ebanx_process_refund_error', $order, $request);
+
+				switch ($request->status_code) {
+					case 'BP-REF-7':
+						$message = __('The payment cannot be refunded because it is not confirmed.', 'woocommerce-gateway-ebanx');
+						break;
+					default:
+						$message = $request->status_message;
+				}
+
+				return new WP_Error('ebanx_process_refund_error', $message);
+			}
+
+			$order->add_order_note(sprintf(__('EBANX: Refund requested. %s - Refund ID: %s - Reason: %s.', 'woocommerce-gateway-ebanx'), wc_price($amount), $request->refund->id, $reason));
+
+			update_post_meta($order_id, '_ebanx_payment_refunds', $request->payment->refunds);
+
+			do_action('ebanx_after_process_refund', $order, $request, $refunds);
+
+			return true;
 		}
-
-		if ( empty($reason) ) {
-			$reason = __('No reason specified.', 'woocommerce-gateway-ebanx');
+		catch (Exception $e) {
+			return new WP_Error('ebanx_process_refund_error', __('We could not finish processing this refund. Please try again.'));
 		}
-
-		$data = array(
-			'hash'        => $hash,
-			'amount'      => $amount,
-			'operation'   => 'request',
-			'description' => $reason,
-		);
-
-		$config = [
-			'integrationKey' => $this->private_key,
-			'testMode'       => $this->is_sandbox_mode,
-		];
-
-		\Ebanx\Config::set($config);
-
-		$request = \Ebanx\EBANX::doRefund($data);
-
-		if ($request->status !== 'SUCCESS') {
-			do_action('ebanx_process_refund_error', $order, $request);
-
-			return false;
-		}
-
-		$order->add_order_note(sprintf(__('EBANX: Refund requested to EBANX %s - Refund ID: %s - Reason: %s.', 'woocommerce-gateway-ebanx'), wc_price($amount), $request->refund->id, $reason));
-
-		$refunds = current(get_post_meta((int) $order_id, "_ebanx_payment_refunds"));
-
-		$request->refund->wc_refund = current($order->get_refunds());
-
-		$refunds[] = $request->refund;
-
-		update_post_meta($order->id, "_ebanx_payment_refunds", $refunds);
-
-		do_action('ebanx_after_process_refund', $order, $request, $refunds);
-
-		return true;
 	}
 
 	/**
