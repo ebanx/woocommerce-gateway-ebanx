@@ -584,6 +584,10 @@ if ( ! class_exists('WC_EBANX') ) {
 		 */
 		public static function log($message)
 		{
+			$configs = new WC_EBANX_Global_Gateway();
+
+			if ($configs->settings['debug_enabled'] !== 'yes') return;
+			
 			if (empty(self::$log)) self::$log = new WC_Logger();
 
 			self::$log->add('woocommerce-gateway-ebanx', $message);
