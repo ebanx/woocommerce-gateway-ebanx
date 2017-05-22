@@ -12,6 +12,10 @@ env:
 services:
   - docker
   
+cache:
+  - yarn: true
+  - apt: true
+
 before_install:
   - sudo service mysql stop
   - sudo apt-get update
