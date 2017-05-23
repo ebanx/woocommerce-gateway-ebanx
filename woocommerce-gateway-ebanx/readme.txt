@@ -318,3 +318,4 @@ These are the most importante fixes and features, but another fixes and quality 
 == Arbitrary section ==
 
 When you use our plug in, you trust us with your information and agree that we may keep it and use it for the purposes of our commercial relationship. As we are a PCI compliant company, we will keep all your data safe, and will not use it for any other purposes.
+
