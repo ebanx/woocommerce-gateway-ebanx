@@ -3,7 +3,7 @@ Contributors: ebanxwp
 Tags: credit card, boleto, ebanx, woocommerce, approval rate, conversion rate, brazil, mexico, peru, colombia, chile, oxxo, baloto, cash payment, local payment one-click payment, installments, alternative payments, accept more payments
 Requires at least: 4.0
 Tested up to: 4.7
-Stable tag: 1.12.1
+Stable tag: 1.13.0
 License: MIT
 License URI: https://opensource.org/licenses/MIT
 
@@ -135,6 +135,13 @@ Yes, you can.
 4. There you go, you’re all set!
 
 == Changelog ==
+
+= 1.13.0 =
+* Fix - Fix for debug log when is enabled before record a log [#507](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/507)
+* Fix - Fix issue to avoid some issues on refund transactions [#506](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/506)
+* Fix - Changed label to Minimum Instalment (title-cased labels) [#500](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/500)
+* Fix - Fixed compliance fields when country is empty [#498](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/498)
+* Feature - Docker implementation and end-to-end tests for Brazil payments done [#504](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/504)
 
 = 1.12.1 =
 * Fix - Credit-card saving for new customers [#496](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/496)
@@ -311,3 +318,4 @@ These are the most importante fixes and features, but another fixes and quality 
 == Arbitrary section ==
 
 When you use our plug in, you trust us with your information and agree that we may keep it and use it for the purposes of our commercial relationship. As we are a PCI compliant company, we will keep all your data safe, and will not use it for any other purposes.
+
