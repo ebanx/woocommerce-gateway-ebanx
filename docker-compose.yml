@@ -1,7 +1,7 @@
 version: '3'
 
 services:
-  mysql:
+  woo_mysql:
     image: mariadb
     environment:
       MYSQL_DATABASE: wordpress
@@ -11,7 +11,7 @@ services:
     volumes:
       - ./.data:/var/lib/mysql
 
-  plugin:
+  woo_plugin:
     image: ebanx/ebanx-woocommerce
     build:
       context: .
@@ -31,4 +31,4 @@ services:
     volumes:
       - ./woocommerce-gateway-ebanx/:/var/www/html/wp-content/plugins/woocommerce-gateway-ebanx/
     links:
-      - mysql
+      - woo_mysql:mysql
