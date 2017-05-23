@@ -395,9 +395,11 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway
 				return new WP_Error('ebanx_process_refund_error', $message);
 			}
 
+			$refunds = $request->payment->refunds;
+
 			$order->add_order_note(sprintf(__('EBANX: Refund requested. %s - Refund ID: %s - Reason: %s.', 'woocommerce-gateway-ebanx'), wc_price($amount), $request->refund->id, $reason));
 
-			update_post_meta($order_id, '_ebanx_payment_refunds', $request->payment->refunds);
+			update_post_meta($order_id, '_ebanx_payment_refunds', $refunds);
 
 			do_action('ebanx_after_process_refund', $order, $request, $refunds);
 
