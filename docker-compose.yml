@@ -9,7 +9,7 @@ services:
     ports:
       - 3306:3306
     volumes:
-      - ./.data:/var/lib/mysql
+      - ./.data/db:/var/lib/mysql
 
   woo_plugin:
     image: ebanx/ebanx-woocommerce
@@ -29,6 +29,7 @@ services:
     ports:
       - 80:80
     volumes:
+      - /var/www/html
       - ./woocommerce-gateway-ebanx/:/var/www/html/wp-content/plugins/woocommerce-gateway-ebanx/
     links:
       - woo_mysql:mysql
