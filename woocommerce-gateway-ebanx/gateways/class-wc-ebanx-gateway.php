@@ -970,6 +970,15 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway
 				update_post_meta($order->id, "_ebanx_payment_refunds", $refunds);
 				break;
 			case 'UPDATE':
+				$status = array(
+					'CO' => 'Confirmed',
+					'CA' => 'Canceled',
+					'PE' => 'Pending',
+					'OP' => 'Opened'	
+				);
+
+				$order->add_order_note(sprintf(__('EBANX: The payment has been updated to: %s.', 'woocommerce-gateway-ebanx'), $status[$data->payment->status]));
+
 				switch (strtoupper($data->payment->status)) {
 					case 'CO':
 						$order->update_status('processing');
