@@ -965,6 +965,8 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway
 	 * @return void
 	 */
 	final public function update_payment($order, $data) {
+		$requestStatus = strtoupper($data->payment->status);
+
 		$status = array(
 			'CO' => 'Confirmed',
 			'CA' => 'Canceled',
@@ -972,9 +974,17 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway
 			'OP' => 'Opened'	
 		);
 
-		$order->add_order_note(sprintf(__('EBANX: The payment has been updated to: %s.', 'woocommerce-gateway-ebanx'), $status[$data->payment->status]));
+		$paymentStatus = $status[$data->payment->status];
 
-		switch (strtoupper($data->payment->status)) {
+		// Avoid updating payment many times
+		if (
+			in_array($order->status, array('processing', 'completed'))
+			&& $requestStatus !== 'CA'
+		) return;
+
+		$order->add_order_note(sprintf(__('EBANX: The payment has been updated to: %s.', 'woocommerce-gateway-ebanx'), $paymentStatus));
+
+		switch ($requestStatus) {
 			case 'CO':
 				$order->update_status('processing');
 				break;
