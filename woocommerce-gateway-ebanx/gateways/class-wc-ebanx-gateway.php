@@ -941,58 +941,14 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway
 
 		$order = new WC_Order($order_id);
 
-		// TODO: if (empty($order)) {}
-		// TODO: if ($data->status != "SUCCESS")
-
 		switch (strtoupper($notificationType)) {
 			case 'REFUND':
-				$refunds = current(get_post_meta($order->id, "_ebanx_payment_refunds"));
+				$this->process_refund_hook($order, $data);
 
-				foreach ($refunds as $k => $ref) {
-					foreach ($data->payment->refunds as $refund) {
-						if ($ref->id == $refund->id) {
-							if ($refund->status == 'CO' && $refunds[$k]->status != 'CO') {
-								$order->add_order_note(sprintf(__('EBANX: Your Refund was confirmed to EBANX - Refund ID: %s', 'woocommerce-gateway-ebanx'), $refund->id));
-							}
-							if ($refund->status == 'CA' && $refunds[$k]->status != 'CA') {
-								$order->add_order_note(sprintf(__('EBANX: Your Refund was canceled to EBANX - Refund ID: %s', 'woocommerce-gateway-ebanx'), $refund->id));
-							}
-
-							$refunds[$k]->status       = $refund->status; // status == co save note
-							$refunds[$k]->cancel_date  = $refund->cancel_date;
-							$refunds[$k]->request_date = $refund->request_date;
-							$refunds[$k]->pending_date = $refund->pending_date;
-							$refunds[$k]->confirm_date = $refund->confirm_date;
-						}
-					}
-				}
-
-				update_post_meta($order->id, "_ebanx_payment_refunds", $refunds);
 				break;
 			case 'UPDATE':
-				$status = array(
-					'CO' => 'Confirmed',
-					'CA' => 'Canceled',
-					'PE' => 'Pending',
-					'OP' => 'Opened'	
-				);
+				$this->update_payment($order, $data);
 
-				$order->add_order_note(sprintf(__('EBANX: The payment has been updated to: %s.', 'woocommerce-gateway-ebanx'), $status[$data->payment->status]));
-
-				switch (strtoupper($data->payment->status)) {
-					case 'CO':
-						$order->update_status('processing');
-						break;
-					case 'CA':
-						$order->update_status('failed');
-						break;
-					case 'PE':
-						$order->update_status('on-hold');
-						break;
-					case 'OP':
-						$order->update_status('pending');
-						break;
-				}
 				break;
 		};
 
@@ -1002,7 +958,72 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway
 	}
 
 	/**
-	 * Create the conveter amount on checkout page
+	 * Updates the payment when receive a notification from EBANX
+	 *
+	 * @param WC_Order $order
+	 * @param EBANX_Request $data
+	 * @return void
+	 */
+	final public function update_payment($order, $data) {
+		$status = array(
+			'CO' => 'Confirmed',
+			'CA' => 'Canceled',
+			'PE' => 'Pending',
+			'OP' => 'Opened'	
+		);
+
+		$order->add_order_note(sprintf(__('EBANX: The payment has been updated to: %s.', 'woocommerce-gateway-ebanx'), $status[$data->payment->status]));
+
+		switch (strtoupper($data->payment->status)) {
+			case 'CO':
+				$order->update_status('processing');
+				break;
+			case 'CA':
+				$order->update_status('failed');
+				break;
+			case 'PE':
+				$order->update_status('on-hold');
+				break;
+			case 'OP':
+				$order->update_status('pending');
+				break;
+		}
+	}
+
+	/**
+	 * Updates the refunds when receivers a EBANX refund notification
+	 *
+	 * @param WC_Order $order
+	 * @param EBANX_Request $data
+	 * @return void
+	 */
+	final public function process_refund_hook($order, $data) {
+		$refunds = current(get_post_meta($order->id, "_ebanx_payment_refunds"));
+
+		foreach ($refunds as $k => $ref) {
+			foreach ($data->payment->refunds as $refund) {
+				if ($ref->id == $refund->id) {
+					if ($refund->status == 'CO' && $refunds[$k]->status != 'CO') {
+						$order->add_order_note(sprintf(__('EBANX: Your Refund was confirmed to EBANX - Refund ID: %s', 'woocommerce-gateway-ebanx'), $refund->id));
+					}
+					if ($refund->status == 'CA' && $refunds[$k]->status != 'CA') {
+						$order->add_order_note(sprintf(__('EBANX: Your Refund was canceled to EBANX - Refund ID: %s', 'woocommerce-gateway-ebanx'), $refund->id));
+					}
+
+					$refunds[$k]->status       = $refund->status; // status == co save note
+					$refunds[$k]->cancel_date  = $refund->cancel_date;
+					$refunds[$k]->request_date = $refund->request_date;
+					$refunds[$k]->pending_date = $refund->pending_date;
+					$refunds[$k]->confirm_date = $refund->confirm_date;
+				}
+			}
+		}
+
+		update_post_meta($order->id, "_ebanx_payment_refunds", $refunds);
+	}
+
+	/**
+	 * Create the converter amount on checkout page
 	 *
 	 * @param  string $currency Possible currencies: BRL, USD, EUR, PEN, CLP, COP, MXN
 	 * @return void
