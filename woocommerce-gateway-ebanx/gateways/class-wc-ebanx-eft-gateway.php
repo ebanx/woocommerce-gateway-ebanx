@@ -77,7 +77,7 @@ class WC_EBANX_Eft_Gateway extends WC_EBANX_Redirect_Gateway
 		$data = array(
 			'data' => array(),
 			'order_status' => $order->get_status(),
-			'method' => 'debit-card'
+			'method' => 'eft'
 		);
 
 		parent::thankyou_page($data);
