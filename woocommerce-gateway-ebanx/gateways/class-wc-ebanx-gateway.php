@@ -971,32 +971,27 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway
 			'CO' => 'Confirmed',
 			'CA' => 'Canceled',
 			'PE' => 'Pending',
-			'OP' => 'Opened'	
+			'OP' => 'Opened'    
 		);
-
-		$paymentStatus = $status[$data->payment->status];
-
-		// Avoid updating payment many times
-		if (
-			in_array($order->status, array('processing', 'completed'))
-			&& $requestStatus !== 'CA'
-		) return;
-
-		$order->add_order_note(sprintf(__('EBANX: The payment has been updated to: %s.', 'woocommerce-gateway-ebanx'), $paymentStatus));
-
+		$new_status = null;
 		switch ($requestStatus) {
 			case 'CO':
-				$order->update_status('processing');
+				$new_status = 'processing';
 				break;
 			case 'CA':
-				$order->update_status('failed');
+				$new_status = 'failed';
 				break;
 			case 'PE':
-				$order->update_status('on-hold');
+				$new_status = 'on-hold';
 				break;
 			case 'OP':
-				$order->update_status('pending');
+				$new_status = 'pending';
 				break;
+		}
+
+		if ($new_status !== $order->status) {
+			$paymentStatus = $status[$data->payment->status];
+			$order->add_order_note(sprintf(__('EBANX: The payment has been updated to: %s.', 'woocommerce-gateway-ebanx'), $paymentStatus));
 		}
 	}
 
