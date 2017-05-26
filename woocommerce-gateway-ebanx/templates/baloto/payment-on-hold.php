@@ -22,8 +22,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 <hr>
 <div class="banking-ticket__actions">
     <div class="ebanx-button--group ebanx-button--group-two">
-        <a href="<?=$url_pdf ?>" target="_blank" class="button banking-ticket__action">Guardar como PDF</a>
-        <a href="<?=$url_print ?>" target="_blank" class="button banking-ticket__action">Imprimir Baloto</a>
+        <a href="<?=$url_pdf ?>" target="_blank" class="button banking-ticket__action">Guardar como PDF</a><a href="<?=$url_print ?>" target="_blank" class="button banking-ticket__action">Imprimir Baloto</a>
     </div>
 </div>
 <hr>

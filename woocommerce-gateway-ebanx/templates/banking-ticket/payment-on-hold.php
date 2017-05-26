@@ -37,8 +37,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 <div class="banking-ticket__actions">
     <div class="ebanx-button--group ebanx-button--group-two">
-        <a href="<?php echo $url_pdf ?>" target="_blank" class="button banking-ticket__action">Salvar em PDF</a>
-        <a href="<?php echo $url_print ?>" target="_blank" class="button banking-ticket__action">Imprimir boleto</a>
+        <a href="<?php echo $url_pdf ?>" target="_blank" class="button banking-ticket__action">Salvar em PDF</a><a href="<?php echo $url_print ?>" target="_blank" class="button banking-ticket__action">Imprimir boleto</a>
     </div>
 </div>
 
