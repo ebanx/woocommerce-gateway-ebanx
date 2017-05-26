@@ -363,31 +363,21 @@ li[class*="ebanx"] .payment_box .ebanx-credit-card-label > .ebanx-credit-card-bi
   margin: 20px 0;
 }
 
-.woocommerce .ebanx-button--group-two > a,
-.woocommerce .ebanx-button--group-two > button,
-.woocommerce .ebanx-button--group-two > .button {
-  width: 49%;
-  float: left;
+.button.banking-ticket__action {
+  width: calc(50% - 10px);
+  display: inline-block;
+  margin: 0;
 }
 
-.woocommerce .ebanx-button--group-two > a:not(:first-child),
-.woocommerce .ebanx-button--group-two > button:not(:first-child),
-.woocommerce .ebanx-button--group-two > .button:not(:first-child) {
-  float: right;
-}
-
-.woocommerce .ebanx-button--group::before,
-.woocommerce .ebanx-button--group::after {
-  content: " ";
-  display: table;
+.button.banking-ticket__action:last-child {
+  margin-left: 20px;
 }
 
 .woocommerce .ebanx-button--group::after {clear: both;}
 
 .woocommerce .ebanx-button--copy {
   position: relative;
-  margin-bottom: 0 !important;
-
+  margin: 0 !important;
   transition: all .3s;
 }
 
@@ -465,14 +455,15 @@ li[class*="ebanx"] .payment_box .ebanx-credit-card-label > .ebanx-credit-card-bi
 .banking-ticket__barcode::after {clear: both;}
 
 .banking-ticket__barcode-code {
-  display: inline-block;
+  display: block;
   letter-spacing: .32px;
-  vertical-align: middle;
+  text-align: center;
 }
 
 .banking-ticket__barcode-copy {
-  display: inline-block;
-  margin-left: 32px;
+  display: block;
+  text-align: center;
+  margin-top: 20px;
 }
 
 .ebanx-form-row .select2.select2-container {
