@@ -3,7 +3,7 @@ Contributors: ebanxwp
 Tags: credit card, boleto, ebanx, woocommerce, approval rate, conversion rate, brazil, mexico, peru, colombia, chile, oxxo, baloto, cash payment, local payment one-click payment, installments, alternative payments, accept more payments
 Requires at least: 4.0
 Tested up to: 4.7
-Stable tag: 1.13.0
+Stable tag: 1.13.1
 License: MIT
 License URI: https://opensource.org/licenses/MIT
 
@@ -135,6 +135,11 @@ Yes, you can.
 4. There you go, you’re all set!
 
 == Changelog ==
+
+= 1.13.1 =
+* Fix - Avoid duplication payment notifications [#509](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/509)
+* Fix - Changed PSE thank you page HTML [#512](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/512)
+* Fix - Changed Boleto thank you page HTML [#513](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/513)
 
 = 1.13.0 =
 * Fix - Fix for debug log when is enabled before record a log [#507](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/507)
