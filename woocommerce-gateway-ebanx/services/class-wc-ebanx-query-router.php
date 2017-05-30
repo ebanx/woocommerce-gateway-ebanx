@@ -49,7 +49,7 @@ class WC_EBANX_Query_Router {
 
 		// Route it and die
 		call_user_func_array($route, $params);
-		wp_die();
+		exit;
 	}
 
 	// Private
