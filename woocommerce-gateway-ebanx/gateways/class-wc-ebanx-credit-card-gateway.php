@@ -359,6 +359,10 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
 					WC_EBANX_Constants::ACQUIRER_MIN_INSTALMENT_VALUE_MXN,
 					$merchant_min_instalment_value);
 				break;
+			case 'co':
+				$site_to_local_rate = $this->get_local_currency_rate_for_site(WC_EBANX_Constants::CURRENCY_CODE_COP);
+				$min_instalment_value = WC_EBANX_Constants::ACQUIRER_MIN_INSTALMENT_VALUE_COP;
+				break;
 		}
 
 		if (isset($site_to_local_rate) && isset($min_instalment_value)) {

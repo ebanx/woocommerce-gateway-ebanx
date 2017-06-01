@@ -71,6 +71,7 @@ abstract class WC_EBANX_Constants
 	 */
 	const ACQUIRER_MIN_INSTALMENT_VALUE_MXN = 100;
 	const ACQUIRER_MIN_INSTALMENT_VALUE_BRL = 20;
+	const ACQUIRER_MIN_INSTALMENT_VALUE_COP = 0;
 
 	/**
 	 * Max supported credit-card instalments
@@ -103,6 +104,7 @@ abstract class WC_EBANX_Constants
 	public static $CREDIT_CARD_COUNTRIES = array(
 		self::COUNTRY_BRAZIL => self::COUNTRY_BRAZIL,
 		self::COUNTRY_MEXICO => self::COUNTRY_MEXICO,
+		self::COUNTRY_COLOMBIA => self::COUNTRY_COLOMBIA,
 	);
 
 	/**
@@ -178,6 +180,7 @@ abstract class WC_EBANX_Constants
 		'ebanx-banking-ticket' => '_boleto',
 		'ebanx-credit-card-br' => '_creditcard',
 		'ebanx-credit-card-mx' => '_creditcard',
+		'ebanx-credit-card-co' => '_creditcard',
 		'ebanx-debit-card' => 'debitcard',
 		'ebanx-oxxo' => '_oxxo',
 		'ebanx-sencillito' => '_sencillito',
@@ -214,6 +217,7 @@ abstract class WC_EBANX_Constants
 			'ebanx-servipag',
 		),
 		self::COUNTRY_COLOMBIA => array(
+			'ebanx-credit-card-co',
 			'ebanx-baloto',
 			'ebanx-eft',
 		),
