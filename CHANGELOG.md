@@ -1,5 +1,9 @@
 # CHANGELOG
 
+# 1.13.2
+* Fix - Replaced wp_die to exit to avoid error 500 [#515](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/515)
+* Fix - Updating order when it receives a payment status notification [#516](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/516)
+
 # 1.13.1
 * Fix - Avoid duplication payment notifications [#509](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/509)
 * Fix - Changed PSE thank you page HTML [#512](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/512)
