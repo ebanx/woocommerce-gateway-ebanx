@@ -1,5 +1,9 @@
 # CHANGELOG
 
+# 1.14.0
+* Feature - Added EURO conversion [#520](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/520)
+* Feature - Support for pt_PT translations [#521](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/521)
+
 # 1.13.2
 * Fix - Replaced wp_die to exit to avoid error 500 [#515](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/515)
 * Fix - Updating order when it receives a payment status notification [#516](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/516)
