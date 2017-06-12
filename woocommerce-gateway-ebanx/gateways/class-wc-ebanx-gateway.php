@@ -417,16 +417,18 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway
 	 * @return double
 	 */
 	public function get_local_currency_rate_for_site($local_currency_code) {
-		$site_currency = get_woocommerce_currency();
-
-		if ($site_currency === $local_currency_code) {
+		if ($this->merchant_currency === strtoupper($local_currency_code)) {
 			return 1;
 		}
 
 		$usd_to_site_rate = 1;
+		$converted_currencies = array(
+			WC_EBANX_Constants::CURRENCY_CODE_USD,
+			WC_EBANX_Constants::CURRENCY_CODE_EUR
+		);
 
-		if ($site_currency !== WC_EBANX_Constants::CURRENCY_CODE_USD) {
-			$usd_to_site_rate = $this->get_currency_rate($site_currency);
+		if ( ! in_array($this->merchant_currency, $converted_currencies) ) {
+			$usd_to_site_rate = $this->get_currency_rate($this->merchant_currency);
 		}
 
 		return $this->get_currency_rate($local_currency_code) / $usd_to_site_rate;
@@ -449,18 +451,18 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway
 		$cached = get_option($cache_key);
 		if ($cached !== false) {
 			list($rate, $time) = explode('|', $cached);
-			if ($time == $cache_time) {
+			if ($time === $cache_time) {
 				return $rate;
 			}
 		}
 
 		$usd_to_local = \Ebanx\Ebanx::getExchange( array(
-				'currency_code' => WC_EBANX_Constants::CURRENCY_CODE_USD,
-				'currency_base_code' => $local_currency_code
-			) );
+			'currency_code' => $this->merchant_currency,
+			'currency_base_code' => $local_currency_code
+		) );
 
 		if (!isset($usd_to_local)
-			|| strtoupper(trim($usd_to_local->status)) !== "SUCCESS") {
+			|| strtoupper(trim($usd_to_local->status)) !== 'SUCCESS') {
 
 			return 1;
 		}
@@ -1035,10 +1037,7 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway
 	 * @return void
 	 */
 	public function checkout_rate_conversion($currency, $template = true, $country = null, $instalments = null) {
-		if ( ! in_array($this->merchant_currency, array(
-			WC_EBANX_Constants::CURRENCY_CODE_USD,
-			WC_EBANX_Constants::CURRENCY_CODE_EUR,
-			WC_EBANX_Constants::CURRENCY_CODE_BRL) ) ){
+		if ( ! in_array($this->merchant_currency, WC_EBANX_Constants::$CURRENCIES_CODES_ALLOWED ) ) {
 			return;
 		}
 
