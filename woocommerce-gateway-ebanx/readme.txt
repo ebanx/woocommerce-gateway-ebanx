@@ -136,6 +136,9 @@ Yes, you can.
 
 == Changelog ==
 
+= 1.14.1 =
+* Fix - Problem resolved when the actions were updated via book actions. [#523](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/523)
+
 = 1.14.0 =
 * Feature - Added EURO conversion [#520](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/520)
 * Feature - Support for pt_PT translations [#521](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/521)
