@@ -20,7 +20,7 @@ before_install:
   - sudo service mysql stop
   - sudo apt-get update
   - sudo apt-key update
-  - sudo apt-get install -y docker-engine
+  - sudo apt-get install -y docker-ce
   - curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.2/install.sh | bash
   - nvm install node 7
   - nvm alias default node 7
