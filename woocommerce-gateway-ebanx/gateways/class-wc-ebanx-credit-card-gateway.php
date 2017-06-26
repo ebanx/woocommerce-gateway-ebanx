@@ -22,7 +22,7 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
 
 		parent::__construct();
 
-		add_action('woocommerce_order_edit_status', array($this, 'capture_payment_action'));
+		add_action('woocommerce_order_edit_status', array($this, 'capture_payment_action'), 10, 2);
 
 		if ($this->get_setting_or_default('interest_rates_enabled', 'no') == 'yes') {
 			$max_instalments = $this->configs->settings['credit_card_instalments'];
@@ -55,12 +55,14 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
 	 *
 	 * @return void
 	 */
-	public function capture_payment_action() {
-		$order = wc_get_order(WC_EBANX_Request::read('order_id'));
-		$status = WC_EBANX_Request::read('status');
+	public function capture_payment_action($order_id, $status) {
+		$action = WC_EBANX_Request::read('action');
+		$order = wc_get_order($order_id);
 		$recapture = false;
 
-		if ( $order->payment_method !== $this->id || $status !== 'processing') {
+		if ($order->payment_method !== $this->id
+			|| $status !== 'processing'
+			|| $action !== 'woocommerce_mark_order_status') {
 			return;
 		}
 
