@@ -55,9 +55,9 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
 	 *
 	 * @return void
 	 */
-	public function capture_payment_action($id, $status) {
+	public function capture_payment_action($order_id, $status) {
 		$action = WC_EBANX_Request::read('action');
-		$order = wc_get_order($id);
+		$order = wc_get_order($order_id);
 		$recapture = false;
 
 		if ($order->payment_method !== $this->id
