@@ -10,3 +10,4 @@ node_modules
 .vscode
 apidocs/phpdoc-cache-*
 .data
+.phpintel
