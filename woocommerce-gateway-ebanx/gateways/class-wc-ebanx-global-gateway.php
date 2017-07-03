@@ -48,6 +48,7 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway
 		'due_date_days' => '3',
 		'brazil_taxes_options' => 'cpf',
 		'interest_rates_enabled' => 'no',
+		'show_local_amount' => 'yes',
 		'min_instalment_value_brl' => '20',
 		'min_instalment_value_usd' => '0',
 		'min_instalment_value_eur' => '0',
@@ -370,6 +371,11 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway
 				'default' => array('cpf'),
 				'description' => __('In order to process with the EBANX Plugin in Brazil there a few mandatory fields such as CPF identification for individuals and CNPJ for companies.'),
 				'desc_tip' => true
+			),
+			'show_local_amount' => array(
+				'title' => __('Show Local Amount', 'woocommerce-gateway-ebanx'),
+				'label' => __('Show the converted price on EBANX gateways', 'woocommerce-gateway-ebanx'),
+				'type' => 'checkbox',
 			),
 			'checkout_manager_enabled' => array(
 				'title' => __('Checkout Manager', 'woocommerce-gateway-ebanx'),
