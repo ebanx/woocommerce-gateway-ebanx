@@ -3,7 +3,7 @@ Contributors: ebanxwp
 Tags: credit card, boleto, ebanx, woocommerce, approval rate, conversion rate, brazil, mexico, peru, colombia, chile, oxxo, baloto, cash payment, local payment one-click payment, installments, alternative payments, accept more payments
 Requires at least: 4.0
 Tested up to: 4.7
-Stable tag: 1.14.1
+Stable tag: 1.15.0
 License: MIT
 License URI: https://opensource.org/licenses/MIT
 
@@ -135,6 +135,10 @@ Yes, you can.
 4. There you go, you’re all set!
 
 == Changelog ==
+
+= 1.15.0 =
+* Feature - Created an option to hide the local amount value on checkout page [#526](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/526)
+* Fix - Applied box-sizing: border-box on boleto thank you pages button to avoid issues [#527](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/527)
 
 = 1.14.1 =
 * Fix - Problem resolved when the actions were updated via book actions. [#523](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/523)

@@ -1,5 +1,9 @@
 # CHANGELOG
 
+# 1.15.0
+* Feature - Created an option to hide the local amount value on checkout page [#526](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/526)
+* Fix - Applied box-sizing: border-box on boleto thank you pages button to avoid issues [#527](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/527)
+
 # 1.14.1
 * Fix - Problem resolved when the actions were updated via book actions. [#523](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/523)
 
