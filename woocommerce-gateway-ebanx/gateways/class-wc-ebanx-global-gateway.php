@@ -374,7 +374,7 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway
 			),
 			'show_local_amount' => array(
 				'title' => __('Show Local Amount', 'woocommerce-gateway-ebanx'),
-				'label' => __('Show the converted price on EBANX gateways', 'woocommerce-gateway-ebanx'),
+				'label' => __('Show price in Local Currencies as converted by EBANX', 'woocommerce-gateway-ebanx'),
 				'type' => 'checkbox',
 			),
 			'checkout_manager_enabled' => array(
