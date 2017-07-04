@@ -1037,7 +1037,8 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway
 	 * @return void
 	 */
 	public function checkout_rate_conversion($currency, $template = true, $country = null, $instalments = null) {
-		if ( ! in_array($this->merchant_currency, WC_EBANX_Constants::$CURRENCIES_CODES_ALLOWED ) ) {
+		if ( ! in_array($this->merchant_currency, WC_EBANX_Constants::$CURRENCIES_CODES_ALLOWED )
+			|| $this->configs->settings['show_local_amount'] !== 'yes') {
 			return;
 		}
 
