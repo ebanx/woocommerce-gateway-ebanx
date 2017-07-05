@@ -973,7 +973,7 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway
 			'CO' => 'Confirmed',
 			'CA' => 'Canceled',
 			'PE' => 'Pending',
-			'OP' => 'Opened'    
+			'OP' => 'Opened'
 		);
 		$new_status = null;
 		switch ($requestStatus) {
@@ -1038,7 +1038,7 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway
 	 */
 	public function checkout_rate_conversion($currency, $template = true, $country = null, $instalments = null) {
 		if ( ! in_array($this->merchant_currency, WC_EBANX_Constants::$CURRENCIES_CODES_ALLOWED )
-			|| $this->configs->settings['show_local_amount'] !== 'yes') {
+			|| $this->configs->get_setting_or_default('show_local_amount', 'yes') !== 'yes') {
 			return;
 		}
 
