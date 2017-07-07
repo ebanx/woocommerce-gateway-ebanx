@@ -973,7 +973,7 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway
 			'CO' => 'Confirmed',
 			'CA' => 'Canceled',
 			'PE' => 'Pending',
-			'OP' => 'Opened'    
+			'OP' => 'Opened'
 		);
 		$new_status = null;
 		switch ($requestStatus) {
@@ -1033,16 +1033,28 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway
 	/**
 	 * Create the converter amount on checkout page
 	 *
-	 * @param  string $currency Possible currencies: BRL, USD, EUR, PEN, CLP, COP, MXN
+	 * @param string $currency Possible currencies: BRL, USD, EUR, PEN, CLP, COP, MXN
+	 * @param boolean $template
+	 * @param boolean $country
+	 * @param boolean $instalments
 	 * @return void
 	 */
 	public function checkout_rate_conversion($currency, $template = true, $country = null, $instalments = null) {
+		global $order;
+
 		if ( ! in_array($this->merchant_currency, WC_EBANX_Constants::$CURRENCIES_CODES_ALLOWED )
 			|| $this->configs->settings['show_local_amount'] !== 'yes') {
 			return;
 		}
 
 		$amount = WC()->cart->total;
+
+		if (!$amount) {
+			$order_id = get_query_var('order-pay');
+			$order = new WC_Order($order_id);
+
+			$amount = $order->get_total();
+		}
 
 		if ($country === null) {
 			$country = $this->getTransactionAddress('country');
@@ -1054,7 +1066,7 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway
 			$rate = round(floatval($this->get_local_currency_rate_for_site($currency)), 2);
 
 			if ( WC()->cart->prices_include_tax ) {
-				$amount = WC()->cart->total + WC()->cart->tax_total;
+				$amount += WC()->cart->tax_total;
 			}
 
 			$amount *= $rate;
