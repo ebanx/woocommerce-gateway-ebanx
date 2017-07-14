@@ -7,19 +7,19 @@
 
 		$fields = array(
 			'billing_postcode' => array(
-				'label' => __('Zipcode', 'woocommerce'),
+				'label' => __('Postcode / ZIP', 'woocommerce'),
 				'value' => $address['postcode']
 			),
 			'billing_address_1' => array(
-				'label' => 'Address',
+				'label' => __('Street address', 'woocommerce'),
 				'value' => $address['address_1']
 			),
 			'billing_city' => array(
-				'label' => 'City',
+				'label' => __('Town / City', 'woocommerce'),
 				'value' => $address['city']
 			),
 			'billing_state' => array(
-				'label' => 'State',
+				'label' => __('State / County', 'woocommerce'),
 				'value' => $address['state']
 			),
 			'billing_country' => array(
