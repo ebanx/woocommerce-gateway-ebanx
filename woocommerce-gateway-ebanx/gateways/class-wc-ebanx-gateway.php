@@ -99,11 +99,29 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway
 
 		return parent::is_available()
 			&& $this->enabled === 'yes'
+			&& $this->is_gateway()
 			&& !empty($this->public_key)
 			&& !empty($this->private_key)
 			&& ($this->currency_is_usd_eur($currency)
 			|| $this->ebanx_process_merchant_currency($currency)
 			);
+	}
+
+	/**
+	* Detects if the page only accepts the selected gateways.
+	*
+	* @return boolean
+	*/
+	public function is_gateway()
+	{
+		$order_id = get_query_var('order-pay');
+		$order = wc_get_order($order_id);
+
+		if ($order && !empty($order->get_payment_method())) {
+			return $order->get_payment_method() === $this->id;
+		}
+
+		return true;
 	}
 
 	/**
@@ -474,6 +492,8 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway
 
 	/**
 	* Gets the necessary data to send to EBANX APIs.
+	*
+	* @return array
 	*/
 	protected function get_data()
 	{
