@@ -99,7 +99,7 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway
 
 		return parent::is_available()
 			&& $this->enabled === 'yes'
-			&& $this->is_gateway()
+			&& $this->is_current_order_gateway()
 			&& !empty($this->public_key)
 			&& !empty($this->private_key)
 			&& ($this->currency_is_usd_eur($currency)
@@ -112,7 +112,7 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway
 	*
 	* @return boolean
 	*/
-	public function is_gateway()
+	public function is_current_order_gateway()
 	{
 		$order_id = get_query_var('order-pay');
 		$order = wc_get_order($order_id);
