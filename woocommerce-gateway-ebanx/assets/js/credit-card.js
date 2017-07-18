@@ -87,7 +87,7 @@ jQuery( function($) {
 				var cvv       = $('#ebanx-card-cvv').val();
 				var expires   = $('#ebanx-card-expiry').payment('cardExpiryVal');
 				var card_name = $('#ebanx-card-holder-name').val() || ($('#billing_first_name').val() + ' ' + $('#billing_last_name').val());
-				var country   = $('#billing_country').val().toLowerCase();
+				var country   = $('#billing_country, input[name*="billing_country"]').val().toLowerCase();
         var instalments = $('#ebanx-container-new-credit-card').find('select.ebanx-instalments').val();
 
 				EBANX.config.setCountry(country);
@@ -191,6 +191,7 @@ jQuery( function($) {
 		var country = self.attr('data-country');
 		var amount = self.attr('data-amount');
 		var currency = self.attr('data-currency');
+		var order_id = self.attr('data-order-id');
 		var text = self.parents('.payment_box').find('.ebanx-payment-converted-amount span');
 		var spinner = self.parents('.payment_box').find('.ebanx-spinner');
 
@@ -204,7 +205,8 @@ jQuery( function($) {
         instalments: instalments,
         country: country,
         amount: amount,
-        currency: currency
+        currency: currency,
+        order_id: order_id
       }
 		})
 			.done(function (data) {

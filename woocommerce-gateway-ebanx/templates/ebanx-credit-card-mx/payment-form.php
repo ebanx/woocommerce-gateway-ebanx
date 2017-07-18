@@ -13,6 +13,8 @@ if (!defined('ABSPATH')) {
 ?>
 
 <div id="ebanx-credit-cart-form" class="ebanx-payment-container ebanx-language-es">
+	<?php include WC_EBANX::get_templates_path() . 'compliance-fields-mx.php' ?>
+
     <section class="ebanx-form-row">
     	<?php if (!empty($cards)): ?>
     		<?php foreach ($cards as $k => $card): ?>

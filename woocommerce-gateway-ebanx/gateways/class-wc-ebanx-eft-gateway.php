@@ -57,7 +57,8 @@ class WC_EBANX_Eft_Gateway extends WC_EBANX_Redirect_Gateway
 			array(
 				'title'       => $this->title,
 				'description' => $this->description,
-				'banks'       => WC_EBANX_Constants::$BANKS_EFT_ALLOWED[WC_EBANX_Constants::COUNTRY_COLOMBIA]
+				'banks'       => WC_EBANX_Constants::$BANKS_EFT_ALLOWED[WC_EBANX_Constants::COUNTRY_COLOMBIA],
+				'id' => $this->id
 			),
 			'woocommerce/ebanx/',
 			WC_EBANX::get_templates_path()

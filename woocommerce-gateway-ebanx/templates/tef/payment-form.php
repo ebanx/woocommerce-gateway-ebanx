@@ -13,6 +13,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 ?>
 
 <div id="ebanx-tef-payment" class="ebanx-payment-container ebanx-language-br">
+	<?php include WC_EBANX::get_templates_path() . 'compliance-fields-br.php' ?>
+
 	<p>
 		<label class="ebanx-label">
 			<input type="radio" name="tef" value="itau" checked> Itaú
