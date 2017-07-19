@@ -71,6 +71,7 @@ abstract class WC_EBANX_Constants
 	 */
 	const ACQUIRER_MIN_INSTALMENT_VALUE_MXN = 100;
 	const ACQUIRER_MIN_INSTALMENT_VALUE_BRL = 20;
+	const ACQUIRER_MIN_INSTALMENT_VALUE_COP = 20; // TODO: Check what value goes here
 
 	/**
 	 * Max supported credit-card instalments

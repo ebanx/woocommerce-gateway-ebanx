@@ -361,6 +361,12 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
 					WC_EBANX_Constants::ACQUIRER_MIN_INSTALMENT_VALUE_MXN,
 					$merchant_min_instalment_value);
 				break;
+			case 'co':
+				$site_to_local_rate = $this->get_local_currency_rate_for_site(WC_EBANX_Constants::CURRENCY_CODE_COP);
+				$merchant_min_instalment_value = $this->get_setting_or_default("min_instalment_value_$currency_code", 0) * $site_to_local_rate;
+				$min_instalment_value = max(
+					WC_EBANX_Constants::ACQUIRER_MIN_INSTALMENT_VALUE_COP,
+					$merchant_min_instalment_value);
 		}
 
 		if (isset($site_to_local_rate) && isset($min_instalment_value)) {
@@ -468,7 +474,17 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
 
 		$country = $this->getTransactionAddress('country');
 
-		$currency = $country === WC_EBANX_Constants::COUNTRY_BRAZIL ? WC_EBANX_Constants::CURRENCY_CODE_BRL : WC_EBANX_Constants::CURRENCY_CODE_MXN;
+		switch ($country) {
+			case WC_EBANX_Constants::COUNTRY_BRAZIL:
+				$currency = WC_EBANX_Constants::CURRENCY_CODE_BRL;
+				break;
+			case WC_EBANX_Constants::COUNTRY_MEXICO:
+				$currency = WC_EBANX_Constants::CURRENCY_CODE_MXN;
+				break;
+			case WC_EBANX_Constants::COUNTRY_COLOMBIA:
+				$currency = WC_EBANX_Constants::CURRENCY_CODE_COP;
+				break;
+		}
 
 		wc_get_template(
 			$this->id . '/payment-form.php',
