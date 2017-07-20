@@ -367,6 +367,7 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
 				$min_instalment_value = max(
 					WC_EBANX_Constants::ACQUIRER_MIN_INSTALMENT_VALUE_COP,
 					$merchant_min_instalment_value);
+				break;
 		}
 
 		if (isset($site_to_local_rate) && isset($min_instalment_value)) {
@@ -428,15 +429,20 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
 			$has_interest = false;
 			$cart_total = $amount;
 
+			echo "aaaaaaaaaaaaaaaaaaaaaaaaa";
+
 			if (isset($instalment_taxes) && array_key_exists($number, $instalment_taxes)) {
+				echo "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb";
 				$cart_total += $cart_total * $instalment_taxes[$number];
 				$cart_total += $cart_total * $tax;
 				if ($instalment_taxes[$number] > 0) {
+					echo "cccccccccccccccccccccccccccccccc";
 					$has_interest = true;
 				}
 			}
 
 			if ( $this->is_valid_instalment_amount($cart_total, $number) ) {
+				echo "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb2";
 				$instalment_price = $cart_total / $number;
 				$instalment_price = round(floatval($instalment_price), 2);
 
@@ -467,24 +473,17 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
 			});
 		}
 
-		$max_instalments = min($this->configs->settings['credit_card_instalments'], WC_EBANX_Constants::MAX_INSTALMENTS);
+		$country = $this->getTransactionAddress('country');
+
+		$max_instalments = min(
+			$this->configs->settings['credit_card_instalments'],
+			WC_EBANX_Constants::$MAX_INSTALMENTS[$country]
+		);
 
 		$tax = get_woocommerce_currency() === WC_EBANX_Constants::CURRENCY_CODE_BRL ? WC_EBANX_Constants::BRAZIL_TAX : 0;
 		$instalments_terms = $this->get_payment_terms($cart_total, $max_instalments, $tax);
 
-		$country = $this->getTransactionAddress('country');
-
-		switch ($country) {
-			case WC_EBANX_Constants::COUNTRY_BRAZIL:
-				$currency = WC_EBANX_Constants::CURRENCY_CODE_BRL;
-				break;
-			case WC_EBANX_Constants::COUNTRY_MEXICO:
-				$currency = WC_EBANX_Constants::CURRENCY_CODE_MXN;
-				break;
-			case WC_EBANX_Constants::COUNTRY_COLOMBIA:
-				$currency = WC_EBANX_Constants::CURRENCY_CODE_COP;
-				break;
-		}
+		$currency = WC_EBANX_Constants::$LOCAL_CURRENCIES[$country];
 
 		wc_get_template(
 			$this->id . '/payment-form.php',

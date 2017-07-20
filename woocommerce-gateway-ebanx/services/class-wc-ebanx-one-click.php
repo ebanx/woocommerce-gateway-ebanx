@@ -311,18 +311,16 @@ class WC_EBANX_One_Click {
 				break;
 		}
 
+		$country = $this->gateway->getTransactionAddress('country');
+
 		$cart_total = $product->price;
 
-		$max_instalments = min($this->gateway->configs->settings['credit_card_instalments'], WC_EBANX_Constants::MAX_INSTALMENTS);
+		$max_instalments = min($this->gateway->configs->settings['credit_card_instalments'], WC_EBANX_Constants::$MAX_INSTALMENTS[$country]);
 
-		$instalments_terms = $this->gateway->get_payment_terms($cart_total, $max_instalments);
 		$tax = get_woocommerce_currency() === WC_EBANX_Constants::CURRENCY_CODE_BRL ? WC_EBANX_Constants::BRAZIL_TAX : 0;
 
 		$instalments_terms = $this->gateway->get_payment_terms($cart_total, $max_instalments, $tax);
-
-		$country = $this->gateway->getTransactionAddress('country');
-
-		$currency = $country === WC_EBANX_Constants::COUNTRY_BRAZIL ? WC_EBANX_Constants::CURRENCY_CODE_BRL : WC_EBANX_Constants::CURRENCY_CODE_MXN;
+		$currency = WC_EBANX_Constants::$CREDIT_CARD_CURRENCIES[$country];
 
 		$args = apply_filters( 'ebanx_template_args', array(
 				'cards' => $this->cards,
