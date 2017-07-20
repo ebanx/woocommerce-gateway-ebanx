@@ -488,6 +488,7 @@ if ( ! class_exists('WC_EBANX') ) {
 			// Colombia Gateways
 			include_once WC_EBANX_GATEWAYS_DIR . 'class-wc-ebanx-baloto-gateway.php';
 			include_once WC_EBANX_GATEWAYS_DIR . 'class-wc-ebanx-eft-gateway.php';
+			include_once WC_EBANX_GATEWAYS_DIR . 'class-wc-ebanx-credit-card-co-gateway.php';
 
 			// Peru Gateways
 			include_once WC_EBANX_GATEWAYS_DIR . 'class-wc-ebanx-pagoefectivo-gateway.php';
@@ -541,6 +542,7 @@ if ( ! class_exists('WC_EBANX') ) {
 			$methods[] = 'WC_EBANX_Servipag_Gateway';
 
 			// Colombia
+			$methods[] = 'WC_EBANX_Credit_Card_CO_Gateway';
 			$methods[] = 'WC_EBANX_Baloto_Gateway';
 			$methods[] = 'WC_EBANX_Eft_Gateway';
 
