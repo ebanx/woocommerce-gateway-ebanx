@@ -429,20 +429,15 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
 			$has_interest = false;
 			$cart_total = $amount;
 
-			echo "aaaaaaaaaaaaaaaaaaaaaaaaa";
-
 			if (isset($instalment_taxes) && array_key_exists($number, $instalment_taxes)) {
-				echo "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb";
 				$cart_total += $cart_total * $instalment_taxes[$number];
 				$cart_total += $cart_total * $tax;
 				if ($instalment_taxes[$number] > 0) {
-					echo "cccccccccccccccccccccccccccccccc";
 					$has_interest = true;
 				}
 			}
 
 			if ( $this->is_valid_instalment_amount($cart_total, $number) ) {
-				echo "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb2";
 				$instalment_price = $cart_total / $number;
 				$instalment_price = round(floatval($instalment_price), 2);
 
