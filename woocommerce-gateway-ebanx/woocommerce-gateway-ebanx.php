@@ -473,6 +473,7 @@ if ( ! class_exists('WC_EBANX') ) {
 			// Chile Gateways
 			include_once WC_EBANX_GATEWAYS_DIR . 'class-wc-ebanx-servipag-gateway.php';
 			include_once WC_EBANX_GATEWAYS_DIR . 'class-wc-ebanx-sencillito-gateway.php';
+			include_once WC_EBANX_GATEWAYS_DIR . 'class-wc-ebanx-webpay-gateway.php';
 
 			// Brazil Gateways
 			include_once WC_EBANX_GATEWAYS_DIR . 'class-wc-ebanx-banking-ticket-gateway.php';
@@ -538,6 +539,7 @@ if ( ! class_exists('WC_EBANX') ) {
 			$methods[] = 'WC_EBANX_Oxxo_Gateway';
 
 			// Chile
+			$methods[] = 'WC_EBANX_Webpay_Gateway';
 			$methods[] = 'WC_EBANX_Sencillito_Gateway';
 			$methods[] = 'WC_EBANX_Servipag_Gateway';
 

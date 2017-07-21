@@ -217,6 +217,7 @@ abstract class WC_EBANX_Constants
 			'ebanx-account'
 		),
 		self::COUNTRY_CHILE => array(
+			'ebanx-webpay',
 			'ebanx-sencillito',
 			'ebanx-servipag',
 		),

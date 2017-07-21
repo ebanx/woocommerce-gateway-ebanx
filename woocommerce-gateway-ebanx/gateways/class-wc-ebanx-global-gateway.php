@@ -32,6 +32,7 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway
 		'chile_payment_methods' => array(
 			'ebanx-sencillito',
 			'ebanx-servipag',
+			'ebanx-webpay',
 		),
 		'colombia_payment_methods' => array(
 			'ebanx-credit-card-co',
@@ -186,10 +187,12 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway
 				'type'        => 'multiselect',
 				'class'       => 'wc-enhanced-select',
 				'options'     => array(
+					'ebanx-webpay' => 'Webpay',
 					'ebanx-sencillito' => 'Sencillito',
 					'ebanx-servipag'   => 'Servipag',
 				),
 				'default'     => array(
+					'ebanx-webpay',
 					'ebanx-sencillito',
 					'ebanx-servipag',
 				),
