@@ -20,7 +20,9 @@ class WC_EBANX_Webpay_Gateway extends WC_EBANX_Redirect_Gateway
 
 		parent::__construct();
 
-		$this->enabled = is_array($this->configs->settings['chile_payment_methods']) ? in_array($this->id, $this->configs->settings['chile_payment_methods']) ? 'yes' : false : false;
+		$this->enabled = is_array($this->configs->settings['chile_payment_methods']) 
+			? in_array($this->id, $this->configs->settings['chile_payment_methods']) 
+			? 'yes' : false : false;
 	}
 
 	/**
@@ -30,7 +32,7 @@ class WC_EBANX_Webpay_Gateway extends WC_EBANX_Redirect_Gateway
 	 */
 	public function is_available()
 	{
-		return parent::is_available() && $this->getTransactionAddress('country') == WC_EBANX_Constants::COUNTRY_CHILE;
+		return parent::is_available() && $this->getTransactionAddress('country') === WC_EBANX_Constants::COUNTRY_CHILE;
 	}
 
 	/**

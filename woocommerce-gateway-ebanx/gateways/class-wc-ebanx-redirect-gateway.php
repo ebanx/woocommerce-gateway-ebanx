@@ -21,7 +21,7 @@ abstract class WC_EBANX_Redirect_Gateway extends WC_EBANX_Gateway
 			return $this->process_response_error($request, $order);
 		}
 		$redirect = $request->redirect_url;
-		if (!$redirect && !$request->payment->redirect_url) {
+		if (!$redirect && !isset($request->payment->redirect_url)) {
 			return $this->process_response_error($request, $order);
 		}
 		$redirect = $request->payment->redirect_url;
