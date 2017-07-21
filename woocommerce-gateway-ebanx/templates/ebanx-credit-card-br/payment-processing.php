@@ -12,12 +12,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 ?>
 
-<p><strong><?php _e(sprintf('Seu pagamento foi confirmado, %s.', $customer_name), 'woocommerce-gateway-ebanx') ?></strong></p>
-<p><?php _e('Valor a pagar com IOF (0.38%):', 'woocommerce-gateway-ebanx') ?> <?php echo $total ?></p>
-<?php if ($instalments_number > 1) : ?>
-    <p class="ebanx-payment-type"><?php echo $instalments_number ?> <?php _e('parcelas de', 'woocommerce-gateway-ebanx') ?> <?php echo $instalments_amount ?></p>
-<?php else : ?>
-    <p class="ebanx-payment-type"><?php _e('Pagamento à vista', 'woocommerce-gateway-ebanx') ?></p>
-<?php endif; ?>
-<p><?php _e(sprintf('Pago com Cartão %s:', ucwords($card_brand_name)), 'woocommerce-gateway-ebanx') ?> <?php echo $masked_card ?></p>
-<p><?php _e('Obrigado por ter comprado conosco.', 'woocommerce-gateway-ebanx') ?></p>
+<div class="ebanx-thank-you-page ebanx-thank-you-page--br ebanx-thank-you-page--cc-br">
+	<?php if ($instalments_number > 1) : ?>
+		<p><strong><?= $customer_name ?> seu pagamento de <?= $total ?>, parcelado em <?= $instalments_number ?>x de <?= $instalments_amount ?>, foi aprovado o/</strong></p>
+	<?php else: ?>
+		<p><strong><?= $customer_name ?> seu pagamento de <?= $total ?>, à vista, foi aprovado o/</strong></p>
+	<?php endif ?>
+
+	<p>Se tiver alguma dúvida em relação ao seu pagamento, acesse a Conta EBANX com o email <strong><?= $customer_email ?></strong>.</p>
+
+	<?php include WC_EBANX::get_templates_path() . 'apps_br.php' ?>
+</div>
