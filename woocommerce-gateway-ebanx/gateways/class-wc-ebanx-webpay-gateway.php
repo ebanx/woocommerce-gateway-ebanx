@@ -11,7 +11,7 @@ class WC_EBANX_Webpay_Gateway extends WC_EBANX_Redirect_Gateway
 	 */
 	public function __construct()
 	{
-		$this->id           = 'ebanx-flowcl';
+		$this->id           = 'ebanx-webpay';
 		$this->method_title = __('EBANX - Webpay', 'woocommerce-gateway-ebanx');
 
 		$this->api_name    = 'flowcl';
