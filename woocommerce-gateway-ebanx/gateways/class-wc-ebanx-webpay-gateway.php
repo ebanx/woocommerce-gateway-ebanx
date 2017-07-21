@@ -53,7 +53,7 @@ class WC_EBANX_Webpay_Gateway extends WC_EBANX_Redirect_Gateway
 		}
 
 		wc_get_template(
-			'webpay/payment-form.php',
+			'flow/webpay/payment-form.php',
 			array(
 				'title'       => $this->title,
 				'description' => $this->description,
