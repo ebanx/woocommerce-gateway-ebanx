@@ -554,7 +554,7 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway
 				'phone_number'          => $order->billing_phone,
 				'amount_total'          => $order->get_total(),
 				'order_number'          => $order->id,
-				'merchant_payment_code' => $order->id . '-' . md5(rand(123123, 9999999)),
+				'merchant_payment_code' => substr($order->id . '-' . md5(rand(123123, 9999999)), 0, 40),
 				'items' => array_map(function($product) {
 					return array(
 						'name' => $product['name'],
