@@ -59,6 +59,7 @@ SVG;
 	private static function render_iof_notice() {
 		self::render_stylesheet('iof-notice-admin');
 		self::render_script('iof-options', array('jquery'));
+		self::localize_script('iof-options', array('confirm_message' => __('Please, don\'t change this unless you know what you are doing. (Placeholder text)', 'woocommerce-gateway-ebanx')));
 	}
 
 	/**
@@ -113,6 +114,19 @@ SVG;
 			WC_EBANX::get_plugin_version(),
 			true
 		);
+	}
+
+	/**
+	 * Adds a script block with some the variables from $var_data on page head.
+	 *
+	 * @param  string $handle     Handle name
+	 * @param  array  $var_data An array with the data that you want to pass to the script
+	 * @return void
+	 */
+	private static function localize_script($handle, $var_data) {
+		$script_name = 'woocommerce_ebanx_'.str_replace('-', '_', $handle);
+
+		wp_localize_script($script_name, $script_name, $var_data);
 	}
 
 	private static function render_inline_script($filename) {
