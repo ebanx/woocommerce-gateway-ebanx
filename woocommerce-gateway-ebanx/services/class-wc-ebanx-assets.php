@@ -10,6 +10,7 @@ class WC_EBANX_Assets {
 		self::adjust_dynamic_admin_options_sections();
 		self::resize_settings_menu_icon();
 		self::disable_ebanx_gateways();
+		self::render_iof_notice();
 	}
 
 	/**
@@ -48,6 +49,15 @@ SVG;
 	 */
 	private static function resize_settings_menu_icon() {
 		self::render_stylesheet('settings-menu-icon');
+	}
+
+	/**
+	 * Renders the style tag to resize the menu icon to the correct size
+	 *
+	 * @return void
+	 */
+	private static function render_iof_notice() {
+		self::render_stylesheet('iof-notice-admin');
 	}
 
 	/**

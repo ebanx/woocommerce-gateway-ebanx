@@ -52,6 +52,7 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway
 		'brazil_taxes_options' => 'cpf',
 		'interest_rates_enabled' => 'no',
 		'show_local_amount' => 'yes',
+		'add_iof_to_local_amount_enabled' => 'yes',
 		'min_instalment_value_brl' => '20',
 		'min_instalment_value_usd' => '0',
 		'min_instalment_value_eur' => '0',
@@ -459,6 +460,13 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway
 				'type' => 'text',
 				'class' => 'ebanx-advanced-option ebanx-checkout-manager-field ebanx-colombia-document',
 				'placeholder' => __('eg: billing_colombia_document', 'woocommerce-gateway-ebanx')
+			),
+			'add_iof_to_local_amount_enabled' => array(
+				'title' => __('Add IOF to local amount', 'woocommerce-gateway-ebanx'),
+				'label' => __('Apply IOF when calculating the price in BRL', 'woocommerce-gateway-ebanx'),
+				'type' => 'checkbox',
+				'class' => 'ebanx-advanced-option ebanx-advanced-option-enable',
+				'description' => __('<div class="iof-notice"><p>Please, don\'t change this unless you know what you are doing. (Placeholder text)</p></div>'),
 			),
 		));
 
