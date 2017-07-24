@@ -13,7 +13,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 ?>
 
 <p><strong><?php _e(sprintf('Seu pagamento foi confirmado, %s.', $customer_name), 'woocommerce-gateway-ebanx') ?></strong></p>
-<p><?php _e('Valor a pagar com IOF (0.38%):', 'woocommerce-gateway-ebanx') ?> <?php echo $total ?></p>
+<p><?php _e('Valor a pagar com ' .
+            ($this->configs->get_setting_or_default('add_iof_to_local_amount_enabled', 'yes') === 'yes' ? 'IOF (0.38%)' : 'em Reais')
+            . ':', 'woocommerce-gateway-ebanx') ?> <?php echo $total ?></p>
 <?php if ($instalments_number > 1) : ?>
     <p class="ebanx-payment-type"><?php echo $instalments_number ?> <?php _e('parcelas de', 'woocommerce-gateway-ebanx') ?> <?php echo $instalments_amount ?></p>
 <?php else : ?>
