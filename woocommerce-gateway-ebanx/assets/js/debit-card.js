@@ -72,7 +72,7 @@ jQuery( function($) {
 				var cvv       = $('#ebanx-debit-card-cvv').val();
 				var expires   = $('#ebanx-debit-card-expiry').payment('cardExpiryVal');
 				var card_name = $('#ebanx-debit-card-holder-name').val();
-				var country   = $('#billing_country').val().toLowerCase();
+				var country   = $('#billing_country, input[name*="billing_country"]').val().toLowerCase();
 
 				EBANX.config.setCountry(country);
 

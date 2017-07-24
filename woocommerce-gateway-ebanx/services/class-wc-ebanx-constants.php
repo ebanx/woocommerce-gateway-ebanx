@@ -71,11 +71,16 @@ abstract class WC_EBANX_Constants
 	 */
 	const ACQUIRER_MIN_INSTALMENT_VALUE_MXN = 100;
 	const ACQUIRER_MIN_INSTALMENT_VALUE_BRL = 20;
+	const ACQUIRER_MIN_INSTALMENT_VALUE_COP = 0;
 
 	/**
 	 * Max supported credit-card instalments
 	 */
-	const MAX_INSTALMENTS = 12;
+	public static $MAX_INSTALMENTS = array(
+		self::COUNTRY_BRAZIL => 12,
+		self::COUNTRY_MEXICO => 12,
+		self::COUNTRY_COLOMBIA => 36,
+	);
 
 	/**
 	* Taxes applied by country
@@ -103,6 +108,7 @@ abstract class WC_EBANX_Constants
 	public static $CREDIT_CARD_COUNTRIES = array(
 		self::COUNTRY_BRAZIL => self::COUNTRY_BRAZIL,
 		self::COUNTRY_MEXICO => self::COUNTRY_MEXICO,
+		self::COUNTRY_COLOMBIA => self::COUNTRY_COLOMBIA,
 	);
 
 	/**
@@ -114,6 +120,7 @@ abstract class WC_EBANX_Constants
 		self::CURRENCY_CODE_BRL,
 		self::CURRENCY_CODE_MXN,
 		self::CURRENCY_CODE_USD,
+		self::CURRENCY_CODE_COP,
 		self::CURRENCY_CODE_EUR
 	);
 
@@ -210,10 +217,13 @@ abstract class WC_EBANX_Constants
 			'ebanx-account'
 		),
 		self::COUNTRY_CHILE => array(
+			'ebanx-webpay',
+			'ebanx-multicaja',
 			'ebanx-sencillito',
 			'ebanx-servipag',
 		),
 		self::COUNTRY_COLOMBIA => array(
+			'ebanx-credit-card-co',
 			'ebanx-baloto',
 			'ebanx-eft',
 		),

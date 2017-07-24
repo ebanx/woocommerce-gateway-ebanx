@@ -1,0 +1,19 @@
+.iof-notice {
+  width: 400px;
+  height: 54px;
+  background-color: white;
+  border-left: 4px solid #ffb712;
+  box-sizing: border-box;
+  box-shadow: rgba(0, 0, 0, 0.1) 0 1px 1px 0;
+  color: rgb(68, 68, 68);
+  font-size: 13px;
+  font-weight: normal;
+  line-height: 18px;
+  outline: rgb(68, 68, 68) none 0px;
+  padding: 1px 12px;
+}
+
+.iof-notice p {
+  margin: .5em 0;
+  padding: 2px;
+}

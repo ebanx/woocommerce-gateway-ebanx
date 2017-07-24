@@ -5,7 +5,7 @@
  * Description: Offer Latin American local payment methods & increase your conversion rates with the solution used by AliExpress, AirBnB and Spotify in Brazil.
  * Author: EBANX
  * Author URI: https://www.ebanx.com/business/en
- * Version: 1.15.0
+ * Version: 1.16.0
  * License: MIT
  * Text Domain: woocommerce-gateway-ebanx
  * Domain Path: /languages
@@ -93,6 +93,7 @@ if ( ! class_exists('WC_EBANX') ) {
 			add_action('wp_loaded', array($this, 'enable_i18n'));
 
 			add_action('init', array($this, 'ebanx_router'));
+			add_action('init', array('WC_EBANX_Third_Party_Compability_Layer', 'check_and_solve'));
 			add_action('admin_init', array($this, 'ebanx_sidebar_shortcut'));
 			add_action('admin_init', array('WC_EBANX_Flash', 'enqueue_admin_messages'));
 
@@ -461,16 +462,20 @@ if ( ! class_exists('WC_EBANX') ) {
 			include_once WC_EBANX_SERVICES_DIR . 'class-wc-ebanx-errors.php';
 			include_once WC_EBANX_SERVICES_DIR . 'class-wc-ebanx-assets.php';
 			include_once WC_EBANX_SERVICES_DIR . 'class-wc-ebanx-query-router.php';
+			include_once WC_EBANX_SERVICES_DIR . 'class-wc-ebanx-third-party-compability-layer.php';
 
 			// Gateways
 			include_once WC_EBANX_GATEWAYS_DIR . 'class-wc-ebanx-gateway.php';
 			include_once WC_EBANX_GATEWAYS_DIR . 'class-wc-ebanx-redirect-gateway.php';
+			include_once WC_EBANX_GATEWAYS_DIR . 'class-wc-ebanx-flow-gateway.php';
 			include_once WC_EBANX_GATEWAYS_DIR . 'class-wc-ebanx-global-gateway.php';
 			include_once WC_EBANX_GATEWAYS_DIR . 'class-wc-ebanx-credit-card-gateway.php';
 
 			// Chile Gateways
 			include_once WC_EBANX_GATEWAYS_DIR . 'class-wc-ebanx-servipag-gateway.php';
 			include_once WC_EBANX_GATEWAYS_DIR . 'class-wc-ebanx-sencillito-gateway.php';
+			include_once WC_EBANX_GATEWAYS_DIR . 'class-wc-ebanx-webpay-gateway.php';
+			include_once WC_EBANX_GATEWAYS_DIR . 'class-wc-ebanx-multicaja-gateway.php';
 
 			// Brazil Gateways
 			include_once WC_EBANX_GATEWAYS_DIR . 'class-wc-ebanx-banking-ticket-gateway.php';
@@ -486,6 +491,7 @@ if ( ! class_exists('WC_EBANX') ) {
 			// Colombia Gateways
 			include_once WC_EBANX_GATEWAYS_DIR . 'class-wc-ebanx-baloto-gateway.php';
 			include_once WC_EBANX_GATEWAYS_DIR . 'class-wc-ebanx-eft-gateway.php';
+			include_once WC_EBANX_GATEWAYS_DIR . 'class-wc-ebanx-credit-card-co-gateway.php';
 
 			// Peru Gateways
 			include_once WC_EBANX_GATEWAYS_DIR . 'class-wc-ebanx-pagoefectivo-gateway.php';
@@ -535,10 +541,13 @@ if ( ! class_exists('WC_EBANX') ) {
 			$methods[] = 'WC_EBANX_Oxxo_Gateway';
 
 			// Chile
+			$methods[] = 'WC_EBANX_Webpay_Gateway';
+			$methods[] = 'WC_EBANX_Multicaja_Gateway';
 			$methods[] = 'WC_EBANX_Sencillito_Gateway';
 			$methods[] = 'WC_EBANX_Servipag_Gateway';
 
 			// Colombia
+			$methods[] = 'WC_EBANX_Credit_Card_CO_Gateway';
 			$methods[] = 'WC_EBANX_Baloto_Gateway';
 			$methods[] = 'WC_EBANX_Eft_Gateway';
 
@@ -587,7 +596,7 @@ if ( ! class_exists('WC_EBANX') ) {
 			$configs = new WC_EBANX_Global_Gateway();
 
 			if ($configs->settings['debug_enabled'] !== 'yes') return;
-			
+
 			if (empty(self::$log)) self::$log = new WC_Logger();
 
 			self::$log->add('woocommerce-gateway-ebanx', $message);

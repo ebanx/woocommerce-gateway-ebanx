@@ -83,7 +83,7 @@ class WC_EBANX_Payment_By_Link {
 			'email'                 => self::$order->billing_email,
 			'country'               => strtolower(self::$order->billing_country),
 			'payment_type_code'     => empty(self::$order->payment_method) ? '_all' : WC_EBANX_Constants::$GATEWAY_TO_PAYMENT_TYPE_CODE[self::$order->payment_method],
-			'merchant_payment_code' => self::$order->id . '_' . md5(time()),
+			'merchant_payment_code' => substr(self::$order->id . '_' . md5(time()), 0, 40),
 			'currency_code'         => strtoupper(get_woocommerce_currency()),
 			'amount'                => self::$order->get_total()
 		);

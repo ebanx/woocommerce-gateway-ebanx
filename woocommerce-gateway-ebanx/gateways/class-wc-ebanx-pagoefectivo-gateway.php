@@ -54,7 +54,9 @@ class WC_EBANX_Pagoefectivo_Gateway extends WC_EBANX_Gateway
 
 		wc_get_template(
 			'pagoefectivo/payment-form.php',
-			array(),
+			array(
+				'id' => $this->id
+			),
 			'woocommerce/ebanx/',
 			WC_EBANX::get_templates_path()
 		);
