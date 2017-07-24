@@ -58,6 +58,7 @@ SVG;
 	 */
 	private static function render_iof_notice() {
 		self::render_stylesheet('iof-notice-admin');
+		self::render_script('iof-options', array('jquery'));
 	}
 
 	/**

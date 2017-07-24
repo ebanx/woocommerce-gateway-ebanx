@@ -465,7 +465,7 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway
 				'title' => __('Add IOF to local amount', 'woocommerce-gateway-ebanx'),
 				'label' => __('Apply IOF when calculating the price in BRL', 'woocommerce-gateway-ebanx'),
 				'type' => 'checkbox',
-				'class' => 'ebanx-advanced-option ebanx-advanced-option-enable',
+				'class' => 'ebanx-advanced-option ebanx-advanced-option-enable iof-checkbox',
 				'description' => __('<div class="iof-notice"><p>Please, don\'t change this unless you know what you are doing. (Placeholder text)</p></div>'),
 			),
 		));
