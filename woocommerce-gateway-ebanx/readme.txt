@@ -3,7 +3,7 @@ Contributors: ebanxwp
 Tags: credit card, boleto, ebanx, woocommerce, approval rate, conversion rate, brazil, mexico, peru, colombia, chile, oxxo, baloto, cash payment, local payment one-click payment, installments, alternative payments, accept more payments
 Requires at least: 4.0
 Tested up to: 4.7
-Stable tag: 1.15.0
+Stable tag: 1.16.0
 License: MIT
 License URI: https://opensource.org/licenses/MIT
 
@@ -135,6 +135,16 @@ Yes, you can.
 4. There you go, you’re all set!
 
 == Changelog ==
+
+= 1.16.0 =
+* Feature - Pay for order(woocommerce native payment by link) [#531](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/531)
+* Feature - Added Credit Card Gateway for Colombia [#534](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/534)
+* Feature - Added Multicaja Gateway for Chile [#539](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/539)
+* Feature - Added Webpay Gateway for Chile [#538](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/538)
+* Feature - Added an option for merchant to hide IOF [#541](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/541)
+* Feature - Added a compability layer to prevent incompabilities from third party plugins and themes like WooCommerce's Storefront  [#535](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/535)
+* Fix - Fixed PHP notice when using empty interest rate option [#530](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/530)
+* Fix - Fixed error when a Merchant Payment Code gets greater than 40 characters [#537](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/537)
 
 = 1.15.0 =
 * Feature - Created an option to hide the local amount value on checkout page [#526](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/526)
