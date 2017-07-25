@@ -466,7 +466,8 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway
 				'label' => __('Apply IOF when calculating the price in BRL', 'woocommerce-gateway-ebanx'),
 				'type' => 'checkbox',
 				'class' => 'ebanx-advanced-option ebanx-advanced-option-enable iof-checkbox',
-				'description' => '<div class="iof-notice"><p>' . __('ATTENTION: You need to validate this change with your Business Development expert or the EBANX Merchant Services. Selecting or deselecting the box will only change the appearance of IOF on your check out but the value might still be shown to your customer.', 'woocommerce-gateway-ebanx') . '</p></div>',
+				'description' => 'The IOF is a tax... (Placeholder)', // Todo: Confirm text with Larissa
+				'desc_tip'=> true,
 			),
 		));
 
