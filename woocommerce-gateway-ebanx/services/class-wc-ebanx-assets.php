@@ -58,7 +58,7 @@ SVG;
 	 */
 	private static function render_iof_notice() {
 		self::render_script('iof-options', array('jquery'));
-		self::localize_script('iof-options', array('confirm_message' => __('ATTENTION: You need to validate this change with your Business Development expert or the EBANX Merchant Services. Selecting or deselecting the box will only change the appearance of IOF on your check out but the value might still be shown to your customer.', 'woocommerce-gateway-ebanx')));
+		self::localize_script('iof-options', array('confirm_message' => __('ATTENTION: You need to validate this change with your Business Development expert or the EBANX Merchant Services. Selecting or deselecting the box will only change the appearance of IOF on your checkout.', 'woocommerce-gateway-ebanx')));  // Todo: Confirm text with Larissa
 	}
 
 	/**
