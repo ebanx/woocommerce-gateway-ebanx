@@ -554,7 +554,7 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway
 				'phone_number'          => $order->billing_phone,
 				'amount_total'          => $order->get_total(),
 				'order_number'          => $order->id,
-				'merchant_payment_code' => $order->id . '-' . md5(rand(123123, 9999999)),
+				'merchant_payment_code' => substr($order->id . '-' . md5(rand(123123, 9999999)), 0, 40),
 				'items' => array_map(function($product) {
 					return array(
 						'name' => $product['name'],
@@ -1164,7 +1164,7 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway
 		}
 
 		// Applies IOF for Brazil payments only
-		if ( $country === WC_EBANX_Constants::COUNTRY_BRAZIL ) {
+		if ( $country === WC_EBANX_Constants::COUNTRY_BRAZIL && $this->configs->get_setting_or_default('add_iof_to_local_amount_enabled', 'yes') === 'yes' ) {
 			$amount += ($amount * WC_EBANX_Constants::BRAZIL_TAX);
 		}
 
@@ -1213,7 +1213,7 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway
 		$texts = array(
 			'pt-br' => array(
 				'INTRO'                                      => 'Total a pagar ',
-				WC_EBANX_Constants::CURRENCY_CODE_BRL    => 'com IOF (0.38%)'
+				WC_EBANX_Constants::CURRENCY_CODE_BRL    => $this->configs->get_setting_or_default('add_iof_to_local_amount_enabled', 'yes') === 'yes' ? 'com IOF (0.38%)' : 'em Reais'
 			),
 			'es'    => array(
 				'INTRO'                                      => 'Total a pagar en ',

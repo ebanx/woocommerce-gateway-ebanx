@@ -10,6 +10,7 @@ class WC_EBANX_Assets {
 		self::adjust_dynamic_admin_options_sections();
 		self::resize_settings_menu_icon();
 		self::disable_ebanx_gateways();
+		self::render_iof_notice();
 	}
 
 	/**
@@ -48,6 +49,17 @@ SVG;
 	 */
 	private static function resize_settings_menu_icon() {
 		self::render_stylesheet('settings-menu-icon');
+	}
+
+	/**
+	 * Renders the style tag to resize the menu icon to the correct size
+	 *
+	 * @return void
+	 */
+	private static function render_iof_notice() {
+		self::render_stylesheet('iof-notice-admin');
+		self::render_script('iof-options', array('jquery'));
+		self::localize_script('iof-options', array('confirm_message' => __('ATTENTION: You need to validate this change with your Business Development expert or the EBANX Merchant Services. Selecting or deselecting the box will only change the appearance of IOF on your check out but the value might still be shown to your customer.', 'woocommerce-gateway-ebanx')));
 	}
 
 	/**
@@ -102,6 +114,19 @@ SVG;
 			WC_EBANX::get_plugin_version(),
 			true
 		);
+	}
+
+	/**
+	 * Adds a script block with some the variables from $var_data on page head.
+	 *
+	 * @param  string $handle     Handle name
+	 * @param  array  $var_data An array with the data that you want to pass to the script
+	 * @return void
+	 */
+	private static function localize_script($handle, $var_data) {
+		$script_name = 'woocommerce_ebanx_'.str_replace('-', '_', $handle);
+
+		wp_localize_script($script_name, $script_name, $var_data);
 	}
 
 	private static function render_inline_script($filename) {
