@@ -760,18 +760,7 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway
 
 			$code = $e->getMessage();
 
-			$languages = array(
-				'mx' => 'es',
-				'cl' => 'es',
-				'pe' => 'es',
-				'co' => 'es',
-				'br' => 'pt-br',
-			);
-			$language = $languages[$country];
-
-			$errors = WC_EBANX_Errors::get_errors();
-
-			$message = !empty($errors[$language][$code]) ? $errors[$language][$code] : $errors[$language]['GENERAL'] . " ({$code})";
+			$message = self::get_error_message($code, $country);
 
 			WC()->session->set('refresh_totals', true);
 			WC_EBANX::log("EBANX Error: $message");
@@ -781,6 +770,22 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway
 			do_action('ebanx_process_payment_error', $message, $code);
 			return;
 		}
+	}
+
+	private static function get_error_message($code, $country)
+	{
+		$languages = array(
+			'mx' => 'es',
+			'cl' => 'es',
+			'pe' => 'es',
+			'co' => 'es',
+			'br' => 'pt-br',
+		);
+		$language = $languages[$country];
+
+		$errors = WC_EBANX_Errors::get_errors();
+
+		return !empty($errors[$language][$code]) ? $errors[$language][$code] : $errors[$language]['GENERAL'] . " ({$code})";
 	}
 
 	/**
