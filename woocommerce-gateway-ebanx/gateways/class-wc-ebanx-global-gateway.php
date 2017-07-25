@@ -406,11 +406,6 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway
 				'description' => __('In order to process with the EBANX Plugin in Brazil there a few mandatory fields such as CPF identification for individuals and CNPJ for companies.'),
 				'desc_tip' => true
 			),
-			'show_local_amount' => array(
-				'title' => __('Show Local Amount', 'woocommerce-gateway-ebanx'),
-				'label' => __('Show price in Local Currencies as converted by EBANX', 'woocommerce-gateway-ebanx'),
-				'type' => 'checkbox',
-			),
 			'checkout_manager_enabled' => array(
 				'title' => __('Checkout Manager', 'woocommerce-gateway-ebanx'),
 				'label' => __('Use my checkout manager fields', 'woocommerce-gateway-ebanx'),
@@ -461,8 +456,13 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway
 				'class' => 'ebanx-advanced-option ebanx-checkout-manager-field ebanx-colombia-document',
 				'placeholder' => __('eg: billing_colombia_document', 'woocommerce-gateway-ebanx')
 			),
+			'show_local_amount' => array(
+				'title' => __('Show Local Amount', 'woocommerce-gateway-ebanx'),
+				'label' => __('Show price in Local Currencies as converted by EBANX', 'woocommerce-gateway-ebanx'),  // Todo: Confirm text with Larissa
+				'type' => 'checkbox',
+			),
 			'add_iof_to_local_amount_enabled' => array(
-				'title' => __('Add IOF to local amount', 'woocommerce-gateway-ebanx'),
+				'title' => __('Add IOF to Local Amount', 'woocommerce-gateway-ebanx'), // Todo: Confirm text with Larissa
 				'label' => __('Apply IOF when calculating the price in BRL', 'woocommerce-gateway-ebanx'),
 				'type' => 'checkbox',
 				'class' => 'ebanx-advanced-option ebanx-advanced-option-enable iof-checkbox',
