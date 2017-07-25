@@ -457,16 +457,16 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway
 				'placeholder' => __('eg: billing_colombia_document', 'woocommerce-gateway-ebanx')
 			),
 			'show_local_amount' => array(
-				'title' => __('Show Local Amount', 'woocommerce-gateway-ebanx'),
-				'label' => __('Show price in Local Currencies as converted by EBANX', 'woocommerce-gateway-ebanx'),  // Todo: Confirm text with Larissa
+				'title' => __('Total Local Amount', 'woocommerce-gateway-ebanx'),
+				'label' => __('Show your customer the total purchase amount in local currency on the checkout', 'woocommerce-gateway-ebanx'),
 				'type' => 'checkbox',
 			),
 			'add_iof_to_local_amount_enabled' => array(
-				'title' => __('Add IOF to Local Amount', 'woocommerce-gateway-ebanx'), // Todo: Confirm text with Larissa
-				'label' => __('Apply IOF when calculating the price in BRL', 'woocommerce-gateway-ebanx'),
+				'title' => __('IOF on Local Amount', 'woocommerce-gateway-ebanx'),
+				'label' => __('Apply IOF when calculating the price in BRL on the checkout', 'woocommerce-gateway-ebanx'),
 				'type' => 'checkbox',
 				'class' => 'ebanx-advanced-option ebanx-advanced-option-enable iof-checkbox',
-				'description' => 'The IOF is a tax... (Placeholder)', // Todo: Confirm text with Larissa
+				'description' => 'IOF is a federal tax levied on credit (including intercompany loans), foreign exchange, insurance and securities transactions.',
 				'desc_tip'=> true,
 			),
 		));
