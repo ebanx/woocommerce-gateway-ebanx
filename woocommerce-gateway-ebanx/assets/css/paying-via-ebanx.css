@@ -474,3 +474,24 @@ li[class*="ebanx"] .payment_box .ebanx-credit-card-label > .ebanx-credit-card-bi
 .ebanx-compliance-fields {
   margin-bottom: 30px;
 }
+
+.ebanx-thank-you-page {}
+
+.ebanx-thank-you-page > p a {
+  display: inline-block;
+}
+
+.ebanx-badges p a {
+  -webkit-box-shadow: none;
+  box-shadow: none;
+}
+
+.ebanx-badges p a:hover {
+  -webkit-box-shadow: none;
+  box-shadow: none;
+}
+
+.ebanx-badges p a img {
+  -webkit-box-shadow: none;
+  box-shadow: none;
+}
