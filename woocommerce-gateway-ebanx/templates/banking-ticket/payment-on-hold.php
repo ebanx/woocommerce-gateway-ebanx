@@ -34,4 +34,6 @@ if ( ! defined( 'ABSPATH' ) ) {
     </div>
 
 	<iframe id="ebanx-boleto-frame" src="<?php echo $url_iframe; ?>" style="width: 100%; border: 0px; height: 1000px"></iframe>
+
+	<?php include WC_EBANX::get_templates_path() . 'apps_br.php' ?>
 </div>
