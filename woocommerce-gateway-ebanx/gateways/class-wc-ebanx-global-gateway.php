@@ -406,11 +406,6 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway
 				'description' => __('In order to process with the EBANX Plugin in Brazil there a few mandatory fields such as CPF identification for individuals and CNPJ for companies.'),
 				'desc_tip' => true
 			),
-			'show_local_amount' => array(
-				'title' => __('Show Local Amount', 'woocommerce-gateway-ebanx'),
-				'label' => __('Show price in Local Currencies as converted by EBANX', 'woocommerce-gateway-ebanx'),
-				'type' => 'checkbox',
-			),
 			'checkout_manager_enabled' => array(
 				'title' => __('Checkout Manager', 'woocommerce-gateway-ebanx'),
 				'label' => __('Use my checkout manager fields', 'woocommerce-gateway-ebanx'),
@@ -461,12 +456,18 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway
 				'class' => 'ebanx-advanced-option ebanx-checkout-manager-field ebanx-colombia-document',
 				'placeholder' => __('eg: billing_colombia_document', 'woocommerce-gateway-ebanx')
 			),
+			'show_local_amount' => array(
+				'title' => __('Total Local Amount', 'woocommerce-gateway-ebanx'),
+				'label' => __('Show your customer the total purchase amount in local currency on the checkout', 'woocommerce-gateway-ebanx'),
+				'type' => 'checkbox',
+			),
 			'add_iof_to_local_amount_enabled' => array(
-				'title' => __('Add IOF to local amount', 'woocommerce-gateway-ebanx'),
-				'label' => __('Apply IOF when calculating the price in BRL', 'woocommerce-gateway-ebanx'),
+				'title' => __('IOF on Local Amount', 'woocommerce-gateway-ebanx'),
+				'label' => __('Apply IOF when calculating the price in BRL on the checkout', 'woocommerce-gateway-ebanx'),
 				'type' => 'checkbox',
 				'class' => 'ebanx-advanced-option ebanx-advanced-option-enable iof-checkbox',
-				'description' => '<div class="iof-notice"><p>' . __('ATTENTION: You need to validate this change with your Business Development expert or the EBANX Merchant Services. Selecting or deselecting the box will only change the appearance of IOF on your check out but the value might still be shown to your customer.', 'woocommerce-gateway-ebanx') . '</p></div>',
+				'description' => 'IOF is a federal tax levied on credit (including intercompany loans), foreign exchange, insurance and securities transactions.',
+				'desc_tip'=> true,
 			),
 		));
 
