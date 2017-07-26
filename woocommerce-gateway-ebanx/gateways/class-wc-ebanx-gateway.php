@@ -770,6 +770,13 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway
 		}
 	}
 
+	/**
+	 * Get the error message
+	 * 
+	 * @param Exception $exception
+	 * @param string $country
+	 * @return string
+	 */
 	private static function get_error_message($exception, $country)
 	{
 		$code = $exception->getCode() ?: $exception->getMessage();
