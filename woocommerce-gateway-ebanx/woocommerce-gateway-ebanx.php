@@ -25,6 +25,7 @@ define('WC_EBANX_PLUGIN_DIR_URL', plugin_dir_url(__FILE__) . DIRECTORY_SEPARATOR
 define('WC_EBANX_PLUGIN_NAME', WC_EBANX_PLUGIN_DIR_URL . basename(__FILE__));
 define('WC_EBANX_GATEWAYS_DIR', __DIR__ . DIRECTORY_SEPARATOR . 'gateways' . DIRECTORY_SEPARATOR);
 define('WC_EBANX_SERVICES_DIR', __DIR__ . DIRECTORY_SEPARATOR . 'services' . DIRECTORY_SEPARATOR);
+define('WC_EBANX_EXCEPTIONS_DIR', __DIR__ . DIRECTORY_SEPARATOR . 'exceptions' . DIRECTORY_SEPARATOR);
 define('WC_EBANX_LANGUAGES_DIR', dirname( plugin_basename(__FILE__) ) . '/languages/');
 define('WC_EBANX_TEMPLATES_DIR', __DIR__ . DIRECTORY_SEPARATOR . 'templates' . DIRECTORY_SEPARATOR);
 define('WC_EBANX_VENDOR_DIR', __DIR__ . DIRECTORY_SEPARATOR . 'vendor' . DIRECTORY_SEPARATOR);
@@ -505,6 +506,9 @@ if ( ! class_exists('WC_EBANX') ) {
 
 			// Controllers
 			include_once WC_EBANX_CONTROLLERS_DIR . 'class-wc-ebanx-api-controller.php';
+
+			// Exceptions
+			include_once WC_EBANX_EXCEPTIONS_DIR . 'class-wc-ebanx-payment-exception.php';
 		}
 
 		/**
