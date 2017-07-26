@@ -62,6 +62,7 @@ class WC_EBANX_Errors {
 			),
 			'es'    => array(
 				'GENERAL'                    => 'No pudimos concluir tu compra. Por favor intenta nuevamente o entra en contacto con el sitio web.',
+				'BP-DR-6'                    => 'Para este opción de pago, el valor mínimo permitido es de %s. Elige otro método y finaliza tu pago.',
 				'BP-DR-13'                   => 'Por favor, escribe tu nombre completo.',
 				'BP-DR-15'                   => 'El email no es válido. ',
 				'BP-DR-19'                   => 'Escribe tu fecha de nacimiento en el formato DD/MM/AA.',

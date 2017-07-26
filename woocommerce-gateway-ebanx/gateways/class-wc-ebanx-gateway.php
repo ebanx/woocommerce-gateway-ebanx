@@ -785,6 +785,17 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway
 
 		$errors = WC_EBANX_Errors::get_errors();
 
+		if ($code === 'BP-DR-6' && $language === 'es') {
+			$error_info = array();
+			preg_match('/Amount must be greater than (\w{3}) (.+)/',
+				$exception->getMessage(),
+				$error_info
+			);
+			$amount = $error_info[2];
+			$currency = $error_info[1];
+			return sprintf($errors[$language][$code], wc_price($amount, array('currency' => $currency)));
+		}
+
 		return !empty($errors[$language][$code]) ? $errors[$language][$code] : $errors[$language]['GENERAL'] . " ({$code})";
 	}
 
