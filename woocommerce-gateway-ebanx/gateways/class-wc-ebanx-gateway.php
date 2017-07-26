@@ -772,7 +772,7 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway
 
 	private static function get_error_message($exception, $country)
 	{
-		$code = $exception->getCode();
+		$code = $exception->getCode() ?: $exception->getMessage();
 
 		$languages = array(
 			'mx' => 'es',
