@@ -758,20 +758,7 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway
 
 			$country = $this->getTransactionAddress('country');
 
-			$code = $e->getMessage();
-
-			$languages = array(
-				'mx' => 'es',
-				'cl' => 'es',
-				'pe' => 'es',
-				'co' => 'es',
-				'br' => 'pt-br',
-			);
-			$language = $languages[$country];
-
-			$errors = WC_EBANX_Errors::get_errors();
-
-			$message = !empty($errors[$language][$code]) ? $errors[$language][$code] : $errors[$language]['GENERAL'] . " ({$code})";
+			$message = self::get_error_message($e, $country);
 
 			WC()->session->set('refresh_totals', true);
 			WC_EBANX::log("EBANX Error: $message");
@@ -781,6 +768,42 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway
 			do_action('ebanx_process_payment_error', $message, $code);
 			return;
 		}
+	}
+
+	/**
+	 * Get the error message
+	 * 
+	 * @param Exception $exception
+	 * @param string $country
+	 * @return string
+	 */
+	private static function get_error_message($exception, $country)
+	{
+		$code = $exception->getCode() ?: $exception->getMessage();
+
+		$languages = array(
+			'mx' => 'es',
+			'cl' => 'es',
+			'pe' => 'es',
+			'co' => 'es',
+			'br' => 'pt-br',
+		);
+		$language = $languages[$country];
+
+		$errors = WC_EBANX_Errors::get_errors();
+
+		if ($code === 'BP-DR-6' && $language === 'es') {
+			$error_info = array();
+			preg_match('/Amount must be greater than (\w{3}) (.+)/',
+				$exception->getMessage(),
+				$error_info
+			);
+			$amount = $error_info[2];
+			$currency = $error_info[1];
+			return sprintf($errors[$language][$code], wc_price($amount, array('currency' => $currency)));
+		}
+
+		return !empty($errors[$language][$code]) ? $errors[$language][$code] : $errors[$language]['GENERAL'] . " ({$code})";
 	}
 
 	/**
@@ -921,6 +944,7 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway
 	protected function process_response_error($request, $order)
 	{
 		$code = isset($request->status_code) ? $request->status_code : 'GENERAL';
+		$status_message = isset($request->status_message) ? $request->status_message : '';
 		$error_message = __(sprintf('EBANX: An error occurred: %s - %s', $code, $request->status_message), 'woocommerce-gateway-ebanx');
 
 		$order->update_status('failed', $error_message);
@@ -928,7 +952,7 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway
 
 		do_action('ebanx_process_response_error', $order, $code);
 
-		throw new Exception($code);
+		throw new WC_EBANX_Payment_Exception($status_message, $code);
 	}
 
 	/**
