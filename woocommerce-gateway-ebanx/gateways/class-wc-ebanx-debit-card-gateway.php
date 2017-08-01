@@ -15,8 +15,8 @@ class WC_EBANX_Debit_Card_Gateway extends WC_EBANX_Gateway
 		$this->method_title = __('EBANX - Debit Card', 'woocommerce-gateway-ebanx');
 
 		$this->api_name    = 'debitcard';
-		$this->title       = __('Tarjeta de Débito', 'woocommerce-gateway-ebanx');
-		$this->description = __('Paga con tarjeta de débito.', 'woocommerce-gateway-ebanx');
+		$this->title       = 'Tarjeta de Débito';
+		$this->description = 'Paga con tarjeta de débito.';
 
 		parent::__construct();
 
