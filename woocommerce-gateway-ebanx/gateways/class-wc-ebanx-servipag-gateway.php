@@ -15,8 +15,8 @@ class WC_EBANX_Servipag_Gateway extends WC_EBANX_Redirect_Gateway
 		$this->method_title = __('EBANX - Servipag', 'woocommerce-gateway-ebanx');
 
 		$this->api_name    = 'servipag';
-		$this->title       = __('ServiPag', 'woocommerce-gateway-ebanx');
-		$this->description = __('Paga con Servipag.', 'woocommerce-gateway-ebanx');
+		$this->title       = 'ServiPag';
+		$this->description = 'Paga con Servipag.';
 
 		parent::__construct();
 
