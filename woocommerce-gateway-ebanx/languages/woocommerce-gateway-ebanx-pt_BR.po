@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
-"POT-Creation-Date: 2017-08-01 18:54-0300\n"
-"PO-Revision-Date: 2017-08-01 18:57-0300\n"
+"POT-Creation-Date: 2017-08-02 13:51-0300\n"
+"PO-Revision-Date: 2017-08-02 13:52-0300\n"
 "Last-Translator: \n"
 "Language-Team: EBANX\n"
 "Language: pt_BR\n"
@@ -25,37 +25,13 @@ msgstr ""
 msgid "EBANX - ACCOUNT"
 msgstr "EBANX - CONTA"
 
-#: gateways/class-wc-ebanx-account-gateway.php:18
-msgid "Saldo EBANX"
-msgstr "Saldo EBANX"
-
-#: gateways/class-wc-ebanx-account-gateway.php:19
-msgid "Pague usando o saldo da sua conta do EBANX."
-msgstr "Pague usando o saldo da sua conta do EBANX."
-
 #: gateways/class-wc-ebanx-baloto-gateway.php:15
 msgid "EBANX - Baloto"
 msgstr "EBANX - Baloto"
 
-#: gateways/class-wc-ebanx-baloto-gateway.php:18
-msgid "Baloto"
-msgstr "Baloto"
-
-#: gateways/class-wc-ebanx-baloto-gateway.php:19
-msgid "Paga con Baloto."
-msgstr "Paga com Baloto."
-
 #: gateways/class-wc-ebanx-banking-ticket-gateway.php:15
 msgid "EBANX - Banking Ticket"
 msgstr "EBANX - Boleto"
-
-#: gateways/class-wc-ebanx-banking-ticket-gateway.php:18
-msgid "Boleto EBANX"
-msgstr "Boleto EBANX"
-
-#: gateways/class-wc-ebanx-banking-ticket-gateway.php:19
-msgid "Pague com boleto bancário."
-msgstr "Pague com boleto bancário."
 
 #: gateways/class-wc-ebanx-credit-card-br-gateway.php:14
 msgid "EBANX - Credit Card Brazil"
@@ -115,14 +91,6 @@ msgstr "EBANX - Cartão de Débito"
 msgid "EBANX - PSE"
 msgstr "EBANX - PSE"
 
-#: gateways/class-wc-ebanx-eft-gateway.php:18
-msgid "PSE - Pago Seguros en Línea"
-msgstr "PSE - Pago Seguros en Línea"
-
-#: gateways/class-wc-ebanx-eft-gateway.php:19
-msgid "Paga con PSE - Pago Seguros en Línea."
-msgstr "Pague com PSE - Pago Seguros en Línea."
-
 #: gateways/class-wc-ebanx-gateway.php:172
 msgid "Select an option"
 msgstr "Selecione uma opção"
@@ -161,38 +129,38 @@ msgid "We could not finish processing this refund. Please try again."
 msgstr ""
 "Não pudemos terminar de processar este reebolso. Por favor, tente novamente."
 
-#: gateways/class-wc-ebanx-gateway.php:943
+#: gateways/class-wc-ebanx-gateway.php:967
 #, php-format
 msgid "Processing response: %s"
 msgstr "Processando resposta: %s"
 
-#: gateways/class-wc-ebanx-gateway.php:963
+#: gateways/class-wc-ebanx-gateway.php:987
 msgid "EBANX: The payment has failed."
 msgstr "EBANX: O pagamento falhou."
 
-#: gateways/class-wc-ebanx-gateway.php:968
+#: gateways/class-wc-ebanx-gateway.php:992
 msgid "EBANX: The payment was opened."
 msgstr "EBANX: O pagamento foi aberto."
 
-#: gateways/class-wc-ebanx-gateway.php:973
+#: gateways/class-wc-ebanx-gateway.php:997
 msgid "EBANX: The order is awaiting payment."
 msgstr "EBANX: A pedido está aguardando pagamento."
 
-#: gateways/class-wc-ebanx-gateway.php:978
+#: gateways/class-wc-ebanx-gateway.php:1002
 msgid "EBANX: The transaction was paid."
 msgstr "EBANX: A transação foi paga."
 
-#: gateways/class-wc-ebanx-gateway.php:1073
+#: gateways/class-wc-ebanx-gateway.php:1097
 #, php-format
 msgid "EBANX: The payment has been updated to: %s."
 msgstr "EBANX: O pagamento foi atualizado para: %s."
 
-#: gateways/class-wc-ebanx-gateway.php:1092
+#: gateways/class-wc-ebanx-gateway.php:1116
 #, php-format
 msgid "EBANX: Your Refund was confirmed to EBANX - Refund ID: %s"
 msgstr "EBANX: Seu reebolso foi confirmado para o EBANX - ID do reembolso: %s"
 
-#: gateways/class-wc-ebanx-gateway.php:1095
+#: gateways/class-wc-ebanx-gateway.php:1119
 #, php-format
 msgid "EBANX: Your Refund was canceled to EBANX - Refund ID: %s"
 msgstr "EBANX: Seu Reembolso foi cancelado para o EBANX - ID do reembolso: %s"
@@ -549,101 +517,33 @@ msgstr "Aplicar o IOF quando calcular o preço em BRL no checkout"
 msgid "EBANX - Multicaja"
 msgstr "EBANX - Multicaja"
 
-#: gateways/class-wc-ebanx-multicaja-gateway.php:17
-msgid "Multicaja"
-msgstr "Multicaja"
-
-#: gateways/class-wc-ebanx-multicaja-gateway.php:18
-msgid "Paga con multicaja."
-msgstr "Pague com multicaja."
-
 #: gateways/class-wc-ebanx-oxxo-gateway.php:15
 msgid "EBANX - OXXO"
 msgstr "EBANX - OXXO"
-
-#: gateways/class-wc-ebanx-oxxo-gateway.php:18
-msgid "OXXO"
-msgstr "OXXO"
-
-#: gateways/class-wc-ebanx-oxxo-gateway.php:19
-msgid "Paga con boleta OXXO."
-msgstr "Pague com OXXO."
 
 #: gateways/class-wc-ebanx-pagoefectivo-gateway.php:15
 msgid "EBANX - Pagoefectivo"
 msgstr "EBANX - Pagoefectivo"
 
-#: gateways/class-wc-ebanx-pagoefectivo-gateway.php:18
-msgid "PagoEfectivo"
-msgstr "PagoEfectivo"
-
-#: gateways/class-wc-ebanx-pagoefectivo-gateway.php:19
-msgid "Paga con PagoEfectivo."
-msgstr "Pague com PagoEfectivo."
-
 #: gateways/class-wc-ebanx-safetypay-gateway.php:15
 msgid "EBANX - Safetypay"
 msgstr "EBANX - Safetypay"
-
-#: gateways/class-wc-ebanx-safetypay-gateway.php:17
-msgid "SafetyPay"
-msgstr "SafetyPay"
-
-#: gateways/class-wc-ebanx-safetypay-gateway.php:18
-msgid "Paga con SafetyPay."
-msgstr "Pague com SafetyPay."
 
 #: gateways/class-wc-ebanx-sencillito-gateway.php:15
 msgid "EBANX - Sencillito"
 msgstr "EBANX - Sencillito"
 
-#: gateways/class-wc-ebanx-sencillito-gateway.php:18
-msgid "Sencillito"
-msgstr "Sencillito"
-
-#: gateways/class-wc-ebanx-sencillito-gateway.php:19
-msgid "Paga con Sencillito."
-msgstr "Paga con Sencillito."
-
 #: gateways/class-wc-ebanx-servipag-gateway.php:15
 msgid "EBANX - Servipag"
 msgstr "EBANX - Servipag"
-
-#: gateways/class-wc-ebanx-servipag-gateway.php:18
-msgid "ServiPag"
-msgstr "ServiPag"
-
-#: gateways/class-wc-ebanx-servipag-gateway.php:19
-msgid "Paga con Servipag."
-msgstr "Pague com Servipag."
 
 #: gateways/class-wc-ebanx-tef-gateway.php:15
 msgid "EBANX - TEF"
 msgstr "EBANX - TEF"
 
-#: gateways/class-wc-ebanx-tef-gateway.php:18
-msgid "Débito Online"
-msgstr "Débito Online"
-
-#: gateways/class-wc-ebanx-tef-gateway.php:19
-msgid ""
-"Selecione o seu banco. A seguir, você será redirecionado para concluir o "
-"pagamento pelo seu internet banking."
-msgstr ""
-"Selecione o seu banco. A seguir, você será redirecionado para concluir o "
-"pagamento pelo seu internet banking."
-
 #: gateways/class-wc-ebanx-webpay-gateway.php:15
 msgid "EBANX - Webpay"
 msgstr "EBANX - Webpay"
-
-#: gateways/class-wc-ebanx-webpay-gateway.php:17
-msgid "Webpay"
-msgstr "Webpay"
-
-#: gateways/class-wc-ebanx-webpay-gateway.php:18
-msgid "Paga con Webpay."
-msgstr "Pague com Webpay."
 
 #: services/class-wc-ebanx-assets.php:61
 msgid ""
@@ -868,92 +768,6 @@ msgstr "Cidade"
 msgid "State / County"
 msgstr "Estado"
 
-#: templates/debit-card/payment-form.php:23
-#: templates/ebanx-credit-card-br/card-template.php:9
-#: templates/ebanx-credit-card-co/card-template.php:14
-#: templates/ebanx-credit-card-mx/card-template.php:14
-msgid "MM / AA"
-msgstr "MM / AA"
-
-#: templates/debit-card/payment-form.php:27
-#: templates/ebanx-credit-card-br/card-template.php:13
-#: templates/ebanx-credit-card-br/payment-form.php:35
-#: templates/ebanx-credit-card-co/card-template.php:18
-#: templates/ebanx-credit-card-co/payment-form.php:33
-#: templates/ebanx-credit-card-mx/card-template.php:18
-#: templates/ebanx-credit-card-mx/payment-form.php:35
-msgid "CVV"
-msgstr "CVV"
-
-#: templates/debit-card/payment-processing.php:16
-msgid "Resumo de la compra:"
-msgstr "Resumo da compra:"
-
-#: templates/debit-card/payment-processing.php:17
-msgid "Valor:"
-msgstr "Valor:"
-
-#: templates/debit-card/payment-processing.php:18
-msgid "Pago realizado en una sola exhibición"
-msgstr "Pagamento realizado a vista."
-
-#: templates/debit-card/payment-processing.php:19
-msgid "Gracias por haber comprado con nosotros."
-msgstr "Obrigado por comprar conosco"
-
-#: templates/ebanx-credit-card-br/card-template.php:3
-msgid "Número do Cartão"
-msgstr "Número do Cartão"
-
-#: templates/ebanx-credit-card-br/card-template.php:8
-msgid "Data de validade (MM / AA)"
-msgstr "Data de validade (MM / AA)"
-
-#: templates/ebanx-credit-card-br/card-template.php:12
-#: templates/ebanx-credit-card-br/payment-form.php:33
-msgid "Código de segurança"
-msgstr "Código de segurança"
-
-#: templates/ebanx-credit-card-br/card-template.php:22
-msgid "Salvar este cartão para compras futuras"
-msgstr "Salvar este cartão para compras futuras"
-
-#: templates/ebanx-credit-card-br/payment-form.php:48
-msgid "Usar um outro cartão"
-msgstr "Usar um outro cartão"
-
-#: templates/ebanx-credit-card-co/card-template.php:3
-#: templates/ebanx-credit-card-mx/card-template.php:3
-msgid "Titular de la tarjeta"
-msgstr "Titular do cartão"
-
-#: templates/ebanx-credit-card-co/card-template.php:8
-#: templates/ebanx-credit-card-mx/card-template.php:8
-msgid "Número de la tarjeta"
-msgstr "Número do cartão"
-
-#: templates/ebanx-credit-card-co/card-template.php:13
-#: templates/ebanx-credit-card-mx/card-template.php:13
-msgid "Fecha de expiración (MM / AA)"
-msgstr "Data de Validade (MM / AA)"
-
-#: templates/ebanx-credit-card-co/card-template.php:17
-#: templates/ebanx-credit-card-co/payment-form.php:31
-#: templates/ebanx-credit-card-mx/card-template.php:17
-#: templates/ebanx-credit-card-mx/payment-form.php:33
-msgid "Código de verificación"
-msgstr "Código de segurança"
-
-#: templates/ebanx-credit-card-co/card-template.php:27
-#: templates/ebanx-credit-card-mx/card-template.php:27
-msgid "Guarda esta tarjeta para compras futuras."
-msgstr "Salvar este cartão para compras futuras"
-
-#: templates/ebanx-credit-card-co/payment-form.php:46
-#: templates/ebanx-credit-card-mx/payment-form.php:48
-msgid "Otra tarjeta de crédito"
-msgstr "Usar um outro cartão"
-
 #: templates/eft/payment-failed.php:17 templates/eft/payment-on-hold.php:17
 #: templates/eft/payment-processing.php:17
 #, php-format
@@ -1032,7 +846,7 @@ msgstr "Processando..."
 msgid "Pay Now"
 msgstr "Pagar"
 
-#: templates/payment-by-link-action.php:6 woocommerce-gateway-ebanx.php:641
+#: templates/payment-by-link-action.php:6 woocommerce-gateway-ebanx.php:645
 msgid "Create EBANX Payment Link"
 msgstr "Criar Link de Pagamento EBANX"
 
@@ -1061,9 +875,136 @@ msgstr "Pagamento realizado com sucesso usando Servipag.."
 msgid "Currency %s is not supported. Works only with Brazilian Real."
 msgstr "A moeda %s não é suportada. Funciona apenas como Real Brasileiro."
 
-#: woocommerce-gateway-ebanx.php:574
+#: woocommerce-gateway-ebanx.php:578
 msgid "Settings"
 msgstr "Configurações"
+
+#~ msgid "MM / AA"
+#~ msgstr "MM / AA"
+
+#~ msgid "CVV"
+#~ msgstr "CVV"
+
+#~ msgid "Usar um outro cartão"
+#~ msgstr "Usar um outro cartão"
+
+#~ msgid "Otra tarjeta de crédito"
+#~ msgstr "Usar um outro cartão"
+
+#~ msgid "Paga con PagoEfectivo."
+#~ msgstr "Pague com PagoEfectivo."
+
+#~ msgid "Saldo EBANX"
+#~ msgstr "Saldo EBANX"
+
+#~ msgid "Pague usando o saldo da sua conta do EBANX."
+#~ msgstr "Pague usando o saldo da sua conta do EBANX."
+
+#~ msgid "Baloto"
+#~ msgstr "Baloto"
+
+#~ msgid "Paga con Baloto."
+#~ msgstr "Paga com Baloto."
+
+#~ msgid "Boleto EBANX"
+#~ msgstr "Boleto EBANX"
+
+#~ msgid "Pague com boleto bancário."
+#~ msgstr "Pague com boleto bancário."
+
+#~ msgid "PSE - Pago Seguros en Línea"
+#~ msgstr "PSE - Pago Seguros en Línea"
+
+#~ msgid "Paga con PSE - Pago Seguros en Línea."
+#~ msgstr "Pague com PSE - Pago Seguros en Línea."
+
+#~ msgid "Multicaja"
+#~ msgstr "Multicaja"
+
+#~ msgid "Paga con multicaja."
+#~ msgstr "Pague com multicaja."
+
+#~ msgid "OXXO"
+#~ msgstr "OXXO"
+
+#~ msgid "Paga con boleta OXXO."
+#~ msgstr "Pague com OXXO."
+
+#~ msgid "PagoEfectivo"
+#~ msgstr "PagoEfectivo"
+
+#~ msgid "SafetyPay"
+#~ msgstr "SafetyPay"
+
+#~ msgid "Paga con SafetyPay."
+#~ msgstr "Pague com SafetyPay."
+
+#~ msgid "Sencillito"
+#~ msgstr "Sencillito"
+
+#~ msgid "Paga con Sencillito."
+#~ msgstr "Paga con Sencillito."
+
+#~ msgid "ServiPag"
+#~ msgstr "ServiPag"
+
+#~ msgid "Paga con Servipag."
+#~ msgstr "Pague com Servipag."
+
+#~ msgid "Débito Online"
+#~ msgstr "Débito Online"
+
+#~ msgid ""
+#~ "Selecione o seu banco. A seguir, você será redirecionado para concluir o "
+#~ "pagamento pelo seu internet banking."
+#~ msgstr ""
+#~ "Selecione o seu banco. A seguir, você será redirecionado para concluir o "
+#~ "pagamento pelo seu internet banking."
+
+#~ msgid "Webpay"
+#~ msgstr "Webpay"
+
+#~ msgid "Paga con Webpay."
+#~ msgstr "Pague com Webpay."
+
+#~ msgid "Resumo de la compra:"
+#~ msgstr "Resumo da compra:"
+
+#~ msgid "Valor:"
+#~ msgstr "Valor:"
+
+#~ msgid "Pago realizado en una sola exhibición"
+#~ msgstr "Pagamento realizado a vista."
+
+#~ msgid "Gracias por haber comprado con nosotros."
+#~ msgstr "Obrigado por comprar conosco"
+
+#~ msgid "Número do Cartão"
+#~ msgstr "Número do Cartão"
+
+#~ msgid "Data de validade (MM / AA)"
+#~ msgstr "Data de validade (MM / AA)"
+
+#~ msgid "Código de segurança"
+#~ msgstr "Código de segurança"
+
+#~ msgid "Salvar este cartão para compras futuras"
+#~ msgstr "Salvar este cartão para compras futuras"
+
+#~ msgid "Titular de la tarjeta"
+#~ msgstr "Titular do cartão"
+
+#~ msgid "Número de la tarjeta"
+#~ msgstr "Número do cartão"
+
+#~ msgid "Fecha de expiración (MM / AA)"
+#~ msgstr "Data de Validade (MM / AA)"
+
+#~ msgid "Código de verificación"
+#~ msgstr "Código de segurança"
+
+#~ msgid "Guarda esta tarjeta para compras futuras."
+#~ msgstr "Salvar este cartão para compras futuras"
 
 #~ msgid "Cartão de Crédito"
 #~ msgstr "Cartão de Crédito"
