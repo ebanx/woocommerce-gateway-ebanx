@@ -91,7 +91,6 @@ class WC_EBANX_One_Click {
 			));
 
 			$product_id = WC_EBANX_Request::read('ebanx-product-id');
-
 			$user = array(
 				'email' => get_user_meta($this->userId, 'billing_email', true),
 				'country' => get_user_meta($this->userId, 'billing_country', true),
@@ -265,11 +264,11 @@ class WC_EBANX_One_Click {
 			&& ! empty(WC_EBANX_Request::read('ebanx-credit-card-installments', null))
 			&& ! empty(WC_EBANX_Request::read('ebanx-one-click-cvv', null))
 			&& WC_EBANX_Request::has($names['ebanx_billing_brazil_document'])
-			&& WC_EBANX_Request::has($names['ebanx_billing_brazil_birth_date'])
-			&& WC_EBANX_Request::has($names['ebanx_billing_colombia_document'])
+			&& (WC_EBANX_Request::has($names['ebanx_billing_brazil_birth_date'])
+			|| WC_EBANX_Request::has($names['ebanx_billing_colombia_document']))
 			&& ! empty(WC_EBANX_Request::read($names['ebanx_billing_brazil_document'], null))
-			&& ! empty(WC_EBANX_Request::read($names['ebanx_billing_brazil_birth_date'], null))
-			&& ! empty(WC_EBANX_Request::read($names['ebanx_billing_colombia_document'], null));
+			&& (!empty(WC_EBANX_Request::read($names['ebanx_billing_brazil_birth_date'], null))
+			|| !empty(WC_EBANX_Request::read($names['ebanx_billing_colombia_document'], null)));
 	}
 
 	/**
