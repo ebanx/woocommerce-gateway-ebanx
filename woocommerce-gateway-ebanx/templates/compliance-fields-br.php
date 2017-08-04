@@ -28,15 +28,13 @@
 				'label' => __('Town / City', 'woocommerce'),
 				'value' => $address['city']
 			),
-			'billing_state' => array(
-				'label' => __('State / County', 'woocommerce'),
-				'value' => $address['state']
-			),
 			'billing_country' => array(
 				'value' => $address['country'],
 				'type' => 'hidden'
 			)
 		);
+		$countries_obj = new WC_Countries();
+		$states = $countries_obj->get_states('BR');
 	}
 ?>
 
@@ -62,5 +60,14 @@
 				</label>
 			<?php endif ?>
 		<?php endforeach ?>
+        <label>
+            <?php _e('State / County', 'woocommerce') ?>
+            <select name="<?php echo "{$id}[billing_state]" ?>" class="ebanx-select-field">
+                <option value="" selected>Select...</option>
+		        <?php foreach ($states as $abbr => $name): ?>
+                    <option value="<?php echo $abbr ?>"><?php echo $name ?></option>
+		        <?php endforeach; ?>
+            </select>
+        </label>
 	</div>
 <?php endif ?>
