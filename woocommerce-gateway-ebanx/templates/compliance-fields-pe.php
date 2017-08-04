@@ -30,7 +30,7 @@
 ?>
 
 <?php if ($order_id): ?>
-    <div class="ebanx-compliance-fields ebanx-compliance-fiels-br">
+    <div class="ebanx-compliance-fields ebanx-compliance-fiels-pe">
 		<?php foreach ($fields as $name => $field): ?>
 			<?php if (isset($field['type']) && $field['type'] === 'hidden'): ?>
                 <input
