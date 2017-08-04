@@ -248,6 +248,7 @@ class WC_EBANX_One_Click {
 		WC_EBANX_Request::set('ebanx_brand', $card->brand);
 		WC_EBANX_Request::set('ebanx_billing_cvv', WC_EBANX_Request::read('ebanx-one-click-cvv'));
 		WC_EBANX_Request::set('ebanx_is_one_click', true);
+		WC_EBANX_Request::set('ebanx-credit-card-installments', WC_EBANX_Request::read('ebanx-credit-card-installments', 1));
 		WC_EBANX_Request::set('ebanx_billing_instalments', WC_EBANX_Request::read('ebanx-credit-card-installments'));
 
 		WC_EBANX_Request::set($names['ebanx_billing_brazil_document'], get_user_meta( $this->userId, '_ebanx_billing_brazil_document', true ));
