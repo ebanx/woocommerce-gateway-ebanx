@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
-"POT-Creation-Date: 2017-08-02 13:51-0300\n"
-"PO-Revision-Date: 2017-08-02 13:52-0300\n"
+"POT-Creation-Date: 2017-08-04 13:17-0300\n"
+"PO-Revision-Date: 2017-08-04 13:34-0300\n"
 "Last-Translator: \n"
 "Language-Team: EBANX\n"
 "Language: pt_BR\n"
@@ -98,12 +98,12 @@ msgstr "Selecione uma opção"
 #: gateways/class-wc-ebanx-gateway.php:176
 #: gateways/class-wc-ebanx-global-gateway.php:402
 msgid "CPF - Individuals"
-msgstr "CPF - Indivíduos"
+msgstr "CPF - Pessoa física"
 
 #: gateways/class-wc-ebanx-gateway.php:177
 #: gateways/class-wc-ebanx-global-gateway.php:403
 msgid "CNPJ - Companies"
-msgstr "CNPJ - Companhias"
+msgstr "CNPJ - Pessoa jurídica"
 
 #: gateways/class-wc-ebanx-gateway.php:183
 #: gateways/class-wc-ebanx-gateway.php:203
@@ -191,8 +191,8 @@ msgid ""
 "the <a href=\"https://www.ebanx.com/business/en/dashboard\">EBANX Dashboard."
 "</a>"
 msgstr ""
-"Você pode obter as chaves de integração na seção de configurações, fazendo "
-"log in no <a href=\"https://www.ebanx.com/business/en/dashboard\">EBANX "
+"Você pode obter as chaves de integração na seção \"Settings\", fazendo log "
+"in no <a href=\"https://www.ebanx.com/business/en/dashboard\">EBANX "
 "Dashboard.</a>"
 
 #: gateways/class-wc-ebanx-global-gateway.php:121
@@ -237,7 +237,9 @@ msgstr "Habilitar Debug Log"
 
 #: gateways/class-wc-ebanx-global-gateway.php:146
 msgid "Record all errors that occur when executing a transaction."
-msgstr "Gravar todos os erros que ocorram quando executando uma transação."
+msgstr ""
+"Gravar todos os erros que ocorrerem enquanto uma transação estiver sendo "
+"executada."
 
 #: gateways/class-wc-ebanx-global-gateway.php:151
 msgid "Enable Payment Methods"
@@ -325,13 +327,13 @@ msgid ""
 "Otherwise you will need to capture the payment going to: WooCommerce -> "
 "Orders. Not captured payments will be cancelled in 4 days."
 msgstr ""
-"Capture automaticamente pagamentos de seus clientes, apenas para cartão de "
-"crédito.  Caso contrário você precisará capturar o pagamento indo em: "
-"WooCommerce -> Orders. Pagamentos não capturados serão cancelados em 4 dias."
+"Capture automaticamente pedidos de seus clientes, apenas para cartão de "
+"crédito. Caso contrário você precisará capturar o pedido indo em: "
+"WooCommerce -> Orders. Pedidos não capturados serão cancelados em 4 dias."
 
 #: gateways/class-wc-ebanx-global-gateway.php:266
 msgid "Maximum nº of Instalments"
-msgstr "Nº máximo de parcelas"
+msgstr "Nº Máximo de Parcelas"
 
 #: gateways/class-wc-ebanx-global-gateway.php:307
 msgid ""
@@ -344,7 +346,7 @@ msgstr ""
 #: gateways/class-wc-ebanx-global-gateway.php:314
 #, php-format
 msgid "Minimum Instalment (%s)"
-msgstr "Parcela mínima (%s)"
+msgstr "Parcela Mínima (%s)"
 
 #: gateways/class-wc-ebanx-global-gateway.php:317
 #, php-format
@@ -379,16 +381,16 @@ msgstr ""
 
 #: gateways/class-wc-ebanx-global-gateway.php:339
 msgid "1x Interest Rate in %"
-msgstr "1x Taxa de Juro em %"
+msgstr "1x - Taxa de Juros em %"
 
 #: gateways/class-wc-ebanx-global-gateway.php:346
 #: gateways/class-wc-ebanx-global-gateway.php:358
 msgid "eg: 15.7%"
-msgstr "eg: 15.7%"
+msgstr "ex: 15.7%"
 
 #: gateways/class-wc-ebanx-global-gateway.php:351
 msgid "x Interest Rate"
-msgstr "x Taxa de Juro"
+msgstr "x - Taxa de Juros"
 
 #: gateways/class-wc-ebanx-global-gateway.php:366
 msgid "Cash Payments"
@@ -420,31 +422,31 @@ msgid ""
 "fields such as CPF identification for individuals and CNPJ for companies."
 msgstr ""
 "Para processar com o Plugin EBANX no Brasil há alguns campos obrigatórios "
-"como CPF para indivíduos e CNPJ para Companhias."
+"como CPF para pessoas físicas e CNPJ para pessoas jurídicas."
 
 #: gateways/class-wc-ebanx-global-gateway.php:410
 msgid "Checkout Manager"
-msgstr "Administrador de Checkout"
+msgstr "Gerenciador de Checkout"
 
 #: gateways/class-wc-ebanx-global-gateway.php:411
 msgid "Use my checkout manager fields"
-msgstr "Usar campos do meu administrador de checkout"
+msgstr "Usar campos do meu gerenciador de checkout"
 
 #: gateways/class-wc-ebanx-global-gateway.php:414
 msgid ""
 "If you make use of a Checkout Manager, please identify the HTML name "
 "attribute of the fields."
 msgstr ""
-"Se você usa um administrador de checkout, por favor identifique o nome do "
-"atributo HTML dos campos"
+"Se você usa um gerenciador de checkout, por favor identifique o atributo "
+"HTML 'name' dos campos"
 
 #: gateways/class-wc-ebanx-global-gateway.php:418
 msgid "Entity Type Selector"
-msgstr "Seletor de Tipo de Entidade"
+msgstr "Tipo de Entidade"
 
 #: gateways/class-wc-ebanx-global-gateway.php:421
 msgid "eg: billing_brazil_entity"
-msgstr "eg: billing_brazil_entity"
+msgstr "ex: billing_brazil_entity"
 
 #: gateways/class-wc-ebanx-global-gateway.php:424
 msgid "CPF"
@@ -452,7 +454,7 @@ msgstr "CPF"
 
 #: gateways/class-wc-ebanx-global-gateway.php:427
 msgid "eg: billing_brazil_cpf"
-msgstr "eg: billing_brazil_cpf"
+msgstr "ex: billing_brazil_cpf"
 
 #: gateways/class-wc-ebanx-global-gateway.php:430
 msgid "Birthdate Brazil"
@@ -460,7 +462,7 @@ msgstr "Data de Nascimento no Brasil"
 
 #: gateways/class-wc-ebanx-global-gateway.php:433
 msgid "eg: billing_brazil_birth_date"
-msgstr "eg: billing_brazil_birth_date"
+msgstr "ex: billing_brazil_birth_date"
 
 #: gateways/class-wc-ebanx-global-gateway.php:436
 msgid "CNPJ"
@@ -468,7 +470,7 @@ msgstr "CNPJ"
 
 #: gateways/class-wc-ebanx-global-gateway.php:439
 msgid "eg: billing_brazil_cnpj"
-msgstr "eg: billing_brazil_cnpj"
+msgstr "ex: billing_brazil_cnpj"
 
 #: gateways/class-wc-ebanx-global-gateway.php:442
 msgid "RUT"
@@ -476,7 +478,7 @@ msgstr "RUT"
 
 #: gateways/class-wc-ebanx-global-gateway.php:445
 msgid "eg: billing_chile_document"
-msgstr "eg: billing_chile_document"
+msgstr "ex: billing_chile_document"
 
 #: gateways/class-wc-ebanx-global-gateway.php:448
 msgid "Birthdate Chile"
@@ -484,7 +486,7 @@ msgstr "Data de Nascimento no Chile"
 
 #: gateways/class-wc-ebanx-global-gateway.php:451
 msgid "eg: billing_chile_birth_date"
-msgstr "eg: billing_chile_birth_date"
+msgstr "ex: billing_chile_birth_date"
 
 #: gateways/class-wc-ebanx-global-gateway.php:454
 msgid "DNI"
@@ -492,11 +494,11 @@ msgstr "DNI"
 
 #: gateways/class-wc-ebanx-global-gateway.php:457
 msgid "eg: billing_colombia_document"
-msgstr "eg: billing_colombia_document"
+msgstr "ex: billing_colombia_document"
 
 #: gateways/class-wc-ebanx-global-gateway.php:460
 msgid "Total Local Amount"
-msgstr "Quantia total local"
+msgstr "Quantia Total Local"
 
 #: gateways/class-wc-ebanx-global-gateway.php:461
 msgid ""
@@ -551,10 +553,9 @@ msgid ""
 "the box will not set this to your customer. Contact your EBANX Account "
 "Manager or Business Development Expert."
 msgstr ""
-"Você precisa validar esta mudança com o EBANX, apenas deselecionar ou "
-"selecionar a caixa não irá refletir para seu cliente. Contate seu "
-"Administrador de Conta do EBANX ou Especialista em Desenvolvimento de "
-"Negócio."
+"Você precisa validar esta mudança com o EBANX, apenas desmarcar ou marcar a "
+"caixa não irá refletir para seu cliente. Contate seu Administrador de Conta "
+"do EBANX ou Business Development Expert."
 
 #: services/class-wc-ebanx-checker.php:20
 msgid ""
@@ -744,12 +745,6 @@ msgstr "Link do Pagamento para o Cliente"
 msgid "Payment successfully made using Baloto."
 msgstr "Pagamento realizado com sucesso usando Baloto."
 
-#: templates/compliance-fields-br.php:20 templates/compliance-fields-cl.php:20
-#: templates/compliance-fields-co.php:15 templates/compliance-fields-mx.php:10
-#: templates/compliance-fields-pe.php:10
-msgid "Postcode / ZIP"
-msgstr "Código postal / CEP"
-
 #: templates/compliance-fields-br.php:24 templates/compliance-fields-cl.php:24
 #: templates/compliance-fields-co.php:19 templates/compliance-fields-mx.php:14
 #: templates/compliance-fields-pe.php:14
@@ -878,6 +873,9 @@ msgstr "A moeda %s não é suportada. Funciona apenas como Real Brasileiro."
 #: woocommerce-gateway-ebanx.php:578
 msgid "Settings"
 msgstr "Configurações"
+
+#~ msgid "Postcode / ZIP"
+#~ msgstr "Código postal / CEP"
 
 #~ msgid "MM / AA"
 #~ msgstr "MM / AA"

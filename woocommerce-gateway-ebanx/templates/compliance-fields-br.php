@@ -17,7 +17,7 @@
 				'value' => $birthDate
 			),
 			'billing_postcode' => array(
-				'label' => __('Postcode / ZIP', 'woocommerce'),
+				'label' => 'Postcode / ZIP',
 				'value' => $address['postcode']
 			),
 			'billing_address_1' => array(
