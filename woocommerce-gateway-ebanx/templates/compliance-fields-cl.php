@@ -42,25 +42,26 @@
 ?>
 
 <?php if ($order_id): ?>
-	<div class="ebanx-compliance-fields ebanx-compliance-fiels-cl">
+    <div class="ebanx-compliance-fields ebanx-compliance-fiels-br">
 		<?php foreach ($fields as $name => $field): ?>
 			<?php if (isset($field['type']) && $field['type'] === 'hidden'): ?>
-				<input
-					type="hidden"
-					name="<?php echo "{$id}[{$name}]" ?>"
-					value="<?php echo isset($field['value']) ? $field['value'] : null  ?>"
-					class="input-text"
-				/>
+                <input
+                        type="hidden"
+                        name="<?php echo "{$id}[{$name}]" ?>"
+                        value="<?php echo isset($field['value']) ? $field['value'] : null  ?>"
+                        class="input-text"
+                />
 			<?php else: ?>
-				<label>
-					<?php echo $field['label'] ?>
-					<input
-						type="<?php echo isset($field['type']) ? $field['type'] : 'text'  ?>"
-						name="<?php echo "{$id}[{$name}]" ?>"
-						value="<?php echo isset($field['value']) ? $field['value'] : null  ?>"
-						class="input-text"
-					/>
-				</label>
+                <div class="ebanx-form-row ebanx-form-row-wide">
+                    <label for="<?php echo "{$id}[{$name}]" ?>"><?php echo $field['label'] ?></label>
+                    <input
+                            type="<?php echo isset($field['type']) ? $field['type'] : 'text'  ?>"
+                            name="<?php echo "{$id}[{$name}]" ?>"
+                            id="<?php echo "{$id}[{$name}]" ?>"
+                            value="<?php echo isset($field['value']) ? $field['value'] : null  ?>"
+                            class="input-text"
+                    />
+                </div>
 			<?php endif ?>
 		<?php endforeach ?>
 	</div>

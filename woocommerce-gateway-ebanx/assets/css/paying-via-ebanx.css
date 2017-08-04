@@ -495,3 +495,8 @@ li[class*="ebanx"] .payment_box .ebanx-credit-card-label > .ebanx-credit-card-bi
   -webkit-box-shadow: none;
   box-shadow: none;
 }
+
+.ebanx-compliance-fields .ebanx-form-row {
+    padding-left: 0;
+    padding-right: 0;
+}
