@@ -6,34 +6,34 @@ if ( $order_id ) {
 	$document = $order ? get_user_meta( $order->get_user_id(), '_ebanx_document', true ) : false;
 	$address  = $order->get_address();
 
-	$fields = array(
-		'ebanx_billing_colombia_document' => array(
-			'label' => 'DNI',
-			'value' => $document
-		),
-		'billing_postcode'                => array(
-			'label' => __( 'Postcode / ZIP', 'woocommerce' ),
-			'value' => $address['postcode']
-		),
-		'billing_address_1'               => array(
-			'label' => __( 'Street address', 'woocommerce' ),
-			'value' => $address['address_1']
-		),
-		'billing_city'                    => array(
-			'label' => __( 'Town / City', 'woocommerce' ),
-			'value' => $address['city']
-		),
-		'billing_state'                   => array(
-			'label' => __( 'State / County', 'woocommerce' ),
-			'value' => $address['state']
-		),
-		'billing_country'                 => array(
-			'label' => 'Country',
-			'value' => $address['country'],
-			'type'  => 'hidden'
-		)
-	);
-}
+		$fields = array(
+			'ebanx_billing_colombia_document' => array(
+				'label' => 'DNI',
+				'value' => $document
+			),
+			'billing_postcode' => array(
+				'label' => 'Postcode / ZIP',
+				'value' => $address['postcode']
+			),
+			'billing_address_1' => array(
+				'label' => __('Street address', 'woocommerce'),
+				'value' => $address['address_1']
+			),
+			'billing_city' => array(
+				'label' => __('Town / City', 'woocommerce'),
+				'value' => $address['city']
+			),
+			'billing_state' => array(
+				'label' => __('State / County', 'woocommerce'),
+				'value' => $address['state']
+			),
+			'billing_country' => array(
+				'label' => 'Country',
+				'value' => $address['country'],
+				'type' => 'hidden'
+			)
+		);
+	}
 ?>
 
 <?php if ( $order_id ): ?>
