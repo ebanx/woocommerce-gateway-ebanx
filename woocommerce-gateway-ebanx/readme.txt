@@ -5,7 +5,7 @@ Requires at least: 4.0
 Tested up to: 4.7
 Stable tag: 1.17.0
 License: Apache v2.0
-License URI: http://www.apache.org/licenses/
+License URI: http://www.apache.org/licenses/LICENSE-2.0
 
 Offer Latin American local payment methods & increase your conversion rates with the solution used by AliExpress, AirBnB and Spotify in Brazil.
 
