@@ -137,7 +137,6 @@ if ( ! class_exists('WC_EBANX') ) {
 			 */
 			add_filter('woocommerce_payment_gateways', array($this, 'add_gateway'));
 			add_filter('plugin_action_links_' . plugin_basename(__FILE__), array($this, 'plugin_action_links'));
-			add_filter('woocommerce_my_account_my_orders_actions', array(WC_EBANX_Cancel_Order::class, 'sv_add_my_account_order_actions'));
 		}
 
 		/**
