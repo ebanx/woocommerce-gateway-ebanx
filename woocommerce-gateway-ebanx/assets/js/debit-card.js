@@ -100,6 +100,7 @@ jQuery( function($) {
         		wc_ebanx_form.removeHiddenInputs();
 			} else {
 				wc_ebanx_form.form.append('<input type="hidden" name="ebanx_debit_token" id="ebanx_debit_token" value="' + response.data.token + '"/>');
+				wc_ebanx_form.form.append('<input type="hidden" name="ebanx_masked_card_number" id="ebanx_masked_card_number" value="' + response.data.masked_card_number + '"/>');
 				wc_ebanx_form.form.submit();
 			}
 		},
@@ -111,6 +112,7 @@ jQuery( function($) {
 		removeHiddenInputs: function () {
 		  $('#ebanx_debit_token').remove();
 		  $('#ebanx_billing_cvv').remove();
+		  $('#ebanx_masked_card_number').remove();
 		}
 	};
 

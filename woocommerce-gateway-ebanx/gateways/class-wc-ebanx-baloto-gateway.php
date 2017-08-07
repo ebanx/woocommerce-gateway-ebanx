@@ -15,8 +15,8 @@ class WC_EBANX_Baloto_Gateway extends WC_EBANX_Gateway
 		$this->method_title = __('EBANX - Baloto', 'woocommerce-gateway-ebanx');
 
 		$this->api_name    = 'baloto';
-		$this->title       = __('Baloto', 'woocommerce-gateway-ebanx');
-		$this->description = __('Paga con Baloto.', 'woocommerce-gateway-ebanx');
+		$this->title       = 'Baloto';
+		$this->description = 'Paga con Baloto.';
 
 		parent::__construct();
 
