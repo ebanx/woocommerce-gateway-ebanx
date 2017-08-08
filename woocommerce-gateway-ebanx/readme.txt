@@ -3,7 +3,7 @@ Contributors: ebanxwp
 Tags: credit card, boleto, ebanx, woocommerce, approval rate, conversion rate, brazil, mexico, peru, colombia, chile, oxxo, baloto, cash payment, local payment one-click payment, installments, alternative payments, accept more payments
 Requires at least: 4.0
 Tested up to: 4.7
-Stable tag: 1.17.0
+Stable tag: 1.17.1
 License: Apache v2.0
 License URI: http://www.apache.org/licenses/LICENSE-2.0
 
@@ -136,11 +136,14 @@ Yes, you can.
 
 == Changelog ==
 
+= 1.17.1 =
+* Fix - Removed unused include [554](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/554)
+
 = 1.17.0 =
 * Feature - New Thank You pages for Credit Card and Boleto [#544](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/544)
 * Feature - Added translation for Minimum Amount for Purchase error on Colombia [#547](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/547)
 * Feature - Added Portuguese translation for Settings Page [#549](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/549)
-* Feature - Changed project license to Apache v2.0 [548](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/548)
+* Feature - Changed project license to Apache v2.0 [#548](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/548)
 * Fix - Changed IOF messages on Admin Dashboard [#545](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/545)
 * Fix - Fixed Debit Card tokenize error [#550](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/550)
 * Fix - Fixed One Click Payment not processing [#551](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/551)
