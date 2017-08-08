@@ -139,6 +139,20 @@ abstract class WC_EBANX_Constants
 	);
 
 	/**
+	 * The cash payments processed by EBANX
+	 *
+	 * @var array
+	 */
+	public static $CASH_PAYMENTS = array(
+		'boleto',
+		'oxxo',
+		'pagoefectivo',
+		'sencillito',
+		'safetypay-cash',
+		'baloto',
+	);
+
+	/**
 	 * The banks that EBANX process in Brazil
 	 *
 	 * @var array

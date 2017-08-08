@@ -137,6 +137,7 @@ if ( ! class_exists('WC_EBANX') ) {
 			 */
 			add_filter('woocommerce_payment_gateways', array($this, 'add_gateway'));
 			add_filter('plugin_action_links_' . plugin_basename(__FILE__), array($this, 'plugin_action_links'));
+			add_filter('woocommerce_my_account_my_orders_actions', array(WC_EBANX_Cancel_Order::class, 'add_my_account_cancel_order_action'), 10, 2);
 		}
 
 		/**
@@ -503,6 +504,9 @@ if ( ! class_exists('WC_EBANX') ) {
 			include_once WC_EBANX_SERVICES_DIR . 'class-wc-ebanx-payment-validator.php';
 			include_once WC_EBANX_SERVICES_DIR . 'class-wc-ebanx-my-account.php';
 			include_once WC_EBANX_SERVICES_DIR . 'class-wc-ebanx-one-click.php';
+
+			// Hooks/Filters
+			include_once WC_EBANX_SERVICES_DIR . 'class-wc-ebanx-cancel-order.php';
 
 			// Controllers
 			include_once WC_EBANX_CONTROLLERS_DIR . 'class-wc-ebanx-api-controller.php';
