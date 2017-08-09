@@ -213,6 +213,7 @@ if ( ! class_exists('WC_EBANX') ) {
 
 			$ebanx_router->map('dashboard-check', array($api_controller, 'dashboard_check'));
 			$ebanx_router->map('order-received', array($api_controller, 'order_received'));
+			$ebanx_router->map('cancel-order', array($api_controller, 'cancel_order'));
 
 			$ebanx_router->serve();
 		}

@@ -29,6 +29,15 @@ class WC_EBANX_Api_Controller {
 	}
 
 	/**
+	 * Responds that the plugin is installed
+	 *
+	 * @return void
+	 */
+	public function cancel_order() {
+		echo 'cancelado';
+	}
+
+	/**
 	 * Gets the banking ticket HTML by cUrl with url fopen fallback
 	 *
 	 * @return void

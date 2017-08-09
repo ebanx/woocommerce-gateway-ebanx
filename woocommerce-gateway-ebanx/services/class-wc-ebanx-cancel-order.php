@@ -11,7 +11,7 @@ class WC_EBANX_Cancel_Order {
 		}
 
 		$actions['cancel'] = array(
-			'url'  => '/wordpress/index.php/my-account/orders/',
+			'url'  => get_site_url() . '?ebanx=cancel-order',
 			'name' => __('Cancel', 'woocommerce-gateway-ebanx'),
 		);
 		return $actions;
