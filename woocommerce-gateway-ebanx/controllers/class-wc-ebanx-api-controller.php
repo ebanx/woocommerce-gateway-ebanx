@@ -33,8 +33,13 @@ class WC_EBANX_Api_Controller {
 	 *
 	 * @return void
 	 */
-	public function cancel_order() {
-		echo 'cancelado';
+	public function cancel_order($order_id, $user_id) {
+		$user_id = intval($user_id);
+		$order_id = intval($order_id);
+		if ($user_id !== get_current_user_id()) {
+		    wp_redirect(get_site_url() . '/index.php/my-account/orders/');
+		}
+		$order = new WC_Order( $order_id );
 	}
 
 	/**

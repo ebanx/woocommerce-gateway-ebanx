@@ -144,12 +144,12 @@ abstract class WC_EBANX_Constants
 	 * @var array
 	 */
 	public static $CASH_PAYMENTS = array(
-		'boleto',
-		'oxxo',
-		'pagoefectivo',
-		'sencillito',
-		'safetypay-cash',
-		'baloto',
+		'ebanx-banking-ticket',
+		'ebanx-oxxo',
+		'ebanx-pagoefectivo',
+		'ebanx-sencillito',
+		'ebanx-safetypay-cash',
+		'ebanx-baloto',
 	);
 
 	/**
