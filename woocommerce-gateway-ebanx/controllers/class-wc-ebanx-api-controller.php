@@ -39,7 +39,30 @@ class WC_EBANX_Api_Controller {
 		if ($user_id !== get_current_user_id()) {
 		    wp_redirect(get_site_url() . '/index.php/my-account/orders/');
 		}
-		$order = new WC_Order( $order_id );
+
+		$data = array(
+			'hash' => get_post_meta($order_id, '_ebanx_payment_hash', true)
+		);
+
+		\Ebanx\Config::set(array(
+			'integrationKey' => $this->get_integration_key(),
+			'testMode'       => $this->is_sandbox(),
+		));
+
+		try {
+			$request = \Ebanx\EBANX::doCancel($data);
+			var_dump($request);
+
+			$order = new WC_Order( $order_id );
+			$order->update_status('cancelled', 'Cancelled by customer');
+			wp_redirect($order->get_view_order_url());
+		} catch (Exception $e) {
+			var_dump($e->getMessage());
+		}
+	}
+
+	private function get_integration_key() {
+		return $this->is_sandbox() ? $this->config->settings['sandbox_private_key'] : $this->config->settings['live_private_key'];
 	}
 
 	/**
@@ -82,5 +105,14 @@ class WC_EBANX_Api_Controller {
 
 		curl_close($curl);
 		echo $html;
+	}
+
+	/**
+	 * @param $configs
+	 *
+	 * @return bool
+	 */
+	private function is_sandbox() {
+		return $this->config->settings['sandbox_mode_enabled'] === 'yes';
 	}
 }
