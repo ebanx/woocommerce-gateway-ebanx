@@ -34,12 +34,10 @@ class WC_EBANX_Api_Controller {
 	 * @return void
 	 */
 	public function cancel_order($order_id, $user_id) {
-		$user_id = intval($user_id);
-		$order_id = intval($order_id);
 		$order = new WC_Order( $order_id );
-		if ($user_id !== get_current_user_id()
+		if ($user_id != get_current_user_id()
 		    || $order->get_status() !== 'on-hold'
-		    || !in_array($order->get_payment_method(), WC_EBANX_Constants::$CASH_PAYMENTS)
+		    || !in_array($order->get_payment_method(), WC_EBANX_Constants::$CASH_PAYMENTS_GATEWAYS_CODE)
 			) {
 				wp_redirect( get_site_url() );
 				return;
@@ -58,13 +56,17 @@ class WC_EBANX_Api_Controller {
 			$request = \Ebanx\EBANX::doCancel($data);
 
 			if ($request->status === 'SUCCESS') {
-				$order->update_status('cancelled', 'Cancelled by customer');
+				$order->update_status('cancelled', __('EBANX: Cancelled by customer', 'woocommerce-gateway-ebanx'));
 			}
-			
+
 			wp_redirect($order->get_view_order_url());
 
 		} catch (Exception $e) {
-			return new WP_Error('ebanx_process_cancel_error', __('We could not cancel this order. Please try again.'));
+			$message = $e->getMessage();
+			WC_EBANX::log("EBANX Error: $message");
+
+			wc_add_notice($message, 'error');
+			wp_redirect( get_site_url() );
 		}
 	}
 

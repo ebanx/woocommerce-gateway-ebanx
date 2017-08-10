@@ -143,7 +143,7 @@ abstract class WC_EBANX_Constants
 	 *
 	 * @var array
 	 */
-	public static $CASH_PAYMENTS = array(
+	public static $CASH_PAYMENTS_GATEWAYS_CODE = array(
 		'ebanx-banking-ticket',
 		'ebanx-oxxo',
 		'ebanx-pagoefectivo',

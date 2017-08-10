@@ -466,6 +466,7 @@ if ( ! class_exists('WC_EBANX') ) {
 			include_once WC_EBANX_SERVICES_DIR . 'class-wc-ebanx-assets.php';
 			include_once WC_EBANX_SERVICES_DIR . 'class-wc-ebanx-query-router.php';
 			include_once WC_EBANX_SERVICES_DIR . 'class-wc-ebanx-third-party-compability-layer.php';
+			include_once WC_EBANX_SERVICES_DIR . 'class-wc-ebanx-cancel-order.php';
 
 			// Gateways
 			include_once WC_EBANX_GATEWAYS_DIR . 'class-wc-ebanx-gateway.php';
@@ -505,9 +506,6 @@ if ( ! class_exists('WC_EBANX') ) {
 			include_once WC_EBANX_SERVICES_DIR . 'class-wc-ebanx-payment-validator.php';
 			include_once WC_EBANX_SERVICES_DIR . 'class-wc-ebanx-my-account.php';
 			include_once WC_EBANX_SERVICES_DIR . 'class-wc-ebanx-one-click.php';
-
-			// Hooks/Filters
-			include_once WC_EBANX_SERVICES_DIR . 'class-wc-ebanx-cancel-order.php';
 
 			// Controllers
 			include_once WC_EBANX_CONTROLLERS_DIR . 'class-wc-ebanx-api-controller.php';
