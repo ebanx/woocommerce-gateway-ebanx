@@ -29,7 +29,7 @@ class WC_EBANX_Api_Controller {
 	}
 
 	/**
-	 * Responds that the plugin is installed
+	 * Cancels an open cash payment order with "On hold" status
 	 *
 	 * @return void
 	 */
@@ -56,12 +56,14 @@ class WC_EBANX_Api_Controller {
 
 		try {
 			$request = \Ebanx\EBANX::doCancel($data);
-			var_dump($request);
 
-			$order->update_status('cancelled', 'Cancelled by customer');
-			wp_redirect($order->get_view_order_url());
+			if ($request->status === 'SUCCESS') {
+				$order->update_status('cancelled', 'Cancelled by customer');
+				wp_redirect($order->get_view_order_url());
+			}
+
 		} catch (Exception $e) {
-			var_dump($e->getMessage());
+			return new WP_Error('ebanx_process_cancel_error', __('We could not cancel this order. Please try again.'));
 		}
 	}
 
