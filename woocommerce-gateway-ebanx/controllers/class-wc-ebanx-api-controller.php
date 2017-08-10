@@ -59,8 +59,9 @@ class WC_EBANX_Api_Controller {
 
 			if ($request->status === 'SUCCESS') {
 				$order->update_status('cancelled', 'Cancelled by customer');
-				wp_redirect($order->get_view_order_url());
 			}
+			
+			wp_redirect($order->get_view_order_url());
 
 		} catch (Exception $e) {
 			return new WP_Error('ebanx_process_cancel_error', __('We could not cancel this order. Please try again.'));
