@@ -36,8 +36,13 @@ class WC_EBANX_Api_Controller {
 	public function cancel_order($order_id, $user_id) {
 		$user_id = intval($user_id);
 		$order_id = intval($order_id);
-		if ($user_id !== get_current_user_id()) {
-		    wp_redirect(get_site_url() . '/index.php/my-account/orders/');
+		$order = new WC_Order( $order_id );
+		if ($user_id !== get_current_user_id()
+		    || $order->get_status() !== 'on-hold'
+		    || !in_array($order->get_payment_method(), WC_EBANX_Constants::$CASH_PAYMENTS)
+			) {
+				wp_redirect( get_site_url() );
+				return;
 		}
 
 		$data = array(
@@ -53,7 +58,6 @@ class WC_EBANX_Api_Controller {
 			$request = \Ebanx\EBANX::doCancel($data);
 			var_dump($request);
 
-			$order = new WC_Order( $order_id );
 			$order->update_status('cancelled', 'Cancelled by customer');
 			wp_redirect($order->get_view_order_url());
 		} catch (Exception $e) {
