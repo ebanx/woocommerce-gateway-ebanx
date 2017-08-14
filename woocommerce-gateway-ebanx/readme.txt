@@ -136,7 +136,7 @@ Yes, you can.
 
 == Changelog ==
 
-= 1.17.1 =
+= 1.18.0 =
 * Feature - Filter to change amount per gateway [#555](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/555)
 * Feature - Added "Cancel Order" button on "My Account" page [#556](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/556)
 * Fix - Removed autocomplete from cvv field on on-click payment [#557](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/557)
