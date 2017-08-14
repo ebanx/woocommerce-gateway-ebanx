@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
-"POT-Creation-Date: 2017-08-04 13:17-0300\n"
-"PO-Revision-Date: 2017-08-04 16:29-0300\n"
+"POT-Creation-Date: 2017-08-08 18:51-0300\n"
+"PO-Revision-Date: 2017-08-08 18:52-0300\n"
 "Last-Translator: \n"
 "Language-Team: EBANX\n"
 "Language: pt_BR\n"
@@ -557,6 +557,10 @@ msgstr ""
 "caixa não irá refletir para seu cliente. Contate seu Administrador de Conta "
 "do EBANX ou Business Development Expert."
 
+#: services/class-wc-ebanx-cancel-order.php:15
+msgid "Cancel"
+msgstr "Cancelar"
+
 #: services/class-wc-ebanx-checker.php:20
 msgid ""
 "EBANX - The Sandbox Mode option is enabled, in this mode, none of your "
@@ -655,7 +659,7 @@ msgstr ""
 msgid "View Banking Ticket"
 msgstr "Ver Boleto"
 
-#: services/class-wc-ebanx-one-click.php:143
+#: services/class-wc-ebanx-one-click.php:142
 msgid "EBANX: Unable to create the payment via one click."
 msgstr "EBANX: Incapaz de criar o pagamento via um clique."
 
@@ -757,9 +761,10 @@ msgstr "Endereço"
 msgid "Town / City"
 msgstr "Cidade"
 
-#: templates/compliance-fields-br.php:32 templates/compliance-fields-cl.php:32
+#: templates/compliance-fields-br.php:65 templates/compliance-fields-cl.php:32
 #: templates/compliance-fields-co.php:27 templates/compliance-fields-mx.php:22
-#: templates/compliance-fields-pe.php:22
+#: templates/compliance-fields-mx.php:58 templates/compliance-fields-pe.php:22
+#: templates/compliance-fields-pe.php:58
 msgid "State / County"
 msgstr "Estado"
 
@@ -841,7 +846,7 @@ msgstr "Processando..."
 msgid "Pay Now"
 msgstr "Pagar"
 
-#: templates/payment-by-link-action.php:6 woocommerce-gateway-ebanx.php:645
+#: templates/payment-by-link-action.php:6 woocommerce-gateway-ebanx.php:649
 msgid "Create EBANX Payment Link"
 msgstr "Criar Link de Pagamento EBANX"
 
@@ -870,7 +875,7 @@ msgstr "Pagamento realizado com sucesso usando Servipag.."
 msgid "Currency %s is not supported. Works only with Brazilian Real."
 msgstr "A moeda %s não é suportada. Funciona apenas como Real Brasileiro."
 
-#: woocommerce-gateway-ebanx.php:578
+#: woocommerce-gateway-ebanx.php:582
 msgid "Settings"
 msgstr "Configurações"
 

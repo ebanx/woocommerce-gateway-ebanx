@@ -137,6 +137,7 @@ if ( ! class_exists('WC_EBANX') ) {
 			 */
 			add_filter('woocommerce_payment_gateways', array($this, 'add_gateway'));
 			add_filter('plugin_action_links_' . plugin_basename(__FILE__), array($this, 'plugin_action_links'));
+			add_filter('woocommerce_my_account_my_orders_actions', array(WC_EBANX_Cancel_Order::class, 'add_my_account_cancel_order_action'), 10, 2);
 		}
 
 		/**
@@ -212,6 +213,7 @@ if ( ! class_exists('WC_EBANX') ) {
 
 			$ebanx_router->map('dashboard-check', array($api_controller, 'dashboard_check'));
 			$ebanx_router->map('order-received', array($api_controller, 'order_received'));
+			$ebanx_router->map('cancel-order', array($api_controller, 'cancel_order'));
 
 			$ebanx_router->serve();
 		}
@@ -464,6 +466,7 @@ if ( ! class_exists('WC_EBANX') ) {
 			include_once WC_EBANX_SERVICES_DIR . 'class-wc-ebanx-assets.php';
 			include_once WC_EBANX_SERVICES_DIR . 'class-wc-ebanx-query-router.php';
 			include_once WC_EBANX_SERVICES_DIR . 'class-wc-ebanx-third-party-compability-layer.php';
+			include_once WC_EBANX_SERVICES_DIR . 'class-wc-ebanx-cancel-order.php';
 
 			// Gateways
 			include_once WC_EBANX_GATEWAYS_DIR . 'class-wc-ebanx-gateway.php';
