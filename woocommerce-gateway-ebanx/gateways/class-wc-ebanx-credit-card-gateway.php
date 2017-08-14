@@ -264,6 +264,10 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
 	{
 		parent::save_user_meta_fields($order);
 
+		if ( ! $this->userId ) {
+			$this->userId = $order->user_id;
+		}
+
 		if ( ! $this->userId
 			|| $this->get_setting_or_default('save_card_data', 'no') !== 'yes'
 			|| ! WC_EBANX_Request::has('ebanx-save-credit-card')
