@@ -3,7 +3,7 @@ Contributors: ebanxwp
 Tags: credit card, boleto, ebanx, woocommerce, approval rate, conversion rate, brazil, mexico, peru, colombia, chile, oxxo, baloto, cash payment, local payment one-click payment, installments, alternative payments, accept more payments
 Requires at least: 4.0
 Tested up to: 4.7
-Stable tag: 1.17.1
+Stable tag: 1.18.0
 License: Apache v2.0
 License URI: http://www.apache.org/licenses/LICENSE-2.0
 
@@ -137,7 +137,13 @@ Yes, you can.
 == Changelog ==
 
 = 1.17.1 =
-* Fix - Removed unused include [554](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/554)
+* Feature - Filter to change amount per gateway [#555](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/555)
+* Feature - Added "Cancel Order" button on "My Account" page [#556](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/556)
+* Fix - Removed autocomplete from cvv field on on-click payment [#557](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/557)
+* Fix - Correctly saves Credit Card when creating account [#558](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/558)
+
+= 1.17.1 =
+* Fix - Removed unused include [#554](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/554)
 
 = 1.17.0 =
 * Feature - New Thank You pages for Credit Card and Boleto [#544](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/544)
