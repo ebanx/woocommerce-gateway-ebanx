@@ -1148,6 +1148,8 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway
 
 		$amount = WC()->cart->total;
 
+		$amount = apply_filters('ebanx_get_custom_total_amount', $amount, $instalments);
+
 		$order_id = null;
 
 		if (!empty(get_query_var('order-pay'))) {

@@ -29,6 +29,52 @@ class WC_EBANX_Api_Controller {
 	}
 
 	/**
+	 * Cancels an open cash payment order with "On hold" status
+	 *
+	 * @return void
+	 */
+	public function cancel_order($order_id, $user_id) {
+		$order = new WC_Order( $order_id );
+		if ($user_id != get_current_user_id()
+		    || $order->get_status() !== 'on-hold'
+		    || !in_array($order->get_payment_method(), WC_EBANX_Constants::$CASH_PAYMENTS_GATEWAYS_CODE)
+			) {
+				wp_redirect( get_site_url() );
+				return;
+		}
+
+		$data = array(
+			'hash' => get_post_meta($order_id, '_ebanx_payment_hash', true)
+		);
+
+		\Ebanx\Config::set(array(
+			'integrationKey' => $this->get_integration_key(),
+			'testMode'       => $this->is_sandbox(),
+		));
+
+		try {
+			$request = \Ebanx\EBANX::doCancel($data);
+
+			if ($request->status === 'SUCCESS') {
+				$order->update_status('cancelled', __('EBANX: Cancelled by customer', 'woocommerce-gateway-ebanx'));
+			}
+
+			wp_redirect($order->get_view_order_url());
+
+		} catch (Exception $e) {
+			$message = $e->getMessage();
+			WC_EBANX::log("EBANX Error: $message");
+
+			wc_add_notice($message, 'error');
+			wp_redirect( get_site_url() );
+		}
+	}
+
+	private function get_integration_key() {
+		return $this->is_sandbox() ? $this->config->settings['sandbox_private_key'] : $this->config->settings['live_private_key'];
+	}
+
+	/**
 	 * Gets the banking ticket HTML by cUrl with url fopen fallback
 	 *
 	 * @return void
@@ -68,5 +114,14 @@ class WC_EBANX_Api_Controller {
 
 		curl_close($curl);
 		echo $html;
+	}
+
+	/**
+	 * @param $configs
+	 *
+	 * @return bool
+	 */
+	private function is_sandbox() {
+		return $this->config->settings['sandbox_mode_enabled'] === 'yes';
 	}
 }

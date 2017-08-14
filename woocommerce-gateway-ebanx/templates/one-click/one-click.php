@@ -37,7 +37,7 @@ $i = 0;
 
 					<div class="ebanx-one-click-cvv">
 						<label><?php _e('Card Code', 'woocommerce-gateway-ebanx') ?></label>
-						<input type="text" maxlength="4" minlength="3" class="ebanx-one-click-cvv-input input-text" id="ebanx-one-click-cvv-input" name="ebanx-one-click-cvv" placeholder="CVV" required>
+						<input type="text" maxlength="4" minlength="3" autocomplete="off" class="ebanx-one-click-cvv-input input-text" id="ebanx-one-click-cvv-input" name="ebanx-one-click-cvv" placeholder="CVV" required>
 					</div>
 
 					<div class="ebanx-one-click-installments">
