@@ -772,7 +772,7 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway
 
 	/**
 	 * Get the error message
-	 * 
+	 *
 	 * @param Exception $exception
 	 * @param string $country
 	 * @return string
@@ -944,6 +944,15 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway
 	protected function process_response_error($request, $order)
 	{
 		$code = isset($request->status_code) ? $request->status_code : 'GENERAL';
+
+		if ('GENERAL' === $code
+			&& isset($request->payment->transaction_status)
+			&& $request->payment->transaction_status->code === 'NOK') {
+
+			$code = 'REFUSED-CC';
+			$status_message = $request->payment->transaction_status->description;
+		}
+
 		$status_message = isset($request->status_message) ? $request->status_message : '';
 		$error_message = __(sprintf('EBANX: An error occurred: %s - %s', $code, $request->status_message), 'woocommerce-gateway-ebanx');
 
