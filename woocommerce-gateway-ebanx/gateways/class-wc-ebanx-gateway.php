@@ -944,6 +944,7 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway
 	protected function process_response_error($request, $order)
 	{
 		$code = isset($request->status_code) ? $request->status_code : 'GENERAL';
+		$status_message = isset($request->status_message) ? $request->status_message : '';
 
 		if ('GENERAL' === $code
 			&& isset($request->payment->transaction_status)
@@ -953,7 +954,6 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway
 			$status_message = $request->payment->transaction_status->description;
 		}
 
-		$status_message = isset($request->status_message) ? $request->status_message : '';
 		$error_message = __(sprintf('EBANX: An error occurred: %s - %s', $code, $request->status_message), 'woocommerce-gateway-ebanx');
 
 		$order->update_status('failed', $error_message);
