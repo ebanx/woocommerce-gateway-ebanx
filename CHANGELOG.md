@@ -1,5 +1,10 @@
 # CHANGELOG
 
+# 1.19.0
+* Feature - Credit Card refusal message and detailed log [#560](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/560)
+* Feature - Removed Birth Date from checkout form [#561](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/561)
+* Fix - Changed currency array for One Click [#562](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/562)
+
 # 1.18.0
 * Feature - Filter to change amount per gateway [#555](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/555)
 * Feature - Added "Cancel Order" button on "My Account" page [#556](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/556)

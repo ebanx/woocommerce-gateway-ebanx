@@ -252,7 +252,6 @@ class WC_EBANX_One_Click {
 		WC_EBANX_Request::set('ebanx_billing_instalments', WC_EBANX_Request::read('ebanx-credit-card-installments'));
 
 		WC_EBANX_Request::set($names['ebanx_billing_brazil_document'], get_user_meta( $this->userId, '_ebanx_billing_brazil_document', true ));
-		WC_EBANX_Request::set($names['ebanx_billing_brazil_birth_date'], get_user_meta( $this->userId, '_ebanx_billing_brazil_birth_date', true ));
 
 		WC_EBANX_Request::set($names['ebanx_billing_colombia_document'], get_user_meta( $this->userId, '_ebanx_billing_colombia_document', true ));
 
@@ -264,11 +263,9 @@ class WC_EBANX_One_Click {
 		return ! empty(WC_EBANX_Request::read('ebanx-one-click-token', null))
 			&& ! empty(WC_EBANX_Request::read('ebanx-credit-card-installments', null))
 			&& ! empty(WC_EBANX_Request::read('ebanx-one-click-cvv', null))
-			&& WC_EBANX_Request::has($names['ebanx_billing_brazil_document'])
-			&& (WC_EBANX_Request::has($names['ebanx_billing_brazil_birth_date'])
+			&& (WC_EBANX_Request::has($names['ebanx_billing_brazil_document'])
 			|| WC_EBANX_Request::has($names['ebanx_billing_colombia_document']))
-			&& ! empty(WC_EBANX_Request::read($names['ebanx_billing_brazil_document'], null))
-			&& (!empty(WC_EBANX_Request::read($names['ebanx_billing_brazil_birth_date'], null))
+			&& (! empty(WC_EBANX_Request::read($names['ebanx_billing_brazil_document'], null))
 			|| !empty(WC_EBANX_Request::read($names['ebanx_billing_colombia_document'], null)));
 	}
 
@@ -324,7 +321,7 @@ class WC_EBANX_One_Click {
 		$tax = get_woocommerce_currency() === WC_EBANX_Constants::CURRENCY_CODE_BRL ? WC_EBANX_Constants::BRAZIL_TAX : 0;
 
 		$instalments_terms = $this->gateway->get_payment_terms($cart_total, $max_instalments, $tax);
-		$currency = WC_EBANX_Constants::$CREDIT_CARD_CURRENCIES[$country];
+		$currency = WC_EBANX_Constants::$LOCAL_CURRENCIES[$country];
 
 		$args = apply_filters( 'ebanx_template_args', array(
 				'cards' => $this->cards,

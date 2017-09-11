@@ -4,17 +4,12 @@
 	if ($order_id) {
 		$order = wc_get_order($order_id);
 		$document = $order ? get_user_meta($order->get_user_id(), '_ebanx_document', true) : false;
-		$birthDate = $order ? get_user_meta($order->get_user_id(), '_ebanx_birth_date', true) : false;
 		$address = $order->get_address();
 
 		$fields = array(
 			'ebanx_billing_brazil_document' => array(
 				'label' => 'CPF',
 				'value' => $document
-			),
-			'ebanx_billing_brazil_birth_date' => array(
-				'label' => __('Birth Date', 'woocommerce-gateway-ebanx'),
-				'value' => $birthDate
 			),
 			'billing_postcode' => array(
 				'label' => 'Postcode / ZIP',
