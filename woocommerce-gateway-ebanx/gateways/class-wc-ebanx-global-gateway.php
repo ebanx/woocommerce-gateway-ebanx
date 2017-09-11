@@ -426,12 +426,6 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway
 				'class' => 'ebanx-advanced-option ebanx-checkout-manager-field cpf',
 				'placeholder' => __('eg: billing_brazil_cpf', 'woocommerce-gateway-ebanx')
 			),
-			'checkout_manager_birthdate' => array(
-				'title' => __('Birthdate Brazil', 'woocommerce-gateway-ebanx'),
-				'type' => 'text',
-				'class' => 'ebanx-advanced-option ebanx-checkout-manager-field cpf',
-				'placeholder' => __('eg: billing_brazil_birth_date', 'woocommerce-gateway-ebanx')
-			),
 			'checkout_manager_cnpj_brazil' => array(
 				'title' => __('CNPJ', 'woocommerce-gateway-ebanx'),
 				'type' => 'text',
@@ -443,12 +437,6 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway
 				'type' => 'text',
 				'class' => 'ebanx-advanced-option ebanx-checkout-manager-field ebanx-chile-document',
 				'placeholder' => __('eg: billing_chile_document', 'woocommerce-gateway-ebanx')
-			),
-			'checkout_manager_chile_birth_date' => array(
-				'title' => __('Birthdate Chile', 'woocommerce-gateway-ebanx'),
-				'type' => 'text',
-				'class' => 'ebanx-advanced-option ebanx-checkout-manager-field ebanx-chile-bdate',
-				'placeholder' => __('eg: billing_chile_birth_date', 'woocommerce-gateway-ebanx')
 			),
 			'checkout_manager_colombia_document' => array(
 				'title' => __('DNI', 'woocommerce-gateway-ebanx'),
