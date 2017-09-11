@@ -33,7 +33,6 @@ const checkoutPage = (function (test) {
         city: '#billing_city',
         postcode: '#billing_postcode',
         brazilDocument: '#ebanx_billing_brazil_document',
-        brazilBirthdate: '#ebanx_billing_brazil_birth_date',
         country: '#billing_country',
         state: '#billing_state',
         hash: 'input[name="ebanx_payment_hash"]',
@@ -93,10 +92,6 @@ const checkoutPage = (function (test) {
     this.fillField(brazilDocument, fields.brazilDocument);
   };
 
-  _private.fillBrazilBirthDate = function (birthdate) {
-    this.fillField(birthdate, fields.brazilBirthdate);
-  };
-
   _private.fillSelect = function (field, value) {
     test
       .get(field, { timeout: 10000 })
@@ -140,7 +135,6 @@ const checkoutPage = (function (test) {
       this.fillCheckout(data);
 
       _private.fillBrazilDocument(data.brazilDocument);
-      _private.fillBrazilBirthDate(data.brazilBirthdate);
 
       return this;
     },
