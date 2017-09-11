@@ -321,7 +321,7 @@ class WC_EBANX_One_Click {
 		$tax = get_woocommerce_currency() === WC_EBANX_Constants::CURRENCY_CODE_BRL ? WC_EBANX_Constants::BRAZIL_TAX : 0;
 
 		$instalments_terms = $this->gateway->get_payment_terms($cart_total, $max_instalments, $tax);
-		$currency = WC_EBANX_Constants::$CREDIT_CARD_CURRENCIES[$country];
+		$currency = WC_EBANX_Constants::$LOCAL_CURRENCIES[$country];
 
 		$args = apply_filters( 'ebanx_template_args', array(
 				'cards' => $this->cards,
