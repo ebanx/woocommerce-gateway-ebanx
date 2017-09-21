@@ -213,7 +213,7 @@ msgstr ""
 #: gateways/class-wc-ebanx-global-gateway.php:113
 msgid ""
 "You can obtain the integration keys in the settings section, logging in to "
-"the <a href=\"https://www.ebanx.com/business/en/dashboard\">EBANX Dashboard."
+"the <a href=\"http://dashboard.ebanx.com\">EBANX Dashboard."
 "</a>"
 msgstr ""
 

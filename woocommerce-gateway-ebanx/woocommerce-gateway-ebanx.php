@@ -307,7 +307,7 @@ if ( ! class_exists('WC_EBANX') ) {
 				return;
 			}
 
-			$url = 'https://www.ebanx.com/business/en/dashboard/api/lead';
+			$url = 'http://dashboard.ebanx.com/api/lead';
 			$args = array(
 				'body' => array(
 					'lead' => array(
@@ -354,7 +354,7 @@ if ( ! class_exists('WC_EBANX') ) {
 		 * @return void
 		 */
 		public function update_lead() {
-			$url = 'https://www.ebanx.com/business/en/dashboard/api/lead';
+			$url = 'http://dashboard.ebanx.com/api/lead';
 			$lead_id = get_option('_ebanx_lead_id');
 
 			$args = array(
