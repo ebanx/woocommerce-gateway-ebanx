@@ -307,7 +307,7 @@ if ( ! class_exists('WC_EBANX') ) {
 				return;
 			}
 
-			$url = 'https://www.ebanx.com/business/en/dashboard/api/lead';
+			$url = 'https://dashboard.ebanx.com/api/lead';
 			$args = array(
 				'body' => array(
 					'lead' => array(
@@ -354,7 +354,7 @@ if ( ! class_exists('WC_EBANX') ) {
 		 * @return void
 		 */
 		public function update_lead() {
-			$url = 'https://www.ebanx.com/business/en/dashboard/api/lead';
+			$url = 'https://dashboard.ebanx.com/api/lead';
 			$lead_id = get_option('_ebanx_lead_id');
 
 			$args = array(
@@ -699,7 +699,7 @@ if ( ! class_exists('WC_EBANX') ) {
 						'payment_hash' => $payment_hash,
 						'payment_checkout_url' => get_post_meta($order->id, '_ebanx_checkout_url', true),
 						'is_sandbox_mode' => $this->is_sandbox_mode,
-						'dashboard_link' => "http://dashboard.ebanx.com/" . ($this->is_sandbox_mode ? 'test/' : '') . "payments/?hash=$payment_hash"
+						'dashboard_link' => "https://dashboard.ebanx.com/" . ($this->is_sandbox_mode ? 'test/' : '') . "payments/?hash=$payment_hash"
 					),
 					'woocommerce/ebanx/',
 					WC_EBANX::get_templates_path()

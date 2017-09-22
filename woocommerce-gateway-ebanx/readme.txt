@@ -77,7 +77,7 @@ To install the plugin manually, download our plugin and upload it to your web se
 
 The EBANX Gateway Plugin can also be installed using GitHub. You can find our repository [here](https://github.com/ebanx/checkout-woocommerce/ "EBANX GitHub repository"). To download the plugin from our repository, please view [our latest release](https://github.com/ebanx/woocommerce-gateway-ebanx/releases/latest "Latest Release from GitHub repository") and download the `woocommerce-gateway-ebanx.zip` package.
 
-Still need your API Keys? You can pick those up [here](https://www.ebanx.com/business/en/dashboard "EBANX API keys").
+Still need your API Keys? You can pick those up [here](https://dashboard.ebanx.com "EBANX API keys").
 
 == Frequently Asked Questions ==
 
