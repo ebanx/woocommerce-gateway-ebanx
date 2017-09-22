@@ -14,8 +14,9 @@ class WC_EBANX_Tef_Gateway extends WC_EBANX_Redirect_Gateway
 		$this->id           = 'ebanx-tef';
 		$this->method_title = __('EBANX - TEF', 'woocommerce-gateway-ebanx');
 
-		$this->title       = __('Débito Online', 'woocommerce-gateway-ebanx');
-		$this->description = __('Selecione o seu banco. A seguir, você será redirecionado para concluir o pagamento pelo seu internet banking.', 'woocommerce-gateway-ebanx');
+		$this->api_name = 'tef';
+		$this->title       = 'Débito Online';
+		$this->description = 'Selecione o seu banco. A seguir, você será redirecionado para concluir o pagamento pelo seu internet banking.';
 
 		parent::__construct();
 
@@ -56,6 +57,7 @@ class WC_EBANX_Tef_Gateway extends WC_EBANX_Redirect_Gateway
 			array(
 				'title'       => $this->title,
 				'description' => $this->description,
+				'id' => $this->id
 			),
 			'woocommerce/ebanx/',
 			WC_EBANX::get_templates_path()

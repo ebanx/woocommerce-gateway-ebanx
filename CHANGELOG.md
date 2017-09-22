@@ -1,5 +1,83 @@
 # CHANGELOG
 
+# 1.19.0
+* Feature - Credit Card refusal message and detailed log [#560](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/560)
+* Feature - Removed Birth Date from checkout form [#561](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/561)
+* Fix - Changed currency array for One Click [#562](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/562)
+
+# 1.18.0
+* Feature - Filter to change amount per gateway [#555](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/555)
+* Feature - Added "Cancel Order" button on "My Account" page [#556](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/556)
+* Fix - Removed autocomplete from cvv field on on-click payment [#557](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/557)
+* Fix - Correctly saves Credit Card when creating account [#558](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/558)
+
+# 1.17.1
+* Fix - Removed unused include [#554](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/554)
+
+# 1.17.0
+* Feature - New Thank You pages for Credit Card and Boleto [#544](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/544)
+* Feature - Added translation for Minimum Amount for Purchase error on Colombia [#547](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/547)
+* Feature - Added Portuguese translation for Settings Page [#549](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/549)
+* Feature - Changed project license to Apache v2.0 [#548](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/548)
+* Fix - Changed IOF messages on Admin Dashboard [#545](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/545)
+* Fix - Fixed Debit Card tokenize error [#550](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/550)
+* Fix - Fixed One Click Payment not processing [#551](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/551)
+* Fix - Updated pay for order layout [#552](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/552)
+
+# 1.16.0
+* Feature - Pay for order(woocommerce native payment by link) [#531](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/531)
+* Feature - Added Credit Card Gateway for Colombia [#534](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/534)
+* Feature - Added Multicaja Gateway for Chile [#539](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/539)
+* Feature - Added Webpay Gateway for Chile [#538](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/538)
+* Feature - Added an option for merchant to hide IOF [#541](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/541)
+* Feature - Added a compability layer to prevent incompabilities from third party plugins and themes like WooCommerce's Storefront  [#535](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/535)
+* Fix - Fixed PHP notice when using empty interest rate option [#530](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/530)
+* Fix - Fixed error when a Merchant Payment Code gets greater than 40 characters [#537](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/537)
+
+# 1.15.0
+* Feature - Created an option to hide the local amount value on checkout page [#526](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/526)
+* Fix - Applied box-sizing: border-box on boleto thank you pages button to avoid issues [#527](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/527)
+
+# 1.14.1
+* Fix - Problem resolved when the actions were updated via book actions. [#523](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/523)
+
+# 1.14.0
+* Feature - Added EURO conversion [#520](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/520)
+* Feature - Support for pt_PT translations [#521](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/521)
+
+# 1.13.2
+* Fix - Replaced wp_die to exit to avoid error 500 [#515](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/515)
+* Fix - Updating order when it receives a payment status notification [#516](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/516)
+
+# 1.13.1
+* Fix - Avoid duplication payment notifications [#509](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/509)
+* Fix - Changed PSE thank you page HTML [#512](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/512)
+* Fix - Changed Boleto thank you page HTML [#513](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/513)
+
+# 1.13.0
+* Fix - Fix for debug log when is enabled before record a log [#507](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/507)
+* Fix - Fix issue to avoid some issues on refund transactions [#506](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/506)
+* Fix - Changed label to Minimum Instalment (title-cased labels) [#500](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/500)
+* Fix - Fixed compliance fields when country is empty [#498](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/498)
+* Feature - Docker implementation and end-to-end tests for Brazil payments done [#504](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/504)
+
+# 1.12.1
+* Fix - Credit-card saving for new customers [#496](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/496)
+* Fix - One-click payments button in product details [#496](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/496)
+
+# 1.12.0
+* Feature - Using interest rate on minimum instalment value [#490](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/490)
+* Feature - Refactor EBANX query router [#487](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/487)
+* Feature - Added a minimal value setting on settings [#477](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/477)
+* Feature - Changed cookie to localStorage to save flags [#476](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/476)
+* Feature - Plugin docs using phpDocumentator [#488](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/488)
+* Fix - Thank you page values and instalments fixed [#473](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/473)
+* Fix - Hide saved cards when option is disabled [#475](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/475)
+* Fix - DNI field is not mandatory for colombia any more [#486](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/486)
+* Fix - Changed the assets path to system path instead of host path [#489](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/489)
+* Fix - Using absolute path to spinner gif [#485](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/485)
+* Improvement - Updated notification notices and notes [#468](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/468)
+
 # 1.11.4
 * Fix - Fixed float values not being accepted in interest rates [#480](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/480)
 * Fix - Added '/' to Notification URL to prevent Response Code 301 [#480](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/480)

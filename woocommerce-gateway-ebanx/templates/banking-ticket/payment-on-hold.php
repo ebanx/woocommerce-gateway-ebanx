@@ -1,6 +1,6 @@
 <?php
 /**
- * Bank Slip - Payment instructions.
+ * EBANX Banking Ticket - Payment instructions.
  *
  * @author  EBANX
  * @package WooCommerce_EBANX/Templates
@@ -12,36 +12,28 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 ?>
 
-<div class="banking-ticket__desc">
-    <p class="woocommerce-thankyou-order-received">Pronto, seu boleto foi gerado, <?php echo $customer_name?>.</p>
-    <p>Mandamos uma cópia para o email <strong><?php echo $customer_email ?></strong>.</p>
-    <p>
-        - Não se esqueça, ele vence dia <strong><?php echo date_i18n('d/m', strtotime($due_date))?></strong>. Depois disso não é mais possível realizar o pagamento.<br/>
-        - Dica: Além dos bancos e casas lotéricas você também pode pagar pelo seu internet banking, sem sair de casa.
-    </p>
-    <p>Ficou alguma dúvida? A gente te <a href="https://www.ebanx.com/br/ajuda/pagamentos/boleto-bancario" target="_blank">ajuda</a>.</p>
-</div>
+<div class="ebanx-thank-you-page ebanx-thank-you-page--br ebanx-thank-you-page--cc-br">
+	<p><strong><?= $customer_name ?>, seu boleto foi gerado e a data de vencimento é dia <?= date_i18n('d/m', strtotime($due_date)) ?> :)</strong></p>
 
-<hr>
+	<p>Enviamos uma cópia para o email <strong><?= $customer_email ?></strong></p>
 
-<div class="banking-ticket__barcode">
-    <div class="banking-ticket__barcode-code">
-        <?php echo $barcode_fraud['boleto1']; ?>.<?php echo $barcode_fraud['boleto2']; ?> <?php echo $barcode_fraud['boleto3']; ?>.<?php echo $barcode_fraud['boleto4']; ?> <?php echo $barcode_fraud['boleto5']; ?>.<?php echo $barcode_fraud['boleto6']; ?> <?php echo $barcode_fraud['boleto7']; ?> <?php echo $barcode_fraud['boleto8']; ?>
+	<p>Pague o boleto no Internet Banking de seu banco apenas copiando o código de barras! Você também pode imprimir o boleto e pagar em casas lotéricas e no caixa do seu banco.</p>
+
+	<div>
+		<h3><?php echo $barcode_fraud['boleto1']; ?>.<?php echo $barcode_fraud['boleto2']; ?> <?php echo $barcode_fraud['boleto3']; ?>.<?php echo $barcode_fraud['boleto4']; ?> <?php echo $barcode_fraud['boleto5']; ?>.<?php echo $barcode_fraud['boleto6']; ?> <?php echo $barcode_fraud['boleto7']; ?> <?php echo $barcode_fraud['boleto8']; ?></h3>
+		<div class="banking-ticket__barcode-copy">
+			<button type="button" class="button ebanx-button--copy" data-clipboard-text="<?php echo $barcode; ?>">Copiar</button>
+		</div>
+	</div>
+
+	<br>
+	<p>Dica: Pagar seu boleto até às 21h de dias úteis, faz com que o pagamento tenha a chance de ser confirmado mais rápido :)</p>
+
+	<div class="ebanx-button--group ebanx-button--group-two">
+        <a href="<?php echo $url_pdf ?>" target="_blank" class="button banking-ticket__action">Salvar em PDF</a><a href="<?php echo $url_print ?>" target="_blank" class="button banking-ticket__action">Imprimir boleto</a>
     </div>
-    <div class="banking-ticket__barcode-copy">
-        <button type="button" class="button ebanx-button--copy" data-clipboard-text="<?php echo $barcode; ?>">Copiar</button>
-    </div>
-</div>
 
-<hr>
+	<iframe id="ebanx-boleto-frame" src="<?php echo $url_iframe; ?>" style="width: 100%; border: 0px; height: 1000px"></iframe>
 
-<div class="banking-ticket__actions">
-    <div class="ebanx-button--group ebanx-button--group-two">
-        <a href="<?php echo $url_pdf ?>" target="_blank" class="button banking-ticket__action">Salvar em PDF</a>
-        <a href="<?php echo $url_print ?>" target="_blank" class="button banking-ticket__action">Imprimir boleto</a>
-    </div>
-</div>
-
-<div>
-    <iframe id="ebanx-boleto-frame" src="<?php echo $url_iframe; ?>" style="width: 100%; border: 0px; height: 1000px"></iframe>
+	<?php include WC_EBANX::get_templates_path() . 'apps_br.php' ?>
 </div>

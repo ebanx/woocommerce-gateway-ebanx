@@ -39,6 +39,12 @@ abstract class WC_EBANX_Constants
 	const CURRENCY_CODE_MXN = 'MXN'; // Mexico
 	const CURRENCY_CODE_COP = 'COP'; // Colombia
 	const CURRENCY_CODE_CLP = 'CLP'; // Chile
+
+	/**
+	 * Only the currencies allowed and processed by EBANX
+	 *
+	 * @var array
+	 */
 	public static $CURRENCIES_CODES_ALLOWED = array(
 		self::CURRENCY_CODE_BRL,
 		self::CURRENCY_CODE_USD,
@@ -65,11 +71,16 @@ abstract class WC_EBANX_Constants
 	 */
 	const ACQUIRER_MIN_INSTALMENT_VALUE_MXN = 100;
 	const ACQUIRER_MIN_INSTALMENT_VALUE_BRL = 20;
+	const ACQUIRER_MIN_INSTALMENT_VALUE_COP = 0;
 
 	/**
 	 * Max supported credit-card instalments
 	 */
-	const MAX_INSTALMENTS = 12;
+	public static $MAX_INSTALMENTS = array(
+		self::COUNTRY_BRAZIL => 12,
+		self::COUNTRY_MEXICO => 12,
+		self::COUNTRY_COLOMBIA => 36,
+	);
 
 	/**
 	* Taxes applied by country
@@ -97,6 +108,20 @@ abstract class WC_EBANX_Constants
 	public static $CREDIT_CARD_COUNTRIES = array(
 		self::COUNTRY_BRAZIL => self::COUNTRY_BRAZIL,
 		self::COUNTRY_MEXICO => self::COUNTRY_MEXICO,
+		self::COUNTRY_COLOMBIA => self::COUNTRY_COLOMBIA,
+	);
+
+	/**
+	 * The countries that credit cards are processed by EBANX
+	 *
+	 * @var array
+	 */
+	public static $CREDIT_CARD_CURRENCIES = array(
+		self::CURRENCY_CODE_BRL,
+		self::CURRENCY_CODE_MXN,
+		self::CURRENCY_CODE_USD,
+		self::CURRENCY_CODE_COP,
+		self::CURRENCY_CODE_EUR
 	);
 
 	/**
@@ -111,6 +136,20 @@ abstract class WC_EBANX_Constants
 	  'sencillito' => 'America/Santiago',
 	  'safetypay-cash' => 'America/Lima',
 	  'baloto' => 'America/Bogota',
+	);
+
+	/**
+	 * The cash payments processed by EBANX
+	 *
+	 * @var array
+	 */
+	public static $CASH_PAYMENTS_GATEWAYS_CODE = array(
+		'ebanx-banking-ticket',
+		'ebanx-oxxo',
+		'ebanx-pagoefectivo',
+		'ebanx-sencillito',
+		'ebanx-safetypay-cash',
+		'ebanx-baloto',
 	);
 
 	/**
@@ -151,6 +190,11 @@ abstract class WC_EBANX_Constants
 		)
 	);
 
+	/**
+	 * Payment type API codes for each plugin payment gateway
+	 *
+	 * @var array
+	 */
 	public static $GATEWAY_TO_PAYMENT_TYPE_CODE = array(
 		'ebanx-banking-ticket' => '_boleto',
 		'ebanx-credit-card-br' => '_creditcard',
@@ -187,10 +231,13 @@ abstract class WC_EBANX_Constants
 			'ebanx-account'
 		),
 		self::COUNTRY_CHILE => array(
+			'ebanx-webpay',
+			'ebanx-multicaja',
 			'ebanx-sencillito',
 			'ebanx-servipag',
 		),
 		self::COUNTRY_COLOMBIA => array(
+			'ebanx-credit-card-co',
 			'ebanx-baloto',
 			'ebanx-eft',
 		),

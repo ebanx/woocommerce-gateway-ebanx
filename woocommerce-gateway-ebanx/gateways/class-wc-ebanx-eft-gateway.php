@@ -15,8 +15,8 @@ class WC_EBANX_Eft_Gateway extends WC_EBANX_Redirect_Gateway
 		$this->method_title = __('EBANX - PSE', 'woocommerce-gateway-ebanx');
 
 		$this->api_name    = 'eft';
-		$this->title       = __('PSE - Pago Seguros en Línea', 'woocommerce-gateway-ebanx');
-		$this->description = __('Paga con PSE - Pago Seguros en Línea.', 'woocommerce-gateway-ebanx');
+		$this->title       = 'PSE - Pago Seguros en Línea';
+		$this->description = 'Paga con PSE - Pago Seguros en Línea.';
 
 		parent::__construct();
 
@@ -57,7 +57,8 @@ class WC_EBANX_Eft_Gateway extends WC_EBANX_Redirect_Gateway
 			array(
 				'title'       => $this->title,
 				'description' => $this->description,
-				'banks'       => WC_EBANX_Constants::$BANKS_EFT_ALLOWED[WC_EBANX_Constants::COUNTRY_COLOMBIA]
+				'banks'       => WC_EBANX_Constants::$BANKS_EFT_ALLOWED[WC_EBANX_Constants::COUNTRY_COLOMBIA],
+				'id' => $this->id
 			),
 			'woocommerce/ebanx/',
 			WC_EBANX::get_templates_path()

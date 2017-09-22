@@ -35,9 +35,6 @@ class WC_EBANX_Hooks {
 	public static function payment_status_hook_action() {
 		ob_start();
 
-		// $myfile = fopen("/var/www/checkout-woocommerce/test.txt", "a") or die("Unable to open file!");
-		// fwrite($myfile, json_encode(array('get' => $_GET, 'post' => $_REQUEST, 'request' => $_REQUEST)));
-
 		if ( ( WC_EBANX_Request::has('operation')
 			&& WC_EBANX_Request::read('operation') == 'payment_status_change'
 			&& WC_EBANX_Request::has('notification_type')
@@ -63,13 +60,14 @@ class WC_EBANX_Hooks {
 				$codes['merchant_payment_code'] = WC_EBANX_Request::read('merchant_payment_code');
 			}
 
-			$ebanx = new WC_EBANX_Tef_Gateway();
+			$ebanx = new WC_EBANX_Gateway();
 			$order = $ebanx->process_hook( $codes, WC_EBANX_Request::read('notification_type') );
 
 			if ( self::is_url_response() ) {
 				wp_redirect( $order->get_checkout_order_received_url() );
-				exit;
 			}
+
+			exit;
 		}
 
 		ob_end_clean();

@@ -15,8 +15,8 @@ class WC_EBANX_Banking_Ticket_Gateway extends WC_EBANX_Gateway
 		$this->method_title = __('EBANX - Banking Ticket', 'woocommerce-gateway-ebanx');
 
 		$this->api_name = 'boleto';
-		$this->title = __('Boleto EBANX', 'woocommerce-gateway-ebanx');
-		$this->description = __('Pague com boleto bancário.', 'woocommerce-gateway-ebanx');
+		$this->title = 'Boleto EBANX';
+		$this->description = 'Pague com boleto bancário.';
 
 		parent::__construct();
 
@@ -54,7 +54,9 @@ class WC_EBANX_Banking_Ticket_Gateway extends WC_EBANX_Gateway
 
 		wc_get_template(
 			'banking-ticket/checkout-instructions.php',
-			array(),
+			array(
+				'id' => $this->id
+			),
 			'woocommerce/ebanx/',
 			WC_EBANX::get_templates_path()
 		);

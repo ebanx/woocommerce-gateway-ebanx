@@ -15,8 +15,8 @@ class WC_EBANX_Debit_Card_Gateway extends WC_EBANX_Gateway
 		$this->method_title = __('EBANX - Debit Card', 'woocommerce-gateway-ebanx');
 
 		$this->api_name    = 'debitcard';
-		$this->title       = __('Tarjeta de Débito', 'woocommerce-gateway-ebanx');
-		$this->description = __('Paga con tarjeta de débito.', 'woocommerce-gateway-ebanx');
+		$this->title       = 'Tarjeta de Débito';
+		$this->description = 'Paga con tarjeta de débito.';
 
 		parent::__construct();
 
@@ -70,7 +70,8 @@ class WC_EBANX_Debit_Card_Gateway extends WC_EBANX_Gateway
 		wc_get_template(
 			'debit-card/payment-form.php',
 			array(
-				'cart_total' => $this->get_order_total()
+				'cart_total' => $this->get_order_total(),
+				'id' => $this->id
 			),
 			'woocommerce/ebanx/',
 			WC_EBANX::get_templates_path()
@@ -87,8 +88,8 @@ class WC_EBANX_Debit_Card_Gateway extends WC_EBANX_Gateway
 	 */
 	protected function request_data($order)
 	{
-		if ( empty(WC_EBANX_Request::read('ebanx_debit_token'))
-			|| empty(WC_EBANX_Request::read('ebanx_billing_cvv')) ) {
+		if ( empty(WC_EBANX_Request::read('ebanx_debit_token', null))
+			|| empty(WC_EBANX_Request::read('ebanx_billing_cvv', null)) ) {
 			throw new Exception("Missing ebanx card params.");
 		}
 

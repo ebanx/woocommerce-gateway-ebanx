@@ -15,6 +15,8 @@ asort($banks);
 ?>
 
 <div id="ebanx-eft-payment" class="ebanx-payment-container ebanx-language-es">
+	<?php include WC_EBANX::get_templates_path() . 'compliance-fields-co.php' ?>
+
     <select name="eft" class="ebanx-select-field">
         <?php foreach($banks as $key => $bank): ?>
         	<option value="<?php echo $key ?>"><?php echo $bank ?></option>
