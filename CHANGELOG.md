@@ -1,5 +1,8 @@
 # CHANGELOG
 
+# 1.20.0
+* Feature - Dashboard lead links update to Dashboard v2 [#564](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/564)
+
 # 1.19.0
 * Feature - Credit Card refusal message and detailed log [#560](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/560)
 * Feature - Removed Birth Date from checkout form [#561](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/561)

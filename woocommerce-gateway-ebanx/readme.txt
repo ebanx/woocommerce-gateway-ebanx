@@ -3,7 +3,7 @@ Contributors: ebanxwp
 Tags: credit card, boleto, ebanx, woocommerce, approval rate, conversion rate, brazil, mexico, peru, colombia, chile, oxxo, baloto, cash payment, local payment one-click payment, installments, alternative payments, accept more payments
 Requires at least: 4.0
 Tested up to: 4.7
-Stable tag: 1.19.0
+Stable tag: 1.20.0
 License: Apache v2.0
 License URI: http://www.apache.org/licenses/LICENSE-2.0
 
@@ -135,6 +135,9 @@ Yes, you can.
 4. There you go, you’re all set!
 
 == Changelog ==
+
+= 1.20.0 =
+* Feature - Dashboard lead links update to Dashboard v2 [#564](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/564)
 
 = 1.19.0 =
 * Feature - Credit Card refusal message and detailed log [#560](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/560)
