@@ -9,7 +9,7 @@ $i = 0;
 
 ?>
 
-<?php if ($cards): ?>
+<?php if ($cards && ( ! empty(get_user_meta( $this->userId, '_ebanx_billing_brazil_document', true )) || ! empty(get_user_meta( $this->userId, '_ebanx_billing_colombia_document', true )) || WC()->customer->get_country() === 'MX')): ?>
 	<form class="ebanx-one-click-form" id="ebanx-one-click-form" method="post" action="<?php echo $permalink ?>">
 		<input type="hidden" name="ebanx-action" value="<?php echo $action ?>">
 		<input type="hidden" name="ebanx-nonce" value="<?php echo $nonce ?>">
