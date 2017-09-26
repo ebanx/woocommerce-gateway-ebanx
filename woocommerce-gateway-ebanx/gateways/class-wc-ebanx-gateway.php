@@ -846,6 +846,10 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway
 	 */
 	protected function save_user_meta_fields($order)
 	{
+		if (!$this->userId) {
+			$this->userId = get_current_user_id();
+		}
+
 		if ($this->userId) {
 			$document = false;
 
