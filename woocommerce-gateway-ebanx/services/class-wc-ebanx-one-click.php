@@ -278,6 +278,13 @@ class WC_EBANX_One_Click {
 		return !is_user_logged_in() || !get_user_meta( $this->userId, '_billing_email', true ) && !empty( $this->cards );
 	}
 
+	public function should_show_button() {
+		return $this->cards
+		       && (! empty(get_user_meta( $this->userId, '_ebanx_billing_brazil_document', true ))
+	           || ! empty(get_user_meta( $this->userId, '_ebanx_billing_colombia_document', true ))
+	           || $this->userCountry === WC_EBANX_Constants::COUNTRY_MEXICO);
+	}
+
 	/**
 	 * Render the button "One-Click Purchase" using a template
 	 *
@@ -335,7 +342,8 @@ class WC_EBANX_One_Click {
 				'action' => self::CREATE_ORDER_ACTION,
 				'permalink' => get_permalink($product->id),
 				'country' => $country,
-				'currency' => $currency
+				'currency' => $currency,
+				'should_show_button' => $this->should_show_button(),
 			) );
 
 		wc_get_template( 'one-click.php', $args, '', WC_EBANX::get_templates_path() . 'one-click/' );
