@@ -14,10 +14,12 @@ abstract class WC_EBANX_Constants
 	const COUNTRY_BRAZIL   = 'br';
 	const COUNTRY_MEXICO   = 'mx';
 	const COUNTRY_COLOMBIA = 'co';
+	const COUNTRY_ARGENTINA = 'ar';
 
 	/**
 	 * The full name of countries that EBANX processes
 	 */
+	const COUNTRY_ARGENTINA_NAME = 'Argentina';
 	const COUNTRY_BRAZIL_NAME = 'Brazil';
 	const COUNTRY_CHILE_NAME = 'Chile';
 	const COUNTRY_COLOMBIA_NAME = 'Colombia';
@@ -39,6 +41,7 @@ abstract class WC_EBANX_Constants
 	const CURRENCY_CODE_MXN = 'MXN'; // Mexico
 	const CURRENCY_CODE_COP = 'COP'; // Colombia
 	const CURRENCY_CODE_CLP = 'CLP'; // Chile
+	const CURRENCY_CODE_ARS = 'ARS'; // Argentina
 
 	/**
 	 * Only the currencies allowed and processed by EBANX
@@ -52,7 +55,8 @@ abstract class WC_EBANX_Constants
 		self::CURRENCY_CODE_PEN,
 		self::CURRENCY_CODE_MXN,
 		self::CURRENCY_CODE_COP,
-		self::CURRENCY_CODE_CLP
+		self::CURRENCY_CODE_CLP,
+		self::CURRENCY_CODE_ARS,
 	);
 
 	/**
@@ -63,7 +67,8 @@ abstract class WC_EBANX_Constants
 		self::COUNTRY_CHILE => self::CURRENCY_CODE_CLP,
 		self::COUNTRY_COLOMBIA => self::CURRENCY_CODE_COP,
 		self::COUNTRY_MEXICO => self::CURRENCY_CODE_MXN,
-		self::COUNTRY_PERU => self::CURRENCY_CODE_PEN
+		self::COUNTRY_PERU => self::CURRENCY_CODE_PEN,
+		self::COUNTRY_ARGENTINA => self::CURRENCY_CODE_ARS,
 	);
 
 	/**
@@ -98,6 +103,7 @@ abstract class WC_EBANX_Constants
 		self::COUNTRY_MEXICO,
 		self::COUNTRY_PERU,
 		self::COUNTRY_CHILE,
+		self::COUNTRY_ARGENTINA,
 	);
 
 	/**
@@ -249,7 +255,8 @@ abstract class WC_EBANX_Constants
 			'ebanx-credit-card-mx',
 			'ebanx-debit-card',
 			'ebanx-oxxo'
-		)
+		),
+		self::COUNTRY_ARGENTINA => array(),
 	);
 
 	/**
