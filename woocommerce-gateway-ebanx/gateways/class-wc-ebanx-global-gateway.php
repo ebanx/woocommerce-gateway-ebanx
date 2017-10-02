@@ -44,6 +44,7 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway
 			'ebanx-safetypay',
 			'ebanx-pagoefectivo',
 		),
+		'argentina_payment_methods' => array(),
 		'save_card_data' => 'yes',
 		'one_click' => 'yes',
 		'capture_enabled' => 'yes',
@@ -68,7 +69,7 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway
 
 		$this->id                 = 'ebanx-global';
 		$this->method_title       = __('EBANX', 'woocommerce-gateway-ebanx');
-		$this->method_description = __('EBANX easy-to-setup checkout allows your business to accept local payments in Brazil, Mexico, Colombia, Chile & Peru.', 'woocommerce-gateway-ebanx');
+		$this->method_description = __('EBANX easy-to-setup checkout allows your business to accept local payments in Brazil, Mexico, Argentina, Colombia, Chile & Peru.', 'woocommerce-gateway-ebanx');
 
 		$this->merchant_currency = strtoupper(get_woocommerce_currency());
 
@@ -228,6 +229,13 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway
 					'ebanx-safetypay',
 					'ebanx-pagoefectivo',
 				),
+			),
+			'argentina_payment_methods'      => array(
+				'title'       => __('Argentina', 'woocommerce-gateway-ebanx'),
+				'type'        => 'multiselect',
+				'class'       => 'wc-enhanced-select',
+				'options'     => array(),
+				'default'     => array(),
 			),
 			'payments_options_title'     => array(
 				'title' => __('Payment Options', 'woocommerce-gateway-ebanx'),
