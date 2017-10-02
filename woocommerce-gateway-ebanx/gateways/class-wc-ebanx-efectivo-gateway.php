@@ -116,16 +116,18 @@ class WC_EBANX_Efectivo_Gateway extends WC_EBANX_Gateway
 	 *
 	 * @param  WC_Order $order
 	 * @return array
+	 * @throws Exception
 	 */
 	protected function request_data($order)
 	{
-		/*TODO: ? if (empty($_POST['ebanx_efectivo_rfc'])) {
-		throw new Exception("Missing rfc.");
-		}*/
+		if ( ! WC_EBANX_Request::has('efectivo')
+			 || ! in_array(WC_EBANX_Request::read('efectivo'), WC_EBANX_Constants::$VOUCHERS_EFECTIVO_ALLOWED)) {
+			throw new Exception('MISSING-VOUCHER');
+		}
 
 		$data = parent::request_data($order);
 
-		$data['payment']['payment_type_code'] = $this->api_name;
+		$data['payment']['payment_type_code'] = WC_EBANX_Request::read('efectivo');
 
 		return $data;
 	}

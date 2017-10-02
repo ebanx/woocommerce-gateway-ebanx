@@ -565,6 +565,9 @@ if ( ! class_exists('WC_EBANX') ) {
 			$methods[] = 'WC_EBANX_Pagoefectivo_Gateway';
 			$methods[] = 'WC_EBANX_Safetypay_Gateway';
 
+			// Argentina
+			$methods[] = 'WC_EBANX_Efectivo_Gateway';
+
 			return $methods;
 		}
 

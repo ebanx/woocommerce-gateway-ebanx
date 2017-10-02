@@ -196,6 +196,12 @@ abstract class WC_EBANX_Constants
 		)
 	);
 
+	public static $VOUCHERS_EFECTIVO_ALLOWED = array(
+		'rapipago',
+		'pagofacil',
+		'cupon',
+	);
+
 	/**
 	 * Payment type API codes for each plugin payment gateway
 	 *
