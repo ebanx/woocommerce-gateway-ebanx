@@ -44,7 +44,9 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway
 			'ebanx-safetypay',
 			'ebanx-pagoefectivo',
 		),
-		'argentina_payment_methods' => array(),
+		'argentina_payment_methods' => array(
+			'ebanx-efectivo',
+		),
 		'save_card_data' => 'yes',
 		'one_click' => 'yes',
 		'capture_enabled' => 'yes',
@@ -234,8 +236,12 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway
 				'title'       => __('Argentina', 'woocommerce-gateway-ebanx'),
 				'type'        => 'multiselect',
 				'class'       => 'wc-enhanced-select',
-				'options'     => array(),
-				'default'     => array(),
+				'options'     => array(
+					'ebanx-efectivo'    => 'Efectivo',
+				),
+				'default'     => array(
+					'ebanx-efectivo'
+				),
 			),
 			'payments_options_title'     => array(
 				'title' => __('Payment Options', 'woocommerce-gateway-ebanx'),

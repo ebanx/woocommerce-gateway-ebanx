@@ -256,7 +256,9 @@ abstract class WC_EBANX_Constants
 			'ebanx-debit-card',
 			'ebanx-oxxo'
 		),
-		self::COUNTRY_ARGENTINA => array(),
+		self::COUNTRY_ARGENTINA => array(
+			'ebanx-efectivo'
+		),
 	);
 
 	/**

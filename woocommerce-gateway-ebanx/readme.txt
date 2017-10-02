@@ -106,6 +106,7 @@ The [Developer’s Academy](https://www.ebanx.com/business/en/developers/integra
   * Debit & Credit Cards
   * EBANX Wallet, Debit Transfer
 * Argentina
+  * Efectivo
 * Chile
   * Sencillito, Cash Payment
   * Servipag, Online Debit Transfer
