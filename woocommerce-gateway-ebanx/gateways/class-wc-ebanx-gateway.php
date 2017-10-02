@@ -484,6 +484,8 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway
 			'ebanx_billing_brazil_cnpj' => WC_EBANX_Request::read($this->names['ebanx_billing_brazil_cnpj'], null),
 			'ebanx_billing_chile_document' => WC_EBANX_Request::read($this->names['ebanx_billing_chile_document'], null),
 			'ebanx_billing_colombia_document' => WC_EBANX_Request::read($this->names['ebanx_billing_colombia_document'], null),
+			'ebanx_billing_brazil_birth_date' => '02/02/1995',
+			'ebanx_billing_chile_birth_date' => '02/02/1995',
 			'billing_postcode' => WC_EBANX_Request::read('billing_postcode', null),
 			'billing_address_1' => WC_EBANX_Request::read('billing_address_1', null),
 			'billing_address_2' => WC_EBANX_Request::read('billing_address_2', null),
