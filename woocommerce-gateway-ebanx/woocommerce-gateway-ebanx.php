@@ -492,6 +492,9 @@ if ( ! class_exists('WC_EBANX') ) {
 			include_once WC_EBANX_GATEWAYS_DIR . 'class-wc-ebanx-debit-card-gateway.php';
 			include_once WC_EBANX_GATEWAYS_DIR . 'class-wc-ebanx-oxxo-gateway.php';
 
+			// Argentina Gateways
+			include_once WC_EBANX_GATEWAYS_DIR . 'class-wc-ebanx-efectivo-gateway.php';
+
 			// Colombia Gateways
 			include_once WC_EBANX_GATEWAYS_DIR . 'class-wc-ebanx-baloto-gateway.php';
 			include_once WC_EBANX_GATEWAYS_DIR . 'class-wc-ebanx-eft-gateway.php';
