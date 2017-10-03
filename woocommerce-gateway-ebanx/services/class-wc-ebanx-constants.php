@@ -156,6 +156,7 @@ abstract class WC_EBANX_Constants
 		'ebanx-sencillito',
 		'ebanx-safetypay-cash',
 		'ebanx-baloto',
+		'ebanx-efectivo',
 	);
 
 	/**
