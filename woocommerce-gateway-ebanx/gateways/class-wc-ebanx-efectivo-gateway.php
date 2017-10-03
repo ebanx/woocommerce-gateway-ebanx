@@ -75,7 +75,7 @@ class WC_EBANX_Efectivo_Gateway extends WC_EBANX_Gateway
 	{
 		parent::save_order_meta_fields($order, $request);
 
-		update_post_meta($order->id, '_efectivo_url', $request->payment->efectivo_url);
+		update_post_meta($order->id, '_efectivo_url', $request->payment->voucher_url);
 	}
 
 	/**
