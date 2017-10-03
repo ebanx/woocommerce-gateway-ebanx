@@ -142,6 +142,10 @@ abstract class WC_EBANX_Constants
 	  'sencillito' => 'America/Santiago',
 	  'safetypay-cash' => 'America/Lima',
 	  'baloto' => 'America/Bogota',
+	  'efectivo' => 'America/Argentina/Buenos_Aires',
+	  'rapipago' => 'America/Argentina/Buenos_Aires',
+	  'pagofacil' => 'America/Argentina/Buenos_Aires',
+	  'cupon' => 'America/Argentina/Buenos_Aires',
 	);
 
 	/**
