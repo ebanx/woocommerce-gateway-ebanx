@@ -8,6 +8,8 @@ include_once WC_EBANX_SERVICES_DIR . 'class-wc-ebanx-notice.php';
 
 final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway
 {
+	const SETTINGS_KEY = "woocommerce_ebanx-global_settings";
+
 	/**
 	 * Mock to insert when plugin is installed
 	 *
@@ -118,7 +120,7 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway
 			'integration_title' => array(
 				'title' => __('Integration', 'woocommerce-gateway-ebanx'),
 				'type' => 'title',
-				'description' => sprintf(__('You can obtain the integration keys in the settings section, logging in to the <a href="https://www.ebanx.com/business/en/dashboard">EBANX Dashboard.</a>', 'woocommerce-gateway-ebanx'), 'https://google.com'),
+				'description' => sprintf(__('You can <a href="javascript:fetch-keys" id="woocommerce_ebanx-global_fetch_keys_button">click here to obtain the integration keys</a> automagically, or copy them from the settings section in the <a href="%s">EBANX Dashboard.</a>', 'woocommerce-gateway-ebanx'), 'https://www.ebanx.com/business/en/dashboard'),
 			),
 			'sandbox_private_key'       => array(
 				'title'       => __('Sandbox Integration Key', 'woocommerce-gateway-ebanx'),
@@ -491,6 +493,15 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway
 
 			$properties['default'] = self::$defaults[$field];
 		}
+	}
+
+	/**
+	 * Persists current settings to database
+	 *
+	 * @return void
+	 */
+	public function save_current_settings() {
+		update_option(self::SETTINGS_KEY, $this->settings, false);
 	}
 
 	/**

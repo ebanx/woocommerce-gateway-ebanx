@@ -5,7 +5,7 @@
  * Description: Offer Latin American local payment methods & increase your conversion rates with the solution used by AliExpress, AirBnB and Spotify in Brazil.
  * Author: EBANX
  * Author URI: https://www.ebanx.com/business/en
- * Version: 1.20.0
+ * Version: 1.21.0
  * License: MIT
  * Text Domain: woocommerce-gateway-ebanx
  * Domain Path: /languages
@@ -193,8 +193,7 @@ if ( ! class_exists('WC_EBANX') ) {
 		 *
 		 * @return void
 		 */
-		public function plugins_loaded()
-		{
+		public function plugins_loaded() {
 			if ($this->get_environment_warning()) {
 				return;
 			}
@@ -210,9 +209,12 @@ if ( ! class_exists('WC_EBANX') ) {
 
 			$this->setup_configs();
 			$api_controller = new WC_EBANX_Api_Controller($this->configs);
+			$integration_controller = new WC_EBANX_Integration_Controller($this->configs);
 
 			$ebanx_router->map('dashboard-check', array($api_controller, 'dashboard_check'));
 			$ebanx_router->map('order-received', array($api_controller, 'order_received'));
+			$ebanx_router->map('fetch-keys', array($integration_controller, 'fetch_keys_modal'));
+			$ebanx_router->map('write-integration-keys', array($integration_controller, 'write_keys'));
 			$ebanx_router->map('cancel-order', array($api_controller, 'cancel_order'));
 
 			$ebanx_router->serve();
@@ -512,6 +514,7 @@ if ( ! class_exists('WC_EBANX') ) {
 
 			// Controllers
 			include_once WC_EBANX_CONTROLLERS_DIR . 'class-wc-ebanx-api-controller.php';
+			include_once WC_EBANX_CONTROLLERS_DIR . 'class-wc-ebanx-integration-controller.php';
 
 			// Exceptions
 			include_once WC_EBANX_EXCEPTIONS_DIR . 'class-wc-ebanx-payment-exception.php';
@@ -634,7 +637,7 @@ if ( ! class_exists('WC_EBANX') ) {
 				// TODO: Create a dynamic url
 				WC_EBANX_Constants::SETTINGS_URL,
 				'',
-				WC_EBANX_Assets::get_logo(),
+				WC_EBANX_Assets::get_small_logo(),
 				21
 			);
 		}

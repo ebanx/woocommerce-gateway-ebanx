@@ -58,7 +58,7 @@ abstract class WC_EBANX_Helper
 
 	/**
 	 * Get post id from meta key and value
-	 * 
+	 *
 	 * @param string $key
 	 * @param mixed $value
 	 * @return int|bool
@@ -68,12 +68,39 @@ abstract class WC_EBANX_Helper
 		$meta = $wpdb->get_results("SELECT * FROM `".$wpdb->postmeta."` WHERE meta_key='".esc_sql($key)."' AND meta_value='".esc_sql($value)."'");
 		if (is_array($meta) && !empty($meta) && isset($meta[0])) {
 			$meta = $meta[0];
-		}		
+		}
 		if (is_object($meta)) {
 			return $meta->post_id;
 		}
 		else {
 			return false;
 		}
+	}
+
+	/**
+	 * Compares an object with a schema array with keys and value types
+	 *
+	 * @return bool Wether schema matches
+	 */
+	public static function match_schema($subject, $schema) {
+		foreach ($schema as $key => $value) {
+			if ( ! isset($subject->{$key}) ) {
+				return false;
+			}
+
+			if ( is_array($value) ) {
+				if ( ! self::match_schema($subject->{$key}, $schema[$key]) ) {
+					return false;
+				}
+
+				continue;
+			}
+
+			if ( gettype($subject->{$key}) !== $value ) {
+				return false;
+			}
+		}
+
+		return true;
 	}
 }
