@@ -4,9 +4,9 @@ if (!defined('ABSPATH')) {
 	exit;
 }
 
-class WC_EBANX_Capture_Order {
+class WC_EBANX_Capture_Payment {
 	public static function add_order_capture_button( $actions, $order ) {
-		if ($order->get_status() !== 'on-hold') {
+		if ($order->get_status() !== 'on-hold' && ) {
 			return $actions;
 		}
 
@@ -20,7 +20,7 @@ class WC_EBANX_Capture_Order {
 	}
 
 	private static function get_capture_button_url($order) {
-		return 'ebanx.com';
+		return get_admin_url() . '?ebanx=capture-payment&order_id=' . $order->get_id();
 	}
 
 	public static function add_order_capture_button_css() {
