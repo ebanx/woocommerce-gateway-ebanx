@@ -6,7 +6,9 @@ if (!defined('ABSPATH')) {
 
 class WC_EBANX_Capture_Payment {
 	public static function add_order_capture_button( $actions, $order ) {
-		if ($order->get_status() !== 'on-hold' && ) {
+		if ($order->get_status() !== 'on-hold'
+		    || strpos($order->get_payment_method(), 'ebanx-credit-card') !== 0
+		    || !current_user_can('administrator')) {
 			return $actions;
 		}
 
