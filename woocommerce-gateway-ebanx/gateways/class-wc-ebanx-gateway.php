@@ -757,6 +757,7 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway
 		$code = $exception->getCode() ?: $exception->getMessage();
 
 		$languages = array(
+			'ar' => 'es',
 			'mx' => 'es',
 			'cl' => 'es',
 			'pe' => 'es',
