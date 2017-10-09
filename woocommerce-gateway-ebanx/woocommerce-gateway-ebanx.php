@@ -5,7 +5,7 @@
  * Description: Offer Latin American local payment methods & increase your conversion rates with the solution used by AliExpress, AirBnB and Spotify in Brazil.
  * Author: EBANX
  * Author URI: https://www.ebanx.com/business/en
- * Version: 1.20.0
+ * Version: 1.21.0
  * License: MIT
  * Text Domain: woocommerce-gateway-ebanx
  * Domain Path: /languages
@@ -137,7 +137,7 @@ if ( ! class_exists('WC_EBANX') ) {
 			 */
 			add_filter('woocommerce_payment_gateways', array($this, 'add_gateway'));
 			add_filter('plugin_action_links_' . plugin_basename(__FILE__), array($this, 'plugin_action_links'));
-			add_filter('woocommerce_my_account_my_orders_actions', array(WC_EBANX_Cancel_Order::class, 'add_my_account_cancel_order_action'), 10, 2);
+			add_filter('woocommerce_my_account_my_orders_actions', array('WC_EBANX_Cancel_Order', 'add_my_account_cancel_order_action'), 10, 2);
 		}
 
 		/**
@@ -492,6 +492,9 @@ if ( ! class_exists('WC_EBANX') ) {
 			include_once WC_EBANX_GATEWAYS_DIR . 'class-wc-ebanx-debit-card-gateway.php';
 			include_once WC_EBANX_GATEWAYS_DIR . 'class-wc-ebanx-oxxo-gateway.php';
 
+			// Argentina Gateways
+			include_once WC_EBANX_GATEWAYS_DIR . 'class-wc-ebanx-efectivo-gateway.php';
+
 			// Colombia Gateways
 			include_once WC_EBANX_GATEWAYS_DIR . 'class-wc-ebanx-baloto-gateway.php';
 			include_once WC_EBANX_GATEWAYS_DIR . 'class-wc-ebanx-eft-gateway.php';
@@ -561,6 +564,9 @@ if ( ! class_exists('WC_EBANX') ) {
 			// Peru
 			$methods[] = 'WC_EBANX_Pagoefectivo_Gateway';
 			$methods[] = 'WC_EBANX_Safetypay_Gateway';
+
+			// Argentina
+			$methods[] = 'WC_EBANX_Efectivo_Gateway';
 
 			return $methods;
 		}

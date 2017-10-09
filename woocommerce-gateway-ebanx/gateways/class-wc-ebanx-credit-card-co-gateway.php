@@ -13,6 +13,7 @@ class WC_EBANX_Credit_Card_CO_Gateway extends WC_EBANX_Credit_Card_Gateway
 	{
 		$this->id = 'ebanx-credit-card-co';
 		$this->method_title = __('EBANX - Credit Card Colombia', 'woocommerce-gateway-ebanx');
+		$this->currency_code = WC_EBANX_Constants::CURRENCY_CODE_COP;
 
 		$this->title = 'Tarjeta de Crédito';
 		$this->description = 'Pay with credit card.';

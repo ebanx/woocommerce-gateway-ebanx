@@ -13,6 +13,7 @@ class WC_EBANX_Credit_Card_MX_Gateway extends WC_EBANX_Credit_Card_Gateway
 	{
 		$this->id = 'ebanx-credit-card-mx';
 		$this->method_title = __('EBANX - Credit Card Mexico', 'woocommerce-gateway-ebanx');
+		$this->currency_code = WC_EBANX_Constants::CURRENCY_CODE_MXN;
 
 		$this->title = 'Tarjeta de Crédito';
 		$this->description = 'Pay with credit card.';

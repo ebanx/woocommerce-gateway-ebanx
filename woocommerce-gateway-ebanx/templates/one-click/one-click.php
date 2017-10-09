@@ -9,7 +9,7 @@ $i = 0;
 
 ?>
 
-<?php if ($cards): ?>
+<?php if ($should_show_button) : ?>
 	<form class="ebanx-one-click-form" id="ebanx-one-click-form" method="post" action="<?php echo $permalink ?>">
 		<input type="hidden" name="ebanx-action" value="<?php echo $action ?>">
 		<input type="hidden" name="ebanx-nonce" value="<?php echo $nonce ?>">

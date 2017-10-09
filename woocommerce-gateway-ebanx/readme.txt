@@ -1,9 +1,9 @@
 === EBANX Payment Gateway for WooCommerce ===
 Contributors: ebanxwp
-Tags: credit card, boleto, ebanx, woocommerce, approval rate, conversion rate, brazil, mexico, peru, colombia, chile, oxxo, baloto, cash payment, local payment one-click payment, installments, alternative payments, accept more payments
+Tags: credit card, boleto, ebanx, woocommerce, approval rate, conversion rate, brazil, mexico, argentina, peru, colombia, chile, oxxo, baloto, cash payment, local payment one-click payment, installments, alternative payments, accept more payments
 Requires at least: 4.0
 Tested up to: 4.7
-Stable tag: 1.20.0
+Stable tag: 1.21.0
 License: Apache v2.0
 License URI: http://www.apache.org/licenses/LICENSE-2.0
 
@@ -19,7 +19,7 @@ Ready to accept local payments but don’t have an account yet? Finish our [simp
 
 **Plugin Description**
 
-The WooCommerce EBANX Payment Gateway plugin allows you to accept local & international payment methods directly on your ecommerce store. Using the EBANX plugin you can process relevant cash, online debit, and credit card payments in Brazil, Mexico, Chile, Colombia & Peru, and access over 20M EBANX Wallet users. **No technical knowledge is needed for installation. Installation is simple, the way it should be.**
+The WooCommerce EBANX Payment Gateway plugin allows you to accept local & international payment methods directly on your ecommerce store. Using the EBANX plugin you can process relevant cash, online debit, and credit card payments in Brazil, Mexico, Argentina, Chile, Colombia & Peru, and access over 20M EBANX Wallet users. **No technical knowledge is needed for installation. Installation is simple, the way it should be.**
 
 **EBANX Advantages**
 
@@ -105,6 +105,8 @@ The [Developer’s Academy](https://www.ebanx.com/business/en/developers/integra
   * OXXO, Cash Payment
   * Debit & Credit Cards
   * EBANX Wallet, Debit Transfer
+* Argentina
+  * Efectivo
 * Chile
   * Sencillito, Cash Payment
   * Servipag, Online Debit Transfer
@@ -135,6 +137,17 @@ Yes, you can.
 4. There you go, you’re all set!
 
 == Changelog ==
+
+= 1.21.0 =
+* Feature - Added new Argentina payment method Efectivo [#576](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/576)
+* Feature - Showing instalments on local currency [#571](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/571)
+* Fix - Saving customer document when creating account on checkout [#566](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/566)
+* Fix - Show one click button only if customer has document [#567](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/567)
+* Fix - Removed ::class from same file that checks if php version is supported [#568](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/568)
+* Fix - Added fake birthdate to payment data to prevent error on unconfigured merchants [#569](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/569)
+* Fix - Overwriting libjs invalid expiry date error [#572](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/572)
+* Fix - Saving document on redirect payment methods [#574](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/574)
+* Fix - Fixed iframe resizer [#575](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/575)
 
 = 1.20.0 =
 * Feature - Dashboard lead links update to Dashboard v2 [#564](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/564)

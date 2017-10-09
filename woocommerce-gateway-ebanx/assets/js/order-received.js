@@ -35,7 +35,7 @@ jQuery(document).ready(function ($) {
 
   if (iframe) {
     var resizeIframe = function resizeIframe(iframe) {
-      iframe.style.height = iframe.contentWindow.document.body.parentElement.scrollHeight + 'px';
+      iframe.style.height = iframe.contentWindow.document.body.scrollHeight + 'px';
     }
 
     $(window).on('load', function () {
