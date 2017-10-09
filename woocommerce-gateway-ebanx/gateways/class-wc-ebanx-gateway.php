@@ -757,6 +757,7 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway
 		$code = $exception->getCode() ?: $exception->getMessage();
 
 		$languages = array(
+			'ar' => 'es',
 			'mx' => 'es',
 			'cl' => 'es',
 			'pe' => 'es',
@@ -1199,6 +1200,7 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway
 		$price = wc_price($amount, array('currency' => $currency));
 
 		$languages = array(
+			'ar' => 'es',
 			'mx' => 'es',
 			'cl' => 'es',
 			'pe' => 'es',
@@ -1218,6 +1220,7 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway
 				WC_EBANX_Constants::CURRENCY_CODE_CLP    => 'Peso chileno',
 				WC_EBANX_Constants::CURRENCY_CODE_PEN    => 'Sol peruano',
 				WC_EBANX_Constants::CURRENCY_CODE_COP    => 'Peso colombiano',
+				WC_EBANX_Constants::CURRENCY_CODE_ARS    => 'Peso argentino',
 				WC_EBANX_Constants::CURRENCY_CODE_BRL    => 'Real brasileño'
 			),
 		);
