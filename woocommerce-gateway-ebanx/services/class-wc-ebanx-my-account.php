@@ -124,6 +124,9 @@ class WC_EBANX_My_Account
 			case 'ebanx-baloto':
 				WC_EBANX_Baloto_Gateway::thankyou_page($order);
 				break;
+			case 'ebanx-efectivo':
+				WC_EBANX_Efectivo_Gateway::thankyou_page($order);
+				break;
 		}
 	}
 }

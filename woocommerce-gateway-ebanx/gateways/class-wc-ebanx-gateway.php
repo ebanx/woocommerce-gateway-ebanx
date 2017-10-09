@@ -484,6 +484,8 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway
 			'ebanx_billing_brazil_cnpj' => WC_EBANX_Request::read($this->names['ebanx_billing_brazil_cnpj'], null),
 			'ebanx_billing_chile_document' => WC_EBANX_Request::read($this->names['ebanx_billing_chile_document'], null),
 			'ebanx_billing_colombia_document' => WC_EBANX_Request::read($this->names['ebanx_billing_colombia_document'], null),
+			'ebanx_billing_brazil_birth_date' => '31/12/1969',
+			'ebanx_billing_chile_birth_date' => '31/12/1969',
 			'billing_postcode' => WC_EBANX_Request::read('billing_postcode', null),
 			'billing_address_1' => WC_EBANX_Request::read('billing_address_1', null),
 			'billing_address_2' => WC_EBANX_Request::read('billing_address_2', null),
@@ -755,6 +757,7 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway
 		$code = $exception->getCode() ?: $exception->getMessage();
 
 		$languages = array(
+			'ar' => 'es',
 			'mx' => 'es',
 			'cl' => 'es',
 			'pe' => 'es',
@@ -846,6 +849,10 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway
 	 */
 	protected function save_user_meta_fields($order)
 	{
+		if (!$this->userId) {
+			$this->userId = get_current_user_id();
+		}
+
 		if ($this->userId) {
 			$document = false;
 
@@ -1193,6 +1200,7 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway
 		$price = wc_price($amount, array('currency' => $currency));
 
 		$languages = array(
+			'ar' => 'es',
 			'mx' => 'es',
 			'cl' => 'es',
 			'pe' => 'es',
@@ -1212,6 +1220,7 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway
 				WC_EBANX_Constants::CURRENCY_CODE_CLP    => 'Peso chileno',
 				WC_EBANX_Constants::CURRENCY_CODE_PEN    => 'Sol peruano',
 				WC_EBANX_Constants::CURRENCY_CODE_COP    => 'Peso colombiano',
+				WC_EBANX_Constants::CURRENCY_CODE_ARS    => 'Peso argentino',
 				WC_EBANX_Constants::CURRENCY_CODE_BRL    => 'Real brasileño'
 			),
 		);

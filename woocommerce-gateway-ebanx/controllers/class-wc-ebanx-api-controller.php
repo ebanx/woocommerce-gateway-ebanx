@@ -80,24 +80,7 @@ class WC_EBANX_Api_Controller {
 	 * @return void
 	 */
 	public function order_received($hash, $payment_type) {
-		$is_sandbox = $this->config->get_setting_or_default('sandbox_mode_enabled', 'yes') === 'yes';
-
-		$subdomain = $is_sandbox ? 'sandbox' : 'print';
-		$url = "https://{$subdomain}.ebanx.com/";
-
-		if ($payment_type !== 'cip') {
-			$url .= 'print/';
-		}
-
-		if ($payment_type !== null && $payment_type !== 'boleto') {
-			$url .= "{$payment_type}/";
-		}
-
-		$url .= "?hash={$hash}";
-
-		if ($payment_type !== 'baloto') {
-			$url .= '&format=basic#';
-		}
+		$url = $this->get_url($hash, $payment_type);
 
 		if (!in_array('curl', get_loaded_extensions())) {
 			echo file_get_contents($url);
@@ -123,5 +106,32 @@ class WC_EBANX_Api_Controller {
 	 */
 	private function is_sandbox() {
 		return $this->config->settings['sandbox_mode_enabled'] === 'yes';
+	}
+
+	private function get_url($hash, $payment_type) {
+		$is_sandbox = $this->config->get_setting_or_default('sandbox_mode_enabled', 'yes') === 'yes';
+
+		$subdomain = $is_sandbox ? 'sandbox' : 'print';
+		$url = "https://{$subdomain}.ebanx.com/";
+
+		if ($payment_type !== 'cip') {
+			$url .= 'print/';
+		}
+
+		if ($payment_type === 'efectivo') {
+			$url .= 'voucher/';
+		}
+
+		if ($payment_type !== null && $payment_type !== 'boleto' && $payment_type !== 'efectivo') {
+			$url .= "{$payment_type}/";
+		}
+
+		$url .= "?hash={$hash}";
+
+		if ($payment_type !== 'baloto') {
+			$url .= '&format=basic#';
+		}
+
+		return $url;
 	}
 }

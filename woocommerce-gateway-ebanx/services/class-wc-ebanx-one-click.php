@@ -278,6 +278,13 @@ class WC_EBANX_One_Click {
 		return !is_user_logged_in() || !get_user_meta( $this->userId, '_billing_email', true ) && !empty( $this->cards );
 	}
 
+	public function should_show_button() {
+		return $this->cards
+		       && (! empty(get_user_meta( $this->userId, '_ebanx_billing_brazil_document', true ))
+	           || ! empty(get_user_meta( $this->userId, '_ebanx_billing_colombia_document', true ))
+	           || $this->userCountry === WC_EBANX_Constants::COUNTRY_MEXICO);
+	}
+
 	/**
 	 * Render the button "One-Click Purchase" using a template
 	 *
@@ -322,12 +329,15 @@ class WC_EBANX_One_Click {
 
 		$instalments_terms = $this->gateway->get_payment_terms($cart_total, $max_instalments, $tax);
 		$currency = WC_EBANX_Constants::$LOCAL_CURRENCIES[$country];
+		$ebanx = new WC_EBANX_Gateway();
 
 		$args = apply_filters( 'ebanx_template_args', array(
 				'cards' => $this->cards,
 				'cart_total' => $cart_total,
 				'product_id' => $product->id,
 				'installment_taxes' => $this->instalment_rates,
+				'currency' => $currency,
+				'currency_rate' => round(floatval($ebanx->get_local_currency_rate_for_site($currency)), 2),
 				'label' => __( 'Pay with one click', 'woocommerce-gateway-ebanx' ),
 				'instalments' => $messages['instalments'],
 				'instalments_terms' => $instalments_terms,
@@ -335,7 +345,7 @@ class WC_EBANX_One_Click {
 				'action' => self::CREATE_ORDER_ACTION,
 				'permalink' => get_permalink($product->id),
 				'country' => $country,
-				'currency' => $currency
+				'should_show_button' => $this->should_show_button(),
 			) );
 
 		wc_get_template( 'one-click.php', $args, '', WC_EBANX::get_templates_path() . 'one-click/' );

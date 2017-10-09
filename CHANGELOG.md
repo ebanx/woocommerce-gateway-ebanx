@@ -1,5 +1,19 @@
 # CHANGELOG
 
+# 1.21.0
+* Feature - Added new Argentina payment method Efectivo [#576](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/576)
+* Feature - Showing instalments on local currency [#571](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/571)
+* Fix - Saving customer document when creating account on checkout [#566](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/566)
+* Fix - Show one click button only if customer has document [#567](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/567)
+* Fix - Removed ::class from same file that checks if php version is supported [#568](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/568)
+* Fix - Added fake birthdate to payment data to prevent error on unconfigured merchants [#569](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/569)
+* Fix - Overwriting libjs invalid expiry date error [#572](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/572)
+* Fix - Saving document on redirect payment methods [#574](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/574)
+* Fix - Fixed iframe resizer [#575](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/575)
+
+# 1.20.0
+* Feature - Dashboard lead links update to Dashboard v2 [#564](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/564)
+
 # 1.19.0
 * Feature - Credit Card refusal message and detailed log [#560](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/560)
 * Feature - Removed Birth Date from checkout form [#561](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/561)
