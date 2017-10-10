@@ -66,7 +66,7 @@ class WC_EBANX_Api_Controller {
 
 			if (!$is_recapture) {
 				$order->add_order_note(sprintf(__('EBANX: The transaction was captured with the following: %s', 'woocommerce-gateway-ebanx'), wp_get_current_user()->data->user_email));
-				WC_EBANX_Flash::add_message('Payment ' . $order_id . ' was captured successfully', 'warning', true);
+				WC_EBANX_Flash::add_message(__('Payment ' . $order_id . ' was captured successfully.', 'woocommerce-gateway-ebanx'), 'warning', true);
 			}
 		}
 	else if ($response->payment->status == 'CA') {

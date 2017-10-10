@@ -105,6 +105,9 @@ if ( ! class_exists('WC_EBANX') ) {
 
 			add_action('admin_head', array( 'WC_EBANX_Capture_Payment', 'add_order_capture_button_css'));
 
+			add_action( 'woocommerce_order_actions', array('WC_EBANX_Capture_Payment', 'add_auto_capture_dropdown'));
+			add_action( 'woocommerce_order_action_ebanx_capture_order', array('WC_EBANX_Capture_Payment', 'capture_from_order_dropdown'));
+
 			add_action('admin_footer', array('WC_EBANX_Assets', 'render'), 0);
 
 			add_action('woocommerce_settings_saved', array($this, 'setup_configs'), 10);
