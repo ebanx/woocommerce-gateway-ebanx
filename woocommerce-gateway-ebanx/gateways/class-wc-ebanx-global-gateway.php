@@ -28,6 +28,7 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway
 			'ebanx-credit-card-mx',
 			'ebanx-debit-card',
 			'ebanx-oxxo',
+			'ebanx-spei',
 		),
 		'chile_payment_methods' => array(
 			'ebanx-sencillito',
@@ -180,11 +181,13 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway
 					'ebanx-credit-card-mx' => 'Credit Card',
 					'ebanx-debit-card'  => 'Debit Card',
 					'ebanx-oxxo'        => 'OXXO',
+					'ebanx-spei'        => 'SPEI',
 				),
 				'default'     => array(
 					'ebanx-credit-card-mx',
 					'ebanx-debit-card',
 					'ebanx-oxxo',
+					'ebanx-spei',
 				),
 			),
 			'chile_payment_methods'     => array(
