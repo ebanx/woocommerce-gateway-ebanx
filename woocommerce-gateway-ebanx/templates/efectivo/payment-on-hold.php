@@ -28,5 +28,5 @@ if ( ! defined( 'ABSPATH' ) ) {
 <hr>
 
 <div>
-    <iframe src="<?= $url_iframe; ?>" style="width: 100%; height: 1000px; border: 0px;"></iframe>
+    <iframe src="<?= $url_iframe; ?>" style="width: 100%; height: 1000px; border: 0px;" scrolling="no"></iframe>
 </div>
