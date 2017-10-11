@@ -92,7 +92,6 @@ class WC_EBANX_Spei_Gateway extends WC_EBANX_Gateway
 		$spei_pdf = $spei_url . "&format=pdf";
 		$spei_print = $spei_url . "&format=print";
 		$customer_email = get_post_meta($order->id, '_ebanx_payment_customer_email', true);
-		$spei_hash = get_post_meta($order->id, '_ebanx_payment_hash', true);
 		$customer_name = $order->billing_first_name;
 		$spei_due_date = get_post_meta($order->id, '_payment_due_date', true);
 
