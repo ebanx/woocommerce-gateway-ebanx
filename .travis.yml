@@ -1,6 +1,8 @@
 language: php
 sudo: false
 
+script: echo 'OK';
+
 before_deploy: zip woocommerce-gateway-ebanx woocommerce-gateway-ebanx/**/*
 
 deploy:
