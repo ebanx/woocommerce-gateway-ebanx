@@ -1,0 +1,24 @@
+language: php
+sudo: false
+
+script: echo 'OK';
+
+before_deploy: zip woocommerce-gateway-ebanx woocommerce-gateway-ebanx/**/*
+
+deploy:
+  - provider: releases
+    api_key:
+      secure: UFNVgzpLZdcytqxHjOw6rqOFZUdGsHq0jfcmR9hOQ6YmFheA87TkmDAl+3+NScQE9Jy+qn2BJGzCn+3LPS0W9hHR388MhUmisWc7uuS5FOMzwqYQ2PeWcNDeSektFZipsnjQsieoZUNJ3zIaLQtjqgN92hHl4Ql6ZiCR7fxLIcNTBO5w+ciuTgjDlJ4Bwg4cUAlqFzSxAZkdBwHhDQ44AS325HrYvw9b1Wt9/vfnE+bhVN/tmT/p5aYjKvcZeFZpL24NRHTByS75qtg2/Zbv2Rk3I/Nh1/MT2qp2ZMWSq5z9fsmD+hsxMWUi1/IL5iE25SKs51aYn7xD+vOHZWteEhoH6TFPAn9VB5F3OHWgObQUl5F7FAUzmPf+iWUVGwetP0vj/YdFgOseWuk8z4IA1gVsdNXPYL8pc3SWDqjQC0WCaLox8n//Oz0AwRmrMlJS6NSFLPu6IiZrofk2olTp7h0WOBVenVWjl7y2nSk5w58i/lCSDbzKulPCk1D9MesAi3IK3PalVfk3hjcH7Mcz4mQpddeT1XYguRhd2RZ6hIYWO9G0rOwn1DETzovm7yhpUvXeRkkmbD3y9eztAHJdJgtHXOdNJQp7OD44SAm44YOHA20g7fdSmb4P1jShNCXn/tEDaPaQMgufwIwIDdlZhno7c1iVjYLg9ix/u3DHLT0=
+    file: woocommerce-gateway-ebanx.zip
+    skip_cleanup: true
+    on:
+      branch: master
+      repo: ebanx/woocommerce-gateway-ebanx
+      tags: true
+  - provider: script
+    skip_cleanup: true
+    script: ./deploy.sh
+    on:
+      branch: master
+      repo: ebanx/woocommerce-gateway-ebanx
+      tags: true
