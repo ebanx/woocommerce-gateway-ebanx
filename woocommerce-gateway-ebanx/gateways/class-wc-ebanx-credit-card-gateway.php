@@ -500,7 +500,7 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
 				'place_order_enabled' => $save_card,
 				'instalments' => $country === WC_EBANX_Constants::COUNTRY_BRAZIL ? 'Número de parcelas' :  'Meses sin intereses',
 				'id' => $this->id,
-				'add_tax' => $this->configs->get_setting_or_default('add_iof_to_local_amount_enabled', 'yes') === 'yes';
+				'add_tax' => $this->configs->get_setting_or_default('add_iof_to_local_amount_enabled', 'yes') === 'yes'
 			),
 			'woocommerce/ebanx/',
 			WC_EBANX::get_templates_path()
