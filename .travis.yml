@@ -3,7 +3,7 @@ sudo: false
 
 script: echo 'OK';
 
-before_deploy: zip woocommerce-gateway-ebanx woocommerce-gateway-ebanx/**/*
+before_deploy: zip woocommerce-gateway-ebanx ./**/*
 
 deploy:
   - provider: releases
