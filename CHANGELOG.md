@@ -1,5 +1,11 @@
 # CHANGELOG
 
+#1.22.0
+* Feature - Explicit capture button [#578](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/578)
+* Feature - Added new Mexico payment method SPEI [#581](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/581)
+* Fix - Resizing iFrame for Argentina payment methods [#580](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/580)
+* Fix - Fix IOF in instalments for disabled tax flag [#584](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/584)
+
 # 1.21.0
 * Feature - Added new Argentina payment method Efectivo [#576](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/576)
 * Feature - Showing instalments on local currency [#571](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/571)

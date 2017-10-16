@@ -3,7 +3,7 @@ Contributors: ebanxwp
 Tags: credit card, boleto, ebanx, woocommerce, approval rate, conversion rate, brazil, mexico, argentina, peru, colombia, chile, oxxo, baloto, cash payment, local payment one-click payment, installments, alternative payments, accept more payments
 Requires at least: 4.0
 Tested up to: 4.7
-Stable tag: 1.21.0
+Stable tag: 1.22.0
 License: Apache v2.0
 License URI: http://www.apache.org/licenses/LICENSE-2.0
 
@@ -137,6 +137,12 @@ Yes, you can.
 4. There you go, you’re all set!
 
 == Changelog ==
+
+= 1.22.0 =
+* Feature - Explicit capture button [#578](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/578)
+* Feature - Added new Mexico payment method SPEI [#581](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/581)
+* Fix - Resizing iFrame for Argentina payment methods [#580](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/580)
+* Fix - Fix IOF in instalments for disabled tax flag [#584](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/584)
 
 = 1.21.0 =
 * Feature - Added new Argentina payment method Efectivo [#576](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/576)
