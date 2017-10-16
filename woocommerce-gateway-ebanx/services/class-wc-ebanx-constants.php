@@ -265,7 +265,8 @@ abstract class WC_EBANX_Constants
 		self::COUNTRY_MEXICO => array(
 			'ebanx-credit-card-mx',
 			'ebanx-debit-card',
-			'ebanx-oxxo'
+			'ebanx-oxxo',
+			'ebanx-spei',
 		),
 		self::COUNTRY_ARGENTINA => array(
 			'ebanx-efectivo'

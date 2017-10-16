@@ -1,9 +1,0 @@
-{
-  "license": "Apache-2.0",
-  "dependencies": {
-    "async": "^2.3.0",
-    "cpf_cnpj": "^0.2.0",
-    "faker": "^4.1.0",
-    "joi": "^10.3.1"
-  }
-}

@@ -1,41 +1,24 @@
 language: php
+sudo: false
 
-env:
-  WOOCOMMERCE_VERSION: 3.0.7
-  EBANX_ADMIN_USERNAME: ebanx
-  EBANX_ADMIN_PASSWORD: ebanx
-  EBANX_SITE_TITLE: EBANX
-  EBANX_SITE_EMAIL: plugin@ebanx.com
-  EBANX_DB: wordpress
-  EBANX_PASSWORD: root
+script: echo 'OK';
 
-services:
-  - docker
-  
-cache:
-  - yarn: true
-  - apt: true
+before_deploy: zip woocommerce-gateway-ebanx woocommerce-gateway-ebanx/**/*
 
-before_install:
-  - sudo service mysql stop
-  - sudo apt-get update
-  - sudo apt-key update
-  - sudo apt-get install -y docker-ce
-  - curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.2/install.sh | bash
-  - nvm install node 7
-  - nvm alias default node 7
-  - npm install -g kill-port
-  - kill-port --port 80
-  - kill-port --port 3306
-  - docker run --name mysql -p 3306:3306 -e MYSQL_ROOT_PASSWORD=${EBANX_PASSWORD} -e MYSQL_DATABASE=${EBANX_DB} -d mariadb:5
-  - docker run --name ebanx-woocommerce -p 80:80 --link mysql:mysql --volume="${TRAVIS_BUILD_DIR}/woocommerce-gateway-ebanx/:/var/www/html/wp-content/plugins/woocommerce-gateway-ebanx/" -e EBANX_WC_PLUGIN_VERSION=${WOOCOMMERCE_VERSION} -e EBANX_ADMIN_USERNAME=${EBANX_ADMIN_USERNAME} -e EBANX_ADMIN_PASSWORD=${EBANX_ADMIN_PASSWORD} -e EBANX_SITE_TITLE=${EBANX_SITE_TITLE} -e EBANX_SITE_EMAIL=${EBANX_SITE_EMAIL} -d ebanx/ebanx-woocommerce
-
-install:
-  - npm install -g cypress-cli
-  - cypress install
-  - npm install
-
-script:
-  - ./wait-for-it.sh -t 300 localhost:3306 -- echo "MySQL is alive!"
-  - ./wait-for-it.sh -t 300 localhost:80 -- echo "Plugin is alive!"
-  - cypress run --record --key f54e0f8d-46b4-47a4-b331-10a8e4731c3b
+deploy:
+  - provider: releases
+    api_key:
+      secure: UFNVgzpLZdcytqxHjOw6rqOFZUdGsHq0jfcmR9hOQ6YmFheA87TkmDAl+3+NScQE9Jy+qn2BJGzCn+3LPS0W9hHR388MhUmisWc7uuS5FOMzwqYQ2PeWcNDeSektFZipsnjQsieoZUNJ3zIaLQtjqgN92hHl4Ql6ZiCR7fxLIcNTBO5w+ciuTgjDlJ4Bwg4cUAlqFzSxAZkdBwHhDQ44AS325HrYvw9b1Wt9/vfnE+bhVN/tmT/p5aYjKvcZeFZpL24NRHTByS75qtg2/Zbv2Rk3I/Nh1/MT2qp2ZMWSq5z9fsmD+hsxMWUi1/IL5iE25SKs51aYn7xD+vOHZWteEhoH6TFPAn9VB5F3OHWgObQUl5F7FAUzmPf+iWUVGwetP0vj/YdFgOseWuk8z4IA1gVsdNXPYL8pc3SWDqjQC0WCaLox8n//Oz0AwRmrMlJS6NSFLPu6IiZrofk2olTp7h0WOBVenVWjl7y2nSk5w58i/lCSDbzKulPCk1D9MesAi3IK3PalVfk3hjcH7Mcz4mQpddeT1XYguRhd2RZ6hIYWO9G0rOwn1DETzovm7yhpUvXeRkkmbD3y9eztAHJdJgtHXOdNJQp7OD44SAm44YOHA20g7fdSmb4P1jShNCXn/tEDaPaQMgufwIwIDdlZhno7c1iVjYLg9ix/u3DHLT0=
+    file: woocommerce-gateway-ebanx.zip
+    skip_cleanup: true
+    on:
+      branch: master
+      repo: ebanx/woocommerce-gateway-ebanx
+      tags: true
+  - provider: script
+    skip_cleanup: true
+    script: ./deploy.sh
+    on:
+      branch: master
+      repo: ebanx/woocommerce-gateway-ebanx
+      tags: true

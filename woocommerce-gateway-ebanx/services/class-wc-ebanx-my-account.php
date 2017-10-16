@@ -100,6 +100,9 @@ class WC_EBANX_My_Account
 			case 'ebanx-oxxo':
 				WC_EBANX_Oxxo_Gateway::thankyou_page($order);
 				break;
+			case 'ebanx-spei':
+				WC_EBANX_Spei_Gateway::thankyou_page($order);
+				break;
 			case 'ebanx-pagoefectivo':
 				WC_EBANX_Pagoefectivo_Gateway::thankyou_page($order);
 				break;
