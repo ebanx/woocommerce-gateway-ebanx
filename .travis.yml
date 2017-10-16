@@ -12,13 +12,11 @@ deploy:
     file: woocommerce-gateway-ebanx.zip
     skip_cleanup: true
     on:
-      branch: master
-      repo: ebanx/woocommerce-gateway-ebanx
       tags: true
+      all_branches: true
   - provider: script
     skip_cleanup: true
     script: ./deploy.sh
     on:
-      branch: master
-      repo: ebanx/woocommerce-gateway-ebanx
       tags: true
+      all_branches: true

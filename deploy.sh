@@ -10,8 +10,8 @@ if [[ -z "$WP_ORG_PASSWORD" ]]; then
 	exit 1
 fi
 
-if [[ -z "$TRAVIS_BRANCH" || "$TRAVIS_BRANCH" != "master" ]]; then
-	echo "Build branch is required and must be 'master'" 1>&2
+if [[ -z "$TRAVIS_TAG" ]]; then
+	echo "Build must be tag" 1>&2
 	exit 0
 fi
 
@@ -21,7 +21,7 @@ SLUG="ebanx-payment-gateway-for-woocommerce"
 PROJECT_ROOT="$( cd "$( dirname "${BASH_SOURCE[0]}" )/.." && pwd )"
 PLUGIN_BUILDS_PATH="$PROJECT_ROOT/build"
 VERSION=$TRAVIS_TAG
-ZIP_FILE="$PROJECT_ROOT/$PLUGIN.zip"
+ZIP_FILE="$PROJECT_ROOT/woocommerce-gateway-ebanx/$PLUGIN.zip"
 
 # Ensure the zip file for the current version has been built
 if [ ! -f "$ZIP_FILE" ]; then
