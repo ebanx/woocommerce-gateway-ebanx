@@ -65,7 +65,6 @@ echo "Generating diff"
 svn stat $SVN_ROOT_PATH | grep '^?' | awk '{print $2}' | xargs -I x svn add x@
 # Remove deleted files from SVN
 svn stat $SVN_ROOT_PATH | grep '^!' | awk '{print $2}' | xargs -I x svn rm --force x@
-svn stat $SVN_ROOT_PATH
 
 echo "Uploading to SVN"
 # Commit to SVN
