@@ -3,8 +3,6 @@
 $currency = $currency ?: get_woocommerce_currency();
 $currency_rate = $currency_rate ?: 1;
 
-$add_tax = $this->configs->get_setting_or_default('add_iof_to_local_amount_enabled', 'yes') === 'yes';
-
 if ($currency === WC_EBANX_Constants::CURRENCY_CODE_BRL && $add_tax) {
 	$currency_rate *= 1 + WC_EBANX_Constants::BRAZIL_TAX;
 }
