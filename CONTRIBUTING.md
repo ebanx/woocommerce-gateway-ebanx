@@ -24,9 +24,8 @@ If you want to contribute to our repository the best way is to clone it and then
 	1. Go to the plugins folder on your WordPress: `cd /path/to/wordpress/wp-content/plugins`
 	2. Download the lastest WooCommerce build: `git clone https://github.com/woocommerce/woocommerce.git`
 	3. Configure it on WordPress Admin Dashboard
-3. Clone this repository to your projects folder (not inside WordPress folder): `git clone https://github.com/ebanx/woocommerce-gateway-ebanx`
-4. Create a symlink from the inner folder to your wordpress plugins folder: `ln -s /path/to/clone/directory/woocommerce-gateway-ebanx/woocommerce-gateway-ebanx /path/to/wordpress/wp-content/plugins/woocommerce-gateway-ebanx`
-5. Let the coding begin!
+3. Clone this repository to your wordpress plugins folder: `cd /path/to/wordpress/wp-content/plugins && git clone https://github.com/ebanx/woocommerce-gateway-ebanx`
+4. Let the coding begin!
 
 ## Have you found a bug?
 
