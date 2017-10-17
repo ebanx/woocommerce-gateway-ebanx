@@ -16,7 +16,14 @@ jQuery(document).ready(function ($) {
 
   var removeError = function (el) {
     $(el).removeClass('is-invalid');
-  }
+  };
+
+  tooltip.keypress(function(e) {
+    if (e.keyCode === 13) {
+      e.preventDefault();
+      form.submit();
+    }
+  });
 
   button.on('click', function (e) {
     e.preventDefault();
