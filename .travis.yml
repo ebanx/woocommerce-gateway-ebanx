@@ -1,4 +1,5 @@
 language: php
+dist: trusty
 sudo: false
 
 before_script: phpenv config-add phpunit-php.ini
