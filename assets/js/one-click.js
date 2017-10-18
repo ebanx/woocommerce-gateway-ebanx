@@ -23,6 +23,7 @@ jQuery(document).ready(function ($) {
       e.preventDefault();
       form.submit();
     }
+    return true;
   });
 
   button.on('click', function (e) {
@@ -35,10 +36,9 @@ jQuery(document).ready(function ($) {
     tooltip.removeClass('is-active');
   });
 
-  payButton.on('click', function () {
+  form.on('submit', function () {
     payButton.text(payButton.attr('data-processing-label')).attr('disabled', 'disabled');
-  
-    form.submit();
+    return true;
   });
 
   cvv.on('keyup', function () {
