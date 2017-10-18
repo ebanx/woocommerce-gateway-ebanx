@@ -1,7 +1,10 @@
 language: php
+dist: trusty
 sudo: false
 
-script: echo 'OK';
+script: phpunit
+
+after_success: bash <(curl -s https://codecov.io/bash)
 
 before_deploy: zip ebanx-payment-gateway-for-woocommerce ./**/*
 
