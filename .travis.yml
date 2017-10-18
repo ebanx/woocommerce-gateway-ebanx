@@ -2,9 +2,7 @@ language: php
 dist: trusty
 sudo: false
 
-before_script: phpenv config-add phpunit-php.ini
-
-script: ./vendor/bin/phpunit -vvv
+script: phpunit
 
 after_success: bash <(curl -s https://codecov.io/bash)
 
