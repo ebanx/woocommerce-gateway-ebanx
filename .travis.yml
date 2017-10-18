@@ -1,7 +1,7 @@
 language: php
 sudo: false
 
-script: phpunit
+script: ./vendor/bin/phpunit
 
 after_success: bash <(curl -s https://codecov.io/bash)
 
