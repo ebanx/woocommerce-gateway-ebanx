@@ -10,16 +10,6 @@
         <directory prefix="test-" suffix=".php">./tests</directory>
     </testsuite>
 
-    <filter>
-        <whitelist processUncoveredFilesFromWhitelist="true">
-            <directory suffix=".php">controllers</directory>
-            <directory suffix=".php">exceptions</directory>
-            <directory suffix=".php">gateways</directory>
-            <directory suffix=".php">services</directory>
-            <directory suffix=".php">templates</directory>
-        </whitelist>
-    </filter>
-
     <logging>
         <log type="coverage-clover" target="clover.xml"/>
         <log type="coverage-html" target="./report" charset="UTF-8"
