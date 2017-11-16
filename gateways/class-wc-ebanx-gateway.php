@@ -990,7 +990,7 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway
 	 *
 	 * @param  array  $codes
 	 * @param  string $notificationType     The type of the description
-	 * @return void
+	 * @return WC_Order
 	 */
 	final public function process_hook(array $codes, $notificationType)
 	{
@@ -1051,6 +1051,9 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway
 		$new_status = null;
 		switch ($requestStatus) {
 			case 'CO':
+				if (strpos($order->get_payment_method(), 'ebanx-credit-card') === 0) {
+					return;
+				}
 				$new_status = 'processing';
 				break;
 			case 'CA':
