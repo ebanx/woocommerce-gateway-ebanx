@@ -75,7 +75,7 @@ abstract class WC_EBANX_Constants
 	 * Minimal instalment value for acquirers to approve based on currency
 	 */
 	const ACQUIRER_MIN_INSTALMENT_VALUE_MXN = 100;
-	const ACQUIRER_MIN_INSTALMENT_VALUE_BRL = 20;
+	const ACQUIRER_MIN_INSTALMENT_VALUE_BRL = 5;
 	const ACQUIRER_MIN_INSTALMENT_VALUE_COP = 0;
 
 	/**
