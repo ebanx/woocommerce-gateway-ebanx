@@ -11,3 +11,7 @@ node_modules
 apidocs/phpdoc-cache-*
 .data
 .phpintel
+
+# Tests
+/report/
+/clover.xml
