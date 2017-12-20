@@ -1,6 +1,12 @@
 # CHANGELOG
 
-#1.22.0
+# 1.23.0
+* Feature - One click form can now be submitted using keyboard [#588](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/588)
+* Feature - Better payment origin identification on dashboard [#590](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/590)
+* Feature - Plugin approved for wordpress 4.9 [#593](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/593)
+* Feature - Change minimum instalment value to 5 BRL for brazilian credit card payments [#595](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/595)
+
+# 1.22.0
 * Feature - Explicit capture button [#578](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/578)
 * Feature - Added new Mexico payment method SPEI [#581](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/581)
 * Fix - Adjusted iFrame display for Argentina cash payment methods [#580](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/580)
