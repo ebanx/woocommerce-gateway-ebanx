@@ -15,10 +15,10 @@ abstract class WC_EBANX_Flow_Gateway extends WC_EBANX_Redirect_Gateway
 
 		parent::__construct();
 
-		$this->enabled = is_array($this->configs->settings['chile_payment_methods']) 
-			? in_array($this->id, $this->configs->settings['chile_payment_methods']) 
-				? 'yes' 
-				: false 
+		$this->enabled = is_array($this->configs->settings['chile_payment_methods'])
+			? in_array($this->id, $this->configs->settings['chile_payment_methods'])
+				? 'yes'
+				: false
 			: false;
 	}
 
@@ -91,10 +91,7 @@ abstract class WC_EBANX_Flow_Gateway extends WC_EBANX_Redirect_Gateway
 	protected function request_data($order)
 	{
 		$data = parent::request_data($order);
-
-		$data['payment']['payment_type_code'] = $this->api_name;
-		$data['payment']['flow_payment_method'] = $this->flow_payment_method;
-
+		$data['payment']['payment_type_code'] = $this->flow_payment_method;
 		return $data;
 	}
 }
