@@ -138,6 +138,10 @@ Yes, you can.
 
 == Changelog ==
 
+= 1.24.0 =
+* Feature - Updated Chile payments api identification code [#597](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/597)
+* Feature - Skipping asynchronous confirmations for credit card payments [#592](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/592)
+
 = 1.23.0 =
 * Feature - One click form can now be submitted using keyboard [#588](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/588)
 * Feature - Better payment origin identification on dashboard [#590](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/590)
@@ -211,7 +215,7 @@ Yes, you can.
 
 = 1.13.2 =
 * Fix - Replaced wp_die to exit to avoid error 500 [#515](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/515)
-* Fix - Updating order when it receives a payment status notification [#516](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/516) 
+* Fix - Updating order when it receives a payment status notification [#516](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/516)
 
 = 1.13.1 =
 * Fix - Avoid duplication payment notifications [#509](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/509)
