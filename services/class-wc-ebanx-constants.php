@@ -77,6 +77,7 @@ abstract class WC_EBANX_Constants
 	const ACQUIRER_MIN_INSTALMENT_VALUE_MXN = 100;
 	const ACQUIRER_MIN_INSTALMENT_VALUE_BRL = 5;
 	const ACQUIRER_MIN_INSTALMENT_VALUE_COP = 0;
+	const ACQUIRER_MIN_INSTALMENT_VALUE_ARS = 0;
 
 	/**
 	 * Max supported credit-card instalments
@@ -85,6 +86,7 @@ abstract class WC_EBANX_Constants
 		self::COUNTRY_BRAZIL => 12,
 		self::COUNTRY_MEXICO => 12,
 		self::COUNTRY_COLOMBIA => 36,
+		self::COUNTRY_ARGENTINA => 12,
 	);
 
 	/**

@@ -504,6 +504,7 @@ if ( ! class_exists('WC_EBANX') ) {
 			include_once WC_EBANX_GATEWAYS_DIR . 'class-wc-ebanx-spei-gateway.php';
 
 			// Argentina Gateways
+			include_once WC_EBANX_GATEWAYS_DIR . 'class-wc-ebanx-credit-card-ar-gateway.php';
 			include_once WC_EBANX_GATEWAYS_DIR . 'class-wc-ebanx-efectivo-gateway.php';
 
 			// Colombia Gateways
@@ -578,6 +579,7 @@ if ( ! class_exists('WC_EBANX') ) {
 			$methods[] = 'WC_EBANX_Safetypay_Gateway';
 
 			// Argentina
+			$methods[] = 'WC_EBANX_Credit_Card_AR_Gateway';
 			$methods[] = 'WC_EBANX_Efectivo_Gateway';
 
 			return $methods;

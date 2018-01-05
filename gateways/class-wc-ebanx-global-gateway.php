@@ -46,6 +46,7 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway
 			'ebanx-pagoefectivo',
 		),
 		'argentina_payment_methods' => array(
+			'ebanx-credit-card-ar',
 			'ebanx-efectivo',
 		),
 		'save_card_data' => 'yes',
@@ -240,10 +241,12 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway
 				'type'        => 'multiselect',
 				'class'       => 'wc-enhanced-select',
 				'options'     => array(
-					'ebanx-efectivo'    => 'Efectivo',
+					'ebanx-credit-card-ar' => 'Credit Card',
+					'ebanx-efectivo'       => 'Efectivo',
 				),
 				'default'     => array(
-					'ebanx-efectivo'
+					'ebanx-credit-card-ar',
+					'ebanx-efectivo',
 				),
 			),
 			'payments_options_title'     => array(
@@ -331,14 +334,14 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway
 				'title' => sprintf(__('Minimum Instalment (%s)', 'woocommerce-gateway-ebanx'), strtoupper($currency_code)),
 				'type' => 'number',
 				'class' => 'ebanx-payments-option',
-				'placeholder' => sprintf(__('The default is %d', 'woocommerce-gateway-ebanx'), 
+				'placeholder' => sprintf(__('The default is %d', 'woocommerce-gateway-ebanx'),
 					$this->get_min_instalment_value_for_currency($currency_code) ),
 				'custom_attributes' => array(
 					'min' => $this->get_min_instalment_value_for_currency($currency_code),
 					'step' => '0.01'
 				),
 				'desc_tip' => true,
-				'description' => __('Set the minimum instalment value during checkout. The minimum EBANX allows for BRL is 20 and MXN is 100, lower values in these currencies will be ignored.', 'woocommerce-gateway-ebanx')
+				'description' => __('Set the minimum instalment value during checkout. The minimum EBANX allows for BRL is 5 and MXN is 100, lower values in these currencies will be ignored.', 'woocommerce-gateway-ebanx')
 			);
 		}
 		$fields = array_merge($fields, array(
@@ -498,7 +501,7 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway
 
 	/**
 	 * Gets the min instalment value for the provided currency
-	 * 
+	 *
 	 * @param  $currency_code string The lower-cased currency code
 	 * @return double
 	 */
