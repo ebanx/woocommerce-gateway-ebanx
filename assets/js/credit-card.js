@@ -61,7 +61,7 @@ jQuery( function($) {
 		onError: function (e, res) {
       wc_ebanx_form.removeErrors();
 
-			$('#ebanx-credit-cart-form').prepend('<p class="woocommerce-error">' + (res.response.error.err.message || 'Some error happened. Please, verify the data of your credit card and try again.') + '</p>');
+			$('#ebanx-credit-cart-form').prepend('<p class="woocommerce-error">' + wc_ebanx_form.getError(res.response.error.err) + '</p>');
 
 			$('body, html').animate({
 				scrollTop: $('#ebanx-credit-cart-form').find('.woocommerce-error').offset().top - 20
@@ -179,6 +179,15 @@ jQuery( function($) {
       $('#ebanx_device_fingerprint').remove();
       $('#ebanx_billing_instalments').remove();
       $('#ebanx_billing_cvv').remove();
+    },
+
+    getError: function (error) {
+      if ( error.message ) {
+        return error.message;
+      }
+      EBANX.errors.InvalidValueFieldError( error.status_code );
+
+      return EBANX.errors.message || 'Some error happened. Please, verify the data of your credit card and try again.';
     }
 	};
 
