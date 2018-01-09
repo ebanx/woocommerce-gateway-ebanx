@@ -1,6 +1,8 @@
 jQuery (function ($) {
   EBANX.errors.summary.pt_BR['BP-DR-57'] = 'A data do cartão de crédito deve estar no formato MM/AA';
   EBANX.errors.summary.es['BP-DR-57'] = 'Por favor, escribe la fecha en el formato MM/AA';
+  EBANX.errors.summary.pt_BR['BP-DR-101'] = 'Este cartão não está habilitado para E-Commerce';
+  EBANX.errors.summary.es['BP-DR-101'] = 'Esta tarjeta no está habilitada para E-Commerce';
   // Custom select fields
   if ('select2' in $.fn) {
     $('select.ebanx-select-field').select2();
