@@ -1,5 +1,8 @@
 # CHANGELOG
 
+# 1.24.1
+* Fix - Made some credit cards errors more specific for better user understanding [#601](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/597)
+
 # 1.24.0
 * Feature - Updated Chile payments api identification code [#597](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/597)
 * Feature - Skipping asynchronous confirmations for credit card payments [#592](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/592)
