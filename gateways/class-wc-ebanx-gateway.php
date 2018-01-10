@@ -1208,6 +1208,7 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway
 			'cl' => 'es',
 			'pe' => 'es',
 			'co' => 'es',
+			'ec' => 'es',
 			'br' => 'pt-br',
 		);
 		$language = $languages[$country];
