@@ -117,6 +117,7 @@ abstract class WC_EBANX_Constants
 		self::COUNTRY_BRAZIL => self::COUNTRY_BRAZIL,
 		self::COUNTRY_MEXICO => self::COUNTRY_MEXICO,
 		self::COUNTRY_COLOMBIA => self::COUNTRY_COLOMBIA,
+		self::COUNTRY_ARGENTINA => self::COUNTRY_ARGENTINA,
 	);
 
 	/**
@@ -129,7 +130,8 @@ abstract class WC_EBANX_Constants
 		self::CURRENCY_CODE_MXN,
 		self::CURRENCY_CODE_USD,
 		self::CURRENCY_CODE_COP,
-		self::CURRENCY_CODE_EUR
+		self::CURRENCY_CODE_EUR,
+		self::CURRENCY_CODE_ARS,
 	);
 
 	/**
