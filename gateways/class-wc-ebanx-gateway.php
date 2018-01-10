@@ -1049,9 +1049,11 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway
 			'OP' => 'Opened'
 		);
 		$new_status = null;
+
 		switch ($requestStatus) {
 			case 'CO':
-				if (strpos($order->get_payment_method(), 'ebanx-credit-card') === 0) {
+				if (method_exists($order, 'get_payment_method')
+					&& strpos($order->get_payment_method(), 'ebanx-credit-card') === 0) {
 					return;
 				}
 				$new_status = 'processing';
