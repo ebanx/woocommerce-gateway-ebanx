@@ -48,6 +48,9 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway
 		'argentina_payment_methods' => array(
 			'ebanx-efectivo',
 		),
+		'ecuador_payment_methods' => array(
+			'ebanx-safetypay',
+		),
 		'save_card_data' => 'yes',
 		'one_click' => 'yes',
 		'capture_enabled' => 'yes',
@@ -246,6 +249,17 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway
 					'ebanx-efectivo'
 				),
 			),
+			'ecuador_payment_methods'      => array(
+				'title'       => __('Ecuador', 'woocommerce-gateway-ebanx'),
+				'type'        => 'multiselect',
+				'class'       => 'wc-enhanced-select',
+				'options'     => array(
+					'ebanx-safetypay'    => 'SafetyPay',
+				),
+				'default'     => array(
+					'ebanx-safetypay',
+				),
+			),
 			'payments_options_title'     => array(
 				'title' => __('Payment Options', 'woocommerce-gateway-ebanx'),
 				'type'  => 'title'
@@ -331,7 +345,7 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway
 				'title' => sprintf(__('Minimum Instalment (%s)', 'woocommerce-gateway-ebanx'), strtoupper($currency_code)),
 				'type' => 'number',
 				'class' => 'ebanx-payments-option',
-				'placeholder' => sprintf(__('The default is %d', 'woocommerce-gateway-ebanx'), 
+				'placeholder' => sprintf(__('The default is %d', 'woocommerce-gateway-ebanx'),
 					$this->get_min_instalment_value_for_currency($currency_code) ),
 				'custom_attributes' => array(
 					'min' => $this->get_min_instalment_value_for_currency($currency_code),
@@ -498,7 +512,7 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway
 
 	/**
 	 * Gets the min instalment value for the provided currency
-	 * 
+	 *
 	 * @param  $currency_code string The lower-cased currency code
 	 * @return double
 	 */
