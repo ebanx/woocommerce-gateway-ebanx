@@ -295,7 +295,6 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
 			}
 		}
 
-		// TODO: Implement token due date
 		if (isset($card)) {
 			$cards[] = $card;
 		}
