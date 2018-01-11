@@ -49,6 +49,9 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway
 			'ebanx-credit-card-ar',
 			'ebanx-efectivo',
 		),
+		'ecuador_payment_methods' => array(
+			'ebanx-safetypay',
+		),
 		'save_card_data' => 'yes',
 		'one_click' => 'yes',
 		'capture_enabled' => 'yes',
@@ -247,6 +250,17 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway
 				'default'     => array(
 					'ebanx-credit-card-ar',
 					'ebanx-efectivo',
+				),
+			),
+			'ecuador_payment_methods'      => array(
+				'title'       => __('Ecuador', 'woocommerce-gateway-ebanx'),
+				'type'        => 'multiselect',
+				'class'       => 'wc-enhanced-select',
+				'options'     => array(
+					'ebanx-safetypay'    => 'SafetyPay',
+				),
+				'default'     => array(
+					'ebanx-safetypay',
 				),
 			),
 			'payments_options_title'     => array(

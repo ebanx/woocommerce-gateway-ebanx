@@ -6,6 +6,9 @@ if (!defined('ABSPATH')) {
 
 class WC_EBANX_Safetypay_Gateway extends WC_EBANX_Redirect_Gateway
 {
+	private $enabled_in_peru = false;
+	private $enabled_in_ecuador = false;
+
 	/**
 	 * Constructor
 	 */
@@ -19,10 +22,15 @@ class WC_EBANX_Safetypay_Gateway extends WC_EBANX_Redirect_Gateway
 
 		parent::__construct();
 
-		$this->enabled = is_array($this->configs->settings['peru_payment_methods'])
-			&& in_array($this->id, $this->configs->settings['peru_payment_methods'])
-				? 'yes'
-				: false;
+		$peru_methods = $this->get_setting_or_default('peru_payment_methods', []);
+		$ecuador_methods = $this->get_setting_or_default('ecuador_payment_methods', []);
+
+		$this->enabled_in_peru = in_array($this->id, $peru_methods);
+		$this->enabled_in_ecuador = in_array($this->id, $ecuador_methods);
+
+		$this->enabled = $this->enabled_in_peru || $this->enabled_in_ecuador
+			? 'yes'
+			: false;
 	}
 
 	/**
@@ -32,21 +40,36 @@ class WC_EBANX_Safetypay_Gateway extends WC_EBANX_Redirect_Gateway
 	 */
 	public function is_available()
 	{
-		return parent::is_available() && $this->getTransactionAddress('country') == WC_EBANX_Constants::COUNTRY_PERU;
+		$country = $this->getTransactionAddress('country');
+		$is_peru = $country == WC_EBANX_Constants::COUNTRY_PERU;
+		$is_ecuador = $country == WC_EBANX_Constants::COUNTRY_ECUADOR;
+
+		return parent::is_available()
+			&& (
+				($is_peru && $this->enabled_in_peru)
+				|| ($is_ecuador && $this->enabled_in_ecuador)
+			);
 	}
 
 	/**
 	 * Check if the currency is processed by EBANX
 	 *
-	 * @param  string $currency Possible currencies: PEN
+	 * @param  string $currency Possible currencies: PEN for PERU and globals for ECUADOR
 	 * @return boolean          Return true if EBANX process the currency
 	 */
 	public function ebanx_process_merchant_currency($currency) {
-		return $currency === WC_EBANX_Constants::CURRENCY_CODE_PEN;
+		$country = $this->getTransactionAddress('country');
+
+		switch ($country) {
+			case WC_EBANX_Constants::COUNTRY_PERU:
+				return WC_EBANX_Constants::CURRENCY_CODE_PEN;
+			default:
+				return null;
+		}
 	}
 
 	/**
-	 * The page of order received, we call them as "Thank you pages"
+	 * The page of order received, we call them "Thank you pages"
 	 *
 	 * @param  WC_Order $order The order created
 	 * @return void
@@ -56,7 +79,7 @@ class WC_EBANX_Safetypay_Gateway extends WC_EBANX_Redirect_Gateway
 		$data = array(
 			'data' => array(),
 			'order_status' => $order->get_status(),
-			'method' => 'pagoefectivo'
+			'method' => 'safetypay'
 		);
 
 		parent::thankyou_page($data);
@@ -82,7 +105,9 @@ class WC_EBANX_Safetypay_Gateway extends WC_EBANX_Redirect_Gateway
 			WC_EBANX::get_templates_path()
 		);
 
-		parent::checkout_rate_conversion(WC_EBANX_Constants::CURRENCY_CODE_PEN);
+		$is_peru = $this->getTransactionAddress('country') === WC_EBANX_Constants::COUNTRY_PERU;
+
+		parent::checkout_rate_conversion(WC_EBANX_Constants::CURRENCY_CODE_PEN, $is_peru);
 	}
 
 	/**

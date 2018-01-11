@@ -15,16 +15,7 @@ abstract class WC_EBANX_Constants
 	const COUNTRY_MEXICO   = 'mx';
 	const COUNTRY_COLOMBIA = 'co';
 	const COUNTRY_ARGENTINA = 'ar';
-
-	/**
-	 * The full name of countries that EBANX processes
-	 */
-	const COUNTRY_ARGENTINA_NAME = 'Argentina';
-	const COUNTRY_BRAZIL_NAME = 'Brazil';
-	const COUNTRY_CHILE_NAME = 'Chile';
-	const COUNTRY_COLOMBIA_NAME = 'Colombia';
-	const COUNTRY_PERU_NAME = 'Peru';
-	const COUNTRY_MEXICO_NAME = 'Mexico';
+	const COUNTRY_ECUADOR   = 'ec';
 
 	/**
 	 * The fixed URL to our settings page, always use this one if you want to redirect to it
@@ -35,8 +26,8 @@ abstract class WC_EBANX_Constants
 	 * Currencies that EBANX processes
 	 */
 	const CURRENCY_CODE_BRL = 'BRL'; // Brazil
-	const CURRENCY_CODE_USD = 'USD'; // USA
-	const CURRENCY_CODE_EUR = 'EUR'; // Euro
+	const CURRENCY_CODE_USD = 'USD'; // USA & ECUADOR
+	const CURRENCY_CODE_EUR = 'EUR'; // European Union
 	const CURRENCY_CODE_PEN = 'PEN'; // Peru
 	const CURRENCY_CODE_MXN = 'MXN'; // Mexico
 	const CURRENCY_CODE_COP = 'COP'; // Colombia
