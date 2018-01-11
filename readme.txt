@@ -1,9 +1,9 @@
 === EBANX Payment Gateway for WooCommerce ===
 Contributors: ebanxwp
-Tags: credit card, boleto, ebanx, woocommerce, approval rate, conversion rate, brazil, mexico, argentina, peru, colombia, chile, oxxo, baloto, cash payment, local payment one-click payment, installments, alternative payments, accept more payments
+Tags: credit card, boleto, ebanx, woocommerce, approval rate, conversion rate, brazil, mexico, argentina, peru, colombia, chile, ecuador, oxxo, baloto, cash payment, local payment one-click payment, installments, alternative payments, accept more payments
 Requires at least: 4.0
 Tested up to: 4.9
-Stable tag: 1.24.1
+Stable tag: 1.25.0
 License: Apache v2.0
 License URI: http://www.apache.org/licenses/LICENSE-2.0
 
@@ -19,7 +19,7 @@ Ready to accept local payments but don’t have an account yet? Finish our [simp
 
 **Plugin Description**
 
-The WooCommerce EBANX Payment Gateway plugin allows you to accept local & international payment methods directly on your ecommerce store. Using the EBANX plugin you can process relevant cash, online debit, and credit card payments in Brazil, Mexico, Argentina, Chile, Colombia & Peru, and access over 20M EBANX Wallet users. **No technical knowledge is needed for installation. Installation is simple, the way it should be.**
+The WooCommerce EBANX Payment Gateway plugin allows you to accept local & international payment methods directly on your ecommerce store. Using the EBANX plugin you can process relevant cash, online debit, and credit card payments in Brazil, Mexico, Argentina, Chile, Colombia, Peru & Ecuador, and access over 20M EBANX Wallet users. **No technical knowledge is needed for installation. Installation is simple, the way it should be.**
 
 **EBANX Advantages**
 
@@ -106,6 +106,7 @@ The [Developer’s Academy](https://www.ebanx.com/business/en/developers/integra
   * Debit & Credit Cards
   * EBANX Wallet, Debit Transfer
 * Argentina
+  * Credit Card
   * Efectivo
 * Chile
   * Sencillito, Cash Payment
@@ -114,14 +115,18 @@ The [Developer’s Academy](https://www.ebanx.com/business/en/developers/integra
   * PagoEfectivo, Cash Payment / Debit Transfer
   * SafetyPay, Cash Payment / Debit Transfer
 * Colombia
+  * Credit Card
   * Pagos Seguros en Línea (PSE), Online Debit Transfer
   * Baloto
+* Ecuador
+  * SafetyPay, Cash Payment / Debit Transfer
 
 = Which currencies does EBANX accept? =
 
 * USD - U.S. Dollar
 * EUR - Euro
 * BRL - Real
+* ARS - Peso Argentino
 * MXN - Peso Mexicano
 * COP - Peso Colombiano
 * CLP - Peso Chileno
@@ -137,6 +142,10 @@ Yes, you can.
 4. There you go, you’re all set!
 
 == Changelog ==
+
+= 1.25.0 =
+* Feature - Creditcard for Argentina [#602](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/602)
+* Feature - SafetyPay for Ecuador [#603](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/603)
 
 = 1.24.1 =
 * Fix - Made some credit cards errors more specific for better user understanding [#601](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/597)

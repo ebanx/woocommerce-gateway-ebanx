@@ -1,5 +1,9 @@
 # CHANGELOG
 
+# 1.25.0
+* Feature - Creditcard for Argentina [#602](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/602)
+* Feature - SafetyPay for Ecuador [#603](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/603)
+
 # 1.24.1
 * Fix - Made some credit cards errors more specific for better user understanding [#601](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/597)
 
