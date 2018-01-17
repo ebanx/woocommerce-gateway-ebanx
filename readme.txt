@@ -3,7 +3,7 @@ Contributors: ebanxwp
 Tags: credit card, boleto, ebanx, woocommerce, approval rate, conversion rate, brazil, mexico, argentina, peru, colombia, chile, ecuador, oxxo, baloto, cash payment, local payment one-click payment, installments, alternative payments, accept more payments
 Requires at least: 4.0
 Tested up to: 4.9
-Stable tag: 1.25.0
+Stable tag: 1.25.1
 License: Apache v2.0
 License URI: http://www.apache.org/licenses/LICENSE-2.0
 
@@ -143,12 +143,15 @@ Yes, you can.
 
 == Changelog ==
 
+= 1.25.1 =
+* Fix - Preventing IOF from being applied more than once on instalments [#604](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/604)
+
 = 1.25.0 =
 * Feature - Creditcard for Argentina [#602](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/602)
 * Feature - SafetyPay for Ecuador [#603](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/603)
 
 = 1.24.1 =
-* Fix - Made some credit cards errors more specific for better user understanding [#601](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/597)
+* Fix - Made some credit cards errors more specific for better user understanding [#601](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/601)
 
 = 1.24.0 =
 * Feature - Updated Chile payments api identification code [#597](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/597)
