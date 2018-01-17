@@ -5,6 +5,7 @@ $currency_rate = $currency_rate ?: 1;
 
 if ($currency === WC_EBANX_Constants::CURRENCY_CODE_BRL && $add_tax) {
 	$currency_rate *= 1 + WC_EBANX_Constants::BRAZIL_TAX;
+	$add_tax = false;
 }
 
 if ( count($instalments_terms) > 1 ) : ?>
