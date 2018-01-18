@@ -489,7 +489,12 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
 			WC_EBANX_Constants::$MAX_INSTALMENTS[$country]
 		);
 
-		$tax = get_woocommerce_currency() === WC_EBANX_Constants::CURRENCY_CODE_BRL ? WC_EBANX_Constants::BRAZIL_TAX : 0;
+		$tax = 0;
+		if ( get_woocommerce_currency() === WC_EBANX_Constants::CURRENCY_CODE_BRL
+			&& $this->configs->get_setting_or_default('add_iof_to_local_amount_enabled', 'yes') === 'yes' ) {
+			$tax = WC_EBANX_Constants::CURRENCY_CODE_BRL;
+		}
+
 		$instalments_terms = $this->get_payment_terms($cart_total, $max_instalments, $tax);
 
 		$currency = WC_EBANX_Constants::$LOCAL_CURRENCIES[$country];
