@@ -1,5 +1,8 @@
 # CHANGELOG
 
+# 1.25.2
+* Fix - Fixed IOF being mistankenly applied to instalments [#606](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/606)
+
 # 1.25.1
 * Fix - Preventing IOF from being applied more than once on instalments [#604](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/604)
 
