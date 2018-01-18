@@ -325,7 +325,11 @@ class WC_EBANX_One_Click {
 
 		$max_instalments = min($this->gateway->configs->settings['credit_card_instalments'], WC_EBANX_Constants::$MAX_INSTALMENTS[$country]);
 
-		$tax = get_woocommerce_currency() === WC_EBANX_Constants::CURRENCY_CODE_BRL ? WC_EBANX_Constants::BRAZIL_TAX : 0;
+		$tax = 0;
+		if ( get_woocommerce_currency() === WC_EBANX_Constants::CURRENCY_CODE_BRL
+			 && $this->configs->get_setting_or_default('add_iof_to_local_amount_enabled', 'yes') === 'yes' ) {
+			$tax = WC_EBANX_Constants::CURRENCY_CODE_BRL;
+		}
 
 		$instalments_terms = $this->gateway->get_payment_terms($cart_total, $max_instalments, $tax);
 		$currency = WC_EBANX_Constants::$LOCAL_CURRENCIES[$country];
