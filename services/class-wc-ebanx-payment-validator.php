@@ -68,6 +68,7 @@ class WC_EBANX_Payment_Validator {
 		$this->validate_amount();
 		$this->validate_country();
 		$this->validate_email();
+		$this->validate_instalments();
 		if ($this->validate_payment_method()) return true;
 
 		return $this->get_error_count() > 0;
@@ -195,6 +196,22 @@ class WC_EBANX_Payment_Validator {
 		if ( array_key_exists(strtolower($this->order->billing_country), WC_EBANX_Constants::$EBANX_GATEWAYS_BY_COUNTRY)
 			&& ! in_array($this->order->payment_method, WC_EBANX_Constants::$EBANX_GATEWAYS_BY_COUNTRY[strtolower($this->order->billing_country)]) ) {
 			$this->add_error(__('The selected payment method is not available on the chosen Country.', 'woocommerce-gateway-ebanx'));
+			return true;
+		}
+
+		return false;
+	}
+
+	private function validate_instalments() {
+		$instalments = get_post_meta($this->order->id, '_ebanx_instalments', true);
+
+		if ( $instalments < 1 ) {
+			$this->add_error(__('Select at least 1 instalment'));
+			return true;
+		}
+
+		if ( $instalments > 12 ) {
+			$this->add_error(__('Select less than 12 instalments'));
 			return true;
 		}
 
