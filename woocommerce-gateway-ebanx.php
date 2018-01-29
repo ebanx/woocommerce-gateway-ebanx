@@ -145,6 +145,7 @@ if ( ! class_exists('WC_EBANX') ) {
 			add_filter('woocommerce_my_account_my_orders_actions', array('WC_EBANX_Cancel_Order', 'add_my_account_cancel_order_action'), 10, 2);
 			add_filter('woocommerce_admin_order_actions', array( 'WC_EBANX_Capture_Payment', 'add_order_capture_button'), 10, 2);
 
+			add_action( 'woocommerce_admin_order_data_after_billing_address', array( $this, 'get_instalment_admin_html' ) );
 
 		}
 
@@ -674,6 +675,8 @@ if ( ! class_exists('WC_EBANX') ) {
 					'testMode'       => $this->is_sandbox_mode,
 				);
 
+				update_post_meta($order->id, '_ebanx_instalments', WC_EBANX_Request::read('ebanx_instalments', 1));
+
 				WC_EBANX_Payment_By_Link::create($post_id, $config);
 			}
 			return;
@@ -725,6 +728,28 @@ if ( ! class_exists('WC_EBANX') ) {
 					WC_EBANX::get_templates_path()
 				);
 			}
+		}
+
+		public function get_instalments_admin_html () {
+			echo '<div class="edit_address">
+				<p class="form-field form-field-wide">
+					<label>' . __( 'Instalment for EBANX Credit Card:', 'woocommerce-gateway-ebanx' ) . '</label>
+					<select name="ebanx_instalments" id="_payment_method_instalment" class="first">
+						<option value="1" selected>1</option>
+						<option value="2">2</option>
+						<option value="3">3</option>
+						<option value="4">4</option>
+						<option value="5">5</option>
+						<option value="6">6</option>
+						<option value="7">7</option>
+						<option value="8">8</option>
+						<option value="9">9</option>
+						<option value="10">10</option>
+						<option value="11">11</option>
+						<option value="12">12</option>
+					</select>
+				</p>
+			</div>';
 		}
 	}
 
