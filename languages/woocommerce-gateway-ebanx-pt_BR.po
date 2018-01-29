@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
-"POT-Creation-Date: 2018-01-29 15:52-0200\n"
-"PO-Revision-Date: 2018-01-29 15:59-0200\n"
+"POT-Creation-Date: 2018-01-29 18:33-0200\n"
+"PO-Revision-Date: 2018-01-29 18:34-0200\n"
 "Last-Translator: \n"
 "Language-Team: EBANX\n"
 "Language: pt_BR\n"
@@ -759,8 +759,12 @@ msgstr ""
 "O método de Pagamento selecionado não está disponível no país escolhido."
 
 #: services/class-wc-ebanx-payment-validator.php:209
-msgid "EBANX only supports instalments between 1 and 12"
-msgstr "O EBANX suporta apenas número de parcelas entre 1 e 12"
+msgid "Select at least 1 instalment"
+msgstr "Selecione no mínimo 1 parcela"
+
+#: services/class-wc-ebanx-payment-validator.php:214
+msgid "Select less than 12 instalments"
+msgstr "Selecione no máximo 12 parcelas"
 
 #: templates/admin-order-details.php:2
 msgid "EBANX Order Details"
@@ -919,6 +923,9 @@ msgstr "Configurações"
 #: woocommerce-gateway-ebanx.php:736
 msgid "Instalment for EBANX Credit Card:"
 msgstr "Número de Parcelas para Cartões de Crédito com EBANX:"
+
+#~ msgid "EBANX only supports instalments between 1 and 12"
+#~ msgstr "O EBANX suporta apenas número de parcelas entre 1 e 12"
 
 #~ msgid "Birth Date"
 #~ msgstr "Data de Nascimento"

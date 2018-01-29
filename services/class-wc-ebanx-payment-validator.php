@@ -205,8 +205,13 @@ class WC_EBANX_Payment_Validator {
 	private function validate_instalments() {
 		$instalments = get_post_meta($this->order->id, '_ebanx_instalments', true);
 
-		if ( $instalments > 12 || $instalments < 1 ) {
-			$this->add_error(__('EBANX only supports instalments between 1 and 12'));
+		if ( $instalments < 1 ) {
+			$this->add_error(__('Select at least 1 instalment'));
+			return true;
+		}
+
+		if ( $instalments > 12 ) {
+			$this->add_error(__('Select less than 12 instalments'));
 			return true;
 		}
 
