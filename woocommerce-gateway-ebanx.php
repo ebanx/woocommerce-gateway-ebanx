@@ -145,7 +145,7 @@ if ( ! class_exists('WC_EBANX') ) {
 			add_filter('woocommerce_my_account_my_orders_actions', array('WC_EBANX_Cancel_Order', 'add_my_account_cancel_order_action'), 10, 2);
 			add_filter('woocommerce_admin_order_actions', array( 'WC_EBANX_Capture_Payment', 'add_order_capture_button'), 10, 2);
 
-			add_action( 'woocommerce_admin_order_data_after_billing_address', array( $this, 'get_instalment_admin_html' ) );
+			add_action( 'woocommerce_admin_order_data_after_billing_address', array( $this, 'get_instalments_admin_html' ) );
 
 		}
 
