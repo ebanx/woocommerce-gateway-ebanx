@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
-"POT-Creation-Date: 2018-01-29 18:33-0200\n"
-"PO-Revision-Date: 2018-01-29 18:34-0200\n"
+"POT-Creation-Date: 2018-01-30 15:06-0200\n"
+"PO-Revision-Date: 2018-01-30 15:18-0200\n"
 "Last-Translator: \n"
 "Language-Team: EBANX\n"
 "Language: pt_BR\n"
@@ -66,13 +66,13 @@ msgstr "EBANX - O pagamento não pode ser capturado, mudando para Falho."
 #: gateways/class-wc-ebanx-credit-card-gateway.php:127
 #: services/class-wc-ebanx-capture-payment.php:123
 msgid "EBANX - Payment has already been captured, changing it to Processing."
-msgstr "EBANX - O pagamento já foi capturado, mudando para Processando"
+msgstr "EBANX - O pagamento já foi capturado, mudando para Processando."
 
 #: controllers/class-wc-ebanx-api-controller.php:117
 #: gateways/class-wc-ebanx-credit-card-gateway.php:131
 #: services/class-wc-ebanx-capture-payment.php:127
 msgid "EBANX - Payment cannot be captured, changing it to Pending."
-msgstr "EBANX - O pagamento não pôde ser capturado, mudando para Pendente"
+msgstr "EBANX - O pagamento não pôde ser capturado, mudando para Pendente."
 
 #: controllers/class-wc-ebanx-api-controller.php:157
 msgid "EBANX: Cancelled by customer"
@@ -471,7 +471,7 @@ msgid ""
 "attribute of the fields."
 msgstr ""
 "Se você usa um gerenciador de checkout, por favor identifique o atributo "
-"HTML 'name' dos campos"
+"HTML 'name' dos campos."
 
 #: gateways/class-wc-ebanx-global-gateway.php:452
 msgid "Entity Type Selector"
@@ -696,17 +696,25 @@ msgstr "EBANX: Incapaz de criar o pagamento via um clique."
 msgid "Pay with one click"
 msgstr "Pague com um clique"
 
-#: services/class-wc-ebanx-payment-by-link.php:42
+#: services/class-wc-ebanx-payment-by-link.php:115
+msgid "EBANX: Your order was created via EBANX."
+msgstr "EBANX: Seu pedido foi criado via EBANX."
+
+#: services/class-wc-ebanx-payment-by-link.php:153
+#, php-format
+msgid ""
+"Your transaction's value must be lower than %s %s. Please, set a lower one."
+msgstr ""
+"O valor da sua transação deve ser menor que %s %s. Por favor, coloque um "
+"menor."
+
+#: services/class-wc-ebanx-payment-by-link.php:155
 msgid ""
 "We couldn't create your EBANX order. Could you review your fields and try "
 "again?"
 msgstr ""
 "Não foi possível criar seu pedido EBANX. Você poderia revisar os campos e "
 "tentar novamente?"
-
-#: services/class-wc-ebanx-payment-by-link.php:117
-msgid "EBANX: Your order was created via EBANX."
-msgstr "EBANX: Seu pedido foi criado via EBANX."
 
 #: services/class-wc-ebanx-payment-validator.php:83
 msgid ""
