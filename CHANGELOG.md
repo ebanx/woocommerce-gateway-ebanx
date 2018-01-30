@@ -1,5 +1,9 @@
 # CHANGELOG
 
+# 1.26.0
+* Feature - Added instalments to payment by link order form [#608](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/608)
+* Feature - Treating BP-R-32 error message on payment by link order form [#609](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/609)
+
 # 1.25.2
 * Fix - Fixed IOF being mistankenly applied to instalments [#606](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/606)
 
