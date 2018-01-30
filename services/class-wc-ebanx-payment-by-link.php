@@ -37,9 +37,7 @@ class WC_EBANX_Payment_By_Link {
 
 		$request = self::send_request();
 		if ( $request && $request->status !== 'SUCCESS' ) {
-			self::add_error( WP_DEBUG
-				? $request->status_code . ': ' . $request->status_message
-				: __('We couldn\'t create your EBANX order. Could you review your fields and try again?' ) );
+			self::add_error(self::getErrorMessage($request));
 			self::send_errors();
 			return;
 		}
@@ -133,5 +131,28 @@ class WC_EBANX_Payment_By_Link {
 
 	private static function get_instalments_range() {
 		return '1-'. get_post_meta(self::$order->id, '_ebanx_instalments', true);
+	}
+
+	/**
+	 * @param $request
+	 * @return string
+	 */
+	private static function getErrorMessage($request)
+	{
+		if ( WP_DEBUG ) {
+			return $request->status_code . ': ' . $request->status_message;
+		}
+
+		switch ($request->status_code) {
+			case 'BP-R-32':
+				// Amount must be less than {currencyCode} {amount}
+				$value = explode(' ', substr($request->status_message, 25));
+				$currencyCode = $value[0];
+				$amount = number_format( $value[1], 0, wc_get_price_decimal_separator(), wc_get_price_thousand_separator() );
+
+				return sprintf(__("Your transaction's value must be lower than %s %s. Please, set a lower one."), $currencyCode, $amount);
+			default:
+				return __( 'We couldn\'t create your EBANX order. Could you review your fields and try again?' );
+		}
 	}
 }
