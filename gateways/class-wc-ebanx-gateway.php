@@ -1178,12 +1178,14 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway
 		}
 
 		$message = $this->get_checkout_message($amount, $currency, $country);
+		$exchange_rate = 'Taxa de câmbio: <strong class="ebanx-amount-total">R$3,43</strong>';
 
 		if ($template) {
 			wc_get_template(
 				'checkout-conversion-rate.php',
 				array(
-					'message' => $message
+					'message' => $message,
+					'exchange_rate' => $exchange_rate,
 				),
 				'woocommerce/ebanx/',
 				WC_EBANX::get_templates_path()

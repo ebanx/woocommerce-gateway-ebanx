@@ -10,6 +10,7 @@ if (!defined('ABSPATH')) {
 }
 ?>
 <div class="ebanx-payment-converted-amount" style="overflow: hidden">
+	<span style="float: left; margin-bottom: 5px"><?php echo $exchange_rate; ?></span>
 	<span style="float: left;"><?php echo $message; ?></span>
 	<img
 		class="ebanx-spinner" 
