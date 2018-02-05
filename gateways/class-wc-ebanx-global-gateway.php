@@ -488,7 +488,7 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway
 				'label' => __('Apply IOF when calculating the price in BRL on the checkout', 'woocommerce-gateway-ebanx'),
 				'type' => 'checkbox',
 				'class' => 'ebanx-advanced-option ebanx-advanced-option-enable iof-checkbox',
-				'description' => 'IOF is a federal tax levied on credit (including intercompany loans), foreign exchange, insurance and securities transactions.',
+				'description' => 'IOF is a Brazilian Tax on Financial Operations applied on credit, foreign exchange, insurance and securities transactions.',
 				'desc_tip'=> true,
 			),
 		));
