@@ -495,7 +495,7 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway
 				'title' => __('Exchange Rate', 'woocommerce-gateway-ebanx'),
 				'label' => __('Show your customer the currency exchange rate of the day', 'woocommerce-gateway-ebanx'),
 				'type' => 'checkbox',
-				'description' => 'Selecting this box, you will inform your customer about the currency exchange rate of the day because it may interfere with the final amount.',
+				'description' => __('Selecting this box, you will inform your customer about the currency exchange rate of the day because it may interfere with the final amount.'),
 				'desc_tip'=> true,
 			),
 			'add_iof_to_local_amount_enabled' => array(
