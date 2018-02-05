@@ -61,7 +61,8 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway
 		'interest_rates_enabled' => 'no',
 		'show_local_amount' => 'yes',
 		'add_iof_to_local_amount_enabled' => 'yes',
-		'min_instalment_value_brl' => '20',
+		'show_exchange_rate' => 'no',
+		'min_instalment_value_brl' => '5',
 		'min_instalment_value_usd' => '0',
 		'min_instalment_value_eur' => '0',
 		'min_instalment_value_mxn' => '100'
