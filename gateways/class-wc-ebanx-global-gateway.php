@@ -61,7 +61,8 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway
 		'interest_rates_enabled' => 'no',
 		'show_local_amount' => 'yes',
 		'add_iof_to_local_amount_enabled' => 'yes',
-		'min_instalment_value_brl' => '20',
+		'show_exchange_rate' => 'no',
+		'min_instalment_value_brl' => '5',
 		'min_instalment_value_usd' => '0',
 		'min_instalment_value_eur' => '0',
 		'min_instalment_value_mxn' => '100'
@@ -478,14 +479,28 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway
 				'class' => 'ebanx-advanced-option ebanx-checkout-manager-field ebanx-colombia-document',
 				'placeholder' => __('eg: billing_colombia_document', 'woocommerce-gateway-ebanx')
 			),
+		));
+
+		$fields = array_merge($fields, array(
+			'currency_options_title' => array(
+				'title' => __('Currency & Amount Options', 'woocommerce-gateway-ebanx'),
+				'type' => 'title'
+			),
 			'show_local_amount' => array(
 				'title' => __('Total Local Amount', 'woocommerce-gateway-ebanx'),
 				'label' => __('Show your customer the total purchase amount in local currency on the checkout', 'woocommerce-gateway-ebanx'),
 				'type' => 'checkbox',
 			),
+			'show_exchange_rate' => array(
+				'title' => __('Exchange Rate', 'woocommerce-gateway-ebanx'),
+				'label' => __('Show your customer the currency exchange rate of the day', 'woocommerce-gateway-ebanx'),
+				'type' => 'checkbox',
+				'description' => __('Selecting this box, you will inform your customer about the currency exchange rate of the day because it may interfere with the final amount.'),
+				'desc_tip'=> true,
+			),
 			'add_iof_to_local_amount_enabled' => array(
 				'title' => __('IOF on Local Amount', 'woocommerce-gateway-ebanx'),
-				'label' => __('Apply IOF when calculating the price in BRL on the checkout', 'woocommerce-gateway-ebanx'),
+				'label' => __('Apply IOF (Brazilian Tax on Financial Operations) when calculating the price in BRL on the checkout', 'woocommerce-gateway-ebanx'),
 				'type' => 'checkbox',
 				'class' => 'ebanx-advanced-option ebanx-advanced-option-enable iof-checkbox',
 				'description' => 'IOF is a Brazilian Tax on Financial Operations applied on credit, foreign exchange, insurance and securities transactions.',

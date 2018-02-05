@@ -1146,6 +1146,7 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway
 			$country = $this->getTransactionAddress('country');
 		}
 
+		$rate = 1;
 		if ( in_array($this->merchant_currency, array(
 			WC_EBANX_Constants::CURRENCY_CODE_USD,
 			WC_EBANX_Constants::CURRENCY_CODE_EUR) ) ) {
@@ -1154,9 +1155,9 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway
 			if ( WC()->cart->prices_include_tax ) {
 				$amount += WC()->cart->tax_total;
 			}
-
-			$amount *= $rate;
 		}
+
+		$amount *= $rate;
 
 		// Applies instalments taxes
 		if ( $this->get_setting_or_default('interest_rates_enabled', 'no') === 'yes'
@@ -1178,12 +1179,14 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway
 		}
 
 		$message = $this->get_checkout_message($amount, $currency, $country);
+		$exchange_rate_message = $this->get_exchange_rate_message($rate, $currency, $country);
 
 		if ($template) {
 			wc_get_template(
 				'checkout-conversion-rate.php',
 				array(
-					'message' => $message
+					'message' => $message,
+					'exchange_rate_message' => $exchange_rate_message,
 				),
 				'woocommerce/ebanx/',
 				WC_EBANX::get_templates_path()
@@ -1199,25 +1202,15 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway
 	 * @param int $amount The total price of the order
 	 * @param  string $currency Possible currencies: BRL, USD, EUR, PEN, CLP, COP, MXN
 	 * @param string $country The country code
-	 * @return void
+	 * @return string
 	 */
 	public function get_checkout_message($amount, $currency, $country) {
 		$price = wc_price($amount, array('currency' => $currency));
-
-		$languages = array(
-			'ar' => 'es',
-			'mx' => 'es',
-			'cl' => 'es',
-			'pe' => 'es',
-			'co' => 'es',
-			'ec' => 'es',
-			'br' => 'pt-br',
-		);
-		$language = $languages[$country];
+		$language = $this->get_language_by_country($country);
 
 		$texts = array(
 			'pt-br' => array(
-				'INTRO'                                      => 'Total a pagar ',
+				'INTRO'                                  => 'Total a pagar ',
 				WC_EBANX_Constants::CURRENCY_CODE_BRL    => $this->configs->get_setting_or_default('add_iof_to_local_amount_enabled', 'yes') === 'yes' ? 'com IOF (0.38%)' : 'em Reais'
 			),
 			'es'    => array(
@@ -1234,6 +1227,44 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway
 		$message = $texts[$language]['INTRO'];
 		$message .= !empty($texts[$language][$currency]) ? $texts[$language][$currency] : $currency;
 		$message .= ': <strong class="ebanx-amount-total">' . $price . '</strong>';
+
+		return $message;
+	}
+
+	private function get_language_by_country($country) {
+		$languages = array(
+			'ar' => 'es',
+			'mx' => 'es',
+			'cl' => 'es',
+			'pe' => 'es',
+			'co' => 'es',
+			'ec' => 'es',
+			'br' => 'pt-br',
+		);
+		if (!array_key_exists($country, $languages)) {
+			return 'pt-br';
+		}
+		return $languages[$country];
+	}
+
+	private function get_exchange_rate_message($rate, $currency, $country) {
+		if ($this->configs->get_setting_or_default('show_exchange_rate', 'no') === 'no') {
+			return '';
+		}
+
+		if ($rate === 1) {
+			return '';
+		}
+
+		$price = wc_price($rate, array('currency' => $currency));
+		$language = $this->get_language_by_country($country);
+		$texts = array(
+			'pt-br' => 'Taxa de câmbio: ',
+			'es' => 'Tipo de cambio: ',
+		);
+
+		$message = $texts[$language];
+		$message .= '<strong class="ebanx-amount-total">' . $price . '</strong>';
 
 		return $message;
 	}
