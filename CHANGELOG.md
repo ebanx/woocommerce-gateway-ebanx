@@ -1,7 +1,7 @@
 # CHANGELOG
 
 # 1.27.0
-* Feature - Added instalments to payment by link order form [#611](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/611)
+* Feature - Change tooltip message for IOF on local amount [#611](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/611)
 * Feature - Show exchange rate on checkout [#612](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/612)
 
 # 1.26.0
