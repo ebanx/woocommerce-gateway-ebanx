@@ -14,8 +14,6 @@
     <config name="testVersion" value="5.2-"/>
 
     <!-- Rules -->
-    <rule ref="WooCommerce-Core" />
-
     <rule ref="WordPress">
         <exclude name="WordPress.VIP.DirectDatabaseQuery.NoCaching" />
         <exclude name="WordPress.VIP.DirectDatabaseQuery.SchemaChange" />
