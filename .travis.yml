@@ -6,12 +6,12 @@ php: 5.6
 install: composer update
 
 script:
-  - bash tests/bin/phpcs.sh
+  - bash .scripts/phpcs.sh
   - phpunit
 
 after_success: bash <(curl -s https://codecov.io/bash)
 
-before_deploy: bash tests/bin/phpcs.sh
+before_deploy: bash .scripts/before_deploy.sh
 
 deploy:
   - provider: releases
