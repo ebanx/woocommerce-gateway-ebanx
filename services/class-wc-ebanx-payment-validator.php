@@ -1,6 +1,6 @@
 <?php
 
-if ( !defined( 'ABSPATH' ) ) {
+if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
@@ -13,8 +13,8 @@ class WC_EBANX_Payment_Validator {
 	/**
 	 * Construct
 	 */
-	public function __construct($order) {
-		$this->set_order($order);
+	public function __construct( $order ) {
+		$this->set_order( $order );
 	}
 
 	/**
@@ -22,7 +22,7 @@ class WC_EBANX_Payment_Validator {
 	 *
 	 * @param WC_Order $order The order to validate
 	 */
-	public function set_order($order) {
+	public function set_order( $order ) {
 		$this->order = $order;
 	}
 
@@ -32,9 +32,9 @@ class WC_EBANX_Payment_Validator {
 	 *
 	 * @param string $error The error message
 	 */
-	private function add_error($error) {
+	private function add_error( $error ) {
 		$this->errors[] = $error;
-		$this->errors = array_unique($this->errors);
+		$this->errors   = array_unique( $this->errors );
 	}
 
 	/**
@@ -52,7 +52,7 @@ class WC_EBANX_Payment_Validator {
 	 * @return int
 	 */
 	public function get_error_count() {
-		return count($this->errors);
+		return count( $this->errors );
 	}
 
 	/**
@@ -63,24 +63,29 @@ class WC_EBANX_Payment_Validator {
 	public function validate() {
 		$this->errors = array();
 
-		if ($this->validate_status()) return true;
+		if ( $this->validate_status() ) {
+			return true;
+		}
 		$this->validate_currency();
 		$this->validate_amount();
 		$this->validate_country();
 		$this->validate_email();
 		$this->validate_instalments();
-		if ($this->validate_payment_method()) return true;
+		if ( $this->validate_payment_method() ) {
+			return true;
+		}
 
 		return $this->get_error_count() > 0;
 	}
 
 	/**
 	 * Validates the order status
+	 *
 	 * @return bool Problems found
 	 */
 	private function validate_status() {
 		if ( ! $this->order->status === 'pending' ) {
-			$this->add_error(__('Payment links can only be created when the order status is selected as Pending Payments.', 'woocommerce-gateway-ebanx'));
+			$this->add_error( __( 'Payment links can only be created when the order status is selected as Pending Payments.', 'woocommerce-gateway-ebanx' ) );
 			return true;
 		}
 		return false;
@@ -88,13 +93,14 @@ class WC_EBANX_Payment_Validator {
 
 	/**
 	 * Validates the currency code
+	 *
 	 * @return bool Problems found
 	 */
 	private function validate_currency() {
 		if ( get_woocommerce_currency() !== 'USD'
 			&& get_woocommerce_currency() !== 'EUR'
-			&& get_woocommerce_currency() !== WC_EBANX_Constants::$LOCAL_CURRENCIES[strtolower($this->order->billing_country)] ) {
-			$this->add_error(sprintf(__('The selected Country doesn\'t support the chosen Currency (%s).', 'woocommerce-gateway-ebanx'), get_woocommerce_currency()));
+			&& get_woocommerce_currency() !== WC_EBANX_Constants::$LOCAL_CURRENCIES[ strtolower( $this->order->billing_country ) ] ) {
+			$this->add_error( sprintf( __( 'The selected Country doesn\'t support the chosen Currency (%s).', 'woocommerce-gateway-ebanx' ), get_woocommerce_currency() ) );
 			return true;
 		}
 
@@ -103,11 +109,12 @@ class WC_EBANX_Payment_Validator {
 
 	/**
 	 * Validates the order amount
+	 *
 	 * @return bool Problems found
 	 */
 	private function validate_amount() {
 		if ( $this->order->get_total() < 1 ) {
-			$this->add_error(__('The minimum total amount is $1, please pick a greater value.', 'woocommerce-gateway-ebanx'));
+			$this->add_error( __( 'The minimum total amount is $1, please pick a greater value.', 'woocommerce-gateway-ebanx' ) );
 			return true;
 		}
 
@@ -116,11 +123,12 @@ class WC_EBANX_Payment_Validator {
 
 	/**
 	 * Validates the order country
+	 *
 	 * @return bool Problems found
 	 */
 	private function validate_country() {
-		if ( ! in_array(strtolower($this->order->billing_country), WC_EBANX_Constants::$ALL_COUNTRIES) ) {
-			$this->add_error(__('EBANX only support the following Countries: Brazil, Mexico, Peru, Colombia and Chile. Select one of these to complete your order.', 'woocommerce-gateway-ebanx'));
+		if ( ! in_array( strtolower( $this->order->billing_country ), WC_EBANX_Constants::$ALL_COUNTRIES ) ) {
+			$this->add_error( __( 'EBANX only support the following Countries: Brazil, Mexico, Peru, Colombia and Chile. Select one of these to complete your order.', 'woocommerce-gateway-ebanx' ) );
 			return true;
 		}
 		return false;
@@ -128,11 +136,12 @@ class WC_EBANX_Payment_Validator {
 
 	/**
 	 * Validates the customer e-mail
+	 *
 	 * @return bool Problems found
 	 */
 	private function validate_email() {
-		if ( ! filter_var($this->order->billing_email, FILTER_VALIDATE_EMAIL) ) {
-			$this->add_error(__('The customer email is a required field. Please provide a valid customer e-mail.', 'woocommerce-gateway-ebanx'));
+		if ( ! filter_var( $this->order->billing_email, FILTER_VALIDATE_EMAIL ) ) {
+			$this->add_error( __( 'The customer email is a required field. Please provide a valid customer e-mail.', 'woocommerce-gateway-ebanx' ) );
 			return true;
 		}
 
@@ -141,17 +150,22 @@ class WC_EBANX_Payment_Validator {
 
 	/**
 	 * Validates the payment method
+	 *
 	 * @return bool Problems found
 	 */
 	private function validate_payment_method() {
-		if ( empty($this->order->payment_method) ) {
+		if ( empty( $this->order->payment_method ) ) {
 			return false;
 		}
 
 		// true: Leave and stop validating other fields
-		if ($this->validate_payment_method_is_ebanx_account()) return true;
+		if ( $this->validate_payment_method_is_ebanx_account() ) {
+			return true;
+		}
 
-		if ($this->validate_payment_method_is_ebanx_payment()) return false;
+		if ( $this->validate_payment_method_is_ebanx_payment() ) {
+			return false;
+		}
 
 		$this->validate_payment_method_country();
 
@@ -166,7 +180,7 @@ class WC_EBANX_Payment_Validator {
 	 */
 	private function validate_payment_method_is_ebanx_account() {
 		if ( $this->order->payment_method === 'ebanx-account' ) {
-			$this->add_error(__('The EBANX account is not available yet as payment method, you will hear about that soon!', 'woocommerce-gateway-ebanx'));
+			$this->add_error( __( 'The EBANX account is not available yet as payment method, you will hear about that soon!', 'woocommerce-gateway-ebanx' ) );
 			return true;
 		}
 
@@ -179,8 +193,8 @@ class WC_EBANX_Payment_Validator {
 	 * @return bool Problems found
 	 */
 	private function validate_payment_method_is_ebanx_payment() {
-		if ( ! array_key_exists($this->order->payment_method, WC_EBANX_Constants::$GATEWAY_TO_PAYMENT_TYPE_CODE) ) {
-			$this->add_error(__('EBANX does not support the selected payment method.', 'woocommerce-gateway-ebanx'));
+		if ( ! array_key_exists( $this->order->payment_method, WC_EBANX_Constants::$GATEWAY_TO_PAYMENT_TYPE_CODE ) ) {
+			$this->add_error( __( 'EBANX does not support the selected payment method.', 'woocommerce-gateway-ebanx' ) );
 			return true;
 		}
 
@@ -193,9 +207,9 @@ class WC_EBANX_Payment_Validator {
 	 * @return bool Problems found
 	 */
 	private function validate_payment_method_country() {
-		if ( array_key_exists(strtolower($this->order->billing_country), WC_EBANX_Constants::$EBANX_GATEWAYS_BY_COUNTRY)
-			&& ! in_array($this->order->payment_method, WC_EBANX_Constants::$EBANX_GATEWAYS_BY_COUNTRY[strtolower($this->order->billing_country)]) ) {
-			$this->add_error(__('The selected payment method is not available on the chosen Country.', 'woocommerce-gateway-ebanx'));
+		if ( array_key_exists( strtolower( $this->order->billing_country ), WC_EBANX_Constants::$EBANX_GATEWAYS_BY_COUNTRY )
+			&& ! in_array( $this->order->payment_method, WC_EBANX_Constants::$EBANX_GATEWAYS_BY_COUNTRY[ strtolower( $this->order->billing_country ) ] ) ) {
+			$this->add_error( __( 'The selected payment method is not available on the chosen Country.', 'woocommerce-gateway-ebanx' ) );
 			return true;
 		}
 
@@ -203,15 +217,15 @@ class WC_EBANX_Payment_Validator {
 	}
 
 	private function validate_instalments() {
-		$instalments = get_post_meta($this->order->id, '_ebanx_instalments', true);
+		$instalments = get_post_meta( $this->order->id, '_ebanx_instalments', true );
 
 		if ( $instalments < 1 ) {
-			$this->add_error(__('Select at least 1 instalment'));
+			$this->add_error( __( 'Select at least 1 instalment' ) );
 			return true;
 		}
 
 		if ( $instalments > 12 ) {
-			$this->add_error(__('Select less than 12 instalments'));
+			$this->add_error( __( 'Select less than 12 instalments' ) );
 			return true;
 		}
 

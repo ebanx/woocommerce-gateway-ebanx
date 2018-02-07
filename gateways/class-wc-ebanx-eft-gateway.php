@@ -1,18 +1,17 @@
 <?php
 
-if (!defined('ABSPATH')) {
+if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-class WC_EBANX_Eft_Gateway extends WC_EBANX_Redirect_Gateway
-{
+class WC_EBANX_Eft_Gateway extends WC_EBANX_Redirect_Gateway {
+
 	/**
 	 * Constructor
 	 */
-	public function __construct()
-	{
+	public function __construct() {
 		$this->id           = 'ebanx-eft';
-		$this->method_title = __('EBANX - PSE', 'woocommerce-gateway-ebanx');
+		$this->method_title = __( 'EBANX - PSE', 'woocommerce-gateway-ebanx' );
 
 		$this->api_name    = 'eft';
 		$this->title       = 'PSE - Pago Seguros en Línea';
@@ -20,7 +19,7 @@ class WC_EBANX_Eft_Gateway extends WC_EBANX_Redirect_Gateway
 
 		parent::__construct();
 
-		$this->enabled = is_array($this->configs->settings['colombia_payment_methods']) ? in_array($this->id, $this->configs->settings['colombia_payment_methods']) ? 'yes' : false : false;
+		$this->enabled = is_array( $this->configs->settings['colombia_payment_methods'] ) ? in_array( $this->id, $this->configs->settings['colombia_payment_methods'] ) ? 'yes' : false : false;
 	}
 
 	/**
@@ -28,9 +27,8 @@ class WC_EBANX_Eft_Gateway extends WC_EBANX_Redirect_Gateway
 	 *
 	 * @return boolean
 	 */
-	public function is_available()
-	{
-		return parent::is_available() && $this->getTransactionAddress('country') == WC_EBANX_Constants::COUNTRY_COLOMBIA;
+	public function is_available() {
+		return parent::is_available() && $this->getTransactionAddress( 'country' ) == WC_EBANX_Constants::COUNTRY_COLOMBIA;
 	}
 
 	/**
@@ -39,17 +37,16 @@ class WC_EBANX_Eft_Gateway extends WC_EBANX_Redirect_Gateway
 	 * @param  string $currency Possible currencies: COP
 	 * @return boolean          Return true if EBANX process the currency
 	 */
-	public function ebanx_process_merchant_currency($currency) {
+	public function ebanx_process_merchant_currency( $currency ) {
 		return $currency === WC_EBANX_Constants::CURRENCY_CODE_COP;
 	}
 
 	/**
 	 * The HTML structure on checkout page
 	 */
-	public function payment_fields()
-	{
-		if ($description = $this->get_description()) {
-			echo wp_kses_post(wpautop(wptexturize($description)));
+	public function payment_fields() {
+		if ( $description = $this->get_description() ) {
+			echo wp_kses_post( wpautop( wptexturize( $description ) ) );
 		}
 
 		wc_get_template(
@@ -57,14 +54,14 @@ class WC_EBANX_Eft_Gateway extends WC_EBANX_Redirect_Gateway
 			array(
 				'title'       => $this->title,
 				'description' => $this->description,
-				'banks'       => WC_EBANX_Constants::$BANKS_EFT_ALLOWED[WC_EBANX_Constants::COUNTRY_COLOMBIA],
-				'id' => $this->id
+				'banks'       => WC_EBANX_Constants::$BANKS_EFT_ALLOWED[ WC_EBANX_Constants::COUNTRY_COLOMBIA ],
+				'id'          => $this->id,
 			),
 			'woocommerce/ebanx/',
 			WC_EBANX::get_templates_path()
 		);
 
-		parent::checkout_rate_conversion(WC_EBANX_Constants::CURRENCY_CODE_COP);
+		parent::checkout_rate_conversion( WC_EBANX_Constants::CURRENCY_CODE_COP );
 	}
 
 	/**
@@ -73,15 +70,14 @@ class WC_EBANX_Eft_Gateway extends WC_EBANX_Redirect_Gateway
 	 * @param  WC_Order $order The order created
 	 * @return void
 	 */
-	public static function thankyou_page($order)
-	{
+	public static function thankyou_page( $order ) {
 		$data = array(
-			'data' => array(),
+			'data'         => array(),
 			'order_status' => $order->get_status(),
-			'method' => 'debit-card'
+			'method'       => 'debit-card',
 		);
 
-		parent::thankyou_page($data);
+		parent::thankyou_page( $data );
 	}
 
 	/**
@@ -90,16 +86,15 @@ class WC_EBANX_Eft_Gateway extends WC_EBANX_Redirect_Gateway
 	 * @param  WC_Order $order
 	 * @return array
 	 */
-	protected function request_data($order)
-	{
-		if ( ! WC_EBANX_Request::has('eft')
-			|| ! array_key_exists(WC_EBANX_Request::read('eft'), WC_EBANX_Constants::$BANKS_EFT_ALLOWED[WC_EBANX_Constants::COUNTRY_COLOMBIA])) {
-			throw new Exception('MISSING-BANK-NAME');
+	protected function request_data( $order ) {
+		if ( ! WC_EBANX_Request::has( 'eft' )
+			|| ! array_key_exists( WC_EBANX_Request::read( 'eft' ), WC_EBANX_Constants::$BANKS_EFT_ALLOWED[ WC_EBANX_Constants::COUNTRY_COLOMBIA ] ) ) {
+			throw new Exception( 'MISSING-BANK-NAME' );
 		}
 
-		$data = parent::request_data($order);
+		$data = parent::request_data( $order );
 
-		$data['payment']['eft_code']          = WC_EBANX_Request::read('eft');
+		$data['payment']['eft_code']          = WC_EBANX_Request::read( 'eft' );
 		$data['payment']['payment_type_code'] = $this->api_name;
 
 		return $data;

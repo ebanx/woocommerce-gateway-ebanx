@@ -11,6 +11,4 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-?>
-
 

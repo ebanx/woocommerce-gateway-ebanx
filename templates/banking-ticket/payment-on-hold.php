@@ -13,9 +13,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 ?>
 
 <div class="ebanx-thank-you-page ebanx-thank-you-page--br ebanx-thank-you-page--cc-br">
-	<p><strong><?= $customer_name ?>, seu boleto foi gerado e a data de vencimento é dia <?= date_i18n('d/m', strtotime($due_date)) ?> :)</strong></p>
+	<p><strong><?php echo $customer_name; ?>, seu boleto foi gerado e a data de vencimento é dia <?php echo date_i18n( 'd/m', strtotime( $due_date ) ); ?> :)</strong></p>
 
-	<p>Enviamos uma cópia para o email <strong><?= $customer_email ?></strong></p>
+	<p>Enviamos uma cópia para o email <strong><?php echo $customer_email; ?></strong></p>
 
 	<p>Pague o boleto no Internet Banking de seu banco apenas copiando o código de barras! Você também pode imprimir o boleto e pagar em casas lotéricas e no caixa do seu banco.</p>
 
@@ -30,10 +30,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<p>Dica: Pagar seu boleto até às 21h de dias úteis, faz com que o pagamento tenha a chance de ser confirmado mais rápido :)</p>
 
 	<div class="ebanx-button--group ebanx-button--group-two">
-        <a href="<?php echo $url_pdf ?>" target="_blank" class="button banking-ticket__action">Salvar em PDF</a><a href="<?php echo $url_print ?>" target="_blank" class="button banking-ticket__action">Imprimir boleto</a>
-    </div>
+		<a href="<?php echo $url_pdf; ?>" target="_blank" class="button banking-ticket__action">Salvar em PDF</a><a href="<?php echo $url_print; ?>" target="_blank" class="button banking-ticket__action">Imprimir boleto</a>
+	</div>
 
 	<iframe id="ebanx-boleto-frame" src="<?php echo $url_iframe; ?>" style="width: 100%; border: 0px; height: 1000px"></iframe>
 
-	<?php include WC_EBANX::get_templates_path() . 'apps_br.php' ?>
+	<?php require WC_EBANX::get_templates_path() . 'apps_br.php'; ?>
 </div>

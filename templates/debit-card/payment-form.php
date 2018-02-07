@@ -1,12 +1,12 @@
 <?php
 
-if (!defined('ABSPATH')) {
-    exit;
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
 }
 ?>
 
 <div id="ebanx-debit-cart-form" class="ebanx-payment-container ebanx-language-es">
-	<?php include WC_EBANX::get_templates_path() . 'compliance-fields-mx.php' ?>
+	<?php require WC_EBANX::get_templates_path() . 'compliance-fields-mx.php'; ?>
 
 	<div id="ebanx-container-new-debit-card">
 		<section class="ebanx-form-row">

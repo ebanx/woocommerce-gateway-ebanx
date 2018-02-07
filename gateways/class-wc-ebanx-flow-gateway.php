@@ -1,22 +1,21 @@
 <?php
 
-if (!defined('ABSPATH')) {
+if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-abstract class WC_EBANX_Flow_Gateway extends WC_EBANX_Redirect_Gateway
-{
+abstract class WC_EBANX_Flow_Gateway extends WC_EBANX_Redirect_Gateway {
+
 	/**
 	 * Constructor
 	 */
-	public function __construct()
-	{
-		$this->api_name    = 'flowcl';
+	public function __construct() {
+		$this->api_name = 'flowcl';
 
 		parent::__construct();
 
-		$this->enabled = is_array($this->configs->settings['chile_payment_methods'])
-			? in_array($this->id, $this->configs->settings['chile_payment_methods'])
+		$this->enabled = is_array( $this->configs->settings['chile_payment_methods'] )
+			? in_array( $this->id, $this->configs->settings['chile_payment_methods'] )
 				? 'yes'
 				: false
 			: false;
@@ -27,9 +26,8 @@ abstract class WC_EBANX_Flow_Gateway extends WC_EBANX_Redirect_Gateway
 	 *
 	 * @return boolean
 	 */
-	public function is_available()
-	{
-		return parent::is_available() && $this->getTransactionAddress('country') === WC_EBANX_Constants::COUNTRY_CHILE;
+	public function is_available() {
+		return parent::is_available() && $this->getTransactionAddress( 'country' ) === WC_EBANX_Constants::COUNTRY_CHILE;
 	}
 
 	/**
@@ -38,17 +36,16 @@ abstract class WC_EBANX_Flow_Gateway extends WC_EBANX_Redirect_Gateway
 	 * @param  string $currency Possible currencies: COP
 	 * @return boolean          Return true if EBANX process the currency
 	 */
-	public function ebanx_process_merchant_currency($currency) {
+	public function ebanx_process_merchant_currency( $currency ) {
 		return $currency === WC_EBANX_Constants::CURRENCY_CODE_CLP;
 	}
 
 	/**
 	 * The HTML structure on checkout page
 	 */
-	public function payment_fields()
-	{
-		if ($description = $this->get_description()) {
-			echo wp_kses_post(wpautop(wptexturize($description)));
+	public function payment_fields() {
+		if ( $description = $this->get_description() ) {
+			echo wp_kses_post( wpautop( wptexturize( $description ) ) );
 		}
 
 		wc_get_template(
@@ -56,13 +53,13 @@ abstract class WC_EBANX_Flow_Gateway extends WC_EBANX_Redirect_Gateway
 			array(
 				'title'       => $this->title,
 				'description' => $this->description,
-				'id' => $this->id
+				'id'          => $this->id,
 			),
 			'woocommerce/ebanx/',
 			WC_EBANX::get_templates_path()
 		);
 
-		parent::checkout_rate_conversion(WC_EBANX_Constants::CURRENCY_CODE_CLP);
+		parent::checkout_rate_conversion( WC_EBANX_Constants::CURRENCY_CODE_CLP );
 	}
 
 	/**
@@ -71,15 +68,14 @@ abstract class WC_EBANX_Flow_Gateway extends WC_EBANX_Redirect_Gateway
 	 * @param  WC_Order $order The order created
 	 * @return void
 	 */
-	public static function thankyou_page($order)
-	{
+	public static function thankyou_page( $order ) {
 		$data = array(
-			'data' => array(),
+			'data'         => array(),
 			'order_status' => $order->get_status(),
-			'method' => $this->flow_payment_method
+			'method'       => $this->flow_payment_method,
 		);
 
-		parent::thankyou_page($data);
+		parent::thankyou_page( $data );
 	}
 
 	/**
@@ -88,9 +84,8 @@ abstract class WC_EBANX_Flow_Gateway extends WC_EBANX_Redirect_Gateway
 	 * @param  WC_Order $order
 	 * @return array
 	 */
-	protected function request_data($order)
-	{
-		$data = parent::request_data($order);
+	protected function request_data( $order ) {
+		$data                                 = parent::request_data( $order );
 		$data['payment']['payment_type_code'] = $this->flow_payment_method;
 		return $data;
 	}

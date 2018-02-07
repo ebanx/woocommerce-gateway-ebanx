@@ -14,5 +14,5 @@ if ( ! defined( 'ABSPATH' ) ) {
 ?>
 
 <div class="woocommerce-message">
-	<span><?php _e('Payment successfully made using Safetypay.', 'woocommerce-gateway-ebanx' ); ?></span>
+	<span><?php _e( 'Payment successfully made using Safetypay.', 'woocommerce-gateway-ebanx' ); ?></span>
 </div>

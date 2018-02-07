@@ -1,18 +1,17 @@
 <?php
 
-if (!defined('ABSPATH')) {
+if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-class WC_EBANX_Sencillito_Gateway extends WC_EBANX_Redirect_Gateway
-{
+class WC_EBANX_Sencillito_Gateway extends WC_EBANX_Redirect_Gateway {
+
 	/**
 	 * Constructor
 	 */
-	public function __construct()
-	{
+	public function __construct() {
 		$this->id           = 'ebanx-sencillito';
-		$this->method_title = __('EBANX - Sencillito', 'woocommerce-gateway-ebanx');
+		$this->method_title = __( 'EBANX - Sencillito', 'woocommerce-gateway-ebanx' );
 
 		$this->api_name    = 'sencillito';
 		$this->title       = 'Sencillito';
@@ -20,7 +19,7 @@ class WC_EBANX_Sencillito_Gateway extends WC_EBANX_Redirect_Gateway
 
 		parent::__construct();
 
-		$this->enabled = is_array($this->configs->settings['chile_payment_methods']) ? in_array($this->id, $this->configs->settings['chile_payment_methods']) ? 'yes' : false : false;
+		$this->enabled = is_array( $this->configs->settings['chile_payment_methods'] ) ? in_array( $this->id, $this->configs->settings['chile_payment_methods'] ) ? 'yes' : false : false;
 	}
 
 	/**
@@ -28,9 +27,8 @@ class WC_EBANX_Sencillito_Gateway extends WC_EBANX_Redirect_Gateway
 	 *
 	 * @return boolean
 	 */
-	public function is_available()
-	{
-		return parent::is_available() && $this->getTransactionAddress('country') == WC_EBANX_Constants::COUNTRY_CHILE;
+	public function is_available() {
+		return parent::is_available() && $this->getTransactionAddress( 'country' ) == WC_EBANX_Constants::COUNTRY_CHILE;
 	}
 
 	/**
@@ -39,7 +37,7 @@ class WC_EBANX_Sencillito_Gateway extends WC_EBANX_Redirect_Gateway
 	 * @param  string $currency Possible currencies: CLP
 	 * @return boolean          Return true if EBANX process the currency
 	 */
-	public function ebanx_process_merchant_currency($currency) {
+	public function ebanx_process_merchant_currency( $currency ) {
 		return $currency === WC_EBANX_Constants::CURRENCY_CODE_CLP;
 	}
 
@@ -49,9 +47,8 @@ class WC_EBANX_Sencillito_Gateway extends WC_EBANX_Redirect_Gateway
 	 * @param  WC_Order $order
 	 * @return array
 	 */
-	protected function request_data($order)
-	{
-		$data                                 = parent::request_data($order);
+	protected function request_data( $order ) {
+		$data                                 = parent::request_data( $order );
 		$data['payment']['payment_type_code'] = $this->api_name;
 
 		return $data;
@@ -60,22 +57,21 @@ class WC_EBANX_Sencillito_Gateway extends WC_EBANX_Redirect_Gateway
 	/**
 	 * The HTML structure on checkout page
 	 */
-	public function payment_fields()
-	{
-		if ($description = $this->get_description()) {
-			echo wp_kses_post(wpautop(wptexturize($description)));
+	public function payment_fields() {
+		if ( $description = $this->get_description() ) {
+			echo wp_kses_post( wpautop( wptexturize( $description ) ) );
 		}
 
 		wc_get_template(
 			'sencillito/payment-form.php',
 			array(
-				'id' => $this->id
+				'id' => $this->id,
 			),
 			'woocommerce/ebanx/',
 			WC_EBANX::get_templates_path()
 		);
 
-		parent::checkout_rate_conversion(WC_EBANX_Constants::CURRENCY_CODE_CLP);
+		parent::checkout_rate_conversion( WC_EBANX_Constants::CURRENCY_CODE_CLP );
 	}
 
 	/**
@@ -84,14 +80,13 @@ class WC_EBANX_Sencillito_Gateway extends WC_EBANX_Redirect_Gateway
 	 * @param  WC_Order $order The order created
 	 * @return void
 	 */
-	public static function thankyou_page($order)
-	{
+	public static function thankyou_page( $order ) {
 		$data = array(
-			'data' => array(),
+			'data'         => array(),
 			'order_status' => $order->get_status(),
-			'method' => 'sencillito'
+			'method'       => 'sencillito',
 		);
 
-		parent::thankyou_page($data);
+		parent::thankyou_page( $data );
 	}
 }
