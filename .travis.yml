@@ -2,11 +2,15 @@ language: php
 dist: trusty
 sudo: false
 
-script: phpunit
+install: composer update
+
+script:
+  - bash tests/bin/phpcs.sh
+  - phpunit
 
 after_success: bash <(curl -s https://codecov.io/bash)
 
-before_deploy: zip ebanx-payment-gateway-for-woocommerce ./**/*
+before_deploy: bash tests/bin/phpcs.sh
 
 deploy:
   - provider: releases
@@ -23,3 +27,9 @@ deploy:
     on:
       tags: true
       all_branches: true
+
+cache:
+  apt: true
+  directories:
+    - $TRAVIS_BUILD_DIR/vendor
+    - $HOME/.composer/cache
