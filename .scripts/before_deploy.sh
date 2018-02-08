@@ -3,4 +3,4 @@
 rm -rf vendor
 composer install --no-dev
 
-zip -r ebanx-payment-gateway-for-woocommerce . -x "*.git*"
+zip -r $TRAVIS_BUILD_DIR/ebanx-payment-gateway-for-woocommerce $TRAVIS_BUILD_DIR/. -x "*.git*"
