@@ -18,7 +18,7 @@ if ( ! defined('ABSPATH') ) {
 }
 
 define('WC_EBANX_MIN_PHP_VER', '5.6.0');
-define('TEST_ONLY', 'should fail build');
+define( 'TEST_ONLY', 'should fail build' );
 define('WC_EBANX_MIN_WC_VER', '2.6.0');
 define('WC_EBANX_MIN_WP_VER', '4.0.0');
 define('WC_EBANX_DIR', __DIR__ . DIRECTORY_SEPARATOR);
