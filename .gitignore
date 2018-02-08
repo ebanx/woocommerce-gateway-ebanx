@@ -1,5 +1,7 @@
 .idea/
 wordpress/
+vendor/
+composer.lock
 .DS_Store
 *.log
 *.gz
