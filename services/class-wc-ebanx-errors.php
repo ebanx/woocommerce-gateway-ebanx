@@ -60,7 +60,7 @@ class WC_EBANX_Errors {
 				'INVALID-BILLING-COUNTRY'    => 'Por favor, escolha um país.',
 				'INVALID-ADDRESS'            => 'Insira o seu endereço completo com o número da casa, apartamento ou estabelecimento.',
 				'REFUSED-CC'                 => 'Não foi possível concluir a compra. Entre em contato com o banco/emissor do cartão ou tente novamente.',
-				'SANDBOX-INVALID-CC-NUMBER'  => 'Detectamos que você está em modo Sandbox e por isso só permitimos apenas alguns números de cartões. <a href="https://www.ebanx.com/business/en/developers/integrations/testing/credit-card-test-numbers" target="_blank">Você pode utilizar um dos nossos cartões de teste acessando a EBANX Developer\'s Academy.</a>'
+				'SANDBOX-INVALID-CC-NUMBER'  => 'Detectamos que você está em modo Sandbox e por isso só permitimos apenas alguns números de cartões. <a href="https://www.ebanx.com/business/en/developers/integrations/testing/credit-card-test-numbers" target="_blank">Você pode utilizar um dos nossos cartões de teste acessando a EBANX Developer\'s Academy.</a>',
 			),
 			'es'    => array(
 				'GENERAL'                    => 'No pudimos concluir tu compra. Por favor intenta nuevamente o entra en contacto con el sitio web.',
@@ -114,7 +114,7 @@ class WC_EBANX_Errors {
 				'INVALID-BILLING-COUNTRY'    => 'Por favor, escoge un país.',
 				'INVALID-ADDRESS'            => 'Por favor, introduce tu dirección completa. Número de residencia o apartamento.',
 				'REFUSED-CC'                 => 'No pudimos concluir tu compra. Ponte en contacto con el banco/emisor de la tarjeta o vuelve a intentarlo.',
-				'SANDBOX-INVALID-CC-NUMBER'  => 'Detectamos que estás en modo Sandbox y por eso restringimos algunos números de tarjetas. <a href="https://www.ebanx.com/business/en/developers/integrations/testing/credit-card-test-numbers" target="_blank">Puedes utilizar una de nuestras tarjetas de prueba accediendo a EBANX Developer\'s Academy.</a>'
+				'SANDBOX-INVALID-CC-NUMBER'  => 'Detectamos que estás en modo Sandbox y por eso restringimos algunos números de tarjetas. <a href="https://www.ebanx.com/business/en/developers/integrations/testing/credit-card-test-numbers" target="_blank">Puedes utilizar una de nuestras tarjetas de prueba accediendo a EBANX Developer\'s Academy.</a>',
 			),
 		);
 	}

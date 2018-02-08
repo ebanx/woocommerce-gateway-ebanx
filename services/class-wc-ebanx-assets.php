@@ -25,7 +25,6 @@ SVG;
 	}
 
 	// PRIVATE
-
 	/**
 	 * Renders the script to manage the admin options script part of ebanx gateway configuration
 	 *
@@ -36,10 +35,10 @@ SVG;
 			return;
 		}
 
-		self::render_stylesheet('toggleable-options');
+		self::render_stylesheet( 'toggleable-options' );
 
-		self::render_script('payments-options', array('jquery'));
-		self::render_script('advanced-options', array('jquery'));
+		self::render_script( 'payments-options', array( 'jquery' ) );
+		self::render_script( 'advanced-options', array( 'jquery' ) );
 	}
 
 	/**
@@ -48,7 +47,7 @@ SVG;
 	 * @return void
 	 */
 	private static function resize_settings_menu_icon() {
-		self::render_stylesheet('settings-menu-icon');
+		self::render_stylesheet( 'settings-menu-icon' );
 	}
 
 	/**
@@ -57,8 +56,8 @@ SVG;
 	 * @return void
 	 */
 	private static function render_iof_notice() {
-		self::render_script('iof-options', array('jquery'));
-		self::localize_script('iof-options', array('confirm_message' => __('You need to validate this change with EBANX, only deselecting or selecting the box will not set this to your customer. Contact your EBANX Account Manager or Business Development Expert.', 'woocommerce-gateway-ebanx')));
+		self::render_script( 'iof-options', array( 'jquery' ) );
+		self::localize_script( 'iof-options', array( 'confirm_message' => __( 'You need to validate this change with EBANX, only deselecting or selecting the box will not set this to your customer. Contact your EBANX Account Manager or Business Development Expert.', 'woocommerce-gateway-ebanx' ) ) );
 	}
 
 	/**
@@ -67,8 +66,8 @@ SVG;
 	 * @return void
 	 */
 	private static function disable_ebanx_gateways() {
-		self::render_stylesheet('disable-ebanx-gateways');
-		self::render_inline_script('disable-ebanx-gateways');
+		self::render_stylesheet( 'disable-ebanx-gateways' );
+		self::render_inline_script( 'disable-ebanx-gateways' );
 	}
 
 	/**
@@ -77,8 +76,8 @@ SVG;
 	 * @return boolean
 	 */
 	private static function is_in_ebanx_settings() {
-		return WC_EBANX_Request::has('section')
-			&& WC_EBANX_Request::read('section') === 'ebanx-global';
+		return WC_EBANX_Request::has( 'section' )
+			&& WC_EBANX_Request::read( 'section' ) === 'ebanx-global';
 	}
 
 	/**
@@ -88,10 +87,10 @@ SVG;
 	 * @param  string $filename Filename without extension
 	 * @return void
 	 */
-	private static function render_stylesheet($filename) {
-		$file_path = WC_EBANX_DIR . 'assets/css/'.$filename.'.css';
-		$contents = file_get_contents($file_path);
-		echo '<style>'.$contents.'</style>';
+	private static function render_stylesheet( $filename ) {
+		$file_path = WC_EBANX_DIR . 'assets/css/' . $filename . '.css';
+		$contents  = file_get_contents( $file_path );
+		echo '<style>' . $contents . '</style>';
 	}
 
 	/**
@@ -102,9 +101,9 @@ SVG;
 	 * @param  array  $dependencies An array with wp script names of dependencies
 	 * @return void
 	 */
-	private static function render_script($filename, $dependencies = array()) {
-		$script_name = 'woocommerce_ebanx_'.str_replace('-', '_', $filename);
-		$file_path = plugins_url('assets/js/'.$filename.'.js', WC_EBANX::DIR);
+	private static function render_script( $filename, $dependencies = array() ) {
+		$script_name = 'woocommerce_ebanx_' . str_replace( '-', '_', $filename );
+		$file_path   = plugins_url( 'assets/js/' . $filename . '.js', WC_EBANX::DIR );
 
 		wp_enqueue_script(
 			$script_name,
@@ -122,15 +121,15 @@ SVG;
 	 * @param  array  $var_data An array with the data that you want to pass to the script
 	 * @return void
 	 */
-	private static function localize_script($handle, $var_data) {
-		$script_name = 'woocommerce_ebanx_'.str_replace('-', '_', $handle);
+	private static function localize_script( $handle, $var_data ) {
+		$script_name = 'woocommerce_ebanx_' . str_replace( '-', '_', $handle );
 
-		wp_localize_script($script_name, $script_name, $var_data);
+		wp_localize_script( $script_name, $script_name, $var_data );
 	}
 
-	private static function render_inline_script($filename) {
-		$file_path = WC_EBANX_DIR . 'assets/js/'.$filename.'.js';
-		$contents = file_get_contents($file_path);
-		echo '<script>'.$contents.'</script>';
+	private static function render_inline_script( $filename ) {
+		$file_path = WC_EBANX_DIR . 'assets/js/' . $filename . '.js';
+		$contents  = file_get_contents( $file_path );
+		echo '<script>' . $contents . '</script>';
 	}
 }
