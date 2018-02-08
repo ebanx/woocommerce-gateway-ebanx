@@ -12,7 +12,8 @@
         "dealerdirect/phpcodesniffer-composer-installer": "^0.4.3",
         "phpunit/phpunit": "^4.8",
         "squizlabs/php_codesniffer": "*",
-        "wp-coding-standards/wpcs": "^0.14"
+        "wp-coding-standards/wpcs": "^0.14",
+        "exussum12/coverage-checker": "dev-master"
     },
     "scripts": {
         "test": "phpunit",
