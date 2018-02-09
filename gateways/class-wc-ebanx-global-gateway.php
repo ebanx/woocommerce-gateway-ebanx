@@ -403,9 +403,9 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway
 				'class' => 'ebanx-payments-option'
 			),
 			'due_date_days' => array(
-				'title' => __('Days to Expiration', 'woocommerce-gateway-ebanx'),
-				'class' => 'wc-enhanced-select ebanx-due-cash-date ebanx-payments-option',
-				'description' => __('Define the maximum number of days on which your customer can complete the payment of: Boleto, OXXO, Sencilito, PagoEfectivo and SafetyPay.', 'woocommerce-gateway-ebanx'),
+				'title' => __( 'Days to Expiration', 'woocommerce-gateway-ebanx' ),
+				'class' => 'ebanx-due-cash-date ebanx-payments-option',
+				'description' => __( 'Define the maximum number of days on which your customer can complete the payment of: Boleto, OXXO, Sencilito, PagoEfectivo and SafetyPay.', 'woocommerce-gateway-ebanx' ),
 				'desc_tip' => true
 			),
 		));
