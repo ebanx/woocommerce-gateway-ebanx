@@ -255,6 +255,8 @@ class WC_EBANX_One_Click {
 
 		WC_EBANX_Request::set($names['ebanx_billing_colombia_document'], get_user_meta( $this->userId, '_ebanx_billing_colombia_document', true ));
 
+		WC_EBANX_Request::set($names['ebanx_billing_argentina_document'], get_user_meta( $this->userId, '_ebanx_billing_argentina_document', true ));
+
 		WC_EBANX_Request::set('billing_postcode', $this->get_user_billing_address()['postcode']);
 		WC_EBANX_Request::set('billing_address_1', $this->get_user_billing_address()['address_1']);
 		WC_EBANX_Request::set('billing_city', $this->get_user_billing_address()['city']);
@@ -264,9 +266,11 @@ class WC_EBANX_One_Click {
 			&& ! empty(WC_EBANX_Request::read('ebanx-credit-card-installments', null))
 			&& ! empty(WC_EBANX_Request::read('ebanx-one-click-cvv', null))
 			&& (WC_EBANX_Request::has($names['ebanx_billing_brazil_document'])
-			|| WC_EBANX_Request::has($names['ebanx_billing_colombia_document']))
+			|| WC_EBANX_Request::has($names['ebanx_billing_colombia_document'])
+			|| WC_EBANX_Request::has($names['ebanx_billing_argentina_document']))
 			&& (! empty(WC_EBANX_Request::read($names['ebanx_billing_brazil_document'], null))
-			|| !empty(WC_EBANX_Request::read($names['ebanx_billing_colombia_document'], null)));
+			|| !empty(WC_EBANX_Request::read($names['ebanx_billing_colombia_document'], null))
+			|| !empty(WC_EBANX_Request::read($names['ebanx_billing_argentina_document'], null)));
 	}
 
 	/**
@@ -282,6 +286,7 @@ class WC_EBANX_One_Click {
 		return $this->cards
 		       && (! empty(get_user_meta( $this->userId, '_ebanx_billing_brazil_document', true ))
 	           || ! empty(get_user_meta( $this->userId, '_ebanx_billing_colombia_document', true ))
+	           || ! empty(get_user_meta( $this->userId, '_ebanx_billing_argentina_document', true ))
 	           || $this->userCountry === WC_EBANX_Constants::COUNTRY_MEXICO);
 	}
 
@@ -308,6 +313,7 @@ class WC_EBANX_One_Click {
 			case 'es_CL':
 			case 'es_PE':
 			case 'es_MX':
+			case 'es_AR':
 				$messages = array(
 					'instalments' => 'Meses sin intereses'
 				);
