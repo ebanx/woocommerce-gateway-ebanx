@@ -479,6 +479,12 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway
 				'class' => 'ebanx-advanced-option ebanx-checkout-manager-field ebanx-colombia-document',
 				'placeholder' => __('eg: billing_colombia_document', 'woocommerce-gateway-ebanx')
 			),
+			'checkout_manager_argentina_document' => array(
+				'title' => __('CDI', 'woocommerce-gateway-ebanx'),
+				'type' => 'text',
+				'class' => 'ebanx-advanced-option ebanx-checkout-manager-field ebanx-argentina-document',
+				'placeholder' => __('eg: billing_argentina_document', 'woocommerce-gateway-ebanx')
+			),
 		));
 
 		$fields = array_merge($fields, array(
