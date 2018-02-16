@@ -8,7 +8,7 @@ if ( $order_id ) {
 
 		$fields = array(
 			'ebanx_billing_argentina_document' => array(
-				'label' => 'CDI',
+				'label' => __( 'Document', 'woocommerce-gateway-ebanx' ),
 				'value' => $document
 			),
 			'billing_postcode' => array(
