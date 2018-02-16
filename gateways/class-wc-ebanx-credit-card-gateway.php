@@ -264,18 +264,18 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
 	{
 		parent::save_user_meta_fields($order);
 
-		if ( ! $this->userId ) {
-			$this->userId = $order->user_id;
+		if ( ! $this->user_id ) {
+			$this->user_id = $order->user_id;
 		}
 
-		if ( ! $this->userId
-			|| $this->get_setting_or_default('save_card_data', 'no') !== 'yes'
-			|| ! WC_EBANX_Request::has('ebanx-save-credit-card')
-			|| WC_EBANX_Request::read('ebanx-save-credit-card') !== 'yes') {
+		if ( ! $this->user_id
+		     || $this->get_setting_or_default('save_card_data', 'no') !== 'yes'
+		     || ! WC_EBANX_Request::has('ebanx-save-credit-card')
+		     || WC_EBANX_Request::read('ebanx-save-credit-card') !== 'yes') {
 			return;
 		}
 
-		$cards = get_user_meta($this->userId, '_ebanx_credit_card_token', true);
+		$cards = get_user_meta( $this->user_id, '_ebanx_credit_card_token', true );
 		$cards = !empty($cards) ? $cards : [];
 
 		$card = new \stdClass();
@@ -299,7 +299,7 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
 			$cards[] = $card;
 		}
 
-		update_user_meta($this->userId, '_ebanx_credit_card_token', $cards);
+		update_user_meta( $this->user_id, '_ebanx_credit_card_token', $cards );
 	}
 
 	/**
@@ -477,7 +477,7 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
 		$save_card = $this->get_setting_or_default('save_card_data', 'no') === 'yes';
 
 		if ( $save_card ) {
-			$cards = array_filter((array) get_user_meta($this->userId, '_ebanx_credit_card_token', true), function ($card) {
+			$cards = array_filter( (array) get_user_meta( $this->user_id, '_ebanx_credit_card_token', true ), function ( $card ) {
 				return !empty($card->brand) && !empty($card->token) && !empty($card->masked_number);
 			});
 		}

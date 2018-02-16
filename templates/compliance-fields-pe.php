@@ -9,7 +9,7 @@ if ( $order_id ) {
 		$fields = array(
 			'ebanx_billing_peru_document' => array(
 				'label' => 'DNI',
-				'value' => $document
+				'value' => $document,
 			),
 			'billing_postcode' => array(
 				'label' => 'Postcode / ZIP',
