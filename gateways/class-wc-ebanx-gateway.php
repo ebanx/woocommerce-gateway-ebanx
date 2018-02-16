@@ -594,16 +594,16 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway
 		}
 
 		if ($this->getTransactionAddress('country') === WC_EBANX_Constants::COUNTRY_CHILE) {
-			if ( empty($payload['ebanx_billing_chile_document']) && $order->get_payment_method() === 'ebanx-webpay') {
-				throw new Exception('BP-DR-22');
+			if ( empty( $payload['ebanx_billing_chile_document'] ) && $order->get_payment_method() === 'ebanx-webpay' ) {
+				throw new Exception( 'BP-DR-22' );
 			}
 
-			WC_EBANX_Request::set('ebanx_billing_document', $payload['ebanx_billing_chile_document']);
+			WC_EBANX_Request::set( 'ebanx_billing_document', $payload['ebanx_billing_chile_document'] );
 		}
 
 		if ($this->getTransactionAddress('country') === WC_EBANX_Constants::COUNTRY_COLOMBIA) {
-			if ( empty($payload['ebanx_billing_colombia_document']) && $order->get_payment_method() === 'ebanx-credit-card-co') {
-				throw new Exception('BP-DR-22');
+			if ( empty( $payload['ebanx_billing_colombia_document'] ) && $order->get_payment_method() === 'ebanx-credit-card-co' ) {
+				throw new Exception( 'BP-DR-22' );
 			}
 
 			WC_EBANX_Request::set('ebanx_billing_document', $payload['ebanx_billing_colombia_document']);

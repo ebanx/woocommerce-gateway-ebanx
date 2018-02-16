@@ -1,0 +1,73 @@
+diff --git a/.editorconfig b/.editorconfig
+index 12a9537..b66bf3e 100644
+--- a/.editorconfig
++++ b/.editorconfig
+@@ -15,4 +15,4 @@ indent_size = 4
+ 
+ [*.{js,html,css}]
+ indent_style = space
+-indent_size = 2
++indent_size = 4
+diff --git a/assets/js/checkout-fields.js b/assets/js/checkout-fields.js
+index bac891a..23c890b 100644
+--- a/assets/js/checkout-fields.js
++++ b/assets/js/checkout-fields.js
+@@ -83,4 +83,33 @@ jQuery (function ($) {
+       }
+     })
+     .change();
++
++    var hideDocument = function (gatewayId) {
++        switch ($('#billing_country').val()) {
++            case 'CO':
++                var ebanxColombianDocumentField = $('#ebanx_billing_colombia_document_field');
++                if (gatewayId !== 'ebanx-credit-card-co') {
++                    disableFields(ebanxColombianDocumentField);
++                    break;
++                }
++                enableFields(ebanxColombianDocumentField);
++                break;
++            case "CL":
++                var ebanxChileanDocumentField = $('#ebanx_billing_chile_document_field');
++                if (gatewayId !== 'ebanx-webpay') {
++                    disableFields(ebanxChileanDocumentField);
++                    break;
++                }
++                enableFields(ebanxChileanDocumentField);
++                break;
++            default:
++                break;
++        }
++    };
++
++  $('body').on( 'updated_checkout', function() {
++    var paymentMethods = $('.wc_payment_methods.payment_methods.methods > li > input');
++    hideDocument($('input[name=payment_method]:checked').val());
++    paymentMethods.on('change', function(e) { hideDocument(e.target.value); });
++  });
+ });
+diff --git a/gateways/class-wc-ebanx-gateway.php b/gateways/class-wc-ebanx-gateway.php
+index efe1482..7a08026 100644
+--- a/gateways/class-wc-ebanx-gateway.php
++++ b/gateways/class-wc-ebanx-gateway.php
+@@ -594,14 +594,18 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway
+ 		}
+ 
+ 		if ($this->getTransactionAddress('country') === WC_EBANX_Constants::COUNTRY_CHILE) {
+-			if ( empty($payload['ebanx_billing_chile_document']) ) {
+-				throw new Exception('INVALID-FIELDS');
++			if ( empty($payload['ebanx_billing_chile_document']) && $order->get_payment_method() === 'ebanx-webpay') {
++				throw new Exception('BP-DR-22');
+ 			}
+ 
+ 			WC_EBANX_Request::set('ebanx_billing_document', $payload['ebanx_billing_chile_document']);
+ 		}
+ 
+ 		if ($this->getTransactionAddress('country') === WC_EBANX_Constants::COUNTRY_COLOMBIA) {
++			if ( empty($payload['ebanx_billing_colombia_document']) && $order->get_payment_method() === 'ebanx-credit-card-co') {
++				throw new Exception('BP-DR-22');
++			}
++
+ 			WC_EBANX_Request::set('ebanx_billing_document', $payload['ebanx_billing_colombia_document']);
+ 		}
+ 
