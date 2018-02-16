@@ -455,12 +455,6 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway
 				'class' => 'ebanx-advanced-option ebanx-checkout-manager-field cpf_cnpj',
 				'placeholder' => __('eg: billing_brazil_entity', 'woocommerce-gateway-ebanx')
 			),
-			'checkout_manager_argentina_document_type' => array(
-				'title' => __('Document Type Selector', 'woocommerce-gateway-ebanx'),
-				'type' => 'text',
-				'class' => 'ebanx-advanced-option ebanx-checkout-manager-field cuit_cuil_cid',
-				'placeholder' => __('eg: billing_argentina_document', 'woocommerce-gateway-ebanx')
-			),
 			'checkout_manager_cpf_brazil' => array(
 				'title' => __('CPF', 'woocommerce-gateway-ebanx'),
 				'type' => 'text',
@@ -484,6 +478,12 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway
 				'type' => 'text',
 				'class' => 'ebanx-advanced-option ebanx-checkout-manager-field ebanx-colombia-document',
 				'placeholder' => __('eg: billing_colombia_document', 'woocommerce-gateway-ebanx')
+			),
+			'checkout_manager_argentina_document_type' => array(
+				'title' => __('Document Type Selector', 'woocommerce-gateway-ebanx'),
+				'type' => 'text',
+				'class' => 'ebanx-advanced-option ebanx-checkout-manager-field ebanx-argentina-document-type',
+				'placeholder' => __('eg: billing_argentina_document', 'woocommerce-gateway-ebanx')
 			),
 			'checkout_manager_argentina_document' => array(
 				'title' => __('Argentinian document', 'woocommerce-gateway-ebanx'),

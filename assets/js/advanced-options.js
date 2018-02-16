@@ -57,6 +57,7 @@
 
       if (argentinaVal != null && argentinaVal.length > 0) {
         enableFields(fields.filter('.ebanx-argentina-document'));
+        enableFields(fields.filter('.ebanx-argentina-document-type'));
       }
 
       if (brazilVal == null && chileVal == null && colombiaVal == null) {
