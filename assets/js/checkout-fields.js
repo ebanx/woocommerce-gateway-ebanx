@@ -109,7 +109,7 @@ jQuery (function ($) {
 
 	$( 'body' ).on( 'updated_checkout', function () {
 		var paymentMethods = $( '.wc_payment_methods.payment_methods.methods > li > input' );
-		hideDocument($( 'input[name=payment_method]:checked' ).val());
+		hideDocument( $( 'input[name=payment_method]:checked' ).val() );
 		paymentMethods.on( 'change', function( e ) { hideDocument( e.target.value ); } );
 	});
 });
