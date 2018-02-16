@@ -13,6 +13,8 @@ node_modules
 apidocs/phpdoc-cache-*
 .data
 .phpintel
+phpcs.json
+diff.txt
 
 # Tests
 /report/
