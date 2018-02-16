@@ -276,7 +276,7 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway
 			'ebanx_billing_colombia_document' => $this->get_checkout_manager_settings_or_default('checkout_manager_colombia_document', 'ebanx_billing_colombia_document'),
 
 			// Argentina Fields
-			'ebanx_billing_argentina_document_type' => $this->get_checkout_manager_settings_or_default('checkout_manager_argentina_document_type', 'checkout_manager_argentina_document_type'),
+			'ebanx_billing_argentina_document_type' => $this->get_checkout_manager_settings_or_default('checkout_manager_argentina_document_type', 'ebanx_billing_argentina_document_type'),
 			'ebanx_billing_argentina_document' => $this->get_checkout_manager_settings_or_default('checkout_manager_argentina_document', 'ebanx_billing_argentina_document'),
 		);
 	}
@@ -662,6 +662,10 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway
 
 		if (!empty(WC_EBANX_Request::read('ebanx_billing_document', null))) {
 			$newData['payment']['document'] = WC_EBANX_Request::read('ebanx_billing_document', null);
+		}
+
+		if ( ! empty( WC_EBANX_Request::read( 'ebanx_billing_argentina_document_type', null ) ) ) {
+			$newData['payment']['document_type'] = WC_EBANX_Request::read( 'ebanx_billing_argentina_document_type', null );
 		}
 
 		if (!empty($payload['billing_postcode'])) {
