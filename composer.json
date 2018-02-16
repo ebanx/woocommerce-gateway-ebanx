@@ -13,7 +13,7 @@
         "phpunit/phpunit": "^4.8",
         "squizlabs/php_codesniffer": "*",
         "wp-coding-standards/wpcs": "^0.14",
-        "exussum12/coverage-checker": "dev-master"
+        "exussum12/coverage-checker": "^0.8.0"
     },
     "scripts": {
         "test": "phpunit",
