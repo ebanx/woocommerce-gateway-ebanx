@@ -35,6 +35,11 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway
 	protected static $initializedGateways = 0;
 	protected static $totalGateways = 0;
 
+	/**
+	 * Current user id
+	 *
+	 * @var int
+	 */
 	public $user_id;
 
 	const REQUIRED_MARK = " <abbr class=\"required\" title=\"required\">*</abbr>";
@@ -204,7 +209,7 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway
 			'type'     => 'text',
 			'label'    => 'DNI' . self::REQUIRED_MARK,
 			'class' => array('ebanx_billing_colombia_document', 'form-row-wide'),
-			'default' => isset($dni) ? $dni : ''
+			'default' => isset($dni) ? $dni : '',
 		);
 		$ebanx_billing_peru_document = array(
 			'type'    => 'text',
@@ -496,20 +501,20 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway
 	protected function get_data()
 	{
 		$data = array(
-			'ebanx_billing_brazil_person_type' => WC_EBANX_Request::read($this->names['ebanx_billing_brazil_person_type'], 'cpf'),
-			'ebanx_billing_brazil_document'    => WC_EBANX_Request::read($this->names['ebanx_billing_brazil_document'], null),
-			'ebanx_billing_brazil_cnpj'        => WC_EBANX_Request::read($this->names['ebanx_billing_brazil_cnpj'], null),
-			'ebanx_billing_chile_document'     => WC_EBANX_Request::read($this->names['ebanx_billing_chile_document'], null),
-			'ebanx_billing_colombia_document'  => WC_EBANX_Request::read($this->names['ebanx_billing_colombia_document'], null),
+			'ebanx_billing_brazil_person_type' => WC_EBANX_Request::read( $this->names['ebanx_billing_brazil_person_type'], 'cpf' ),
+			'ebanx_billing_brazil_document'    => WC_EBANX_Request::read( $this->names['ebanx_billing_brazil_document'], null ),
+			'ebanx_billing_brazil_cnpj'        => WC_EBANX_Request::read( $this->names['ebanx_billing_brazil_cnpj'], null ),
+			'ebanx_billing_chile_document'     => WC_EBANX_Request::read( $this->names['ebanx_billing_chile_document'], null ) ,
+			'ebanx_billing_colombia_document'  => WC_EBANX_Request::read( $this->names['ebanx_billing_colombia_document'], null ),
 			'ebanx_billing_peru_document'      => WC_EBANX_Request::read( $this->names['ebanx_billing_peru_document'], null ),
 			'ebanx_billing_brazil_birth_date'  => '31/12/1969',
 			'ebanx_billing_chile_birth_date'   => '31/12/1969',
-			'billing_postcode'                 => WC_EBANX_Request::read('billing_postcode', null),
-			'billing_address_1'                => WC_EBANX_Request::read('billing_address_1', null),
-			'billing_address_2'                => WC_EBANX_Request::read('billing_address_2', null),
-			'billing_city'                     => WC_EBANX_Request::read('billing_city', null),
-			'billing_state'                    => WC_EBANX_Request::read('billing_state', null),
-			'billing_company'                  => WC_EBANX_Request::read('billing_company', null)
+			'billing_postcode'                 => WC_EBANX_Request::read( 'billing_postcode', null ),
+			'billing_address_1'                => WC_EBANX_Request::read( 'billing_address_1', null ),
+			'billing_address_2'                => WC_EBANX_Request::read( 'billing_address_2', null ),
+			'billing_city'                     => WC_EBANX_Request::read( 'billing_city', null ),
+			'billing_state'                    => WC_EBANX_Request::read( 'billing_state', null ),
+			'billing_company'                  => WC_EBANX_Request::read( 'billing_company', null ),
 		);
 
 		if ( !empty(WC_EBANX_Request::has($this->id)) ) {

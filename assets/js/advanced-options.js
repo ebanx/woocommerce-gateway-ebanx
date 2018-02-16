@@ -8,8 +8,8 @@
   var countryPayments = {
     brazil: $('#woocommerce_ebanx-global_brazil_payment_methods'),
     chile: $('#woocommerce_ebanx-global_chile_payment_methods'),
-	colombia: $( '#woocommerce_ebanx-global_colombia_payment_methods' ),
-	peru: $( '#woocommerce_ebanx-global_peru_payment_methods' )
+		colombia: $( '#woocommerce_ebanx-global_colombia_payment_methods' ),
+		peru: $( '#woocommerce_ebanx-global_peru_payment_methods' )
   };
 
   var disableFields = function(jqElementList) {
