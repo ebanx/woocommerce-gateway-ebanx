@@ -209,13 +209,13 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway
 			'type'     => 'text',
 			'label'    => 'DNI' . self::REQUIRED_MARK,
 			'class' => array('ebanx_billing_colombia_document', 'form-row-wide'),
-			'default' => isset($dni) ? $dni : '',
+			'default' => isset( $dni ) ? $dni : '',
 		);
 		$ebanx_billing_peru_document = array(
 			'type'    => 'text',
 			'label'   => 'DNI' . self::REQUIRED_MARK,
 			'class'   => array( 'ebanx_billing_peru_document', 'form-row-wide' ),
-			'default' => isset( $dni_pe ) ? $dni_pe : ''
+			'default' => isset( $dni_pe ) ? $dni_pe : '',
 		);
 
 		if (!$disable_own_fields) {
@@ -504,7 +504,7 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway
 			'ebanx_billing_brazil_person_type' => WC_EBANX_Request::read( $this->names['ebanx_billing_brazil_person_type'], 'cpf' ),
 			'ebanx_billing_brazil_document'    => WC_EBANX_Request::read( $this->names['ebanx_billing_brazil_document'], null ),
 			'ebanx_billing_brazil_cnpj'        => WC_EBANX_Request::read( $this->names['ebanx_billing_brazil_cnpj'], null ),
-			'ebanx_billing_chile_document'     => WC_EBANX_Request::read( $this->names['ebanx_billing_chile_document'], null ) ,
+			'ebanx_billing_chile_document'     => WC_EBANX_Request::read( $this->names['ebanx_billing_chile_document'], null ),
 			'ebanx_billing_colombia_document'  => WC_EBANX_Request::read( $this->names['ebanx_billing_colombia_document'], null ),
 			'ebanx_billing_peru_document'      => WC_EBANX_Request::read( $this->names['ebanx_billing_peru_document'], null ),
 			'ebanx_billing_brazil_birth_date'  => '31/12/1969',
