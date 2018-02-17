@@ -533,6 +533,7 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway
 				'name'                  => $order->billing_first_name . ' ' . $order->billing_last_name,
 				'email'                 => $order->billing_email,
 				'phone_number'          => $order->billing_phone,
+				'customer_ip'           => WC_Geolocation::get_ip_address(),
 				'amount_total'          => $order->get_total(),
 				'order_number'          => $order->id,
 				'merchant_payment_code' => substr($order->id . '-' . md5(rand(123123, 9999999)), 0, 40),
