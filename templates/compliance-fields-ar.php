@@ -1,8 +1,9 @@
-
 <?php
 /**
- * Current order id
- *
+ * @package WooCommerce_EBANX
+ */
+
+/**
  * @var int
  */
 $order_id = get_query_var( 'order-pay' );
@@ -48,29 +49,29 @@ if ( $order_id ) {
 			<?php if ( isset( $field['type'] ) && 'hidden' === $field['type'] ) : ?>
 				<input
 					type="hidden"
-					name="<?php echo "{$id}[{$name}]"; ?>"
-					value="<?php echo isset( $field['value'] ) ? $field['value'] : null; ?>"
+					name="<?= esc_html( "{$id}[{$name}]" ); ?>"
+					value="<?= isset( $field['value'] ) ? esc_html( $field['value'] ) : null; ?>"
 					class="input-text"
 				/>
 			<?php else : ?>
 				<div class="ebanx-form-row ebanx-form-row-wide">
-					<label for="<?php echo "{$id}[{$name}]"; ?>"><?php echo $field['label']; ?></label>
+					<label for="<?= esc_html("{$id}[{$name}]"); ?>"><?= esc_html( $field['label'] ); ?></label>
 					<input
-						type="<?php echo isset( $field['type'] ) ? $field['type'] : 'text'; ?>"
-						name="<?php echo "{$id}[{$name}]"; ?>"
-						id="<?php echo "{$id}[{$name}]"; ?>"
-						value="<?php echo isset( $field['value'] ) ? $field['value'] : null; ?>"
+						type="<?= isset( $field['type'] ) ? esc_html( $field['type'] ) : 'text'; ?>"
+						name="<?= esc_html( "{$id}[{$name}]" ); ?>"
+						id="<?= esc_html( "{$id}[{$name}]" ); ?>"
+						value="<?= isset( $field['value'] ) ? esc_html( $field['value'] ) : null; ?>"
 						class="input-text"
 					/>
 				</div>
 			<?php endif ?>
 		<?php endforeach ?>
 		<div class="ebanx-form-row ebanx-form-row-wide">
-			<label for="<?php echo "{$id}[billing_state]"; ?>"><?php _e( 'State / County', 'woocommerce-gateway-ebanx' ); ?></label>
-			<select name="<?php echo "{$id}[billing_state]"; ?>" id="<?php echo "{$id}[billing_state]"; ?>" class="ebanx-select-field">
+			<label for="<?= esc_html( "{$id}[billing_state]" ); ?>"><?php _e( 'State / County', 'woocommerce-gateway-ebanx' ); ?></label>
+			<select name="<?= esc_html( "{$id}[billing_state]" ); ?>" id="<?= esc_html( "{$id}[billing_state]" ); ?>" class="ebanx-select-field">
 				<option value="" selected>Select...</option>
 				<?php foreach ( $states as $abbr => $name ) : ?>
-					<option value="<?php echo $abbr; ?>"><?php echo $name; ?></option>
+					<option value="<?= esc_html( $abbr ); ?>"><?= esc_html( $name ); ?></option>
 				<?php endforeach; ?>
 			</select>
 		</div>
