@@ -3,9 +3,14 @@ $order_id = get_query_var( 'order-pay' );
 
 if ( $order_id ) {
 	$order   = wc_get_order( $order_id );
+	$document = $order ? get_user_meta( $order->get_user_id(), '_ebanx_document', true ) : false;
 	$address = $order->get_address();
 
 		$fields = array(
+			'ebanx_billing_peru_document' => array(
+				'label' => 'DNI',
+				'value' => $document,
+			),
 			'billing_postcode' => array(
 				'label' => 'Postcode / ZIP',
 				'value' => $address['postcode']

@@ -474,10 +474,16 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway
 				'placeholder' => __('eg: billing_chile_document', 'woocommerce-gateway-ebanx')
 			),
 			'checkout_manager_colombia_document' => array(
-				'title' => __('DNI', 'woocommerce-gateway-ebanx'),
+				'title' => __( 'DNI Colombia', 'woocommerce-gateway-ebanx' ),
 				'type' => 'text',
 				'class' => 'ebanx-advanced-option ebanx-checkout-manager-field ebanx-colombia-document',
-				'placeholder' => __('eg: billing_colombia_document', 'woocommerce-gateway-ebanx')
+				'placeholder' => __( 'eg: billing_colombia_document', 'woocommerce-gateway-ebanx' ),
+			),
+			'checkout_manager_peru_document' => array(
+				'title' => __( 'DNI Peru', 'woocommerce-gateway-ebanx' ),
+				'type' => 'text',
+				'class' => 'ebanx-advanced-option ebanx-checkout-manager-field ebanx-peru-document',
+				'placeholder' => __( 'eg: billing_peru_document', 'woocommerce-gateway-ebanx' ),
 			),
 			'checkout_manager_argentina_document_type' => array(
 				'title' => __('Document Type Selector', 'woocommerce-gateway-ebanx'),
