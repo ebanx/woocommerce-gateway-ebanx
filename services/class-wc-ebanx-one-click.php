@@ -15,6 +15,11 @@ class WC_EBANX_One_Click {
 	 */
 	private $user_id;
 	private $gateway;
+	/**
+	 * User country
+	 *
+	 * @var string
+	 */
 	private $user_country;
 
 	protected $instalment_rates = array();
@@ -25,7 +30,7 @@ class WC_EBANX_One_Click {
 	public function __construct() {
 		$this->user_id      = get_current_user_id();
 		$this->user_country = trim( strtolower( get_user_meta( $this->user_id, 'billing_country', true ) ) );
-		$this->gateway      = $this->user_country ? ( $this->user_country === WC_EBANX_Constants::COUNTRY_BRAZIL ? new WC_EBANX_Credit_Card_BR_Gateway() : new WC_EBANX_Credit_Card_MX_Gateway() ) : false;
+		$this->gateway      = $this->user_country ? ( WC_EBANX_Constants::COUNTRY_BRAZIL === $this->user_country ? new WC_EBANX_Credit_Card_BR_Gateway() : new WC_EBANX_Credit_Card_MX_Gateway() ) : false;
 
 		if ( !$this->gateway
 			|| $this->gateway->get_setting_or_default('one_click', 'no') !== 'yes'
@@ -291,9 +296,9 @@ class WC_EBANX_One_Click {
 	public function should_show_button() {
 		return $this->cards
 			&& ( ! empty( get_user_meta( $this->user_id, '_ebanx_billing_brazil_document', true ) )
-			|| ! empty(get_user_meta( $this->user_id, '_ebanx_billing_colombia_document', true ))
+			|| ! empty( get_user_meta( $this->user_id, '_ebanx_billing_colombia_document', true ) )
 			|| ! empty( get_user_meta( $this->user_id, '_ebanx_billing_argentina_document', true ) )
-			|| $this->user_country === WC_EBANX_Constants::COUNTRY_MEXICO );
+			|| WC_EBANX_Constants::COUNTRY_MEXICO === $this->user_country );
 	}
 
 	/**

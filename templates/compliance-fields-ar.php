@@ -1,5 +1,5 @@
-<?php
 
+<?php
 /**
  * Current order id
  *
@@ -48,29 +48,29 @@ if ( $order_id ) {
 			<?php if ( isset( $field['type'] ) && 'hidden' === $field['type'] ) : ?>
 				<input
 					type="hidden"
-					name="<?php echo __("{$id}[{$name}]", 'woocommerce-gateway-ebanx'); ?>"
-					value="<?php echo isset( $field['value'] ) ? __($field['value'], 'woocommerce-gateway-ebanx') : null; ?>"
+					name="<?php echo "{$id}[{$name}]"; ?>"
+					value="<?php echo isset( $field['value'] ) ? $field['value'] : null; ?>"
 					class="input-text"
 				/>
 			<?php else : ?>
 				<div class="ebanx-form-row ebanx-form-row-wide">
-					<label for="<?php echo __("{$id}[{$name}]", 'woocommerce-gateway-ebanx'); ?>"><?php echo __($field['label'], 'woocommerce-gateway-ebanx'); ?></label>
+					<label for="<?php echo "{$id}[{$name}]"; ?>"><?php echo $field['label']; ?></label>
 					<input
-						type="<?php echo isset( $field['type'] ) ? __($field['type'], 'woocommerce-gateway-ebanx') : 'text'; ?>"
-						name="<?php echo __("{$id}[{$name}]", 'woocommerce-gateway-ebanx'); ?>"
-						id="<?php echo __("{$id}[{$name}]", 'woocommerce-gateway-ebanx'); ?>"
-						value="<?php echo isset( $field['value'] ) ? __($field['value'], 'woocommerce-gateway-ebanx') : null; ?>"
+						type="<?php echo isset( $field['type'] ) ? $field['type'] : 'text'; ?>"
+						name="<?php echo "{$id}[{$name}]"; ?>"
+						id="<?php echo "{$id}[{$name}]"; ?>"
+						value="<?php echo isset( $field['value'] ) ? $field['value'] : null; ?>"
 						class="input-text"
 					/>
 				</div>
 			<?php endif ?>
 		<?php endforeach ?>
 		<div class="ebanx-form-row ebanx-form-row-wide">
-			<label for="<?php echo __("{$id}[billing_state]", 'woocommerce-gateway-ebanx'); ?>"><?php _e( 'State / County', 'woocommerce-gateway-ebanx' ); ?></label>
-			<select name="<?php echo __("{$id}[billing_state]", 'woocommerce-gateway-ebanx'); ?>" id="<?php echo __("{$id}[billing_state]", 'woocommerce-gateway-ebanx') ?>" class="ebanx-select-field">
+			<label for="<?php echo "{$id}[billing_state]"; ?>"><?php _e( 'State / County', 'woocommerce-gateway-ebanx' ); ?></label>
+			<select name="<?php echo "{$id}[billing_state]"; ?>" id="<?php echo "{$id}[billing_state]"; ?>" class="ebanx-select-field">
 				<option value="" selected>Select...</option>
 				<?php foreach ( $states as $abbr => $name ) : ?>
-					<option value="<?php echo __($abbr, 'woocommerce-gateway-ebanx'); ?>"><?php echo __($name, 'woocommerce-gateway-ebanx'); ?></option>
+					<option value="<?php echo $abbr; ?>"><?php echo $name; ?></option>
 				<?php endforeach; ?>
 			</select>
 		</div>
