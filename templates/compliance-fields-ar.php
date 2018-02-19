@@ -1,9 +1,5 @@
 <?php
 /**
- * @package WooCommerce_EBANX
- */
-
-/**
  * @var int
  */
 $order_id = get_query_var( 'order-pay' );
@@ -67,7 +63,7 @@ if ( $order_id ) {
 			<?php endif ?>
 		<?php endforeach ?>
 		<div class="ebanx-form-row ebanx-form-row-wide">
-			<label for="<?php echo esc_html( "{$id}[billing_state]" ); ?>"><?php _e( 'State / County', 'woocommerce-gateway-ebanx' ); ?></label>
+			<label for="<?php echo esc_html( "{$id}[billing_state]" ); ?>"><?php esc_html_e( 'State / County', 'woocommerce-gateway-ebanx' ); ?></label>
 			<select name="<?php echo esc_html( "{$id}[billing_state]" ); ?>" id="<?php echo esc_html( "{$id}[billing_state]" ); ?>" class="ebanx-select-field">
 				<option value="" selected>Select...</option>
 				<?php foreach ( $states as $abbr => $name ) : ?>
