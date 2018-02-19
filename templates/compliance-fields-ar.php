@@ -49,29 +49,29 @@ if ( $order_id ) {
 			<?php if ( isset( $field['type'] ) && 'hidden' === $field['type'] ) : ?>
 				<input
 					type="hidden"
-					name="<?= esc_html( "{$id}[{$name}]" ); ?>"
-					value="<?= isset( $field['value'] ) ? esc_html( $field['value'] ) : null; ?>"
+					name="<?php echo esc_html( "{$id}[{$name}]" ); ?>"
+					value="<?php echo isset( $field['value'] ) ? esc_html( $field['value'] ) : null; ?>"
 					class="input-text"
 				/>
 			<?php else : ?>
 				<div class="ebanx-form-row ebanx-form-row-wide">
-					<label for="<?= esc_html("{$id}[{$name}]"); ?>"><?= esc_html( $field['label'] ); ?></label>
+					<label for="<?php echo esc_html( "{$id}[{$name}]" ); ?>"><?php echo esc_html( $field['label'] ); ?></label>
 					<input
-						type="<?= isset( $field['type'] ) ? esc_html( $field['type'] ) : 'text'; ?>"
-						name="<?= esc_html( "{$id}[{$name}]" ); ?>"
-						id="<?= esc_html( "{$id}[{$name}]" ); ?>"
-						value="<?= isset( $field['value'] ) ? esc_html( $field['value'] ) : null; ?>"
+						type="<?php echo isset( $field['type'] ) ? esc_html( $field['type'] ) : 'text'; ?>"
+						name="<?php echo esc_html( "{$id}[{$name}]" ); ?>"
+						id="<?php echo esc_html( "{$id}[{$name}]" ); ?>"
+						value="<?php echo isset( $field['value'] ) ? esc_html( $field['value'] ) : null; ?>"
 						class="input-text"
 					/>
 				</div>
 			<?php endif ?>
 		<?php endforeach ?>
 		<div class="ebanx-form-row ebanx-form-row-wide">
-			<label for="<?= esc_html( "{$id}[billing_state]" ); ?>"><?php _e( 'State / County', 'woocommerce-gateway-ebanx' ); ?></label>
-			<select name="<?= esc_html( "{$id}[billing_state]" ); ?>" id="<?= esc_html( "{$id}[billing_state]" ); ?>" class="ebanx-select-field">
+			<label for="<?php echo esc_html( "{$id}[billing_state]" ); ?>"><?php _e( 'State / County', 'woocommerce-gateway-ebanx' ); ?></label>
+			<select name="<?php echo esc_html( "{$id}[billing_state]" ); ?>" id="<?php echo esc_html( "{$id}[billing_state]" ); ?>" class="ebanx-select-field">
 				<option value="" selected>Select...</option>
 				<?php foreach ( $states as $abbr => $name ) : ?>
-					<option value="<?= esc_html( $abbr ); ?>"><?= esc_html( $name ); ?></option>
+					<option value="<?php echo esc_html( $abbr ); ?>"><?php echo esc_html( $name ); ?></option>
 				<?php endforeach; ?>
 			</select>
 		</div>

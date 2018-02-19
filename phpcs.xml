@@ -38,6 +38,7 @@
     </rule>
     <rule ref="Generic.Commenting">
         <exclude-pattern>tests/</exclude-pattern>
+        <exclude name="Generic.Commenting.DocCommentSniff" />
     </rule>
     <rule ref="Squiz.Commenting">
         <exclude name="Squiz.Commenting.LongConditionClosingComment" />
