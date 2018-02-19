@@ -486,16 +486,16 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway
 				'placeholder' => __( 'eg: billing_peru_document', 'woocommerce-gateway-ebanx' ),
 			),
 			'checkout_manager_argentina_document_type' => array(
-				'title' => __('Document Type Selector', 'woocommerce-gateway-ebanx'),
+				'title' => __( 'Document Type Selector', 'woocommerce-gateway-ebanx' ),
 				'type' => 'text',
 				'class' => 'ebanx-advanced-option ebanx-checkout-manager-field ebanx-argentina-document-type',
-				'placeholder' => __('eg: billing_argentina_document', 'woocommerce-gateway-ebanx')
+				'placeholder' => __( 'eg: billing_argentina_document', 'woocommerce-gateway-ebanx' ),
 			),
 			'checkout_manager_argentina_document' => array(
-				'title' => __('Argentinian document', 'woocommerce-gateway-ebanx'),
+				'title' => __( 'Argentinian document', 'woocommerce-gateway-ebanx' ),
 				'type' => 'text',
 				'class' => 'ebanx-advanced-option ebanx-checkout-manager-field ebanx-argentina-document',
-				'placeholder' => __('eg: billing_argentina_document', 'woocommerce-gateway-ebanx')
+				'placeholder' => __( 'eg: billing_argentina_document', 'woocommerce-gateway-ebanx' ),
 			),
 		));
 
