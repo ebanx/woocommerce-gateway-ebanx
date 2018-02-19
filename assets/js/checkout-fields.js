@@ -37,6 +37,9 @@ jQuery (function ($) {
       case 'pe':
         filter = 'peru_';
         break;
+			case 'ar':
+				filter = 'argentina_';
+				break;
       default:
         // Filter is some other country, let's give it an empty set
         return $([]);

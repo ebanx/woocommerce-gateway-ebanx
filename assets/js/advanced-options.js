@@ -8,6 +8,7 @@
   var countryPayments = {
     brazil: $('#woocommerce_ebanx-global_brazil_payment_methods'),
     chile: $('#woocommerce_ebanx-global_chile_payment_methods'),
+		argentina: $( '#woocommerce_ebanx-global_argentina_payment_methods' ),
 		colombia: $( '#woocommerce_ebanx-global_colombia_payment_methods' ),
 		peru: $( '#woocommerce_ebanx-global_peru_payment_methods' )
   };
@@ -25,6 +26,7 @@
     var brazilVal = countryPayments.brazil.val();
     var chileVal = countryPayments.chile.val();
     var colombiaVal = countryPayments.colombia.val();
+		var argentinaVal = countryPayments.argentina.val();
 		var peruVal = countryPayments.peru.val();
     disableFields(fields);
     disableFields(fieldBrazilTaxes);
@@ -33,7 +35,7 @@
       enableFields(fieldBrazilTaxes);
     }
 
-		if ( fieldsToggler.length === 1 && fieldsToggler[0].checked ) {
+		if (fieldsToggler.length === 1 && fieldsToggler[0].checked) {
 
       enableFields(fields.filter('.always-visible'));
       if (brazilVal != null && brazilVal.length > 0 && modes != null) {
@@ -55,7 +57,12 @@
         enableFields(fields.filter('.ebanx-colombia-document'));
       }
 
-			if ( peruVal != null && peruVal.length > 0 ) {
+			if ( argentinaVal != null && argentinaVal.length > 0 ) {
+				enableFields( fields.filter( '.ebanx-argentina-document' ) );
+				enableFields( fields.filter( '.ebanx-argentina-document-type' ) );
+			}
+
+			if (peruVal != null && peruVal.length > 0) {
 				enableFields( fields.filter( '.ebanx-peru-document' ) );
 			}
 

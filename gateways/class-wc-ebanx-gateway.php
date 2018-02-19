@@ -174,6 +174,8 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway
 
 		$dni_pe = get_user_meta( $this->user_id, '_ebanx_billing_peru_document', true );
 
+		$cdi = get_user_meta( $this->user_id, '_ebanx_billing_argentina_document', true );
+
 		$ebanx_billing_brazil_person_type = array(
 			'type' => 'select',
 			'label' => __('Select an option', 'woocommerce-gateway-ebanx'),
@@ -183,6 +185,18 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway
 				'cpf' => __('CPF - Individuals', 'woocommerce-gateway-ebanx'),
 				'cnpj' => __('CNPJ - Companies', 'woocommerce-gateway-ebanx')
 			)
+		);
+
+		$ebanx_billing_argentina_document_type = array(
+			'type' => 'select',
+			'label' => __( 'Select a document type', 'woocommerce-gateway-ebanx' ),
+			'default' => 'ARG_CUIT',
+			'class' => array( 'ebanx_billing_argentina_selector', 'ebanx-select-field' ),
+			'options' => array(
+				'ARG_CUIT' => __( 'CUIT', 'woocommerce-gateway-ebanx' ),
+				'ARG_CUIL' => __( 'CUIL', 'woocommerce-gateway-ebanx' ),
+				'ARG_CDI' => __( 'CDI', 'woocommerce-gateway-ebanx' ),
+			),
 		);
 
 		$ebanx_billing_brazil_document = array(
@@ -217,6 +231,12 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway
 			'class'   => array( 'ebanx_billing_peru_document', 'form-row-wide' ),
 			'default' => isset( $dni_pe ) ? $dni_pe : '',
 		);
+		$ebanx_billing_argentina_document = array(
+			'type'     => 'text',
+			'label'    => __( 'Document', 'woocommerce-gateway-ebanx' ) . self::REQUIRED_MARK,
+			'class' => array( 'ebanx_billing_argentina_document', 'form-row-wide' ),
+			'default' => isset( $cdi ) ? $cdi : '',
+		);
 
 		if (!$disable_own_fields) {
 			// CPF and CNPJ are enabled
@@ -239,6 +259,10 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway
 
 			// For Colombia
 			$fields['billing']['ebanx_billing_colombia_document'] = $ebanx_billing_colombia_document;
+
+			// For Argentina.
+			$fields['billing']['ebanx_billing_argentina_document_type'] = $ebanx_billing_argentina_document_type;
+			$fields['billing']['ebanx_billing_argentina_document'] = $ebanx_billing_argentina_document;
 
 			// For Peru.
 			$fields['billing']['ebanx_billing_peru_document'] = $ebanx_billing_peru_document;
@@ -269,6 +293,10 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway
 
 			// Colombia Fields
 			'ebanx_billing_colombia_document' => $this->get_checkout_manager_settings_or_default('checkout_manager_colombia_document', 'ebanx_billing_colombia_document'),
+
+			// Argentina Fields.
+			'ebanx_billing_argentina_document_type' => $this->get_checkout_manager_settings_or_default( 'checkout_manager_argentina_document_type', 'ebanx_billing_argentina_document_type' ),
+			'ebanx_billing_argentina_document' => $this->get_checkout_manager_settings_or_default( 'checkout_manager_argentina_document', 'ebanx_billing_argentina_document' ),
 
 			// Peru Fields.
 			'ebanx_billing_peru_document'      => $this->get_checkout_manager_settings_or_default( 'checkout_manager_peru_document', 'ebanx_billing_peru_document' ),
@@ -507,6 +535,8 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway
 			'ebanx_billing_chile_document'     => WC_EBANX_Request::read( $this->names['ebanx_billing_chile_document'], null ),
 			'ebanx_billing_colombia_document'  => WC_EBANX_Request::read( $this->names['ebanx_billing_colombia_document'], null ),
 			'ebanx_billing_peru_document'      => WC_EBANX_Request::read( $this->names['ebanx_billing_peru_document'], null ),
+			'ebanx_billing_argentina_document_type' => WC_EBANX_Request::read( $this->names['ebanx_billing_argentina_document_type'], 'ARG_CUIT' ),
+			'ebanx_billing_argentina_document' => WC_EBANX_Request::read( $this->names['ebanx_billing_argentina_document'], null ),
 			'ebanx_billing_brazil_birth_date'  => '31/12/1969',
 			'ebanx_billing_chile_birth_date'   => '31/12/1969',
 			'billing_postcode'                 => WC_EBANX_Request::read( 'billing_postcode', null ),
@@ -633,6 +663,15 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway
 			WC_EBANX_Request::set('ebanx_billing_document', $payload['ebanx_billing_colombia_document']);
 		}
 
+		if ( $this->getTransactionAddress( 'country' ) === WC_EBANX_Constants::COUNTRY_ARGENTINA ) {
+			if ( empty( $payload['ebanx_billing_argentina_document'] ) ) {
+				throw new Exception( 'BP-DR-22' );
+			}
+
+			WC_EBANX_Request::set( 'ebanx_billing_document', $payload['ebanx_billing_argentina_document'] );
+			WC_EBANX_Request::set( 'ebanx_billing_document_type', $payload['ebanx_billing_argentina_document_type'] );
+		}
+
 		if ( $this->getTransactionAddress( 'country' ) === WC_EBANX_Constants::COUNTRY_PERU ) {
 			if ( empty( $payload['ebanx_billing_peru_document'] ) ) {
 				throw new Exception( 'BP-DR-22' );
@@ -652,46 +691,50 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway
 		$street_number = empty($addresses['houseNumber']) ? 'S/N' : trim($addresses['houseNumber'] . ' ' . $addresses['additionToAddress']);
 		$street_name = $addresses['streetName'];
 
-		$newData = array();
-		$newData['payment'] = array();
+		$new_data = array();
+		$new_data['payment'] = array();
 
-		$newData['payment']['person_type'] = $person_type;
+		$new_data['payment']['person_type'] = $person_type;
 
 		if (!empty(WC_EBANX_Request::read('ebanx_billing_document', null))) {
-			$newData['payment']['document'] = WC_EBANX_Request::read('ebanx_billing_document', null);
+			$new_data['payment']['document'] = WC_EBANX_Request::read( 'ebanx_billing_document', null );
+		}
+
+		if ( ! empty( WC_EBANX_Request::read( 'ebanx_billing_argentina_document_type', null ) ) ) {
+			$new_data['payment']['document_type'] = WC_EBANX_Request::read( 'ebanx_billing_argentina_document_type', null );
 		}
 
 		if (!empty($payload['billing_postcode'])) {
-			$newData['payment']['zipcode'] = $payload['billing_postcode'];
+			$new_data['payment']['zipcode'] = $payload['billing_postcode'];
 		}
 
 		if (!empty($payload['billing_address_1'])) {
-			$newData['payment']['address'] = $street_name;
+			$new_data['payment']['address'] = $street_name;
 		}
 
 		if (!empty($street_number)) {
-			$newData['payment']['street_number'] = $street_number;
+			$new_data['payment']['street_number'] = $street_number;
 		}
 
 		if (!empty($payload['billing_city'])) {
-			$newData['payment']['city'] = $payload['billing_city'];
+			$new_data['payment']['city'] = $payload['billing_city'];
 		}
 
 		if (!empty($payload['billing_state'])) {
-			$newData['payment']['state'] = $payload['billing_state'];
+			$new_data['payment']['state'] = $payload['billing_state'];
 		}
 
 		if ($this->getTransactionAddress('country') === WC_EBANX_Constants::COUNTRY_BRAZIL) {
 
 			if ($person_type == 'business') {
-				$newData['payment']['responsible'] = array(
+				$new_data['payment']['responsible'] = array(
 					"name" => $data['payment']['name']
 				);
-				$newData['payment']['name'] = $payload['billing_company'];
+				$new_data['payment']['name'] = $payload['billing_company'];
 			}
 		}
 
-		$data['payment'] = array_merge($data['payment'], $newData['payment']);
+		$data['payment'] = array_merge( $data['payment'], $new_data['payment'] );
 
 		return $data;
 	}
@@ -931,6 +974,20 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway
 					$document = sanitize_text_field( WC_EBANX_Request::read( 'ebanx_billing_peru_document' ) );
 
 					update_user_meta( $this->user_id, '_ebanx_billing_peru_document', $document );
+				}
+			}
+
+			if ( $this->getTransactionAddress( 'country' ) === WC_EBANX_Constants::COUNTRY_ARGENTINA ) {
+				if ( WC_EBANX_Request::has( 'ebanx_billing_argentina_document' ) ) {
+					$document = sanitize_text_field( WC_EBANX_Request::read( 'ebanx_billing_argentina_document' ) );
+
+					update_user_meta( $this->user_id, '_ebanx_billing_argentina_document', $document );
+				}
+
+				if ( WC_EBANX_Request::has( 'ebanx_billing_argentina_document_type' ) ) {
+					$document_type = sanitize_text_field( WC_EBANX_Request::read( $this->names['ebanx_billing_argentina_document_type'] ) );
+
+					update_user_meta( $this->user_id, '_ebanx_billing_argentina_document_type', $document_type );
 				}
 			}
 

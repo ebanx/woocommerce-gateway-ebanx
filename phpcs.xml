@@ -38,10 +38,12 @@
     </rule>
     <rule ref="Generic.Commenting">
         <exclude-pattern>tests/</exclude-pattern>
+        <exclude name="Generic.Commenting.DocComment.MissingShort" />
     </rule>
     <rule ref="Squiz.Commenting">
         <exclude name="Squiz.Commenting.LongConditionClosingComment" />
         <exclude name="Squiz.Commenting.PostStatementComment" />
+        <exclude name="Squiz.Commenting.FileComment" />
     </rule>
     <rule ref="PEAR.Functions.FunctionCallSignature.EmptyLine" />
 </ruleset>

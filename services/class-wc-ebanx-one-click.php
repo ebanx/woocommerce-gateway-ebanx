@@ -8,8 +8,17 @@ class WC_EBANX_One_Click {
 	const CREATE_ORDER_ACTION = 'ebanx_create_order';
 
 	private $cards;
-	private $userId;
+
+	/**
+	 * @var int
+	 */
+	private $user_id;
 	private $gateway;
+
+	/**
+	 * @var string
+	 */
+	private $user_country;
 
 	protected $instalment_rates = array();
 
@@ -17,9 +26,9 @@ class WC_EBANX_One_Click {
 	 * Constructor
 	 */
 	public function __construct() {
-		$this->userId  = get_current_user_id();
-		$this->userCountry = trim(strtolower(get_user_meta( $this->userId, 'billing_country', true )));
-		$this->gateway = $this->userCountry ? ($this->userCountry === WC_EBANX_Constants::COUNTRY_BRAZIL ? new WC_EBANX_Credit_Card_BR_Gateway() : new WC_EBANX_Credit_Card_MX_Gateway()) : false;
+		$this->user_id      = get_current_user_id();
+		$this->user_country = trim( strtolower( get_user_meta( $this->user_id, 'billing_country', true ) ) );
+		$this->gateway      = $this->user_country ? ( WC_EBANX_Constants::COUNTRY_BRAZIL === $this->user_country ? new WC_EBANX_Credit_Card_BR_Gateway() : new WC_EBANX_Credit_Card_MX_Gateway() ) : false;
 
 		if ( !$this->gateway
 			|| $this->gateway->get_setting_or_default('one_click', 'no') !== 'yes'
@@ -34,7 +43,7 @@ class WC_EBANX_One_Click {
 		add_action( 'woocommerce_after_add_to_cart_form', array( $this, 'print_button' ) );
 		add_action( 'wp_loaded', array( $this, 'one_click_handler' ), 99 );
 
-		$cards = get_user_meta( $this->userId, '_ebanx_credit_card_token', true );
+		$cards = get_user_meta( $this->user_id, '_ebanx_credit_card_token', true );
 
 		$this->cards = is_array( $cards ) ? array_filter( $cards ) : array();
 
@@ -87,22 +96,22 @@ class WC_EBANX_One_Click {
 		try {
 			$order = wc_create_order(array(
 				'status' => 'pending',
-				'customer_id' => $this->userId
+				'customer_id' => $this->user_id,
 			));
 
 			$product_id = WC_EBANX_Request::read('ebanx-product-id');
 			$user = array(
-				'email' => get_user_meta($this->userId, 'billing_email', true),
-				'country' => get_user_meta($this->userId, 'billing_country', true),
-				'first_name' => get_user_meta($this->userId, 'billing_first_name', true),
-				'last_name' => get_user_meta($this->userId, 'billing_last_name', true),
-				'company' => get_user_meta($this->userId, 'billing_company', true),
-				'address_1' => get_user_meta($this->userId, 'billing_address_1', true),
-				'address_2' => get_user_meta($this->userId, 'billing_address_2', true),
-				'city' => get_user_meta($this->userId, 'billing_city', true),
-				'state' => get_user_meta($this->userId, 'billing_state', true),
-				'postcode' => get_user_meta($this->userId, 'billing_postcode', true),
-				'phone' => get_user_meta($this->userId, 'billing_phone', true)
+				'email' => get_user_meta( $this->user_id, 'billing_email', true ),
+				'country' => get_user_meta( $this->user_id, 'billing_country', true ),
+				'first_name' => get_user_meta( $this->user_id, 'billing_first_name', true ),
+				'last_name' => get_user_meta( $this->user_id, 'billing_last_name', true ),
+				'company' => get_user_meta( $this->user_id, 'billing_company', true ),
+				'address_1' => get_user_meta( $this->user_id, 'billing_address_1', true ),
+				'address_2' => get_user_meta( $this->user_id, 'billing_address_2', true ),
+				'city' => get_user_meta( $this->user_id, 'billing_city', true ),
+				'state' => get_user_meta( $this->user_id, 'billing_state', true ),
+				'postcode' => get_user_meta( $this->user_id, 'billing_postcode', true ),
+				'phone' => get_user_meta( $this->user_id, 'billing_phone', true ),
 			);
 
 			$product_to_add = get_product( $product_id );
@@ -170,7 +179,7 @@ class WC_EBANX_One_Click {
 		WC()->cart->empty_cart( true );
 
 		// update user meta with saved persistent
-		$saved_cart = get_user_meta( $this->userId, '_ebanx_persistent_cart', true );
+		$saved_cart = get_user_meta( $this->user_id, '_ebanx_persistent_cart', true );
 
 		// then reload cart
 		WC()->session->set( 'cart', $saved_cart );
@@ -185,27 +194,27 @@ class WC_EBANX_One_Click {
 	public function get_user_billing_address() {
 		// Formatted Addresses
 		$billing = array(
-			'first_name' => get_user_meta( $this->userId, 'billing_first_name', true ),
-			'last_name'  => get_user_meta( $this->userId, 'billing_last_name', true ),
-			'company'    => get_user_meta( $this->userId, 'billing_company', true ),
-			'address_1'  => get_user_meta( $this->userId, 'billing_address_1', true ),
-			'address_2'  => get_user_meta( $this->userId, 'billing_address_2', true ),
-			'city'       => get_user_meta( $this->userId, 'billing_city', true ),
-			'state'      => get_user_meta( $this->userId, 'billing_state', true ),
-			'postcode'   => get_user_meta( $this->userId, 'billing_postcode', true ),
-			'country'    => get_user_meta( $this->userId, 'billing_country', true ),
-			'email'      => get_user_meta( $this->userId, 'billing_email', true ),
-			'phone'      => get_user_meta( $this->userId, 'billing_phone', true )
+			'first_name' => get_user_meta( $this->user_id, 'billing_first_name', true ),
+			'last_name'  => get_user_meta( $this->user_id, 'billing_last_name', true ),
+			'company'    => get_user_meta( $this->user_id, 'billing_company', true ),
+			'address_1'  => get_user_meta( $this->user_id, 'billing_address_1', true ),
+			'address_2'  => get_user_meta( $this->user_id, 'billing_address_2', true ),
+			'city'       => get_user_meta( $this->user_id, 'billing_city', true ),
+			'state'      => get_user_meta( $this->user_id, 'billing_state', true ),
+			'postcode'   => get_user_meta( $this->user_id, 'billing_postcode', true ),
+			'country'    => get_user_meta( $this->user_id, 'billing_country', true ),
+			'email'      => get_user_meta( $this->user_id, 'billing_email', true ),
+			'phone'      => get_user_meta( $this->user_id, 'billing_phone', true ),
 		);
 
 		if ( ! empty( $billing['country'] ) ) {
-			update_user_meta($this->userId, 'billing_country', $billing['country'] );
+			update_user_meta( $this->user_id, 'billing_country', $billing['country'] );
 		}
 		if ( ! empty( $billing['state'] ) ) {
-			update_user_meta($this->userId, 'billing_state', $billing['state'] );
+			update_user_meta( $this->user_id, 'billing_state', $billing['state'] );
 		}
 		if ( ! empty( $billing['postcode'] ) ) {
-			update_user_meta($this->userId, 'billing_postcode', $billing['postcode'] );
+			update_user_meta( $this->user_id, 'billing_postcode', $billing['postcode'] );
 		}
 
 		return apply_filters( 'ebanx_customer_billing', array_filter( $billing ) );
@@ -237,7 +246,7 @@ class WC_EBANX_One_Click {
 	 * @return boolean If the user has all required data, return true
 	 */
 	protected function customer_has_ebanx_required_data() {
-		$card = current( array_filter( (array) array_filter( get_user_meta( $this->userId, '_ebanx_credit_card_token', true ) ), function ( $card ) {
+		$card = current( array_filter( (array) array_filter( get_user_meta( $this->user_id, '_ebanx_credit_card_token', true ) ), function ( $card ) {
 			return $card->token == WC_EBANX_Request::read('ebanx-one-click-token');
 		} ) );
 
@@ -251,9 +260,11 @@ class WC_EBANX_One_Click {
 		WC_EBANX_Request::set('ebanx-credit-card-installments', WC_EBANX_Request::read('ebanx-credit-card-installments', 1));
 		WC_EBANX_Request::set('ebanx_billing_instalments', WC_EBANX_Request::read('ebanx-credit-card-installments'));
 
-		WC_EBANX_Request::set($names['ebanx_billing_brazil_document'], get_user_meta( $this->userId, '_ebanx_billing_brazil_document', true ));
+		WC_EBANX_Request::set( $names['ebanx_billing_brazil_document'], get_user_meta( $this->user_id, '_ebanx_billing_brazil_document', true ) );
 
-		WC_EBANX_Request::set($names['ebanx_billing_colombia_document'], get_user_meta( $this->userId, '_ebanx_billing_colombia_document', true ));
+		WC_EBANX_Request::set( $names['ebanx_billing_colombia_document'], get_user_meta( $this->user_id, '_ebanx_billing_colombia_document', true ) );
+
+		WC_EBANX_Request::set( $names['ebanx_billing_argentina_document'], get_user_meta( $this->user_id, '_ebanx_billing_argentina_document', true ) );
 
 		WC_EBANX_Request::set('billing_postcode', $this->get_user_billing_address()['postcode']);
 		WC_EBANX_Request::set('billing_address_1', $this->get_user_billing_address()['address_1']);
@@ -264,9 +275,11 @@ class WC_EBANX_One_Click {
 			&& ! empty(WC_EBANX_Request::read('ebanx-credit-card-installments', null))
 			&& ! empty(WC_EBANX_Request::read('ebanx-one-click-cvv', null))
 			&& (WC_EBANX_Request::has($names['ebanx_billing_brazil_document'])
-			|| WC_EBANX_Request::has($names['ebanx_billing_colombia_document']))
+			|| WC_EBANX_Request::has( $names['ebanx_billing_colombia_document'] )
+			|| WC_EBANX_Request::has( $names['ebanx_billing_argentina_document'] ) )
 			&& (! empty(WC_EBANX_Request::read($names['ebanx_billing_brazil_document'], null))
-			|| !empty(WC_EBANX_Request::read($names['ebanx_billing_colombia_document'], null)));
+			|| ! empty( WC_EBANX_Request::read( $names['ebanx_billing_colombia_document'], null ) )
+			|| ! empty( WC_EBANX_Request::read( $names['ebanx_billing_argentina_document'], null ) ) );
 	}
 
 	/**
@@ -275,14 +288,15 @@ class WC_EBANX_One_Click {
 	 * @return boolean Returns if the customer has a minimal requirement
 	 */
 	public function customer_can() {
-		return !is_user_logged_in() || !get_user_meta( $this->userId, '_billing_email', true ) && !empty( $this->cards );
+		return ! is_user_logged_in() || ! get_user_meta( $this->user_id, '_billing_email', true ) && ! empty( $this->cards );
 	}
 
 	public function should_show_button() {
 		return $this->cards
-		       && (! empty(get_user_meta( $this->userId, '_ebanx_billing_brazil_document', true ))
-	           || ! empty(get_user_meta( $this->userId, '_ebanx_billing_colombia_document', true ))
-	           || $this->userCountry === WC_EBANX_Constants::COUNTRY_MEXICO);
+			&& ( ! empty( get_user_meta( $this->user_id, '_ebanx_billing_brazil_document', true ) )
+			|| ! empty( get_user_meta( $this->user_id, '_ebanx_billing_colombia_document', true ) )
+			|| ! empty( get_user_meta( $this->user_id, '_ebanx_billing_argentina_document', true ) )
+			|| WC_EBANX_Constants::COUNTRY_MEXICO === $this->user_country );
 	}
 
 	/**
@@ -291,7 +305,7 @@ class WC_EBANX_One_Click {
 	 * @return void
 	 */
 	public function print_button() {
-		if ( ! $this->userCountry ) {
+		if ( ! $this->user_country ) {
 			return;
 		}
 
@@ -308,6 +322,7 @@ class WC_EBANX_One_Click {
 			case 'es_CL':
 			case 'es_PE':
 			case 'es_MX':
+			case 'es_AR':
 				$messages = array(
 					'instalments' => 'Meses sin intereses'
 				);
