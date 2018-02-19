@@ -697,7 +697,7 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway
 		$new_data['payment']['person_type'] = $person_type;
 
 		if (!empty(WC_EBANX_Request::read('ebanx_billing_document', null))) {
-			$new_data['payment']['document'] = WC_EBANX_Request::read('ebanx_billing_document', null);
+			$new_data['payment']['document'] = WC_EBANX_Request::read( 'ebanx_billing_document', null );
 		}
 
 		if ( ! empty( WC_EBANX_Request::read( 'ebanx_billing_argentina_document_type', null ) ) ) {
@@ -734,7 +734,7 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway
 			}
 		}
 
-		$data['payment'] = array_merge($data['payment'], $new_data['payment']);
+		$data['payment'] = array_merge( $data['payment'], $new_data['payment'] );
 
 		return $data;
 	}
