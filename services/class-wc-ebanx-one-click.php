@@ -8,16 +8,14 @@ class WC_EBANX_One_Click {
 	const CREATE_ORDER_ACTION = 'ebanx_create_order';
 
 	private $cards;
+
 	/**
-	 * Current user id
-	 *
 	 * @var int
 	 */
 	private $user_id;
 	private $gateway;
+
 	/**
-	 * User country
-	 *
 	 * @var string
 	 */
 	private $user_country;
