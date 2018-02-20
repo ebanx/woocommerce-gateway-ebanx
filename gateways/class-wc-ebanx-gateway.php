@@ -355,6 +355,14 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway
 				true
 			);
 		}
+
+		if ( is_checkout() && $this->is_sandbox_mode ) {
+			wp_enqueue_style(
+				'woocommerce_ebanx_sandbox_style',
+				plugins_url('assets/css/sandbox.css', WC_EBANX::DIR)
+			);
+		}
+
 		if (
 			is_wc_endpoint_url( 'order-pay' ) ||
 			is_wc_endpoint_url( 'order-received' ) ||

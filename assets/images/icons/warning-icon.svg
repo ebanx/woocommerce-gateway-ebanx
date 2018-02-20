@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="32px" height="32px" viewBox="0 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 48.2 (47327) - http://www.bohemiancoding.com/sketch -->
+    <title>Group</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="EBANX-WooCommerce-Plugin-Sandbox-Disclaimer" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" transform="translate(-876.000000, -627.000000)">
+        <g id="Group" transform="translate(876.000000, 627.000000)">
+            <circle id="Oval-2-Copy-3" fill="#F3E39A" cx="16" cy="16" r="16"></circle>
+            <g id="Oval" transform="translate(7.000000, 7.000000)" fill="#D09119">
+                <path d="M9,18 C4.02943725,18 0,13.9705627 0,9 C0,4.02943725 4.02943725,0 9,0 C13.9705627,0 18,4.02943725 18,9 C18,13.9705627 13.9705627,18 9,18 Z M9,16 C12.8659932,16 16,12.8659932 16,9 C16,5.13400675 12.8659932,2 9,2 C5.13400675,2 2,5.13400675 2,9 C2,12.8659932 5.13400675,16 9,16 Z" fill-rule="nonzero"></path>
+                <path d="M8.4,10.2173913 L9.6,10.2173913 L9.90588235,7.24403927 L9.90588235,5 L8.08235294,5 L8.08235294,7.24403927 L8.4,10.2173913 Z M9,13 C9.55294118,13 10,12.5736325 10,12.0462833 C10,11.5189341 9.55294118,11.0925666 9,11.0925666 C8.44705882,11.0925666 8,11.5189341 8,12.0462833 C8,12.5736325 8.44705882,13 9,13 Z" id="!"></path>
+            </g>
+        </g>
+    </g>
+</svg>

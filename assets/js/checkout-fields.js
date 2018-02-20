@@ -112,6 +112,12 @@ jQuery (function ($) {
 
 	$( 'body' ).on( 'updated_checkout', function () {
 		var paymentMethods = $( '.wc_payment_methods.payment_methods.methods > li > input' );
+		var methods = $( '.wc_payment_methods.payment_methods.methods > li' );
+		var hue = methods.filter(function (index, li) {
+			return li.classList.contains('tef');
+		});
+		console.log(hue);
+
 		hideDocument( $( 'input[name=payment_method]:checked' ).val() );
 		paymentMethods.on( 'change', function( e ) { hideDocument( e.target.value ); } );
 	});
