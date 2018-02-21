@@ -354,7 +354,14 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway
 				WC_EBANX::get_plugin_version(),
 				true
 			);
-			wp_localize_script( 'woocommerce_ebanx_checkout_fields', 'wc_ebanx_checkout_params', array( 'is_sandbox' => $this->is_sandbox_mode ) );
+			$checkout_params = array(
+				'is_sandbox' => $this->is_sandbox_mode,
+				'sandbox_tag_messages' => array(
+					'pt-br' => 'EM TESTE',
+					'es' => 'EN PRUEBA',
+				),
+			);
+			wp_localize_script( 'woocommerce_ebanx_checkout_fields', 'wc_ebanx_checkout_params', apply_filters( 'wc_ebanx_checkout_params', $checkout_params ) );
 		}
 
 		if ( is_checkout() && $this->is_sandbox_mode ) {
@@ -1384,6 +1391,11 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway
 		return $message;
 	}
 
+	/**
+	 * @param string $country
+	 *
+	 * @return string
+	 */
 	protected function get_sandbox_form_message( $country ) {
 		$messages = array(
 			'pt-br' => 'Ainda estamos testando esse tipo de pagamento. Por isso, a sua compra não será cobrada nem enviada.',
