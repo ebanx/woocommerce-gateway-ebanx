@@ -354,6 +354,7 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway
 				WC_EBANX::get_plugin_version(),
 				true
 			);
+			wp_localize_script('woocommerce_ebanx_checkout_fields', 'wc_ebanx_checkout_params', array('is_sandbox' => $this->is_sandbox_mode));
 		}
 
 		if ( is_checkout() && $this->is_sandbox_mode ) {

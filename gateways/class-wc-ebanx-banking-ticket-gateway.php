@@ -17,8 +17,7 @@ class WC_EBANX_Banking_Ticket_Gateway extends WC_EBANX_Gateway
 		$this->api_name = 'boleto';
 //		$this->title = 'Boleto EBANX';
 
-		$this->title = 'Boleto EBANX
-<span id="sandbox-alert"> EM TESTE </span>';
+		$this->title = 'Boleto EBANX';
 
 		$this->description = 'Pague com boleto bancário.';
 
