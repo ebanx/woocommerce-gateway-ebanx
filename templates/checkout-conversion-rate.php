@@ -11,7 +11,7 @@ if (!defined('ABSPATH')) {
 ?>
 <div class="ebanx-payment-converted-amount" style="overflow: hidden">
 	<span style="float: left; margin-bottom: 5px"><?php echo $exchange_rate_message; ?></span>
-	<span style="float: left;"><?php echo $message; ?></span>
+	<span id="converted-amount" style="float: left;"><?php echo $message; // phpcs:ignore WordPress.XSS.EscapeOutput ?></span>
 	<img
 		class="ebanx-spinner" 
 		src="<?php echo esc_url( admin_url('/images/spinner-2x.gif') ); ?>" 
