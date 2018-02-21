@@ -48,8 +48,6 @@ span#sandbox-alert-tag:after {
 }
 
 .sandbox-alert-icon {
-  float: left;
-  max-height: 100%;
   position: absolute;
   top: 50%;
   transform: translateY(-50%);

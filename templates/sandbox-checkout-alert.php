@@ -10,6 +10,6 @@ $messages = array(
 
 ?>
 <div class="sandbox-alert-box">
-	<img class="sandbox-alert-icon" src="<?php echo esc_html( WC_EBANX_PLUGIN_DIR_URL ); ?>assets/images/icons/warning-icon.svg" />
+	<img class="sandbox-alert-icon" style="max-height: 100%; float: left;" src="<?php echo esc_html( WC_EBANX_PLUGIN_DIR_URL ); ?>assets/images/icons/warning-icon.svg" />
 	<div class="sandbox-alert-message"><?php echo esc_html( $messages[ $language ] ); ?></div>
 </div>
