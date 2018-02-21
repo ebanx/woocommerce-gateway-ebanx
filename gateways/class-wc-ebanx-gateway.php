@@ -1341,7 +1341,7 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway
 		return $message;
 	}
 
-	private function get_language_by_country($country) {
+	protected function get_language_by_country($country) {
 		$languages = array(
 			'ar' => 'es',
 			'mx' => 'es',

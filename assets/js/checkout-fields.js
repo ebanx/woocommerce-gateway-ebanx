@@ -114,11 +114,12 @@ jQuery (function ($) {
 		var paymentMethods = $( '.wc_payment_methods.payment_methods.methods > li > input' );
 
 		if (wc_ebanx_checkout_params.is_sandbox) {
+			var message = $( '#billing_country' ).val() === 'BR' ? 'EM TESTE' : 'EN PRUEBA';
 			var methodsLabels = $( '.wc_payment_methods.payment_methods.methods > li > label' );
 			var ebanxMethodsLabels = methodsLabels.filter(function (index, elm) {
 				return /ebanx/.test( $(elm).attr('for') ) ;
 			});
-			$( ebanxMethodsLabels ).find('img').before('<span id="sandbox-alert-tag">EM TESTE</span>');
+			$( ebanxMethodsLabels ).find('img').before('<span id="sandbox-alert-tag">' + message + '</span>');
 		}
 
 
