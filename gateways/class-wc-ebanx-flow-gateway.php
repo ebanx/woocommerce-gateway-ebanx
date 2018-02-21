@@ -47,7 +47,7 @@ abstract class WC_EBANX_Flow_Gateway extends WC_EBANX_Redirect_Gateway
 	 */
 	public function payment_fields()
 	{
-		$language = $this->get_language_by_country($this->getTransactionAddress('country'));
+		$language = $this->get_language_by_country( $this->getTransactionAddress( 'country' ) );
 		wc_get_template(
 			'sandbox-checkout-alert.php',
 			array(

@@ -15,7 +15,6 @@ class WC_EBANX_Banking_Ticket_Gateway extends WC_EBANX_Gateway
 		$this->method_title = __('EBANX - Banking Ticket', 'woocommerce-gateway-ebanx');
 
 		$this->api_name = 'boleto';
-//		$this->title = 'Boleto EBANX';
 
 		$this->title = 'Boleto EBANX';
 
@@ -51,7 +50,7 @@ class WC_EBANX_Banking_Ticket_Gateway extends WC_EBANX_Gateway
 	 */
 	public function payment_fields()
 	{
-		$language = $this->get_language_by_country($this->getTransactionAddress('country'));
+		$language = $this->get_language_by_country( $this->getTransactionAddress( 'country' ) );
 		wc_get_template(
 			'sandbox-checkout-alert.php',
 			array(

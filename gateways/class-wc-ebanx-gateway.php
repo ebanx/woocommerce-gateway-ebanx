@@ -354,13 +354,13 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway
 				WC_EBANX::get_plugin_version(),
 				true
 			);
-			wp_localize_script('woocommerce_ebanx_checkout_fields', 'wc_ebanx_checkout_params', array('is_sandbox' => $this->is_sandbox_mode));
+			wp_localize_script( 'woocommerce_ebanx_checkout_fields', 'wc_ebanx_checkout_params', array( 'is_sandbox' => $this->is_sandbox_mode ) );
 		}
 
 		if ( is_checkout() && $this->is_sandbox_mode ) {
 			wp_enqueue_style(
 				'woocommerce_ebanx_sandbox_style',
-				plugins_url('assets/css/sandbox-checkout-alert.css', WC_EBANX::DIR)
+				plugins_url( 'assets/css/sandbox-checkout-alert.css', WC_EBANX::DIR )
 			);
 		}
 
@@ -1341,7 +1341,12 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway
 		return $message;
 	}
 
-	protected function get_language_by_country($country) {
+	/**
+	 * @param string $country
+	 *
+	 * @return string
+	 */
+	protected function get_language_by_country( $country ) {
 		$languages = array(
 			'ar' => 'es',
 			'mx' => 'es',

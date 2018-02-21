@@ -117,11 +117,10 @@ jQuery (function ($) {
 			var message = $( '#billing_country' ).val() === 'BR' ? 'EM TESTE' : 'EN PRUEBA';
 			var methodsLabels = $( '.wc_payment_methods.payment_methods.methods > li > label' );
 			var ebanxMethodsLabels = methodsLabels.filter(function (index, elm) {
-				return /ebanx/.test( $(elm).attr('for') ) ;
+				return /ebanx/.test( $( elm ).attr( 'for' ) );
 			});
-			$( ebanxMethodsLabels ).find('img').before('<span id="sandbox-alert-tag">' + message + '</span>');
+			$( ebanxMethodsLabels ).find( 'img' ).before( '<span id="sandbox-alert-tag">' + message + '</span>' );
 		}
-
 
 		hideDocument( $( 'input[name=payment_method]:checked' ).val() );
 		paymentMethods.on( 'change', function( e ) { hideDocument( e.target.value ); } );
