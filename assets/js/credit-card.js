@@ -202,7 +202,7 @@ jQuery( function($) {
 		var amount = self.attr('data-amount');
 		var currency = self.attr('data-currency');
 		var order_id = self.attr('data-order-id');
-		var text = self.parents('.payment_box').find('#converted-amount');
+		var text = self.parents( '.payment_box' ).find( '#converted-amount' );
 		var spinner = self.parents('.payment_box').find('.ebanx-spinner');
 
 		spinner.fadeIn();
