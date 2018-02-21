@@ -360,7 +360,7 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway
 		if ( is_checkout() && $this->is_sandbox_mode ) {
 			wp_enqueue_style(
 				'woocommerce_ebanx_sandbox_style',
-				plugins_url('assets/css/sandbox.css', WC_EBANX::DIR)
+				plugins_url('assets/css/sandbox-checkout-alert.css', WC_EBANX::DIR)
 			);
 		}
 

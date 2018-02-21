@@ -51,14 +51,14 @@ class WC_EBANX_Banking_Ticket_Gateway extends WC_EBANX_Gateway
 	 */
 	public function payment_fields()
 	{
-		if( $this->is_sandbox_mode ) {
-			wc_get_template(
-				'banking-ticket/sandbox.php',
-				array(),
-				'woocommerce/ebanx/',
-				WC_EBANX::get_templates_path()
-			);
-		}
+		wc_get_template(
+			'sandbox-checkout-alert.php',
+			array(
+				'is_sandbox_mode' => $this->is_sandbox_mode,
+			),
+			'woocommerce/ebanx/',
+			WC_EBANX::get_templates_path()
+		);
 
 		if ($description = $this->get_description()) {
 			echo wp_kses_post(wpautop(wptexturize($description)));

@@ -118,7 +118,7 @@ jQuery (function ($) {
 			var ebanxMethodsLabels = methodsLabels.filter(function (index, elm) {
 				return /ebanx/.test( $(elm).attr('for') ) ;
 			});
-			$( ebanxMethodsLabels ).find('img').before('<span id="sandbox-alert">EM TESTE</span>');
+			$( ebanxMethodsLabels ).find('img').before('<span id="sandbox-alert-tag">EM TESTE</span>');
 		}
 
 
