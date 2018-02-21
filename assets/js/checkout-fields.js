@@ -112,6 +112,17 @@ jQuery (function ($) {
 
 	$( 'body' ).on( 'updated_checkout', function () {
 		var paymentMethods = $( '.wc_payment_methods.payment_methods.methods > li > input' );
+
+		if (wc_ebanx_checkout_params.is_sandbox) {
+			var messages = wc_ebanx_checkout_params.sandbox_tag_messages;
+			var localizedMessage = $( '#billing_country' ).val() === 'BR' ? messages['pt-br'] : messages['es'];
+			var methodsLabels = $( '.wc_payment_methods.payment_methods.methods > li > label' );
+			var ebanxMethodsLabels = methodsLabels.filter(function (index, elm) {
+				return /ebanx/.test( $( elm ).attr( 'for' ) );
+			});
+			$( ebanxMethodsLabels ).find( 'img' ).before( '<span id="sandbox-alert-tag">' + localizedMessage + '</span>' );
+		}
+
 		hideDocument( $( 'input[name=payment_method]:checked' ).val() );
 		paymentMethods.on( 'change', function( e ) { hideDocument( e.target.value ); } );
 	});

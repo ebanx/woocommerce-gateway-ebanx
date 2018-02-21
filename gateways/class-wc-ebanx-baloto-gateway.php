@@ -48,6 +48,17 @@ class WC_EBANX_Baloto_Gateway extends WC_EBANX_Gateway
 	 */
 	public function payment_fields()
 	{
+		$message = $this->get_sandbox_form_message( $this->getTransactionAddress( 'country' ) );
+		wc_get_template(
+			'sandbox-checkout-alert.php',
+			array(
+				'is_sandbox_mode' => $this->is_sandbox_mode,
+				'message' => $message,
+			),
+			'woocommerce/ebanx/',
+			WC_EBANX::get_templates_path()
+		);
+
 		if ($description = $this->get_description()) {
 			echo wp_kses_post(wpautop(wptexturize($description)));
 		}

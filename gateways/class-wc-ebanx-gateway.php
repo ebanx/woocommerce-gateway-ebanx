@@ -354,7 +354,23 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway
 				WC_EBANX::get_plugin_version(),
 				true
 			);
+			$checkout_params = array(
+				'is_sandbox' => $this->is_sandbox_mode,
+				'sandbox_tag_messages' => array(
+					'pt-br' => 'EM TESTE',
+					'es' => 'EN PRUEBA',
+				),
+			);
+			wp_localize_script( 'woocommerce_ebanx_checkout_fields', 'wc_ebanx_checkout_params', apply_filters( 'wc_ebanx_checkout_params', $checkout_params ) );
 		}
+
+		if ( is_checkout() && $this->is_sandbox_mode ) {
+			wp_enqueue_style(
+				'woocommerce_ebanx_sandbox_style',
+				plugins_url( 'assets/css/sandbox-checkout-alert.css', WC_EBANX::DIR )
+			);
+		}
+
 		if (
 			is_wc_endpoint_url( 'order-pay' ) ||
 			is_wc_endpoint_url( 'order-received' ) ||
@@ -1332,7 +1348,12 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway
 		return $message;
 	}
 
-	private function get_language_by_country($country) {
+	/**
+	 * @param string $country
+	 *
+	 * @return string
+	 */
+	protected function get_language_by_country( $country ) {
 		$languages = array(
 			'ar' => 'es',
 			'mx' => 'es',
@@ -1368,5 +1389,19 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway
 		$message .= '<strong class="ebanx-exchange-rate">' . $price . '</strong>';
 
 		return $message;
+	}
+
+	/**
+	 * @param string $country
+	 *
+	 * @return string
+	 */
+	protected function get_sandbox_form_message( $country ) {
+		$messages = array(
+			'pt-br' => 'Ainda estamos testando esse tipo de pagamento. Por isso, a sua compra não será cobrada nem enviada.',
+			'es' => 'Todavia estamos probando este método de pago. Por eso su compra no sera cobrada ni enviada.',
+		);
+
+		return $messages[ $this->get_language_by_country( $country ) ];
 	}
 }
