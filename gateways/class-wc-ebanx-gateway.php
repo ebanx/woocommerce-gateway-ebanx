@@ -1383,4 +1383,13 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway
 
 		return $message;
 	}
+
+	protected function get_sandbox_form_message( $country ) {
+		$messages = array(
+			'pt-br' => 'Ainda estamos testando esse tipo de pagamento. Por isso, a sua compra não será cobrada nem enviada.',
+			'es' => 'Todavia estamos probando este método de pago. Por eso su compra no sera cobrada ni enviada.',
+		);
+
+		return $messages[ $this->get_language_by_country( $country ) ];
+	}
 }

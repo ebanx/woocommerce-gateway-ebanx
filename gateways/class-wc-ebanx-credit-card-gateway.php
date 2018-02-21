@@ -499,12 +499,12 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
 
 		$currency = WC_EBANX_Constants::$LOCAL_CURRENCIES[$country];
 
-		$language = $this->get_language_by_country( $country );
+		$message = $this->get_sandbox_form_message( $country );
 		wc_get_template(
 			'sandbox-checkout-alert.php',
 			array(
 				'is_sandbox_mode' => $this->is_sandbox_mode,
-				'language' => $language,
+				'message' => $message,
 			),
 			'woocommerce/ebanx/',
 			WC_EBANX::get_templates_path()
