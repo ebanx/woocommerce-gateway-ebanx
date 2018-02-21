@@ -1379,7 +1379,7 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway
 		);
 
 		$message = $texts[$language];
-		$message .= '<strong class="ebanx-amount-total">' . $price . '</strong>';
+		$message .= '<strong class="ebanx-exchange-rate">' . $price . '</strong>';
 
 		return $message;
 	}
