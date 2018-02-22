@@ -363,7 +363,7 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway
 			'interest_rates_enabled' => array(
 				'type'    => 'checkbox',
 				'title'   => __('Interest Rates', 'woocommerce-gateway-ebanx'),
-				'label'   => __('Enable Interest Rates', 'woocommerce-gateway-ebanx'),
+				'label'   => __( 'Enable interest rates', 'woocommerce-gateway-ebanx' ),
 				'description' => __('Enable and set a custom interest rate for your customers according to the number of Instalments you allow the payment.'),
 				'desc_tip' => true,
 				'class' => 'ebanx-payments-option'
