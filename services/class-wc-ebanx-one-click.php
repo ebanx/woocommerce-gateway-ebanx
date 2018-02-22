@@ -271,16 +271,16 @@ class WC_EBANX_One_Click {
 		WC_EBANX_Request::set('billing_city', $this->get_user_billing_address()['city']);
 		WC_EBANX_Request::set('billing_state', $this->get_user_billing_address()['state']);
 
-		return ! empty( WC_EBANX_Request::read('ebanx-one-click-token', null ) )
-			&& ! empty( WC_EBANX_Request::read('ebanx-credit-card-installments', null ) )
-			&& ! empty( WC_EBANX_Request::read('ebanx-one-click-cvv', null ) )
-			&& ( ( WC_EBANX_Request::has($names['ebanx_billing_brazil_document'] )
+		return ! empty( WC_EBANX_Request::read( 'ebanx-one-click-token', null ) )
+			&& ! empty( WC_EBANX_Request::read( 'ebanx-credit-card-installments', null ) )
+			&& ! empty( WC_EBANX_Request::read( 'ebanx-one-click-cvv', null ) )
+			&& ( ( WC_EBANX_Request::has( $names['ebanx_billing_brazil_document'] )
 			|| WC_EBANX_Request::has( $names['ebanx_billing_colombia_document'] )
 			|| WC_EBANX_Request::has( $names['ebanx_billing_argentina_document'] ) )
 			&& ( ! empty( WC_EBANX_Request::read( $names['ebanx_billing_brazil_document'], null ) )
 			|| ! empty( WC_EBANX_Request::read( $names['ebanx_billing_colombia_document'], null ) )
 			|| ! empty( WC_EBANX_Request::read( $names['ebanx_billing_argentina_document'], null ) ) )
-			|| $this->user_country === 'mx' );
+			|| 'mx' === $this->user_country );
 	}
 
 	/**
