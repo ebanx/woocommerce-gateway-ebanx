@@ -31,6 +31,7 @@ define('WC_EBANX_TEMPLATES_DIR', __DIR__ . DIRECTORY_SEPARATOR . 'templates' . D
 define('WC_EBANX_VENDOR_DIR', __DIR__ . DIRECTORY_SEPARATOR . 'vendor' . DIRECTORY_SEPARATOR);
 define('WC_EBANX_ASSETS_DIR', __DIR__ . DIRECTORY_SEPARATOR . 'assets' . DIRECTORY_SEPARATOR);
 define('WC_EBANX_CONTROLLERS_DIR', __DIR__ . DIRECTORY_SEPARATOR . 'controllers' . DIRECTORY_SEPARATOR);
+define('WC_EBANX_DATABASE_DIR', __DIR__ . DIRECTORY_SEPARATOR . 'database' . DIRECTORY_SEPARATOR);
 
 if ( ! class_exists('WC_EBANX') ) {
 	/**
@@ -38,6 +39,10 @@ if ( ! class_exists('WC_EBANX') ) {
 	 */
 	register_activation_hook(__FILE__, array('WC_EBANX', 'activate_plugin'));
 	register_deactivation_hook(__FILE__, array('WC_EBANX', 'deactivate_plugin'));
+
+	// TODO: also call it on upgrade
+	include_once WC_EBANX_DATABASE_DIR . 'class-wc-ebanx-database.php';
+	register_activation_hook( __FILE__, array( 'WC_EBANX_Database', 'create_log_table' ) );
 
 	/**
 	 * WooCommerce WC_EBANX main class.
