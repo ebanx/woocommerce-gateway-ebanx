@@ -40,7 +40,6 @@ if ( ! class_exists('WC_EBANX') ) {
 	register_activation_hook(__FILE__, array('WC_EBANX', 'activate_plugin'));
 	register_deactivation_hook(__FILE__, array('WC_EBANX', 'deactivate_plugin'));
 
-	// TODO: also call it on upgrade
 	include_once WC_EBANX_DATABASE_DIR . 'class-wc-ebanx-database.php';
 	register_activation_hook( __FILE__, array( 'WC_EBANX_Database', 'create_log_table' ) );
 
@@ -411,6 +410,12 @@ if ( ! class_exists('WC_EBANX') ) {
 			do_action('ebanx_deactivate_plugin');
 		}
 
+		/**
+		 * Method that will be called when plugin is updated.
+		 *
+		 * @param $plugin_upgrader
+		 * @param $data
+		 */
 		public function on_update( $plugin_upgrader, $data ) {
 			$ebanx_path = plugin_basename( __FILE__ );
 			$ebanx_database = new WC_EBANX_Database();
