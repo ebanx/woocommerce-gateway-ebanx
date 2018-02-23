@@ -1,0 +1,38 @@
+{
+  "name": "ebanx-doraemon",
+  "author": "Cristopher Rodrigues",
+  "version": "1.0.0",
+  "description": "E2e test to EBANX Woocommerce Plugin.",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/ebanx/woocommerce-gateway-ebanx.git"
+  },
+  "engines": {
+    "npm": ">=3",
+    "node": ">=7"
+  },
+  "license": "Apache-2.0",
+  "scripts": {
+    "test": "bash bin/test.sh",
+    "test:woocommerce": "cypress run  --project ./woocommerce",
+    "cypress:open": "cypress open --project ./woocommerce",
+    "test:woocommerce:no-video": "cypress run --config videoRecording=false --project ./woocommerce",
+    "lint": "npm run lint:js",
+    "lint:eslint": "eslint --ignore-path .gitignore",
+    "lint:js": "npm run lint:eslint -- . ",
+    "lint:staged": "lint-staged"
+  },
+  "lint-staged": {
+    "*.js": "lint:eslint"
+  },
+  "pre-commit": "lint:staged",
+  "dependencies": {
+    "cypress": "^1.0.3",
+    "eslint": "^4.17.0",
+    "faker": "git://github.com/marak/Faker.js",
+    "joi": "^13.1.2",
+    "lint-staged": "^6.1.0",
+    "pre-commit": "^1.2.2",
+    "ramda": "^0.25.0"
+  }
+}
