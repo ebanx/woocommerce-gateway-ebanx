@@ -29,4 +29,19 @@ class WC_EBANX_Database {
 
 		dbDelta( $sql );
 	}
+
+	/**
+	 * @param string $event
+	 * @param string $log
+	 */
+	public static function save_log( $event, $log ) {
+		global $wpdb;
+		$table_name = $wpdb->prefix . 'ebanx_logs';
+
+		$wpdb->insert( $table_name, array(
+			'time' => current_time( 'mysql' ),
+			'event' => $event,
+			'log' => $log,
+		));
+	}
 }
