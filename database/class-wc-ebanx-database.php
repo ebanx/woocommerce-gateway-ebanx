@@ -15,7 +15,7 @@ class WC_EBANX_Database {
 		$table_name = $wpdb->prefix . 'ebanx_logs';
 		$charset_collate = $wpdb->get_charset_collate();
 
-		if ( $wpdb->get_var( $wpdb->prepare( "SHOW TABLES LIKE '%s'", $table_name ) ) ) {
+		if ( $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', $table_name ) ) ) {
 			return;
 		}
 

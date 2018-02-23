@@ -31,7 +31,7 @@ define('WC_EBANX_TEMPLATES_DIR', __DIR__ . DIRECTORY_SEPARATOR . 'templates' . D
 define('WC_EBANX_VENDOR_DIR', __DIR__ . DIRECTORY_SEPARATOR . 'vendor' . DIRECTORY_SEPARATOR);
 define('WC_EBANX_ASSETS_DIR', __DIR__ . DIRECTORY_SEPARATOR . 'assets' . DIRECTORY_SEPARATOR);
 define('WC_EBANX_CONTROLLERS_DIR', __DIR__ . DIRECTORY_SEPARATOR . 'controllers' . DIRECTORY_SEPARATOR);
-define('WC_EBANX_DATABASE_DIR', __DIR__ . DIRECTORY_SEPARATOR . 'database' . DIRECTORY_SEPARATOR);
+define( 'WC_EBANX_DATABASE_DIR', __DIR__ . DIRECTORY_SEPARATOR . 'database' . DIRECTORY_SEPARATOR );
 
 if ( ! class_exists('WC_EBANX') ) {
 	/**
@@ -413,8 +413,8 @@ if ( ! class_exists('WC_EBANX') ) {
 		/**
 		 * Method that will be called when plugin is updated.
 		 *
-		 * @param $plugin_upgrader
-		 * @param $data
+		 * @param WP_Upgrader $plugin_upgrader
+		 * @param array       $data
 		 */
 		public function on_update( $plugin_upgrader, $data ) {
 			$ebanx_path = plugin_basename( __FILE__ );

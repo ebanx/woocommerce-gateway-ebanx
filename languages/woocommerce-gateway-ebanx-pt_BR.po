@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
-"POT-Creation-Date: 2018-02-05 14:50-0200\n"
-"PO-Revision-Date: 2018-02-05 14:51-0200\n"
+"POT-Creation-Date: 2018-02-22 15:16-0300\n"
+"PO-Revision-Date: 2018-02-22 15:17-0300\n"
 "Last-Translator: \n"
 "Language-Team: EBANX\n"
 "Language: pt_BR\n"
@@ -122,70 +122,93 @@ msgstr "EBANX - Efectivo"
 msgid "EBANX - PSE"
 msgstr "EBANX - PSE"
 
-#: gateways/class-wc-ebanx-gateway.php:170
+#: gateways/class-wc-ebanx-gateway.php:181
 msgid "Select an option"
 msgstr "Selecione uma opção"
 
-#: gateways/class-wc-ebanx-gateway.php:174
+#: gateways/class-wc-ebanx-gateway.php:185
 #: gateways/class-wc-ebanx-global-gateway.php:437
 msgid "CPF - Individuals"
 msgstr "CPF - Pessoa física"
 
-#: gateways/class-wc-ebanx-gateway.php:175
+#: gateways/class-wc-ebanx-gateway.php:186
 #: gateways/class-wc-ebanx-global-gateway.php:438
 msgid "CNPJ - Companies"
 msgstr "CNPJ - Pessoa jurídica"
 
-#: gateways/class-wc-ebanx-gateway.php:364
+#: gateways/class-wc-ebanx-gateway.php:192
+msgid "Select a document type"
+msgstr ""
+
+#: gateways/class-wc-ebanx-gateway.php:196
+msgid "CUIT"
+msgstr ""
+
+#: gateways/class-wc-ebanx-gateway.php:197
+msgid "CUIL"
+msgstr ""
+
+#: gateways/class-wc-ebanx-gateway.php:198
+#, fuzzy
+#| msgid "DNI"
+msgid "CDI"
+msgstr "DNI"
+
+#: gateways/class-wc-ebanx-gateway.php:236
+#: templates/compliance-fields-ar.php:14
+msgid "Document"
+msgstr ""
+
+#: gateways/class-wc-ebanx-gateway.php:430
 msgid "No reason specified."
 msgstr "Nenhuma razão especificada."
 
-#: gateways/class-wc-ebanx-gateway.php:388
+#: gateways/class-wc-ebanx-gateway.php:454
 msgid "The payment cannot be refunded because it is not confirmed."
 msgstr "O pagamento não pode ser reembolsado porque não está confirmado."
 
-#: gateways/class-wc-ebanx-gateway.php:399
+#: gateways/class-wc-ebanx-gateway.php:465
 #, php-format
 msgid "EBANX: Refund requested. %s - Refund ID: %s - Reason: %s."
 msgstr "EBANX: Reebolso requisitado. %s - ID do reembolso: %s - Razão: %s."
 
-#: gateways/class-wc-ebanx-gateway.php:408
+#: gateways/class-wc-ebanx-gateway.php:474
 msgid "We could not finish processing this refund. Please try again."
 msgstr ""
 "Não pudemos terminar de processar este reebolso. Por favor, tente novamente."
 
-#: gateways/class-wc-ebanx-gateway.php:939
+#: gateways/class-wc-ebanx-gateway.php:1056
 #, php-format
 msgid "Processing response: %s"
 msgstr "Processando resposta: %s"
 
-#: gateways/class-wc-ebanx-gateway.php:959
+#: gateways/class-wc-ebanx-gateway.php:1076
 msgid "EBANX: The payment has failed."
 msgstr "EBANX: O pagamento falhou."
 
-#: gateways/class-wc-ebanx-gateway.php:964
+#: gateways/class-wc-ebanx-gateway.php:1081
 msgid "EBANX: The payment was opened."
 msgstr "EBANX: O pagamento foi aberto."
 
-#: gateways/class-wc-ebanx-gateway.php:969
+#: gateways/class-wc-ebanx-gateway.php:1086
 msgid "EBANX: The order is awaiting payment."
 msgstr "EBANX: A pedido está aguardando pagamento."
 
-#: gateways/class-wc-ebanx-gateway.php:974
+#: gateways/class-wc-ebanx-gateway.php:1091
 msgid "EBANX: The transaction was paid."
 msgstr "EBANX: A transação foi paga."
 
-#: gateways/class-wc-ebanx-gateway.php:1074
+#: gateways/class-wc-ebanx-gateway.php:1191
 #, php-format
 msgid "EBANX: The payment has been updated to: %s."
 msgstr "EBANX: O pagamento foi atualizado para: %s."
 
-#: gateways/class-wc-ebanx-gateway.php:1093
+#: gateways/class-wc-ebanx-gateway.php:1210
 #, php-format
 msgid "EBANX: Your Refund was confirmed to EBANX - Refund ID: %s"
 msgstr "EBANX: Seu reebolso foi confirmado para o EBANX - ID do reembolso: %s"
 
-#: gateways/class-wc-ebanx-gateway.php:1096
+#: gateways/class-wc-ebanx-gateway.php:1213
 #, php-format
 msgid "EBANX: Your Refund was canceled to EBANX - Refund ID: %s"
 msgstr "EBANX: Seu Reembolso foi cancelado para o EBANX - ID do reembolso: %s"
@@ -401,8 +424,8 @@ msgid "Interest Rates"
 msgstr "Taxa de Juros"
 
 #: gateways/class-wc-ebanx-global-gateway.php:366
-msgid "Enable Interest Rates"
-msgstr "Habilitar Taxa de Juros"
+msgid "Enable interest rates"
+msgstr "Habilitar taxa de juros"
 
 #: gateways/class-wc-ebanx-global-gateway.php:367
 msgid ""
@@ -506,37 +529,70 @@ msgid "eg: billing_chile_document"
 msgstr "ex: billing_chile_document"
 
 #: gateways/class-wc-ebanx-global-gateway.php:477
-msgid "DNI"
-msgstr "DNI"
+#, fuzzy
+#| msgid "Colombia"
+msgid "DNI Colombia"
+msgstr "Colômbia"
 
 #: gateways/class-wc-ebanx-global-gateway.php:480
 msgid "eg: billing_colombia_document"
 msgstr "ex: billing_colombia_document"
 
+#: gateways/class-wc-ebanx-global-gateway.php:483
+#, fuzzy
+#| msgid "Peru"
+msgid "DNI Peru"
+msgstr "Peru"
+
 #: gateways/class-wc-ebanx-global-gateway.php:486
+#, fuzzy
+#| msgid "eg: billing_chile_document"
+msgid "eg: billing_peru_document"
+msgstr "ex: billing_chile_document"
+
+#: gateways/class-wc-ebanx-global-gateway.php:489
+#, fuzzy
+#| msgid "Entity Type Selector"
+msgid "Document Type Selector"
+msgstr "Tipo de Entidade"
+
+#: gateways/class-wc-ebanx-global-gateway.php:492
+#: gateways/class-wc-ebanx-global-gateway.php:498
+#, fuzzy
+#| msgid "eg: billing_chile_document"
+msgid "eg: billing_argentina_document"
+msgstr "ex: billing_chile_document"
+
+#: gateways/class-wc-ebanx-global-gateway.php:495
+#, fuzzy
+#| msgid "Argentina"
+msgid "Argentinian document"
+msgstr "Argentina"
+
+#: gateways/class-wc-ebanx-global-gateway.php:504
 msgid "Currency & Amount Options"
 msgstr "Opções de Moeda & Totais"
 
-#: gateways/class-wc-ebanx-global-gateway.php:490
+#: gateways/class-wc-ebanx-global-gateway.php:508
 msgid "Total Local Amount"
 msgstr "Quantia Total Local"
 
-#: gateways/class-wc-ebanx-global-gateway.php:491
+#: gateways/class-wc-ebanx-global-gateway.php:509
 msgid ""
 "Show your customer the total purchase amount in local currency on the "
 "checkout"
 msgstr ""
 "Mostrar para seu cliente a quantia total da compra em moeda local no checkout"
 
-#: gateways/class-wc-ebanx-global-gateway.php:495
+#: gateways/class-wc-ebanx-global-gateway.php:513
 msgid "Exchange Rate"
 msgstr "Variação Cambial"
 
-#: gateways/class-wc-ebanx-global-gateway.php:496
+#: gateways/class-wc-ebanx-global-gateway.php:514
 msgid "Show your customer the currency exchange rate of the day"
 msgstr "Mostrar ao cliente a cotação da moeda no dia"
 
-#: gateways/class-wc-ebanx-global-gateway.php:498
+#: gateways/class-wc-ebanx-global-gateway.php:516
 msgid ""
 "Selecting this box, you will inform your customer about the currency "
 "exchange rate of the day because it may interfere with the final amount."
@@ -545,11 +601,11 @@ msgstr ""
 "moeda no dia, pois a variação cambial pode interferir no valor final da "
 "compra."
 
-#: gateways/class-wc-ebanx-global-gateway.php:502
+#: gateways/class-wc-ebanx-global-gateway.php:520
 msgid "IOF on Local Amount"
 msgstr "IOF na Quantia Local"
 
-#: gateways/class-wc-ebanx-global-gateway.php:503
+#: gateways/class-wc-ebanx-global-gateway.php:521
 #, fuzzy
 #| msgid "Apply IOF when calculating the price in BRL on the checkout"
 msgid ""
@@ -713,11 +769,11 @@ msgstr ""
 msgid "View Banking Ticket"
 msgstr "Ver Boleto"
 
-#: services/class-wc-ebanx-one-click.php:142
+#: services/class-wc-ebanx-one-click.php:151
 msgid "EBANX: Unable to create the payment via one click."
 msgstr "EBANX: Incapaz de criar o pagamento via um clique."
 
-#: services/class-wc-ebanx-one-click.php:345
+#: services/class-wc-ebanx-one-click.php:360
 msgid "Pay with one click"
 msgstr "Pague com um clique"
 
@@ -819,22 +875,22 @@ msgstr "Link do Pagamento para o Cliente"
 msgid "Payment successfully made using Baloto."
 msgstr "Pagamento realizado com sucesso usando Baloto."
 
-#: templates/compliance-fields-br.php:19 templates/compliance-fields-cl.php:19
-#: templates/compliance-fields-co.php:19 templates/compliance-fields-mx.php:14
-#: templates/compliance-fields-pe.php:14
+#: templates/compliance-fields-ar.php:22 templates/compliance-fields-br.php:19
+#: templates/compliance-fields-cl.php:19 templates/compliance-fields-co.php:19
+#: templates/compliance-fields-mx.php:14 templates/compliance-fields-pe.php:19
 msgid "Street address"
 msgstr "Endereço"
 
-#: templates/compliance-fields-br.php:23 templates/compliance-fields-cl.php:23
-#: templates/compliance-fields-co.php:23 templates/compliance-fields-mx.php:18
-#: templates/compliance-fields-pe.php:18
+#: templates/compliance-fields-ar.php:26 templates/compliance-fields-br.php:23
+#: templates/compliance-fields-cl.php:23 templates/compliance-fields-co.php:23
+#: templates/compliance-fields-mx.php:18 templates/compliance-fields-pe.php:23
 msgid "Town / City"
 msgstr "Cidade"
 
-#: templates/compliance-fields-br.php:60 templates/compliance-fields-cl.php:27
-#: templates/compliance-fields-co.php:27 templates/compliance-fields-mx.php:22
-#: templates/compliance-fields-mx.php:58 templates/compliance-fields-pe.php:22
-#: templates/compliance-fields-pe.php:58
+#: templates/compliance-fields-ar.php:30 templates/compliance-fields-br.php:60
+#: templates/compliance-fields-cl.php:27 templates/compliance-fields-co.php:27
+#: templates/compliance-fields-mx.php:22 templates/compliance-fields-mx.php:58
+#: templates/compliance-fields-pe.php:27 templates/compliance-fields-pe.php:63
 msgid "State / County"
 msgstr "Estado"
 
