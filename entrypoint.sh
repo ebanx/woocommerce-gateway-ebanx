@@ -9,6 +9,10 @@ export WS_GROUP=www-data
 
 /usr/local/bin/wait-for-it.sh -t 60 mysql:3306 -- echo 'MySQL is up!'
 
+if [ "$WOOCOMMERCE_EXTERNAL_PORT" != "80" ]; then
+    WOOCOMMERCE_URL="${WOOCOMMERCE_URL}:${WOOCOMMERCE_EXTERNAL_PORT}"
+fi
+
 if ! $(wp core is-installed --allow-root); then
   cd $WP_ROOT
 
@@ -28,7 +32,7 @@ if ! $(wp core is-installed --allow-root); then
 		chown www-data:www-data .htaccess
   fi
 
-  wp core install --url=localhost --title=$EBANX_SITE_TITLE --admin_user=$EBANX_ADMIN_USERNAME --admin_password=$EBANX_ADMIN_PASSWORD --admin_email=$EBANX_SITE_EMAIL --skip-email --allow-root --debug
+  wp core install --url=$WOOCOMMERCE_URL --title=$EBANX_SITE_TITLE --admin_user=$EBANX_ADMIN_USERNAME --admin_password=$EBANX_ADMIN_PASSWORD --admin_email=$EBANX_SITE_EMAIL --skip-email --allow-root --debug
 
   # Install and activate plugins
   wp plugin install woocommerce --version=$EBANX_WC_PLUGIN_VERSION --activate --allow-root --debug
@@ -68,7 +72,7 @@ if ! $(wp core is-installed --allow-root); then
   chown -R ${WP_OWNER}:${WP_GROUP} ${WP_ROOT}/wp-content/uploads/
   chown -R ${WP_OWNER}:${WP_GROUP} ${WP_ROOT}/wp-content/themes/
 
-  echo "EBANX: Visit http://localhost or http://localhost/wp-admin/"
+  echo "EBANX: Visit http://$WOOCOMMERCE_URL or http://$WOOCOMMERCE_URL/wp-admin/"
   echo "EBANX: Username - $EBANX_ADMIN_USERNAME"
   echo "EBANX: Password - $EBANX_ADMIN_PASSWORD"
 fi

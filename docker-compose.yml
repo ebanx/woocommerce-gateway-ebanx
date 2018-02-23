@@ -15,8 +15,10 @@ services:
       EBANX_ADMIN_PASSWORD: ebanx
       EBANX_SITE_TITLE: EBANX
       EBANX_SITE_EMAIL: plugin@ebanx.com
+      WOOCOMMERCE_URL: ${WOOCOMMERCE_URL:-localhost}
+      WOOCOMMERCE_EXTERNAL_PORT: ${WOOCOMMERCE_EXTERNAL_PORT:-80}
     ports:
-      - 80:80
+      - ${WOOCOMMERCE_EXTERNAL_PORT:-80}:80
     volumes:
       - ./:/var/www/html/wp-content/plugins/woocommerce-gateway-ebanx/
     links:
@@ -28,6 +30,6 @@ services:
       MYSQL_DATABASE: wordpress
       MYSQL_ROOT_PASSWORD: root
     ports:
-      - 3306:3306
+      - ${MYSQL_EXTERNAL_PORT:-3306}:3306
     volumes:
       - ./.data:/var/lib/mysql
