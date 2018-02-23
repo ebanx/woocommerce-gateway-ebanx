@@ -1,6 +1,6 @@
 === EBANX Payment Gateway for WooCommerce ===
 Contributors: ebanxwp
-Tags: credit card, boleto, ebanx, woocommerce, approval rate, conversion rate, brazil, mexico, argentina, peru, colombia, chile, ecuador, oxxo, baloto, cash payment, local payment one-click payment, installments, alternative payments, accept more payments
+Tags: credit card, boleto, ebanx, woocommerce, payment gateway, latin america, brazil, mexico, argentina, peru, colombia, chile, ecuador, cash payment, local payment, card payment, one-click payment, alternative payments, payment processing
 Requires at least: 4.0
 Tested up to: 4.9
 Stable tag: 1.27.0
@@ -13,13 +13,13 @@ Offer Latin American local payment methods & increase your conversion rates with
 
 [youtube https://www.youtube.com/watch?v=J8vFkDwHMWA]
 
-Accept with ease and security, the most popular local payment methods in Latin America and receive your money anywhere in the world. The WooCommerce EBANX Payment Gateway plugin will enable you to significantly increase your cross-border sales & conversion rates by allowing you to sell like a local in the world’s fastest growing ecommerce markets.
+Accept with ease and security, the most popular local payment methods in Latin America and receive your money anywhere in the world. The WooCommerce EBANX Payment Gateway plugin will enable you to significantly increase your cross-border sales & conversion rates by allowing you to sell like a local in the world’s fastest growing eCommerce markets.
 
 Ready to accept local payments but don’t have an account yet? Finish our [simple sign-up](https://www.ebanx.com/business/en/dashboard) and we can start helping you sell like a local in Latin America or schedule a [call with a Business Development Executive](https://app.hubspot.com/meetings/ebanx-ronaldo/schedule-call).
 
 **Plugin Description**
 
-The WooCommerce EBANX Payment Gateway plugin allows you to accept local & international payment methods directly on your ecommerce store. Using the EBANX plugin you can process relevant cash, online debit, and credit card payments in Brazil, Mexico, Argentina, Chile, Colombia, Peru & Ecuador, and access over 20M EBANX Wallet users. **No technical knowledge is needed for installation. Installation is simple, the way it should be.**
+The WooCommerce EBANX Payment Gateway plugin allows you to accept local & international payment methods directly on your eCommerce store. Using the EBANX plugin you can process relevant cash, online debit, and credit card payments in Brazil, Mexico, Argentina, Chile, Colombia, Peru & Ecuador, and access over 20M EBANX Wallet users. **No technical knowledge is needed for installation. Installation is simple, the way it should be.**
 
 **EBANX Advantages**
 
@@ -28,19 +28,21 @@ The WooCommerce EBANX Payment Gateway plugin allows you to accept local & intern
 * Checkout payment form is responsive and adapts nicely to all mobile screen sizes and themes
 * Everything you need in one plugin, you don’t have to install any external plugins or extensions
 * Sell to over 20M EBANX Wallet users
-* Join ecommerce merchants such as AliExpress, Airbnb and Spotify
+* Join eCommerce merchants such as AliExpress, Airbnb and Spotify
 
 **Customize and Manage Your Payments**
 
 With the EBANX plugin, you can:
 
-* Choose which payment methods are displayed at checkout
+* Choose which payment methods are displayed on your checkout page
 * Set a maximum number of installments
 * Select an expiration date for cash payments
-* Allow customers to save their credit card information
-* Set individual interest rates for each credit card instalment plan
-* Create orders & request refunds directly in WooCommerce
-* Accept Local Currencies, USD and EUR based on your WooCommerce Currency Options, to be processed by EBANX
+* Have all the requested information gathered on one checkout page entirely integrated with your platform
+* Allow your customers to save their credit card to buy with just one-click and improve your conversions
+* Do not worry about your customer's sensitive data, because everything is saved in EBANX environment using PCI standards
+* Set individual interest rates for each credit card installment plan
+* Create orders & request refunds directly in your WooCommerce store
+* Accept Local Currencies based on your WooCommerce Currency Options, to be processed by EBANX
 
 The plugin also includes:
 
@@ -51,7 +53,7 @@ The plugin also includes:
 
 **Want to do a Test Drive?**
 
-Our demonstrations allow you to create a payment as customer would and to explore all the plugin features **without having to install**. Access the [Demo Store](https://www.ebanxdemo.com/) for your own first-hand experience or [request a personal demonstration via phone](https://app.hubspot.com/meetings/ebanx-ronaldo/schedule-call) with a Business Development Executive.
+Our demonstrations allow you to create a payment as a customer would and to explore all the plugin features **without having to install it**. Access the [Demo Store](https://www.ebanxdemo.com/) for your own first-hand experience.
 
 Looking for more detailed information? Visit our [Developer’s Academy](https://www.ebanx.com/business/en/developers/) for step-by-step guides, API references, and integration options or [call a Business Development Executive](https://app.hubspot.com/meetings/ebanx-ronaldo/schedule-call).
 
@@ -61,17 +63,17 @@ All pages that incorporate the EBANX plugin must be served over HTTPS.
 
 **About EBANX**
 
-[EBANX is a local payments expert](https://www.ebanx.com/business/en) and we offer complete solutions for international businesses wanting to sell more in Latin America. Whether you are an enterprise or running your own startup, EBANX can help you sell internationally with ease and efficiency.
+[EBANX is a local payments expert](https://www.ebanx.com/business/en) that offer complete solutions to connect eager buyers with global sellers, increasing the merchant's revenue in the fastest growing markets in Latin America. Whether you are an enterprise or running your startup, EBANX can help you sell internationally with ease and efficiency.
 
 == Installation ==
 
 **Automatic**
 
-Automatic installation is the easiest option and can be done without leaving your web browser. To do an automatic install of the EBANX plugin, login to the WordPress Dashboard, go to the Plugins menu, and select “Add New.” Then, search for the “EBANX Payment Gateway for WooCommerce” and click “Install Now.”
+Automatic installation is the easiest, and it can be done without leaving your web browser. To do an automatic install of the EBANX plugin, login to the WordPress Dashboard, go to the Plugins menu, and select “Add New.” Then, search for the “EBANX” to find EBANX Payment Gateway for WooCommerce and click on “Install Now.” After the installation, you just have to activate and get ready to sell even more.
 
 **Manual**
 
-To install the plugin manually, download our plugin and upload it to your web server via an FTP application. Visit the [WordPress codex](https://codex.wordpress.org/Managing_Plugins#Manual_Plugin_Installation "WordPress codex") for further instructions.
+To install the plugin manually, download our plugin and upload it to your web server via an FTP application. Visit the [WordPress codex](https://codex.wordpress.org/Managing_Plugins#Manual_Plugin_Installation "WordPress codex") for further instructions. Don't waste your time and improve your results!
 
 **Via GitHub**
 
@@ -87,11 +89,11 @@ Not yet. However, customers are able to save credit card information and make on
 
 = Who can I contact if I still have questions? =
 
-Reach out to one of our integration specialists at integration@ebanx.com or speak with your merchant services or business manager. Don’t have a business manager yet? [Sign-up here](https://www.ebanx.com/business/en/dashboard "EBANX Dashboard") and we will assign one to your company account or [schedule a call](https://app.hubspot.com/meetings/ebanx-ronaldo/schedule-call) with a Business Development Executive.
+Reach out to one of our integration specialists at integration@ebanx.com or get in touch with us through our "Help & Support" tab inside the EBANX Dashboard. If you don't have an account yet, access our [Sign-up here](https://www.ebanx.com/business/en/dashboard "EBANX Dashboard") or [schedule a call](https://app.hubspot.com/meetings/ebanx-ronaldo/schedule-call) with a Business Development Executive.
 
 = Where can I find more documentation or instructions? =
 
-The [Developer’s Academy](https://www.ebanx.com/business/en/developers/integrations/extensions-and-plugins/woocommerce-plugin "EBANX Developer's Academy") has step-by-step instructions and detailed information about all our plugins.
+On the [EBANX Developer’s Academy](https://www.ebanx.com/business/en/developers/integrations/extensions-and-plugins/woocommerce-plugin "EBANX Developer's Academy") you will find instructions and detailed information about all our plugins.
 
 = Which payment types does EBANX process? =
 
@@ -100,26 +102,28 @@ The [Developer’s Academy](https://www.ebanx.com/business/en/developers/integra
   * EBANX Boleto, Cash Payment
   * Hipercard, Elo, and Aura Domestic Credit Cards
   * Online Debit Transfer
-  * EBANX Wallet, Prepaid Card / Debit Transfer
+  * EBANX Account, Debit Transfer
 * Mexico
   * OXXO, Cash Payment
   * Debit & Credit Cards
-  * EBANX Wallet, Debit Transfer
+  * EBANX Account, Debit Transfer
 * Argentina
-  * Credit Card
-  * Efectivo
-* Chile
-  * Sencillito, Cash Payment
-  * Servipag, Online Debit Transfer
-* Peru
-  * PagoEfectivo, Cash Payment / Debit Transfer
-  * SafetyPay, Cash Payment / Debit Transfer
+  * Cupón de Pago, Cash Payment / Online Banking
 * Colombia
   * Credit Card
   * Pagos Seguros en Línea (PSE), Online Debit Transfer
-  * Baloto
-* Ecuador
+  * Baloto, Cash Payment
+* Chile
+  * Sencillito, Cash Payment
+  * ServiPag, Online Debit Transfer
+  * WebPay, Debit and Credit Card
+  * Multicaja, Cash Payment / Bank Transfer
+* Peru
+  * PagoEfectivo, Cash Payment / Debit Transfer
   * SafetyPay, Cash Payment / Debit Transfer
+* Ecuador
+  * Cash Payment
+  * Online Transfer
 
 = Which currencies does EBANX accept? =
 
@@ -136,7 +140,7 @@ The [Developer’s Academy](https://www.ebanx.com/business/en/developers/integra
 
 Yes, you can.
 
-1. Set up your own billing fields in the checkout manager plugin page;
+1. Set up your billing fields in the checkout manager plugin page;
 2. Go to the `EBANX Settings` page and open the `Advanced Options` section;
 3. Enable the `Use my checkout manager fields` checkbox and fill in the field names as in step 1;
 4. There you go, you’re all set!
@@ -148,17 +152,17 @@ Yes, you can.
 * Feature - Show exchange rate on checkout [#612](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/612)
 
 = 1.26.0 =
-* Feature - Added instalments to payment by link order form [#608](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/608)
+* Feature - Added installments to payment by link order form [#608](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/608)
 * Feature - Treating BP-R-32 error message on payment by link order form [#609](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/609)
 
 = 1.25.2 =
-* Fix - Fixed IOF being mistankenly applied to instalments [#606](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/606)
+* Fix - Fixed IOF being mistakenly applied to installments [#606](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/606)
 
 = 1.25.1 =
-* Fix - Preventing IOF from being applied more than once on instalments [#604](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/604)
+* Fix - Preventing IOF from being applied more than once on installments [#604](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/604)
 
 = 1.25.0 =
-* Feature - Creditcard for Argentina [#602](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/602)
+* Feature - Credit Card for Argentina [#602](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/602)
 * Feature - SafetyPay for Ecuador [#603](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/603)
 
 = 1.24.1 =
@@ -171,25 +175,25 @@ Yes, you can.
 = 1.23.0 =
 * Feature - One click form can now be submitted using keyboard [#588](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/588)
 * Feature - Better payment origin identification on dashboard [#590](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/590)
-* Feature - Plugin approved for wordpress 4.9 [#593](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/593)
-* Feature - Change minimum instalment value to 5 BRL for brazilian credit card payments [#595](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/595)
+* Feature - Plugin approved for WordPress 4.9 [#593](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/593)
+* Feature - Change minimum installment value to 5 BRL for Brazilian credit card payments [#595](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/595)
 
 = 1.22.0 =
 * Feature - Explicit capture button [#578](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/578)
 * Feature - Added new Mexico payment method SPEI [#581](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/581)
 * Fix - Adjusted iFrame display for Argentina cash payment methods [#580](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/580)
-* Fix - Ignored IOF in instalments for disabled tax flag [#584](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/584)
+* Fix - Ignored IOF in installments for disabled tax flag [#584](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/584)
 
 = 1.21.0 =
 * Feature - Added new Argentina payment method Efectivo [#576](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/576)
-* Feature - Showing instalments on local currency [#571](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/571)
+* Feature - Showing installments on local currency [#571](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/571)
 * Fix - Saving customer document when creating account on checkout [#566](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/566)
 * Fix - Show one click button only if customer has document [#567](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/567)
 * Fix - Removed ::class from same file that checks if php version is supported [#568](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/568)
-* Fix - Added fake birthdate to payment data to prevent error on unconfigured merchants [#569](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/569)
+* Fix - Added fake birthdate to payment data to prevent error on deconfigured merchants [#569](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/569)
 * Fix - Overwriting libjs invalid expiry date error [#572](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/572)
 * Fix - Saving document on redirect payment methods [#574](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/574)
-* Fix - Fixed iframe resizer [#575](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/575)
+* Fix - Fixed iframe resized [#575](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/575)
 
 = 1.20.0 =
 * Feature - Dashboard lead links update to Dashboard v2 [#564](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/564)
@@ -219,12 +223,12 @@ Yes, you can.
 * Fix - Updated pay for order layout [#552](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/552)
 
 = 1.16.0 =
-* Feature - Pay for order(woocommerce native payment by link) [#531](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/531)
+* Feature - Pay for order(WooCommerce native payment by link) [#531](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/531)
 * Feature - Added Credit Card Gateway for Colombia [#534](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/534)
 * Feature - Added Multicaja Gateway for Chile [#539](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/539)
-* Feature - Added Webpay Gateway for Chile [#538](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/538)
+* Feature - Added WebLPay Gateway for Chile [#538](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/538)
 * Feature - Added an option for merchant to hide IOF [#541](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/541)
-* Feature - Added a compability layer to prevent incompabilities from third party plugins and themes like WooCommerce's Storefront  [#535](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/535)
+* Feature - Added a compatibility layer to prevent incompatibilities from third party plugins and themes like WooCommerce's Storefront  [#535](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/535)
 * Fix - Fixed PHP notice when using empty interest rate option [#530](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/530)
 * Fix - Fixed error when a Merchant Payment Code gets greater than 40 characters [#537](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/537)
 
@@ -251,7 +255,7 @@ Yes, you can.
 = 1.13.0 =
 * Fix - Fix for debug log when is enabled before record a log [#507](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/507)
 * Fix - Fix issue to avoid some issues on refund transactions [#506](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/506)
-* Fix - Changed label to Minimum Instalment (title-cased labels) [#500](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/500)
+* Fix - Changed label to Minimum Installment (title-cased labels) [#500](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/500)
 * Fix - Fixed compliance fields when country is empty [#498](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/498)
 * Feature - Docker implementation and end-to-end tests for Brazil payments done [#504](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/504)
 
@@ -260,14 +264,14 @@ Yes, you can.
 * Fix - One-click payments button in product details [#496](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/496)
 
 = 1.12.0 =
-* Feature - Using interest rate on minimum instalment value [#490](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/490)
+* Feature - Using interest rate on minimum installment value [#490](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/490)
 * Feature - Refactor EBANX query router [#487](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/487)
 * Feature - Added a minimal value setting on settings [#477](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/477)
 * Feature - Changed cookie to localStorage to save flags [#476](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/476)
 * Feature - Plugin docs using phpDocumentator [#488](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/488)
-* Fix - Thank you page values and instalments fixed [#473](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/473)
+* Fix - Thank you page values and installments fixed [#473](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/473)
 * Fix - Hide saved cards when option is disabled [#475](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/475)
-* Fix - DNI field is not mandatory for colombia any more [#486](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/486)
+* Fix - DNI field is not mandatory for Colombia any more [#486](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/486)
 * Fix - Changed the assets path to system path instead of host path [#489](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/489)
 * Fix - Using absolute path to spinner gif [#485](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/485)
 * Improvement - Updated notification notices and notes [#468](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/468)
@@ -277,11 +281,11 @@ Yes, you can.
 * Fix - Added '/' to Notification URL to prevent Response Code 301 [#480](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/480)
 
 = 1.11.3 =
-* Fix - Fixed a problem that it was incrementing a value by instalment [#463](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/463)
+* Fix - Fixed a problem that it was incrementing a value by installment [#463](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/463)
 
 = 1.11.2 =
 * Fix - Fixed translation paths [#462](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/462)
-* Fix - Fixed converted value message when instalments is changed [#462](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/462)
+* Fix - Fixed converted value message when installments is changed [#462](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/462)
 * Fix - Fixed problems with newer version of WooCommerce [#462](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/462)
 
 = 1.11.0 =
@@ -305,12 +309,12 @@ These are the most importante fixes and features, but another fixes and quality 
 = 1.10.0 =
 * Feature - Removed restriction on guest users for sandbox mode [#406](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/406)
 * Feature - Showing some EBANX order details on admin order details page [#404](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/404)
-* Improvement - Removed unecessary properties and variables [#407](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/407)
+* Improvement - Removed unnecessary properties and variables [#407](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/407)
 * Improvement - Improved texts and options on OXXO thank you page [#409](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/409)
 * Fix - Updated deprecated function [#403](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/403)
 
 = 1.9.1 =
-* Fix - Fixed translations string keys in instalment template [#402](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/402)
+* Fix - Fixed translations string keys in installment template [#402](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/402)
 
 = 1.9.0 =
 * Feature - Advanced options hide when not applicable [#391](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/391)
@@ -318,10 +322,10 @@ These are the most importante fixes and features, but another fixes and quality 
 * Feature - Added tooltips with nice descriptions to gateway settings page [#400](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/400)
 * Improvement - Cached last key check response to speed up admin panel [#396](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/396)
 * Improvement - Cached exchange rates in short intervals to improve checkout page performance [#399](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/399)
-* Fix - Fixed translations for instalments with interests [#395](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/395)
+* Fix - Fixed translations for installments with interests [#395](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/395)
 
 = 1.8.1 =
-* Fix - Fixed instalment reading on checkout [#393](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/393)
+* Fix - Fixed installment reading on checkout [#393](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/393)
 
 = 1.8.0 =
 * Feature - Hide irrelevant fields and group fields by country on EBANX Settings page [#373](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/373)
@@ -331,7 +335,7 @@ These are the most importante fixes and features, but another fixes and quality 
 * Feature - Added asterisk to required compliance fields on checkout page [#370](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/370)
 
 = 1.7.1 =
-* Fix - Fixed Oxxo and Pagoefectivo iframe not showing [#382](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/382)
+* Fix - Fixed OXXO and Pago Efectivo iframe not showing [#382](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/382)
 
 = 1.7.0 =
 * Feature - The HTML select fields are now using the `select2` jQuery plugin to improve the user experience [#356](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/356)
@@ -339,7 +343,7 @@ These are the most importante fixes and features, but another fixes and quality 
 * Improvement - All JS assets are loading on footer [#357](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/357)
 * Fix - Fixed the low resolution of the EBANX badge on non-retina displays [#354](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/354)
 * Fix - Prevent fatal error when the plugin is activated without WooCommerce plugin [#360](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/360)
-* Fix - Avoid SSL warning from EBANX PHP libray when the plugin make a request to URLs with a bad SSL certificate [#362](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/362)
+* Fix - Avoid SSL warning from EBANX PHP library when the plugin make a request to URLs with a bad SSL certificate [#362](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/362)
 * Fix - Resolves fatal error when the plugin can't get some informations [#365](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/365)
 
 = 1.6.1 =
@@ -349,7 +353,7 @@ These are the most importante fixes and features, but another fixes and quality 
 * Feature - Integrates with EBANX Dashboard plugin presence check [#348](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/348)
 * Improvement - Gets the banking ticket HTML by cUrl with url fopen fallback [#345](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/345)
 * Improvement - Changed iframe boleto URL fetching to avoid xss injections [#345](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/345)
-* Fix - Max instalment limits are now adjusted for local currency instead of assuming USD for prices [#349](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/349)
+* Fix - Max installment limits are now adjusted for local currency instead of assuming USD for prices [#349](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/349)
 
 = 1.5.3 =
 * Fix - In case user country was not set one-click payments was crashing [#343](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/343)
@@ -361,14 +365,14 @@ These are the most importante fixes and features, but another fixes and quality 
 * Fix - Notification URL in payment payload [#341](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/341)
 
 = 1.5.0 =
-* Feature - Instalment interest rates are now configurable [#336](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/336)
+* Feature - Installment interest rates are now configurable [#336](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/336)
 * Improvement - Payment Options section in admin is now togglable [#336](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/336)
 
 = 1.4.1 =
 * Fix - Fixed API Lead URL to the correct URL, because it was causing a redirect without www
 
 = 1.4.0 =
-* Fix - Fixed max instalments limit according to acquirer in one-click payments [#334](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/334)
+* Fix - Fixed max installments limit according to acquirer in one-click payments [#334](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/334)
 * Improvement - Sending analytics information for plugin activations [#332](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/332)
 
 = 1.3.0 =
@@ -380,15 +384,15 @@ These are the most importante fixes and features, but another fixes and quality 
 * Fix - Checkout manager field for person type selecting in Brasil value is now respected [#323](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/323)
 
 = 1.2.2 =
-* Fix - Chceckout manager fields are no longer mandatory when activated [#320](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/320)
+* Fix - Checkout manager fields are no longer mandatory when activated [#320](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/320)
 
 = 1.2.1 =
 * Fix - Chile payments when using checkout manager [#306](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/306)
 
 = 1.2.0 =
-* Feature - Instalments limit based on minimun amount accepted by credit card acquirer [#298](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/298)
+* Feature - Installments limit based on minimum amount accepted by credit card acquirer [#298](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/298)
 * Feature - API requests now using cUrl as main method of http communication [#302](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/302)
-* Feature - Checkout manager option for entity type field in brazil checkout in cases where cnpj and cpf are both enabled [#304](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/304)
+* Feature - Checkout manager option for entity type field in brazil checkout in cases where CNPJ and CPF are both enabled [#304](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/304)
 * Fix - Undisplayed thank-you-page messages [#299](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/299)
 * Fix - Checkout manager settings being respected even when disabled [#304](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/304)
 
@@ -399,11 +403,11 @@ These are the most importante fixes and features, but another fixes and quality 
 * Fix - Brazil compliance fields showing for other countries [#294](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/294)
 
 = 1.1.0 =
-* Feature - Instalments field now gets hidden when max instalments is set to one [#275](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/275)
+* Feature - Installments field now gets hidden when max installments is set to one [#275](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/275)
 * Feature - Send store notification and return links to payment api [#268](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/268)
 * Feature - Support for third-party checkout manager plugins [#279](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/279)
 * Feature - CPF/CNPJ Brazilian person types support [#279](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/279)
-* Feature - New debit card flags for mexico [#290](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/290)
+* Feature - New debit card flags for Mexico [#290](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/290)
 * Change - Added the new tags: `alternative payments` and `accept more payments`
 * Fix - Thank you pages for each payment gateway are now called by order status [#277](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/277)
 * Fix - The credit cards gateways were separated by countries [#277](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/277)
@@ -413,7 +417,7 @@ These are the most importante fixes and features, but another fixes and quality 
 * Enhancement - All methods are commented now [#266](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/266)
 
 = 1.0.1 =
-* 2016-01-17 - Texts - Chaging the namings and texts from plugin.
+* 2016-01-17 - Texts - Changing the naming and texts from plugin.
 
 = 1.0.0 =
 * 2016-12-30 - First Release.
@@ -427,7 +431,7 @@ These are the most importante fixes and features, but another fixes and quality 
 5. Plugin Configuration - You can choose the countries and gateways to work with just by inserting them on the right field to enable payments methods.
 6. Plugin Configuration - Set more advanced options such as: Save Card Data, One-click payment, enable auto-capture and maximum number of installments.
 
-== Arbitrary section ==
+== Security section ==
 
 When you use our plug in, you trust us with your information and agree that we may keep it and use it for the purposes of our commercial relationship. As we are a PCI compliant company, we will keep all your data safe, and will not use it for any other purposes.
 
