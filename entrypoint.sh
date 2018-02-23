@@ -33,6 +33,10 @@ if ! $(wp core is-installed --allow-root); then
   fi
 
   wp core install --url=$WOOCOMMERCE_URL --title=$EBANX_SITE_TITLE --admin_user=$EBANX_ADMIN_USERNAME --admin_password=$EBANX_ADMIN_PASSWORD --admin_email=$EBANX_SITE_EMAIL --skip-email --allow-root --debug
+  wp config set WP_DEBUG false --raw --allow-root --debug
+
+  # Install and activate storefrontheme
+  wp theme install storefront --version=$EBANX_STOREFRONT_THEME_VERSION --activate --allow-root --debug
 
   # Install and activate plugins
   wp plugin install woocommerce --version=$EBANX_WC_PLUGIN_VERSION --activate --allow-root --debug
@@ -72,7 +76,7 @@ if ! $(wp core is-installed --allow-root); then
   chown -R ${WP_OWNER}:${WP_GROUP} ${WP_ROOT}/wp-content/uploads/
   chown -R ${WP_OWNER}:${WP_GROUP} ${WP_ROOT}/wp-content/themes/
 
-  echo "EBANX: Visit http://$WOOCOMMERCE_URL or http://$WOOCOMMERCE_URL/wp-admin/"
+  echo "EBANX: Visit http://$WOOCOMMERCE_URL/shop/ or http://$WOOCOMMERCE_URL/wp-admin/"
   echo "EBANX: Username - $EBANX_ADMIN_USERNAME"
   echo "EBANX: Password - $EBANX_ADMIN_PASSWORD"
 fi

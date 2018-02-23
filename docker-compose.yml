@@ -10,7 +10,8 @@ services:
         WORDPRESS_DB_NAME: wordpress
         WORDPRESS_DB_HOST: mysql
     environment:
-      EBANX_WC_PLUGIN_VERSION: 3.0.5
+      EBANX_WC_PLUGIN_VERSION: 3.3.3
+      EBANX_STOREFRONT_THEME_VERSION: 2.2.8
       EBANX_ADMIN_USERNAME: ebanx
       EBANX_ADMIN_PASSWORD: ebanx
       EBANX_SITE_TITLE: EBANX
