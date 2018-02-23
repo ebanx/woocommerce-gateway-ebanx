@@ -1,0 +1,33 @@
+version: '3'
+
+services:
+  woocommerce:
+    build:
+      context: .
+      args:
+        WORDPRESS_DB_USER: root
+        WORDPRESS_DB_PASSWORD: root
+        WORDPRESS_DB_NAME: wordpress
+        WORDPRESS_DB_HOST: mysql
+    environment:
+      EBANX_WC_PLUGIN_VERSION: 3.0.5
+      EBANX_ADMIN_USERNAME: ebanx
+      EBANX_ADMIN_PASSWORD: ebanx
+      EBANX_SITE_TITLE: EBANX
+      EBANX_SITE_EMAIL: plugin@ebanx.com
+    ports:
+      - 80:80
+    volumes:
+      - ./:/var/www/html/wp-content/plugins/woocommerce-gateway-ebanx/
+    links:
+      - mysql
+
+  mysql:
+    image: mariadb
+    environment:
+      MYSQL_DATABASE: wordpress
+      MYSQL_ROOT_PASSWORD: root
+    ports:
+      - 3306:3306
+    volumes:
+      - ./.data:/var/lib/mysql
