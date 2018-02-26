@@ -7,7 +7,6 @@ setup_test() {
   cd $TRAVIS_BUILD_DIR/tests
   npm install
   ./node_modules/.bin/cypress -v
-  sudo service mysql stop
   "export DISPLAY=:99.0"
   "sh -e /etc/init.d/xvfb start"
 }
@@ -21,6 +20,7 @@ run_tests() {
 
 setup_docker() {
   echo setup_docker
+  sudo service mysql stop
   cd $TRAVIS_BUILD_DIR
   docker-compose up -d --build
 }
