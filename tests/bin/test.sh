@@ -4,9 +4,8 @@
 
 run_test() {
   cd $TRAVIS_BUILD_DIR/tests
-
-  ls
-
+  node -v
+  npm -v
   npm install
   node ./node_modules/.bin/cypress run --config videoRecording=false --project ./woocommerce -s cypress/integration/$TEST_COUNTRY.js
 }
