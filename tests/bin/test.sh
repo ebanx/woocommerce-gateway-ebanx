@@ -17,7 +17,6 @@ setup_test() {
 setup_docker() {
   cd $TRAVIS_BUILD_DIR
   docker-compose up --build
-  sleep 20 # REMOVE THAT
 }
 
 setup_test
