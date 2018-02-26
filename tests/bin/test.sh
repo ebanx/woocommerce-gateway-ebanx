@@ -6,6 +6,9 @@ setup_test() {
   echo setup_test
   cd $TRAVIS_BUILD_DIR/tests
   npm install
+  ./node_modules/.bin/cypress -v
+  ./node_modules/.bin/cypress run --config videoRecording=false --project ./woocommerce -s cypress/integration/$TEST_COUNTRY.js
+  exit 1;
   sudo service mysql stop
   "export DISPLAY=:99.0"
   "sh -e /etc/init.d/xvfb start"

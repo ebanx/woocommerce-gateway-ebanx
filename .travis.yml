@@ -19,21 +19,21 @@ cache:
 env:
   matrix:
     - TEST_COUNTRY=argentina
-    - TEST_COUNTRY=brazil
-    - TEST_COUNTRY=chile
-    - TEST_COUNTRY=colombia
-    - TEST_COUNTRY=ecuador
-    - TEST_COUNTRY=mexico
-    - TEST_COUNTRY=peru
+    # - TEST_COUNTRY=brazil
+    # - TEST_COUNTRY=chile
+    # - TEST_COUNTRY=colombia
+    # - TEST_COUNTRY=ecuador
+    # - TEST_COUNTRY=mexico
+    # - TEST_COUNTRY=peru
 
 install: composer update
 
 script:
   - bash ./tests/bin/test.sh
 
-stages:
-  - lint
-  - unit
+# stages:
+#   - lint
+#   - unit
   - test
   - deploy
 
@@ -42,17 +42,17 @@ after_success: bash <(curl -s https://codecov.io/bash)
 before_deploy: bash .scripts/before_deploy.sh
 
 jobs:
-  include:
-    - stage: lint
-      env:
-        - TEST_COUNTRY=
-      script:
-        - bash .scripts/phpcs.sh
-    - stage: unit
-      env:
-        - TEST_COUNTRY=
-      script:
-        - phpunit
+  # include:
+  #   - stage: lint
+  #     env:
+  #       - TEST_COUNTRY=
+  #     script:
+  #       - bash .scripts/phpcs.sh
+  #   - stage: unit
+  #     env:
+  #       - TEST_COUNTRY=
+  #     script:
+  #       - phpunit
     - stage: test
       if: $TRAVIS_COMMIT_MESSAGE =~ ^(\[tests skip\])
     - stage: deploy
