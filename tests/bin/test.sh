@@ -14,13 +14,17 @@ setup_test() {
   "sh -e /etc/init.d/xvfb start"
 }
 
+run_tests() {
+  cd $TRAVIS_BUILD_DIR/tests
+  node ./node_modules/.bin/cypress run --config videoRecording=false --project ./woocommerce -s cypress/integration/$TEST_COUNTRY.js
+}
+
 setup_docker() {
   cd $TRAVIS_BUILD_DIR
-  docker-compose up --build
+  docker-compose up -d --build
 }
 
 setup_test
 setup_docker
 
-cd $TRAVIS_BUILD_DIR/tests
-node ./node_modules/.bin/cypress run --config videoRecording=false --project ./woocommerce -s cypress/integration/$TEST_COUNTRY.js
+while ! curl -s http://localhost > /dev/null; do echo waiting for woocommerce-container; sleep 3; done; run_tests
