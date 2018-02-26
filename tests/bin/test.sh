@@ -5,7 +5,7 @@
 setup_test() {
   echo setup_test
   cd $TRAVIS_BUILD_DIR/tests
-  npm install
+  npm install --unsafe-perm=true --allow-root
 
   ls -la ./node_modules
   ls -la ./node_modules/.bin
@@ -17,11 +17,7 @@ setup_test() {
 
 run_tests() {
   echo run_tests
-  cd $TRAVIS_BUILD_DIR/tests
-  echo "./node_modules/"
-  ls ./node_modules/
-  echo "./node_modules/.bin"
-  ls ./node_modules/.bin
+  cd $TRAVIS_BUILD_DIR/tests  
   ./node_modules/.bin/cypress run --config videoRecording=false --project ./woocommerce -s cypress/integration/$TEST_COUNTRY.js
 }
 
