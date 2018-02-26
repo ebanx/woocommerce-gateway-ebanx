@@ -6,10 +6,6 @@ setup_test() {
   echo setup_test
   cd $TRAVIS_BUILD_DIR/tests
   npm install --unsafe-perm=true --allow-root
-
-  ls -la ./node_modules
-  ls -la ./node_modules/.bin
-
   sudo service mysql stop
   "export DISPLAY=:99.0"
   "sh -e /etc/init.d/xvfb start"
@@ -17,7 +13,8 @@ setup_test() {
 
 run_tests() {
   echo run_tests
-  cd $TRAVIS_BUILD_DIR/tests  
+  cd $TRAVIS_BUILD_DIR/tests
+  sudo chmod +x ./node_modules/.bin/cypress
   ./node_modules/.bin/cypress run --config videoRecording=false --project ./woocommerce -s cypress/integration/$TEST_COUNTRY.js
 }
 
