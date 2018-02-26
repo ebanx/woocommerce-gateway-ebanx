@@ -20,4 +20,5 @@ setup_docker() {
 setup_test
 setup_docker
 
-node ./node_modules/.bin/cypress run --config videoRecording=false --project ./woocommerce -s cypress/integration/$TEST_COUNTRY.js
+cd $TRAVIS_BUILD_DIR/tests
+sudo node ./node_modules/.bin/cypress run --config videoRecording=false --project ./woocommerce -s cypress/integration/$TEST_COUNTRY.js
