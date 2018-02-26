@@ -2,7 +2,12 @@
 
 [[ $TRAVIS_COMMIT_MESSAGE =~ ^(\[tests skip\]) ]] && echo "TESTS SKIP" && exit 0;
 
-PLATFORM=$(echo $DORAEMON_TEST | cut -f1 -d-)
-COUNTRY=$(echo $DORAEMON_TEST | cut -f2 -d-)
+cd $TRAVIS_BUILD_DIR
 
-node ./node_modules/.bin/cypress run --config videoRecording=false --project ./$PLATFORM -s cypress/integration/$COUNTRY.js
+docker-compose up -d
+sleep 120 # REMOVE THAT
+
+cd $TRAVIS_BUILD_DIR/tests
+
+npm install
+node ./node_modules/.bin/cypress run --config videoRecording=false --project ./woocommerce -s cypress/integration/$TEST_COUNTRY.js
