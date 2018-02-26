@@ -27,7 +27,7 @@
   },
   "pre-commit": "lint:staged",
   "dependencies": {
-    "cypress": "^1.0.3",
+    "cypress": "^2.0.2",
     "eslint": "^4.17.0",
     "faker": "git://github.com/marak/Faker.js",
     "joi": "^13.1.2",
