@@ -18,7 +18,7 @@ setup_test() {
 run_tests() {
   echo run_tests
   cd $TRAVIS_BUILD_DIR/tests
-  node ./node_modules/.bin/cypress run --config videoRecording=false --project ./woocommerce -s cypress/integration/$TEST_COUNTRY.js
+  sudo ./node_modules/.bin/cypress run --config videoRecording=false --project ./woocommerce -s cypress/integration/$TEST_COUNTRY.js
 }
 
 setup_docker() {
