@@ -50,14 +50,20 @@ before_deploy: bash .scripts/before_deploy.sh
 jobs:
   include:
     - stage: lint
+      env:
+        - TEST_COUNTRY=
       script:
         - bash .scripts/phpcs.sh
     - stage: unit
+      env:
+        - TEST_COUNTRY=
       script:
         - phpunit
     - stage: test
       if: $TRAVIS_COMMIT_MESSAGE =~ ^(\[tests skip\])
     - stage: deploy
+      env:
+        - TEST_COUNTRY=
       deploy:
         - provider: releases
           api_key:
