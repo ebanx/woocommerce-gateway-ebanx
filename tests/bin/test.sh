@@ -4,7 +4,7 @@
 
 setup_test() {
   cd $TRAVIS_BUILD_DIR/tests
-  sudo npm install
+  npm install
 
   ls -la ./node_modules
   ls -la ./node_modules/.bin
