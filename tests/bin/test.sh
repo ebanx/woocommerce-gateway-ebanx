@@ -3,6 +3,7 @@
 [[ $TRAVIS_COMMIT_MESSAGE =~ ^(\[tests skip\]) ]] && echo "TESTS SKIP" && exit 0;
 
 list() {
+  whoami
   ls -la $TRAVIS_BUILD_DIR
   ls -la $TRAVIS_BUILD_DIR/tests
 }
@@ -14,6 +15,7 @@ setup_test() {
   ./node_modules/.bin/cypress -v
   "export DISPLAY=:99.0"
   "sh -e /etc/init.d/xvfb start"
+  run_tests
 }
 
 run_tests() {
@@ -29,9 +31,9 @@ setup_docker() {
   docker-compose up -d --build
 }
 
-list
-setup_docker
-list
+# list
+# setup_docker
+# list
 setup_test
 
-while ! curl -s http://localhost > /dev/null; do echo waiting for woocommerce-container; sleep 10; done; run_tests
+# while ! curl -s http://localhost > /dev/null; do echo waiting for woocommerce-container; sleep 10; done; run_tests
