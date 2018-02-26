@@ -5,7 +5,7 @@
 setup_test() {
   echo setup_test
   cd $TRAVIS_BUILD_DIR/tests
-  npm install --unsafe-perm=true --allow-root
+  npm install
   sudo service mysql stop
   "export DISPLAY=:99.0"
   "sh -e /etc/init.d/xvfb start"
