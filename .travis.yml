@@ -16,12 +16,6 @@ cache:
     - $TRAVIS_BUILD_DIR/tests/node_modules
     - $HOME/.composer/cache
 
-before_script:
-  - sudo service mysql stop
-  - "export DISPLAY=:99.0"
-  - "sh -e /etc/init.d/xvfb start"
-  - sleep 3
-
 env:
   matrix:
     - TEST_COUNTRY=argentina
