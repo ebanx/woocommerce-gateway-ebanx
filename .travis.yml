@@ -28,13 +28,10 @@ env:
 
 install: composer update
 
-script:
-  - bash ./tests/bin/test.sh
-
 stages:
   - lint
   - unit
-  - test
+  - e2e
   - deploy
 
 before_deploy: bash .scripts/before_deploy.sh
@@ -51,6 +48,9 @@ jobs:
         - TEST_COUNTRY=
       script:
         - phpunit
+    - stage: e2e
+      script:
+        - bash ./tests/bin/test.sh
     - stage: deploy
       env:
         - TEST_COUNTRY=
