@@ -28,18 +28,19 @@ env:
 
 install: composer update
 
-# before_cache:
-#   - sudo chown -R travis:travis $TRAVIS_BUILD_DIR/vendor
+before_cache:
+  - sudo chown -R travis:travis $TRAVIS_BUILD_DIR/vendor
 
-# script:
-#   - bash ./tests/bin/test.sh
+script:
+  - bash ./tests/bin/test.sh
 
 stages:
   - lint
-  # - unit
-  - e2e
+  - unit
+  - test
+  - deploy
 
-# before_deploy: bash .scripts/before_deploy.sh
+before_deploy: bash .scripts/before_deploy.sh
 
 jobs:
   include:
@@ -53,14 +54,8 @@ jobs:
     #     - TEST_COUNTRY=
     #   script:
     #     - phpunit
-    - stage: e2e
-      env:
-        matrix:
-          - TEST_COUNTRY=argentina
-          - TEST_COUNTRY=brazil
-      script:
-        - bash ./tests/bin/test.sh
-    - stage: Deploy Woocommerce
+    - stage: deploy
+      script: skip
       env:
         - TEST_COUNTRY=
       deploy:
