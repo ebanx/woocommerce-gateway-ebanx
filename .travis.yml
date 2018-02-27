@@ -20,11 +20,11 @@ env:
   matrix:
     - TEST_COUNTRY=argentina
     - TEST_COUNTRY=brazil
-    # - TEST_COUNTRY=chile
-    # - TEST_COUNTRY=colombia
-    # - TEST_COUNTRY=ecuador
-    # - TEST_COUNTRY=mexico
-    # - TEST_COUNTRY=peru
+    - TEST_COUNTRY=chile
+    - TEST_COUNTRY=colombia
+    - TEST_COUNTRY=ecuador
+    - TEST_COUNTRY=mexico
+    - TEST_COUNTRY=peru
 
 install: composer update
 
@@ -49,11 +49,11 @@ jobs:
         - TEST_COUNTRY=
       script:
         - bash .scripts/phpcs.sh
-    # - stage: unit
-    #   env:
-    #     - TEST_COUNTRY=
-    #   script:
-    #     - phpunit
+    - stage: unit
+      env:
+        - TEST_COUNTRY=
+      script:
+        - phpunit
     - stage: deploy
       script: skip
       env:

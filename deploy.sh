@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
 
-echo "DEEEEPLOY";
-
 exit 0;
 
 if [[ -z "$TRAVIS" ]]; then
