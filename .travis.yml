@@ -28,6 +28,9 @@ env:
 
 install: composer update
 
+before_script:
+  - sudo chown -R travis:travis $TRAVIS_BUILD_DIR/vendor
+
 script:
   - bash ./tests/bin/test.sh
 
@@ -35,7 +38,6 @@ stages:
   - lint
   - unit
   - test
-  - send
 
 # before_deploy: bash .scripts/before_deploy.sh
 
@@ -51,7 +53,7 @@ jobs:
         - TEST_COUNTRY=
       script:
         - phpunit
-    - stage: send
+    - stage: Deploy Woocommerce
       env:
         - TEST_COUNTRY=
       deploy:
