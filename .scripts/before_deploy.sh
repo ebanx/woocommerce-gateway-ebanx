@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+bash <(curl -s https://codecov.io/bash)
+
 rm -rf vendor
 composer install --no-dev
 

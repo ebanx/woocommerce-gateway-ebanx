@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+exit 0;
+
 if [[ -z "$TRAVIS" ]]; then
 	echo "Script is only to be run by Travis CI" 1>&2
 	exit 1
