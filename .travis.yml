@@ -20,13 +20,16 @@ env:
   matrix:
     - TEST_COUNTRY=argentina
     - TEST_COUNTRY=brazil
-    # - TEST_COUNTRY=chile
-    # - TEST_COUNTRY=colombia
-    # - TEST_COUNTRY=ecuador
-    # - TEST_COUNTRY=mexico
-    # - TEST_COUNTRY=peru
+    - TEST_COUNTRY=chile
+    - TEST_COUNTRY=colombia
+    - TEST_COUNTRY=ecuador
+    - TEST_COUNTRY=mexico
+    - TEST_COUNTRY=peru
 
 install: composer update
+
+script:
+  - bash ./tests/bin/test.sh
 
 stages:
   - lint
@@ -34,7 +37,7 @@ stages:
   - test
   - deploy
 
-before_deploy: bash .scripts/before_deploy.sh
+# before_deploy: bash .scripts/before_deploy.sh
 
 jobs:
   include:
@@ -48,9 +51,6 @@ jobs:
         - TEST_COUNTRY=
       script:
         - phpunit
-    - stage: test
-      script:
-        - bash ./tests/bin/test.sh
     - stage: deploy
       env:
         - TEST_COUNTRY=
@@ -63,9 +63,9 @@ jobs:
           on:
             tags: true
             all_branches: true
-        - provider: script
-          skip_cleanup: true
-          script: ./deploy.sh
-          on:
-            tags: true
-            all_branches: true
+        # - provider: script
+        #   skip_cleanup: true
+        #   script: ./deploy.sh
+        #   on:
+        #     tags: true
+        #     all_branches: true
