@@ -1,5 +1,9 @@
 #!/usr/bin/env bash
 
+echo "DEEEEPLOY";
+
+exit 0;
+
 if [[ -z "$TRAVIS" ]]; then
 	echo "Script is only to be run by Travis CI" 1>&2
 	exit 1
