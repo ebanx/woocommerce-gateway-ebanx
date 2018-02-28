@@ -1139,6 +1139,9 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway
 
 				break;
 			case 'UPDATE':
+				if ( 'completed' === $order->status ) {
+					break;
+				}
 				$this->update_payment($order, $data);
 
 				break;
