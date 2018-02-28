@@ -1,4 +1,3 @@
 #!/usr/bin/env bash
 
-sudo chown -R travis:travis $TRAVIS_BUILD_DIR/vendor
-sudo chown -R travis:travis $TRAVIS_BUILD_DIR/tests
+bash $TRAVIS_BUILD_DIR/.scripts/revoke_permissions.sh
