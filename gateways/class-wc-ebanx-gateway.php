@@ -1139,9 +1139,6 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway
 
 				break;
 			case 'UPDATE':
-				if ( 'completed' === $order->status ) {
-					break;
-				}
 				$this->update_payment($order, $data);
 
 				break;
@@ -1187,6 +1184,10 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway
 			case 'OP':
 				$new_status = 'pending';
 				break;
+		}
+
+		if ( 'completed' === $order->status && 'CA' !== $requestStatus ) {
+			return;
 		}
 
 		if ($new_status !== $order->status) {
