@@ -25,7 +25,7 @@ setup_docker() {
   echo setup_docker
   sudo service mysql stop
   cd $TRAVIS_BUILD_DIR
-  docker-compose up -d --build
+  docker-compose up -d
 }
 
 setup_docker
