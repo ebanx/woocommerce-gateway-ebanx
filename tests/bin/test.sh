@@ -4,12 +4,6 @@
 
 setup_test() {
   echo setup_test
-  sudo chown -R travis:travis $TRAVIS_BUILD_DIR/tests
-  sudo chown -R travis:travis $TRAVIS_BUILD_DIR/vendor
-
-  "export DISPLAY=:99.0"
-  "sh -e /etc/init.d/xvfb start"
-
   cd $TRAVIS_BUILD_DIR/tests
   npm install
 }
@@ -25,7 +19,7 @@ setup_docker() {
   echo setup_docker
   sudo service mysql stop
   cd $TRAVIS_BUILD_DIR
-  docker-compose up -d --build
+  docker-compose up -d
 }
 
 setup_docker
