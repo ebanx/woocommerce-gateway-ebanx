@@ -7,9 +7,6 @@ setup_test() {
   sudo chown -R travis:travis $TRAVIS_BUILD_DIR/tests
   sudo chown -R travis:travis $TRAVIS_BUILD_DIR/vendor
 
-  "export DISPLAY=:99.0"
-  "sh -e /etc/init.d/xvfb start"
-
   cd $TRAVIS_BUILD_DIR/tests
   npm install
 }
