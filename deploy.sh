@@ -39,7 +39,7 @@ mkdir $SVN_ROOT_PATH/trunk
 
 echo "Synchronizing trunk"
 # Copy our new version of the plugin into trunk
-rsync -r -p --exclude=build --exclude=tests $TRAVIS_BUILD_DIR/* $SVN_ROOT_PATH/trunk
+rsync -r -p --exclude=build --exclude=tests --exclude=_vendor $TRAVIS_BUILD_DIR/* $SVN_ROOT_PATH/trunk
 
 # Erase possible broken version
 rm -fR "$SVN_ROOT_PATH/tags/$TRAVIS_TAG"
@@ -48,7 +48,7 @@ mkdir $SVN_ROOT_PATH/tags/$TRAVIS_TAG
 
 echo "Synchronizing tag $TRAVIS_TAG"
 # Copy our new version of the plugin into tag directory
-rsync -r -p --exclude "build" $TRAVIS_BUILD_DIR/* $SVN_ROOT_PATH/tags/$TRAVIS_TAG
+rsync -r -p --exclude=build --exclude=tests --exclude=_vendor $TRAVIS_BUILD_DIR/* $SVN_ROOT_PATH/tags/$TRAVIS_TAG
 
 echo "Generating diff"
 # Add new files to SVN
