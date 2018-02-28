@@ -1157,7 +1157,7 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway
 	 * @return void
 	 */
 	final public function update_payment($order, $data) {
-		$requestStatus = strtoupper($data->payment->status);
+		$request_status = strtoupper( $data->payment->status );
 
 		$status = array(
 			'CO' => 'Confirmed',
@@ -1167,7 +1167,7 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway
 		);
 		$new_status = null;
 
-		switch ($requestStatus) {
+		switch ( $request_status ) {
 			case 'CO':
 				if (method_exists($order, 'get_payment_method')
 					&& strpos($order->get_payment_method(), 'ebanx-credit-card') === 0) {
@@ -1186,7 +1186,7 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway
 				break;
 		}
 
-		if ( 'completed' === $order->status && 'CA' !== $requestStatus ) {
+		if ( 'completed' === $order->status && 'CA' !== $request_status ) {
 			return;
 		}
 
