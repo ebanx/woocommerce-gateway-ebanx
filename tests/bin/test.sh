@@ -4,8 +4,6 @@
 
 setup_test() {
   echo setup_test
-  bash $TRAVIS_BUILD_DIR/.scripts/revoke_permissions.sh
-
   cd $TRAVIS_BUILD_DIR/tests
   npm install
 }

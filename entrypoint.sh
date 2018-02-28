@@ -2,10 +2,10 @@
 
 set -e
 
-export WP_OWNER=www-data
-export WP_GROUP=www-data
+# export WP_OWNER=www-data
+# export WP_GROUP=www-data
 export WP_ROOT=/var/www/html
-export WS_GROUP=www-data
+# export WS_GROUP=www-data
 
 /usr/local/bin/wait-for-it.sh -t 60 mysql:3306 -- echo 'MySQL is up!'
 
@@ -63,19 +63,19 @@ if ! $(wp core is-installed --allow-root); then
   # Configure Permalink
   wp rewrite structure '/%postname%/' --hard --allow-root
 
-  find ${WP_ROOT} -exec chown ${WP_OWNER}:${WP_GROUP} {} \;
-  find ${WP_ROOT} -type d -exec chmod 755 {} \;
-  find ${WP_ROOT} -type f -exec chmod 644 {} \;
-  chgrp ${WS_GROUP} ${WP_ROOT}/wp-config.php
-  chmod 660 ${WP_ROOT}/wp-config.php
-  find ${WP_ROOT}/wp-content -exec chgrp ${WS_GROUP} {} \;
-  find ${WP_ROOT}/wp-content -type d -exec chmod 775 {} \;
-  find ${WP_ROOT}/wp-content -type f -exec chmod 664 {} \;
-  chmod g+w ${WP_ROOT}
-  chown -R ${WP_OWNER}:${WP_GROUP} ${WP_ROOT}/wp-content
-  chown -R ${WP_OWNER}:${WP_GROUP} ${WP_ROOT}/wp-content/plugins/
-  chown -R ${WP_OWNER}:${WP_GROUP} ${WP_ROOT}/wp-content/uploads/
-  chown -R ${WP_OWNER}:${WP_GROUP} ${WP_ROOT}/wp-content/themes/
+  # find ${WP_ROOT} -exec chown ${WP_OWNER}:${WP_GROUP} {} \;
+  # find ${WP_ROOT} -type d -exec chmod 755 {} \;
+  # find ${WP_ROOT} -type f -exec chmod 644 {} \;
+  # chgrp ${WS_GROUP} ${WP_ROOT}/wp-config.php
+  # chmod 660 ${WP_ROOT}/wp-config.php
+  # find ${WP_ROOT}/wp-content -exec chgrp ${WS_GROUP} {} \;
+  # find ${WP_ROOT}/wp-content -type d -exec chmod 775 {} \;
+  # find ${WP_ROOT}/wp-content -type f -exec chmod 664 {} \;
+  # chmod g+w ${WP_ROOT}
+  # chown -R ${WP_OWNER}:${WP_GROUP} ${WP_ROOT}/wp-content
+  # chown -R ${WP_OWNER}:${WP_GROUP} ${WP_ROOT}/wp-content/plugins/
+  # chown -R ${WP_OWNER}:${WP_GROUP} ${WP_ROOT}/wp-content/uploads/
+  # chown -R ${WP_OWNER}:${WP_GROUP} ${WP_ROOT}/wp-content/themes/
 
   echo "EBANX: Visit http://$WOOCOMMERCE_URL/shop/ or http://$WOOCOMMERCE_URL/wp-admin/"
   echo "EBANX: Username - $EBANX_ADMIN_USERNAME"
