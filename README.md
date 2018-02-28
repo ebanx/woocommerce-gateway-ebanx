@@ -26,8 +26,10 @@ composer install
 And run docker compose:
 
 ```ssh
-docker-compose up -d
+docker-compose up
 ```
+
+Access in your browser: http://localhost
 
 ### Do you want to contribute?
 
