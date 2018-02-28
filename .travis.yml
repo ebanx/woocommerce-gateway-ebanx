@@ -38,6 +38,7 @@ stages:
   - deploy
 
 after_deploy: bash .scripts/after_deploy.sh
+after_success: bash .scripts/after_success.sh
 before_deploy: bash .scripts/before_deploy.sh
 
 jobs:
