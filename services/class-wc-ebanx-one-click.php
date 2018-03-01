@@ -310,6 +310,10 @@ class WC_EBANX_One_Click {
 			return;
 		}
 
+		if ( ! $this->configs ) {
+			return;
+		}
+
 		global $product;
 
 		switch ( get_locale() ) {
