@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
 
-exit 0;
-
 if [[ -z "$TRAVIS" ]]; then
 	echo "Script is only to be run by Travis CI" 1>&2
 	exit 1
@@ -63,3 +61,6 @@ svn ci --no-auth-cache --username $WP_ORG_USERNAME --password $WP_ORG_PASSWORD $
 echo "Cleaning temp dirs"
 # Remove SVN temp dir
 rm -fR $SVN_ROOT_PATH
+
+rm -rf vendor
+mv _vendor vendor
