@@ -35,10 +35,8 @@ stages:
   - lint
   - unit
   - test
+  - release
   - deploy
-
-after_deploy: bash .scripts/after_deploy.sh
-before_deploy: bash .scripts/before_deploy.sh
 
 jobs:
   include:
@@ -52,8 +50,11 @@ jobs:
         - TEST_COUNTRY=
       script:
         - phpunit
-    - stage: deploy
-      script: skip
+    - stage: release
+      script:
+        - bash <(curl -s https://codecov.io/bash)
+        - bash .scripts/before_deploy.sh
+        - zip -r /tmp/ebanx-payment-gateway-for-woocommerce $TRAVIS_BUILD_DIR/. -x "*.git*" "*tests*" "*_vendor*"
       env:
         - TEST_COUNTRY=
       deploy:
@@ -65,6 +66,12 @@ jobs:
           on:
             tags: true
             all_branches: true
+    - stage: deploy
+      script:
+        - bash .scripts/before_deploy.sh
+      env:
+        - TEST_COUNTRY=
+      deploy:
         - provider: script
           skip_cleanup: true
           script: ./deploy.sh
