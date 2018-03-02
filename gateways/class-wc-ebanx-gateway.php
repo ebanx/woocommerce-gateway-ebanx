@@ -1,6 +1,7 @@
 <?php
 
 require WC_EBANX_VENDOR_DIR . 'ebanx/ebanx/src/autoload.php';
+require WC_EBANX_SERVICES_DIR . 'class-wc-ebanx-api.php';
 
 if (!defined('ABSPATH')) {
 	exit;
@@ -36,6 +37,16 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway
 	protected static $totalGateways = 0;
 
 	/**
+	 * @var WC_EBANX_Global_Gateway
+	 */
+	protected $configs;
+
+	/**
+	 * @var \Ebanx\Benjamin\Facade
+	 */
+	protected $ebanx;
+
+	/**
 	 * Current user id
 	 *
 	 * @var int
@@ -64,6 +75,8 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway
 		if ($this->configs->settings['debug_enabled'] === 'yes') {
 			$this->log = new WC_Logger();
 		}
+
+		$this->ebanx = (new EBANX_Api($this->configs))->ebanx();
 
 		add_action('wp_enqueue_scripts', array($this, 'checkout_assets'), 100);
 
@@ -797,6 +810,8 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway
 	{
 		try {
 			$order = wc_get_order($order_id);
+
+			var_dump($this->ebanx);exit;
 
 			do_action('ebanx_before_process_payment', $order);
 
