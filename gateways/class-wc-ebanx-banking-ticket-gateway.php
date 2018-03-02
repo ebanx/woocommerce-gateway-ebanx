@@ -22,6 +22,8 @@ class WC_EBANX_Banking_Ticket_Gateway extends WC_EBANX_Gateway
 
 		parent::__construct();
 
+		$this->gateway = $this->ebanx->boleto();
+
 		$this->enabled = is_array($this->configs->settings['brazil_payment_methods']) ? in_array($this->id, $this->configs->settings['brazil_payment_methods']) ? 'yes' : false : false;
 	}
 

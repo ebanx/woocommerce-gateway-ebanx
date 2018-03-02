@@ -2,6 +2,7 @@
 
 require WC_EBANX_VENDOR_DIR . 'ebanx/ebanx/src/autoload.php';
 require WC_EBANX_SERVICES_DIR . 'class-wc-ebanx-api.php';
+require WC_EBANX_SERVICES_DIR . 'class-wc-ebanx-payment-adapter.php';
 
 if (!defined('ABSPATH')) {
 	exit;
@@ -45,6 +46,16 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway
 	 * @var \Ebanx\Benjamin\Facade
 	 */
 	protected $ebanx;
+
+	/**
+	 * @var \Ebanx\Benjamin\Services\Gateways\BaseGateway
+	 */
+	protected $gateway;
+
+	/**
+	 * @var string
+	 */
+	protected $api_name;
 
 	/**
 	 * Current user id
@@ -630,16 +641,6 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway
 			)
 		);
 
-		if (!empty($this->configs->settings['due_date_days']) && in_array($this->api_name, array_keys(WC_EBANX_Constants::$CASH_PAYMENTS_TIMEZONES)))
-		{
-			$date = new DateTime();
-
-			$date->setTimezone(new DateTimeZone(WC_EBANX_Constants::$CASH_PAYMENTS_TIMEZONES[$this->api_name]));
-			$date->modify("+{$this->configs->settings['due_date_days']} day");
-
-			$data['payment']['due_date'] = $date->format('d/m/Y');
-		}
-
 		if ($this->getTransactionAddress('country') === WC_EBANX_Constants::COUNTRY_BRAZIL) {
 			$fields_options = array();
 
@@ -811,24 +812,26 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway
 		try {
 			$order = wc_get_order($order_id);
 
-			var_dump($this->ebanx);exit;
-
 			do_action('ebanx_before_process_payment', $order);
 
 			if ($order->get_total() > 0) {
 				$data = $this->request_data($order);
 
-				$config = array(
-					'integrationKey' => $this->private_key,
-					'testMode'       => $this->is_sandbox_mode,
-				);
+//				$config = array(
+//					'integrationKey' => $this->private_key,
+//					'testMode'       => $this->is_sandbox_mode,
+//				);
+//
+//				\Ebanx\Config::set($config);
+//				\Ebanx\Config::setDirectMode(true);
+//
+//				$request = \Ebanx\EBANX::doRequest($data);
+				$country = $this->get_tr
+				$data = EBANX_Payment_Adapter::transform( $order, $this->configs, $this->api_name, $this->get_data(), );
 
-				\Ebanx\Config::set($config);
-				\Ebanx\Config::setDirectMode(true);
+				$response = $this->gateway->create($data);
 
-				$request = \Ebanx\EBANX::doRequest($data);
-
-				$this->process_response($request, $order);
+				$this->process_response($response, $order);
 			} else {
 				$order->payment_complete();
 			}
