@@ -826,8 +826,7 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway
 //				\Ebanx\Config::setDirectMode(true);
 //
 //				$request = \Ebanx\EBANX::doRequest($data);
-				$country = $this->get_tr
-				$data = EBANX_Payment_Adapter::transform( $order, $this->configs, $this->api_name, $this->get_data(), );
+				$data = EBANX_Payment_Adapter::transform( $order, $this->configs, $this->api_name, $this->get_data());
 
 				$response = $this->gateway->create($data);
 
