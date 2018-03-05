@@ -1,6 +1,6 @@
 <?php
 
-if (!defined('ABSPATH')) {
+if (!defined( 'ABSPATH' )) {
 	exit;
 }
 
@@ -38,24 +38,24 @@ class WC_EBANX_Log {
 					'Author URI' => 'Author URI',
 				)
 			);
-		}, get_option('active_plugins'));
+		}, get_option( 'active_plugins' ));
 	}
 
 	private static function get_theme_data() {
 		$wp_theme = wp_get_theme();
 
 		return [
-			'Name' => $wp_theme->get('Name'),
-			'ThemeURI' => $wp_theme->get('ThemeURI'),
-			'Description' => $wp_theme->get('Description'),
-			'Author' => $wp_theme->get('Author'),
-			'AuthorURI' => $wp_theme->get('AuthorURI'),
-			'Version' => $wp_theme->get('Version'),
-			'Template' => $wp_theme->get('Template'),
-			'Status' => $wp_theme->get('Status'),
-			'Tags' => $wp_theme->get('Tags'),
-			'TextDomain' => $wp_theme->get('TextDomain'),
-			'DomainPath' => $wp_theme->get('DomainPath'),
+			'Name' => $wp_theme->get( 'Name' ),
+			'ThemeURI' => $wp_theme->get( 'ThemeURI' ),
+			'Description' => $wp_theme->get( 'Description' ),
+			'Author' => $wp_theme->get( 'Author' ),
+			'AuthorURI' => $wp_theme->get( 'AuthorURI' ),
+			'Version' => $wp_theme->get( 'Version' ),
+			'Template' => $wp_theme->get( 'Template' ),
+			'Status' => $wp_theme->get( 'Status' ),
+			'Tags' => $wp_theme->get( 'Tags' ),
+			'TextDomain' => $wp_theme->get( 'TextDomain' ),
+			'DomainPath' => $wp_theme->get( 'DomainPath' ),
 		];
 	}
 
@@ -63,12 +63,12 @@ class WC_EBANX_Log {
 		$wp_theme = wp_get_theme();
 
 		return array(
-			'admin_email' => get_option('admin_email'),
-			'blogname' => get_option('blogname'),
-			'blogdescription' => get_option('blogdescription'),
-			'home' => get_option('home'),
-			'siteurl' => get_option('siteurl'),
-			'template' => get_option('template'),
+			'admin_email' => get_option( 'admin_email' ),
+			'blogname' => get_option( 'blogname' ),
+			'blogdescription' => get_option( 'blogdescription' ),
+			'home' => get_option( 'home' ),
+			'siteurl' => get_option( 'siteurl' ),
+			'template' => get_option( 'template' ),
 		);
 	}
 }
