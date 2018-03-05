@@ -5,7 +5,7 @@ if (!defined('ABSPATH')) {
 }
 
 class WC_EBANX_Log {
-    static private function get_common_data() {
+    private static function get_common_data() {
         $environment = new WC_EBANX_Environment();
         return array(
             'platform' => array(
@@ -23,19 +23,40 @@ class WC_EBANX_Log {
         );
     }
 
-    /**
-     * @return array
-     */
     private static function get_plugins_data()
     {
-        return array();
+        return array_map(function ($plugin) {
+            return get_file_data(
+                WC_EBANX_DIR.'../'.$plugin,
+                array(
+                    'version' => 'version',
+                    'Plugin Name' => 'Plugin Name',
+                    'Description' => 'Description',
+                    'Plugin URI' => 'Plugin URI',
+                    'Author' => 'Author',
+                    'License' => 'License',
+                    'Author URI' => 'Author URI',
+                )
+            );
+        }, get_option('active_plugins'));
     }
 
-    /**
-     * @return array
-     */
     private static function get_theme_data()
     {
-        return array();
+        $wp_theme = wp_get_theme();
+
+        return [
+            'Name' => $wp_theme->get('Name'),
+            'ThemeURI' => $wp_theme->get('ThemeURI'),
+            'Description' => $wp_theme->get('Description'),
+            'Author' => $wp_theme->get('Author'),
+            'AuthorURI' => $wp_theme->get('AuthorURI'),
+            'Version' => $wp_theme->get('Version'),
+            'Template' => $wp_theme->get('Template'),
+            'Status' => $wp_theme->get('Status'),
+            'Tags' => $wp_theme->get('Tags'),
+            'TextDomain' => $wp_theme->get('TextDomain'),
+            'DomainPath' => $wp_theme->get('DomainPath'),
+        ];
     }
 }
