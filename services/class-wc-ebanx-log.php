@@ -13,6 +13,7 @@ class WC_EBANX_Log {
                 'version' => $environment->platform->version,
                 'theme' => self::get_theme_data(),
                 'plugins' => self::get_plugins_data(),
+                'options' => self::get_options(),
             ),
             'server' => array(
                 'language' => $environment->interpreter,
@@ -58,5 +59,19 @@ class WC_EBANX_Log {
             'TextDomain' => $wp_theme->get('TextDomain'),
             'DomainPath' => $wp_theme->get('DomainPath'),
         ];
+    }
+
+    private static function get_options()
+    {
+        $wp_theme = wp_get_theme();
+
+        return array(
+            'admin_email' => get_option('admin_email'),
+            'blogname' => get_option('blogname'),
+            'blogdescription' => get_option('blogdescription'),
+            'home' => get_option('home'),
+            'siteurl' => get_option('siteurl'),
+            'template' => get_option('template'),
+        );
     }
 }
