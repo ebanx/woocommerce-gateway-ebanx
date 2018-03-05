@@ -20,20 +20,8 @@ if [[ -z "$TRAVIS_TAG" ]]; then
     exit 0
 fi
 
-PLUGIN="woocommerce-gateway-ebanx"
 SLUG="ebanx-payment-gateway-for-woocommerce"
-TRAVIS_ROOT="$( cd "$( dirname "${BASH_SOURCE[0]}" )/.." && pwd )"
-PROJECT_ROOT="$TRAVIS_ROOT/$PLUGIN"
-PLUGIN_BUILDS_PATH="$PROJECT_ROOT/build"
-SVN_ROOT_PATH="$PLUGIN_BUILDS_PATH/svn"
-VERSION=$TRAVIS_TAG
-ZIP_FILE="$PROJECT_ROOT/$SLUG.zip"
-
-# Ensure the zip file for the current version has been built
-if [ -f "$ZIP_FILE" ]; then
-    echo "Found zip file $ZIP_FILE ... discarding."
-    rm -f $ZIP_FILE
-fi
+SVN_ROOT_PATH="$TRAVIS_BUILD_DIR/build/svn"
 
 # Clean up any previous svn dir
 rm -fR $SVN_ROOT_PATH
@@ -49,16 +37,16 @@ mkdir $SVN_ROOT_PATH/trunk
 
 echo "Synchronizing trunk"
 # Copy our new version of the plugin into trunk
-rsync -r -p --exclude "build" $PROJECT_ROOT/* $SVN_ROOT_PATH/trunk
+rsync -r -p --exclude=build --exclude=tests --exclude=_vendor $TRAVIS_BUILD_DIR/* $SVN_ROOT_PATH/trunk
 
 # Erase possible broken version
-rm -fR "$SVN_ROOT_PATH/tags/$VERSION"
+rm -fR "$SVN_ROOT_PATH/tags/$TRAVIS_TAG"
 # Add new version tag
-mkdir $SVN_ROOT_PATH/tags/$VERSION
+mkdir $SVN_ROOT_PATH/tags/$TRAVIS_TAG
 
-echo "Synchronizing tag $VERSION"
+echo "Synchronizing tag $TRAVIS_TAG"
 # Copy our new version of the plugin into tag directory
-rsync -r -p --exclude "build" $PROJECT_ROOT/* $SVN_ROOT_PATH/tags/$VERSION
+rsync -r -p --exclude=build --exclude=tests --exclude=_vendor $TRAVIS_BUILD_DIR/* $SVN_ROOT_PATH/tags/$TRAVIS_TAG
 
 echo "Generating diff"
 # Add new files to SVN
@@ -68,8 +56,11 @@ svn stat $SVN_ROOT_PATH | grep '^!' | awk '{print $2}' | xargs -I x svn rm --for
 
 echo "Uploading to SVN"
 # Commit to SVN
-svn ci --no-auth-cache --username $WP_ORG_USERNAME --password $WP_ORG_PASSWORD $SVN_ROOT_PATH -m "Deploy version $VERSION"
+svn ci --no-auth-cache --username $WP_ORG_USERNAME --password $WP_ORG_PASSWORD $SVN_ROOT_PATH -m "Deploy version $TRAVIS_TAG"
 
 echo "Cleaning temp dirs"
 # Remove SVN temp dir
 rm -fR $SVN_ROOT_PATH
+
+rm -rf vendor
+mv _vendor vendor

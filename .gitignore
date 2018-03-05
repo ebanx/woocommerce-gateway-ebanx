@@ -15,6 +15,7 @@ apidocs/phpdoc-cache-*
 .phpintel
 phpcs.json
 diff.txt
+.env
 
 # Tests
 /report/

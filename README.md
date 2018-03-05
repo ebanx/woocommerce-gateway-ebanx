@@ -15,6 +15,22 @@ Please, visit the [official plugin page on WordPress store](https://wordpress.or
 
 ## Installation
 
+You can use our docker.
+
+First install dependencies:
+
+```ssh
+composer install
+```
+
+And run docker compose:
+
+```ssh
+docker-compose up
+```
+
+Access in your browser: http://localhost
+
 ### Do you want to contribute?
 
 We've put together all the information you'll need on [CONTRIBUTING.md](https://github.com/ebanx/woocommerce-gateway-ebanx/blob/master/CONTRIBUTING.md). Also, we always try to keep this file updated and with as much information as possible. If you want to help us with this file or with any coding issue, we would really appreciate it. :heart:
