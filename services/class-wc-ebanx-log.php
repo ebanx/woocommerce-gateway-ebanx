@@ -24,8 +24,7 @@ class WC_EBANX_Log {
 		);
 	}
 
-	private static function get_plugins_data()
-	{
+	private static function get_plugins_data() {
 		return array_map(function ($plugin) {
 			return get_file_data(
 				WC_EBANX_DIR.'../'.$plugin,
@@ -42,8 +41,7 @@ class WC_EBANX_Log {
 		}, get_option('active_plugins'));
 	}
 
-	private static function get_theme_data()
-	{
+	private static function get_theme_data() {
 		$wp_theme = wp_get_theme();
 
 		return [
@@ -61,8 +59,7 @@ class WC_EBANX_Log {
 		];
 	}
 
-	private static function get_options()
-	{
+	private static function get_options() {
 		$wp_theme = wp_get_theme();
 
 		return array(
