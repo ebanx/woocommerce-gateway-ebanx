@@ -41,7 +41,7 @@ if ( ! class_exists('WC_EBANX') ) {
 	register_deactivation_hook(__FILE__, array('WC_EBANX', 'deactivate_plugin'));
 
 	include_once WC_EBANX_DATABASE_DIR . 'class-wc-ebanx-database.php';
-	register_activation_hook( __FILE__, array( 'WC_EBANX_Database', 'create_log_table' ) );
+	register_activation_hook( __FILE__, array( 'WC_EBANX_Database', 'migrate' ) );
 
 	/**
 	 * WooCommerce WC_EBANX main class.
@@ -393,6 +393,9 @@ if ( ! class_exists('WC_EBANX') ) {
 		 */
 		public static function activate_plugin() {
 			self::save_merchant_infos();
+			self::include_log_classes();
+
+			PluginActivate::persist();
 
 			flush_rewrite_rules();
 
@@ -406,6 +409,9 @@ if ( ! class_exists('WC_EBANX') ) {
 		 */
 		public static function deactivate_plugin() {
 			flush_rewrite_rules();
+
+			self::include_log_classes();
+			PluginDeactivate::persist();
 
 			do_action('ebanx_deactivate_plugin');
 		}
@@ -423,7 +429,7 @@ if ( ! class_exists('WC_EBANX') ) {
 			if ( 'update' === $data['action'] && 'plugin' === $data['type'] ) {
 				foreach ( $data['plugins'] as $plugin_path ) {
 					if ( $plugin_path === $ebanx_path ) {
-						$ebanx_database->create_log_table();
+						$ebanx_database->migrate();
 					}
 				}
 			}
@@ -484,9 +490,14 @@ if ( ! class_exists('WC_EBANX') ) {
 			return self::$instance;
 		}
 
-		/**
-		 * Includes.
-		 */
+		private static function include_log_classes() {
+			include_once WC_EBANX_SERVICES_DIR . 'class-wc-ebanx-environment.php';
+			include_once WC_EBANX_SERVICES_DIR . 'class-wc-ebanx-log.php';
+			include_once WC_EBANX_SERVICES_DIR . 'log/Log.php';
+			include_once WC_EBANX_SERVICES_DIR . 'log/PluginActivate.php';
+			include_once WC_EBANX_SERVICES_DIR . 'log/PluginDeactivate.php';
+		}
+
 		private function includes()
 		{
 			// Utils
@@ -503,6 +514,8 @@ if ( ! class_exists('WC_EBANX') ) {
 			include_once WC_EBANX_SERVICES_DIR . 'class-wc-ebanx-third-party-compability-layer.php';
 			include_once WC_EBANX_SERVICES_DIR . 'class-wc-ebanx-cancel-order.php';
 			include_once WC_EBANX_SERVICES_DIR . 'class-wc-ebanx-capture-payment.php';
+
+			self::include_log_classes();
 
 			// Gateways
 			include_once WC_EBANX_GATEWAYS_DIR . 'class-wc-ebanx-gateway.php';
