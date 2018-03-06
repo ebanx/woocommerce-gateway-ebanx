@@ -5,7 +5,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 class WC_EBANX_Log {
-	private static function get_common_data() {
+	public static function get_platform_info() {
 		$environment = new WC_EBANX_Environment();
 		return array(
 			'platform' => array(
