@@ -11,11 +11,11 @@ Faker.locale = 'es';
 const mock = (data) => (R.merge(
   data,
   {
-    firstName: Faker.name.firstName(),
-    lastName: Faker.name.lastName(),
-    document: Faker.random.uuid(),
-    documentType: 'CDI',
-    documentTypeId: 'ARG_CDI',
+    firstName: 'MESSI',
+    lastName: 'LIONEL ANDRES',
+    document: '23330162449',
+    documentType: 'CUIT',
+    documentTypeId: 'ARG_CUIT',
     address: Faker.address.streetName(),
     city: Faker.address.city(),
     state: 'Catamarca',
