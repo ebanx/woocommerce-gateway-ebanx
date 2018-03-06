@@ -68,6 +68,8 @@ if ( ! class_exists('WC_EBANX') ) {
 
 		private static $my_account_menu_name = 'EBANX - Saved Cards';
 
+		private $settings = [];
+
 		/**
 		 * Initialize the plugin public actions.
 		 */
@@ -114,6 +116,7 @@ if ( ! class_exists('WC_EBANX') ) {
 
 			add_action('admin_footer', array('WC_EBANX_Assets', 'render'), 0);
 
+			add_action('woocommerce_settings_save_checkout', array($this, 'on_before_save_settings'), 10);
 			add_action('woocommerce_settings_saved', array($this, 'setup_configs'), 10);
 			add_action('woocommerce_settings_saved', array($this, 'on_save_settings'), 10);
 			add_action('woocommerce_settings_saved', array($this, 'update_lead'), 20);
@@ -357,11 +360,20 @@ if ( ! class_exists('WC_EBANX') ) {
 		 *
 		 * @return void
 		 */
+		public function on_before_save_settings() {
+			$this->settings['before'] = $this->configs->settings;
+		}
+
 		public function on_save_settings() {
-			// Delete flag that check if the api is ok
+			$this->settings['after'] = $this->configs->settings;
+
 			delete_option('_ebanx_api_was_checked');
 
 			do_action('ebanx_settings_saved', $_POST);
+
+			PluginSettingsChange::persist($this->settings);
+
+			$this->settings = [];
 		}
 
 		/**
@@ -496,6 +508,7 @@ if ( ! class_exists('WC_EBANX') ) {
 			include_once WC_EBANX_SERVICES_DIR . 'log/Log.php';
 			include_once WC_EBANX_SERVICES_DIR . 'log/PluginActivate.php';
 			include_once WC_EBANX_SERVICES_DIR . 'log/PluginDeactivate.php';
+			include_once WC_EBANX_SERVICES_DIR . 'log/PluginSettingsChange.php';
 		}
 
 		private function includes()
