@@ -44,4 +44,16 @@ class WC_EBANX_Database {
 
 		return $wpdb->insert( self::tables()[$table], $data);
 	}
+
+	public static function truncate( $table ) {
+		global $wpdb;
+
+		$wpdb->query("TRUNCATE TABLE " . self::tables()[$table]);
+	}
+
+	public static function select( $table ) {
+		global $wpdb;
+
+		return $wpdb->get_results("SELECT * FROM " . self::tables()[$table]);
+	}
 }

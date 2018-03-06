@@ -29,6 +29,26 @@ class WC_EBANX_Api_Controller {
 	}
 
 	/**
+	 * Responds that the plugin logs
+	 *
+	 * @return void
+	 */
+	public function retrieve_logs() {
+		header('Content-Type: application/json');
+
+		if(empty($_GET['integration_key']) || $_GET['integration_key'] !== $this->get_integration_key()) {
+			die(json_encode([]));
+		}
+
+		$logs = WC_EBANX_Database::select('logs');
+
+		WC_EBANX_Database::truncate('logs');
+
+
+		die(json_encode($logs));
+	}
+
+	/**
 	 * Captures a credit card payment made while auto capture was disabled
 	 *
 	 * @return void
