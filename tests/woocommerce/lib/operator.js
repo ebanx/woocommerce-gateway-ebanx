@@ -174,6 +174,13 @@ export default class Woocommerce {
           .stillOnCreditCard();
 
         R.ifElse(
+          R.propSatisfies((x) => (typeof x !== 'undefined'), 'instalments'), (data) => {
+            this.pages.thankYou.stillHasInstalments(data.instalments);
+          },
+          R.always(null)
+        )({ data });
+
+        R.ifElse(
           R.propSatisfies((x) => (x instanceof Function), 'next'), (data) => {
             data.next();
           },

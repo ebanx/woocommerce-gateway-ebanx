@@ -385,6 +385,7 @@ export const CHECKOUT_SCHEMA = {
           this.compliance(),
           {
             schema: 'BrazilCreditCard',
+            instalments: Joi.string().required(),
             card: Joi.object().keys({
               number: Joi.number().required(),
               cvv: Joi.string().required(),

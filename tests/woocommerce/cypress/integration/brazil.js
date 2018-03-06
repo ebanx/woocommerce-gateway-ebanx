@@ -50,6 +50,7 @@ describe('Woocommerce', () => {
       it('can buy `wonder womans purse`, create account and can one-click', () => {
         const mockData = {
           paymentMethod: defaults.pay.api.DEFAULT_VALUES.paymentMethods.br.creditcard.id,
+          instalments: '3',
           card: {
             number: defaults._globals.cardsWhitelist.mastercard,
             expiryDate: '12/22',

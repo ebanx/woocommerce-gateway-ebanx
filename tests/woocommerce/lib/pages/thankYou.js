@@ -31,6 +31,14 @@ export default class ThankYou {
     return this;
   }
 
+  stillHasInstalments(instalmentNumber) {
+    this.cy
+      .get('#ebanx-instalment-number', { timeout: 15000 })
+      .should('have.value', instalmentNumber);
+
+    return this;
+  }
+
   stillOnDebitCard() {
     this[stillOn](/(Débito)/);
 

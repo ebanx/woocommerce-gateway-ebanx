@@ -14,9 +14,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 <div class="ebanx-thank-you-page ebanx-thank-you-page--br ebanx-thank-you-page--cc-br">
 	<?php if ($instalments_number > 1) : ?>
-		<p><strong><?= $customer_name ?> seu pagamento de <?= $total ?>, parcelado em <?= $instalments_number ?>x de <?= $instalments_amount ?>, foi aprovado o/</strong></p>
+		<p><strong><?= $customer_name ?> seu pagamento de <?= $total ?>, parcelado em <span id="ebanx-instalment-number"><?= $instalments_number ?></span>x de <?= $instalments_amount ?>, foi aprovado o/</strong></p>
 	<?php else: ?>
-		<p><strong><?= $customer_name ?> seu pagamento de <?= $total ?>, à vista, foi aprovado o/</strong></p>
+		<p><strong><?= $customer_name ?> seu pagamento de <?= $total ?>, <span id="ebanx-instalment-numbers">à vista</span>, foi aprovado o/</strong></p>
 	<?php endif ?>
 
 	<p>Se tiver alguma dúvida em relação ao seu pagamento, acesse a Conta EBANX com o email <strong><?= $customer_email ?></strong>.</p>
