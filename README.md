@@ -52,7 +52,7 @@ The EBANX Gateway Plugin can also be installed using GitHub. You can find our re
 
 ### Don't have an EBANX Account yet?
 
-No problem! Access our [sign-up](https://www.ebanx.com/business/en/dashboard "EBANX Dashboard") or [schedule a call](https://app.hubspot.com/meetings/ebanx-ronaldo/schedule-call) with a Business Development Executive.
+No problem! Access our [sign-up](https://www.ebanx.com/business/en/dashboard "EBANX Dashboard") or [request a call](https://business.ebanx.com/en/contact-sales) with a Business Development Executive.
 
 ---
 
