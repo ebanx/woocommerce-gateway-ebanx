@@ -19,7 +19,6 @@ export default class Pay {
   static paymentData (data) {
     return R.merge({
       currency_ext: Cypress.env('DEMO_CURRENCY'),
-      user_value_5: Cypress.env('DEMO_BENJAMIN'),
       user_value_1: Cypress.env('DEMO_PLATFORM'),
       user_value_3: Cypress.env('DEMO_PLATFORM_VERSION'),
     }, data);
@@ -43,5 +42,5 @@ export default class Pay {
           R.always(null)
         )({ next });
       });
-  }  
+  }
 }

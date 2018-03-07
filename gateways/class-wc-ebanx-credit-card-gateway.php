@@ -418,7 +418,8 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
 				'masked_card' => substr(get_post_meta($order->id, '_masked_card_number', true), -4),
 				'customer_email' => $order->billing_email,
 				'customer_name' => $order->billing_first_name,
-				'total' => wc_price($order_amount, array('currency' => $currency))
+				'total' => wc_price($order_amount, array('currency' => $currency)),
+				'hash' => get_post_meta($order->id, '_ebanx_payment_hash', true)
 			),
 			'order_status' => $order->get_status(),
 			'method' => $order->payment_method

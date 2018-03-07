@@ -1,10 +1,22 @@
 /* global expect */
 
+import { tryNext } from '../../../utils';
+
 const stillOn = Symbol('stillOn');
+const stillOnAndExtractHash = Symbol('stillOnAndExtractHash');
+const extractHash = Symbol('extractHash');
 
 export default class ThankYou {
   constructor(cy) {
     this.cy = cy;
+  }
+
+  [extractHash](next) {
+    this.cy
+      .get('#ebanx-payment-hash')
+      .then(($elm) => {
+        next($elm.data('doraemon-hash'));
+      });
   }
 
   [stillOn] (method) {
@@ -16,6 +28,18 @@ export default class ThankYou {
     ;
   }
 
+  [stillOnAndExtractHash] (method, next) {
+    this.cy
+      .get('.woocommerce-order-overview.woocommerce-thankyou-order-details.order_details', { timeout: 15000 })
+      .should('be.visible')
+      .contains('.woocommerce-order-overview__payment-method.method', method)
+      .should('be.visible');
+
+    this[extractHash]((hash) => {
+      tryNext(next, { hash });
+    });
+  }
+
   stillOnBoleto() {
     this.cy
       .get('#ebanx-boleto-frame', { timeout: 15000 })
@@ -25,18 +49,18 @@ export default class ThankYou {
     return this;
   }
 
-  stillOnCreditCard() {
+  stillOnCreditCard(instalmentNumber, next) {
     this[stillOn](/(Crédito)/);
 
-    return this;
-  }
+    if(typeof instalmentNumber !== 'undefined') {
+      this.cy
+        .get('#ebanx-instalment-number', {timeout: 15000})
+        .contains(instalmentNumber);
+    }
 
-  stillHasInstalments(instalmentNumber) {
-    this.cy
-      .get('#ebanx-instalment-number', { timeout: 15000 })
-      .should('have.value', instalmentNumber);
-
-    return this;
+    this[extractHash]((hash) => {
+      tryNext(next, { hash });
+    });
   }
 
   stillOnDebitCard() {

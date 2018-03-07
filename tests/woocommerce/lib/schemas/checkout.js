@@ -49,6 +49,7 @@ export const CHECKOUT_SCHEMA = {
           this.compliance(),
           {
             schema: 'ArgentinaCreditCard',
+            instalments: Joi.string().required(),
             card: Joi.object().keys({
               number: Joi.number().required(),
               cvv: Joi.string().required(),
@@ -180,6 +181,7 @@ export const CHECKOUT_SCHEMA = {
           {
             schema: 'ColombiaCreditCard',
             document: Joi.string().required(),
+            instalments: Joi.string().required(),
             card: Joi.object().keys({
               name: Joi.string().required(),
               number: Joi.number().required(),
@@ -322,6 +324,7 @@ export const CHECKOUT_SCHEMA = {
           this.compliance(),
           {
             schema: 'MexicoCreditCard',
+            instalments: Joi.string().required(),
             card: Joi.object().keys({
               name: Joi.string().required(),
               number: Joi.number().required(),
