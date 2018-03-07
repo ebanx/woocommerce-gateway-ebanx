@@ -66,8 +66,6 @@ class WC_EBANX_My_Account
 	}
 
 	public function add_payment_hash_input ($text) {
-		
-
 		return $text;
 	}
 
@@ -86,10 +84,16 @@ class WC_EBANX_My_Account
 
 		switch ($order->payment_method) {
 			case 'ebanx-credit-card-br':
-				WC_EBANX_Credit_Card_BR_Gateway::thankyou_page($order);
+				WC_EBANX_Credit_Card_BR_Gateway::thankyou_page( $order );
 				break;
 			case 'ebanx-credit-card-mx':
-				WC_EBANX_Credit_Card_MX_Gateway::thankyou_page($order);
+				WC_EBANX_Credit_Card_MX_Gateway::thankyou_page( $order );
+				break;
+			case 'ebanx-credit-card-ar':
+				WC_EBANX_Credit_Card_AR_Gateway::thankyou_page( $order );
+				break;
+			case 'ebanx-credit-card-co':
+				WC_EBANX_Credit_Card_CO_Gateway::thankyou_page( $order );
 				break;
 			case 'ebanx-banking-ticket':
 				WC_EBANX_Banking_Ticket_Gateway::thankyou_page($order);

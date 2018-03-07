@@ -3,8 +3,9 @@
 import R from 'ramda';
 import Faker from 'faker';
 import defaults from '../../../defaults';
-import { assertUrlStatus } from '../../../utils';
+import {assertUrlStatus, wrapOrderAssertations} from '../../../utils';
 import Woocommerce from '../../lib/operator';
+import Pay from "../../../pay/lib/operator";
 
 Faker.locale = 'es_MX';
 
@@ -26,11 +27,13 @@ const mock = (data) => (R.merge(
 ));
 
 let woocommerce;
+let pay;
 
 describe('Woocommerce', () => {
   before(() => {
     assertUrlStatus(Cypress.env('DEMO_URL'));
 
+    pay = new Pay(cy);
     woocommerce = new Woocommerce(cy);
   });
 
@@ -66,6 +69,7 @@ describe('Woocommerce', () => {
       it('can buy `wonder womans purse`, using credit card and create account without one-click', () => {
         const mockData = {
           paymentMethod: defaults.pay.api.DEFAULT_VALUES.paymentMethods.mx.creditcard.id,
+          instalments: '3',
           card: {
             name: Faker.name.findName(),
             number: defaults._globals.cardsWhitelist.mastercard,
@@ -75,7 +79,18 @@ describe('Woocommerce', () => {
         };
 
         woocommerce
-          .buyWonderWomansPurseWithCreditCardToPersonal(mock(mockData));
+          .buyWonderWomansPurseWithCreditCardToPersonal(mock(mockData), (resp) => {
+            pay.queryPayment(resp.hash, Cypress.env('DEMO_INTEGRATION_KEY'), (payment) => {
+              const checkoutPayment = Pay.paymentData({
+                amount_ext: (Cypress.env('JEANS_PRICE') + Cypress.env('DEMO_INTEREST_RATE')).toFixed(2),
+                payment_type_code: 'mastercard',
+                instalments: '3',
+                status: 'CO',
+              });
+
+              wrapOrderAssertations(payment, checkoutPayment);
+            });
+          });
       });
     });
 

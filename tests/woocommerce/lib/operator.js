@@ -3,6 +3,7 @@ import Cart from './pages/cart';
 import Checkout from './pages/checkout';
 import ThankYou from './pages/thankYou';
 import WonderWomansPurse from './pages/wonderWomansPurse';
+import {tryNext} from "../../utils";
 
 const buyWonderWomansPurse = Symbol('buyWonderWomansPurse');
 
@@ -171,14 +172,9 @@ export default class Woocommerce {
     this.pages.checkout
       .placeWithCreditCard(data, () => {
         this.pages.thankYou
-          .stillOnCreditCard();
-
-        R.ifElse(
-          R.propSatisfies((x) => (x instanceof Function), 'next'), (data) => {
-            data.next();
-          },
-          R.always(null)
-        )({ next });
+          .stillOnCreditCard(data.instalments, (resp) => {
+            tryNext(next, resp);
+          });
       });
   }
 

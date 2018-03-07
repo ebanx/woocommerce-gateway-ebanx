@@ -237,4 +237,13 @@ jQuery( function($) {
 				.find('select.ebanx-instalments'));
 	});
 
+	var selected_instalment;
+
+	$( document ).on( 'change', 'select[name="ebanx-credit-card-installments"]', function () {
+		selected_instalment = $( '#ebanx-container-new-credit-card' ).find( 'select.ebanx-instalments' ).val();
+	});
+
+	$( 'body' ).on( 'updated_checkout', function () {
+		$( '#ebanx-container-new-credit-card' ).find( 'select.ebanx-instalments' ).select2( 'val', selected_instalment );
+	} );
 } );
