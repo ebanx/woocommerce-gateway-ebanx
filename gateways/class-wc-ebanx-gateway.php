@@ -1125,10 +1125,7 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway
 
 		\Ebanx\Config::set($config);
 
-		NotificationReceived::persist([
-			'codes' => $codes,
-			'notification_type' => $notificationType,
-		]);
+		NotificationReceived::persist($_GET);
 
 		/**
 		 * Validates the request parameters
