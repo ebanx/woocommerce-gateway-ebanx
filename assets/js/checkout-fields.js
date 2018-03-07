@@ -5,8 +5,8 @@ jQuery (function ($) {
     EBANX.errors.summary.es['BP-DR-101'] = '¡Lo sentimos!, vuelva a intentarlo con otra tarjeta.';
   // Custom select fields
   if ('select2' in $.fn) {
-    $('select.ebanx-select-field').select2();
-    $('.ebanx-select-field > select').select2();
+	$('select.ebanx-select-field').select2();
+	$('.ebanx-select-field > select').select2();
   }
 
   // Masks
