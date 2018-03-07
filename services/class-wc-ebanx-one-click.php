@@ -343,7 +343,7 @@ class WC_EBANX_One_Click {
 
 		$tax = 0;
 		if ( get_woocommerce_currency() === WC_EBANX_Constants::CURRENCY_CODE_BRL
-			 && $this->configs->get_setting_or_default('add_iof_to_local_amount_enabled', 'yes') === 'yes' ) {
+			 && 'yes' === $this->gateway->get_setting_or_default( 'add_iof_to_local_amount_enabled', 'yes' ) ) {
 			$tax = WC_EBANX_Constants::CURRENCY_CODE_BRL;
 		}
 

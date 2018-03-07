@@ -3,7 +3,7 @@ Contributors: ebanxwp
 Tags: credit card, boleto, ebanx, woocommerce, payment gateway, latin america, brazil, mexico, argentina, peru, colombia, chile, ecuador, cash payment, local payment, card payment, one-click payment, alternative payments, payment processing
 Requires at least: 4.0
 Tested up to: 4.9
-Stable tag: 1.27.0
+Stable tag: 1.28.1
 License: Apache v2.0
 License URI: http://www.apache.org/licenses/LICENSE-2.0
 
@@ -146,6 +146,19 @@ Yes, you can.
 4. There you go, you’re all set!
 
 == Changelog ==
+
+= 1.28.1 =
+* Fix - Get settings from gateway and not from inexistent attribute on one-click [#632](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/632)
+
+= 1.28.0 =
+* Feature - Removed documents from some payment methods of Chilean and Colombian [#617](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/617)
+* Feature - Added document as mandatory to Peruvian gateways [#618](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/618)
+* Feature - Added document as mandatory to Argentinian gateways [#619](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/619)
+* Feature - Added sandbox mode warning on gateway form [#624](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/624)
+* Fix - Fixed due date options not appearing on admin [#616](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/616)
+* Fix - Fixed instalment changing exchange rate message to total local amount message [#623](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/623)
+* Fix - Fixed one click redirecting to product page on Mexico [#626](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/626)
+* Fix - Stop changing 'complete' status on notification arrival [#629](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/629)
 
 = 1.27.0 =
 * Feature - Change tooltip message for IOF on local amount [#611](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/611)

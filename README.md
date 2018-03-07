@@ -1,7 +1,6 @@
 # EBANX Payment Gateway for WooCommerce
 
 [![Build Status](https://travis-ci.org/ebanx/woocommerce-gateway-ebanx.svg?branch=master)](https://travis-ci.org/ebanx/woocommerce-gateway-ebanx)
-[![Stories in Ready](https://badge.waffle.io/ebanx/woocommerce-gateway-ebanx.png?label=ready&title=Ready)](https://waffle.io/ebanx/woocommerce-gateway-ebanx)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/09ef5eb63a394dc3b76cb4319129fbf3)](https://www.codacy.com/app/EBANX/woocommerce-gateway-ebanx?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=ebanx/woocommerce-gateway-ebanx&amp;utm_campaign=Badge_Grade)
 
 Integrate your WooCommerce store with the EBANX payment gateway and improve your sales in fastest growing markets in Latin America.
@@ -14,6 +13,22 @@ Please, visit the [official plugin page on WordPress store](https://wordpress.or
 * WooCommerce 3.0+
 
 ## Installation
+
+You can use our docker.
+
+First install dependencies:
+
+```ssh
+composer install
+```
+
+And run docker compose:
+
+```ssh
+docker-compose up
+```
+
+Access in your browser: http://localhost
 
 ### Do you want to contribute?
 
