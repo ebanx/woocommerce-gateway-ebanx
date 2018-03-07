@@ -448,11 +448,7 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway
 
 			Refund::persist([
 				'request' => $data,
-				'response' => [
-					'status' => $request->status,
-					'status_code' => $request->status_code,
-					'message' => $request->status_message,
-				],
+				'response' => $request, // Response from request to EBANX
 			]);
 
 			if ($request->status !== 'SUCCESS') {
