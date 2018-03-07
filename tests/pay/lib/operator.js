@@ -42,5 +42,5 @@ export default class Pay {
           R.always(null)
         )({ next });
       });
-  }
+	}
 }
