@@ -1,15 +1,15 @@
 <?php 
 
-class Refund extends Log
+class NotificationReceived extends Log
 {
 	public static function persist(array $logData = [])
 	{
 		parent::save(
-			'refund',
+			'notification',
 			array_merge(
-		  		WC_EBANX_Log::get_platform_info(),
+				WC_EBANX_Log::get_platform_info(),
 		  		$logData
-		  	)
+			)
 		);
 	}
 }

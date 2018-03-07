@@ -511,6 +511,8 @@ if ( ! class_exists('WC_EBANX') ) {
 			include_once WC_EBANX_SERVICES_DIR . 'log/PluginDeactivate.php';
 			include_once WC_EBANX_SERVICES_DIR . 'log/PluginSettingsChange.php';
 			include_once WC_EBANX_SERVICES_DIR . 'log/Refund.php';
+			include_once WC_EBANX_SERVICES_DIR . 'log/NotificationReceived.php';
+			include_once WC_EBANX_SERVICES_DIR . 'log/NotificationQuery.php';
 		}
 
 		private function includes()

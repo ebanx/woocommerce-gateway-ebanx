@@ -1125,6 +1125,11 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway
 
 		\Ebanx\Config::set($config);
 
+		NotificationReceived::persist([
+			'codes' => $codes,
+			'notification_type' => $notificationType,
+		]);
+
 		/**
 		 * Validates the request parameters
 		 */
@@ -1133,6 +1138,11 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway
 		}
 
 		$data = \Ebanx\EBANX::doQuery($codes);
+
+		NotificationQuery::persist([
+			'codes' => $codes,
+			'data' => $data
+		]);
 
 		$order_id = WC_EBANX_Helper::get_post_id_by_meta_key_and_value('_ebanx_payment_hash', $data->payment->hash);
 
