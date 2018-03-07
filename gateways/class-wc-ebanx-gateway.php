@@ -1,8 +1,8 @@
 <?php
 
-require WC_EBANX_VENDOR_DIR . 'ebanx/ebanx/src/autoload.php';
-require WC_EBANX_SERVICES_DIR . 'class-wc-ebanx-api.php';
-require WC_EBANX_SERVICES_DIR . 'class-wc-ebanx-payment-adapter.php';
+require_once WC_EBANX_VENDOR_DIR . 'ebanx/ebanx/src/autoload.php';
+require_once WC_EBANX_SERVICES_DIR . 'class-wc-ebanx-api.php';
+require_once WC_EBANX_SERVICES_DIR . 'class-wc-ebanx-payment-adapter.php';
 
 if (!defined('ABSPATH')) {
 	exit;
@@ -43,16 +43,6 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway
 	protected $configs;
 
 	/**
-	 * @var \Ebanx\Benjamin\Facade
-	 */
-	protected $ebanx;
-
-	/**
-	 * @var \Ebanx\Benjamin\Services\Gateways\BaseGateway
-	 */
-	protected $gateway;
-
-	/**
 	 * @var string
 	 */
 	protected $api_name;
@@ -86,8 +76,6 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway
 		if ($this->configs->settings['debug_enabled'] === 'yes') {
 			$this->log = new WC_Logger();
 		}
-
-		$this->ebanx = (new EBANX_Api($this->configs))->ebanx();
 
 		add_action('wp_enqueue_scripts', array($this, 'checkout_assets'), 100);
 
@@ -817,20 +805,17 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway
 			if ($order->get_total() > 0) {
 				$data = $this->request_data($order);
 
-//				$config = array(
-//					'integrationKey' => $this->private_key,
-//					'testMode'       => $this->is_sandbox_mode,
-//				);
-//
-//				\Ebanx\Config::set($config);
-//				\Ebanx\Config::setDirectMode(true);
-//
-//				$request = \Ebanx\EBANX::doRequest($data);
-				$data = EBANX_Payment_Adapter::transform( $order, $this->configs, $this->api_name, $this->get_data());
+				$config = array(
+					'integrationKey' => $this->private_key,
+					'testMode'       => $this->is_sandbox_mode,
+				);
 
-				$response = $this->gateway->create($data);
+				\Ebanx\Config::set($config);
+				\Ebanx\Config::setDirectMode(true);
 
-				$this->process_response($response, $order);
+				$request = \Ebanx\EBANX::doRequest($data);
+
+				$this->process_response($request, $order);
 			} else {
 				$order->payment_complete();
 			}

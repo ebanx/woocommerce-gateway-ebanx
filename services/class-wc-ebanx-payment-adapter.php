@@ -1,23 +1,35 @@
 <?php
 require_once WC_EBANX_SERVICES_DIR . 'class-wc-ebanx-constants.php';
 require_once WC_EBANX_SERVICES_DIR . 'class-wc-ebanx-helper.php';
-require_once WC_EBANX_SERVICES_DIR . 'class-wc-ebanx-constants.php';
+require_once WC_EBANX_SERVICES_DIR . 'class-wc-ebanx-request.php';
 
 
 use Ebanx\Benjamin\Models\Address;
+use Ebanx\Benjamin\Models\Item;
 use Ebanx\Benjamin\Models\Payment;
 use Ebanx\Benjamin\Models\Person;
 
-class EBANX_Payment_Adapter
+class WC_EBANX_Payment_Adapter
 {
-	public static function transform($order, $configs, $api_name, $payload)
+	/**
+	 * @param $order WC_Order
+	 * @param $configs WC_EBANX_Global_Gateway
+	 * @param $api_name string
+	 * @param $names array
+	 *
+	 * @return Payment
+	 * @throws Exception
+	 */
+	public static function transform($order, $configs, $api_name, $names)
 	{
 		return new Payment([
 			'amountTotal' => $order->get_total(),
 			'orderNumber' => $order->id,
 			'dueDate' => static::transform_due_date($configs, $api_name),
-			'address' => static::transform_address($order, $payload),
-			'person' => static::transform_person($order, $configs, $payload),
+			'address' => static::transform_address($order),
+			'person' => static::transform_person($order, $configs, $names),
+			'responsible' => static::transform_person($order, $configs, $names),
+			'items' => static::transform_items( $order ),
 			'merchantPaymentCode' => substr($order->id . '-' . md5(rand(123123, 9999999)), 0, 40),
 		]);
 	}
@@ -28,41 +40,55 @@ class EBANX_Payment_Adapter
 		if (!empty($configs->settings['due_date_days']) && in_array($api_name, array_keys(WC_EBANX_Constants::$CASH_PAYMENTS_TIMEZONES)))
 		{
 			$date = new DateTime();
-
-			$date->setTimezone(new DateTimeZone(WC_EBANX_Constants::$CASH_PAYMENTS_TIMEZONES[$api_name]));
 			$date->modify("+{$configs->settings['due_date_days']} day");
-
-			$date = $date->format('d/m/Y');
 		}
 
 		return $date;
 	}
 
-	private static function transform_address($order, $payload)
+	/**
+	 * @param $order WC_Order
+	 *
+	 * @return Address
+	 * @throws Exception
+	 */
+	private static function transform_address( $order )
 	{
-		$addresses = $payload['billing_address_1'];
+		$addresses = WC_EBANX_Request::read( 'billing_address_1', null );
 
-		if (!empty($payload['billing_address_2'])) {
-			$addresses .= " - " . $payload['billing_address_2'];
+		if ( ! empty(WC_EBANX_Request::read( 'billing_address_2', null ) ) ) {
+			$addresses .= " - " . WC_EBANX_Request::read( 'billing_address_2', null );
 		}
 
-		$addresses = WC_EBANX_Helper::split_street($addresses);
-		$street_number = empty($addresses['houseNumber']) ? 'S/N' : trim($addresses['houseNumber'] . ' ' . $addresses['additionToAddress']);
+		$addresses = WC_EBANX_Helper::split_street( $addresses );
+		$street_number = empty( $addresses['houseNumber'] ) ? 'S/N' : trim( $addresses['houseNumber'] . ' ' . $addresses['additionToAddress'] );
 
-		return new Address([
+		return new Address( [
 			'address' => $addresses['streetName'],
 			'streetNumber' => $street_number,
-			'city' => $payload['billing_city'],
+			'city' => WC_EBANX_Request::read( 'billing_city', null ),
 			'country' => $order->billing_country,
-			'state' => array_key_exists('billing_state', $payload) ? $payload['billing_state'] : '',
-			'zipcode' => $payload['billing_postcode'],
-		]);
+			'state' => WC_EBANX_Request::read( 'billing_state', null ),
+			'zipcode' => WC_EBANX_Request::read( 'billing_postcode', null ),
+		] );
 	}
 
-	private static function transform_person($order, $configs, $payload)
+	/**
+	 * @param $order WC_Order
+	 * @param $configs WC_EBANX_Global_Gateway
+	 * @param $names array
+	 *
+	 * @return Person
+	 * @throws Exception
+	 */
+	private static function transform_person( $order, $configs, $names )
 	{
+
+		$documentInfo = static::get_document( $configs, $names );
+
 		return new Person([
-			'document' => static::get_document($configs, $payload),
+			'type' => $documentInfo['type'],
+			'document' => $documentInfo['number'],
 			'email' => $order->billing_email,
 			'ip' => WC_Geolocation::get_ip_address(),
 			'name' => $order->billing_first_name . ' ' . $order->billing_last_name,
@@ -70,55 +96,85 @@ class EBANX_Payment_Adapter
 		]);
 	}
 
-	private static function get_document($configs, $payload) {
+	/**
+	 * @param $configs WC_EBANX_Global_Gateway
+	 * @param $names array
+	 *
+	 * @return array
+	 * @throws Exception
+	 */
+	private static function get_document($configs, $names) {
 		$country = trim(strtolower(WC()->customer->get_country()));
 
 		switch ($country) {
 			case WC_EBANX_Constants::COUNTRY_BRAZIL:
-				return static::get_brazilian_document($configs, $payload);
+				return static::get_brazilian_document($configs, $names);
 		}
 	}
 
 	/**
-	 * @param $configs
-	 * @param $payload
+	 * @param $configs WC_EBANX_Global_Gateway
+	 * @param $names array
 	 *
-	 * @return string
+	 * @return array
 	 * @throws Exception
 	 */
-	private static function get_brazilian_document($configs, $payload) {
+	private static function get_brazilian_document($configs, $names) {
+		$cpf = WC_EBANX_Request::read( $names['ebanx_billing_brazil_document'], null );
+		$cnpj = WC_EBANX_Request::read( $names['ebanx_billing_brazil_cnpj'], null );
+
 		$fields_options = array();
-		$person_type = 'personal';
+		$person_type = Person::TYPE_PERSONAL;
 
 		if (isset($configs->settings['brazil_taxes_options']) && is_array($configs->settings['brazil_taxes_options'])) {
 			$fields_options = $configs->settings['brazil_taxes_options'];
 		}
 
 		if (count($fields_options) === 1 && $fields_options[0] === 'cnpj') {
-			$person_type = 'business';
+			$person_type = Person::TYPE_BUSINESS;
 		}
 
 		if (in_array('cpf', $fields_options) && in_array('cnpj', $fields_options)) {
-			$person_type = $payload['ebanx_billing_brazil_person_type'] == 'cnpj' ? 'business' : 'personal';
+			$person_type = WC_EBANX_Request::read( $names['ebanx_billing_brazil_person_type'], 'cpf' ) === 'cnpj' ? Person::TYPE_BUSINESS : Person::TYPE_PERSONAL;
 		}
 
-		$has_cpf = !empty($payload['ebanx_billing_brazil_document']);
-		$has_cnpj = !empty($payload['ebanx_billing_brazil_cnpj']);
+		$has_cpf  = ! empty( $cpf );
+		$has_cnpj = ! empty( $cnpj );
 
 		if (
-			empty($payload['billing_postcode']) ||
-			empty($payload['billing_address_1']) ||
-			empty($payload['billing_city']) ||
-			empty($payload['billing_state']) ||
-			($person_type === 'business' && (!$has_cnpj || empty($payload['billing_company']))) ||
-			($person_type === 'personal' && !$has_cpf)
+			empty( WC_EBANX_Request::read( 'billing_postcode', null ) ) ||
+			empty( WC_EBANX_Request::read( 'billing_address_1', null ) ) ||
+			empty( WC_EBANX_Request::read( 'billing_city', null ) ) ||
+			empty( WC_EBANX_Request::read( 'billing_state', null ) ) ||
+			( $person_type === Person::TYPE_BUSINESS && ( ! $has_cnpj || empty( WC_EBANX_Request::read( 'billing_company', null ) ) ) ) ||
+			( $person_type === Person::TYPE_PERSONAL && ! $has_cpf )
 		) {
 			throw new Exception('INVALID-FIELDS');
 		}
 
-		if ($person_type === 'business') {
-			return $payload['ebanx_billing_brazil_cnpj'];
+		if ($person_type === Person::TYPE_BUSINESS) {
+			return $cnpj;
 		}
-		return $payload['ebanx_billing_brazil_document'];
+
+		return [
+			'number' => $cpf,
+			'type' => $person_type
+		];
+	}
+
+	/**
+	 * @param $order WC_Order
+	 *
+	 * @return array
+	 */
+	private static function transform_items( $order ) {
+		return array_map(function($product) {
+			return new Item([
+				'name' => $product['name'],
+				'unit_price' => $product['line_subtotal'],
+				'quantity' => $product['qty'],
+				'type' => $product['type'],
+			]);
+		}, $order->get_items());
 	}
 }

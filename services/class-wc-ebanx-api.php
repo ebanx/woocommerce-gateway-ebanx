@@ -5,13 +5,15 @@ require_once WC_EBANX_DIR . 'woocommerce-gateway-ebanx.php';
 use Ebanx\Benjamin\Models\Configs\Config;
 use Ebanx\Benjamin\Models\Configs\CreditCardConfig;
 
-class EBANX_Api
+class WC_EBANX_Api
 {
 	protected $ebanx;
 	protected $configs;
 
 	/**
 	 * EBANX_Api constructor.
+	 *
+	 * @param WC_EBANX_Global_Gateway $configs
 	 */
 	public function __construct(WC_EBANX_Global_Gateway $configs)
 	{
@@ -23,14 +25,10 @@ class EBANX_Api
 
 	public function getConfig()
 	{
-		$is_sandbox_mode = 'yes' === $this->configs->settings['sandbox_mode_enabled'];
-		$private_key = $is_sandbox_mode ? $this->configs->settings['sandbox_private_key'] : $this->configs->settings['live_private_key'];
-		$public_key = $is_sandbox_mode ? $this->configs->settings['sandbox_public_key'] : $this->configs->settings['live_public_key'];
-
 		return new Config(array(
-			'integrationKey' => $private_key,
-			'sandboxIntegrationKey' => $public_key,
-			'isSandbox' => $is_sandbox_mode,
+			'integrationKey' => $this->configs->settings['live_private_key'],
+			'sandboxIntegrationKey' => $this->configs->settings['sandbox_private_key'],
+			'isSandbox' => 'yes' === $this->configs->settings['sandbox_mode_enabled'],
 			'baseCurrency' => strtoupper( get_woocommerce_currency() ),
 			'notificationUrl' => esc_url( home_url( '/' ) ),
 			'redirectUrl' => esc_url( home_url( '/' ) ),
