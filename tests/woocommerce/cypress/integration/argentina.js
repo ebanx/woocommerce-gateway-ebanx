@@ -41,34 +41,34 @@ describe('Woocommerce', () => {
   });
 
   context('Argentina', () => {
-    context('Efectivo', () => {
-      it('can buy `wonder womans purse` using Rapipago to personal', () => {
-        woocommerce.buyWonderWomansPurseWithEfectivoToPersonal(mock(
-          {
-            paymentMethod: defaults.pay.api.DEFAULT_VALUES.paymentMethods.ar.efectivo.id,
-            paymentType: defaults.pay.api.DEFAULT_VALUES.paymentMethods.ar.efectivo.types.rapipago,
-          }
-        ));
-      });
-
-      it('can buy `wonder womans purse` using Pagofacil to personal', () => {
-        woocommerce.buyWonderWomansPurseWithEfectivoToPersonal(mock(
-          {
-            paymentMethod: defaults.pay.api.DEFAULT_VALUES.paymentMethods.ar.efectivo.id,
-            paymentType: defaults.pay.api.DEFAULT_VALUES.paymentMethods.ar.efectivo.types.pagofacil,
-          }
-        ));
-      });
-
-      it('can buy `wonder womans purse` using OtrosCupones to personal', () => {
-        woocommerce.buyWonderWomansPurseWithEfectivoToPersonal(mock(
-          {
-            paymentMethod: defaults.pay.api.DEFAULT_VALUES.paymentMethods.ar.efectivo.id,
-            paymentType: defaults.pay.api.DEFAULT_VALUES.paymentMethods.ar.efectivo.types.otrosCupones,
-          }
-        ));
-      });
-    });
+    // context('Efectivo', () => {
+    //   it('can buy `wonder womans purse` using Rapipago to personal', () => {
+    //     woocommerce.buyWonderWomansPurseWithEfectivoToPersonal(mock(
+    //       {
+    //         paymentMethod: defaults.pay.api.DEFAULT_VALUES.paymentMethods.ar.efectivo.id,
+    //         paymentType: defaults.pay.api.DEFAULT_VALUES.paymentMethods.ar.efectivo.types.rapipago,
+    //       }
+    //     ));
+    //   });
+    //
+    //   it('can buy `wonder womans purse` using Pagofacil to personal', () => {
+    //     woocommerce.buyWonderWomansPurseWithEfectivoToPersonal(mock(
+    //       {
+    //         paymentMethod: defaults.pay.api.DEFAULT_VALUES.paymentMethods.ar.efectivo.id,
+    //         paymentType: defaults.pay.api.DEFAULT_VALUES.paymentMethods.ar.efectivo.types.pagofacil,
+    //       }
+    //     ));
+    //   });
+    //
+    //   it('can buy `wonder womans purse` using OtrosCupones to personal', () => {
+    //     woocommerce.buyWonderWomansPurseWithEfectivoToPersonal(mock(
+    //       {
+    //         paymentMethod: defaults.pay.api.DEFAULT_VALUES.paymentMethods.ar.efectivo.id,
+    //         paymentType: defaults.pay.api.DEFAULT_VALUES.paymentMethods.ar.efectivo.types.otrosCupones,
+    //       }
+    //     ));
+    //   });
+    // });
 
     context('Credit Card', () => {
       it('can buy `wonder womans purse` using credit card', () => {

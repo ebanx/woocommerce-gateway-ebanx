@@ -496,7 +496,7 @@ export default class Checkout {
     validateSchema(CHECKOUT_SCHEMA[data.countryId.toLowerCase()].creditcard(), data, () => {
       const instalmentsBR = {
         elm: 'select[name="ebanx-credit-card-installments"]',
-        content: '\t\t\t\t\t3x of R$317.44\t\t\t\t\twith interest\t\t\t\t',
+        content: data.instalments + 'x',
         value: data.instalments
       };
       this[fillBilling](data);

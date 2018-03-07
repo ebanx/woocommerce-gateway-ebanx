@@ -800,6 +800,8 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway
 
 			do_action('ebanx_before_process_payment', $order);
 
+//			var_dump($order->payment_method, $order->get_status());exit;
+
 			if ($order->get_total() > 0) {
 				$data = $this->request_data($order);
 

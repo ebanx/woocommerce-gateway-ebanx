@@ -3,7 +3,6 @@
 import { tryNext } from '../../../utils';
 
 const stillOn = Symbol('stillOn');
-const stillOnAndExtractHash = Symbol('stillOnAndExtractHash');
 const extractHash = Symbol('extractHash');
 
 export default class ThankYou {
@@ -26,18 +25,6 @@ export default class ThankYou {
       .contains('.woocommerce-order-overview__payment-method.method', method)
       .should('be.visible')
     ;
-  }
-
-  [stillOnAndExtractHash] (method, next) {
-    this.cy
-      .get('.woocommerce-order-overview.woocommerce-thankyou-order-details.order_details', { timeout: 15000 })
-      .should('be.visible')
-      .contains('.woocommerce-order-overview__payment-method.method', method)
-      .should('be.visible');
-
-    this[extractHash]((hash) => {
-      tryNext(next, { hash });
-    });
   }
 
   stillOnBoleto() {
