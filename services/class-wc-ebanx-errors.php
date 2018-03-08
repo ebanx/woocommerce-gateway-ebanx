@@ -120,4 +120,41 @@ class WC_EBANX_Errors {
 			),
 		);
 	}
+
+	/**
+	 * Get the error message
+	 *
+	 * @param Exception $exception
+	 * @param string $country
+	 * @return string
+	 */
+	public static function get_error_message($exception, $country)
+	{
+		$code = $exception->getCode() ?: $exception->getMessage();
+
+		$languages = array(
+			'ar' => 'es',
+			'mx' => 'es',
+			'cl' => 'es',
+			'pe' => 'es',
+			'co' => 'es',
+			'br' => 'pt-br',
+		);
+		$language = $languages[$country];
+
+		$errors = static::get_errors();
+
+		if ($code === 'BP-DR-6' && $language === 'es') {
+			$error_info = array();
+			preg_match('/Amount must be greater than (\w{3}) (.+)/',
+				$exception->getMessage(),
+				$error_info
+			);
+			$amount = $error_info[2];
+			$currency = $error_info[1];
+			return sprintf($errors[$language][$code], wc_price($amount, array('currency' => $currency)));
+		}
+
+		return !empty($errors[$language][$code]) ? $errors[$language][$code] : $errors[$language]['GENERAL'] . " ({$code})";
+	}
 }

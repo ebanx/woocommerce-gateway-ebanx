@@ -21,8 +21,6 @@ class WC_EBANX_Api
 		$this->ebanx = EBANX($this->getConfig());
 	}
 
-
-
 	public function getConfig()
 	{
 		return new Config(array(
