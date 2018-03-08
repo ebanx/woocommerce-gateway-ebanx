@@ -448,7 +448,7 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway
 
 			WC_EBANX_Refund_Logger::persist([
 				'request' => $data,
-				'response' => $request, // Response from request to EBANX
+				'response' => $request, // Response from request to EBANX.
 			]);
 
 			if ($request->status !== 'SUCCESS') {
@@ -820,7 +820,7 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway
 
 				WC_EBANX_Checkout_Logger::persist([
 					'request' => $data,
-					'response' => $request // Response from EBANX::doRequest
+					'response' => $request,  // Response from EBANX::doRequest.
 				]);
 
 				$this->process_response($request, $order);
@@ -1104,12 +1104,12 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway
 		}
 
 		// Save post's meta fields
-		$this->save_order_meta_fields($order, $request);
+		$this->save_order_meta_fields( $order, $request );
 
 		// Save user's fields
-		$this->save_user_meta_fields($order);
+		$this->save_user_meta_fields( $order );
 
-		do_action('ebanx_process_response', $order);
+		do_action( 'ebanx_process_response', $order );
 	}
 
 	/**
@@ -1119,9 +1119,9 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway
 	 * @param  string $notificationType     The type of the description
 	 * @return WC_Order
 	 */
-	final public function process_hook(array $codes, $notificationType)
+	final public function process_hook( array $codes, $notificationType )
 	{
-		do_action('ebanx_before_process_hook', $codes, $notificationType);
+		do_action( 'ebanx_before_process_hook', $codes, $notificationType );
 
 		$config = array(
 			'integrationKey' => $this->private_key,
@@ -1186,8 +1186,8 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway
 
 		switch ( $request_status ) {
 			case 'CO':
-				if (method_exists($order, 'get_payment_method')
-					&& strpos($order->get_payment_method(), 'ebanx-credit-card') === 0) {
+				if ( method_exists( $order, 'get_payment_method' )
+					&& strpos( $order->get_payment_method(), 'ebanx-credit-card' ) === 0 ) {
 					return;
 				}
 				$new_status = 'processing';
@@ -1209,8 +1209,8 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway
 
 		if ($new_status !== $order->status) {
 			$paymentStatus = $status[$data->payment->status];
-			$order->add_order_note(sprintf(__('EBANX: The payment has been updated to: %s.', 'woocommerce-gateway-ebanx'), $paymentStatus));
-			$order->update_status($new_status);
+			$order->add_order_note( sprintf( __('EBANX: The payment has been updated to: %s.', 'woocommerce-gateway-ebanx' ), $paymentStatus ));
+			$order->update_status( $new_status );
 		}
 	}
 
@@ -1221,8 +1221,8 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway
 	 * @param EBANX_Request $data
 	 * @return void
 	 */
-	final public function process_refund_hook($order, $data) {
-		$refunds = current(get_post_meta($order->id, "_ebanx_payment_refunds"));
+	final public function process_refund_hook( $order, $data ß) {
+		$refunds = current( get_post_meta( $order->id, '_ebanx_payment_refunds' ) );
 
 		foreach ($refunds as $k => $ref) {
 			foreach ($data->payment->refunds as $refund) {

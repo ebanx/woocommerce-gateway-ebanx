@@ -505,6 +505,9 @@ if ( ! class_exists('WC_EBANX') ) {
 			return self::$instance;
 		}
 
+		/**
+		 * Include log classes
+		 */
 		private static function include_log_classes() {
 			include_once WC_EBANX_SERVICES_DIR . 'class-wc-ebanx-environment.php';
 			include_once WC_EBANX_SERVICES_DIR . 'class-wc-ebanx-log.php';
@@ -519,6 +522,9 @@ if ( ! class_exists('WC_EBANX') ) {
 			include_once WC_EBANX_SERVICES_DIR . 'loggers/class-wc-ebanx-checkout-logger.php';
 		}
 
+		/**
+		 * Include all plugin classes
+		 */
 		private function includes()
 		{
 			// Utils
@@ -536,6 +542,7 @@ if ( ! class_exists('WC_EBANX') ) {
 			include_once WC_EBANX_SERVICES_DIR . 'class-wc-ebanx-cancel-order.php';
 			include_once WC_EBANX_SERVICES_DIR . 'class-wc-ebanx-capture-payment.php';
 
+			// Load plugin log classes.
 			self::include_log_classes();
 
 			// Gateways

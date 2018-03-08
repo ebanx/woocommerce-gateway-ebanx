@@ -1,6 +1,12 @@
 <?php 
 
+/**
+ * Log Refund event data
+ */
 final class WC_EBANX_Refund_Logger extends WC_EBANX_Logger {
+	/**
+	 * @inheritdoc
+	 */
 	public static function persist( array $log_data = [] ) {
 		parent::save(
 			'refund',

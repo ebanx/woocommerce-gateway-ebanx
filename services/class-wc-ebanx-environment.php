@@ -4,6 +4,9 @@ if (!defined('ABSPATH')) {
 	exit;
 }
 
+/**
+ * Enviroment data to be logged
+ */
 class WC_EBANX_Environment {
 	public $platform;
 	public $interpreter;
@@ -14,25 +17,25 @@ class WC_EBANX_Environment {
 	public function __construct() {
 		global $wp_version;
 		$platform       = new stdClass();
-		$platform->name = "WordPress";
+		$platform->name = 'WordPress';
 
-		if (isset($wp_version)) {
+		if ( isset( $wp_version ) ) {
 			$platform->version = $wp_version;
 		} else {
-			$platform->version = "Unknown";
-			$platform->error   = "Unable to detect the version number. Make sure you are calling this inside wordpress.";
+			$platform->version = 'Unknown';
+			$platform->error   = 'Unable to detect the version number. Make sure you are calling this inside wordpress.';
 		}
 
 		$this->platform                = $platform;
 		$interpreter                   = new stdClass();
-		$interpreter->name             = "PHP";
+		$interpreter->name             = 'PHP';
 		$interpreter->version          = PHP_VERSION;
 		$this->interpreter             = $interpreter;
-		$web_server_information_string = filter_input(INPUT_SERVER, 'SERVER_SOFTWARE');
-		$web_server_value_parts_array  = explode(" ", $web_server_information_string);
-		$web_server_parts              = explode("/", $web_server_value_parts_array[0]);
+		$web_server_information_string = filter_input( INPUT_SERVER, 'SERVER_SOFTWARE' );
+		$web_server_value_parts_array  = explode( ' ', $web_server_information_string );
+		$web_server_parts              = explode( '/', $web_server_value_parts_array[0] );
 		$web_server                    = new stdClass();
-		$web_server->name              = str_replace("-", " ", $web_server_parts[0]);
+		$web_server->name              = str_replace( '-', ' ', $web_server_parts[0] );
 		$web_server->version           = $web_server_parts[1];
 
 
@@ -41,44 +44,44 @@ class WC_EBANX_Environment {
 		$database_server = new stdClass();
 		$database        = new mysqli(DB_HOST, DB_USER, DB_PASSWORD);
 		if (!mysqli_connect_errno()) {
-			if (strpos($database->server_info, "MariaDB") !== false) {
-				$database_server->name = "MariaDB";
+			if (strpos($database->server_info, 'MariaDB') !== false) {
+				$database_server->name = 'MariaDB';
 			} else {
-				$database_server->name = "MySQL";
+				$database_server->name = 'MySQL';
 			}
-			$result                   = $database->query("SELECT version() AS version");
+			$result                   = $database->query('SELECT version() AS version');
 			$row                      = $result->fetch_assoc();
 			$database_server->version = $row['version'];
 		} else {
-			$database_server->name    = "Unconnected";
-			$database_server->version = "Unknown";
-			$database_server->error   = "Unable to connect to the database. Make sure you are calling this inside wordpress.";
+			$database_server->name    = 'Unconnected';
+			$database_server->version = 'Unknown';
+			$database_server->error   = 'Unable to connect to the database. Make sure you are calling this inside wordpress.';
 		}
 
 		$this->database_server = $database_server;
 
 		$operating_system          = new stdClass();
 		$operating_system->name    = PHP_OS;
-		$operating_system->version = $this->extract_version_number_from(php_uname('v'));
+		$operating_system->version = $this->extract_version_number_from( php_uname('v') );
 		$this->operating_system    = $operating_system;
 	}
 
-	public function extract_version_number_from($haystack) {
-		preg_match('/((\d)+(\.|\D))+/', $haystack, $version_candidates_array);
+	public function extract_version_number_from( $haystack ) {
+		preg_match( '/((\d)+(\.|\D))+/', $haystack, $version_candidates_array );
 
-		if (count($version_candidates_array) > 0 && strlen($version_candidates_array[0]) > 0) {
-			$version_candidates_array[0] = str_replace(".", "_", $version_candidates_array[0]);
-			$version_candidates_array[0] = preg_replace('/[\W]/', '', $version_candidates_array[0]);
-			$version_candidates_array[0] = str_replace("_", ".", $version_candidates_array[0]);
+		if (count($version_candidates_array) > 0 && strlen( $version_candidates_array[0]) > 0 ) {
+			$version_candidates_array[0] = str_replace( '.', '_', $version_candidates_array[0] );
+			$version_candidates_array[0] = preg_replace( '/[\W]/', '', $version_candidates_array[0] );
+			$version_candidates_array[0] = str_replace( '_', '.', $version_candidates_array[0] );
 			$version                     = $version_candidates_array[0];
 		} else {
-			$version = "Unknown";
+			$version = 'Unknown';
 		}
 
 		return $version;
 	}
 
 	public function __toString() {
-		return json_encode($this, JSON_PRETTY_PRINT);
+		return json_encode( $this, JSON_PRETTY_PRINT );
 	}
 }

@@ -44,7 +44,6 @@ class WC_EBANX_Api_Controller {
 
 		WC_EBANX_Database::truncate( 'logs' );
 
-
 		die( json_encode( $logs ) );
 	}
 
@@ -56,9 +55,9 @@ class WC_EBANX_Api_Controller {
 	public function capture_payment($order_id) {
 		$order = new WC_Order( $order_id );
 
-		if (!current_user_can( 'administrator' )
-		    || $order->get_status() !== 'on-hold'
-		    || strpos( $order->get_payment_method(), 'ebanx-credit-card' ) !== 0
+		if ( ! current_user_can( 'administrator' )
+			|| $order->get_status() !== 'on-hold'
+			|| strpos( $order->get_payment_method(), 'ebanx-credit-card' ) !== 0
 		) {
 			wp_redirect( get_site_url() );
 			return;

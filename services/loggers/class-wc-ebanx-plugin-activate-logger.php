@@ -1,6 +1,12 @@
 <?php
 
+/**
+ * Log Plugin Activate event data
+ */
 final class WC_EBANX_Plugin_Activate_Logger extends WC_EBANX_Logger {
+	/**
+	 * @inheritdoc
+	 */
 	public static function persist( array $log_data = [] ) {
 		parent::save(
 			'plugin_activate',
