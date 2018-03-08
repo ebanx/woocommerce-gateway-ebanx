@@ -22,6 +22,8 @@ class WC_EBANX_Safetypay_Gateway extends WC_EBANX_Redirect_Gateway
 
 		parent::__construct();
 
+		$this->ebanx_gateway = $this->ebanx->safetyPayOnline();
+
 		$peru_methods = $this->get_setting_or_default('peru_payment_methods', []);
 		$ecuador_methods = $this->get_setting_or_default('ecuador_payment_methods', []);
 
@@ -122,20 +124,21 @@ class WC_EBANX_Safetypay_Gateway extends WC_EBANX_Redirect_Gateway
 	}
 
 	/**
-	 * Mount the data to send to EBANX API
+	 * @param WC_Order $order
 	 *
-	 * @param  WC_Order $order
-	 * @return array
+	 * @return \Ebanx\Benjamin\Models\Payment
+	 * @throws Exception
 	 */
-	protected function request_data($order)
+	protected function transform_payment_data($order)
 	{
 		if (!isset($_POST['safetypay']) || !in_array($_POST['safetypay'], WC_EBANX_Constants::$TYPES_SAFETYPAY_ALLOWED)) {
 			throw new Exception('INVALID-SAFETYPAY-TYPE');
 		}
 
-		$this->api_name = 'safetypay-' . $_POST['safetypay'];
-		$data = parent::request_data($order);
-		$data['payment']['payment_type_code'] = $this->api_name;
+		$data = WC_EBANX_Payment_Adapter::transform( $order, $this->configs, $this->api_name, $this->names );
+
+		$safetypay_gateway = 'safetypay' . $_POST['safetypay'];
+		$this->ebanx_gateway = $this->ebanx->{$safetypay_gateway}();
 
 		return $data;
 	}
