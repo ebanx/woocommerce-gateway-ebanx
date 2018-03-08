@@ -17,7 +17,7 @@ class WC_EBANX_New_Gateway extends WC_EBANX_Gateway
 	/**
 	 * @var WC_EBANX_Global_Gateway
 	 */
-	protected $configs;
+	public $configs;
 
 	/**
 	 * @var bool
@@ -57,7 +57,7 @@ class WC_EBANX_New_Gateway extends WC_EBANX_Gateway
 	/**
 	 * @var array
 	 */
-	protected $names;
+	public $names;
 
 	/**
 	 * @var string
