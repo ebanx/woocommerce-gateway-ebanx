@@ -1,12 +1,12 @@
 jQuery (function ($) {
   EBANX.errors.summary.pt_BR['BP-DR-57'] = 'A data do cartão de crédito deve estar no formato MM/AA';
   EBANX.errors.summary.es['BP-DR-57'] = 'Por favor, escribe la fecha en el formato MM/AA';
-  EBANX.errors.summary.pt_BR['BP-DR-101'] = 'Este cartão não está habilitado para E-Commerce';
-  EBANX.errors.summary.es['BP-DR-101'] = 'Esta tarjeta no está habilitada para E-Commerce';
+	EBANX.errors.summary.pt_BR['BP-DR-101'] = 'Ops! Esse cartão não está liberado para fazer compras na internet. Entre em contato com o seu banco para mais informações.';
+	EBANX.errors.summary.es['BP-DR-101'] = '¡Lo sentimos!, vuelva a intentarlo con otra tarjeta.';
   // Custom select fields
   if ('select2' in $.fn) {
-    $('select.ebanx-select-field').select2();
-    $('.ebanx-select-field > select').select2();
+		$( 'select.ebanx-select-field' ).select2();
+		$( '.ebanx-select-field > select' ).select2();
   }
 
   // Masks
