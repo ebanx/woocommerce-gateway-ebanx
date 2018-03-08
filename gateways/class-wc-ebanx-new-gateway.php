@@ -1,5 +1,7 @@
 <?php
 
+use Ebanx\Benjamin\Models\Country;
+
 require_once WC_EBANX_SERVICES_DIR . 'class-wc-ebanx-api.php';
 require_once WC_EBANX_SERVICES_DIR . 'class-wc-ebanx-payment-adapter.php';
 
@@ -236,11 +238,9 @@ class WC_EBANX_New_Gateway extends WC_EBANX_Gateway
 		if ( ! isset( $this->user_id ) ) {
 			return;
 		}
-		$document = false;
+		$country = trim( strtolower( $order->billing_country ) );
 
-		if (trim(strtolower($order->billing_country)) === WC_EBANX_Constants::COUNTRY_BRAZIL) {
-			$document = $this->use_brazilian_document();
-		}
+		$document = $this->save_document( $country );
 
 		if ($document !== false) {
 			update_user_meta( $this->user_id, '_ebanx_document', $document );
@@ -308,18 +308,27 @@ class WC_EBANX_New_Gateway extends WC_EBANX_Gateway
 	}
 
 	/**
+	 * @param string $country
+	 *
 	 * @return string
 	 * @throws Exception
 	 */
-	private function use_brazilian_document() {
-		if ( WC_EBANX_Request::has( $this->names['ebanx_billing_brazil_person_type'] ) ) {
-			update_user_meta( $this->user_id, '_ebanx_billing_brazil_person_type', sanitize_text_field( WC_EBANX_Request::read( $this->names['ebanx_billing_brazil_person_type'] ) ) );
+	private function save_document( $country ) {
+		$field_name = 'document';
+		if ( $country === WC_EBANX_Constants::COUNTRY_BRAZIL ) {
+			if ( WC_EBANX_Request::has( $this->names['ebanx_billing_brazil_person_type'] ) ) {
+				update_user_meta( $this->user_id, '_ebanx_billing_brazil_person_type', sanitize_text_field( WC_EBANX_Request::read( $this->names['ebanx_billing_brazil_person_type'] ) ) );
+			}
+
+			if (WC_EBANX_Request::has( $this->names['ebanx_billing_brazil_cnpj'])) {
+				$field_name =  'cnpj';
+			}
 		}
 
-		$field_name = WC_EBANX_Request::has( $this->names['ebanx_billing_brazil_cnpj'] ) ? 'cnpj' : 'document';
-		$document = sanitize_text_field( WC_EBANX_Request::read( $this->names["ebanx_billing_brazil_$field_name"] ) );
+		$country = strtolower(Country::fromIso(strtoupper($country)));
+		$document = sanitize_text_field( WC_EBANX_Request::read( $this->names['ebanx_billing_' . $country . '_' . $field_name] ) );
 
-		update_user_meta( $this->user_id, "_ebanx_billing_brazil_$field_name", $document );
+		update_user_meta( $this->user_id, '_ebanx_billing_' . $country . '_' . $field_name, $document );
 
 		return $document;
 	}

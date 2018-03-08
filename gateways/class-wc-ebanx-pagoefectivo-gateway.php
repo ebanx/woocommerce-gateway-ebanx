@@ -4,7 +4,7 @@ if (!defined('ABSPATH')) {
 	exit;
 }
 
-class WC_EBANX_Pagoefectivo_Gateway extends WC_EBANX_Gateway
+class WC_EBANX_Pagoefectivo_Gateway extends WC_EBANX_New_Gateway
 {
 	/**
 	 * Constructor
@@ -19,6 +19,8 @@ class WC_EBANX_Pagoefectivo_Gateway extends WC_EBANX_Gateway
 		$this->description = 'Paga con PagoEfectivo.';
 
 		parent::__construct();
+
+		$this->ebanx_gateway = $this->ebanx->pagoEfectivo();
 
 		$this->enabled = is_array($this->configs->settings['peru_payment_methods']) ? in_array($this->id, $this->configs->settings['peru_payment_methods']) ? 'yes' : false : false;
 	}
@@ -128,35 +130,21 @@ class WC_EBANX_Pagoefectivo_Gateway extends WC_EBANX_Gateway
 		);
 	}
 
+
 	/**
-	 * Process the response of request from EBANX API
+	 * @param array $response
+	 * @param WC_Order $order
 	 *
-	 * @param  Object $request The result of request
-	 * @param  WC_Order $order   The order created
-	 * @return void
+	 * @throws Exception
+	 * @throws WC_EBANX_Payment_Exception
 	 */
-	protected function process_response($request, $order)
+	protected function process_response( $response, $order)
 	{
-		if ($request->status == 'ERROR' || !$request->payment->cip_url) {
-			return $this->process_response_error($request, $order);
+		if ( $response['status'] !== 'SUCCESS' || ! $response['payment']['cip_url']) {
+			$this->process_response_error( $response, $order);
 		}
-		$request->redirect_url = $request->payment->cip_url;
+		$response['redirect_url'] = $response['payment']['cip_url'];
 
-		return parent::process_response($request, $order);
-	}
-
-	/**
-	 * Mount the data to send to EBANX API
-	 *
-	 * @param  WC_Order $order
-	 * @return array
-	 */
-	protected function request_data($order)
-	{
-		$data = parent::request_data($order);
-
-		$data['payment']['payment_type_code'] = $this->api_name;
-
-		return $data;
+		parent::process_response( $response, $order);
 	}
 }

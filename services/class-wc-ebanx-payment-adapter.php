@@ -128,11 +128,13 @@ class WC_EBANX_Payment_Adapter
 	 * @throws Exception
 	 */
 	private static function transform_person( $order, $configs, $names ) {
-		$documentInfo = static::get_document( $configs, $names );
+		$document_info = static::get_document( $configs, $names );
+		$document_number = is_array($document_info) ? $document_info['number'] : $document_info;
+		$document_type = is_array($document_info) ? $document_info['type'] : null;
 
 		return new Person([
-			'type' => $documentInfo['type'],
-			'document' => $documentInfo['number'],
+			'type' => $document_type,
+			'document' => $document_number,
 			'email' => $order->billing_email,
 			'ip' => WC_Geolocation::get_ip_address(),
 			'name' => $order->billing_first_name . ' ' . $order->billing_last_name,
@@ -144,7 +146,7 @@ class WC_EBANX_Payment_Adapter
 	 * @param $configs WC_EBANX_Global_Gateway
 	 * @param $names array
 	 *
-	 * @return array
+	 * @return array|string
 	 * @throws Exception
 	 */
 	private static function get_document($configs, $names) {
@@ -153,6 +155,10 @@ class WC_EBANX_Payment_Adapter
 		switch ($country) {
 			case WC_EBANX_Constants::COUNTRY_BRAZIL:
 				return static::get_brazilian_document($configs, $names);
+				break;
+			case WC_EBANX_Constants::COUNTRY_PERU:
+				return static::get_peruvian_document( $names );
+				break;
 		}
 	}
 
@@ -204,6 +210,21 @@ class WC_EBANX_Payment_Adapter
 			'number' => $cpf,
 			'type' => $person_type
 		];
+	}
+
+	/**
+	 * @param $names
+	 *
+	 * @return array
+	 * @throws Exception
+	 */
+	private static function get_peruvian_document( $names ) {
+		$document = WC_EBANX_Request::read( $names['ebanx_billing_peru_document'], null );
+		if ( $document === null ) {
+			throw new Exception( 'BP-DR-22' );
+		}
+
+		return $document;
 	}
 
 	/**
