@@ -432,13 +432,10 @@ if ( ! class_exists('WC_EBANX') ) {
 		/**
 		 * Method that will be called when plugin is updated.
 		 *
-<<<<<<< HEAD
 		 * @param $plugin_upgrader
 		 * @param $data
-=======
 		 * @param WP_Upgrader $plugin_upgrader
 		 * @param array       $data
->>>>>>> 424a7457e28620e530ca3c55cdae4201e70faae1
 		 */
 		public function on_update( $plugin_upgrader, $data ) {
 			$ebanx_path = plugin_basename( __FILE__ );
