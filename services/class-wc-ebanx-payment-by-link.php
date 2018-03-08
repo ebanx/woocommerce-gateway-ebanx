@@ -100,7 +100,7 @@ class WC_EBANX_Payment_By_Link {
 			self::add_error($e->getMessage());
 			self::send_errors();
 		} finally {
-			PaymentByLink::persist([
+			WC_EBANX_Payment_By_Link_Logger::persist([
 				'request' => $data,
 				'response' => $request, // Response from EBANX::doRequest
 				'errors' => self::$errors

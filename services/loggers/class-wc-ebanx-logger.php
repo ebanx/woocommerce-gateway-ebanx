@@ -1,6 +1,6 @@
 <?php
 
-abstract class Log {
+abstract class WC_EBANX_Logger {
 	protected final static function save($event, array $logData) {
 		WC_EBANX_Database::insert('logs', array(
 			'time' => current_time( 'mysql' ),

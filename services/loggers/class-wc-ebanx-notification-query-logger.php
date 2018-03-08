@@ -1,6 +1,6 @@
 <?php
 
-class NotificationQuery extends Log 
+final class WC_EBANX_Notification_Query_Logger extends WC_EBANX_Logger
 {
 	public static function persist(array $logData = [])
 	{

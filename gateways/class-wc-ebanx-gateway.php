@@ -446,7 +446,7 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway
 
 			$request = \Ebanx\EBANX::doRefund($data);
 
-			Refund::persist([
+			WC_EBANX_Refund_Logger::persist([
 				'request' => $data,
 				'response' => $request, // Response from request to EBANX
 			]);
@@ -818,7 +818,7 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway
 
 				$request = \Ebanx\EBANX::doRequest($data);
 
-				Checkout::persist([
+				WC_EBANX_Checkout_Logger::persist([
 					'request' => $data,
 					'response' => $request // Response from EBANX::doRequest
 				]);
@@ -1130,7 +1130,7 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway
 
 		\Ebanx\Config::set($config);
 
-		NotificationReceived::persist(['data' => $_GET]);
+		WC_EBANX_Notification_Received_Logger::persist(['data' => $_GET]);
 
 		/**
 		 * Validates the request parameters
@@ -1141,7 +1141,7 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway
 
 		$data = \Ebanx\EBANX::doQuery($codes);
 
-		NotificationQuery::persist([
+		WC_EBANX_Notification_Query_Logger::persist([
 			'codes' => $codes,
 			'data' => $data
 		]);

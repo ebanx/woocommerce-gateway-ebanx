@@ -372,7 +372,7 @@ if ( ! class_exists('WC_EBANX') ) {
 
 			do_action('ebanx_settings_saved', $_POST);
 
-			PluginSettingsChange::persist($this->settings);
+			WC_EBANX_Plugin_Settings_Change_Logger::persist($this->settings);
 
 			$this->settings = [];
 		}
@@ -408,7 +408,7 @@ if ( ! class_exists('WC_EBANX') ) {
 			self::save_merchant_infos();
 			self::include_log_classes();
 
-			PluginActivate::persist();
+			WC_EBANX_Plugin_Activate_Logger::persist();
 
 			flush_rewrite_rules();
 
@@ -424,7 +424,7 @@ if ( ! class_exists('WC_EBANX') ) {
 			flush_rewrite_rules();
 
 			self::include_log_classes();
-			PluginDeactivate::persist();
+			WC_EBANX_Plugin_Deactivate_Logger::persist();
 
 			do_action('ebanx_deactivate_plugin');
 		}
@@ -506,15 +506,15 @@ if ( ! class_exists('WC_EBANX') ) {
 		private static function include_log_classes() {
 			include_once WC_EBANX_SERVICES_DIR . 'class-wc-ebanx-environment.php';
 			include_once WC_EBANX_SERVICES_DIR . 'class-wc-ebanx-log.php';
-			include_once WC_EBANX_SERVICES_DIR . 'log/Log.php';
-			include_once WC_EBANX_SERVICES_DIR . 'log/PluginActivate.php';
-			include_once WC_EBANX_SERVICES_DIR . 'log/PluginDeactivate.php';
-			include_once WC_EBANX_SERVICES_DIR . 'log/PluginSettingsChange.php';
-			include_once WC_EBANX_SERVICES_DIR . 'log/Refund.php';
-			include_once WC_EBANX_SERVICES_DIR . 'log/NotificationReceived.php';
-			include_once WC_EBANX_SERVICES_DIR . 'log/NotificationQuery.php';
-			include_once WC_EBANX_SERVICES_DIR . 'log/PaymentByLink.php';
-			include_once WC_EBANX_SERVICES_DIR . 'log/Checkout.php';
+			include_once WC_EBANX_SERVICES_DIR . 'loggers/class-wc-ebanx-logger.php';
+			include_once WC_EBANX_SERVICES_DIR . 'loggers/class-wc-ebanx-plugin-activate-logger.php';
+			include_once WC_EBANX_SERVICES_DIR . 'loggers/class-wc-ebanx-plugin-deactivate-logger.php';
+			include_once WC_EBANX_SERVICES_DIR . 'loggers/class-wc-ebanx-plugin-settings-change-logger.php';
+			include_once WC_EBANX_SERVICES_DIR . 'loggers/class-wc-ebanx-refund-logger.php';
+			include_once WC_EBANX_SERVICES_DIR . 'loggers/class-wc-ebanx-notification-received-logger.php';
+			include_once WC_EBANX_SERVICES_DIR . 'loggers/class-wc-ebanx-notification-query-logger.php';
+			include_once WC_EBANX_SERVICES_DIR . 'loggers/class-wc-ebanx-payment-by-link-logger.php';
+			include_once WC_EBANX_SERVICES_DIR . 'loggers/class-wc-ebanx-checkout-logger.php';
 		}
 
 		private function includes()
