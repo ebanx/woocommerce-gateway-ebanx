@@ -818,6 +818,11 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway
 
 				$request = \Ebanx\EBANX::doRequest($data);
 
+				Checkout::persist([
+					'request' => $data,
+					'response' => $request // Response from EBANX::doRequest
+				]);
+
 				$this->process_response($request, $order);
 			} else {
 				$order->payment_complete();
