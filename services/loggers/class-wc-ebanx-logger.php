@@ -1,13 +1,13 @@
 <?php
 
 abstract class WC_EBANX_Logger {
-	protected final static function save( $event, array $logData ) {
+	protected final static function save( $event, array $log_data ) {
 		WC_EBANX_Database::insert( 'logs', array(
 			'time' => current_time( 'mysql' ),
 			'event' => $event,
-			'log' => json_encode( $logData ),
+			'log' => json_encode( $log_data ),
 		));
 	}
 
-	public abstract static function persist( array $logData = [] );
+	public abstract static function persist( array $log_data = [] );
 }
