@@ -22,6 +22,8 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_New_Gateway
 
 		parent::__construct();
 
+		$this->ebanx_gateway = $this->ebanx->creditCard();
+
 		add_action('woocommerce_order_edit_status', array($this, 'capture_payment_action'), 10, 2);
 
 		if ($this->get_setting_or_default('interest_rates_enabled', 'no') == 'yes') {

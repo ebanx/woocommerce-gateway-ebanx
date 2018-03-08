@@ -4,7 +4,7 @@ if (!defined('ABSPATH')) {
 	exit;
 }
 
-class WC_EBANX_Debit_Card_Gateway extends WC_EBANX_Gateway
+class WC_EBANX_Debit_Card_Gateway extends WC_EBANX_New_Gateway
 {
 	/**
 	 * Constructor
@@ -19,6 +19,8 @@ class WC_EBANX_Debit_Card_Gateway extends WC_EBANX_Gateway
 		$this->description = 'Paga con tarjeta de débito.';
 
 		parent::__construct();
+
+		$this->ebanx_gateway = $this->ebanx->debitCard();
 
 		$this->enabled = is_array($this->configs->settings['mexico_payment_methods']) ? in_array($this->id, $this->configs->settings['mexico_payment_methods']) ? 'yes' : false : false;
 	}
@@ -91,44 +93,34 @@ class WC_EBANX_Debit_Card_Gateway extends WC_EBANX_Gateway
 		parent::checkout_rate_conversion(WC_EBANX_Constants::CURRENCY_CODE_MXN);
 	}
 
+
 	/**
-	 * Mount the data to send to EBANX API
+	 * @param WC_Order $order
 	 *
-	 * @param  WC_Order $order
-	 * @return array
+	 * @return \Ebanx\Benjamin\Models\Payment
+	 * @throws Exception
 	 */
-	protected function request_data($order)
+	protected function transform_payment_data($order)
 	{
 		if ( empty(WC_EBANX_Request::read('ebanx_debit_token', null))
 			|| empty(WC_EBANX_Request::read('ebanx_billing_cvv', null)) ) {
 			throw new Exception("Missing ebanx card params.");
 		}
 
-		$data = parent::request_data($order);
-
-		$data['payment']['payment_type_code'] = $this->api_name;
-
-		// TODO: need fingerprint ?
-
-		$data['payment']['card'] = array(
-			'token'    => WC_EBANX_Request::read('ebanx_debit_token'),
-			'card_cvv' => WC_EBANX_Request::read('ebanx_billing_cvv'),
-		);
-
-		return $data;
+		return WC_EBANX_Payment_Adapter::transform_card( $order, $this->configs, $this->api_name, $this->names );
 	}
 
 	/**
-	 * Process the response of request from EBANX API
+	 * @param array $request
+	 * @param WC_Order $order
 	 *
-	 * @param  Object $request The result of request
-	 * @param  WC_Order $order   The order created
-	 * @return void
+	 * @throws Exception
+	 * @throws WC_EBANX_Payment_Exception
 	 */
 	protected function process_response($request, $order)
 	{
-		if ($request->status == 'ERROR' || !$request->payment->pre_approved) {
-			return $this->process_response_error($request, $order);
+		if ($request['status'] !== 'SUCCESS' || !$request['payment']['pre_approved']) {
+			$this->process_response_error($request, $order);
 		}
 
 		parent::process_response($request, $order);

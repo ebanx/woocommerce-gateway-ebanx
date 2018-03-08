@@ -60,11 +60,17 @@ class WC_EBANX_Payment_Adapter
 			$payment->device_id = WC_EBANX_Request::read('ebanx_device_fingerprint');
 		}
 
+		$token = WC_EBANX_Request::has('ebanx_debit_token')
+			? WC_EBANX_Request::read('ebanx_debit_token')
+			: WC_EBANX_Request::read('ebanx_token');
+
+		$brand = WC_EBANX_Request::has('ebanx_brand') ? WC_EBANX_Request::read('ebanx_brand') : '';
+
 		$payment->card = new Card([
 			'autoCapture' => ($configs->settings['capture_enabled'] === 'yes'),
-			'token' => WC_EBANX_Request::read('ebanx_token'),
+			'token' => $token,
 			'cvv' => WC_EBANX_Request::read('ebanx_billing_cvv'),
-			'type' => WC_EBANX_Request::read('ebanx_brand'),
+			'type' => $brand,
 		]);
 
 		return $payment;
@@ -77,14 +83,14 @@ class WC_EBANX_Payment_Adapter
 	 * @return DateTime|string
 	 */
 	private static function transform_due_date($configs, $api_name) {
-		$date = '';
+		$due_date = '';
 		if (!empty($configs->settings['due_date_days']) && in_array($api_name, array_keys(WC_EBANX_Constants::$CASH_PAYMENTS_TIMEZONES)))
 		{
-			$date = new DateTime();
-			$date->modify("+{$configs->settings['due_date_days']} day");
+			$due_date = new DateTime();
+			$due_date->modify("+{$configs->settings['due_date_days']} day");
 		}
 
-		return $date;
+		return $due_date;
 	}
 
 	/**

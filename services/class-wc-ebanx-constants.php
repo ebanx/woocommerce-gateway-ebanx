@@ -133,6 +133,7 @@ abstract class WC_EBANX_Constants
 	public static $CASH_PAYMENTS_TIMEZONES = array(
 	  'boleto' => 'America/Sao_Paulo',
 	  'oxxo' => 'America/Mexico_City',
+	  'spei' => 'America/Mexico_City',
 	  'pagoefectivo' => 'America/Lima',
 	  'sencillito' => 'America/Santiago',
 	  'safetypay-cash' => 'America/Lima',
@@ -151,6 +152,7 @@ abstract class WC_EBANX_Constants
 	public static $CASH_PAYMENTS_GATEWAYS_CODE = array(
 		'ebanx-banking-ticket',
 		'ebanx-oxxo',
+		'ebanx-spei',
 		'ebanx-pagoefectivo',
 		'ebanx-sencillito',
 		'ebanx-safetypay-cash',

@@ -795,52 +795,52 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway
 	 * @param  integer $order_id    The ID of the order created
 	 * @return void
 	 */
-	public function process_payment($order_id)
-	{
-		try {
-			$order = wc_get_order($order_id);
-
-			do_action('ebanx_before_process_payment', $order);
-
-			if ($order->get_total() > 0) {
-				$data = $this->request_data($order);
-
-				$config = array(
-					'integrationKey' => $this->private_key,
-					'testMode'       => $this->is_sandbox_mode,
-				);
-
-				\Ebanx\Config::set($config);
-				\Ebanx\Config::setDirectMode(true);
-
-				$request = \Ebanx\EBANX::doRequest($data);
-
-				$this->process_response($request, $order);
-			} else {
-				$order->payment_complete();
-			}
-
-			do_action('ebanx_after_process_payment', $order);
-
-			return $this->dispatch(array(
-				'result'   => 'success',
-				'redirect' => $this->get_return_url($order),
-			));
-		} catch (Exception $e) {
-
-			$country = $this->getTransactionAddress('country');
-
-			$message = self::get_error_message($e, $country);
-
-			WC()->session->set('refresh_totals', true);
-			WC_EBANX::log("EBANX Error: $message");
-
-			wc_add_notice($message, 'error');
-
-			do_action('ebanx_process_payment_error', $message, $code);
-			return;
-		}
-	}
+//	public function process_payment($order_id)
+//	{
+//		try {
+//			$order = wc_get_order($order_id);
+//
+//			do_action('ebanx_before_process_payment', $order);
+//
+//			if ($order->get_total() > 0) {
+//				$data = $this->request_data($order);
+//
+//				$config = array(
+//					'integrationKey' => $this->private_key,
+//					'testMode'       => $this->is_sandbox_mode,
+//				);
+//
+//				\Ebanx\Config::set($config);
+//				\Ebanx\Config::setDirectMode(true);
+//
+//				$request = \Ebanx\EBANX::doRequest($data);
+//
+//				$this->process_response($request, $order);
+//			} else {
+//				$order->payment_complete();
+//			}
+//
+//			do_action('ebanx_after_process_payment', $order);
+//
+//			return $this->dispatch(array(
+//				'result'   => 'success',
+//				'redirect' => $this->get_return_url($order),
+//			));
+//		} catch (Exception $e) {
+//
+//			$country = $this->getTransactionAddress('country');
+//
+//			$message = self::get_error_message($e, $country);
+//
+//			WC()->session->set('refresh_totals', true);
+//			WC_EBANX::log("EBANX Error: $message");
+//
+//			wc_add_notice($message, 'error');
+//
+//			do_action('ebanx_process_payment_error', $message, $code);
+//			return;
+//		}
+//	}
 
 	/**
 	 * Get the error message
