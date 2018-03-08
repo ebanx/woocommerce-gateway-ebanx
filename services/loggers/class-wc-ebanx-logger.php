@@ -6,6 +6,9 @@
 abstract class WC_EBANX_Logger {
 	/**
 	 * method responsible to save log on database
+	 * 
+	 * @var string $event
+	 * @var array $log_data
 	 */
 	protected final static function save( $event, array $log_data ) {
 		WC_EBANX_Database::insert( 'logs', array(
