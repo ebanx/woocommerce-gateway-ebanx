@@ -4,7 +4,7 @@ if (!defined('ABSPATH')) {
 	exit;
 }
 
-abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
+abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_New_Gateway
 {
 	/**
 	 * The rates for each instalment
@@ -180,10 +180,10 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
 	 * Mount the data to send to EBANX API
 	 *
 	 * @param WC_Order $order
-	 * @return array
+	 * @return \Ebanx\Benjamin\Models\Payment
 	 * @throws Exception
 	 */
-	protected function request_data($order)
+	protected function transform_payment_data($order)
 	{
 
 		if (empty(WC_EBANX_Request::read('ebanx_token', null))
@@ -198,41 +198,21 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
 			throw new Exception('MISSING-DEVICE-FINGERPRINT');
 		}
 
-		$data = parent::request_data($order);
-
-		if (in_array($this->getTransactionAddress('country'), WC_EBANX_Constants::$CREDIT_CARD_COUNTRIES)) {
-			$data['payment']['instalments'] = '1';
-
-			if ($this->configs->settings['credit_card_instalments'] > 1 && WC_EBANX_Request::has('ebanx_billing_instalments')) {
-				$data['payment']['instalments'] = WC_EBANX_Request::read('ebanx_billing_instalments');
-			}
-		}
-
-		if (!empty(WC_EBANX_Request::read('ebanx_device_fingerprint', null))) {
-			$data['device_id'] = WC_EBANX_Request::read('ebanx_device_fingerprint');
-		}
-
-		$data['payment']['payment_type_code'] = WC_EBANX_Request::read('ebanx_brand');
-		$data['payment']['creditcard'] = array(
-			'token' => WC_EBANX_Request::read('ebanx_token'),
-			'card_cvv' => WC_EBANX_Request::read('ebanx_billing_cvv'),
-			'auto_capture' => ($this->configs->settings['capture_enabled'] === 'yes'),
-		);
-
-		return $data;
+		return WC_EBANX_Payment_Adapter::transform_card( $order, $this->configs, $this->api_name, $this->names );
 	}
 
+
 	/**
-	 * Process the response of request from EBANX API
+	 * @param array $request
+	 * @param WC_Order $order
 	 *
-	 * @param  Object $request The result of request
-	 * @param  WC_Order $order   The order created
-	 * @return void
+	 * @throws Exception
+	 * @throws WC_EBANX_Payment_Exception
 	 */
 	protected function process_response($request, $order)
 	{
-		if ($request->status == 'ERROR' || !$request->payment->pre_approved) {
-			return $this->process_response_error($request, $order);
+		if ($request['status'] !== 'SUCCESS' || !$request['payment']['pre_approved']) {
+			$this->process_response_error($request, $order);
 		}
 
 		parent::process_response($request, $order);

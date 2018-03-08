@@ -5,6 +5,8 @@ require_once WC_EBANX_SERVICES_DIR . 'class-wc-ebanx-request.php';
 
 
 use Ebanx\Benjamin\Models\Address;
+use Ebanx\Benjamin\Models\Card;
+use Ebanx\Benjamin\Models\Country;
 use Ebanx\Benjamin\Models\Item;
 use Ebanx\Benjamin\Models\Payment;
 use Ebanx\Benjamin\Models\Person;
@@ -20,8 +22,7 @@ class WC_EBANX_Payment_Adapter
 	 * @return Payment
 	 * @throws Exception
 	 */
-	public static function transform($order, $configs, $api_name, $names)
-	{
+	public static function transform($order, $configs, $api_name, $names) {
 		return new Payment([
 			'amountTotal' => $order->get_total(),
 			'orderNumber' => $order->id,
@@ -34,8 +35,48 @@ class WC_EBANX_Payment_Adapter
 		]);
 	}
 
-	private static function transform_due_date($configs, $api_name)
-	{
+	/**
+	 * @param $order WC_Order
+	 * @param $configs WC_EBANX_Global_Gateway
+	 * @param $api_name string
+	 * @param $names array
+	 *
+	 * @return Payment
+	 * @throws Exception
+	 */
+	public static function transform_card( $order, $configs, $api_name, $names ) {
+		$payment = self::transform( $order, $configs, $api_name, $names );
+		$country = trim(strtolower(WC()->customer->get_country()));
+
+		if (in_array($country, WC_EBANX_Constants::$CREDIT_CARD_COUNTRIES)) {
+			$payment->instalments = '1';
+
+			if ($configs->settings['credit_card_instalments'] > 1 && WC_EBANX_Request::has('ebanx_billing_instalments')) {
+				$payment->instalments = WC_EBANX_Request::read('ebanx_billing_instalments');
+			}
+		}
+
+		if (!empty(WC_EBANX_Request::read('ebanx_device_fingerprint', null))) {
+			$payment->device_id = WC_EBANX_Request::read('ebanx_device_fingerprint');
+		}
+
+		$payment->card = new Card([
+			'autoCapture' => ($configs->settings['capture_enabled'] === 'yes'),
+			'token' => WC_EBANX_Request::read('ebanx_token'),
+			'cvv' => WC_EBANX_Request::read('ebanx_billing_cvv'),
+			'type' => WC_EBANX_Request::read('ebanx_brand'),
+		]);
+
+		return $payment;
+	}
+
+	/**
+	 * @param $configs
+	 * @param $api_name
+	 *
+	 * @return DateTime|string
+	 */
+	private static function transform_due_date($configs, $api_name) {
 		$date = '';
 		if (!empty($configs->settings['due_date_days']) && in_array($api_name, array_keys(WC_EBANX_Constants::$CASH_PAYMENTS_TIMEZONES)))
 		{
@@ -52,8 +93,7 @@ class WC_EBANX_Payment_Adapter
 	 * @return Address
 	 * @throws Exception
 	 */
-	private static function transform_address( $order )
-	{
+	private static function transform_address( $order ) {
 		$addresses = WC_EBANX_Request::read( 'billing_address_1', null );
 
 		if ( ! empty(WC_EBANX_Request::read( 'billing_address_2', null ) ) ) {
@@ -67,7 +107,7 @@ class WC_EBANX_Payment_Adapter
 			'address' => $addresses['streetName'],
 			'streetNumber' => $street_number,
 			'city' => WC_EBANX_Request::read( 'billing_city', null ),
-			'country' => $order->billing_country,
+			'country' => Country::fromIso( $order->billing_country ),
 			'state' => WC_EBANX_Request::read( 'billing_state', null ),
 			'zipcode' => WC_EBANX_Request::read( 'billing_postcode', null ),
 		] );
@@ -81,9 +121,7 @@ class WC_EBANX_Payment_Adapter
 	 * @return Person
 	 * @throws Exception
 	 */
-	private static function transform_person( $order, $configs, $names )
-	{
-
+	private static function transform_person( $order, $configs, $names ) {
 		$documentInfo = static::get_document( $configs, $names );
 
 		return new Person([

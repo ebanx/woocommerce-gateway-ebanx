@@ -212,7 +212,7 @@ class WC_EBANX_New_Gateway extends WC_EBANX_Gateway
 			$status_message = $response['payment']['transaction_status']['description'];
 		}
 
-		$error_message = __(sprintf('EBANX: An error occurred: %s - %s', $code, $response['status_message']), 'woocommerce-gateway-ebanx');
+		$error_message = __(sprintf('EBANX: An error occurred: %s - %s', $code, $status_message), 'woocommerce-gateway-ebanx');
 
 		$order->update_status('failed', $error_message);
 		$order->add_order_note($error_message);
@@ -302,8 +302,9 @@ class WC_EBANX_New_Gateway extends WC_EBANX_Gateway
 				&& array_key_exists( 'payment', $response )
 				&& is_array( $response['payment'] )
 				&& array_key_exists( 'transaction_status', $response['payment'] )
-				&& isset( $response['payment']['transaction_status'] )
-				&& $response->payment->transaction_status->code === 'NOK';
+				&& is_array( $response['payment']['transaction_status'] )
+				&& array_key_exists( 'code', $response['payment']['transaction_status'] )
+				&& $response['payment']['transaction_status']['code'] === 'NOK';
 	}
 
 	/**

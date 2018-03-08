@@ -8,7 +8,7 @@ class WC_EBANX_Credit_Card_BR_Gateway extends WC_EBANX_Credit_Card_Gateway {
 	/**
 	 * Constructor
 	 */
-	public function __construct() 
+	public function __construct()
 	{
 		$this->id = 'ebanx-credit-card-br';
 		$this->method_title = __('EBANX - Credit Card Brazil', 'woocommerce-gateway-ebanx');
@@ -18,6 +18,8 @@ class WC_EBANX_Credit_Card_BR_Gateway extends WC_EBANX_Credit_Card_Gateway {
 		$this->description = 'Pague com cartão de crédito.';
 
 		parent::__construct();
+
+		$this->ebanx_gateway = $this->ebanx->creditCard();
 
 		$this->enabled = is_array($this->configs->settings['brazil_payment_methods'])
 			&& in_array($this->id, $this->configs->settings['brazil_payment_methods'])
