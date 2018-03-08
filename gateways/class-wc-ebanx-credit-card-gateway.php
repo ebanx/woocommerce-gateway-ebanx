@@ -50,15 +50,16 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_New_Gateway
 		return $actions;
 	}
 
+
 	/**
-	 * Action to capture the payment
+	 * @param int $order_id
+	 * @param string $status
 	 *
-	 * @return void
+	 * @throws Exception
 	 */
 	public function capture_payment_action($order_id, $status) {
-		$action = WC_EBANX_Request::read('action');
+		$action = WC_EBANX_Request::read('action', null);
 		$order = wc_get_order($order_id);
-		$recapture = false;
 
 		if ($order->payment_method !== $this->id
 			|| $status !== 'processing'
@@ -66,78 +67,7 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_New_Gateway
 			return;
 		}
 
-		\Ebanx\Config::set(array(
-			'integrationKey' => $this->private_key,
-			'testMode' => $this->is_sandbox_mode,
-			'directMode' => true,
-		));
-
-		$response = \Ebanx\Ebanx::doCapture(array('hash' => get_post_meta($order->id, '_ebanx_payment_hash', true)));
-		$error = $this->check_capture_errors($response);
-
-		$is_recapture = false;
-		if($error){
-			$is_recapture = $error->code === 'BP-CAP-4';
-			$response->payment->status = $error->status;
-
-			WC_EBANX::log($error->message);
-			WC_EBANX_Flash::add_message($error->message, 'warning', true);
-		}
-
-		if ($response->payment->status == 'CO') {
-			$order->payment_complete();
-
-			if (!$is_recapture) {
-				$order->add_order_note(sprintf(__('EBANX: The transaction was captured with the following: %s', 'woocommerce-gateway-ebanx'), wp_get_current_user()->data->user_email));
-			}
-		}
-		else if ($response->payment->status == 'CA') {
-			$order->payment_complete();
-			$order->update_status('failed');
-			$order->add_order_note(__('EBANX: Transaction Failed', 'woocommerce-gateway-ebanx'));
-		}
-		else if ($response->payment->status == 'OP') {
-			$order->update_status('pending');
-			$order->add_order_note(__('EBANX: Transaction Pending', 'woocommerce-gateway-ebanx'));
-		}
-	}
-
-	/**
-	 * Checks for errors during capture action
-	 * Returns an object with error code, message and target status
-	 *
-	 * @param object $response The response from EBANX API
-	 * @return stdClass
-	 */
-	public function check_capture_errors($response) {
-		if ( $response->status !== 'ERROR' ) {
-			return null;
-		}
-
-		$code = $response->code;
-		$message = sprintf(__('EBANX - Unknown error, enter in contact with Ebanx and inform this error code: %s.', 'woocommerce-gateway-ebanx'), $response->payment->status_code);
-		$status = $response->payment->status;
-
-		switch($response->status_code) {
-			case 'BC-CAP-3':
-				$message = __('EBANX - Payment cannot be captured, changing it to Failed.', 'woocommerce-gateway-ebanx');
-				$status = 'CA';
-				break;
-			case 'BP-CAP-4':
-				$message = __('EBANX - Payment has already been captured, changing it to Processing.', 'woocommerce-gateway-ebanx');
-				$status = 'CO';
-				break;
-			case 'BC-CAP-5':
-				$message = __('EBANX - Payment cannot be captured, changing it to Pending.', 'woocommerce-gateway-ebanx');
-				$status = 'OP';
-				break;
-		}
-
-		return (object)array(
-			'code' => $code,
-			'message' => $message,
-			'status' => $status
-		);
+		WC_EBANX_Capture_Payment::capture_payment($order_id);
 	}
 
 	/**
