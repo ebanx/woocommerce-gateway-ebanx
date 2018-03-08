@@ -120,7 +120,7 @@ class WC_EBANX_New_Gateway extends WC_EBANX_Gateway
 			do_action( 'ebanx_before_process_payment', $order );
 
 			if ( $order->get_total() > 0 ) {
-				$data = WC_EBANX_Payment_Adapter::transform( $order, $this->configs, $this->api_name, $this->names );
+				$data = $this->transform_payment_data( $order );
 
 				$response = $this->ebanx_gateway->create( $data );
 
@@ -245,6 +245,16 @@ class WC_EBANX_New_Gateway extends WC_EBANX_Gateway
 		if ($document !== false) {
 			update_user_meta( $this->user_id, '_ebanx_document', $document );
 		}
+	}
+
+	/**
+	 * @param WC_Order $order
+	 *
+	 * @return \Ebanx\Benjamin\Models\Payment
+	 * @throws Exception
+	 */
+	protected function transform_payment_data( $order ) {
+		return WC_EBANX_Payment_Adapter::transform( $order, $this->configs, $this->api_name, $this->names );
 	}
 
 	/**
