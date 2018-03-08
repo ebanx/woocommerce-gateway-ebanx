@@ -1,7 +1,5 @@
 <?php
 
-use Ebanx\Benjamin\Services\Gateways\Boleto;
-
 require_once WC_EBANX_SERVICES_DIR . 'class-wc-ebanx-api.php';
 require_once WC_EBANX_SERVICES_DIR . 'class-wc-ebanx-payment-adapter.php';
 
@@ -42,7 +40,7 @@ class WC_EBANX_New_Gateway extends WC_EBANX_Gateway
 	protected $ebanx;
 
 	/**
-	 * @var Boleto
+	 * @var \Ebanx\Benjamin\Services\Gateways\DirectGateway
 	 */
 	protected $ebanx_gateway;
 

@@ -20,6 +20,8 @@ class WC_EBANX_Account_Gateway extends WC_EBANX_Redirect_Gateway
 
 		parent::__construct();
 
+		$this->ebanx_gateway = $this->ebanx->ebanxAccount();
+
 		// TODO: Put that to father and remove of the all children's
 		$this->enabled = is_array($this->configs->settings['brazil_payment_methods']) ? in_array($this->id, $this->configs->settings['brazil_payment_methods']) ? 'yes' : false : false;
 	}

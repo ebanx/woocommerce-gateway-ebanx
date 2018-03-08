@@ -4,37 +4,39 @@ if (!defined('ABSPATH')) {
 	exit;
 }
 
-abstract class WC_EBANX_Redirect_Gateway extends WC_EBANX_Gateway
+abstract class WC_EBANX_Redirect_Gateway extends WC_EBANX_New_Gateway
 {
 	protected $redirect_url;
 
 	/**
-	 * Process the response of request from EBANX API
+	 * @param array $response
+	 * @param WC_Order $order
 	 *
-	 * @param  Object $request The result of request
-	 * @param  WC_Order $order   The order created
-	 * @return void
+	 * @throws Exception
+	 * @throws WC_EBANX_Payment_Exception
 	 */
-	protected function process_response($request, $order)
+	protected function process_response( $response, $order)
 	{
-		if ($request->status == 'ERROR') {
-			return $this->process_response_error($request, $order);
+		if ( $response['status'] == 'ERROR') {
+			$this->process_response_error( $response, $order);
 		}
-		$redirect = $request->redirect_url;
-		if (!$redirect && !isset($request->payment->redirect_url)) {
-			return $this->process_response_error($request, $order);
+		$redirect = $response['redirect_url'];
+		if (!$redirect && !isset( $response['payment']['redirect_url'])) {
+			$this->process_response_error( $response, $order);
 		}
-		$redirect = $request->payment->redirect_url;
+		$redirect = $response['payment']['redirect_url'];
 
-		parent::process_response($request, $order);
+		parent::process_response( $response, $order);
 
-		update_post_meta($order->id, '_ebanx_payment_hash', $request->payment->hash);
+		update_post_meta($order->id, '_ebanx_payment_hash', $response['payment']['hash']);
 
 		$this->redirect_url = $redirect;
 	}
 
 	/**
 	 * Dispatch an array to request, always dispatch success
+	 *
+	 * @param array $data
 	 *
 	 * @return array
 	 */
