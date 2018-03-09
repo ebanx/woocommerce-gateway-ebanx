@@ -32,8 +32,8 @@ function ebanx_update_converted_value () {
 class WC_EBANX_Gateway extends WC_Payment_Gateway
 {
 	protected static $ebanx_params = array();
-	protected static $initializedGateways = 0;
-	protected static $totalGateways = 0;
+	protected static $initialized_gateways = 0;
+	protected static $total_gateways = 0;
 
 	/**
 	 * Current user id
@@ -49,7 +49,7 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway
 	 */
 	public function __construct()
 	{
-		self::$totalGateways++;
+		self::$total_gateways++;
 
 		$this->user_id = get_current_user_id();
 
@@ -69,7 +69,7 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway
 
 		add_filter('woocommerce_checkout_fields', array($this, 'checkout_fields'));
 
-		$this->supports = array('refunds');
+		$this->supports = array( 'refunds' );
 
 		$this->icon = $this->show_icon();
 
@@ -383,12 +383,12 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway
 			static::$ebanx_params = array(
 				'key'  => $this->public_key,
 				'mode' => $this->is_sandbox_mode ? 'test' : 'production',
-				'ajaxurl' =>  admin_url( 'admin-ajax.php', null )
+				'ajaxurl' => admin_url( 'admin-ajax.php', null ),
 			);
 
-			self::$initializedGateways++;
+			self::$initialized_gateways++;
 
-			if ( self::$initializedGateways === self::$totalGateways ) {
+			if ( self::$initialized_gateways === self::$total_gateways ) {
 				wp_localize_script( 'woocommerce_ebanx_credit_card', 'wc_ebanx_params', apply_filters( 'wc_ebanx_params', static::$ebanx_params ) );
 			}
 		}
@@ -481,7 +481,7 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway
 	/**
 	 * Queries for a currency exchange rate against site currency
 	 *
-	 * @param  string $local_currency_code The local currency code to query for
+	 * @param  string $local_currency_code The local currency code to query for.
 	 * @return double
 	 */
 	public function get_local_currency_rate_for_site($local_currency_code) {
@@ -1132,7 +1132,7 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway
 		/**
 		 * Validates the request parameters
 		 */
-		if ( isset($codes['hash'] ) && ! empty( $codes['hash'] ) && isset( $codes['merchant_payment_code'] ) && ! empty( $codes['merchant_payment_code'] ) ) {
+		if ( isset( $codes['hash'] ) && ! empty( $codes['hash'] ) && isset( $codes['merchant_payment_code'] ) && ! empty( $codes['merchant_payment_code'] ) ) {
 			unset( $codes['merchant_payment_code'] );
 		}
 
@@ -1206,7 +1206,6 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway
 
 		if ( $new_status !== $order->status ) {
 			$payment_status = $status[ $data->payment->status ];
-			// translator: add a note on order with payment status
 			$order->add_order_note( sprintf( __( 'EBANX: The payment has been updated to: %s.', 'woocommerce-gateway-ebanx' ), $payment_status ) );
 			$order->update_status( $new_status );
 		}

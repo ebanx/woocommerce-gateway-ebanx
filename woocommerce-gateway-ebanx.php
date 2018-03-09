@@ -68,6 +68,9 @@ if ( ! class_exists('WC_EBANX') ) {
 
 		private static $my_account_menu_name = 'EBANX - Saved Cards';
 
+		/**
+		 * @var array $settings
+		 */
 		private $settings = [];
 
 		/**
@@ -116,7 +119,7 @@ if ( ! class_exists('WC_EBANX') ) {
 
 			add_action('admin_footer', array('WC_EBANX_Assets', 'render'), 0);
 
-			add_action('woocommerce_settings_save_checkout', array($this, 'on_before_save_settings'), 10);
+			add_action( 'woocommerce_settings_save_checkout', array( $this, 'on_before_save_settings' ), 10);
 			add_action('woocommerce_settings_saved', array($this, 'setup_configs'), 10);
 			add_action('woocommerce_settings_saved', array($this, 'on_save_settings'), 10);
 			add_action('woocommerce_settings_saved', array($this, 'update_lead'), 20);
@@ -372,7 +375,7 @@ if ( ! class_exists('WC_EBANX') ) {
 
 			do_action('ebanx_settings_saved', $_POST);
 
-			WC_EBANX_Plugin_Settings_Change_Logger::persist($this->settings);
+			WC_EBANX_Plugin_Settings_Change_Logger::persist( $this->settings );
 
 			$this->settings = [];
 		}
@@ -432,8 +435,6 @@ if ( ! class_exists('WC_EBANX') ) {
 		/**
 		 * Method that will be called when plugin is updated.
 		 *
-		 * @param $plugin_upgrader
-		 * @param $data
 		 * @param WP_Upgrader $plugin_upgrader
 		 * @param array       $data
 		 */

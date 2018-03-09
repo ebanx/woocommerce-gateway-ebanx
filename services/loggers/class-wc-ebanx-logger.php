@@ -19,7 +19,7 @@ abstract class WC_EBANX_Logger {
 	}
 
 	/**
-	 * Abstract method that must be overrated by child classes 
+	 * Abstract method that must be overrated by child classes
 	 *
 	 * This method is responsible for receive log data, manage them and send them to method save
 	 *
