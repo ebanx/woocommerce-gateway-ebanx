@@ -6,9 +6,9 @@
 abstract class WC_EBANX_Logger {
 	/**
 	 * method responsible to save log on database
-	 * 
-	 * @param string $event
-	 * @param array $log_data
+	 *
+	 * @param string $event data to be logged.
+	 * @param array $log_data data to be logged.
 	 */
 	protected final static function save( $event, array $log_data ) {
 		WC_EBANX_Database::insert( 'logs', array(
@@ -20,10 +20,10 @@ abstract class WC_EBANX_Logger {
 
 	/**
 	 * Abstract method that must be overrated by child classes 
-	 * 
+	 *
 	 * This method is responsible for receive log data, manage them and send them to method save
-	 * 
-	 * @param array $log_data data to be logged
+	 *
+	 * @param array $log_data data to be logged.
 	 */
-	public abstract static function persist( array $log_data = [] );
+	abstract public static function persist( array $log_data = [] );
 }

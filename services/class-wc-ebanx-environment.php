@@ -10,29 +10,37 @@ if ( ! defined( 'ABSPATH' ) ) {
 class WC_EBANX_Environment {
 	/**
 	 * Environment platform
+	 * @var $platform
 	 */
 	public $platform;
 
 	/**
 	 * Interpreter
+	 * @var $interpreter
 	 */
 	public $interpreter;
 
 	/**
 	 * Server software
+	 * @var $web_server
 	 */
 	public $web_server;
 
 	/**
 	 * Database software
+	 * @var $database_server
 	 */
 	public $database_server;
 
 	/**
 	 * Operating system
+	 * @var $operating_system
 	 */
 	public $operating_system;
 
+	/**
+	 * WC_EBANX_Environment constructor
+	 */
 	public function __construct() {
 		global $wp_version;
 		$platform       = new stdClass();
@@ -69,7 +77,7 @@ class WC_EBANX_Environment {
 			}
 			$result                   = $database->query( 'SELECT version() AS version' );
 			$row                      = $result->fetch_assoc();
-			$database_server->version = $row[ 'version' ];
+			$database_server->version = $row['version'];
 		} else {
 			$database_server->name    = 'Unconnected';
 			$database_server->version = 'Unknown';
@@ -86,7 +94,8 @@ class WC_EBANX_Environment {
 
 	/**
 	 * Extracts version number from a string
-	 * @param $haystack 
+	 *
+	 * @param string $haystack
 	 */
 	public function extract_version_number_from( $haystack ) {
 		preg_match( '/((\d)+(\.|\D))+/', $haystack, $version_candidates_array );

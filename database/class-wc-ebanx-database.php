@@ -7,8 +7,8 @@ require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
  */
 class WC_EBANX_Database {
 	/**
-	 * Table names
-	 * 
+	 * Table names.
+	 *
 	 * @return array
 	 */
 	public static function tables() {
@@ -20,14 +20,14 @@ class WC_EBANX_Database {
 	}
 
 	/**
-	 * Migrate tables
+	 * Migrate tables.
 	 */
 	public static function migrate() {
 		self::create_log_table();
 	}
 
 	/**
-	 * Creates table used to store logs
+	 * Creates table used to store logs.
 	 */
 	private static function create_log_table() {
 		global $wpdb;
@@ -52,8 +52,9 @@ class WC_EBANX_Database {
 
 	/**
 	 * Wrapper for `$wpdb` `insert` method, getting table name from `tables` method
-	 * @param $table table name
-	 * @param $data data to be inserted
+	 *
+	 * @param string $table table name.
+	 * @param array $data data to be inserted.
 	 */
 	public static function insert( $table, $data ) {
 		global $wpdb;
@@ -63,7 +64,8 @@ class WC_EBANX_Database {
 
 	/**
 	 * Truncate table
-	 * @param string $table table name
+	 *
+	 * @param string $table table name.
 	 */
 	public static function truncate( $table ) {
 		global $wpdb;
@@ -74,7 +76,8 @@ class WC_EBANX_Database {
 	/**
 	 * Select all columns from $table
 	 * Commonly used to get all logs before truncate table
-	 * @param string $table table name
+	 *
+	 * @param string $table table name.
 	 */
 	public static function select( $table ) {
 		global $wpdb;

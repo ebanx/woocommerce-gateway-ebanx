@@ -133,8 +133,8 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway
 
 	/**
 	 * Check if the currency is processed by EBANX
-	 * @param  string $currency Possible currencies: BRL, USD, EUR, PEN, CLP, COP, MXN
-	 * @return boolean          Return true if EBANX process the currency
+	 * @param  string $currency Possible currencies: BRL, USD, EUR, PEN, CLP, COP, MXN.
+	 * @return boolean          Return true if EBANX process the currency.
 	 */
 	public function ebanx_process_merchant_currency($currency) {
 		return $currency;
@@ -143,8 +143,8 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway
 	/**
 	 * General method to check if the currency is USD or EUR. These currencies are accepted by all payment methods.
 	 *
-	 * @param  string $currency Possible currencies: USD, EUR
-	 * @return boolean          Return true if EBANX process the currency
+	 * @param  string $currency Possible currencies: USD, EUR.
+	 * @return boolean          Return true if EBANX process the currency.
 	 */
 	public function currency_is_usd_eur($currency) {
 		return in_array($currency, array(WC_EBANX_Constants::CURRENCY_CODE_USD, WC_EBANX_Constants::CURRENCY_CODE_EUR));
@@ -153,8 +153,8 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway
 	/**
 	 * Insert custom billing fields on checkout page
 	 *
-	 * @param  array $fields WooCommerce's fields
-	 * @return array         The new fields
+	 * @param  array $fields WooCommerce's fields.
+	 * @return array         The new fields.
 	 */
 	public function checkout_fields($fields) {
 		$fields_options = array();
@@ -306,8 +306,8 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway
 	/**
 	 * Fetches a single checkout manager setting from the gateway settings if found, otherwise it returns an optional default value
 	 *
-	 * @param  string $name    The setting name to fetch
-	 * @param  mixed  $default The default value in case setting is not present
+	 * @param  string $name    The setting name to fetch.
+	 * @param  mixed  $default The default value in case setting is not present.
 	 * @return mixed
 	 */
 	private function get_checkout_manager_settings_or_default($name, $default=null) {
@@ -1116,11 +1116,10 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway
 	 * Create the hooks to process cash payments
 	 *
 	 * @param  array  $codes
-	 * @param  string $notification_type     The type of the description
+	 * @param  string $notification_type     The type of the description.
 	 * @return WC_Order
 	 */
-	final public function process_hook( array $codes, $notification_type )
-	{
+	final public function process_hook( array $codes, $notification_type ) {
 		do_action( 'ebanx_before_process_hook', $codes, $notification_type );
 
 		$config = array(
@@ -1135,11 +1134,11 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway
 		/**
 		 * Validates the request parameters
 		 */
-		if (isset($codes['hash']) && !empty($codes['hash']) && isset($codes['merchant_payment_code']) && !empty($codes['merchant_payment_code'])) {
-			unset($codes['merchant_payment_code']);
+		if ( isset($codes['hash'] ) && ! empty( $codes['hash'] ) && isset( $codes['merchant_payment_code'] ) && !empty( $codes['merchant_payment_code'] ) ) {
+			unset( $codes['merchant_payment_code'] );
 		}
 
-		$data = \Ebanx\EBANX::doQuery($codes);
+		$data = \Ebanx\EBANX::doQuery( $codes );
 
 		WC_EBANX_Notification_Query_Logger::persist([
 			'codes' => $codes,
@@ -1150,18 +1149,18 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway
 
 		$order = new WC_Order($order_id);
 
-		switch (strtoupper($notification_type)) {
+		switch ( strtoupper( $notification_type ) ) {
 			case 'REFUND':
-				$this->process_refund_hook($order, $data);
+				$this->process_refund_hook( $order, $data );
 
 				break;
 			case 'UPDATE':
-				$this->update_payment($order, $data);
+				$this->update_payment( $order, $data );
 
 				break;
 		};
 
-		do_action('ebanx_after_process_hook', $order, $notification_type);
+		do_action( 'ebanx_after_process_hook', $order, $notification_type );
 
 		return $order;
 	}
@@ -1209,6 +1208,7 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway
 
 		if ( $new_status !== $order->status ) {
 			$payment_status = $status[ $data->payment->status ];
+			// add a note on order with payment status
 			$order->add_order_note( sprintf( __( 'EBANX: The payment has been updated to: %s.', 'woocommerce-gateway-ebanx' ), $payment_status ) );
 			$order->update_status( $new_status );
 		}
