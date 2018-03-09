@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 /**
  * Log Payment By Link event data

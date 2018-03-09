@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 /**
  * Log Refund event data

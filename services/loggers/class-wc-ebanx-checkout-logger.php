@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 /**
  * Log Checkout event data

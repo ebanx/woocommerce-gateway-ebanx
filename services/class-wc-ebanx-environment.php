@@ -10,30 +10,35 @@ if ( ! defined( 'ABSPATH' ) ) {
 class WC_EBANX_Environment {
 	/**
 	 * Environment platform
+	 *
 	 * @var $platform
 	 */
 	public $platform;
 
 	/**
 	 * Interpreter
+	 *
 	 * @var $interpreter
 	 */
 	public $interpreter;
 
 	/**
 	 * Server software
+	 *
 	 * @var $web_server
 	 */
 	public $web_server;
 
 	/**
 	 * Database software
+	 *
 	 * @var $database_server
 	 */
 	public $database_server;
 
 	/**
 	 * Operating system
+	 *
 	 * @var $operating_system
 	 */
 	public $operating_system;

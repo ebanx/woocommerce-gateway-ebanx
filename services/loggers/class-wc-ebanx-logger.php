@@ -5,12 +5,12 @@
  */
 abstract class WC_EBANX_Logger {
 	/**
-	 * method responsible to save log on database
+	 * Method responsible to save log on database
 	 *
-	 * @param string $event data to be logged.
-	 * @param array $log_data data to be logged.
+	 * @param string $event event name to be logged.
+	 * @param array  $log_data data to be logged.
 	 */
-	protected final static function save( $event, array $log_data ) {
+	final protected static function save( $event, array $log_data ) {
 		WC_EBANX_Database::insert( 'logs', array(
 			'time' => current_time( 'mysql' ),
 			'event' => $event,

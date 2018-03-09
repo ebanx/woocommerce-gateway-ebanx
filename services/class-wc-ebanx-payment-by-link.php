@@ -102,8 +102,8 @@ class WC_EBANX_Payment_By_Link {
 		} finally {
 			WC_EBANX_Payment_By_Link_Logger::persist([
 				'request' => $data,
-				'response' => $request, // Response from EBANX::doRequest
-				'errors' => self::$errors
+				'response' => $request, // Response from EBANX::doRequest.
+				'errors' => self::$errors,
 			]);
 		}
 

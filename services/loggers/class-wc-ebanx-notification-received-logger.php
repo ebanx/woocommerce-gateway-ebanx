@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 /**
  * Log Notification Received event data

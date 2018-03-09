@@ -54,7 +54,7 @@ class WC_EBANX_Database {
 	 * Wrapper for `$wpdb` `insert` method, getting table name from `tables` method
 	 *
 	 * @param string $table table name.
-	 * @param array $data data to be inserted.
+	 * @param array  $data data to be inserted.
 	 */
 	public static function insert( $table, $data ) {
 		global $wpdb;
