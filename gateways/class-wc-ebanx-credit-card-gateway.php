@@ -428,7 +428,7 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_New_Gateway
 				'currency' => $currency,
 				'country' => $country,
 				'instalments_terms' => $instalments_terms,
-				'currency' => $this->currency_code,
+				'currency_code' => $this->currency_code,
 				'currency_rate' => round(floatval($this->get_local_currency_rate_for_site($this->currency_code)), 2),
 				'cards' => (array) $cards,
 				'cart_total' => $cart_total,

@@ -72,6 +72,11 @@ class WC_EBANX_New_Gateway extends WC_EBANX_Gateway
 	protected $api_name;
 
 	/**
+	 * @var array
+	 */
+	protected static $ebanx_params = [];
+
+	/**
 	 * @var int
 	 */
 	protected static $totalGateways = 0;
@@ -104,6 +109,63 @@ class WC_EBANX_New_Gateway extends WC_EBANX_Gateway
 		$this->icon = $this->show_icon();
 		$this->names = $this->get_billing_field_names();
 		$this->merchant_currency = strtoupper(get_woocommerce_currency());
+	}
+
+	/**
+	 * Insert the necessary assets on checkout page
+	 *
+	 * @return void
+	 */
+	public function checkout_assets()
+	{
+		if (is_checkout()) {
+			wp_enqueue_script(
+				'woocommerce_ebanx_checkout_fields',
+				plugins_url('assets/js/checkout-fields.js', WC_EBANX::DIR),
+				array('jquery'),
+				WC_EBANX::get_plugin_version(),
+				true
+			);
+			$checkout_params = array(
+				'is_sandbox' => $this->is_sandbox_mode,
+				'sandbox_tag_messages' => array(
+					'pt-br' => 'EM TESTE',
+					'es' => 'EN PRUEBA',
+				),
+			);
+			wp_localize_script( 'woocommerce_ebanx_checkout_fields', 'wc_ebanx_checkout_params', apply_filters( 'wc_ebanx_checkout_params', $checkout_params ) );
+		}
+
+		if ( is_checkout() && $this->is_sandbox_mode ) {
+			wp_enqueue_style(
+				'woocommerce_ebanx_sandbox_style',
+				plugins_url( 'assets/css/sandbox-checkout-alert.css', WC_EBANX::DIR )
+			);
+		}
+
+		if (
+			is_wc_endpoint_url( 'order-pay' ) ||
+			is_wc_endpoint_url( 'order-received' ) ||
+			is_wc_endpoint_url( 'view-order' ) ||
+			is_checkout()
+		) {
+			wp_enqueue_style(
+				'woocommerce_ebanx_paying_via_ebanx_style',
+				plugins_url('assets/css/paying-via-ebanx.css', WC_EBANX::DIR)
+			);
+
+			static::$ebanx_params = array(
+				'key'  => $this->public_key,
+				'mode' => $this->is_sandbox_mode ? 'test' : 'production',
+				'ajaxurl' =>  admin_url('admin-ajax.php', null)
+			);
+
+			self::$initializedGateways++;
+
+			if (self::$initializedGateways === self::$totalGateways) {
+				wp_localize_script('woocommerce_ebanx_credit_card', 'wc_ebanx_params', apply_filters('wc_ebanx_params', static::$ebanx_params));
+			}
+		}
 	}
 
 
