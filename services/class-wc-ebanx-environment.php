@@ -1,6 +1,6 @@
 <?php
 
-if (!defined('ABSPATH')) {
+if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
@@ -8,10 +8,29 @@ if (!defined('ABSPATH')) {
  * Enviroment data to be logged
  */
 class WC_EBANX_Environment {
+	/**
+	 * Environment platform
+	 */
 	public $platform;
+
+	/**
+	 * Interpreter
+	 */
 	public $interpreter;
+
+	/**
+	 * Server software
+	 */
 	public $web_server;
+
+	/**
+	 * Database software
+	 */
 	public $database_server;
+
+	/**
+	 * Operating system
+	 */
 	public $operating_system;
 
 	public function __construct() {
@@ -38,20 +57,19 @@ class WC_EBANX_Environment {
 		$web_server->name              = str_replace( '-', ' ', $web_server_parts[0] );
 		$web_server->version           = $web_server_parts[1];
 
-
 		$this->web_server = $web_server;
 
 		$database_server = new stdClass();
-		$database        = new mysqli(DB_HOST, DB_USER, DB_PASSWORD);
-		if (!mysqli_connect_errno()) {
-			if (strpos($database->server_info, 'MariaDB') !== false) {
+		$database        = new mysqli( DB_HOST, DB_USER, DB_PASSWORD );
+		if ( ! mysqli_connect_errno() ) {
+			if ( strpos( $database->server_info, 'MariaDB' ) !== false ) {
 				$database_server->name = 'MariaDB';
 			} else {
 				$database_server->name = 'MySQL';
 			}
-			$result                   = $database->query('SELECT version() AS version');
+			$result                   = $database->query( 'SELECT version() AS version' );
 			$row                      = $result->fetch_assoc();
-			$database_server->version = $row['version'];
+			$database_server->version = $row[ 'version' ];
 		} else {
 			$database_server->name    = 'Unconnected';
 			$database_server->version = 'Unknown';
@@ -62,14 +80,18 @@ class WC_EBANX_Environment {
 
 		$operating_system          = new stdClass();
 		$operating_system->name    = PHP_OS;
-		$operating_system->version = $this->extract_version_number_from( php_uname('v') );
+		$operating_system->version = $this->extract_version_number_from( php_uname( 'v' ) );
 		$this->operating_system    = $operating_system;
 	}
 
+	/**
+	 * Extracts version number from a string
+	 * @param $haystack 
+	 */
 	public function extract_version_number_from( $haystack ) {
 		preg_match( '/((\d)+(\.|\D))+/', $haystack, $version_candidates_array );
 
-		if (count($version_candidates_array) > 0 && strlen( $version_candidates_array[0]) > 0 ) {
+		if ( count( $version_candidates_array ) > 0 && strlen( $version_candidates_array[0] ) > 0 ) {
 			$version_candidates_array[0] = str_replace( '.', '_', $version_candidates_array[0] );
 			$version_candidates_array[0] = preg_replace( '/[\W]/', '', $version_candidates_array[0] );
 			$version_candidates_array[0] = str_replace( '_', '.', $version_candidates_array[0] );
@@ -81,6 +103,9 @@ class WC_EBANX_Environment {
 		return $version;
 	}
 
+	/**
+	 * Stringifies this object
+	 */
 	public function __toString() {
 		return json_encode( $this, JSON_PRETTY_PRINT );
 	}

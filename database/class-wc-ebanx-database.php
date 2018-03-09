@@ -8,6 +8,8 @@ require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
 class WC_EBANX_Database {
 	/**
 	 * Table names
+	 * 
+	 * @return array
 	 */
 	public static function tables() {
 		global $wpdb;
@@ -33,7 +35,7 @@ class WC_EBANX_Database {
 		$table_name = self::tables()['logs'];
 		$charset_collate = $wpdb->get_charset_collate();
 
-		if ( $wpdb->get_var( $wpdb->prepare( "SHOW TABLES LIKE '%s'", $table_name ) ) ) {
+		if ( $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', $table_name ) ) ) {
 			return;
 		}
 
@@ -50,34 +52,33 @@ class WC_EBANX_Database {
 
 	/**
 	 * Wrapper for `$wpdb` `insert` method, getting table name from `tables` method
+	 * @param $table table name
+	 * @param $data data to be inserted
 	 */
 	public static function insert( $table, $data ) {
 		global $wpdb;
 
-		return $wpdb->insert( self::tables()[$table], $data );
+		return $wpdb->insert( self::tables()[ $table ], $data );
 	}
 
 	/**
 	 * Truncate table
-	 * 
-	 * @var string $table
+	 * @param string $table table name
 	 */
 	public static function truncate( $table ) {
 		global $wpdb;
 
-		$wpdb->query( 'TRUNCATE TABLE ' . self::tables()[$table] );
+		$wpdb->query( $wpdb->prepare( 'TRUNCATE TABLE %s', self::tables()[ $table ] ) );
 	}
 
 	/**
 	 * Select all columns from $table
-	 * 
 	 * Commonly used to get all logs before truncate table
-	 * 
-	 * @var string $table
+	 * @param string $table table name
 	 */
 	public static function select( $table ) {
 		global $wpdb;
 
-		return $wpdb->get_results( 'SELECT * FROM ' . self::tables()[$table] );
+		return $wpdb->get_results( $wpdb->prepare( 'SELECT * FROM %s', self::tables()[ $table ] ) );
 	}
 }
