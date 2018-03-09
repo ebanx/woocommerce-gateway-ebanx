@@ -57,4 +57,18 @@ class WC_EBANX_Credit_Card_AR_Gateway extends WC_EBANX_Credit_Card_Gateway {
 			1
 		);
 	}
+
+	/**
+	 * @param WC_Order $order
+	 *
+	 * @return \Ebanx\Benjamin\Models\Payment
+	 * @throws Exception
+	 */
+	protected function transform_payment_data( $order ) {
+		$data = parent::transform_payment_data( $order );
+
+		$data->person->documentType = WC_EBANX_Request::read( $this->names['ebanx_billing_argentina_document_type'], null );
+
+		return $data;
+	}
 }

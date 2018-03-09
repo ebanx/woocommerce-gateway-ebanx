@@ -128,13 +128,11 @@ class WC_EBANX_Payment_Adapter
 	 * @throws Exception
 	 */
 	private static function transform_person( $order, $configs, $names ) {
-		$document_info = static::get_document( $configs, $names, $order );
-		$document_number = is_array($document_info) ? $document_info['number'] : $document_info;
-		$document_type = is_array($document_info) ? $document_info['type'] : null;
+		$document = static::get_document( $configs, $names, $order );
 
 		return new Person([
-			'type' => $document_type,
-			'document' => $document_number,
+			'type' => static::get_person_type( $configs, $names ),
+			'document' => $document,
 			'email' => $order->billing_email,
 			'ip' => WC_Geolocation::get_ip_address(),
 			'name' => $order->billing_first_name . ' ' . $order->billing_last_name,
@@ -148,13 +146,16 @@ class WC_EBANX_Payment_Adapter
 	 *
 	 * @param $order
 	 *
-	 * @return array|string
+	 * @return string
 	 * @throws Exception
 	 */
 	private static function get_document( $configs, $names, $order ) {
 		$country = trim( strtolower( WC()->customer->get_country() ) );
 
 		switch ( $country ) {
+			case WC_EBANX_Constants::COUNTRY_ARGENTINA:
+				return static::get_argentinian_document( $names );
+				break;
 			case WC_EBANX_Constants::COUNTRY_BRAZIL:
 				return static::get_brazilian_document( $configs, $names );
 				break;
@@ -167,34 +168,38 @@ class WC_EBANX_Payment_Adapter
 			case WC_EBANX_Constants::COUNTRY_PERU:
 				return static::get_peruvian_document( $names );
 				break;
+			default:
+				return '';
 		}
+	}
+
+	/**
+	 * @param array $names
+	 *
+	 * @return string
+	 * @throws Exception
+	 */
+	private static function get_argentinian_document( $names ) {
+		$document = WC_EBANX_Request::read( $names['ebanx_billing_argentina_document'], null );
+		if ( $document === null ) {
+			throw new Exception( 'BP-DR-22' );
+		}
+
+		return $document;
 	}
 
 	/**
 	 * @param $configs WC_EBANX_Global_Gateway
 	 * @param $names array
 	 *
-	 * @return array
+	 * @return string
 	 * @throws Exception
 	 */
 	private static function get_brazilian_document( $configs, $names ) {
 		$cpf = WC_EBANX_Request::read( $names['ebanx_billing_brazil_document'], null );
 		$cnpj = WC_EBANX_Request::read( $names['ebanx_billing_brazil_cnpj'], null );
 
-		$fields_options = array();
-		$person_type = Person::TYPE_PERSONAL;
-
-		if ( isset( $configs->settings['brazil_taxes_options'] ) && is_array( $configs->settings['brazil_taxes_options'] ) ) {
-			$fields_options = $configs->settings['brazil_taxes_options'];
-		}
-
-		if ( count( $fields_options ) === 1 && $fields_options[0] === 'cnpj' ) {
-			$person_type = Person::TYPE_BUSINESS;
-		}
-
-		if ( in_array( 'cpf', $fields_options ) && in_array( 'cnpj', $fields_options ) ) {
-			$person_type = 'cnpj' === WC_EBANX_Request::read( $names['ebanx_billing_brazil_person_type'], 'cpf' ) ? Person::TYPE_BUSINESS : Person::TYPE_PERSONAL;
-		}
+		$person_type = static::get_person_type( $configs, $names );
 
 		$has_cpf  = ! empty( $cpf );
 		$has_cnpj = ! empty( $cnpj );
@@ -214,25 +219,7 @@ class WC_EBANX_Payment_Adapter
 			return $cnpj;
 		}
 
-		return [
-			'number' => $cpf,
-			'type' => $person_type,
-		];
-	}
-
-	/**
-	 * @param array $names
-	 *
-	 * @return array
-	 * @throws Exception
-	 */
-	private static function get_peruvian_document( $names ) {
-		$document = WC_EBANX_Request::read( $names['ebanx_billing_peru_document'], null );
-		if ( $document === null ) {
-			throw new Exception( 'BP-DR-22' );
-		}
-
-		return $document;
+		return $cpf;
 	}
 
 	/**
@@ -265,6 +252,47 @@ class WC_EBANX_Payment_Adapter
 		}
 
 		return $document;
+	}
+
+	/**
+	 * @param array $names
+	 *
+	 * @return string
+	 * @throws Exception
+	 */
+	private static function get_peruvian_document( $names ) {
+		$document = WC_EBANX_Request::read( $names['ebanx_billing_peru_document'], null );
+		if ( $document === null ) {
+			throw new Exception( 'BP-DR-22' );
+		}
+
+		return $document;
+	}
+
+	/**
+	 * @param WC_EBANX_Global_Gateway $configs
+	 * @param array $names
+	 *
+	 * @return string
+	 * @throws Exception
+	 */
+	private static function get_person_type( $configs, $names ) {
+		$fields_options = array();
+		$person_type = Person::TYPE_PERSONAL;
+
+		if ( isset( $configs->settings['brazil_taxes_options'] ) && is_array( $configs->settings['brazil_taxes_options'] ) ) {
+			$fields_options = $configs->settings['brazil_taxes_options'];
+		}
+
+		if ( count( $fields_options ) === 1 && $fields_options[0] === 'cnpj' ) {
+			$person_type = Person::TYPE_BUSINESS;
+		}
+
+		if ( in_array( 'cpf', $fields_options ) && in_array( 'cnpj', $fields_options ) ) {
+			$person_type = 'cnpj' === WC_EBANX_Request::read( $names['ebanx_billing_brazil_person_type'], 'cpf' ) ? Person::TYPE_BUSINESS : Person::TYPE_PERSONAL;
+		}
+
+		return $person_type;
 	}
 
 	/**

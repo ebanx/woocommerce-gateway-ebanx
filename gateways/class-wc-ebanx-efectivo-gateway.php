@@ -4,7 +4,7 @@ if (!defined('ABSPATH')) {
 	exit;
 }
 
-class WC_EBANX_Efectivo_Gateway extends WC_EBANX_Gateway
+class WC_EBANX_Efectivo_Gateway extends WC_EBANX_New_Gateway
 {
 	/**
 	 * Constructor
@@ -126,19 +126,22 @@ class WC_EBANX_Efectivo_Gateway extends WC_EBANX_Gateway
 	 * Mount the data to send to EBANX API
 	 *
 	 * @param  WC_Order $order
-	 * @return array
+	 * @return \Ebanx\Benjamin\Models\Payment
 	 * @throws Exception
 	 */
-	protected function request_data($order)
+	protected function transform_payment_data($order)
 	{
 		if ( ! WC_EBANX_Request::has('efectivo')
 			 || ! in_array(WC_EBANX_Request::read('efectivo'), WC_EBANX_Constants::$VOUCHERS_EFECTIVO_ALLOWED)) {
 			throw new Exception('MISSING-VOUCHER');
 		}
 
-		$data = parent::request_data($order);
+		$data = WC_EBANX_Payment_Adapter::transform( $order, $this->configs, $this->api_name, $this->names );
 
-		$data['payment']['payment_type_code'] = WC_EBANX_Request::read('efectivo');
+		$data->person->documentType = WC_EBANX_Request::read( $this->names['ebanx_billing_argentina_document_type'], null );
+
+		$efectivo_gateway = WC_EBANX_Request::read('efectivo');
+		$this->ebanx_gateway = 'cupon' === $efectivo_gateway ? $this->ebanx->otrosCupones() : $this->ebanx->{$efectivo_gateway}();
 
 		return $data;
 	}
