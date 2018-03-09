@@ -158,11 +158,14 @@ class WC_EBANX_Payment_Adapter
 			case WC_EBANX_Constants::COUNTRY_BRAZIL:
 				return static::get_brazilian_document( $configs, $names );
 				break;
-			case WC_EBANX_Constants::COUNTRY_PERU:
-				return static::get_peruvian_document( $names );
-				break;
 			case WC_EBANX_Constants::COUNTRY_CHILE:
 				return static::get_chilean_document( $order, $names );
+				break;
+			case WC_EBANX_Constants::COUNTRY_COLOMBIA:
+				return static::get_colombian_document( $order, $names );
+				break;
+			case WC_EBANX_Constants::COUNTRY_PERU:
+				return static::get_peruvian_document( $names );
 				break;
 		}
 	}
@@ -249,18 +252,34 @@ class WC_EBANX_Payment_Adapter
 	}
 
 	/**
+	 * @param WC_Order $order
+	 * @param array $names
+	 *
+	 * @return string
+	 * @throws Exception
+	 */
+	private static function get_colombian_document( $order, $names ) {
+		$document = WC_EBANX_Request::read( $names['ebanx_billing_colombia_document'], null );
+		if ( $document === null && 'ebanx-credit-card-co' === $order->get_payment_method() ) {
+			throw new Exception( 'BP-DR-22' );
+		}
+
+		return $document;
+	}
+
+	/**
 	 * @param $order WC_Order
 	 *
 	 * @return array
 	 */
 	private static function transform_items( $order ) {
-		return array_map(function($product) {
+		return array_map( function( $product ) {
 			return new Item([
 				'name' => $product['name'],
-				'unit_price' => $product['line_subtotal'],
+				'unitPrice' => $product['line_subtotal'],
 				'quantity' => $product['qty'],
 				'type' => $product['type'],
 			]);
-		}, $order->get_items());
+		}, $order->get_items() );
 	}
 }

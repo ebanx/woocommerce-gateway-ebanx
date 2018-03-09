@@ -20,6 +20,8 @@ class WC_EBANX_Eft_Gateway extends WC_EBANX_Redirect_Gateway
 
 		parent::__construct();
 
+		$this->ebanx_gateway = $this->ebanx->eft();
+
 		$this->enabled = is_array($this->configs->settings['colombia_payment_methods']) ? in_array($this->id, $this->configs->settings['colombia_payment_methods']) ? 'yes' : false : false;
 	}
 
@@ -96,22 +98,21 @@ class WC_EBANX_Eft_Gateway extends WC_EBANX_Redirect_Gateway
 	}
 
 	/**
-	 * Mount the data to send to EBANX API
+	 * @param WC_Order $order
 	 *
-	 * @param  WC_Order $order
-	 * @return array
+	 * @return \Ebanx\Benjamin\Models\Payment
+	 * @throws Exception
 	 */
-	protected function request_data($order)
+	protected function transform_payment_data($order)
 	{
 		if ( ! WC_EBANX_Request::has('eft')
 			|| ! array_key_exists(WC_EBANX_Request::read('eft'), WC_EBANX_Constants::$BANKS_EFT_ALLOWED[WC_EBANX_Constants::COUNTRY_COLOMBIA])) {
 			throw new Exception('MISSING-BANK-NAME');
 		}
 
-		$data = parent::request_data($order);
+		$data = WC_EBANX_Payment_Adapter::transform( $order, $this->configs, $this->api_name, $this->names );
 
-		$data['payment']['eft_code']          = WC_EBANX_Request::read('eft');
-		$data['payment']['payment_type_code'] = $this->api_name;
+		$data->bankCode = WC_EBANX_Request::read('eft');
 
 		return $data;
 	}

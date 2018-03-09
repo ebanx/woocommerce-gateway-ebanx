@@ -4,7 +4,7 @@ if (!defined('ABSPATH')) {
 	exit;
 }
 
-class WC_EBANX_Baloto_Gateway extends WC_EBANX_Gateway
+class WC_EBANX_Baloto_Gateway extends WC_EBANX_New_Gateway
 {
 	/**
 	 * Constructor
@@ -19,6 +19,8 @@ class WC_EBANX_Baloto_Gateway extends WC_EBANX_Gateway
 		$this->description = 'Paga con Baloto.';
 
 		parent::__construct();
+
+		$this->ebanx_gateway = $this->ebanx->baloto();
 
 		$this->enabled = is_array($this->configs->settings['colombia_payment_methods']) ? in_array($this->id, $this->configs->settings['colombia_payment_methods']) ? 'yes' : false : false;
 	}
