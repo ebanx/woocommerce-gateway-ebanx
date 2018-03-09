@@ -73,8 +73,10 @@ class WC_EBANX_Environment {
 		$this->web_server = $web_server;
 
 		$database_server = new stdClass();
+		// @codingStandardsIgnoreStart
 		$database        = new mysqli( DB_HOST, DB_USER, DB_PASSWORD );
 		if ( ! mysqli_connect_errno() ) {
+			// @codingStandardsIgnoreEnd
 			if ( strpos( $database->server_info, 'MariaDB' ) !== false ) {
 				$database_server->name = 'MariaDB';
 			} else {

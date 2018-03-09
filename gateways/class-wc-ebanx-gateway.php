@@ -1211,6 +1211,7 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway
 
 		if ( $new_status !== $order->status ) {
 			$payment_status = $status[ $data->payment->status ];
+			// @codingStandardsIgnoreLine
 			$order->add_order_note( sprintf( __( 'EBANX: The payment has been updated to: %s.', 'woocommerce-gateway-ebanx' ), $payment_status ) );
 			$order->update_status( $new_status );
 		}
