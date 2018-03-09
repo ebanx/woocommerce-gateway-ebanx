@@ -1,8 +1,6 @@
 <?php
 
 require_once WC_EBANX_VENDOR_DIR . 'ebanx/ebanx/src/autoload.php';
-require_once WC_EBANX_SERVICES_DIR . 'class-wc-ebanx-api.php';
-require_once WC_EBANX_SERVICES_DIR . 'class-wc-ebanx-payment-adapter.php';
 
 if (!defined('ABSPATH')) {
 	exit;
@@ -36,16 +34,6 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway
 	protected static $ebanx_params = array();
 	protected static $initializedGateways = 0;
 	protected static $totalGateways = 0;
-
-	/**
-	 * @var WC_EBANX_Global_Gateway
-	 */
-	protected $configs;
-
-	/**
-	 * @var string
-	 */
-	protected $api_name;
 
 	/**
 	 * Current user id

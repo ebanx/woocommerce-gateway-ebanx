@@ -20,7 +20,7 @@ class WC_EBANX_Sencillito_Gateway extends WC_EBANX_Redirect_Gateway
 
 		parent::__construct();
 
-		$this->ebanx_gateway = $this->ebanx->servipag();
+		$this->ebanx_gateway = $this->ebanx->sencillito();
 
 		$this->enabled = is_array($this->configs->settings['chile_payment_methods']) ? in_array($this->id, $this->configs->settings['chile_payment_methods']) ? 'yes' : false : false;
 	}
