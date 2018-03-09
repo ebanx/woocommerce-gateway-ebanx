@@ -119,7 +119,7 @@ if ( ! class_exists('WC_EBANX') ) {
 
 			add_action('admin_footer', array('WC_EBANX_Assets', 'render'), 0);
 
-			add_action( 'woocommerce_settings_save_checkout', array( $this, 'on_before_save_settings' ), 10);
+			add_action( 'woocommerce_settings_save_checkout', array( $this, 'on_before_save_settings' ), 10 );
 			add_action('woocommerce_settings_saved', array($this, 'setup_configs'), 10);
 			add_action('woocommerce_settings_saved', array($this, 'on_save_settings'), 10);
 			add_action('woocommerce_settings_saved', array($this, 'update_lead'), 20);
@@ -232,11 +232,11 @@ if ( ! class_exists('WC_EBANX') ) {
 			$this->setup_configs();
 			$api_controller = new WC_EBANX_Api_Controller($this->configs);
 
-			$ebanx_router->map('dashboard-check', array($api_controller, 'dashboard_check'));
-			$ebanx_router->map('order-received', array($api_controller, 'order_received'));
-			$ebanx_router->map('cancel-order', array($api_controller, 'cancel_order'));
-			$ebanx_router->map('capture-payment', array($api_controller, 'capture_payment'));
-			$ebanx_router->map('retrieve-logs', array($api_controller, 'retrieve_logs'));
+			$ebanx_router->map( 'dashboard-check', array( $api_controller, 'dashboard_check' ) );
+			$ebanx_router->map( 'order-received', array( $api_controller, 'order_received' ) );
+			$ebanx_router->map( 'cancel-order', array( $api_controller, 'cancel_order' ) );
+			$ebanx_router->map( 'capture-payment', array( $api_controller, 'capture_payment' ) );
+			$ebanx_router->map( 'retrieve-logs', array( $api_controller, 'retrieve_logs' ) );
 
 			$ebanx_router->serve();
 		}
@@ -465,7 +465,7 @@ if ( ! class_exists('WC_EBANX') ) {
 
 			if ($is_endpoint && !is_admin() && is_main_query() && in_the_loop() && is_account_page()) {
 				$title = __(self::$my_account_menu_name, 'woocommerce-gateway-ebanx');
-				remove_filter('the_title', array($this, 'my_account_menus_title'));
+				remove_filter( 'the_title', array( $this, 'my_account_menus_title' ) );
 			}
 
 			return $title;

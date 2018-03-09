@@ -31,8 +31,13 @@ function ebanx_update_converted_value () {
 
 class WC_EBANX_Gateway extends WC_Payment_Gateway
 {
+	/** @var $ebanx_params */
 	protected static $ebanx_params = array();
+
+	/** @var $initialized_gateways */
 	protected static $initialized_gateways = 0;
+
+	/** @var $total_gateways */
 	protected static $total_gateways = 0;
 
 	/**
