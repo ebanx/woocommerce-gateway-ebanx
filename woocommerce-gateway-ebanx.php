@@ -675,14 +675,10 @@ if ( ! class_exists('WC_EBANX') ) {
 				&& ! $checkout_url ) {
 
 				$this->setup_configs();
-				$config = array(
-					'integrationKey' => $this->private_key,
-					'testMode'       => $this->is_sandbox_mode,
-				);
 
 				update_post_meta($order->id, '_ebanx_instalments', WC_EBANX_Request::read('ebanx_instalments', 1));
 
-				WC_EBANX_Payment_By_Link::create($post_id, $config);
+				WC_EBANX_Payment_By_Link::create($post_id);
 			}
 			return;
 		}
