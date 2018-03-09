@@ -386,7 +386,7 @@ export default class Checkout {
       .should('be.visible')
       .click({ force: true });
   }
- 
+
   [fillBilling] (data) {
     this[selectCountry](data);
     this[fillFirstName](data);
@@ -494,11 +494,17 @@ export default class Checkout {
 
   placeWithCreditCard(data, next) {
     validateSchema(CHECKOUT_SCHEMA[data.countryId.toLowerCase()].creditcard(), data, () => {
+      const instalmentsBR = {
+        elm: 'select[name="ebanx-credit-card-installments"]',
+        content: data.instalments + 'x',
+        value: data.instalments
+      };
       this[fillBilling](data);
       this[fillCreditCardName](data.card);
       this[fillCreditCardNumber](data.card);
       this[fillCreditCardExpiryDate](data.card);
       this[fillCreditCardCvv](data.card);
+      if (data.instalments) this[selectInCombobox](instalmentsBR.elm, instalmentsBR.content, instalmentsBR.value);
       this[placeOrder]();
 
       next();
