@@ -479,6 +479,10 @@ if ( ! class_exists('WC_EBANX') ) {
 			include_once WC_EBANX_SERVICES_DIR . 'class-wc-ebanx-cancel-order.php';
 			include_once WC_EBANX_SERVICES_DIR . 'class-wc-ebanx-capture-payment.php';
 
+			// Benjamin
+			include_once WC_EBANX_SERVICES_DIR . 'class-wc-ebanx-api.php';
+			include_once WC_EBANX_SERVICES_DIR . 'class-wc-ebanx-payment-adapter.php';
+
 			// Gateways
 			include_once WC_EBANX_GATEWAYS_DIR . 'class-wc-ebanx-gateway.php';
 			include_once WC_EBANX_GATEWAYS_DIR . 'class-wc-ebanx-new-gateway.php';

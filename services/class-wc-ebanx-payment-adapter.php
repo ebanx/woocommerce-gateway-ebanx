@@ -1,8 +1,4 @@
 <?php
-require_once WC_EBANX_SERVICES_DIR . 'class-wc-ebanx-constants.php';
-require_once WC_EBANX_SERVICES_DIR . 'class-wc-ebanx-helper.php';
-require_once WC_EBANX_SERVICES_DIR . 'class-wc-ebanx-request.php';
-
 
 use Ebanx\Benjamin\Models\Address;
 use Ebanx\Benjamin\Models\Card;

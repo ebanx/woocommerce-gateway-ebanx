@@ -2,9 +2,6 @@
 
 use Ebanx\Benjamin\Models\Country;
 
-require_once WC_EBANX_SERVICES_DIR . 'class-wc-ebanx-api.php';
-require_once WC_EBANX_SERVICES_DIR . 'class-wc-ebanx-payment-adapter.php';
-
 if (!defined('ABSPATH')) {
 	exit;
 }
