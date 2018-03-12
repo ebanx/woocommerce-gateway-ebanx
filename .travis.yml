@@ -54,7 +54,8 @@ jobs:
       script:
         - bash <(curl -s https://codecov.io/bash)
         - bash .scripts/before_deploy.sh
-        - zip -r /tmp/ebanx-payment-gateway-for-woocommerce $TRAVIS_BUILD_DIR/. -x "*.git*" "*tests*" "*_vendor*"
+        - cd $TRAVIS_BUILD_DIR
+        - zip -r /tmp/ebanx-payment-gateway-for-woocommerce ./* -x "*.git*" "*tests*" "*_vendor*"
       env:
         - TEST_COUNTRY=
       deploy:
