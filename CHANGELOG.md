@@ -1,6 +1,10 @@
 # CHANGELOG
 
-#1.28.1
+# 1.28.2
+* Fix - Instalment selection returning to 1x on checkout errors [#639](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/639)
+* Fix - Outdated error messages [#641](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/641)
+
+# 1.28.1
 * Fix - Get settings from gateway and not from inexistent attribute on one-click [#632](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/632)
 
 # 1.28.0
