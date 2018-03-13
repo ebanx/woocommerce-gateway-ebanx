@@ -9,7 +9,7 @@ class WC_EBANX_Third_Party_Compability_Layer {
 	 * Check and solve third party incompabilities
 	 */
 	public static function check_and_solve() {
-		add_action( 'wp_enqueue_scripts', array( self::class, 'check_and_solve_sticky_checkout' ), 90 );
+		add_action( 'wp_enqueue_scripts', array( 'WC_EBANX_Third_Party_Compability_Layer', 'check_and_solve_sticky_checkout' ), 90 );
 	}
 
 	/**
