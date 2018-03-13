@@ -249,15 +249,15 @@ jQuery( function($) {
 
 
 	$( document ).on( 'input', '#ebanx-card-number', function() {
-	    var cvvTextField =  $( '#ebanx-card-cvv' );
+		var cvvTextField = $( '#ebanx-card-cvv' );
 
-        cvvTextField.attr( 'maxlength', 3 );
-		if( $( '#ebanx-card-number').hasClass('amex') ){
-            cvvTextField.attr( 'maxlength', 4 );
+		cvvTextField.attr( 'maxlength', 3 );
+		if( $( '#ebanx-card-number' ).hasClass( 'amex' ) ){
+			cvvTextField.attr( 'maxlength', 4 );
 		}
 
-        if( $( '#ebanx-card-number').hasClass('unknown') ){
-            cvvTextField.val('');
-        }
-    } );
+		if( $( '#ebanx-card-number').hasClass( 'unknown' ) ){
+			cvvTextField.val( '' );
+		}
+	} );
 } );
