@@ -247,7 +247,6 @@ jQuery( function($) {
 		$( '#ebanx-container-new-credit-card' ).find( 'select.ebanx-instalments' ).select2( 'val', selected_instalment );
 	} );
 
-
 	$( document ).on( 'input', '#ebanx-card-number', function() {
 		var cvvTextField = $( '#ebanx-card-cvv' );
 
