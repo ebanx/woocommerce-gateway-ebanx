@@ -356,7 +356,7 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway
 					'step' => '0.01'
 				),
 				'desc_tip' => true,
-				'description' => __('Set the minimum instalment value during checkout. The minimum EBANX allows for BRL is 5 and MXN is 100, lower values in these currencies will be ignored.', 'woocommerce-gateway-ebanx')
+				'description' => __('Set the minimum installment value to show to the options for your customer on the checkout page. The default values are Brazil: BRL 5, Mexico: MXN 100, Colombia: COL 1, Argentina: ARS 1. Any amount under these will not be considered.', 'woocommerce-gateway-ebanx')
 			);
 		}
 		$fields = array_merge($fields, array(
