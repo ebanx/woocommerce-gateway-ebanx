@@ -252,11 +252,11 @@ jQuery( function($) {
 		var cvvTextField = $( '#ebanx-card-cvv' );
 
 		cvvTextField.attr( 'maxlength', 3 );
-		if( $( '#ebanx-card-number' ).hasClass( 'amex' ) ){
+		if ( $( '#ebanx-card-number' ).hasClass( 'amex' ) ) {
 			cvvTextField.attr( 'maxlength', 4 );
 		}
 
-		if( $( '#ebanx-card-number').hasClass( 'unknown' ) ){
+		if ( $( '#ebanx-card-number' ).hasClass( 'unknown' ) ) {
 			cvvTextField.val( '' );
 		}
 	} );
