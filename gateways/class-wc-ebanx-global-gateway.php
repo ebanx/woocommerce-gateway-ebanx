@@ -503,7 +503,7 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway
 			'currency_options_title' => array(
 				'title' => __( 'Currency & Amount Options', 'woocommerce-gateway-ebanx' ),
 				'type' => 'title',
-                'class' => 'ebanx-advanced-option ebanx-advanced-option-enable',
+				'class' => 'ebanx-advanced-option ebanx-advanced-option-enable',
 			),
 			'show_local_amount' => array(
 				'title' => __('Total Local Amount', 'woocommerce-gateway-ebanx'),
