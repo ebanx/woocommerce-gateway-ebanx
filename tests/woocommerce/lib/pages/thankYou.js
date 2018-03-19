@@ -4,6 +4,7 @@ import { tryNext } from '../../../utils';
 
 const stillOn = Symbol('stillOn');
 const extractHash = Symbol('extractHash');
+const extractOrderNumber = Symbol('extractOrderNumber');
 
 export default class ThankYou {
   constructor(cy) {
@@ -15,6 +16,14 @@ export default class ThankYou {
       .get('#ebanx-payment-hash')
       .then(($elm) => {
         next($elm.data('doraemon-hash'));
+      });
+  }
+
+  [extractOrderNumber](next) {
+    this.cy
+      .get('#post-5 > div > div > div > ul > li.woocommerce-order-overview__order.order > strong')
+      .then(($elm) => {
+        next($elm.text());
       });
   }
 
@@ -46,7 +55,9 @@ export default class ThankYou {
     }
 
     this[extractHash]((hash) => {
-      tryNext(next, { hash });
+      this[extractOrderNumber]((orderNumber) => {
+        tryNext(next, { hash, orderNumber });
+      });
     });
   }
 
