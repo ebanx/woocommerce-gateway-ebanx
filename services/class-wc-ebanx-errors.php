@@ -153,11 +153,10 @@ class WC_EBANX_Errors {
 	 * Get the error message
 	 *
 	 * @param Exception $exception
-	 * @param string $country
+	 * @param string    $country
 	 * @return string
 	 */
-	public static function get_error_message($exception, $country)
-	{
+	public static function get_error_message( $exception, $country ) {
 		$code = $exception->getCode() ?: $exception->getMessage();
 
 		$languages = array(
@@ -168,11 +167,11 @@ class WC_EBANX_Errors {
 			'co' => 'es',
 			'br' => 'pt-br',
 		);
-		$language = $languages[$country];
+		$language = $languages[ $country ];
 
 		$errors = static::get_errors();
 
-		if ($code === 'BP-DR-6' && $language === 'es') {
+		if ( 'BP-DR-6' === $code  && 'es' === $language ) {
 			$error_info = array();
 			preg_match('/Amount must be greater than (\w{3}) (.+)/',
 				$exception->getMessage(),
@@ -180,9 +179,9 @@ class WC_EBANX_Errors {
 			);
 			$amount = $error_info[2];
 			$currency = $error_info[1];
-			return sprintf($errors[$language][$code], wc_price($amount, array('currency' => $currency)));
+			return sprintf( $errors[ $language ][ $code ], wc_price( $amount, [ 'currency' => $currency ] ) );
 		}
 
-		return !empty($errors[$language][$code]) ? $errors[$language][$code] : $errors[$language]['GENERAL'] . " ({$code})";
+		return ! empty( $errors[ $language ][ $code ] ) ? $errors[ $language ][ $code ] : $errors[ $language ]['GENERAL'] . " ({$code})";
 	}
 }

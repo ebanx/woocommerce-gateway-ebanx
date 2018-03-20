@@ -33,7 +33,7 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway
 {
 	protected static $ebanx_params = array();
 	protected static $initializedGateways = 0;
-	protected static $totalGateways = 0;
+	protected static $total_gateways = 0;
 
 	/**
 	 * Current user id
@@ -49,7 +49,7 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway
 	 */
 	public function __construct()
 	{
-		self::$totalGateways++;
+		self::$total_gateways++;
 
 		$this->user_id = get_current_user_id();
 
@@ -390,7 +390,7 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway
 
 			self::$initializedGateways++;
 
-			if (self::$initializedGateways === self::$totalGateways) {
+			if (self::$initializedGateways === self::$total_gateways) {
 				wp_localize_script('woocommerce_ebanx_credit_card', 'wc_ebanx_params', apply_filters('wc_ebanx_params', static::$ebanx_params));
 			}
 		}

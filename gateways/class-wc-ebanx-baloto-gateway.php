@@ -4,6 +4,9 @@ if (!defined('ABSPATH')) {
 	exit;
 }
 
+/**
+ * Class WC_EBANX_Baloto_Gateway
+ */
 class WC_EBANX_Baloto_Gateway extends WC_EBANX_New_Gateway
 {
 	/**

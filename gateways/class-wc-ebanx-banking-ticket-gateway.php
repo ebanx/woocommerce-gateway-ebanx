@@ -4,6 +4,9 @@ if (!defined('ABSPATH')) {
 	exit;
 }
 
+/**
+ * Class WC_EBANX_Banking_Ticket_Gateway
+ */
 class WC_EBANX_Banking_Ticket_Gateway extends WC_EBANX_New_Gateway
 {
 	/**

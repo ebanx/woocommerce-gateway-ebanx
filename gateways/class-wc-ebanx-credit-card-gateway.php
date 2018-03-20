@@ -4,6 +4,9 @@ if (!defined('ABSPATH')) {
 	exit;
 }
 
+/**
+ * Class WC_EBANX_Credit_Card_Gateway
+ */
 abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_New_Gateway
 {
 	/**
@@ -54,14 +57,14 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_New_Gateway
 
 
 	/**
-	 * @param int $order_id
+	 * @param int    $order_id
 	 * @param string $status
 	 *
-	 * @throws Exception
+	 * @throws Exception Throws missing parameter exception.
 	 */
 	public function capture_payment_action($order_id, $status) {
-		$action = WC_EBANX_Request::read('action', null);
-		$order = wc_get_order($order_id);
+		$action = WC_EBANX_Request::read( 'action', null );
+		$order = wc_get_order( $order_id );
 
 		if ($order->payment_method !== $this->id
 			|| $status !== 'processing'
@@ -69,7 +72,7 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_New_Gateway
 			return;
 		}
 
-		WC_EBANX_Capture_Payment::capture_payment($order_id);
+		WC_EBANX_Capture_Payment::capture_payment( $order_id );
 	}
 
 	/**
@@ -115,8 +118,7 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_New_Gateway
 	 * @return \Ebanx\Benjamin\Models\Payment
 	 * @throws Exception
 	 */
-	protected function transform_payment_data($order)
-	{
+	protected function transform_payment_data( $order ) {
 
 		if (empty(WC_EBANX_Request::read('ebanx_token', null))
 			|| empty(WC_EBANX_Request::read('ebanx_masked_card_number', null))
@@ -130,21 +132,20 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_New_Gateway
 			throw new Exception('MISSING-DEVICE-FINGERPRINT');
 		}
 
-		return WC_EBANX_Payment_Adapter::transform_card( $order, $this->configs, $this->api_name, $this->names );
+		return WC_EBANX_Payment_Adapter::transform_card( $order, $this->configs, $this->names );
 	}
 
 
 	/**
-	 * @param array $request
+	 * @param array    $request
 	 * @param WC_Order $order
 	 *
-	 * @throws Exception
-	 * @throws WC_EBANX_Payment_Exception
+	 * @throws Exception Throws missing parameter exception.
+	 * @throws WC_EBANX_Payment_Exception Throws error message.
 	 */
-	protected function process_response($request, $order)
-	{
-		if ($request['status'] !== 'SUCCESS' || !$request['payment']['pre_approved']) {
-			$this->process_response_error($request, $order);
+	protected function process_response( $request, $order ) {
+		if ( 'SUCCESS' !== $request['status'] || ! $request['payment']['pre_approved'] ) {
+			$this->process_response_error( $request, $order );
 		}
 
 		parent::process_response($request, $order);

@@ -101,18 +101,17 @@ class WC_EBANX_Eft_Gateway extends WC_EBANX_Redirect_Gateway
 	 * @param WC_Order $order
 	 *
 	 * @return \Ebanx\Benjamin\Models\Payment
-	 * @throws Exception
+	 * @throws Exception Throws missing parameter exception.
 	 */
-	protected function transform_payment_data($order)
-	{
+	protected function transform_payment_data( $order ) {
 		if ( ! WC_EBANX_Request::has('eft')
 			|| ! array_key_exists(WC_EBANX_Request::read('eft'), WC_EBANX_Constants::$BANKS_EFT_ALLOWED[WC_EBANX_Constants::COUNTRY_COLOMBIA])) {
 			throw new Exception('MISSING-BANK-NAME');
 		}
 
-		$data = WC_EBANX_Payment_Adapter::transform( $order, $this->configs, $this->api_name, $this->names );
+		$data = WC_EBANX_Payment_Adapter::transform( $order, $this->configs, $this->names );
 
-		$data->bankCode = WC_EBANX_Request::read('eft');
+		$data->bankCode = WC_EBANX_Request::read( 'eft' );
 
 		return $data;
 	}

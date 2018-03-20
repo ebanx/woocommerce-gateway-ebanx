@@ -4,6 +4,9 @@ if (!defined('ABSPATH')) {
 	exit;
 }
 
+/**
+ * Class WC_EBANX_Pagoefectivo_Gateway
+ */
 class WC_EBANX_Pagoefectivo_Gateway extends WC_EBANX_New_Gateway
 {
 	/**
@@ -132,19 +135,18 @@ class WC_EBANX_Pagoefectivo_Gateway extends WC_EBANX_New_Gateway
 
 
 	/**
-	 * @param array $response
+	 * @param array    $response
 	 * @param WC_Order $order
 	 *
-	 * @throws Exception
-	 * @throws WC_EBANX_Payment_Exception
+	 * @throws Exception Throws parameter missing exception.
+	 * @throws WC_EBANX_Payment_Exception Throws error message.
 	 */
-	protected function process_response( $response, $order)
-	{
-		if ( $response['status'] !== 'SUCCESS' || ! $response['payment']['cip_url']) {
-			$this->process_response_error( $response, $order);
+	protected function process_response( $response, $order ) {
+		if ( 'SUCCESS' !== $response['status'] || ! $response['payment']['cip_url'] ) {
+			$this->process_response_error( $response, $order );
 		}
 		$response['redirect_url'] = $response['payment']['cip_url'];
 
-		parent::process_response( $response, $order);
+		parent::process_response( $response, $order );
 	}
 }

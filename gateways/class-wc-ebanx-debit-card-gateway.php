@@ -4,6 +4,9 @@ if (!defined('ABSPATH')) {
 	exit;
 }
 
+/**
+ * Class WC_EBANX_Debit_Card_Gateway
+ */
 class WC_EBANX_Debit_Card_Gateway extends WC_EBANX_New_Gateway
 {
 	/**
@@ -98,29 +101,28 @@ class WC_EBANX_Debit_Card_Gateway extends WC_EBANX_New_Gateway
 	 * @param WC_Order $order
 	 *
 	 * @return \Ebanx\Benjamin\Models\Payment
-	 * @throws Exception
+	 * @throws Exception Throws missing parameter exception.
 	 */
-	protected function transform_payment_data($order)
-	{
+	protected function transform_payment_data( $order ) {
 		if ( empty(WC_EBANX_Request::read('ebanx_debit_token', null))
 			|| empty(WC_EBANX_Request::read('ebanx_billing_cvv', null)) ) {
 			throw new Exception("Missing ebanx card params.");
 		}
 
-		return WC_EBANX_Payment_Adapter::transform_card( $order, $this->configs, $this->api_name, $this->names );
+		return WC_EBANX_Payment_Adapter::transform_card( $order, $this->configs, $this->names );
 	}
 
 	/**
-	 * @param array $request
+	 * @param array    $request
 	 * @param WC_Order $order
 	 *
-	 * @throws Exception
-	 * @throws WC_EBANX_Payment_Exception
+	 * @throws Exception Throws missing parameter exception.
+	 * @throws WC_EBANX_Payment_Exception Throws error message.
 	 */
 	protected function process_response($request, $order)
 	{
-		if ($request['status'] !== 'SUCCESS' || !$request['payment']['pre_approved']) {
-			$this->process_response_error($request, $order);
+		if ( 'SUCCESS' !== $request['status'] || ! $request['payment']['pre_approved'] ) {
+			$this->process_response_error( $request, $order );
 		}
 
 		parent::process_response($request, $order);

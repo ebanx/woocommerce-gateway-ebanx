@@ -36,7 +36,7 @@ class WC_EBANX_Api_Controller {
 	 * @return void
 	 */
 	public function capture_payment($order_id) {
-		WC_EBANX_Capture_Payment::capture_payment($order_id);
+		WC_EBANX_Capture_Payment::capture_payment( $order_id );
 
 		wp_redirect($this->get_admin_order_url($order_id));
 	}

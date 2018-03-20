@@ -5,9 +5,18 @@ require_once WC_EBANX_DIR . 'woocommerce-gateway-ebanx.php';
 use Ebanx\Benjamin\Models\Configs\Config;
 use Ebanx\Benjamin\Models\Configs\CreditCardConfig;
 
-class WC_EBANX_Api
-{
+/**
+ * Class WC_EBANX_Api
+ */
+class WC_EBANX_Api {
+	/**
+	 * @var \Ebanx\Benjamin\Facade
+	 */
 	protected $ebanx;
+
+	/**
+	 * @var WC_EBANX_Global_Gateway
+	 */
 	protected $configs;
 
 	/**
@@ -15,15 +24,15 @@ class WC_EBANX_Api
 	 *
 	 * @param WC_EBANX_Global_Gateway $configs
 	 */
-	public function __construct(WC_EBANX_Global_Gateway $configs) {
+	public function __construct( WC_EBANX_Global_Gateway $configs ) {
 		$this->configs = $configs;
-		$this->ebanx = EBANX($this->getConfig(), $this->getCreditCardConfig());
+		$this->ebanx = EBANX( $this->get_config(), $this->get_credit_card_config() );
 	}
 
 	/**
 	 * @return Config
 	 */
-	private function getConfig() {
+	private function get_config() {
 		return new Config(array(
 			'integrationKey' => $this->configs->settings['live_private_key'],
 			'sandboxIntegrationKey' => $this->configs->settings['sandbox_private_key'],
@@ -41,15 +50,18 @@ class WC_EBANX_Api
 	/**
 	 * @return CreditCardConfig
 	 */
-	private function getCreditCardConfig() {
+	private function get_credit_card_config() {
 		$currency_code = strtolower( get_woocommerce_currency() );
 
 		return new CreditCardConfig(array(
 			'maxInstalments' => $this->configs->settings['credit_card_instalments'],
-			'minInstalmentAmount' => $this->configs->settings["min_instalment_value_$currency_code"],
+			'minInstalmentAmount' => $this->configs->settings[ "min_instalment_value_$currency_code" ],
 		));
 	}
 
+	/**
+	 * @return \Ebanx\Benjamin\Facade
+	 */
 	public function ebanx() {
 		return $this->ebanx;
 	}

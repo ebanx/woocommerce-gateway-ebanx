@@ -14,6 +14,9 @@ class WC_EBANX_Payment_By_Link {
 	private static $errors = array();
 	private static $post_id;
 	private static $order;
+	/**
+	 * @var WC_EBANX_Global_Gateway
+	 */
 	private static $configs;
 	private static $validator;
 
@@ -23,9 +26,9 @@ class WC_EBANX_Payment_By_Link {
 	 * @param  int $post_id The post id
 	 * @return void
 	 */
-	public static function create($post_id){
+	public static function create( $post_id ) {
 		self::$post_id   = $post_id;
-		self::$order     = wc_get_order($post_id);
+		self::$order     = wc_get_order( $post_id );
 		self::$configs   = new WC_EBANX_Global_Gateway();
 		self::$validator = new WC_EBANX_Payment_Validator(self::$order);
 
@@ -40,13 +43,13 @@ class WC_EBANX_Payment_By_Link {
 		}
 
 		$response = self::send_request();
-		if ( $response && $response['status'] !== 'SUCCESS' ) {
-			self::add_error(self::getErrorMessage($response));
+		if ( $response && 'SUCCESS' !== $response['status'] ) {
+			self::add_error( self::getErrorMessage( $response ) );
 			self::send_errors();
 			return;
 		}
 
-		self::post_request($response['payment']['hash'], $response['redirect_url']);
+		self::post_request( $response['payment']['hash'], $response['redirect_url'] );
 	}
 
 	/**
@@ -84,24 +87,24 @@ class WC_EBANX_Payment_By_Link {
 			'email' => self::$order->billing_email,
 		]);
 
-		$address = new Address(['country' => Country::fromIso(self::$order->billing_country)]);
+		$address = new Address( [ 'country' => Country::fromIso( self::$order->billing_country ) ] );
 
 		$data = new Request([
 			'person'              => $person,
 			'address'             => $address,
-			'type'                => empty(self::$order->payment_method) ? '_all' : WC_EBANX_Constants::$GATEWAY_TO_PAYMENT_TYPE_CODE[self::$order->payment_method],
-			'merchantPaymentCode' => substr(self::$order->id . '_' . md5(time()), 0, 40),
+			'type'                => empty( self::$order->payment_method ) ? '_all' : WC_EBANX_Constants::$gateway_to_payment_type_code[ self::$order->payment_method ],
+			'merchantPaymentCode' => substr( self::$order->id . '_' . md5( time() ), 0, 40) ,
 			'amount'              => self::$order->get_total(),
 			'maxInstalments'     => get_post_meta( self::$order->id, '_ebanx_instalments', true ),
 			'userValues'          => [
 				1 => 'from_woocommerce',
 				3 => 'version=' . WC_EBANX::get_plugin_version(),
-			]
+			],
 		]);
 
 		$response = false;
 		try {
-			$response = (new WC_EBANX_Api(self::$configs))->ebanx()->hosted()->create($data);
+			$response = ( new WC_EBANX_Api( self::$configs ) )->ebanx()->hosted()->create( $data );
 		} catch (Exception $e) {
 			self::add_error($e->getMessage());
 			self::send_errors();

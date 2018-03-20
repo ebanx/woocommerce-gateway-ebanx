@@ -106,7 +106,7 @@ class WC_EBANX_Tef_Gateway extends WC_EBANX_Redirect_Gateway
 	 * @param  Object $request The request from EBANX success response
 	 *
 	 * @return void
-	 * @throws Exception
+	 * @throws Exception Throw parameter missing exception.
 	 */
 	protected function save_order_meta_fields($order, $request)
 	{
@@ -121,18 +121,18 @@ class WC_EBANX_Tef_Gateway extends WC_EBANX_Redirect_Gateway
 	 * @param  WC_Order $order
 	 *
 	 * @return \Ebanx\Benjamin\Models\Payment
-	 * @throws Exception
+	 * @throws Exception Throw parameter missing exception.
 	 */
-	protected function transform_payment_data($order)
+	protected function transform_payment_data( $order )
 	{
 		if ( ! WC_EBANX_Request::has('tef')
 			|| ! in_array(WC_EBANX_Request::read('tef'), WC_EBANX_Constants::$BANKS_TEF_ALLOWED[WC_EBANX_Constants::COUNTRY_BRAZIL])) {
 			throw new Exception('MISSING-BANK-NAME');
 		}
 
-		$data = parent::transform_payment_data($order);
+		$data = parent::transform_payment_data( $order );
 
-		$data->bankCode = WC_EBANX_Request::read('tef');
+		$data->bankCode = WC_EBANX_Request::read( 'tef' );
 
 		return $data;
 	}

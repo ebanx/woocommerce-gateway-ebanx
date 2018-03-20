@@ -62,7 +62,7 @@ class WC_EBANX_Credit_Card_AR_Gateway extends WC_EBANX_Credit_Card_Gateway {
 	 * @param WC_Order $order
 	 *
 	 * @return \Ebanx\Benjamin\Models\Payment
-	 * @throws Exception
+	 * @throws Exception Throws missing parameter exception.
 	 */
 	protected function transform_payment_data( $order ) {
 		$data = parent::transform_payment_data( $order );

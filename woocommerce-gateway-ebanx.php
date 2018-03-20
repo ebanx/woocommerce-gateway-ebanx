@@ -479,7 +479,7 @@ if ( ! class_exists('WC_EBANX') ) {
 			include_once WC_EBANX_SERVICES_DIR . 'class-wc-ebanx-cancel-order.php';
 			include_once WC_EBANX_SERVICES_DIR . 'class-wc-ebanx-capture-payment.php';
 
-			// Benjamin
+			// Benjamin.
 			include_once WC_EBANX_SERVICES_DIR . 'class-wc-ebanx-api.php';
 			include_once WC_EBANX_SERVICES_DIR . 'class-wc-ebanx-payment-adapter.php';
 
@@ -678,7 +678,7 @@ if ( ! class_exists('WC_EBANX') ) {
 
 				update_post_meta($order->id, '_ebanx_instalments', WC_EBANX_Request::read('ebanx_instalments', 1));
 
-				WC_EBANX_Payment_By_Link::create($post_id);
+				WC_EBANX_Payment_By_Link::create( $post_id );
 			}
 			return;
 		}

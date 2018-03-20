@@ -7,65 +7,65 @@ use Ebanx\Benjamin\Models\Item;
 use Ebanx\Benjamin\Models\Payment;
 use Ebanx\Benjamin\Models\Person;
 
-class WC_EBANX_Payment_Adapter
-{
+/**
+ * Class WC_EBANX_Payment_Adapter
+ */
+class WC_EBANX_Payment_Adapter {
 	/**
-	 * @param $order WC_Order
-	 * @param $configs WC_EBANX_Global_Gateway
-	 * @param $api_name string
-	 * @param $names array
+	 * @param WC_Order                $order
+	 * @param WC_EBANX_Global_Gateway $configs
+	 * @param array                   $names
 	 *
 	 * @return Payment
-	 * @throws Exception
+	 * @throws Exception Throws parameter missing exception.
 	 */
-	public static function transform($order, $configs, $api_name, $names) {
+	public static function transform( $order, $configs, $names ) {
 		return new Payment([
 			'amountTotal' => $order->get_total(),
 			'orderNumber' => $order->id,
-			'dueDate' => static::transform_due_date($configs, $api_name),
-			'address' => static::transform_address($order),
-			'person' => static::transform_person($order, $configs, $names),
-			'responsible' => static::transform_person($order, $configs, $names),
+			'dueDate' => static::transform_due_date( $configs ),
+			'address' => static::transform_address( $order ),
+			'person' => static::transform_person( $order, $configs, $names ),
+			'responsible' => static::transform_person( $order, $configs, $names ),
 			'items' => static::transform_items( $order ),
-			'merchantPaymentCode' => substr($order->id . '-' . md5(rand(123123, 9999999)), 0, 40),
+			'merchantPaymentCode' => substr( $order->id . '-' . md5( rand( 123123, 9999999 ) ), 0, 40 ),
 		]);
 	}
 
 	/**
-	 * @param $order WC_Order
-	 * @param $configs WC_EBANX_Global_Gateway
-	 * @param $api_name string
-	 * @param $names array
+	 * @param WC_Order                $order
+	 * @param WC_EBANX_Global_Gateway $configs
+	 * @param array                   $names
 	 *
 	 * @return Payment
-	 * @throws Exception
+	 * @throws Exception Throws parameter missing exception.
 	 */
-	public static function transform_card( $order, $configs, $api_name, $names ) {
-		$payment = self::transform( $order, $configs, $api_name, $names );
-		$country = trim(strtolower(WC()->customer->get_country()));
+	public static function transform_card( $order, $configs, $names ) {
+		$payment = self::transform( $order, $configs, $names );
+		$country = trim( strtolower( WC()->customer->get_country() ) );
 
-		if (in_array($country, WC_EBANX_Constants::$CREDIT_CARD_COUNTRIES)) {
+		if ( in_array( $country, WC_EBANX_Constants::$credit_card_countries ) ) {
 			$payment->instalments = '1';
 
-			if ($configs->settings['credit_card_instalments'] > 1 && WC_EBANX_Request::has('ebanx_billing_instalments')) {
-				$payment->instalments = WC_EBANX_Request::read('ebanx_billing_instalments');
+			if ( $configs->settings['credit_card_instalments'] > 1 && WC_EBANX_Request::has( 'ebanx_billing_instalments' ) ) {
+				$payment->instalments = WC_EBANX_Request::read( 'ebanx_billing_instalments' );
 			}
 		}
 
-		if (!empty(WC_EBANX_Request::read('ebanx_device_fingerprint', null))) {
-			$payment->device_id = WC_EBANX_Request::read('ebanx_device_fingerprint');
+		if ( ! empty( WC_EBANX_Request::read( 'ebanx_device_fingerprint', null ) ) ) {
+			$payment->device_id = WC_EBANX_Request::read( 'ebanx_device_fingerprint' );
 		}
 
-		$token = WC_EBANX_Request::has('ebanx_debit_token')
-			? WC_EBANX_Request::read('ebanx_debit_token')
-			: WC_EBANX_Request::read('ebanx_token');
+		$token = WC_EBANX_Request::has( 'ebanx_debit_token' )
+			? WC_EBANX_Request::read( 'ebanx_debit_token' )
+			: WC_EBANX_Request::read( 'ebanx_token' );
 
-		$brand = WC_EBANX_Request::has('ebanx_brand') ? WC_EBANX_Request::read('ebanx_brand') : '';
+		$brand = WC_EBANX_Request::has( 'ebanx_brand' ) ? WC_EBANX_Request::read( 'ebanx_brand' ) : '';
 
 		$payment->card = new Card([
-			'autoCapture' => ($configs->settings['capture_enabled'] === 'yes'),
+			'autoCapture' => ( 'yes' === $configs->settings['capture_enabled'] ),
 			'token' => $token,
-			'cvv' => WC_EBANX_Request::read('ebanx_billing_cvv'),
+			'cvv' => WC_EBANX_Request::read( 'ebanx_billing_cvv' ),
 			'type' => $brand,
 		]);
 
@@ -73,33 +73,31 @@ class WC_EBANX_Payment_Adapter
 	}
 
 	/**
-	 * @param $configs
-	 * @param $api_name
+	 * @param WC_EBANX_Global_Gateway $configs
 	 *
 	 * @return DateTime|string
 	 */
-	private static function transform_due_date($configs, $api_name) {
+	private static function transform_due_date( $configs ) {
 		$due_date = '';
-		if (!empty($configs->settings['due_date_days']) && in_array($api_name, array_keys(WC_EBANX_Constants::$CASH_PAYMENTS_TIMEZONES)))
-		{
+		if ( ! empty( $configs->settings['due_date_days'] ) ) {
 			$due_date = new DateTime();
-			$due_date->modify("+{$configs->settings['due_date_days']} day");
+			$due_date->modify( "+{$configs->settings['due_date_days']} day" );
 		}
 
 		return $due_date;
 	}
 
 	/**
-	 * @param $order WC_Order
+	 * @param WC_Order $order
 	 *
 	 * @return Address
-	 * @throws Exception
+	 * @throws Exception Throws parameter missing exception.
 	 */
 	private static function transform_address( $order ) {
 		$addresses = WC_EBANX_Request::read( 'billing_address_1', null );
 
-		if ( ! empty(WC_EBANX_Request::read( 'billing_address_2', null ) ) ) {
-			$addresses .= " - " . WC_EBANX_Request::read( 'billing_address_2', null );
+		if ( ! empty( WC_EBANX_Request::read( 'billing_address_2', null ) ) ) {
+			$addresses .= ' - ' . WC_EBANX_Request::read( 'billing_address_2', null );
 		}
 
 		$addresses = WC_EBANX_Helper::split_street( $addresses );
@@ -116,12 +114,12 @@ class WC_EBANX_Payment_Adapter
 	}
 
 	/**
-	 * @param $order WC_Order
-	 * @param $configs WC_EBANX_Global_Gateway
-	 * @param $names array
+	 * @param WC_Order                $order
+	 * @param WC_EBANX_Global_Gateway $configs
+	 * @param array                   $names
 	 *
 	 * @return Person
-	 * @throws Exception
+	 * @throws Exception Throws parameter missing exception.
 	 */
 	private static function transform_person( $order, $configs, $names ) {
 		$document = static::get_document( $configs, $names, $order );
@@ -137,13 +135,12 @@ class WC_EBANX_Payment_Adapter
 	}
 
 	/**
-	 * @param $configs WC_EBANX_Global_Gateway
-	 * @param $names array
-	 *
-	 * @param $order
+	 * @param WC_EBANX_Global_Gateway $configs
+	 * @param array                   $names
+	 * @param WC_Order                $order
 	 *
 	 * @return string
-	 * @throws Exception
+	 * @throws Exception Throws parameter missing exception.
 	 */
 	private static function get_document( $configs, $names, $order ) {
 		$country = trim( strtolower( WC()->customer->get_country() ) );
@@ -173,11 +170,11 @@ class WC_EBANX_Payment_Adapter
 	 * @param array $names
 	 *
 	 * @return string
-	 * @throws Exception
+	 * @throws Exception Throws parameter missing exception.
 	 */
 	private static function get_argentinian_document( $names ) {
 		$document = WC_EBANX_Request::read( $names['ebanx_billing_argentina_document'], null );
-		if ( $document === null ) {
+		if ( null === $document ) {
 			throw new Exception( 'BP-DR-22' );
 		}
 
@@ -185,11 +182,11 @@ class WC_EBANX_Payment_Adapter
 	}
 
 	/**
-	 * @param $configs WC_EBANX_Global_Gateway
-	 * @param $names array
+	 * @param WC_EBANX_Global_Gateway $configs
+	 * @param array                   $names
 	 *
 	 * @return string
-	 * @throws Exception
+	 * @throws Exception Throws parameter missing exception.
 	 */
 	private static function get_brazilian_document( $configs, $names ) {
 		$cpf = WC_EBANX_Request::read( $names['ebanx_billing_brazil_document'], null );
@@ -205,13 +202,13 @@ class WC_EBANX_Payment_Adapter
 			empty( WC_EBANX_Request::read( 'billing_address_1', null ) ) ||
 			empty( WC_EBANX_Request::read( 'billing_city', null ) ) ||
 			empty( WC_EBANX_Request::read( 'billing_state', null ) ) ||
-			( $person_type === Person::TYPE_BUSINESS && ( ! $has_cnpj || empty( WC_EBANX_Request::read( 'billing_company', null ) ) ) ) ||
-			( $person_type === Person::TYPE_PERSONAL && ! $has_cpf )
+			( Person::TYPE_BUSINESS === $person_type && ( ! $has_cnpj || empty( WC_EBANX_Request::read( 'billing_company', null ) ) ) ) ||
+			( Person::TYPE_PERSONAL === $person_type && ! $has_cpf )
 		) {
 			throw new Exception( 'INVALID-FIELDS' );
 		}
 
-		if ( $person_type === Person::TYPE_BUSINESS ) {
+		if ( Person::TYPE_BUSINESS === $person_type ) {
 			return $cnpj;
 		}
 
@@ -220,14 +217,14 @@ class WC_EBANX_Payment_Adapter
 
 	/**
 	 * @param WC_Order $order
-	 * @param array $names
+	 * @param array    $names
 	 *
 	 * @return string
-	 * @throws Exception
+	 * @throws Exception Throws parameter missing exception.
 	 */
 	private static function get_chilean_document( $order, $names ) {
 		$document = WC_EBANX_Request::read( $names['ebanx_billing_chile_document'], null );
-		if ( $document === null && 'ebanx-webpay' === $order->get_payment_method() ) {
+		if ( null === $document && 'ebanx-webpay' === $order->get_payment_method() ) {
 			throw new Exception( 'BP-DR-22' );
 		}
 
@@ -236,14 +233,14 @@ class WC_EBANX_Payment_Adapter
 
 	/**
 	 * @param WC_Order $order
-	 * @param array $names
+	 * @param array    $names
 	 *
 	 * @return string
-	 * @throws Exception
+	 * @throws Exception Throws parameter missing exception.
 	 */
 	private static function get_colombian_document( $order, $names ) {
 		$document = WC_EBANX_Request::read( $names['ebanx_billing_colombia_document'], null );
-		if ( $document === null && 'ebanx-credit-card-co' === $order->get_payment_method() ) {
+		if ( null === $document && 'ebanx-credit-card-co' === $order->get_payment_method() ) {
 			throw new Exception( 'BP-DR-22' );
 		}
 
@@ -254,11 +251,11 @@ class WC_EBANX_Payment_Adapter
 	 * @param array $names
 	 *
 	 * @return string
-	 * @throws Exception
+	 * @throws Exception Throws parameter missing exception.
 	 */
 	private static function get_peruvian_document( $names ) {
 		$document = WC_EBANX_Request::read( $names['ebanx_billing_peru_document'], null );
-		if ( $document === null ) {
+		if ( null === $document ) {
 			throw new Exception( 'BP-DR-22' );
 		}
 
@@ -267,10 +264,10 @@ class WC_EBANX_Payment_Adapter
 
 	/**
 	 * @param WC_EBANX_Global_Gateway $configs
-	 * @param array $names
+	 * @param array                   $names
 	 *
 	 * @return string
-	 * @throws Exception
+	 * @throws Exception Throws parameter missing exception.
 	 */
 	private static function get_person_type( $configs, $names ) {
 		$fields_options = array();
@@ -280,7 +277,7 @@ class WC_EBANX_Payment_Adapter
 			$fields_options = $configs->settings['brazil_taxes_options'];
 		}
 
-		if ( count( $fields_options ) === 1 && $fields_options[0] === 'cnpj' ) {
+		if ( count( $fields_options ) === 1 && 'cnpj' === $fields_options[0] ) {
 			$person_type = Person::TYPE_BUSINESS;
 		}
 
@@ -292,7 +289,7 @@ class WC_EBANX_Payment_Adapter
 	}
 
 	/**
-	 * @param $order WC_Order
+	 * @param $order WC_Order $order
 	 *
 	 * @return array
 	 */

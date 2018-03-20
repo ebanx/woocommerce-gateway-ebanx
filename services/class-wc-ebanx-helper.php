@@ -78,13 +78,15 @@ abstract class WC_EBANX_Helper
 	}
 
 	/**
-	 * @param $array
+	 * @param array $array
 	 *
 	 * @return object
 	 */
-	public static function arrayToObject( $array ){
-		foreach( $array as $key => $value ){
-			if( is_array( $value ) ) $array[ $key ] = static::arrayToObject( $value );
+	public static function array_to_object ( $array ){
+		foreach ( $array as $key => $value ) {
+			if ( is_array( $value ) ) {
+				$array[ $key ] = static::array_to_object( $value );
+			}
 		}
 		return (object) $array;
 	}

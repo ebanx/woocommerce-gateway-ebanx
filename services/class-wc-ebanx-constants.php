@@ -104,7 +104,7 @@ abstract class WC_EBANX_Constants
 	 *
 	 * @var array
 	 */
-	public static $CREDIT_CARD_COUNTRIES = array(
+	public static $credit_card_countries = array(
 		self::COUNTRY_BRAZIL => self::COUNTRY_BRAZIL,
 		self::COUNTRY_MEXICO => self::COUNTRY_MEXICO,
 		self::COUNTRY_COLOMBIA => self::COUNTRY_COLOMBIA,
@@ -123,25 +123,6 @@ abstract class WC_EBANX_Constants
 		self::CURRENCY_CODE_COP,
 		self::CURRENCY_CODE_EUR,
 		self::CURRENCY_CODE_ARS,
-	);
-
-	/**
-	 * The timezones of the countries processed by EBANX
-	 *
-	 * @var array
-	 */
-	public static $CASH_PAYMENTS_TIMEZONES = array(
-	  'boleto' => 'America/Sao_Paulo',
-	  'oxxo' => 'America/Mexico_City',
-	  'spei' => 'America/Mexico_City',
-	  'pagoefectivo' => 'America/Lima',
-	  'sencillito' => 'America/Santiago',
-	  'safetypay-cash' => 'America/Lima',
-	  'baloto' => 'America/Bogota',
-	  'efectivo' => 'America/Argentina/Buenos_Aires',
-	  'rapipago' => 'America/Argentina/Buenos_Aires',
-	  'pagofacil' => 'America/Argentina/Buenos_Aires',
-	  'cupon' => 'America/Argentina/Buenos_Aires',
 	);
 
 	/**
@@ -209,7 +190,7 @@ abstract class WC_EBANX_Constants
 	 *
 	 * @var array
 	 */
-	public static $GATEWAY_TO_PAYMENT_TYPE_CODE = array(
+	public static $gateway_to_payment_type_code = array(
 		'ebanx-banking-ticket' => '_boleto',
 		'ebanx-credit-card-br' => '_creditcard',
 		'ebanx-credit-card-mx' => '_creditcard',
