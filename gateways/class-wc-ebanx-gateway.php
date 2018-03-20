@@ -610,8 +610,8 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway
 					return array(
 						'name' => $product['name'],
 						'unit_price' => $product['line_subtotal'],
-					  	'quantity' => $product['qty'],
-						'type' => $product['type']
+						'quantity' => $product['qty'],
+						'type' => $product['type'],
 					);
 				}, $order->get_items()),
 			)

@@ -34,6 +34,123 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
 				}
 			}
 		}
+
+		$this->supports = array(
+			'refunds',
+			'subscriptions',
+			'subscription_cancellation',
+			'subscription_suspension', 
+			'subscription_reactivation',
+			'subscription_amount_changes',
+			'subscription_date_changes',
+			'subscription_payment_method_change',
+			'gateway_scheduled_payments',
+		);
+
+		add_action( 'woocommerce_scheduled_subscription_payment', [ $this, 'scheduled_subscription_payment' ] );
+	}
+
+	public function scheduled_subscription_payment( $subscription_id ) {
+		$order = wc_get_order($subscription_id);
+
+		$userCc = get_user_meta($order->data['customer_id'], '_ebanx_credit_card_token', true);
+
+		if (count($userCc)) {
+			$userCc = end($userCc);
+
+			switch (strtolower($order->billing_country)) {
+				case WC_EBANX_Constants::COUNTRY_BRAZIL:
+					$document = get_user_meta($order->data['customer_id'], '_ebanx_billing_brazil_document', true);
+					break;
+				case WC_EBANX_Constants::COUNTRY_CHILE:
+					$document = get_user_meta($order->data['customer_id'], '_ebanx_billing_chile_document', true);
+					break;
+				case WC_EBANX_Constants::COUNTRY_COLOMBIA:
+					$document = get_user_meta($order->data['customer_id'], '_ebanx_billing_colombia_document', true);
+					break;
+				case WC_EBANX_Constants::COUNTRY_ARGENTINA:
+					$document = get_user_meta($order->data['customer_id'], '_ebanx_billing_argentina_document', true);
+					break;
+				case WC_EBANX_Constants::COUNTRY_PERU:
+					$document = get_user_meta($order->data['customer_id'], '_ebanx_billing_peru_document', true);
+					break;
+			}
+
+			\EBANX\Config::set(array(
+				'integrationKey' => $this->private_key,
+				'testMode' => $this->is_sandbox_mode,
+				'directMode' => true,
+			));
+
+			$addresses = $order->billing_address_1;
+
+			if (!empty($order->billing_address_2)) {
+				 $addresses .= ' - ' . $order->billing_address_2;
+			}
+
+			$address = WC_EBANX_Helper::::split_street($addresses);
+
+			$data = array(
+				'operation' => 'request',
+				'mode' => 'full',
+				'payment' => array(
+					'document' 	            => $document,
+					'name'                  => $order->billing_first_name . ' ' . $order->billing_last_name,
+					'email'                 => $order->billing_email,
+					'phone_number'          => $order->billing_phone,
+					'zipcode'               => $order->billing_postcode,
+					'country'               => $order->billing_country,
+					'state'                 => $order->billing_state,
+					'city'                  => $order->billing_city,
+					'address'               => $address['streetName'],
+					'street_number'         => empty($address['houseNumber']) ? 'S/N' : trim($address['houseNumber'] . ' ' . $address['additionToAddress']),
+
+					'notification_url'      => $home_url,
+					'redirect_url'          => $home_url,
+					'user_value_1'          => 'from_woocommerce',
+					'user_value_3'          => 'version=' . WC_EBANX::get_plugin_version(),
+					'user_value_4'          => 'via_wc_subscription',
+
+					'currency_code'         => $this->merchant_currency,
+					'amount_total'          => $order->get_total(),
+					'order_number'          => $order->id,
+					'merchant_payment_code' => substr($order->id . '-' . md5(rand(123123, 9999999)), 0, 40),
+					'items' => array_map(function($product) {
+						return array(
+							'name' => $product['name'],
+							'unit_price' => $product['line_subtotal'],
+							'quantity' => $product['qty'],
+							'type' => $product['type'],
+						);
+					}, $order->get_items()),
+					'payment_type_code' => $userCc->brand,
+					'create_token' => true,
+					'creditcard' => array(
+						'token' => $userCc->token,
+					),
+					'currency_code' => $this->currency_code,
+				),
+			);
+			$request = \Ebanx\EBANX::doRequest($data);
+
+			if ( 'ERROR' == $request->status ) {
+				$order->payment_failed();
+				WC_EBANX::log($request->status_message);
+			} else if ( 'SUCCESS' == $request->status ) {
+				if ( 'CO' == $request->payment->status ) {
+					$order->payment_complete();
+					$order->update_status( 'processing' );
+				} else if ( 'CA' == $response->payment->status ) {
+					$order->payment_complete();
+					$order->update_status( 'cancelled' );
+					$order->add_order_note( __( 'EBANX: Transaction Failed', 'woocommerce-gateway-ebanx' ) );
+				} else if ( 'OP' == $response->payment->status ) {
+					$order->payment_failed();
+					$order->update_status( 'pending' );
+					$order->add_order_note( __( 'EBANX: Transaction Pending', 'woocommerce-gateway-ebanx' ) );
+				}
+			}
+		}
 	}
 
 	/**
@@ -136,7 +253,7 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
 		return (object)array(
 			'code' => $code,
 			'message' => $message,
-			'status' => $status
+			'status' => $status,
 		);
 	}
 
