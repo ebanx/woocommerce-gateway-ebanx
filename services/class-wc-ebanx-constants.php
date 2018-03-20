@@ -256,7 +256,7 @@ abstract class WC_EBANX_Constants
 	 *
 	 * @var array
 	 */
-	public static $TYPES_SAFETYPAY_ALLOWED = array(
+	public static $safetypay_allowed_types = array(
 		'cash', 'online',
 	);
 }

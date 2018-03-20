@@ -128,13 +128,13 @@ class WC_EBANX_Safetypay_Gateway extends WC_EBANX_Redirect_Gateway
 	 * @throws Exception Throw parameter missing exception.
 	 */
 	protected function transform_payment_data( $order ) {
-		if (!isset($_POST['safetypay']) || !in_array($_POST['safetypay'], WC_EBANX_Constants::$TYPES_SAFETYPAY_ALLOWED)) {
+		if ( ! WC_EBANX_Request::has( 'safetypay' ) || ! in_array( WC_EBANX_Request::read( 'safetypay' ), WC_EBANX_Constants::$safetypay_allowed_types ) ) {
 			throw new Exception('INVALID-SAFETYPAY-TYPE');
 		}
 
 		$data = WC_EBANX_Payment_Adapter::transform( $order, $this->configs, $this->names );
 
-		$safetypay_gateway = 'safetypay' . wp_unslash( sanitize_text_field( $_POST['safetypay'] ) );
+		$safetypay_gateway = 'safetypay' . WC_EBANX_Request::read( 'safetypay' );
 		$this->ebanx_gateway = $this->ebanx->{$safetypay_gateway}();
 
 		return $data;
