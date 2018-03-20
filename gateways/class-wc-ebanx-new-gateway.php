@@ -124,7 +124,7 @@ class WC_EBANX_New_Gateway extends WC_EBANX_Gateway {
 			wp_enqueue_script(
 				'woocommerce_ebanx_checkout_fields',
 				plugins_url( 'assets/js/checkout-fields.js', WC_EBANX::DIR ),
-				['jquery'],
+				[ 'jquery' ],
 				WC_EBANX::get_plugin_version(),
 				true
 			);
@@ -159,7 +159,7 @@ class WC_EBANX_New_Gateway extends WC_EBANX_Gateway {
 			static::$ebanx_params = [
 				'key' => $this->public_key,
 				'mode' => $this->is_sandbox_mode ? 'test' : 'production',
-				'ajaxurl' =>  admin_url( 'admin-ajax.php', null ),
+				'ajaxurl' => admin_url( 'admin-ajax.php', null ),
 			];
 
 			self::$initialized_gateways++;
@@ -288,7 +288,7 @@ class WC_EBANX_New_Gateway extends WC_EBANX_Gateway {
 		}
 
 		// translators: placeholders contain bp-dr code and corresponding message.
-		$error_message = sprintf( __( 'EBANX: An error occurred: %s - %s', 'woocommerce-gateway-ebanx' ), $code, $status_message );
+		$error_message = sprintf( __( 'EBANX: An error occurred: %1$s - %2$s', 'woocommerce-gateway-ebanx' ), $code, $status_message );
 
 		$order->update_status( 'failed', $error_message );
 		$order->add_order_note( $error_message );

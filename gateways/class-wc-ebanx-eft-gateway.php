@@ -111,6 +111,7 @@ class WC_EBANX_Eft_Gateway extends WC_EBANX_Redirect_Gateway
 
 		$data = WC_EBANX_Payment_Adapter::transform( $order, $this->configs, $this->names );
 
+		// phpcs:ignore WordPress.NamingConventions.ValidVariableName
 		$data->bankCode = WC_EBANX_Request::read( 'eft' );
 
 		return $data;

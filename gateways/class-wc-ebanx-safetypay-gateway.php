@@ -134,7 +134,7 @@ class WC_EBANX_Safetypay_Gateway extends WC_EBANX_Redirect_Gateway
 
 		$data = WC_EBANX_Payment_Adapter::transform( $order, $this->configs, $this->names );
 
-		$safetypay_gateway = 'safetypay' . wp_unslash( $_POST['safetypay'] );
+		$safetypay_gateway = 'safetypay' . wp_unslash( sanitize_text_field( $_POST['safetypay'] ) );
 		$this->ebanx_gateway = $this->ebanx->{$safetypay_gateway}();
 
 		return $data;

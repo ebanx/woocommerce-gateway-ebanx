@@ -131,6 +131,7 @@ class WC_EBANX_Tef_Gateway extends WC_EBANX_Redirect_Gateway
 
 		$data = parent::transform_payment_data( $order );
 
+		// phpcs:ignore WordPress.NamingConventions.ValidVariableName
 		$data->bankCode = WC_EBANX_Request::read( 'tef' );
 
 		return $data;
