@@ -11,7 +11,7 @@ Faker.locale = 'pt_BR';
 let admin;
 let pay;
 
-describe('Admin', () => {
+describe('Woocommerce', () => {
   before(() => {
     assertUrlStatus(Cypress.env('DEMO_URL'));
 
