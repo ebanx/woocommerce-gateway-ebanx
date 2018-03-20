@@ -171,7 +171,7 @@ class WC_EBANX_Errors {
 
 		$errors = static::get_errors();
 
-		if ( 'BP-DR-6' === $code  && 'es' === $language ) {
+		if ( 'BP-DR-6' === $code && 'es' === $language ) {
 			$error_info = array();
 			preg_match('/Amount must be greater than (\w{3}) (.+)/',
 				$exception->getMessage(),

@@ -110,7 +110,7 @@ class WC_EBANX_Capture_Payment {
 
 		$code = $response['code'];
 
-		// translators: placeholders turn into bp-dr codes
+		// translators: placeholders turn into bp-dr codes.
 		$message = sprintf( __( 'EBANX - Unknown error, enter in contact with Ebanx and inform this error code: %s.', 'woocommerce-gateway-ebanx' ), $response['payment']['status_code'] );
 		$status = $response['payment']['status'];
 

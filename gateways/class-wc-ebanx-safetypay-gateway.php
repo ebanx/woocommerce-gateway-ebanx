@@ -127,8 +127,7 @@ class WC_EBANX_Safetypay_Gateway extends WC_EBANX_Redirect_Gateway
 	 * @return \Ebanx\Benjamin\Models\Payment
 	 * @throws Exception Throw parameter missing exception.
 	 */
-	protected function transform_payment_data( $order )
-	{
+	protected function transform_payment_data( $order ) {
 		if (!isset($_POST['safetypay']) || !in_array($_POST['safetypay'], WC_EBANX_Constants::$TYPES_SAFETYPAY_ALLOWED)) {
 			throw new Exception('INVALID-SAFETYPAY-TYPE');
 		}

@@ -88,13 +88,12 @@ class WC_EBANX_New_Gateway extends WC_EBANX_Gateway {
 	/**
 	 * Constructor
 	 */
-	public function __construct()
-	{
+	public function __construct() {
 		self::$total_gateways++;
 
 		$this->user_id = get_current_user_id();
 		$this->configs = new WC_EBANX_Global_Gateway();
-		$this->is_sandbox_mode = ( $this->configs->settings['sandbox_mode_enabled'] === 'yes' );
+		$this->is_sandbox_mode = ( 'yes' === $this->configs->settings['sandbox_mode_enabled'] );
 		$this->private_key = $this->is_sandbox_mode ? $this->configs->settings['sandbox_private_key'] : $this->configs->settings['live_private_key'];
 		$this->public_key = $this->is_sandbox_mode ? $this->configs->settings['sandbox_public_key'] : $this->configs->settings['live_public_key'];
 		$this->ebanx = ( new WC_EBANX_Api( $this->configs ) )->ebanx();
@@ -112,7 +111,7 @@ class WC_EBANX_New_Gateway extends WC_EBANX_Gateway {
 
 		$this->icon = $this->show_icon();
 		$this->names = $this->get_billing_field_names();
-		$this->merchant_currency = strtoupper(get_woocommerce_currency());
+		$this->merchant_currency = strtoupper( get_woocommerce_currency() );
 	}
 
 	/**
@@ -125,7 +124,7 @@ class WC_EBANX_New_Gateway extends WC_EBANX_Gateway {
 			wp_enqueue_script(
 				'woocommerce_ebanx_checkout_fields',
 				plugins_url( 'assets/js/checkout-fields.js', WC_EBANX::DIR ),
-				array('jquery'),
+				['jquery'],
 				WC_EBANX::get_plugin_version(),
 				true
 			);
@@ -160,12 +159,12 @@ class WC_EBANX_New_Gateway extends WC_EBANX_Gateway {
 			static::$ebanx_params = [
 				'key' => $this->public_key,
 				'mode' => $this->is_sandbox_mode ? 'test' : 'production',
-				'ajaxurl' =>  admin_url('admin-ajax.php', null)
+				'ajaxurl' =>  admin_url( 'admin-ajax.php', null ),
 			];
 
 			self::$initialized_gateways++;
 
-			if (self::$initialized_gateways === self::$total_gateways) {
+			if ( self::$initialized_gateways === self::$total_gateways ) {
 				wp_localize_script( 'woocommerce_ebanx_credit_card', 'wc_ebanx_params', apply_filters( 'wc_ebanx_params', static::$ebanx_params ) );
 			}
 		}
@@ -233,7 +232,7 @@ class WC_EBANX_New_Gateway extends WC_EBANX_Gateway {
 	 * @throws WC_EBANX_Payment_Exception Throws error message.
 	 * @throws Exception Throws parameter missing exception.
 	 */
-	protected function process_response($response, $order) {
+	protected function process_response( $response, $order ) {
 		// translators: placeholder contains request response.
 		WC_EBANX::log( sprintf( __( 'Processing response: %s', 'woocommerce-gateway-ebanx' ), print_r( $response, true ) ) );
 
@@ -242,7 +241,7 @@ class WC_EBANX_New_Gateway extends WC_EBANX_Gateway {
 		}
 
 		// translators: placeholder contains ebanx payment hash.
-		$message = __( sprintf( 'Payment approved. Hash: %s', $response['payment']['hash'] ), 'woocommerce-gateway-ebanx' );
+		$message = sprintf( __( 'Payment approved. Hash: %s', 'woocommerce-gateway-ebanx' ), $response['payment']['hash'] );
 
 		WC_EBANX::log( $message );
 
@@ -272,7 +271,7 @@ class WC_EBANX_New_Gateway extends WC_EBANX_Gateway {
 	 */
 	protected function process_response_error( $response, $order ) {
 		if (
-			isset($response['payment']['transaction_status'])
+			isset( $response['payment']['transaction_status'] )
 			&& 'NOK' === $response['payment']['transaction_status']['code']
 			&& 'EBANX' === $response['payment']['transaction_status']['acquirer']
 			&& $this->is_sandbox_mode
@@ -288,8 +287,8 @@ class WC_EBANX_New_Gateway extends WC_EBANX_Gateway {
 			$status_message = $response['payment']['transaction_status']['description'];
 		}
 
-		// translators: placeholders contain bp-dr code and corresponding message
-		$error_message = __( sprintf( 'EBANX: An error occurred: %s - %s', $code, $status_message ), 'woocommerce-gateway-ebanx' );
+		// translators: placeholders contain bp-dr code and corresponding message.
+		$error_message = sprintf( __( 'EBANX: An error occurred: %s - %s', 'woocommerce-gateway-ebanx' ), $code, $status_message );
 
 		$order->update_status( 'failed', $error_message );
 		$order->add_order_note( $error_message );
@@ -362,7 +361,8 @@ class WC_EBANX_New_Gateway extends WC_EBANX_Gateway {
 
 			$refunds = $response['payment']['refunds'];
 
-			$order->add_order_note( sprintf( __( 'EBANX: Refund requested. %s - Refund ID: %s - Reason: %s.', 'woocommerce-gateway-ebanx' ), wc_price( $amount ), $response['refund']['id'], $reason ) );
+			// translators: plasceholders contain amount, refund id and reason.
+			$order->add_order_note( sprintf( __( 'EBANX: Refund requested. %1$s - Refund ID: %2$s - Reason: %3$s.', 'woocommerce-gateway-ebanx' ), wc_price( $amount ), $response['refund']['id'], $reason ) );
 
 			update_post_meta( $order_id, '_ebanx_payment_refunds', $refunds );
 
@@ -370,7 +370,7 @@ class WC_EBANX_New_Gateway extends WC_EBANX_Gateway {
 
 			return true;
 		} catch ( Exception $e ) {
-			return new WP_Error( 'ebanx_process_refund_error', __( 'We could not finish processing this refund. Please try again.' ) );
+			return new WP_Error( 'ebanx_process_refund_error', __( 'We could not finish processing this refund. Please try again.', 'woocommerce-gateway-ebanx' ) );
 		}
 	}
 

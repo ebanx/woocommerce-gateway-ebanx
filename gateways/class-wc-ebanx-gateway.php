@@ -32,7 +32,13 @@ function ebanx_update_converted_value () {
 class WC_EBANX_Gateway extends WC_Payment_Gateway
 {
 	protected static $ebanx_params = array();
-	protected static $initializedGateways = 0;
+	/**
+	 * @var int
+	 */
+	protected static $initialized_gateways = 0;
+	/**
+	 * @var int
+	 */
 	protected static $total_gateways = 0;
 
 	/**
@@ -388,9 +394,9 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway
 				'ajaxurl' =>  admin_url('admin-ajax.php', null)
 			);
 
-			self::$initializedGateways++;
+			self::$initialized_gateways++;
 
-			if (self::$initializedGateways === self::$total_gateways) {
+			if ( self::$initialized_gateways === self::$total_gateways) {
 				wp_localize_script('woocommerce_ebanx_credit_card', 'wc_ebanx_params', apply_filters('wc_ebanx_params', static::$ebanx_params));
 			}
 		}
