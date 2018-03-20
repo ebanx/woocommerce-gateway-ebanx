@@ -1,18 +1,43 @@
-import R from 'ramda';
-import Cart from './pages/cart';
-import Checkout from './pages/checkout';
-import ThankYou from './pages/thankYou';
-import WonderWomansPurse from './pages/wonderWomansPurse';
-import {tryNext} from '../../utils';
+/* global Cypress */
+import NewOrder from '../pages/admin';
+
+const visitNewOrderPage = Symbol('visitNewOrderPage');
 
 export default class Admin {
   constructor(cy) {
     this.cy = cy;
     this.pages = {
-      cart: new Cart(cy),
-      checkout: new Checkout(cy),
-      thankYou: new ThankYou(cy),
-      wonderWomansPurse: new WonderWomansPurse(cy),
+      newOrder: new NewOrder(cy),
     };
+  }
+
+  login() {
+    this.cy
+      .visit(`${Cypress.env('DEMO_URL')}/wp-admin`)
+      .get('#user_login', { timeout: 30000 })
+      .should('be.visible')
+      .type(Cypress.env('ADMIN_USER'))
+      .get('#user_pass')
+      .should('be.visible')
+      .type(Cypress.env('ADMIN_PASSWORD'))
+      .get('#wp-submit')
+      .should('be.visible')
+      .click();
+  }
+
+  buyJeans(country) {
+    this[visitNewOrderPage]();
+
+    this.pages.newOrder.placeWithPaymentByLink(country);
+
+    return this;
+  }
+
+  [visitNewOrderPage] () {
+    cy
+      .visit(`${Cypress.env('DEMO_URL')}/wp-admin/post-new.php?post_type=shop_order`)
+      .get('.button.add-line-item', { timeout: 30000 })
+      .should('be.visible')
+      .click();
   }
 }
