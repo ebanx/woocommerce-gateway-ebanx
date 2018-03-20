@@ -50,6 +50,11 @@ jobs:
         - TEST_COUNTRY=
       script:
         - phpunit
+    - stage: admin
+      env:
+        - TEST_COUNTRY=
+      script:
+        - bash ./tests/bin/admin-test.sh
     - stage: release
       script:
         - bash <(curl -s https://codecov.io/bash)
