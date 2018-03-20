@@ -1,18 +1,18 @@
 const fillUser = Symbol('fillUser');
 const fillCountry = Symbol('fillCountry');
 const addItemToOrder = Symbol('addItemToOrder');
+const createPaymentByLink = Symbol('createPaymentByLink');
 
 export default class AddOrder {
   constructor(cy) {
 	this.cy = cy;
   }
 
-  placeWithPaymentByLink(country) {
+  placeWithPaymentByLink(country, next) {
     this[addItemToOrder]();
     this[fillUser]();
     this[fillCountry](country);
-
-    return this;
+    this[createPaymentByLink](next);
   }
 
 
@@ -50,13 +50,17 @@ export default class AddOrder {
       win.jQuery('select#_billing_country').select2('open');
     })
       .contains('.select2-results__option', country)
-      .trigger('mouseup')
+      .trigger('mouseup');
+  }
+
+  [createPaymentByLink] (next) {
+    cy
       .get('[name="create_ebanx_payment_link"]')
       .should('be.visible')
       .click()
-      .get('#order_data > div.order_data_column_container > div:nth-child(1) > div > p:nth-child(4) > input[type="text"]', { timeout: 30000 })
+      .get('#order_data > div.order_data_column_container > div:nth-child(1) > div > p:nth-child(3) > input[type="text"]', { timeout: 30000 })
       .then(($elm) => {
-        console.log($elm.val());
+        next($elm.val());
       });
   }
 }

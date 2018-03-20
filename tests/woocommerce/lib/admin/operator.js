@@ -25,12 +25,10 @@ export default class Admin {
       .click();
   }
 
-  buyJeans(country) {
+  buyJeans(country, next) {
     this[visitNewOrderPage]();
 
-    this.pages.newOrder.placeWithPaymentByLink(country);
-
-    return this;
+    this.pages.newOrder.placeWithPaymentByLink(country, next);
   }
 
   [visitNewOrderPage] () {
