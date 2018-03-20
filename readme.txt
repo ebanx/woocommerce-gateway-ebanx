@@ -3,7 +3,7 @@ Contributors: ebanxwp
 Tags: credit card, boleto, ebanx, woocommerce, payment gateway, latin america, brazil, mexico, argentina, peru, colombia, chile, ecuador, cash payment, local payment, card payment, one-click payment, alternative payments, payment processing
 Requires at least: 4.0
 Tested up to: 4.9
-Stable tag: 1.28.1
+Stable tag: 1.28.3
 License: Apache v2.0
 License URI: http://www.apache.org/licenses/LICENSE-2.0
 
@@ -147,6 +147,16 @@ Yes, you can.
 4. There you go, you’re all set!
 
 == Changelog ==
+
+= 1.28.3 = 
+* Feature - Allow 4 digit cvv only for America Express Credit Card brand [#648](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/648)
+* Fix - Compatibility layer works with php 5.4 [#645](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/645)
+* Fix - Currency options title not hiding when clicke on admin [#647](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/647)
+
+= 1.28.2 =
+* Fix - Instalment selection returning to 1x on checkout errors [#639](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/639)
+* Fix - Outdated error messages [#641](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/641)
+
 
 = 1.28.1 =
 * Fix - Get settings from gateway and not from inexistent attribute on one-click [#632](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/632)
