@@ -39,7 +39,7 @@ abstract class WC_EBANX_Constants
 	 *
 	 * @var array
 	 */
-	public static $CURRENCIES_CODES_ALLOWED = array(
+	public static $allowed_currency_codes = array(
 		self::CURRENCY_CODE_BRL,
 		self::CURRENCY_CODE_USD,
 		self::CURRENCY_CODE_EUR,

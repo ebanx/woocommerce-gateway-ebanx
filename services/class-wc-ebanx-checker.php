@@ -235,9 +235,9 @@ class WC_EBANX_Checker {
 	 */
 	public static function check_currency($context)
 	{
-		if (!in_array(get_woocommerce_currency(), WC_EBANX_Constants::$CURRENCIES_CODES_ALLOWED)) {
+		if ( ! in_array( get_woocommerce_currency(), WC_EBANX_Constants::$allowed_currency_codes ) ) {
 			$message = __('EBANX Gateway - Does not support the Currency you have set on the WooCommerce settings. To process with the EBANX plugin choose one of the following: %1$s.', 'woocommerce-gateway-ebanx');
-			$message = sprintf($message, implode(', ', WC_EBANX_Constants::$CURRENCIES_CODES_ALLOWED));
+			$message = sprintf( $message, implode(', ', WC_EBANX_Constants::$allowed_currency_codes ) );
 
 			$context->notices
 				->with_message($message)

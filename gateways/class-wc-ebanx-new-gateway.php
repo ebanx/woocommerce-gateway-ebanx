@@ -375,6 +375,259 @@ class WC_EBANX_New_Gateway extends WC_EBANX_Gateway {
 	}
 
 	/**
+	 * Queries for a currency exchange rate against USD
+	 *
+	 * @param string $local_currency_code
+	 * @return double
+	 */
+	public function get_currency_rate( $local_currency_code ) {
+		$cache_key = 'EBANX_exchange_' . $local_currency_code;
+
+		$cache_time = date( 'YmdH' ).floor( date( 'i' ) / 5 );
+
+		$cached = get_option( $cache_key );
+		if ( false !== $cached ) {
+			list( $rate, $time ) = explode( '|', $cached );
+			if ( $time === $cache_time ) {
+				return $rate;
+			}
+		}
+
+		$rate = $this->ebanx->exchange()->siteToLocal( $local_currency_code );
+		update_option( $cache_key, $rate.'|'.$cache_time );
+		return $rate;
+	}
+
+	/**
+	 * Queries for a currency exchange rate against site currency
+	 *
+	 * @param  string $local_currency_code
+	 * @return double
+	 */
+	public function get_local_currency_rate_for_site( $local_currency_code ) {
+		if ( $this->merchant_currency === strtoupper( $local_currency_code ) ) {
+			return 1;
+		}
+
+		$usd_to_site_rate = 1;
+		$converted_currencies = [
+			WC_EBANX_Constants::CURRENCY_CODE_USD,
+			WC_EBANX_Constants::CURRENCY_CODE_EUR,
+		];
+
+		if ( ! in_array( $this->merchant_currency, $converted_currencies ) ) {
+			$usd_to_site_rate = $this->get_currency_rate( $this->merchant_currency );
+		}
+
+		return $this->get_currency_rate( $local_currency_code ) / $usd_to_site_rate;
+	}
+
+	/**
+	 * Create the converter amount on checkout page
+	 *
+	 * @param string  $currency Possible currencies: BRL, USD, EUR, PEN, CLP, COP, MXN
+	 * @param boolean $template
+	 * @param boolean $country
+	 * @param boolean $instalments
+	 *
+	 * @return string
+	 * @throws Exception Throws missing parameter exception.
+	 */
+	public function checkout_rate_conversion( $currency, $template = true, $country = null, $instalments = null ) {
+		if ( ! in_array($this->merchant_currency, WC_EBANX_Constants::$allowed_currency_codes )
+		     || 'yes' !== $this->configs->get_setting_or_default('show_local_amount', 'yes') ) {
+			return;
+		}
+
+		$amount = WC()->cart->total;
+
+		$amount = apply_filters( 'ebanx_get_custom_total_amount', $amount, $instalments );
+
+		$order_id = null;
+
+		if ( ! empty( get_query_var( 'order-pay' ) ) ) {
+			$order_id = get_query_var( 'order-pay' );
+		}
+		else if ( WC_EBANX_Request::has( 'order_id' ) && ! empty( WC_EBANX_Request::read( 'order_id', null ) ) ) {
+			$order_id = WC_EBANX_Request::read( 'order_id', null );
+		}
+
+		if ( ! is_null( $order_id ) ) {
+			$order = new WC_Order( $order_id );
+
+			$amount = $order->get_total();
+		}
+
+		if ( null === $country ) {
+			$country = trim( strtolower( WC()->customer->get_country() ) );
+		}
+
+		$rate = 1;
+		if ( in_array($this->merchant_currency, [ WC_EBANX_Constants::CURRENCY_CODE_USD, WC_EBANX_Constants::CURRENCY_CODE_EUR ] ) ) {
+			$rate = round( floatval( $this->get_local_currency_rate_for_site( $currency ) ), 2 );
+
+			if ( WC()->cart->prices_include_tax ) {
+				$amount += WC()->cart->tax_total;
+			}
+		}
+
+		$amount *= $rate;
+
+		if ( 'yes' === $this->get_setting_or_default( 'interest_rates_enabled', 'no' )
+		     && null !== $instalments ) {
+			$interest_rate = floatval( $this->configs->settings[ 'interest_rates_' . sprintf( "%02d", $instalments ) ] );
+
+			$amount += ( $amount * $interest_rate / 100 );
+		}
+
+		if ( $country === WC_EBANX_Constants::COUNTRY_BRAZIL && 'yes' === $this->configs->get_setting_or_default( 'add_iof_to_local_amount_enabled', 'yes' ) ) {
+			$amount += ( $amount * WC_EBANX_Constants::BRAZIL_TAX );
+		}
+
+		if ( null !== $instalments ) {
+			$instalment_price = $amount / $instalments;
+			$instalment_price = round( floatval( $instalment_price ), 2 );
+			$amount = $instalment_price * $instalments;
+		}
+
+		$message = $this->get_checkout_message( $amount, $currency, $country );
+		$exchange_rate_message = $this->get_exchange_rate_message( $rate, $currency, $country );
+
+		if ( $template ) {
+			wc_get_template(
+				'checkout-conversion-rate.php',
+				[
+					'message' => $message,
+					'exchange_rate_message' => $exchange_rate_message,
+				],
+				'woocommerce/ebanx/',
+				WC_EBANX::get_templates_path()
+			);
+		}
+
+		return $message;
+	}
+
+	/**
+	 * Create the hooks to process cash payments
+	 *
+	 * @param  array  $codes
+	 * @param  string $notificationType
+	 * @return WC_Order
+	 */
+	final public function process_hook( array $codes, $notificationType ) {
+		do_action( 'ebanx_before_process_hook', $codes, $notificationType );
+
+		if ( isset( $codes['hash'] ) && ! empty( $codes['hash'] ) && isset( $codes['merchant_payment_code'] ) && ! empty( $codes['merchant_payment_code'] ) ) {
+			unset( $codes['merchant_payment_code'] );
+		}
+
+		$data = $this->ebanx->paymentInfo()->findByHash( $codes['hash'], $this->is_sandbox_mode );
+
+		$order_id = WC_EBANX_Helper::get_post_id_by_meta_key_and_value( '_ebanx_payment_hash', $data['payment']['hash'] );
+
+		$order = new WC_Order( $order_id );
+
+		switch ( strtoupper( $notificationType ) ) {
+			case 'REFUND':
+				$this->process_refund_hook( $order, $data );
+
+				break;
+			case 'UPDATE':
+				$this->update_payment( $order, $data );
+
+				break;
+		};
+
+		do_action( 'ebanx_after_process_hook', $order, $notificationType );
+
+		return $order;
+	}
+
+	/**
+	 * Updates the payment when receive a notification from EBANX
+	 *
+	 * @param WC_Order $order
+	 * @param array    $data
+	 * @return void
+	 */
+	final public function update_payment( $order, $data ) {
+		$request_status = strtoupper( $data['payment']['status'] );
+
+		$status = array(
+			'CO' => 'Confirmed',
+			'CA' => 'Canceled',
+			'PE' => 'Pending',
+			'OP' => 'Opened'
+		);
+		$new_status = null;
+
+		switch ( $request_status ) {
+			case 'CO':
+				if ( method_exists( $order, 'get_payment_method' )
+				    && strpos( $order->get_payment_method(), 'ebanx-credit-card' ) === 0 ) {
+					return;
+				}
+				$new_status = 'processing';
+				break;
+			case 'CA':
+				$new_status = 'failed';
+				break;
+			case 'PE':
+				$new_status = 'on-hold';
+				break;
+			case 'OP':
+				$new_status = 'pending';
+				break;
+		}
+
+		if ( 'completed' === $order->status && 'CA' !== $request_status ) {
+			return;
+		}
+
+		if ( $new_status !== $order->status ) {
+			$paymentStatus = $status[ $data['payment']['status'] ];
+			// translators: placeholder contains payment status.
+			$order->add_order_note( sprintf( __( 'EBANX: The payment has been updated to: %s.', 'woocommerce-gateway-ebanx' ), $paymentStatus ) );
+			$order->update_status( $new_status );
+		}
+	}
+
+	/**
+	 * Updates the refunds when receivers a EBANX refund notification
+	 *
+	 * @param WC_Order $order
+	 * @param array    $data
+	 * @return void
+	 */
+	final public function process_refund_hook( $order, $data ) {
+		$refunds = current( get_post_meta( $order->id, '_ebanx_payment_refunds' ) );
+
+		foreach ( $refunds as $k => $ref ) {
+			foreach ( $data['payment']['refunds'] as $refund ) {
+				if ( $ref['id'] === $refund['id'] ) {
+					if ( $refund['status'] === 'CO' && $refunds[$k]['status'] !== 'CO' ) {
+						// translators: placeholder contains refund id.
+						$order->add_order_note( sprintf( __( 'EBANX: Your Refund was confirmed to EBANX - Refund ID: %s', 'woocommerce-gateway-ebanx' ), $refund['id'] ) );
+					}
+					if ( $refund->status == 'CA' && $refunds[$k]->status != 'CA' ) {
+						// translators: placeholder contains refund id.
+						$order->add_order_note( sprintf( __( 'EBANX: Your Refund was canceled to EBANX - Refund ID: %s', 'woocommerce-gateway-ebanx' ), $refund['id'] ) );
+					}
+
+					$refunds[$k]['status'] = $refund['status']; // status == co save note
+					$refunds[$k]['cancel_date'] = $refund['cancel_date'];
+					$refunds[$k]['request_date'] = $refund['request_date'];
+					$refunds[$k]['pending_date'] = $refund['pending_date'];
+					$refunds[$k]['confirm_date'] = $refund['confirm_date'];
+				}
+			}
+		}
+
+		update_post_meta( $order->id, '_ebanx_payment_refunds', $refunds );
+	}
+
+	/**
 	 * @param string $status
 	 *
 	 * @return string
