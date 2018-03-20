@@ -4,17 +4,22 @@ import Faker from 'faker';
 
 import defaults from '../../../../defaults';
 import Woocommerce from '../../../lib/operator';
+import Admin from '../../../lib/admin/operator';
 import { assertUrlStatus } from '../../../../utils';
 
 Faker.locale = 'pt_BR';
 
 let woocommerce;
+let admin;
 
 describe('Woocommerce', () => {
   before(() => {
     assertUrlStatus(Cypress.env('DEMO_URL'));
 
     woocommerce = new Woocommerce(cy);
+    admin = new Admin(cy);
+
+    admin.login();
   });
 
   context('Admin', () => {
@@ -45,25 +50,13 @@ describe('Woocommerce', () => {
 
           woocommerce.buyWonderWomansPurseWithCreditCardToPersonal(checkoutData, (resp) => {
             cy
-              .visit(`${Cypress.env('DEMO_URL')}/wp-admin`)
-              .get('#user_login', { timeout: 30000 })
-              .should('be.visible')
-              .type(Cypress.env('ADMIN_USER'))
-              .get('#user_pass')
-              .should('be.visible')
-              .type(Cypress.env('ADMIN_PASSWORD'))
-              .get('#wp-submit')
-              .should('be.visible')
-              .click();
-
-            cy
               .visit(`${Cypress.env('DEMO_URL')}/wp-admin/post.php?post=${resp.orderNumber}&action=edit`)
               .get('.button.refund-items', { timeout: 30000 })
               .should('be.visible')
               .click()
               .get('.refund_order_item_qty')
               .should('be.visible')
-              .type(1)
+              .type('1')
               .get('.button.button-primary.do-api-refund', { timeout: 5000 })
               .should('be.visible')
               .click()

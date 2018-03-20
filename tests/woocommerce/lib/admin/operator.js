@@ -1,5 +1,5 @@
 /* global Cypress */
-import NewOrder from '../pages/admin';
+import AddOrder from '../pages/addOrder';
 
 const visitNewOrderPage = Symbol('visitNewOrderPage');
 
@@ -7,7 +7,7 @@ export default class Admin {
   constructor(cy) {
     this.cy = cy;
     this.pages = {
-      newOrder: new NewOrder(cy),
+      newOrder: new AddOrder(cy),
     };
   }
 
