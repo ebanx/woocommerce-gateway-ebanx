@@ -32,10 +32,11 @@ class WC_EBANX_Spei_Gateway extends WC_EBANX_New_Gateway
 	 * This method always will return false, it doesn't need to show to the customers
 	 *
 	 * @return boolean Always return false
+	 * @throws Exception Throws missing param message.
 	 */
 	public function is_available()
 	{
-		return parent::is_available() && $this->get_transaction_address('country') == WC_EBANX_Constants::COUNTRY_MEXICO;
+		return parent::is_available() && WC_EBANX_Constants::COUNTRY_MEXICO === $this->get_transaction_address( 'country' );
 	}
 
 	/**

@@ -233,8 +233,7 @@ class WC_EBANX_New_Gateway extends WC_EBANX_Gateway {
 	 * @return boolean|string
 	 * @throws Exception Throws parameter missing message.
 	 */
-	public function get_transaction_address($attr = '')
-	{
+	public function get_transaction_address( $attr = '' ) {
 		if (
 			! isset( WC()->customer )
 			|| is_admin()
@@ -249,7 +248,7 @@ class WC_EBANX_New_Gateway extends WC_EBANX_Gateway {
 			$address['country'] = trim( strtolower( WC_EBANX_Request::read( 'billing_country' ) ) );
 		}
 
-		if ($attr !== '' && ! empty( $address[ $attr ] ) ) {
+		if ( '' !== $attr && ! empty( $address[ $attr ] ) ) {
 			return $address[ $attr ];
 		}
 		return $address;

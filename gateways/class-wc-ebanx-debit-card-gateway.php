@@ -32,10 +32,11 @@ class WC_EBANX_Debit_Card_Gateway extends WC_EBANX_New_Gateway
 	 * Check if the method is available to show to the users
 	 *
 	 * @return boolean
+	 * @throws Exception Throws missing param message.
 	 */
 	public function is_available()
 	{
-		return parent::is_available() && $this->get_transaction_address('country') === WC_EBANX_Constants::COUNTRY_MEXICO;
+		return parent::is_available() && WC_EBANX_Constants::COUNTRY_MEXICO === $this->get_transaction_address( 'country' );
 	}
 
 	/**

@@ -29,10 +29,11 @@ class WC_EBANX_Tef_Gateway extends WC_EBANX_Redirect_Gateway
 	 * Check if the method is available to show to the users
 	 *
 	 * @return boolean
+	 * @throws Exception Throws missing parameter message.
 	 */
 	public function is_available()
 	{
-		return parent::is_available() && $this->get_transaction_address('country') == WC_EBANX_Constants::COUNTRY_BRAZIL;
+		return parent::is_available() && WC_EBANX_Constants::COUNTRY_BRAZIL === $this->get_transaction_address( 'country' );
 	}
 
 	/**
