@@ -90,6 +90,7 @@ class WC_EBANX_Safetypay_Gateway extends WC_EBANX_Redirect_Gateway
 
 	/**
 	 * The HTML structure on checkout page
+	 *
 	 * @throws Exception Throws missing param message.
 	 */
 	public function payment_fields()

@@ -382,6 +382,7 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_New_Gateway
 
 	/**
 	 * The HTML structure on checkout page
+	 * 
 	 * @throws Exception Throws missing param message.
 	 */
 	public function payment_fields() {
