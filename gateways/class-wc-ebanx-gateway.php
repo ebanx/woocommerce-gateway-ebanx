@@ -460,7 +460,14 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway
 		return $languages[$country];
 	}
 
-	protected function get_exchange_rate_message($rate, $currency, $country) {
+	/**
+	 * @param double $rate
+	 * @param string $currency
+	 * @param string $country
+	 *
+	 * @return string
+	 */
+	protected function get_exchange_rate_message( $rate, $currency, $country ) {
 		if ($this->configs->get_setting_or_default('show_exchange_rate', 'no') === 'no') {
 			return '';
 		}

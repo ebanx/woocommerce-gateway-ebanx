@@ -383,7 +383,7 @@ class WC_EBANX_New_Gateway extends WC_EBANX_Gateway {
 	public function get_currency_rate( $local_currency_code ) {
 		$cache_key = 'EBANX_exchange_' . $local_currency_code;
 
-		$cache_time = date( 'YmdH' ).floor( date( 'i' ) / 5 );
+		$cache_time = date( 'YmdH' ) . floor( date( 'i' ) / 5 );
 
 		$cached = get_option( $cache_key );
 		if ( false !== $cached ) {
@@ -394,7 +394,7 @@ class WC_EBANX_New_Gateway extends WC_EBANX_Gateway {
 		}
 
 		$rate = $this->ebanx->exchange()->siteToLocal( $local_currency_code );
-		update_option( $cache_key, $rate.'|'.$cache_time );
+		update_option( $cache_key, $rate . '|' . $cache_time );
 		return $rate;
 	}
 
@@ -405,7 +405,7 @@ class WC_EBANX_New_Gateway extends WC_EBANX_Gateway {
 	 * @return double
 	 */
 	public function get_local_currency_rate_for_site( $local_currency_code ) {
-		if ( $this->merchant_currency === strtoupper( $local_currency_code ) ) {
+		if ( strtoupper( $local_currency_code ) === $this->merchant_currency ) {
 			return 1;
 		}
 
@@ -425,7 +425,7 @@ class WC_EBANX_New_Gateway extends WC_EBANX_Gateway {
 	/**
 	 * Create the converter amount on checkout page
 	 *
-	 * @param string  $currency Possible currencies: BRL, USD, EUR, PEN, CLP, COP, MXN
+	 * @param string  $currency Possible currencies: BRL, USD, EUR, PEN, CLP, COP, MXN.
 	 * @param boolean $template
 	 * @param boolean $country
 	 * @param boolean $instalments
@@ -434,8 +434,8 @@ class WC_EBANX_New_Gateway extends WC_EBANX_Gateway {
 	 * @throws Exception Throws missing parameter exception.
 	 */
 	public function checkout_rate_conversion( $currency, $template = true, $country = null, $instalments = null ) {
-		if ( ! in_array($this->merchant_currency, WC_EBANX_Constants::$allowed_currency_codes )
-		     || 'yes' !== $this->configs->get_setting_or_default('show_local_amount', 'yes') ) {
+		if ( ! in_array( $this->merchant_currency, WC_EBANX_Constants::$allowed_currency_codes )
+			|| 'yes' !== $this->configs->get_setting_or_default( 'show_local_amount', 'yes' ) ) {
 			return;
 		}
 
@@ -447,8 +447,7 @@ class WC_EBANX_New_Gateway extends WC_EBANX_Gateway {
 
 		if ( ! empty( get_query_var( 'order-pay' ) ) ) {
 			$order_id = get_query_var( 'order-pay' );
-		}
-		else if ( WC_EBANX_Request::has( 'order_id' ) && ! empty( WC_EBANX_Request::read( 'order_id', null ) ) ) {
+		} else if ( WC_EBANX_Request::has( 'order_id' ) && ! empty( WC_EBANX_Request::read( 'order_id', null ) ) ) {
 			$order_id = WC_EBANX_Request::read( 'order_id', null );
 		}
 
@@ -463,7 +462,7 @@ class WC_EBANX_New_Gateway extends WC_EBANX_Gateway {
 		}
 
 		$rate = 1;
-		if ( in_array($this->merchant_currency, [ WC_EBANX_Constants::CURRENCY_CODE_USD, WC_EBANX_Constants::CURRENCY_CODE_EUR ] ) ) {
+		if ( in_array( $this->merchant_currency, [ WC_EBANX_Constants::CURRENCY_CODE_USD, WC_EBANX_Constants::CURRENCY_CODE_EUR ] ) ) {
 			$rate = round( floatval( $this->get_local_currency_rate_for_site( $currency ) ), 2 );
 
 			if ( WC()->cart->prices_include_tax ) {
@@ -473,14 +472,13 @@ class WC_EBANX_New_Gateway extends WC_EBANX_Gateway {
 
 		$amount *= $rate;
 
-		if ( 'yes' === $this->get_setting_or_default( 'interest_rates_enabled', 'no' )
-		     && null !== $instalments ) {
-			$interest_rate = floatval( $this->configs->settings[ 'interest_rates_' . sprintf( "%02d", $instalments ) ] );
+		if ( 'yes' === $this->get_setting_or_default( 'interest_rates_enabled', 'no' ) && null !== $instalments ) {
+			$interest_rate = floatval( $this->configs->settings[ 'interest_rates_' . sprintf( '%02d', $instalments ) ] );
 
 			$amount += ( $amount * $interest_rate / 100 );
 		}
 
-		if ( $country === WC_EBANX_Constants::COUNTRY_BRAZIL && 'yes' === $this->configs->get_setting_or_default( 'add_iof_to_local_amount_enabled', 'yes' ) ) {
+		if ( WC_EBANX_Constants::COUNTRY_BRAZIL === $country && 'yes' === $this->configs->get_setting_or_default( 'add_iof_to_local_amount_enabled', 'yes' ) ) {
 			$amount += ( $amount * WC_EBANX_Constants::BRAZIL_TAX );
 		}
 
@@ -512,11 +510,12 @@ class WC_EBANX_New_Gateway extends WC_EBANX_Gateway {
 	 * Create the hooks to process cash payments
 	 *
 	 * @param  array  $codes
-	 * @param  string $notificationType
+	 * @param  string $notification_type
+	 *
 	 * @return WC_Order
 	 */
-	final public function process_hook( array $codes, $notificationType ) {
-		do_action( 'ebanx_before_process_hook', $codes, $notificationType );
+	final public function process_hook( array $codes, $notification_type ) {
+		do_action( 'ebanx_before_process_hook', $codes, $notification_type );
 
 		if ( isset( $codes['hash'] ) && ! empty( $codes['hash'] ) && isset( $codes['merchant_payment_code'] ) && ! empty( $codes['merchant_payment_code'] ) ) {
 			unset( $codes['merchant_payment_code'] );
@@ -528,7 +527,7 @@ class WC_EBANX_New_Gateway extends WC_EBANX_Gateway {
 
 		$order = new WC_Order( $order_id );
 
-		switch ( strtoupper( $notificationType ) ) {
+		switch ( strtoupper( $notification_type ) ) {
 			case 'REFUND':
 				$this->process_refund_hook( $order, $data );
 
@@ -539,7 +538,7 @@ class WC_EBANX_New_Gateway extends WC_EBANX_Gateway {
 				break;
 		};
 
-		do_action( 'ebanx_after_process_hook', $order, $notificationType );
+		do_action( 'ebanx_after_process_hook', $order, $notification_type );
 
 		return $order;
 	}
@@ -554,18 +553,18 @@ class WC_EBANX_New_Gateway extends WC_EBANX_Gateway {
 	final public function update_payment( $order, $data ) {
 		$request_status = strtoupper( $data['payment']['status'] );
 
-		$status = array(
+		$status = [
 			'CO' => 'Confirmed',
 			'CA' => 'Canceled',
 			'PE' => 'Pending',
-			'OP' => 'Opened'
-		);
+			'OP' => 'Opened',
+		];
 		$new_status = null;
 
 		switch ( $request_status ) {
 			case 'CO':
 				if ( method_exists( $order, 'get_payment_method' )
-				    && strpos( $order->get_payment_method(), 'ebanx-credit-card' ) === 0 ) {
+					&& strpos( $order->get_payment_method(), 'ebanx-credit-card' ) === 0 ) {
 					return;
 				}
 				$new_status = 'processing';
@@ -586,9 +585,9 @@ class WC_EBANX_New_Gateway extends WC_EBANX_Gateway {
 		}
 
 		if ( $new_status !== $order->status ) {
-			$paymentStatus = $status[ $data['payment']['status'] ];
+			$payment_status = $status[ $data['payment']['status'] ];
 			// translators: placeholder contains payment status.
-			$order->add_order_note( sprintf( __( 'EBANX: The payment has been updated to: %s.', 'woocommerce-gateway-ebanx' ), $paymentStatus ) );
+			$order->add_order_note( sprintf( __( 'EBANX: The payment has been updated to: %s.', 'woocommerce-gateway-ebanx' ), $payment_status ) );
 			$order->update_status( $new_status );
 		}
 	}
@@ -606,20 +605,20 @@ class WC_EBANX_New_Gateway extends WC_EBANX_Gateway {
 		foreach ( $refunds as $k => $ref ) {
 			foreach ( $data['payment']['refunds'] as $refund ) {
 				if ( $ref['id'] === $refund['id'] ) {
-					if ( $refund['status'] === 'CO' && $refunds[$k]['status'] !== 'CO' ) {
+					if ( 'CO' === $refund['status'] && 'CO' !== $refunds[ $k ]['status'] ) {
 						// translators: placeholder contains refund id.
 						$order->add_order_note( sprintf( __( 'EBANX: Your Refund was confirmed to EBANX - Refund ID: %s', 'woocommerce-gateway-ebanx' ), $refund['id'] ) );
 					}
-					if ( $refund->status == 'CA' && $refunds[$k]->status != 'CA' ) {
+					if ( 'CA' === $refund['status'] && 'CA' !== $refunds[ $k ]['status'] ) {
 						// translators: placeholder contains refund id.
 						$order->add_order_note( sprintf( __( 'EBANX: Your Refund was canceled to EBANX - Refund ID: %s', 'woocommerce-gateway-ebanx' ), $refund['id'] ) );
 					}
 
-					$refunds[$k]['status'] = $refund['status']; // status == co save note
-					$refunds[$k]['cancel_date'] = $refund['cancel_date'];
-					$refunds[$k]['request_date'] = $refund['request_date'];
-					$refunds[$k]['pending_date'] = $refund['pending_date'];
-					$refunds[$k]['confirm_date'] = $refund['confirm_date'];
+					$refunds[ $k ]['status'] = $refund['status'];
+					$refunds[ $k ]['cancel_date'] = $refund['cancel_date'];
+					$refunds[ $k ]['request_date'] = $refund['request_date'];
+					$refunds[ $k ]['pending_date'] = $refund['pending_date'];
+					$refunds[ $k ]['confirm_date'] = $refund['confirm_date'];
 				}
 			}
 		}
