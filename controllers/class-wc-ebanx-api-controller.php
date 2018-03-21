@@ -29,6 +29,25 @@ class WC_EBANX_Api_Controller {
 	}
 
 	/**
+	 * Responds that the plugin logs
+	 *
+	 * @return void
+	 */
+	public function retrieve_logs() {
+		header( 'Content-Type: application/json' );
+
+		if ( empty( $_GET['integration_key'] ) || $_GET['integration_key'] !== $this->get_integration_key() ) {
+			die( json_encode( [] ) );
+		}
+
+		$logs = WC_EBANX_Database::select( 'logs' );
+
+		WC_EBANX_Database::truncate( 'logs' );
+
+		die( json_encode( $logs ) );
+	}
+
+	/**
 	 * Captures a credit card payment made while auto capture was disabled
 	 *
 	 * @return void
@@ -36,9 +55,9 @@ class WC_EBANX_Api_Controller {
 	public function capture_payment($order_id) {
 		$order = new WC_Order( $order_id );
 
-		if (!current_user_can('administrator')
-		    || $order->get_status() !== 'on-hold'
-		    || strpos($order->get_payment_method(), 'ebanx-credit-card') !== 0
+		if ( ! current_user_can( 'administrator' )
+			|| $order->get_status() !== 'on-hold'
+			|| strpos( $order->get_payment_method(), 'ebanx-credit-card' ) !== 0
 		) {
 			wp_redirect( get_site_url() );
 			return;
