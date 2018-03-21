@@ -722,6 +722,11 @@ class WC_EBANX_New_Gateway extends WC_EBANX_Gateway {
 		}
 
 		$country = strtolower( Country::fromIso( strtoupper( $country ) ) );
+
+		if ( ! WC_EBANX_Request::has( $this->names[ 'ebanx_billing_' . $country . '_' . $field_name ] ) ) {
+			return false;
+		}
+
 		$document = sanitize_text_field( WC_EBANX_Request::read( $this->names[ 'ebanx_billing_' . $country . '_' . $field_name ] ) );
 
 		update_user_meta( $this->user_id, '_ebanx_billing_' . $country . '_' . $field_name, $document );
