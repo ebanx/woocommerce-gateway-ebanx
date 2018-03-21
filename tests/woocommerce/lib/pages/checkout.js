@@ -95,6 +95,7 @@ export default class Checkout {
       .get(elm)
       .should('be.visible')
       .window().then((win) => {
+        console.log(win);
         win.jQuery(elm).select2('open');
       })
       .contains(elmResults, value)

@@ -335,7 +335,7 @@ class WC_EBANX_One_Click {
 				break;
 		}
 
-		$country = $this->gateway->getTransactionAddress('country');
+		$country = $this->gateway->get_transaction_address('country');
 
 		$cart_total = $product->price;
 

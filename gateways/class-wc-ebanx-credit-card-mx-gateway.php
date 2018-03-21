@@ -30,7 +30,7 @@ class WC_EBANX_Credit_Card_MX_Gateway extends WC_EBANX_Credit_Card_Gateway
 	 */
 	public function is_available()
 	{
-		return parent::is_available() && $this->getTransactionAddress('country') === WC_EBANX_Constants::COUNTRY_MEXICO;
+		return parent::is_available() && $this->get_transaction_address('country') === WC_EBANX_Constants::COUNTRY_MEXICO;
 	}
 
 	/**

@@ -35,7 +35,7 @@ class WC_EBANX_Spei_Gateway extends WC_EBANX_New_Gateway
 	 */
 	public function is_available()
 	{
-		return parent::is_available() && $this->getTransactionAddress('country') == WC_EBANX_Constants::COUNTRY_MEXICO;
+		return parent::is_available() && $this->get_transaction_address('country') == WC_EBANX_Constants::COUNTRY_MEXICO;
 	}
 
 	/**
@@ -53,7 +53,7 @@ class WC_EBANX_Spei_Gateway extends WC_EBANX_New_Gateway
 	 */
 	public function payment_fields()
 	{
-		$message = $this->get_sandbox_form_message( $this->getTransactionAddress( 'country' ) );
+		$message = $this->get_sandbox_form_message( $this->get_transaction_address( 'country' ) );
 		wc_get_template(
 			'sandbox-checkout-alert.php',
 			array(

@@ -31,7 +31,7 @@ class WC_EBANX_Credit_Card_AR_Gateway extends WC_EBANX_Credit_Card_Gateway {
 	 * @return boolean
 	 */
 	public function is_available() {
-		return parent::is_available() && $this->getTransactionAddress('country') == WC_EBANX_Constants::COUNTRY_ARGENTINA;
+		return parent::is_available() && $this->get_transaction_address('country') == WC_EBANX_Constants::COUNTRY_ARGENTINA;
 	}
 
 	/**

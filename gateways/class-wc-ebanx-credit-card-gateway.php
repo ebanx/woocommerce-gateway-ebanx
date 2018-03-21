@@ -396,7 +396,7 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_New_Gateway
 			});
 		}
 
-		$country = $this->getTransactionAddress('country');
+		$country = $this->get_transaction_address('country');
 
 		$max_instalments = min(
 			$this->configs->settings['credit_card_instalments'],

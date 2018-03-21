@@ -40,7 +40,7 @@ class WC_EBANX_Safetypay_Gateway extends WC_EBANX_Redirect_Gateway
 	 */
 	public function is_available()
 	{
-		$country = $this->getTransactionAddress('country');
+		$country = $this->get_transaction_address('country');
 		$is_peru = $country == WC_EBANX_Constants::COUNTRY_PERU;
 		$is_ecuador = $country == WC_EBANX_Constants::COUNTRY_ECUADOR;
 
@@ -58,7 +58,7 @@ class WC_EBANX_Safetypay_Gateway extends WC_EBANX_Redirect_Gateway
 	 * @return boolean          Return true if EBANX process the currency
 	 */
 	public function ebanx_process_merchant_currency($currency) {
-		$country = $this->getTransactionAddress('country');
+		$country = $this->get_transaction_address('country');
 
 		switch ($country) {
 			case WC_EBANX_Constants::COUNTRY_PERU:
@@ -90,7 +90,7 @@ class WC_EBANX_Safetypay_Gateway extends WC_EBANX_Redirect_Gateway
 	 */
 	public function payment_fields()
 	{
-		$message = $this->get_sandbox_form_message( $this->getTransactionAddress( 'country' ) );
+		$message = $this->get_sandbox_form_message( $this->get_transaction_address( 'country' ) );
 		wc_get_template(
 			'sandbox-checkout-alert.php',
 			array(
@@ -116,7 +116,7 @@ class WC_EBANX_Safetypay_Gateway extends WC_EBANX_Redirect_Gateway
 			WC_EBANX::get_templates_path()
 		);
 
-		$is_peru = $this->getTransactionAddress('country') === WC_EBANX_Constants::COUNTRY_PERU;
+		$is_peru = $this->get_transaction_address('country') === WC_EBANX_Constants::COUNTRY_PERU;
 
 		parent::checkout_rate_conversion(WC_EBANX_Constants::CURRENCY_CODE_PEN, $is_peru);
 	}

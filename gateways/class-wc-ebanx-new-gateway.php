@@ -201,7 +201,7 @@ class WC_EBANX_New_Gateway extends WC_EBANX_Gateway {
 				'redirect' => $this->get_return_url( $order ),
 			]);
 		} catch ( Exception $e ) {
-			$country = $this->getTransactionAddress( 'country' );
+			$country = $this->get_transaction_address( 'country' );
 
 			$message = WC_EBANX_Errors::get_error_message( $e, $country );
 
@@ -223,6 +223,36 @@ class WC_EBANX_New_Gateway extends WC_EBANX_Gateway {
 	 */
 	protected function transform_payment_data( $order ) {
 		return WC_EBANX_Payment_Adapter::transform( $order, $this->configs, $this->names );
+	}
+
+	/**
+	 * Get the customer's address
+	 *
+	 * @param  string $attr
+	 *
+	 * @return boolean|string
+	 * @throws Exception Throws parameter missing message.
+	 */
+	public function get_transaction_address($attr = '')
+	{
+		if (
+			! isset( WC()->customer )
+			|| is_admin()
+			|| empty( WC_EBANX_Request::read( 'billing_country', null ) )
+			&& empty( WC()->customer->get_country() )
+		) {
+			return false;
+		}
+
+		$address['country'] = trim( strtolower( WC()->customer->get_country() ) );
+		if ( ! empty( WC_EBANX_Request::read( 'billing_country', null ) ) ) {
+			$address['country'] = trim( strtolower( WC_EBANX_Request::read( 'billing_country' ) ) );
+		}
+
+		if ($attr !== '' && ! empty( $address[ $attr ] ) ) {
+			return $address[ $attr ];
+		}
+		return $address;
 	}
 
 	/**
