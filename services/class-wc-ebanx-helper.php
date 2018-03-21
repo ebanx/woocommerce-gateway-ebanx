@@ -76,4 +76,20 @@ abstract class WC_EBANX_Helper
 			return false;
 		}
 	}
+
+	public static function checkout_contains_subscription()
+	{
+		$subscription = false;
+		if (class_exists('WC_Product_Subscription')) {
+			$cart = WC()->cart->get_cart();
+			foreach ($cart as $index => $item) {
+				if ($item['data'] instanceof WC_Product_Subscription) {
+					$subscription = true;
+					break;
+				}
+			}
+		}
+		return $subscription;
+	}
+
 }

@@ -88,7 +88,7 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
 				 $addresses .= ' - ' . $order->billing_address_2;
 			}
 
-			$address = WC_EBANX_Helper::::split_street($addresses);
+			$address = WC_EBANX_Helper::split_street($addresses);
 
 			$data = array(
 				'operation' => 'request',
