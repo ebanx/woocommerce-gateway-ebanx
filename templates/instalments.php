@@ -24,8 +24,12 @@ if ( count($instalments_terms) > 1 ) : ?>
 			>
 				<?php foreach ( $instalments_terms as $instalment ) : ?>
 					<option value="<?php echo esc_attr( $instalment['number'] ); ?>">
-						<?php printf( __( '%1$dx of %2$s', 'woocommerce-gateway-ebanx' ), absint( $instalment['number'] ), esc_html( strip_tags( wc_price( $instalment['price'] * $currency_rate, array( 'currency' => $currency ) ) ) ) ); ?>
-						<?php echo esc_html( $instalment['has_interest'] ? __( 'with interest', 'woocommerce-gateway-ebanx' ) : '' ); ?>
+						<?php
+							// @codingStandardsIgnoreLine
+							printf( __( '%1$dx of %2$s', 'woocommerce-gateway-ebanx' ), absint( $instalment['number'] ), esc_html( strip_tags( wc_price( $instalment['price'] * $currency_rate, array( 'currency' => $currency ) ) ) ) );
+
+							echo esc_html( $instalment['has_interest'] ? __( 'with interest', 'woocommerce-gateway-ebanx' ) : '' );
+						?>
 					</option>
 				<?php endforeach; ?>
 			</select>
