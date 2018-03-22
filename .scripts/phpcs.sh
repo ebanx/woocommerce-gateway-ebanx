@@ -11,8 +11,9 @@ rm -f $TRAVIS_BUILD_DIR/diff.txt $TRAVIS_BUILD_DIR/phpcs.json
 
 # get diff from last travis build
 # if PR, get diff from the base branch
-echo "git diff $TRAVIS_COMMIT_RANGE > $TRAVIS_BUILD_DIR/diff.txt"
-git diff $TRAVIS_COMMIT_RANGE > $TRAVIS_BUILD_DIR/diff.txt
+commit_range=$TRAVIS_COMMIT_RANGE
+echo "git diff $commit_range > $TRAVIS_BUILD_DIR/diff.txt"
+git diff $commit_range > $TRAVIS_BUILD_DIR/diff.txt
 
 # get all the style errors
 # `|| true` makes sure it returns 0 even when phpcs fails
