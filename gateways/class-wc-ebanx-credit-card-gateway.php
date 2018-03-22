@@ -75,7 +75,7 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
 	/**
 	 * Process scheduled subscription payments.
 	 *
-	 * @param string $subscription_id subscription ID
+	 * @param string $subscription_id subscription ID.
 	 * @return bool
 	 */
 	public function scheduled_subscription_payment( $subscription_id ) {
@@ -129,7 +129,7 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
 				'operation' => 'request',
 				'mode' => 'full',
 				'payment' => array(
-					'document' 	            => $document,
+					'document'              => $document,
 					'name'                  => $order->billing_first_name . ' ' . $order->billing_last_name,
 					'email'                 => $order->billing_email,
 					'phone_number'          => $order->billing_phone,
@@ -138,7 +138,7 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
 					'state'                 => $order->billing_state,
 					'city'                  => $order->billing_city,
 					'address'               => $address['streetName'],
-					'street_number'         => empty($address['houseNumber']) ? 'S/N' : trim($address['houseNumber'] . ' ' . $address['additionToAddress']),
+					'street_number'         => empty( $address['houseNumber'] ) ? 'S/N' : trim( $address['houseNumber'] . ' ' . $address['additionToAddress'] ),
 
 					'notification_url'      => $home_url,
 					'redirect_url'          => $home_url,
@@ -152,10 +152,10 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
 					'merchant_payment_code' => substr( $order->id . '-' . md5( rand( 123123, 9999999 ) ), 0, 40 ),
 					'items' => array_map( function( $product ) {
 						return array(
-							'name' => $product[ 'name' ],
-							'unit_price' => $product[ 'line_subtotal' ],
-							'quantity' => $product[ 'qty' ],
-							'type' => $product[ 'type' ],
+							'name' => $product['name'],
+							'unit_price' => $product['line_subtotal'],
+							'quantity' => $product['qty'],
+							'type' => $product['type'],
 						);
 					}, $order->get_items() ),
 					'payment_type_code' => $user_cc->brand,

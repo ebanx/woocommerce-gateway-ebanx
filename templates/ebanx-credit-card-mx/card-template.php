@@ -31,8 +31,8 @@
 					$save_card_text = null;
 				}
 				?>
-				<input id="ebanx-save-credit-card" name="ebanx-save-credit-card" class="wc-credit-card-form-save" type="<?php echo $input_type; ?>" style="width: auto; display: inline-block;" value="yes" checked />
-				<?php echo $save_card_text; ?>
+				<input id="ebanx-save-credit-card" name="ebanx-save-credit-card" class="wc-credit-card-form-save" type="<?php echo esc_attr( $input_type ); ?>" style="width: auto; display: inline-block;" value="yes" checked />
+				<?php echo esc_html( $save_card_text ); ?>
 			</label>
 		</section>
 		<div class="clear"></div>
