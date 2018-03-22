@@ -51,31 +51,29 @@ class WC_EBANX_Api_Controller {
 	/**
 	 * Cancels an open cash payment order with "On hold" status
 	 *
+	 * @param $order_id
+	 * @param $user_id
+	 *
 	 * @return void
 	 */
-	public function cancel_order($order_id, $user_id) {
+	public function cancel_order( $order_id, $user_id ) {
 		$order = new WC_Order( $order_id );
-		if ($user_id != get_current_user_id()
+		if ( $user_id != get_current_user_id()
 		    || $order->get_status() !== 'on-hold'
-		    || !in_array($order->get_payment_method(), WC_EBANX_Constants::$CASH_PAYMENTS_GATEWAYS_CODE)
+		    || ! in_array( $order->get_payment_method(), WC_EBANX_Constants::$CASH_PAYMENTS_GATEWAYS_CODE )
 			) {
-				wp_redirect( get_site_url() );
-				return;
+			wp_redirect( get_site_url() );
+			return;
 		}
 
-		$data = array(
-			'hash' => get_post_meta($order_id, '_ebanx_payment_hash', true)
-		);
+		$hash = get_post_meta($order_id, '_ebanx_payment_hash', true);
 
-		\Ebanx\Config::set(array(
-			'integrationKey' => $this->get_integration_key(),
-			'testMode'       => $this->is_sandbox(),
-		));
+		$ebanx = ( new WC_EBANX_Api( $this->config ) )->ebanx();
 
 		try {
-			$request = \Ebanx\EBANX::doCancel($data);
+			$response = $ebanx->cancelPayment()->request($hash);
 
-			if ($request->status === 'SUCCESS') {
+			if ($response['status'] === 'SUCCESS') {
 				$order->update_status('cancelled', __('EBANX: Cancelled by customer', 'woocommerce-gateway-ebanx'));
 			}
 
@@ -88,10 +86,6 @@ class WC_EBANX_Api_Controller {
 			wc_add_notice($message, 'error');
 			wp_redirect( get_site_url() );
 		}
-	}
-
-	private function get_integration_key() {
-		return $this->is_sandbox() ? $this->config->settings['sandbox_private_key'] : $this->config->settings['live_private_key'];
 	}
 
 	/**
