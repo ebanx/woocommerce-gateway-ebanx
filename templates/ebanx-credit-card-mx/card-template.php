@@ -20,19 +20,19 @@
 
 	<?php include WC_EBANX::get_templates_path() . 'instalments.php'; ?>
 
-	<?php if ($place_order_enabled) : ?>
+	<?php if ( $place_order_enabled ) : ?>
 		<section class="ebanx-form-row">
 			<label for="ebanx-save-credit-card">
 				<?php
-				$inputType = 'checkbox';
-				$saveCardText = 'Guarda esta tarjeta para compras futuras.';
-				if (WC_EBANX_Helper::checkout_contains_subscription()){
-					$inputType = 'hidden';
-					$saveCardText = null;
+				$input_type = 'checkbox';
+				$save_card_text = 'Guarda esta tarjeta para compras futuras.';
+				if ( WC_EBANX_Helper::checkout_contains_subscription() ) {
+					$input_type = 'hidden';
+					$save_card_text = null;
 				}
 				?>
-				<input id="ebanx-save-credit-card" name="ebanx-save-credit-card" class="wc-credit-card-form-save" type="<?php echo $inputType; ?>" style="width: auto; display: inline-block;" value="yes" checked />
-				<?php echo $saveCardText; ?>
+				<input id="ebanx-save-credit-card" name="ebanx-save-credit-card" class="wc-credit-card-form-save" type="<?php echo $input_type; ?>" style="width: auto; display: inline-block;" value="yes" checked />
+				<?php echo $save_card_text; ?>
 			</label>
 		</section>
 		<div class="clear"></div>

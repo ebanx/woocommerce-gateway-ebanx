@@ -73,14 +73,16 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
 	}
 
 	/**
-	 * @param $subscription_id
+	 * Process scheduled subscription payments.
+	 *
+	 * @param string $subscription_id subscription ID
 	 * @return bool
 	 */
 	public function scheduled_subscription_payment( $subscription_id ) {
 		global $counter;
 		$counter++;
 
-		if ($counter > 1) {
+		if ( 1 < $counter ) {
 			return;
 		}
 
@@ -150,10 +152,10 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
 					'merchant_payment_code' => substr( $order->id . '-' . md5( rand( 123123, 9999999 ) ), 0, 40 ),
 					'items' => array_map( function( $product ) {
 						return array(
-							'name' => $product['name'],
-							'unit_price' => $product['line_subtotal'],
-							'quantity' => $product['qty'],
-							'type' => $product['type'],
+							'name' => $product[ 'name' ],
+							'unit_price' => $product[ 'line_subtotal' ],
+							'quantity' => $product[ 'qty' ],
+							'type' => $product[ 'type' ],
 						);
 					}, $order->get_items() ),
 					'payment_type_code' => $user_cc->brand,

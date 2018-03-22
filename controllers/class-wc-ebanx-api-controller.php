@@ -88,12 +88,12 @@ class WC_EBANX_Api_Controller {
 				WC_EBANX_Flash::add_message(__('Payment ' . $order_id . ' was captured successfully.', 'woocommerce-gateway-ebanx'), 'warning', true);
 			}
 		}
-		else if ( $response->payment->status == 'CA' ) {
+		else if ( 'CA' == $response->payment->status ) {
 			$order->payment_complete();
 			$order->update_status('failed');
 			$order->add_order_note(__('EBANX: Transaction Failed', 'woocommerce-gateway-ebanx'));
 		}
-		else if ( $response->payment->status == 'OP' ) {
+		else if ( 'OP' == $response->payment->status ) {
 			$order->update_status('pending');
 			$order->add_order_note(__('EBANX: Transaction Pending', 'woocommerce-gateway-ebanx'));
 		}
