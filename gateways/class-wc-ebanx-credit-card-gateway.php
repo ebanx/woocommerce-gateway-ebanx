@@ -45,22 +45,25 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
 			'subscription_date_changes',
 			'subscription_payment_method_change',
 		);
-		
-		add_action ( 'wcs_default_retry_rules', [ $this, 'retryRules' ] );
+
+		add_action( 'wcs_default_retry_rules', [ $this, 'retryRules' ] );
 		add_action( 'woocommerce_scheduled_subscription_payment', [ $this, 'scheduled_subscription_payment' ] );
 	}
 
+	/**
+	 * @return array
+	 */
 	public function retryRules() {
 		return array(
 			array(
-				'retry_after_interval'            =>  DAY_IN_SECONDS,
+				'retry_after_interval'            => DAY_IN_SECONDS,
 				'email_template_customer'         => 'WCS_Email_Customer_Payment_Retry',
 				'email_template_admin'            => 'WCS_Email_Payment_Retry',
 				'status_to_apply_to_order'        => 'pending',
 				'status_to_apply_to_subscription' => 'on-hold',
 			),
 			array(
-				'retry_after_interval'            =>  2 * DAY_IN_SECONDS,
+				'retry_after_interval'            => 2 * DAY_IN_SECONDS,
 				'email_template_customer'         => 'WCS_Email_Customer_Payment_Retry',
 				'email_template_admin'            => 'WCS_Email_Payment_Retry',
 				'status_to_apply_to_order'        => 'pending',
@@ -69,9 +72,13 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
 		);
 	}
 
+	/**
+	 * @param $subscription_id
+	 * @return bool
+	 */
 	public function scheduled_subscription_payment( $subscription_id ) {
 		global $counter;
-		$counter += 1;
+		$counter++;
 
 		if ($counter > 1) {
 			return;
@@ -79,34 +86,34 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
 
 		$order = wcs_get_subscription( $subscription_id );
 
-		$userCc = get_user_meta( $order->data['customer_id'], '_ebanx_credit_card_token', true );
+		$user_cc = get_user_meta( $order->data['customer_id'], '_ebanx_credit_card_token', true );
 
-		if (count($userCc)) {
-			$userCc = end($userCc);
+		if ( count( $user_cc ) ) {
+			$user_cc = end( $user_cc );
 
-			switch (strtolower($order->billing_country)) {
+			switch ( strtolower( $order->billing_country ) ) {
 				case WC_EBANX_Constants::COUNTRY_BRAZIL:
-					$document = get_user_meta($order->data['customer_id'], '_ebanx_billing_brazil_document', true);
+					$document = get_user_meta( $order->data['customer_id'], '_ebanx_billing_brazil_document', true );
 					break;
 				case WC_EBANX_Constants::COUNTRY_CHILE:
-					$document = get_user_meta($order->data['customer_id'], '_ebanx_billing_chile_document', true);
+					$document = get_user_meta( $order->data['customer_id'], '_ebanx_billing_chile_document', true );
 					break;
 				case WC_EBANX_Constants::COUNTRY_COLOMBIA:
-					$document = get_user_meta($order->data['customer_id'], '_ebanx_billing_colombia_document', true);
+					$document = get_user_meta( $order->data['customer_id'], '_ebanx_billing_colombia_document', true );
 					break;
 				case WC_EBANX_Constants::COUNTRY_ARGENTINA:
-					$document = get_user_meta($order->data['customer_id'], '_ebanx_billing_argentina_document', true);
+					$document = get_user_meta( $order->data['customer_id'], '_ebanx_billing_argentina_document', true );
 					break;
 				case WC_EBANX_Constants::COUNTRY_PERU:
-					$document = get_user_meta($order->data['customer_id'], '_ebanx_billing_peru_document', true);
+					$document = get_user_meta( $order->data['customer_id'], '_ebanx_billing_peru_document', true );
 					break;
 			}
 
-			\EBANX\Config::set(array(
+			\EBANX\Config::set( array(
 				'integrationKey' => $this->private_key,
 				'testMode' => $this->is_sandbox_mode,
 				'directMode' => true,
-			));
+			) );
 
 			$addresses = $order->billing_address_1;
 
@@ -114,7 +121,7 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
 				 $addresses .= ' - ' . $order->billing_address_2;
 			}
 
-			$address = WC_EBANX_Helper::split_street($addresses);
+			$address = WC_EBANX_Helper::split_street( $addresses );
 
 			$data = array(
 				'operation' => 'request',
@@ -140,33 +147,33 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
 					'currency_code'         => $this->merchant_currency,
 					'amount_total'          => $order->get_total(),
 					'order_number'          => $order->id,
-					'merchant_payment_code' => substr($order->id . '-' . md5(rand(123123, 9999999)), 0, 40),
-					'items' => array_map(function($product) {
+					'merchant_payment_code' => substr( $order->id . '-' . md5( rand( 123123, 9999999 ) ), 0, 40 ),
+					'items' => array_map( function( $product ) {
 						return array(
 							'name' => $product['name'],
 							'unit_price' => $product['line_subtotal'],
 							'quantity' => $product['qty'],
 							'type' => $product['type'],
 						);
-					}, $order->get_items()),
-					'payment_type_code' => $userCc->brand,
+					}, $order->get_items() ),
+					'payment_type_code' => $user_cc->brand,
 					'create_token' => true,
 					'creditcard' => array(
-						'token' => $userCc->token,
+						'token' => $user_cc->token,
 					),
 					'currency_code' => $this->currency_code,
 				),
 			);
-			$request = \Ebanx\EBANX::doRequest($data);
+			$request = \Ebanx\EBANX::doRequest( $data );
 
 			if ( 'ERROR' == $request->status ) {
 				$order->payment_complete();
 				$order->update_status( 'failed' );
-				WC_EBANX::log($request->status_message);
+				WC_EBANX::log( $request->status_message );
 			} else if ( 'SUCCESS' == $request->status ) {
 				switch ( $request->payment->status ) {
 					case 'CO':
-						$order->payment_complete($request->payment->hash);
+						$order->payment_complete( $request->payment->hash );
 						WC_Subscriptions_Manager::activate_subscriptions_for_order( $order );
 						$order->add_order_note( __( 'EBANX: Transaction Received', 'woocommerce-gateway-ebanx' ) );
 						break;
@@ -182,7 +189,7 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
 				return true;
 			}
 		}
-		WC_Subscriptions_Manager::expire_subscriptions_for_order($order);
+		WC_Subscriptions_Manager::expire_subscriptions_for_order( $order );
 		return false;
 	}
 

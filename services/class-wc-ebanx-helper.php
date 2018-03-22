@@ -79,11 +79,10 @@ abstract class WC_EBANX_Helper
 
 	/**
 	 * Verifies if user cart has any subscription product
-	 * 
+	 *
 	 * @return bool
 	 */
-	public static function checkout_contains_subscription()
-	{
+	public static function checkout_contains_subscription() {
 		if ( class_exists( 'WC_Subscriptions_Cart' ) ) {
 			return WC_Subscriptions_Cart::cart_contains_subscription();
 		}
