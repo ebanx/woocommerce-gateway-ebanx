@@ -77,19 +77,17 @@ abstract class WC_EBANX_Helper
 		}
 	}
 
+	/**
+	 * Verifies if user cart has any subscription product
+	 * 
+	 * @return bool
+	 */
 	public static function checkout_contains_subscription()
 	{
-		$subscription = false;
-		if (class_exists('WC_Product_Subscription')) {
-			$cart = WC()->cart->get_cart();
-			foreach ($cart as $index => $item) {
-				if ($item['data'] instanceof WC_Product_Subscription) {
-					$subscription = true;
-					break;
-				}
-			}
+		if ( class_exists( 'WC_Subscriptions_Cart' ) ) {
+			return WC_Subscriptions_Cart::cart_contains_subscription();
 		}
-		return $subscription;
+		return false;
 	}
 
 }

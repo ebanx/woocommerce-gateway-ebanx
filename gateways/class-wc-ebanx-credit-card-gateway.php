@@ -39,21 +39,47 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
 			'refunds',
 			'subscriptions',
 			'subscription_cancellation',
-			'subscription_suspension', 
+			'subscription_suspension',
 			'subscription_reactivation',
 			'subscription_amount_changes',
 			'subscription_date_changes',
 			'subscription_payment_method_change',
-			'gateway_scheduled_payments',
 		);
-
+		
+		add_action ( 'wcs_default_retry_rules', [ $this, 'retryRules' ] );
 		add_action( 'woocommerce_scheduled_subscription_payment', [ $this, 'scheduled_subscription_payment' ] );
 	}
 
-	public function scheduled_subscription_payment( $subscription_id ) {
-		$order = wc_get_order($subscription_id);
+	public function retryRules() {
+		return array(
+			array(
+				'retry_after_interval'            =>  DAY_IN_SECONDS,
+				'email_template_customer'         => 'WCS_Email_Customer_Payment_Retry',
+				'email_template_admin'            => 'WCS_Email_Payment_Retry',
+				'status_to_apply_to_order'        => 'pending',
+				'status_to_apply_to_subscription' => 'on-hold',
+			),
+			array(
+				'retry_after_interval'            =>  2 * DAY_IN_SECONDS,
+				'email_template_customer'         => 'WCS_Email_Customer_Payment_Retry',
+				'email_template_admin'            => 'WCS_Email_Payment_Retry',
+				'status_to_apply_to_order'        => 'pending',
+				'status_to_apply_to_subscription' => 'on-hold',
+			),
+		);
+	}
 
-		$userCc = get_user_meta($order->data['customer_id'], '_ebanx_credit_card_token', true);
+	public function scheduled_subscription_payment( $subscription_id ) {
+		global $counter;
+		$counter += 1;
+
+		if ($counter > 1) {
+			return;
+		}
+
+		$order = wcs_get_subscription( $subscription_id );
+
+		$userCc = get_user_meta( $order->data['customer_id'], '_ebanx_credit_card_token', true );
 
 		if (count($userCc)) {
 			$userCc = end($userCc);
@@ -84,7 +110,7 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
 
 			$addresses = $order->billing_address_1;
 
-			if (!empty($order->billing_address_2)) {
+			if ( ! empty( $order->billing_address_2 ) ) {
 				 $addresses .= ' - ' . $order->billing_address_2;
 			}
 
@@ -134,23 +160,30 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
 			$request = \Ebanx\EBANX::doRequest($data);
 
 			if ( 'ERROR' == $request->status ) {
-				$order->payment_failed();
+				$order->payment_complete();
+				$order->update_status( 'failed' );
 				WC_EBANX::log($request->status_message);
 			} else if ( 'SUCCESS' == $request->status ) {
-				if ( 'CO' == $request->payment->status ) {
-					$order->payment_complete();
-					$order->update_status( 'processing' );
-				} else if ( 'CA' == $response->payment->status ) {
-					$order->payment_complete();
-					$order->update_status( 'cancelled' );
-					$order->add_order_note( __( 'EBANX: Transaction Failed', 'woocommerce-gateway-ebanx' ) );
-				} else if ( 'OP' == $response->payment->status ) {
-					$order->payment_failed();
-					$order->update_status( 'pending' );
-					$order->add_order_note( __( 'EBANX: Transaction Pending', 'woocommerce-gateway-ebanx' ) );
+				switch ( $request->payment->status ) {
+					case 'CO':
+						$order->payment_complete($request->payment->hash);
+						WC_Subscriptions_Manager::activate_subscriptions_for_order( $order );
+						$order->add_order_note( __( 'EBANX: Transaction Received', 'woocommerce-gateway-ebanx' ) );
+						break;
+					case 'CA':
+						$order->cancel_order();
+						$order->add_order_note( __( 'EBANX: Transaction Failed', 'woocommerce-gateway-ebanx' ) );
+						break;
+					case 'OP':
+						$order->payment_failed();
+						$order->add_order_note( __( 'EBANX: Transaction Pending', 'woocommerce-gateway-ebanx' ) );
+						break;
 				}
+				return true;
 			}
 		}
+		WC_Subscriptions_Manager::expire_subscriptions_for_order($order);
+		return false;
 	}
 
 	/**
