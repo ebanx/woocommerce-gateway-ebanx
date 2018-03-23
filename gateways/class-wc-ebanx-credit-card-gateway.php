@@ -169,7 +169,7 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
 			$request = \Ebanx\EBANX::doRequest( $data );
 
 			WC_EBANX_Subscription_Renewal_Logger::persist( array(
-				'subscription_id' => $subscription_id
+				'subscription_id' => $subscription_id,
 				'payment_method' => $this->id,
 				'request' => $data,
 				'response' => $request, // Response from request to EBANX.
