@@ -70,7 +70,9 @@ class WC_EBANX_Database {
 	public static function truncate( $table ) {
 		global $wpdb;
 
-		$wpdb->query( $wpdb->prepare( 'TRUNCATE TABLE %s', self::tables()[ $table ] ) );
+		$table_name = self::tables()[ $table ];
+
+		$wpdb->query( $wpdb->prepare( "TRUNCATE TABLE `$table_name`", null ) );
 	}
 
 	/**
@@ -82,6 +84,8 @@ class WC_EBANX_Database {
 	public static function select( $table ) {
 		global $wpdb;
 
-		return $wpdb->get_results( $wpdb->prepare( 'SELECT * FROM %s', self::tables()[ $table ] ) );
+		$table_name = self::tables()[ $table ];
+
+		return $wpdb->get_results( $wpdb->prepare( "SELECT * FROM `$table_name`", null ) );
 	}
 }
