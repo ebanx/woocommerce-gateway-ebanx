@@ -36,7 +36,7 @@ class WC_EBANX_Api_Controller {
 	public function retrieve_logs() {
 		header( 'Content-Type: application/json' );
 
-		if ( empty( $_GET['integration_key'] ) || $_GET['integration_key'] !== $this->get_integration_key() ) {
+		if ( empty( WC_EBANX_Request::has( 'integration_key' ) ) || WC_EBANX_Request::read( 'integration_key' ) !== $this->get_integration_key() ) {
 			die( json_encode( [] ) );
 		}
 
