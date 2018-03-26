@@ -94,7 +94,7 @@ class WC_EBANX_One_Click {
 		}
 
 		try {
-			$product_id = WC_EBANX_Request::read('ebanx-product-id');
+			$product_id = WC_EBANX_Request::read( 'ebanx-product-id' );
 			$product_to_add = get_product( $product_id );
 
 			$order_params = array(
