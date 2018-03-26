@@ -101,10 +101,10 @@ class WC_EBANX_Checker {
 	 * @return bool
 	 */
 	public static function check_private_key($context) {
-		\Ebanx\Config::set(array('integrationKey' => $context->private_key, 'testMode' => $context->is_sandbox_mode));
+		$ebanx = ( new WC_EBANX_Api( $context->configs ) )->ebanx();
 		try {
-			$res = \Ebanx\Ebanx::getMerchantIntegrationProperties(array('integrationKey' => $context->private_key));
-			if ($res->status === 'SUCCESS') {
+			$isPrivateKeyValid = $ebanx->isValidPrivateKey( $context->private_key );
+			if ( $isPrivateKeyValid ) {
 				return true;
 			}
 
@@ -137,10 +137,10 @@ class WC_EBANX_Checker {
 	 * @return bool
 	 */
 	public static function check_public_key($context) {
-		\Ebanx\Config::set(array('integrationKey' => $context->private_key, 'testMode' => $context->is_sandbox_mode));
+		$ebanx = ( new WC_EBANX_Api( $context->configs ) )->ebanx();
 		try {
-			$res = \Ebanx\Ebanx::getMerchantIntegrationPublicProperties(array('public_integration_key' => $context->public_key));
-			if ($res->status === 'SUCCESS') {
+			$isPrivateKeyValid = $ebanx->isValidPublicKey( $context->public_key );
+			if ( $isPrivateKeyValid ) {
 				return true;
 			}
 
