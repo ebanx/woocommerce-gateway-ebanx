@@ -98,9 +98,9 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_New_Gateway
 		$user_cc = get_user_meta( $order->data['customer_id'], '_ebanx_credit_card_token', true );
 
 		if ( count( $user_cc ) ) {
-			$data = $this->transform_payment_data($order);
+			$data = $this->transform_payment_data( $order );
 
-			$ebanx = ( new WC_EBANX_Api($this->configs) )->ebanx();
+			$ebanx = ( new WC_EBANX_Api( $this->configs ) )->ebanx();
 
 			$response = $ebanx->creditCard()->create( $data );
 
@@ -317,7 +317,7 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_New_Gateway
 	 * This method check the informations sent by WooCommerce and if them are fine, it sends the request to EBANX API
 	 * The catch captures the errors and check the code sent by EBANX API and then show to the users the right error message
 	 *
-	 * @param  integer $order_id The ID of the order created
+	 * @param  integer $order_id The ID of the order created.
 	 *
 	 * @return array
 	 * @throws Exception Shows param missing message.
@@ -346,7 +346,7 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_New_Gateway
 	/**
 	 * Checks if the payment term is allowed based on price, country and minimal instalment value
 	 *
-	 * @param double $price Product price used as base
+	 * @param double $price Product price used as base.
 	 * @param int $instalment_number Number of instalments
 	 * @param string $country Costumer country
 	 * @return integer

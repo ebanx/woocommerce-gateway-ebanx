@@ -380,7 +380,7 @@ class WC_EBANX_New_Gateway extends WC_EBANX_Gateway {
 			$response = $this->ebanx->refund()->requestByHash( $hash, $amount, $reason );
 
 			WC_EBANX_Refund_Logger::persist([
-				'request' => [$hash, $amount, $reason],
+				'request' => [ $hash, $amount, $reason ],
 				'response' => $response, // Response from request to EBANX.
 			]);
 

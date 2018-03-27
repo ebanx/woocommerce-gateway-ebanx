@@ -103,8 +103,8 @@ class WC_EBANX_Checker {
 	public static function check_private_key($context) {
 		$ebanx = ( new WC_EBANX_Api( $context->configs ) )->ebanx();
 		try {
-			$isPrivateKeyValid = $ebanx->isValidPrivateKey( $context->private_key );
-			if ( $isPrivateKeyValid ) {
+			$is_private_key_valid = $ebanx->isValidPrivateKey( $context->private_key );
+			if ( $is_private_key_valid ) {
 				return true;
 			}
 
@@ -139,8 +139,8 @@ class WC_EBANX_Checker {
 	public static function check_public_key($context) {
 		$ebanx = ( new WC_EBANX_Api( $context->configs ) )->ebanx();
 		try {
-			$isPrivateKeyValid = $ebanx->isValidPublicKey( $context->public_key );
-			if ( $isPrivateKeyValid ) {
+			$is_public_key_valid = $ebanx->isValidPublicKey( $context->public_key );
+			if ( $is_public_key_valid ) {
 				return true;
 			}
 
