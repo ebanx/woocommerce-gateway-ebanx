@@ -1,7 +1,5 @@
 <?php
 
-require_once WC_EBANX_VENDOR_DIR . 'ebanx/ebanx/src/autoload.php';
-
 if (!defined('ABSPATH')) {
 	exit;
 }
