@@ -34,8 +34,8 @@ script:
 stages:
   - lint
   - unit
-  - admin
-  - test
+  - admin_tests
+  - customer_tests
   - release
   - deploy
 
@@ -51,7 +51,9 @@ jobs:
         - TEST_COUNTRY=
       script:
         - phpunit
-    - stage: admin
+    - stage: admin_tests
+      env:
+        - TEST_COUNTRY=
       script:
         - bash ./tests/bin/admin-test.sh
     - stage: release
