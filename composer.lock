@@ -4,20 +4,20 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "e6f9ce2ae5cc9636c296f94d4c6a02aa",
+    "content-hash": "23ae4bee6f8e5a49370a9d0870885332",
     "packages": [
         {
             "name": "ebanx/benjamin",
-            "version": "dev-master",
+            "version": "1.9.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/ebanx/benjamin.git",
-                "reference": "668b82ad99d8c79b2dcb946f80d2def94db9e997"
+                "reference": "153512f291d5507d59b136a5f4a877f2b3bff231"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ebanx/benjamin/zipball/668b82ad99d8c79b2dcb946f80d2def94db9e997",
-                "reference": "668b82ad99d8c79b2dcb946f80d2def94db9e997",
+                "url": "https://api.github.com/repos/ebanx/benjamin/zipball/153512f291d5507d59b136a5f4a877f2b3bff231",
+                "reference": "153512f291d5507d59b136a5f4a877f2b3bff231",
                 "shasum": ""
             },
             "require": {
@@ -46,7 +46,7 @@
                 "Apache-2.0"
             ],
             "description": "Business rule provider lib for plugin implementations",
-            "time": "2018-02-22T18:39:57+00:00"
+            "time": "2018-03-27T19:49:02+00:00"
         },
         {
             "name": "ebanx/ebanx",
@@ -1429,12 +1429,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/squizlabs/PHP_CodeSniffer.git",
-                "reference": "78ddbae97cac078f09928bf89e3ab9e53ad2ace0"
+                "reference": "9421d7c120b357fd823188019d003666c5a2d58d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/squizlabs/PHP_CodeSniffer/zipball/78ddbae97cac078f09928bf89e3ab9e53ad2ace0",
-                "reference": "78ddbae97cac078f09928bf89e3ab9e53ad2ace0",
+                "url": "https://api.github.com/repos/squizlabs/PHP_CodeSniffer/zipball/9421d7c120b357fd823188019d003666c5a2d58d",
+                "reference": "9421d7c120b357fd823188019d003666c5a2d58d",
                 "shasum": ""
             },
             "require": {
@@ -1472,7 +1472,7 @@
                 "phpcs",
                 "standards"
             ],
-            "time": "2018-03-16T04:26:30+00:00"
+            "time": "2018-03-26T03:04:46+00:00"
         },
         {
             "name": "symfony/yaml",
@@ -1627,8 +1627,7 @@
     "minimum-stability": "dev",
     "stability-flags": {
         "php": 20,
-        "ebanx/ebanx": 20,
-        "ebanx/benjamin": 20
+        "ebanx/ebanx": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,
