@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "23ae4bee6f8e5a49370a9d0870885332",
+    "content-hash": "7e3b5fc4409135848eca1aac29564914",
     "packages": [
         {
             "name": "ebanx/benjamin",
@@ -47,54 +47,6 @@
             ],
             "description": "Business rule provider lib for plugin implementations",
             "time": "2018-03-27T19:49:02+00:00"
-        },
-        {
-            "name": "ebanx/ebanx",
-            "version": "dev-master",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/ebanx-integration/ebanx-php.git",
-                "reference": "54e80524b31067a1868a93023b305adf97925dad"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/ebanx-integration/ebanx-php/zipball/54e80524b31067a1868a93023b305adf97925dad",
-                "reference": "54e80524b31067a1868a93023b305adf97925dad",
-                "shasum": ""
-            },
-            "require": {
-                "ext-curl": "*",
-                "php": ">=5.3.0"
-            },
-            "require-dev": {
-                "codeclimate/php-test-reporter": "dev-master",
-                "ext-xdebug": ">=2.2",
-                "phpunit/phpunit": "4.4.*"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-0": {
-                    "Ebanx": "src"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "BSD"
-            ],
-            "authors": [
-                {
-                    "name": "Gustavo Henrique Mascarenhas Machado",
-                    "email": "guhemama@gmail.com"
-                }
-            ],
-            "description": "EBANX PHP library",
-            "homepage": "https://ebanx.com",
-            "keywords": [
-                "api",
-                "ebanx",
-                "payment processing"
-            ],
-            "time": "2018-01-03T15:57:47+00:00"
         },
         {
             "name": "guzzlehttp/guzzle",
@@ -1626,8 +1578,7 @@
     "aliases": [],
     "minimum-stability": "dev",
     "stability-flags": {
-        "php": 20,
-        "ebanx/ebanx": 20
+        "php": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,
