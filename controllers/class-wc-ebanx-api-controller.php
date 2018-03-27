@@ -29,6 +29,28 @@ class WC_EBANX_Api_Controller {
 	}
 
 	/**
+	 * Responds that the plugin logs
+	 *
+	 * @return void
+	 * @throws Exception Throws missing param message.
+	 */
+	public function retrieve_logs() {
+		header( 'Content-Type: application/json' );
+
+		if ( empty( WC_EBANX_Request::has( 'integration_key' ) )
+			|| WC_EBANX_Request::read( 'integration_key' ) !== $this->config->settings['live_private_key']
+			|| WC_EBANX_Request::read( 'integration_key' ) !== $this->config->settings['sandbox_private_key'] ) {
+			die( json_encode( [] ) );
+		}
+
+		$logs = WC_EBANX_Database::select( 'logs' );
+
+		WC_EBANX_Database::truncate( 'logs' );
+
+		die( json_encode( $logs ) );
+	}
+
+	/**
 	 * Captures a credit card payment made while auto capture was disabled
 	 *
 	 * @param int $order_id
@@ -111,15 +133,6 @@ class WC_EBANX_Api_Controller {
 
 		curl_close($curl);
 		echo $html;
-	}
-
-	/**
-	 * @param $configs
-	 *
-	 * @return bool
-	 */
-	private function is_sandbox() {
-		return $this->config->settings['sandbox_mode_enabled'] === 'yes';
 	}
 
 	private function get_url($hash, $payment_type) {

@@ -31,6 +31,7 @@ define('WC_EBANX_TEMPLATES_DIR', __DIR__ . DIRECTORY_SEPARATOR . 'templates' . D
 define('WC_EBANX_VENDOR_DIR', __DIR__ . DIRECTORY_SEPARATOR . 'vendor' . DIRECTORY_SEPARATOR);
 define('WC_EBANX_ASSETS_DIR', __DIR__ . DIRECTORY_SEPARATOR . 'assets' . DIRECTORY_SEPARATOR);
 define('WC_EBANX_CONTROLLERS_DIR', __DIR__ . DIRECTORY_SEPARATOR . 'controllers' . DIRECTORY_SEPARATOR);
+define( 'WC_EBANX_DATABASE_DIR', __DIR__ . DIRECTORY_SEPARATOR . 'database' . DIRECTORY_SEPARATOR );
 
 if ( ! class_exists('WC_EBANX') ) {
 	/**
@@ -38,6 +39,9 @@ if ( ! class_exists('WC_EBANX') ) {
 	 */
 	register_activation_hook(__FILE__, array('WC_EBANX', 'activate_plugin'));
 	register_deactivation_hook(__FILE__, array('WC_EBANX', 'deactivate_plugin'));
+
+	include_once WC_EBANX_DATABASE_DIR . 'class-wc-ebanx-database.php';
+	register_activation_hook( __FILE__, array( 'WC_EBANX_Database', 'migrate' ) );
 
 	/**
 	 * WooCommerce WC_EBANX main class.
@@ -63,6 +67,11 @@ if ( ! class_exists('WC_EBANX') ) {
 		private static $my_account_endpoint = 'ebanx-saved-cards';
 
 		private static $my_account_menu_name = 'EBANX - Saved Cards';
+
+		/**
+		 * @var array $settings
+		 */
+		private $settings = [];
 
 		/**
 		 * Initialize the plugin public actions.
@@ -110,12 +119,15 @@ if ( ! class_exists('WC_EBANX') ) {
 
 			add_action('admin_footer', array('WC_EBANX_Assets', 'render'), 0);
 
+			add_action( 'woocommerce_settings_save_checkout', array( $this, 'on_before_save_settings' ), 10 );
 			add_action('woocommerce_settings_saved', array($this, 'setup_configs'), 10);
 			add_action('woocommerce_settings_saved', array($this, 'on_save_settings'), 10);
 			add_action('woocommerce_settings_saved', array($this, 'update_lead'), 20);
 			add_action('woocommerce_settings_saved', array($this, 'checker'), 20);
 
 			add_action('woocommerce_admin_order_data_after_order_details', array($this, 'ebanx_admin_order_details'), 10, 1);
+
+			add_action( 'upgrader_process_complete', array( $this, 'on_update' ), 10, 2 );
 
 			/**
 			 * Payment by Link
@@ -220,10 +232,11 @@ if ( ! class_exists('WC_EBANX') ) {
 			$this->setup_configs();
 			$api_controller = new WC_EBANX_Api_Controller($this->configs);
 
-			$ebanx_router->map('dashboard-check', array($api_controller, 'dashboard_check'));
-			$ebanx_router->map('order-received', array($api_controller, 'order_received'));
-			$ebanx_router->map('cancel-order', array($api_controller, 'cancel_order'));
-			$ebanx_router->map('capture-payment', array($api_controller, 'capture_payment'));
+			$ebanx_router->map( 'dashboard-check', array( $api_controller, 'dashboard_check' ) );
+			$ebanx_router->map( 'order-received', array( $api_controller, 'order_received' ) );
+			$ebanx_router->map( 'cancel-order', array( $api_controller, 'cancel_order' ) );
+			$ebanx_router->map( 'capture-payment', array( $api_controller, 'capture_payment' ) );
+			$ebanx_router->map( 'retrieve-logs', array( $api_controller, 'retrieve_logs' ) );
 
 			$ebanx_router->serve();
 		}
@@ -351,11 +364,20 @@ if ( ! class_exists('WC_EBANX') ) {
 		 *
 		 * @return void
 		 */
+		public function on_before_save_settings() {
+			$this->settings['before'] = $this->configs->settings;
+		}
+
 		public function on_save_settings() {
-			// Delete flag that check if the api is ok
+			$this->settings['after'] = $this->configs->settings;
+
 			delete_option('_ebanx_api_was_checked');
 
 			do_action('ebanx_settings_saved', $_POST);
+
+			WC_EBANX_Plugin_Settings_Change_Logger::persist( $this->settings );
+
+			$this->settings = [];
 		}
 
 		/**
@@ -387,6 +409,9 @@ if ( ! class_exists('WC_EBANX') ) {
 		 */
 		public static function activate_plugin() {
 			self::save_merchant_infos();
+			self::include_log_classes();
+
+			WC_EBANX_Plugin_Activate_Logger::persist();
 
 			flush_rewrite_rules();
 
@@ -401,7 +426,29 @@ if ( ! class_exists('WC_EBANX') ) {
 		public static function deactivate_plugin() {
 			flush_rewrite_rules();
 
+			self::include_log_classes();
+			WC_EBANX_Plugin_Deactivate_Logger::persist();
+
 			do_action('ebanx_deactivate_plugin');
+		}
+
+		/**
+		 * Method that will be called when plugin is updated.
+		 *
+		 * @param WP_Upgrader $plugin_upgrader
+		 * @param array       $data
+		 */
+		public function on_update( $plugin_upgrader, $data ) {
+			$ebanx_path = plugin_basename( __FILE__ );
+			$ebanx_database = new WC_EBANX_Database();
+
+			if ( 'update' === $data['action'] && 'plugin' === $data['type'] ) {
+				foreach ( $data['plugins'] as $plugin_path ) {
+					if ( $plugin_path === $ebanx_path ) {
+						$ebanx_database->migrate();
+					}
+				}
+			}
 		}
 
 		/**
@@ -418,7 +465,7 @@ if ( ! class_exists('WC_EBANX') ) {
 
 			if ($is_endpoint && !is_admin() && is_main_query() && in_the_loop() && is_account_page()) {
 				$title = __(self::$my_account_menu_name, 'woocommerce-gateway-ebanx');
-				remove_filter('the_title', array($this, 'my_account_menus_title'));
+				remove_filter( 'the_title', array( $this, 'my_account_menus_title' ) );
 			}
 
 			return $title;
@@ -460,7 +507,25 @@ if ( ! class_exists('WC_EBANX') ) {
 		}
 
 		/**
-		 * Includes.
+		 * Include log classes
+		 */
+		private static function include_log_classes() {
+			include_once WC_EBANX_SERVICES_DIR . 'class-wc-ebanx-environment.php';
+			include_once WC_EBANX_SERVICES_DIR . 'class-wc-ebanx-log.php';
+			include_once WC_EBANX_SERVICES_DIR . 'loggers/class-wc-ebanx-logger.php';
+			include_once WC_EBANX_SERVICES_DIR . 'loggers/class-wc-ebanx-plugin-activate-logger.php';
+			include_once WC_EBANX_SERVICES_DIR . 'loggers/class-wc-ebanx-plugin-deactivate-logger.php';
+			include_once WC_EBANX_SERVICES_DIR . 'loggers/class-wc-ebanx-plugin-settings-change-logger.php';
+			include_once WC_EBANX_SERVICES_DIR . 'loggers/class-wc-ebanx-refund-logger.php';
+			include_once WC_EBANX_SERVICES_DIR . 'loggers/class-wc-ebanx-notification-received-logger.php';
+			include_once WC_EBANX_SERVICES_DIR . 'loggers/class-wc-ebanx-notification-query-logger.php';
+			include_once WC_EBANX_SERVICES_DIR . 'loggers/class-wc-ebanx-payment-by-link-logger.php';
+			include_once WC_EBANX_SERVICES_DIR . 'loggers/class-wc-ebanx-checkout-logger.php';
+			include_once WC_EBANX_SERVICES_DIR . 'loggers/class-wc-ebanx-subscription-renewal-logger.php';
+		}
+
+		/**
+		 * Include all plugin classes
 		 */
 		private function includes()
 		{
@@ -482,6 +547,9 @@ if ( ! class_exists('WC_EBANX') ) {
 			// Benjamin.
 			include_once WC_EBANX_SERVICES_DIR . 'class-wc-ebanx-api.php';
 			include_once WC_EBANX_SERVICES_DIR . 'class-wc-ebanx-payment-adapter.php';
+
+			// Load plugin log classes.
+			self::include_log_classes();
 
 			// Gateways
 			include_once WC_EBANX_GATEWAYS_DIR . 'class-wc-ebanx-gateway.php';

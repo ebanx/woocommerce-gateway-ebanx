@@ -39,6 +39,103 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_New_Gateway
 				}
 			}
 		}
+
+		$this->supports = array(
+			'refunds',
+			'subscriptions',
+			'subscription_cancellation',
+			'subscription_suspension',
+			'subscription_reactivation',
+			'subscription_amount_changes',
+			'subscription_date_changes',
+			'subscription_payment_method_change',
+		);
+
+		add_action( 'wcs_default_retry_rules', [ $this, 'retryRules' ] );
+		add_action( 'woocommerce_scheduled_subscription_payment', [ $this, 'scheduled_subscription_payment' ] );
+	}
+
+	/**
+	 * @return array
+	 */
+	public function retryRules() {
+		return array(
+			array(
+				'retry_after_interval'            => DAY_IN_SECONDS,
+				'email_template_customer'         => 'WCS_Email_Customer_Payment_Retry',
+				'email_template_admin'            => 'WCS_Email_Payment_Retry',
+				'status_to_apply_to_order'        => 'pending',
+				'status_to_apply_to_subscription' => 'on-hold',
+			),
+			array(
+				'retry_after_interval'            => 2 * DAY_IN_SECONDS,
+				'email_template_customer'         => 'WCS_Email_Customer_Payment_Retry',
+				'email_template_admin'            => 'WCS_Email_Payment_Retry',
+				'status_to_apply_to_order'        => 'pending',
+				'status_to_apply_to_subscription' => 'on-hold',
+			),
+		);
+	}
+
+	/**
+	 * Process scheduled subscription payments.
+	 *
+	 * @param string $subscription_id subscription ID.
+	 *
+	 * @return bool
+	 * @throws Exception Shows missing params message.
+	 */
+	public function scheduled_subscription_payment( $subscription_id ) {
+		global $counter;
+		$counter++;
+
+		if ( 1 < $counter ) {
+			return;
+		}
+
+		$order = wcs_get_subscription( $subscription_id );
+
+		$user_cc = get_user_meta( $order->data['customer_id'], '_ebanx_credit_card_token', true );
+
+		if ( count( $user_cc ) ) {
+			$data = $this->transform_payment_data($order);
+
+			$ebanx = ( new WC_EBANX_Api($this->configs) )->ebanx();
+
+			$response = $ebanx->creditCard()->create( $data );
+
+			WC_EBANX_Subscription_Renewal_Logger::persist( array(
+				'subscription_id' => $subscription_id,
+				'payment_method' => $this->id,
+				'request' => $data,
+				'response' => $response, // Response from response to EBANX.
+			) );
+
+			if ( 'ERROR' == $response['status'] ) {
+				$order->payment_complete();
+				$order->update_status( 'failed' );
+				WC_EBANX::log( $response['status_message'] );
+			} else if ( 'SUCCESS' == $response['status'] ) {
+				switch ( $response['payment']['status'] ) {
+					case 'CO':
+						$order->payment_complete( $response['payment']['hash'] );
+						WC_Subscriptions_Manager::activate_subscriptions_for_order( $order );
+						$order->add_order_note( __( 'EBANX: Transaction Received', 'woocommerce-gateway-ebanx' ) );
+						break;
+					case 'CA':
+						$order->cancel_order();
+						$order->add_order_note( __( 'EBANX: Transaction Failed', 'woocommerce-gateway-ebanx' ) );
+						break;
+					case 'OP':
+						$order->payment_failed();
+						$order->add_order_note( __( 'EBANX: Transaction Pending', 'woocommerce-gateway-ebanx' ) );
+						break;
+				}
+				return true;
+			}
+		}
+		WC_Subscriptions_Manager::expire_subscriptions_for_order( $order );
+		return false;
 	}
 
 	/**
@@ -220,16 +317,16 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_New_Gateway
 	 * This method check the informations sent by WooCommerce and if them are fine, it sends the request to EBANX API
 	 * The catch captures the errors and check the code sent by EBANX API and then show to the users the right error message
 	 *
-	 * @param  integer $order_id    The ID of the order created
-	 * @return void
+	 * @param  integer $order_id The ID of the order created
+	 *
+	 * @return array
+	 * @throws Exception Shows param missing message.
 	 */
 	public function process_payment($order_id)
 	{
 		$has_instalments = (WC_EBANX_Request::has('ebanx_billing_instalments') || WC_EBANX_Request::has('ebanx-credit-card-installments'));
 
 		if ( $has_instalments ) {
-
-			$order = wc_get_order( $order_id );
 
 			$total_price = get_post_meta($order_id, '_order_total', true);
 			$tax_rate = 0;
@@ -249,7 +346,7 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_New_Gateway
 	/**
 	 * Checks if the payment term is allowed based on price, country and minimal instalment value
 	 *
-	 * @param doubloe $price Product price used as base
+	 * @param double $price Product price used as base
 	 * @param int $instalment_number Number of instalments
 	 * @param string $country Costumer country
 	 * @return integer

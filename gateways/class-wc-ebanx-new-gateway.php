@@ -189,6 +189,11 @@ class WC_EBANX_New_Gateway extends WC_EBANX_Gateway {
 
 				$response = $this->ebanx_gateway->create( $data );
 
+				WC_EBANX_Checkout_Logger::persist([
+					'request' => $data,
+					'response' => $response,
+				]);
+
 				$this->process_response( $response, $order );
 			} else {
 				$order->payment_complete();
@@ -374,6 +379,11 @@ class WC_EBANX_New_Gateway extends WC_EBANX_Gateway {
 
 			$response = $this->ebanx->refund()->requestByHash( $hash, $amount, $reason );
 
+			WC_EBANX_Refund_Logger::persist([
+				'request' => [$hash, $amount, $reason],
+				'response' => $response, // Response from request to EBANX.
+			]);
+
 			if ( 'SUCCESS' !== $response['status'] ) {
 				do_action( 'ebanx_process_refund_error', $order, $response );
 
@@ -546,11 +556,18 @@ class WC_EBANX_New_Gateway extends WC_EBANX_Gateway {
 	final public function process_hook( array $codes, $notification_type ) {
 		do_action( 'ebanx_before_process_hook', $codes, $notification_type );
 
+		WC_EBANX_Notification_Received_Logger::persist( [ 'data' => $_GET ] );
+
 		if ( isset( $codes['hash'] ) && ! empty( $codes['hash'] ) && isset( $codes['merchant_payment_code'] ) && ! empty( $codes['merchant_payment_code'] ) ) {
 			unset( $codes['merchant_payment_code'] );
 		}
 
 		$data = $this->ebanx->paymentInfo()->findByHash( $codes['hash'], $this->is_sandbox_mode );
+
+		WC_EBANX_Notification_Query_Logger::persist([
+			'codes' => $codes,
+			'data' => $data,
+		]);
 
 		$order_id = WC_EBANX_Helper::get_post_id_by_meta_key_and_value( '_ebanx_payment_hash', $data['payment']['hash'] );
 
