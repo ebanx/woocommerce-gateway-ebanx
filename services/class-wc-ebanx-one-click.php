@@ -94,12 +94,25 @@ class WC_EBANX_One_Click {
 		}
 
 		try {
-			$order = wc_create_order(array(
+			$product_id = WC_EBANX_Request::read( 'ebanx-product-id' );
+			$product_to_add = get_product( $product_id );
+
+			$order_params = array(
 				'status' => 'pending',
 				'customer_id' => $this->user_id,
-			));
+			);
 
-			$product_id = WC_EBANX_Request::read('ebanx-product-id');
+			if ( class_exists( 'WC_Subscription' ) && $product_to_add instanceof WC_Product_Subscription ) {
+				$subscription = new WC_Subscription( $order_params );
+				$subscription->order = wc_create_order( $order_params );
+
+				$order = $subscription->order;
+			} else {
+				$order = wc_create_order( $order_params );
+			}
+
+			$order->add_product( $product_to_add, 1 );
+
 			$user = array(
 				'email' => get_user_meta( $this->user_id, 'billing_email', true ),
 				'country' => get_user_meta( $this->user_id, 'billing_country', true ),
@@ -113,10 +126,6 @@ class WC_EBANX_One_Click {
 				'postcode' => get_user_meta( $this->user_id, 'billing_postcode', true ),
 				'phone' => get_user_meta( $this->user_id, 'billing_phone', true ),
 			);
-
-			$product_to_add = get_product( $product_id );
-
-			$order->add_product( $product_to_add, 1 );
 
 			$order->set_payment_method($this->gateway);
 
@@ -139,6 +148,13 @@ class WC_EBANX_One_Click {
 				'_order_total' => WC()->cart->total,
 			);
 
+			$order->billing_country = $user['country'];
+			$order->billing_first_name = $user['first_name'];
+			$order->billing_last_name = $user['last_name'];
+			$order->billing_email = $user['email'];
+			$order->billing_phone = $user['phone'];
+			$order->save();
+
 			foreach ($meta as $meta_key => $meta_value) {
 				update_post_meta($order->id, $meta_key, $meta_value );
 			}
@@ -155,9 +171,14 @@ class WC_EBANX_One_Click {
 				throw new Exception($message);
 			}
 
+			if ( isset( $subscription ) ) {
+				$subscription->save();
+				$subscription->update_status( 'active' );
+			}
+
 			$this->restore_cart();
 
-			wp_safe_redirect($response['redirect']);
+			wp_safe_redirect( $response['redirect'] );
 			exit;
 		}
 		catch (Exception $e) {
