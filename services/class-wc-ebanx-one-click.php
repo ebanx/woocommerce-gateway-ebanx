@@ -102,9 +102,12 @@ class WC_EBANX_One_Click {
 				'customer_id' => $this->user_id,
 			);
 
-			if ( class_exists( 'WC_Subscription' ) && $product_to_add instanceof WC_Product_Subscription ) {
+			if ( class_exists( 'WC_Subscription' ) && strpos( get_class( $product_to_add ), 'Subscription' ) !== false ) {
 				$subscription = new WC_Subscription( $order_params );
 				$subscription->order = wc_create_order( $order_params );
+				$subscription->save();
+
+				update_post_meta( $subscription->id, '_customer_user', $this->user_id );
 
 				$order = $subscription->order;
 			} else {
@@ -155,8 +158,8 @@ class WC_EBANX_One_Click {
 			$order->billing_phone = $user['phone'];
 			$order->save();
 
-			foreach ($meta as $meta_key => $meta_value) {
-				update_post_meta($order->id, $meta_key, $meta_value );
+			foreach ( $meta as $meta_key => $meta_value ) {
+				update_post_meta( $order->id, $meta_key, $meta_value );
 			}
 
 			$order->calculate_totals();
