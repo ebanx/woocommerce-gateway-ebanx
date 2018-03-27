@@ -34,7 +34,7 @@ script:
 stages:
   - lint
   - unit
-  - admin tests
+  - admin-tests
   - test
   - release
   - deploy
