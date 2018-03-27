@@ -73,7 +73,7 @@ class WC_EBANX_Api_Controller {
 	/**
 	 * Cancels an open cash payment order with "On hold" status
 	 *
-	 * @param int $order_id
+	 * @param int    $order_id
 	 * @param string $user_id
 	 *
 	 * @return void
