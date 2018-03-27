@@ -38,8 +38,8 @@ class WC_EBANX_Api_Controller {
 		header( 'Content-Type: application/json' );
 
 		if ( empty( WC_EBANX_Request::has( 'integration_key' ) )
-			|| WC_EBANX_Request::read( 'integration_key' ) !== $this->config->settings['live_private_key']
-			|| WC_EBANX_Request::read( 'integration_key' ) !== $this->config->settings['sandbox_private_key'] ) {
+			|| ( WC_EBANX_Request::read( 'integration_key' ) !== $this->config->settings['live_private_key']
+			&& WC_EBANX_Request::read( 'integration_key' ) !== $this->config->settings['sandbox_private_key'] ) ) {
 			die( json_encode( [] ) );
 		}
 
@@ -94,6 +94,11 @@ class WC_EBANX_Api_Controller {
 
 		try {
 			$response = $ebanx->cancelPayment()->request($hash);
+
+			WC_EBANX_Cancel_Logger::persist([
+				'paymentHash' => $hash,
+				'$response' => $response,
+			]);
 
 			if ($response['status'] === 'SUCCESS') {
 				$order->update_status('cancelled', __('EBANX: Cancelled by customer', 'woocommerce-gateway-ebanx'));

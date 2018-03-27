@@ -522,6 +522,7 @@ if ( ! class_exists('WC_EBANX') ) {
 			include_once WC_EBANX_SERVICES_DIR . 'loggers/class-wc-ebanx-payment-by-link-logger.php';
 			include_once WC_EBANX_SERVICES_DIR . 'loggers/class-wc-ebanx-checkout-logger.php';
 			include_once WC_EBANX_SERVICES_DIR . 'loggers/class-wc-ebanx-subscription-renewal-logger.php';
+			include_once WC_EBANX_SERVICES_DIR . 'loggers/class-wc-ebanx-cancel-logger.php';
 		}
 
 		/**
