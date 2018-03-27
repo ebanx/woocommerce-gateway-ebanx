@@ -29,6 +29,25 @@ class WC_EBANX_Api_Controller {
 	}
 
 	/**
+	 * Responds that the plugin logs
+	 *
+	 * @return void
+	 */
+	public function retrieve_logs() {
+		header( 'Content-Type: application/json' );
+
+		if ( empty( WC_EBANX_Request::has( 'integration_key' ) ) || WC_EBANX_Request::read( 'integration_key' ) !== $this->get_integration_key() ) {
+			die( json_encode( [] ) );
+		}
+
+		$logs = WC_EBANX_Database::select( 'logs' );
+
+		WC_EBANX_Database::truncate( 'logs' );
+
+		die( json_encode( $logs ) );
+	}
+
+	/**
 	 * Captures a credit card payment made while auto capture was disabled
 	 *
 	 * @return void
@@ -36,9 +55,9 @@ class WC_EBANX_Api_Controller {
 	public function capture_payment($order_id) {
 		$order = new WC_Order( $order_id );
 
-		if (!current_user_can('administrator')
-		    || $order->get_status() !== 'on-hold'
-		    || strpos($order->get_payment_method(), 'ebanx-credit-card') !== 0
+		if ( ! current_user_can( 'administrator' )
+			|| $order->get_status() !== 'on-hold'
+			|| strpos( $order->get_payment_method(), 'ebanx-credit-card' ) !== 0
 		) {
 			wp_redirect( get_site_url() );
 			return;
@@ -69,12 +88,12 @@ class WC_EBANX_Api_Controller {
 				WC_EBANX_Flash::add_message(__('Payment ' . $order_id . ' was captured successfully.', 'woocommerce-gateway-ebanx'), 'warning', true);
 			}
 		}
-	else if ($response->payment->status == 'CA') {
+		else if ( 'CA' == $response->payment->status ) {
 			$order->payment_complete();
 			$order->update_status('failed');
 			$order->add_order_note(__('EBANX: Transaction Failed', 'woocommerce-gateway-ebanx'));
 		}
-	else if ($response->payment->status == 'OP') {
+		else if ( 'OP' == $response->payment->status ) {
 			$order->update_status('pending');
 			$order->add_order_note(__('EBANX: Transaction Pending', 'woocommerce-gateway-ebanx'));
 		}

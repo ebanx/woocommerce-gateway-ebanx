@@ -68,7 +68,7 @@ abstract class WC_EBANX_Helper
 		$meta = $wpdb->get_results("SELECT * FROM `".$wpdb->postmeta."` WHERE meta_key='".esc_sql($key)."' AND meta_value='".esc_sql($value)."'");
 		if (is_array($meta) && !empty($meta) && isset($meta[0])) {
 			$meta = $meta[0];
-		}		
+		}
 		if (is_object($meta)) {
 			return $meta->post_id;
 		}
@@ -76,4 +76,17 @@ abstract class WC_EBANX_Helper
 			return false;
 		}
 	}
+
+	/**
+	 * Verifies if user cart has any subscription product
+	 *
+	 * @return bool
+	 */
+	public static function checkout_contains_subscription() {
+		if ( class_exists( 'WC_Subscriptions_Cart' ) ) {
+			return WC_Subscriptions_Cart::cart_contains_subscription();
+		}
+		return false;
+	}
+
 }
