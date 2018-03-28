@@ -4,7 +4,10 @@ if (!defined('ABSPATH')) {
 	exit;
 }
 
-class WC_EBANX_Efectivo_Gateway extends WC_EBANX_Gateway
+/**
+ * Class WC_EBANX_Efectivo_Gateway
+ */
+class WC_EBANX_Efectivo_Gateway extends WC_EBANX_New_Gateway
 {
 	/**
 	 * Constructor
@@ -27,10 +30,11 @@ class WC_EBANX_Efectivo_Gateway extends WC_EBANX_Gateway
 	 * This method always will return false, it doesn't need to show to the customers
 	 *
 	 * @return boolean Always return false
+	 * @throws Exception Throws missing param message.
 	 */
 	public function is_available()
 	{
-		return parent::is_available() && $this->getTransactionAddress('country') == WC_EBANX_Constants::COUNTRY_ARGENTINA;
+		return parent::is_available() && WC_EBANX_Constants::COUNTRY_ARGENTINA === $this->get_transaction_address( 'country' );
 	}
 
 	/**
@@ -48,7 +52,7 @@ class WC_EBANX_Efectivo_Gateway extends WC_EBANX_Gateway
 	 */
 	public function payment_fields()
 	{
-		$message = $this->get_sandbox_form_message( $this->getTransactionAddress( 'country' ) );
+		$message = $this->get_sandbox_form_message( $this->get_transaction_address( 'country' ) );
 		wc_get_template(
 			'sandbox-checkout-alert.php',
 			array(
@@ -126,19 +130,21 @@ class WC_EBANX_Efectivo_Gateway extends WC_EBANX_Gateway
 	 * Mount the data to send to EBANX API
 	 *
 	 * @param  WC_Order $order
-	 * @return array
-	 * @throws Exception
+	 * @return \Ebanx\Benjamin\Models\Payment
+	 * @throws Exception Throws missing parameter exception.
 	 */
-	protected function request_data($order)
-	{
+	protected function transform_payment_data( $order ) {
 		if ( ! WC_EBANX_Request::has('efectivo')
 			 || ! in_array(WC_EBANX_Request::read('efectivo'), WC_EBANX_Constants::$VOUCHERS_EFECTIVO_ALLOWED)) {
 			throw new Exception('MISSING-VOUCHER');
 		}
 
-		$data = parent::request_data($order);
+		$data = WC_EBANX_Payment_Adapter::transform( $order, $this->configs, $this->names );
 
-		$data['payment']['payment_type_code'] = WC_EBANX_Request::read('efectivo');
+		$data->person->documentType = WC_EBANX_Request::read( $this->names['ebanx_billing_argentina_document_type'], null );
+
+		$efectivo_gateway = WC_EBANX_Request::read( 'efectivo' );
+		$this->ebanx_gateway = 'cupon' === $efectivo_gateway ? $this->ebanx->otrosCupones() : $this->ebanx->{$efectivo_gateway}();
 
 		return $data;
 	}

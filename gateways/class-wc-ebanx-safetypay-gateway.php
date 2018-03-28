@@ -37,10 +37,11 @@ class WC_EBANX_Safetypay_Gateway extends WC_EBANX_Redirect_Gateway
 	 * Check if the method is available to show to the users
 	 *
 	 * @return boolean
+	 * @throws Exception Throws missing param message.
 	 */
 	public function is_available()
 	{
-		$country = $this->getTransactionAddress('country');
+		$country = $this->get_transaction_address( 'country' );
 		$is_peru = $country == WC_EBANX_Constants::COUNTRY_PERU;
 		$is_ecuador = $country == WC_EBANX_Constants::COUNTRY_ECUADOR;
 
@@ -55,10 +56,12 @@ class WC_EBANX_Safetypay_Gateway extends WC_EBANX_Redirect_Gateway
 	 * Check if the currency is processed by EBANX
 	 *
 	 * @param  string $currency Possible currencies: PEN for PERU and globals for ECUADOR
-	 * @return boolean          Return true if EBANX process the currency
+	 *
+	 * @return boolean          Return true if EBANX process the currency.
+	 * @throws Exception        Throws missing param message.
 	 */
 	public function ebanx_process_merchant_currency($currency) {
-		$country = $this->getTransactionAddress('country');
+		$country = $this->get_transaction_address( 'country' );
 
 		switch ($country) {
 			case WC_EBANX_Constants::COUNTRY_PERU:
@@ -87,10 +90,12 @@ class WC_EBANX_Safetypay_Gateway extends WC_EBANX_Redirect_Gateway
 
 	/**
 	 * The HTML structure on checkout page
+	 *
+	 * @throws Exception Throws missing param message.
 	 */
 	public function payment_fields()
 	{
-		$message = $this->get_sandbox_form_message( $this->getTransactionAddress( 'country' ) );
+		$message = $this->get_sandbox_form_message( $this->get_transaction_address( 'country' ) );
 		wc_get_template(
 			'sandbox-checkout-alert.php',
 			array(
@@ -116,26 +121,26 @@ class WC_EBANX_Safetypay_Gateway extends WC_EBANX_Redirect_Gateway
 			WC_EBANX::get_templates_path()
 		);
 
-		$is_peru = $this->getTransactionAddress('country') === WC_EBANX_Constants::COUNTRY_PERU;
+		$is_peru = WC_EBANX_Constants::COUNTRY_PERU === $this->get_transaction_address( 'country' );
 
 		parent::checkout_rate_conversion(WC_EBANX_Constants::CURRENCY_CODE_PEN, $is_peru);
 	}
 
 	/**
-	 * Mount the data to send to EBANX API
+	 * @param WC_Order $order
 	 *
-	 * @param  WC_Order $order
-	 * @return array
+	 * @return \Ebanx\Benjamin\Models\Payment
+	 * @throws Exception Throw parameter missing exception.
 	 */
-	protected function request_data($order)
-	{
-		if (!isset($_POST['safetypay']) || !in_array($_POST['safetypay'], WC_EBANX_Constants::$TYPES_SAFETYPAY_ALLOWED)) {
+	protected function transform_payment_data( $order ) {
+		if ( ! WC_EBANX_Request::has( 'safetypay' ) || ! in_array( WC_EBANX_Request::read( 'safetypay' ), WC_EBANX_Constants::$safetypay_allowed_types ) ) {
 			throw new Exception('INVALID-SAFETYPAY-TYPE');
 		}
 
-		$this->api_name = 'safetypay-' . $_POST['safetypay'];
-		$data = parent::request_data($order);
-		$data['payment']['payment_type_code'] = $this->api_name;
+		$data = WC_EBANX_Payment_Adapter::transform( $order, $this->configs, $this->names );
+
+		$safetypay_gateway = 'safetypay' . WC_EBANX_Request::read( 'safetypay' );
+		$this->ebanx_gateway = $this->ebanx->{$safetypay_gateway}();
 
 		return $data;
 	}

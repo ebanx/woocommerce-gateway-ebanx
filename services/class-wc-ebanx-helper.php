@@ -58,7 +58,7 @@ abstract class WC_EBANX_Helper
 
 	/**
 	 * Get post id from meta key and value
-	 * 
+	 *
 	 * @param string $key
 	 * @param mixed $value
 	 * @return int|bool
@@ -78,8 +78,25 @@ abstract class WC_EBANX_Helper
 	}
 
 	/**
+	 * @param array $array
+	 *
+	 * @return object
+	 */
+	public static function array_to_object( $array ) {
+		foreach ( $array as $key => $value ) {
+			if ( is_array( $value ) ) {
+				$array[ $key ] = static::array_to_object( $value );
+			}
+		}
+		return (object) $array;
+	}
+
+	/*
 	 * Verifies if user cart has any subscription product
 	 *
+	 * @return bool
+	 */
+	/**
 	 * @return bool
 	 */
 	public static function checkout_contains_subscription() {

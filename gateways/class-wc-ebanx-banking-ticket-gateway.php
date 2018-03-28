@@ -4,7 +4,10 @@ if (!defined('ABSPATH')) {
 	exit;
 }
 
-class WC_EBANX_Banking_Ticket_Gateway extends WC_EBANX_Gateway
+/**
+ * Class WC_EBANX_Banking_Ticket_Gateway
+ */
+class WC_EBANX_Banking_Ticket_Gateway extends WC_EBANX_New_Gateway
 {
 	/**
 	 * Constructor
@@ -22,6 +25,8 @@ class WC_EBANX_Banking_Ticket_Gateway extends WC_EBANX_Gateway
 
 		parent::__construct();
 
+		$this->ebanx_gateway = $this->ebanx->boleto();
+
 		$this->enabled = is_array($this->configs->settings['brazil_payment_methods']) ? in_array($this->id, $this->configs->settings['brazil_payment_methods']) ? 'yes' : false : false;
 	}
 
@@ -29,10 +34,11 @@ class WC_EBANX_Banking_Ticket_Gateway extends WC_EBANX_Gateway
 	 * Check if the method is available to show to the users
 	 *
 	 * @return boolean
+	 * @throws Exception Throws missing param message.
 	 */
 	public function is_available()
 	{
-		return parent::is_available() && $this->getTransactionAddress('country') == WC_EBANX_Constants::COUNTRY_BRAZIL;
+		return parent::is_available() && WC_EBANX_Constants::COUNTRY_BRAZIL === $this->get_transaction_address( 'country' );
 	}
 
 	/**
@@ -50,7 +56,7 @@ class WC_EBANX_Banking_Ticket_Gateway extends WC_EBANX_Gateway
 	 */
 	public function payment_fields()
 	{
-		$message = $this->get_sandbox_form_message( $this->getTransactionAddress( 'country' ) );
+		$message = $this->get_sandbox_form_message( $this->get_transaction_address( 'country' ) );
 		wc_get_template(
 			'sandbox-checkout-alert.php',
 			array(

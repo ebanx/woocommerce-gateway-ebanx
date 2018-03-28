@@ -60,7 +60,7 @@ class WC_EBANX_Hooks {
 				$codes['merchant_payment_code'] = WC_EBANX_Request::read('merchant_payment_code');
 			}
 
-			$ebanx = new WC_EBANX_Gateway();
+			$ebanx = new WC_EBANX_New_Gateway();
 			$order = $ebanx->process_hook( $codes, WC_EBANX_Request::read('notification_type') );
 
 			if ( self::is_url_response() ) {

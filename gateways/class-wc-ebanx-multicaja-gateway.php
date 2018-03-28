@@ -21,5 +21,7 @@ class WC_EBANX_Multicaja_Gateway extends WC_EBANX_Flow_Gateway
 		$this->flow_payment_method = 'multicaja';
 
 		parent::__construct();
+
+		$this->ebanx_gateway = $this->ebanx->multicaja();
 	}
 }

@@ -20,6 +20,8 @@ class WC_EBANX_Eft_Gateway extends WC_EBANX_Redirect_Gateway
 
 		parent::__construct();
 
+		$this->ebanx_gateway = $this->ebanx->eft();
+
 		$this->enabled = is_array($this->configs->settings['colombia_payment_methods']) ? in_array($this->id, $this->configs->settings['colombia_payment_methods']) ? 'yes' : false : false;
 	}
 
@@ -27,10 +29,11 @@ class WC_EBANX_Eft_Gateway extends WC_EBANX_Redirect_Gateway
 	 * Check if the method is available to show to the users
 	 *
 	 * @return boolean
+	 * @throws Exception Throws missing param message.
 	 */
 	public function is_available()
 	{
-		return parent::is_available() && $this->getTransactionAddress('country') == WC_EBANX_Constants::COUNTRY_COLOMBIA;
+		return parent::is_available() && WC_EBANX_Constants::COUNTRY_COLOMBIA === $this->get_transaction_address( 'country' );
 	}
 
 	/**
@@ -48,7 +51,7 @@ class WC_EBANX_Eft_Gateway extends WC_EBANX_Redirect_Gateway
 	 */
 	public function payment_fields()
 	{
-		$message = $this->get_sandbox_form_message( $this->getTransactionAddress( 'country' ) );
+		$message = $this->get_sandbox_form_message( $this->get_transaction_address( 'country' ) );
 		wc_get_template(
 			'sandbox-checkout-alert.php',
 			array(
@@ -96,22 +99,21 @@ class WC_EBANX_Eft_Gateway extends WC_EBANX_Redirect_Gateway
 	}
 
 	/**
-	 * Mount the data to send to EBANX API
+	 * @param WC_Order $order
 	 *
-	 * @param  WC_Order $order
-	 * @return array
+	 * @return \Ebanx\Benjamin\Models\Payment
+	 * @throws Exception Throws missing parameter exception.
 	 */
-	protected function request_data($order)
-	{
+	protected function transform_payment_data( $order ) {
 		if ( ! WC_EBANX_Request::has('eft')
 			|| ! array_key_exists(WC_EBANX_Request::read('eft'), WC_EBANX_Constants::$BANKS_EFT_ALLOWED[WC_EBANX_Constants::COUNTRY_COLOMBIA])) {
 			throw new Exception('MISSING-BANK-NAME');
 		}
 
-		$data = parent::request_data($order);
+		$data = WC_EBANX_Payment_Adapter::transform( $order, $this->configs, $this->names );
 
-		$data['payment']['eft_code']          = WC_EBANX_Request::read('eft');
-		$data['payment']['payment_type_code'] = $this->api_name;
+		// phpcs:ignore WordPress.NamingConventions.ValidVariableName
+		$data->bankCode = WC_EBANX_Request::read( 'eft' );
 
 		return $data;
 	}

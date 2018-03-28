@@ -522,6 +522,7 @@ if ( ! class_exists('WC_EBANX') ) {
 			include_once WC_EBANX_SERVICES_DIR . 'loggers/class-wc-ebanx-payment-by-link-logger.php';
 			include_once WC_EBANX_SERVICES_DIR . 'loggers/class-wc-ebanx-checkout-logger.php';
 			include_once WC_EBANX_SERVICES_DIR . 'loggers/class-wc-ebanx-subscription-renewal-logger.php';
+			include_once WC_EBANX_SERVICES_DIR . 'loggers/class-wc-ebanx-cancel-logger.php';
 		}
 
 		/**
@@ -544,11 +545,16 @@ if ( ! class_exists('WC_EBANX') ) {
 			include_once WC_EBANX_SERVICES_DIR . 'class-wc-ebanx-cancel-order.php';
 			include_once WC_EBANX_SERVICES_DIR . 'class-wc-ebanx-capture-payment.php';
 
+			// Benjamin.
+			include_once WC_EBANX_SERVICES_DIR . 'class-wc-ebanx-api.php';
+			include_once WC_EBANX_SERVICES_DIR . 'class-wc-ebanx-payment-adapter.php';
+
 			// Load plugin log classes.
 			self::include_log_classes();
 
 			// Gateways
 			include_once WC_EBANX_GATEWAYS_DIR . 'class-wc-ebanx-gateway.php';
+			include_once WC_EBANX_GATEWAYS_DIR . 'class-wc-ebanx-new-gateway.php';
 			include_once WC_EBANX_GATEWAYS_DIR . 'class-wc-ebanx-redirect-gateway.php';
 			include_once WC_EBANX_GATEWAYS_DIR . 'class-wc-ebanx-flow-gateway.php';
 			include_once WC_EBANX_GATEWAYS_DIR . 'class-wc-ebanx-global-gateway.php';
@@ -738,14 +744,10 @@ if ( ! class_exists('WC_EBANX') ) {
 				&& ! $checkout_url ) {
 
 				$this->setup_configs();
-				$config = array(
-					'integrationKey' => $this->private_key,
-					'testMode'       => $this->is_sandbox_mode,
-				);
 
 				update_post_meta($order->id, '_ebanx_instalments', WC_EBANX_Request::read('ebanx_instalments', 1));
 
-				WC_EBANX_Payment_By_Link::create($post_id, $config);
+				WC_EBANX_Payment_By_Link::create( $post_id );
 			}
 			return;
 		}

@@ -4,7 +4,10 @@ if (!defined('ABSPATH')) {
 	exit;
 }
 
-class WC_EBANX_Spei_Gateway extends WC_EBANX_Gateway
+/**
+ * Class WC_EBANX_Spei_Gateway
+ */
+class WC_EBANX_Spei_Gateway extends WC_EBANX_New_Gateway
 {
 	/**
 	 * Constructor
@@ -20,6 +23,8 @@ class WC_EBANX_Spei_Gateway extends WC_EBANX_Gateway
 
 		parent::__construct();
 
+		$this->ebanx_gateway = $this->ebanx->spei();
+
 		$this->enabled = is_array($this->configs->settings['mexico_payment_methods']) ? in_array($this->id, $this->configs->settings['mexico_payment_methods']) ? 'yes' : false : false;
 	}
 
@@ -27,10 +32,11 @@ class WC_EBANX_Spei_Gateway extends WC_EBANX_Gateway
 	 * This method always will return false, it doesn't need to show to the customers
 	 *
 	 * @return boolean Always return false
+	 * @throws Exception Throws missing param message.
 	 */
 	public function is_available()
 	{
-		return parent::is_available() && $this->getTransactionAddress('country') == WC_EBANX_Constants::COUNTRY_MEXICO;
+		return parent::is_available() && WC_EBANX_Constants::COUNTRY_MEXICO === $this->get_transaction_address( 'country' );
 	}
 
 	/**
@@ -48,7 +54,7 @@ class WC_EBANX_Spei_Gateway extends WC_EBANX_Gateway
 	 */
 	public function payment_fields()
 	{
-		$message = $this->get_sandbox_form_message( $this->getTransactionAddress( 'country' ) );
+		$message = $this->get_sandbox_form_message( $this->get_transaction_address( 'country' ) );
 		wc_get_template(
 			'sandbox-checkout-alert.php',
 			array(

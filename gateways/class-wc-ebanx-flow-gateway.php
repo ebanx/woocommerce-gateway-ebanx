@@ -26,10 +26,11 @@ abstract class WC_EBANX_Flow_Gateway extends WC_EBANX_Redirect_Gateway
 	 * Check if the method is available to show to the users
 	 *
 	 * @return boolean
+	 * @throws Exception Throws missing param message.
 	 */
 	public function is_available()
 	{
-		return parent::is_available() && $this->getTransactionAddress('country') === WC_EBANX_Constants::COUNTRY_CHILE;
+		return parent::is_available() && WC_EBANX_Constants::COUNTRY_CHILE === $this->get_transaction_address( 'country' );
 	}
 
 	/**
@@ -47,7 +48,7 @@ abstract class WC_EBANX_Flow_Gateway extends WC_EBANX_Redirect_Gateway
 	 */
 	public function payment_fields()
 	{
-		$message = $this->get_sandbox_form_message( $this->getTransactionAddress( 'country' ) );
+		$message = $this->get_sandbox_form_message( $this->get_transaction_address( 'country' ) );
 		wc_get_template(
 			'sandbox-checkout-alert.php',
 			array(

@@ -20,6 +20,8 @@ class WC_EBANX_Tef_Gateway extends WC_EBANX_Redirect_Gateway
 
 		parent::__construct();
 
+		$this->ebanx_gateway = $this->ebanx->tef();
+
 		$this->enabled = is_array($this->configs->settings['brazil_payment_methods']) ? in_array($this->id, $this->configs->settings['brazil_payment_methods']) ? 'yes' : false : false;
 	}
 
@@ -27,10 +29,11 @@ class WC_EBANX_Tef_Gateway extends WC_EBANX_Redirect_Gateway
 	 * Check if the method is available to show to the users
 	 *
 	 * @return boolean
+	 * @throws Exception Throws missing parameter message.
 	 */
 	public function is_available()
 	{
-		return parent::is_available() && $this->getTransactionAddress('country') == WC_EBANX_Constants::COUNTRY_BRAZIL;
+		return parent::is_available() && WC_EBANX_Constants::COUNTRY_BRAZIL === $this->get_transaction_address( 'country' );
 	}
 
 	/**
@@ -48,7 +51,7 @@ class WC_EBANX_Tef_Gateway extends WC_EBANX_Redirect_Gateway
 	 */
 	public function payment_fields()
 	{
-		$message = $this->get_sandbox_form_message( $this->getTransactionAddress( 'country' ) );
+		$message = $this->get_sandbox_form_message( $this->get_transaction_address( 'country' ) );
 		wc_get_template(
 			'sandbox-checkout-alert.php',
 			array(
@@ -102,7 +105,9 @@ class WC_EBANX_Tef_Gateway extends WC_EBANX_Redirect_Gateway
 	 *
 	 * @param  WC_Order $order The order created
 	 * @param  Object $request The request from EBANX success response
+	 *
 	 * @return void
+	 * @throws Exception Throw parameter missing exception.
 	 */
 	protected function save_order_meta_fields($order, $request)
 	{
@@ -115,18 +120,20 @@ class WC_EBANX_Tef_Gateway extends WC_EBANX_Redirect_Gateway
 	 * Mount the data to send to EBANX API
 	 *
 	 * @param  WC_Order $order
-	 * @return array
+	 *
+	 * @return \Ebanx\Benjamin\Models\Payment
+	 * @throws Exception Throw parameter missing exception.
 	 */
-	protected function request_data($order)
-	{
+	protected function transform_payment_data( $order ) {
 		if ( ! WC_EBANX_Request::has('tef')
 			|| ! in_array(WC_EBANX_Request::read('tef'), WC_EBANX_Constants::$BANKS_TEF_ALLOWED[WC_EBANX_Constants::COUNTRY_BRAZIL])) {
 			throw new Exception('MISSING-BANK-NAME');
 		}
 
-		$data = parent::request_data($order);
+		$data = parent::transform_payment_data( $order );
 
-		$data['payment']['payment_type_code'] = WC_EBANX_Request::read('tef');
+		// phpcs:ignore WordPress.NamingConventions.ValidVariableName
+		$data->bankCode = WC_EBANX_Request::read( 'tef' );
 
 		return $data;
 	}
