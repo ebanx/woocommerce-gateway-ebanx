@@ -4,7 +4,10 @@ if (!defined('ABSPATH')) {
 	exit;
 }
 
-class WC_EBANX_Pagoefectivo_Gateway extends WC_EBANX_Gateway
+/**
+ * Class WC_EBANX_Pagoefectivo_Gateway
+ */
+class WC_EBANX_Pagoefectivo_Gateway extends WC_EBANX_New_Gateway
 {
 	/**
 	 * Constructor
@@ -20,6 +23,8 @@ class WC_EBANX_Pagoefectivo_Gateway extends WC_EBANX_Gateway
 
 		parent::__construct();
 
+		$this->ebanx_gateway = $this->ebanx->pagoEfectivo();
+
 		$this->enabled = is_array($this->configs->settings['peru_payment_methods']) ? in_array($this->id, $this->configs->settings['peru_payment_methods']) ? 'yes' : false : false;
 	}
 
@@ -27,10 +32,11 @@ class WC_EBANX_Pagoefectivo_Gateway extends WC_EBANX_Gateway
 	 * This method always will return false, it doesn't need to show to the customers
 	 *
 	 * @return boolean Always return false
+	 * @throws Exception Throws missing param message.
 	 */
 	public function is_available()
 	{
-		return parent::is_available() && $this->getTransactionAddress('country') == WC_EBANX_Constants::COUNTRY_PERU;
+		return parent::is_available() && WC_EBANX_Constants::COUNTRY_PERU === $this->get_transaction_address( 'country' );
 	}
 
 	/**
@@ -48,7 +54,7 @@ class WC_EBANX_Pagoefectivo_Gateway extends WC_EBANX_Gateway
 	 */
 	public function payment_fields()
 	{
-		$message = $this->get_sandbox_form_message( $this->getTransactionAddress( 'country' ) );
+		$message = $this->get_sandbox_form_message( $this->get_transaction_address( 'country' ) );
 		wc_get_template(
 			'sandbox-checkout-alert.php',
 			array(
@@ -128,35 +134,20 @@ class WC_EBANX_Pagoefectivo_Gateway extends WC_EBANX_Gateway
 		);
 	}
 
+
 	/**
-	 * Process the response of request from EBANX API
+	 * @param array    $response
+	 * @param WC_Order $order
 	 *
-	 * @param  Object $request The result of request
-	 * @param  WC_Order $order   The order created
-	 * @return void
+	 * @throws Exception Throws parameter missing exception.
+	 * @throws WC_EBANX_Payment_Exception Throws error message.
 	 */
-	protected function process_response($request, $order)
-	{
-		if ($request->status == 'ERROR' || !$request->payment->cip_url) {
-			return $this->process_response_error($request, $order);
+	protected function process_response( $response, $order ) {
+		if ( 'SUCCESS' !== $response['status'] || ! $response['payment']['cip_url'] ) {
+			$this->process_response_error( $response, $order );
 		}
-		$request->redirect_url = $request->payment->cip_url;
+		$response['redirect_url'] = $response['payment']['cip_url'];
 
-		return parent::process_response($request, $order);
-	}
-
-	/**
-	 * Mount the data to send to EBANX API
-	 *
-	 * @param  WC_Order $order
-	 * @return array
-	 */
-	protected function request_data($order)
-	{
-		$data = parent::request_data($order);
-
-		$data['payment']['payment_type_code'] = $this->api_name;
-
-		return $data;
+		parent::process_response( $response, $order );
 	}
 }

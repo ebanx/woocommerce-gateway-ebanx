@@ -2,10 +2,10 @@
 
 import R from 'ramda';
 import Faker from 'faker';
-import defaults from '../../../defaults';
-import {assertUrlStatus, wrapOrderAssertations} from '../../../utils';
-import Woocommerce from '../../lib/operator';
-import Pay from "../../../pay/lib/operator";
+import defaults from '../../../../defaults';
+import {assertUrlStatus, wrapOrderAssertations} from '../../../../utils';
+import Woocommerce from '../../../lib/operator';
+import Pay from "../../../../pay/lib/operator";
 
 Faker.locale = 'es_MX';
 

@@ -101,10 +101,10 @@ class WC_EBANX_Checker {
 	 * @return bool
 	 */
 	public static function check_private_key($context) {
-		\Ebanx\Config::set(array('integrationKey' => $context->private_key, 'testMode' => $context->is_sandbox_mode));
+		$ebanx = ( new WC_EBANX_Api( $context->configs ) )->ebanx();
 		try {
-			$res = \Ebanx\Ebanx::getMerchantIntegrationProperties(array('integrationKey' => $context->private_key));
-			if ($res->status === 'SUCCESS') {
+			$is_private_key_valid = $ebanx->isValidPrivateKey( $context->private_key );
+			if ( $is_private_key_valid ) {
 				return true;
 			}
 
@@ -137,10 +137,10 @@ class WC_EBANX_Checker {
 	 * @return bool
 	 */
 	public static function check_public_key($context) {
-		\Ebanx\Config::set(array('integrationKey' => $context->private_key, 'testMode' => $context->is_sandbox_mode));
+		$ebanx = ( new WC_EBANX_Api( $context->configs ) )->ebanx();
 		try {
-			$res = \Ebanx\Ebanx::getMerchantIntegrationPublicProperties(array('public_integration_key' => $context->public_key));
-			if ($res->status === 'SUCCESS') {
+			$is_public_key_valid = $ebanx->isValidPublicKey( $context->public_key );
+			if ( $is_public_key_valid ) {
 				return true;
 			}
 
@@ -235,9 +235,9 @@ class WC_EBANX_Checker {
 	 */
 	public static function check_currency($context)
 	{
-		if (!in_array(get_woocommerce_currency(), WC_EBANX_Constants::$CURRENCIES_CODES_ALLOWED)) {
+		if ( ! in_array( get_woocommerce_currency(), WC_EBANX_Constants::$allowed_currency_codes ) ) {
 			$message = __('EBANX Gateway - Does not support the Currency you have set on the WooCommerce settings. To process with the EBANX plugin choose one of the following: %1$s.', 'woocommerce-gateway-ebanx');
-			$message = sprintf($message, implode(', ', WC_EBANX_Constants::$CURRENCIES_CODES_ALLOWED));
+			$message = sprintf( $message, implode( ', ', WC_EBANX_Constants::$allowed_currency_codes ) );
 
 			$context->notices
 				->with_message($message)

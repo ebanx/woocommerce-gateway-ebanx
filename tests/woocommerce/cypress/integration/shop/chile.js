@@ -2,9 +2,9 @@
 
 import R from 'ramda';
 import Faker from 'faker';
-import defaults from '../../../defaults';
-import { assertUrlStatus } from '../../../utils';
-import Woocommerce from '../../lib/operator';
+import defaults from '../../../../defaults';
+import { assertUrlStatus } from '../../../../utils';
+import Woocommerce from '../../../lib/operator';
 
 Faker.locale = 'es';
 

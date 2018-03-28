@@ -4,7 +4,10 @@ if (!defined('ABSPATH')) {
 	exit;
 }
 
-abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
+/**
+ * Class WC_EBANX_Credit_Card_Gateway
+ */
+abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_New_Gateway
 {
 	/**
 	 * The rates for each instalment
@@ -21,6 +24,8 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
 		$this->api_name = '_creditcard';
 
 		parent::__construct();
+
+		$this->ebanx_gateway = $this->ebanx->creditCard();
 
 		add_action('woocommerce_order_edit_status', array($this, 'capture_payment_action'), 10, 2);
 
@@ -76,7 +81,9 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
 	 * Process scheduled subscription payments.
 	 *
 	 * @param string $subscription_id subscription ID.
+	 *
 	 * @return bool
+	 * @throws Exception Shows missing params message.
 	 */
 	public function scheduled_subscription_payment( $subscription_id ) {
 		global $counter;
@@ -91,98 +98,27 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
 		$user_cc = get_user_meta( $order->data['customer_id'], '_ebanx_credit_card_token', true );
 
 		if ( count( $user_cc ) ) {
-			$user_cc = end( $user_cc );
+			$data = $this->transform_payment_data( $order );
 
-			switch ( strtolower( $order->billing_country ) ) {
-				case WC_EBANX_Constants::COUNTRY_BRAZIL:
-					$document = get_user_meta( $order->data['customer_id'], '_ebanx_billing_brazil_document', true );
-					break;
-				case WC_EBANX_Constants::COUNTRY_CHILE:
-					$document = get_user_meta( $order->data['customer_id'], '_ebanx_billing_chile_document', true );
-					break;
-				case WC_EBANX_Constants::COUNTRY_COLOMBIA:
-					$document = get_user_meta( $order->data['customer_id'], '_ebanx_billing_colombia_document', true );
-					break;
-				case WC_EBANX_Constants::COUNTRY_ARGENTINA:
-					$document = get_user_meta( $order->data['customer_id'], '_ebanx_billing_argentina_document', true );
-					break;
-				case WC_EBANX_Constants::COUNTRY_PERU:
-					$document = get_user_meta( $order->data['customer_id'], '_ebanx_billing_peru_document', true );
-					break;
-			}
+			$ebanx = ( new WC_EBANX_Api( $this->configs ) )->ebanx();
 
-			\EBANX\Config::set( array(
-				'integrationKey' => $this->private_key,
-				'testMode' => $this->is_sandbox_mode,
-				'directMode' => true,
-			) );
-
-			$addresses = $order->billing_address_1;
-
-			if ( ! empty( $order->billing_address_2 ) ) {
-				 $addresses .= ' - ' . $order->billing_address_2;
-			}
-
-			$address = WC_EBANX_Helper::split_street( $addresses );
-
-			$data = array(
-				'operation' => 'request',
-				'mode' => 'full',
-				'payment' => array(
-					'document'              => $document,
-					'name'                  => $order->billing_first_name . ' ' . $order->billing_last_name,
-					'email'                 => $order->billing_email,
-					'phone_number'          => $order->billing_phone,
-					'zipcode'               => $order->billing_postcode,
-					'country'               => $order->billing_country,
-					'state'                 => $order->billing_state,
-					'city'                  => $order->billing_city,
-					'address'               => $address['streetName'],
-					'street_number'         => empty( $address['houseNumber'] ) ? 'S/N' : trim( $address['houseNumber'] . ' ' . $address['additionToAddress'] ),
-
-					'notification_url'      => $home_url,
-					'redirect_url'          => $home_url,
-					'user_value_1'          => 'from_woocommerce',
-					'user_value_3'          => 'version=' . WC_EBANX::get_plugin_version(),
-					'user_value_4'          => 'via_wc_subscription',
-
-					'currency_code'         => $this->merchant_currency,
-					'amount_total'          => $order->get_total(),
-					'order_number'          => $order->id,
-					'merchant_payment_code' => substr( $order->id . '-' . md5( rand( 123123, 9999999 ) ), 0, 40 ),
-					'items' => array_map( function( $product ) {
-						return array(
-							'name' => $product['name'],
-							'unit_price' => $product['line_subtotal'],
-							'quantity' => $product['qty'],
-							'type' => $product['type'],
-						);
-					}, $order->get_items() ),
-					'payment_type_code' => $user_cc->brand,
-					'create_token' => true,
-					'creditcard' => array(
-						'token' => $user_cc->token,
-					),
-					'currency_code' => $this->currency_code,
-				),
-			);
-			$request = \Ebanx\EBANX::doRequest( $data );
+			$response = $ebanx->creditCard()->create( $data );
 
 			WC_EBANX_Subscription_Renewal_Logger::persist( array(
 				'subscription_id' => $subscription_id,
 				'payment_method' => $this->id,
 				'request' => $data,
-				'response' => $request, // Response from request to EBANX.
+				'response' => $response, // Response from response to EBANX.
 			) );
 
-			if ( 'ERROR' == $request->status ) {
+			if ( 'ERROR' == $response['status'] ) {
 				$order->payment_complete();
 				$order->update_status( 'failed' );
-				WC_EBANX::log( $request->status_message );
-			} else if ( 'SUCCESS' == $request->status ) {
-				switch ( $request->payment->status ) {
+				WC_EBANX::log( $response['status_message'] );
+			} else if ( 'SUCCESS' == $response['status'] ) {
+				switch ( $response['payment']['status'] ) {
 					case 'CO':
-						$order->payment_complete( $request->payment->hash );
+						$order->payment_complete( $response['payment']['hash'] );
 						WC_Subscriptions_Manager::activate_subscriptions_for_order( $order );
 						$order->add_order_note( __( 'EBANX: Transaction Received', 'woocommerce-gateway-ebanx' ) );
 						break;
@@ -216,15 +152,16 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
 		return $actions;
 	}
 
+
 	/**
-	 * Action to capture the payment
+	 * @param int    $order_id
+	 * @param string $status
 	 *
-	 * @return void
+	 * @throws Exception Throws missing parameter exception.
 	 */
 	public function capture_payment_action($order_id, $status) {
-		$action = WC_EBANX_Request::read('action');
-		$order = wc_get_order($order_id);
-		$recapture = false;
+		$action = WC_EBANX_Request::read( 'action', null );
+		$order = wc_get_order( $order_id );
 
 		if ($order->payment_method !== $this->id
 			|| $status !== 'processing'
@@ -232,78 +169,7 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
 			return;
 		}
 
-		\Ebanx\Config::set(array(
-			'integrationKey' => $this->private_key,
-			'testMode' => $this->is_sandbox_mode,
-			'directMode' => true,
-		));
-
-		$response = \Ebanx\Ebanx::doCapture(array('hash' => get_post_meta($order->id, '_ebanx_payment_hash', true)));
-		$error = $this->check_capture_errors($response);
-
-		$is_recapture = false;
-		if($error){
-			$is_recapture = $error->code === 'BP-CAP-4';
-			$response->payment->status = $error->status;
-
-			WC_EBANX::log($error->message);
-			WC_EBANX_Flash::add_message($error->message, 'warning', true);
-		}
-
-		if ($response->payment->status == 'CO') {
-			$order->payment_complete();
-
-			if (!$is_recapture) {
-				$order->add_order_note(sprintf(__('EBANX: The transaction was captured with the following: %s', 'woocommerce-gateway-ebanx'), wp_get_current_user()->data->user_email));
-			}
-		}
-		else if ($response->payment->status == 'CA') {
-			$order->payment_complete();
-			$order->update_status('failed');
-			$order->add_order_note(__('EBANX: Transaction Failed', 'woocommerce-gateway-ebanx'));
-		}
-		else if ($response->payment->status == 'OP') {
-			$order->update_status('pending');
-			$order->add_order_note(__('EBANX: Transaction Pending', 'woocommerce-gateway-ebanx'));
-		}
-	}
-
-	/**
-	 * Checks for errors during capture action
-	 * Returns an object with error code, message and target status
-	 *
-	 * @param object $response The response from EBANX API
-	 * @return stdClass
-	 */
-	public function check_capture_errors($response) {
-		if ( $response->status !== 'ERROR' ) {
-			return null;
-		}
-
-		$code = $response->code;
-		$message = sprintf(__('EBANX - Unknown error, enter in contact with Ebanx and inform this error code: %s.', 'woocommerce-gateway-ebanx'), $response->payment->status_code);
-		$status = $response->payment->status;
-
-		switch($response->status_code) {
-			case 'BC-CAP-3':
-				$message = __('EBANX - Payment cannot be captured, changing it to Failed.', 'woocommerce-gateway-ebanx');
-				$status = 'CA';
-				break;
-			case 'BP-CAP-4':
-				$message = __('EBANX - Payment has already been captured, changing it to Processing.', 'woocommerce-gateway-ebanx');
-				$status = 'CO';
-				break;
-			case 'BC-CAP-5':
-				$message = __('EBANX - Payment cannot be captured, changing it to Pending.', 'woocommerce-gateway-ebanx');
-				$status = 'OP';
-				break;
-		}
-
-		return (object)array(
-			'code' => $code,
-			'message' => $message,
-			'status' => $status,
-		);
+		WC_EBANX_Capture_Payment::capture_payment( $order_id );
 	}
 
 	/**
@@ -346,11 +212,10 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
 	 * Mount the data to send to EBANX API
 	 *
 	 * @param WC_Order $order
-	 * @return array
+	 * @return \Ebanx\Benjamin\Models\Payment
 	 * @throws Exception
 	 */
-	protected function request_data($order)
-	{
+	protected function transform_payment_data( $order ) {
 
 		if (empty(WC_EBANX_Request::read('ebanx_token', null))
 			|| empty(WC_EBANX_Request::read('ebanx_masked_card_number', null))
@@ -364,41 +229,20 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
 			throw new Exception('MISSING-DEVICE-FINGERPRINT');
 		}
 
-		$data = parent::request_data($order);
-
-		if (in_array($this->getTransactionAddress('country'), WC_EBANX_Constants::$CREDIT_CARD_COUNTRIES)) {
-			$data['payment']['instalments'] = '1';
-
-			if ($this->configs->settings['credit_card_instalments'] > 1 && WC_EBANX_Request::has('ebanx_billing_instalments')) {
-				$data['payment']['instalments'] = WC_EBANX_Request::read('ebanx_billing_instalments');
-			}
-		}
-
-		if (!empty(WC_EBANX_Request::read('ebanx_device_fingerprint', null))) {
-			$data['device_id'] = WC_EBANX_Request::read('ebanx_device_fingerprint');
-		}
-
-		$data['payment']['payment_type_code'] = WC_EBANX_Request::read('ebanx_brand');
-		$data['payment']['creditcard'] = array(
-			'token' => WC_EBANX_Request::read('ebanx_token'),
-			'card_cvv' => WC_EBANX_Request::read('ebanx_billing_cvv'),
-			'auto_capture' => ($this->configs->settings['capture_enabled'] === 'yes'),
-		);
-
-		return $data;
+		return WC_EBANX_Payment_Adapter::transform_card( $order, $this->configs, $this->names );
 	}
 
+
 	/**
-	 * Process the response of request from EBANX API
+	 * @param array    $request
+	 * @param WC_Order $order
 	 *
-	 * @param  Object $request The result of request
-	 * @param  WC_Order $order   The order created
-	 * @return void
+	 * @throws Exception Throws missing parameter exception.
+	 * @throws WC_EBANX_Payment_Exception Throws error message.
 	 */
-	protected function process_response($request, $order)
-	{
-		if ($request->status == 'ERROR' || !$request->payment->pre_approved) {
-			return $this->process_response_error($request, $order);
+	protected function process_response( $request, $order ) {
+		if ( 'SUCCESS' !== $request['status'] || ! $request['payment']['pre_approved'] ) {
+			$this->process_response_error( $request, $order );
 		}
 
 		parent::process_response($request, $order);
@@ -473,16 +317,16 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
 	 * This method check the informations sent by WooCommerce and if them are fine, it sends the request to EBANX API
 	 * The catch captures the errors and check the code sent by EBANX API and then show to the users the right error message
 	 *
-	 * @param  integer $order_id    The ID of the order created
-	 * @return void
+	 * @param  integer $order_id The ID of the order created.
+	 *
+	 * @return array
+	 * @throws Exception Shows param missing message.
 	 */
 	public function process_payment($order_id)
 	{
 		$has_instalments = (WC_EBANX_Request::has('ebanx_billing_instalments') || WC_EBANX_Request::has('ebanx-credit-card-installments'));
 
 		if ( $has_instalments ) {
-
-			$order = wc_get_order( $order_id );
 
 			$total_price = get_post_meta($order_id, '_order_total', true);
 			$tax_rate = 0;
@@ -502,7 +346,7 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
 	/**
 	 * Checks if the payment term is allowed based on price, country and minimal instalment value
 	 *
-	 * @param doubloe $price Product price used as base
+	 * @param double $price Product price used as base.
 	 * @param int $instalment_number Number of instalments
 	 * @param string $country Costumer country
 	 * @return integer
@@ -635,6 +479,8 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
 
 	/**
 	 * The HTML structure on checkout page
+	 *
+	 * @throws Exception Throws missing param message.
 	 */
 	public function payment_fields() {
 		$cart_total = $this->get_order_total();
@@ -649,7 +495,7 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
 			});
 		}
 
-		$country = $this->getTransactionAddress('country');
+		$country = $this->get_transaction_address( 'country' );
 
 		$max_instalments = min(
 			$this->configs->settings['credit_card_instalments'],
@@ -683,7 +529,7 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
 				'currency' => $currency,
 				'country' => $country,
 				'instalments_terms' => $instalments_terms,
-				'currency' => $this->currency_code,
+				'currency_code' => $this->currency_code,
 				'currency_rate' => round(floatval($this->get_local_currency_rate_for_site($this->currency_code)), 2),
 				'cards' => (array) $cards,
 				'cart_total' => $cart_total,

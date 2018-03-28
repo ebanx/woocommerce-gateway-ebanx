@@ -3,7 +3,7 @@ import Cart from './pages/cart';
 import Checkout from './pages/checkout';
 import ThankYou from './pages/thankYou';
 import WonderWomansPurse from './pages/wonderWomansPurse';
-import {tryNext} from "../../utils";
+import {tryNext} from '../../utils';
 
 const buyWonderWomansPurse = Symbol('buyWonderWomansPurse');
 

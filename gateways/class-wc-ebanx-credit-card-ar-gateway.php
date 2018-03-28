@@ -29,9 +29,10 @@ class WC_EBANX_Credit_Card_AR_Gateway extends WC_EBANX_Credit_Card_Gateway {
 	 * Check if the method is available to show to the users
 	 *
 	 * @return boolean
+	 * @throws Exception Throws missing param message.
 	 */
 	public function is_available() {
-		return parent::is_available() && $this->getTransactionAddress('country') == WC_EBANX_Constants::COUNTRY_ARGENTINA;
+		return parent::is_available() && WC_EBANX_Constants::COUNTRY_ARGENTINA === $this->get_transaction_address( 'country' );
 	}
 
 	/**
@@ -56,5 +57,19 @@ class WC_EBANX_Credit_Card_AR_Gateway extends WC_EBANX_Credit_Card_Gateway {
 			null,
 			1
 		);
+	}
+
+	/**
+	 * @param WC_Order $order
+	 *
+	 * @return \Ebanx\Benjamin\Models\Payment
+	 * @throws Exception Throws missing parameter exception.
+	 */
+	protected function transform_payment_data( $order ) {
+		$data = parent::transform_payment_data( $order );
+
+		$data->person->documentType = WC_EBANX_Request::read( $this->names['ebanx_billing_argentina_document_type'], null );
+
+		return $data;
 	}
 }

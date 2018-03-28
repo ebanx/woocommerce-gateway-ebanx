@@ -1,5 +1,10 @@
 <?php
 
+use Ebanx\Benjamin\Models\Address;
+use Ebanx\Benjamin\Models\Country;
+use Ebanx\Benjamin\Models\Person;
+use Ebanx\Benjamin\Models\Request;
+
 if ( !defined( 'ABSPATH' ) ) {
 	exit;
 }
@@ -9,20 +14,22 @@ class WC_EBANX_Payment_By_Link {
 	private static $errors = array();
 	private static $post_id;
 	private static $order;
-	private static $config;
+	/**
+	 * @var WC_EBANX_Global_Gateway
+	 */
+	private static $configs;
 	private static $validator;
 
 	/**
 	 * The core method. It uses the other methods to create a payment link
 	 *
 	 * @param  int $post_id The post id
-	 * @param  array $config  The config array we need to pass to ebanx-php
 	 * @return void
 	 */
-	public static function create($post_id, $config){
-		self::$post_id = $post_id;
-		self::$order = wc_get_order($post_id);
-		self::$config = $config;
+	public static function create( $post_id ) {
+		self::$post_id   = $post_id;
+		self::$order     = wc_get_order( $post_id );
+		self::$configs   = new WC_EBANX_Global_Gateway();
 		self::$validator = new WC_EBANX_Payment_Validator(self::$order);
 
 		if ( ! self::can_create_payment() ) {
@@ -35,14 +42,14 @@ class WC_EBANX_Payment_By_Link {
 			return;
 		}
 
-		$request = self::send_request();
-		if ( $request && $request->status !== 'SUCCESS' ) {
-			self::add_error(self::getErrorMessage($request));
+		$response = self::send_request();
+		if ( $response && 'SUCCESS' !== $response['status'] ) {
+			self::add_error( self::getErrorMessage( $response ) );
 			self::send_errors();
 			return;
 		}
 
-		self::post_request($request->payment->hash, $request->redirect_url);
+		self::post_request( $response['payment']['hash'], $response['redirect_url'] );
 	}
 
 	/**
@@ -70,44 +77,46 @@ class WC_EBANX_Payment_By_Link {
 		}
 	}
 
+
 	/**
-	 * Requests a payment link using ebanx-php
-	 *
-	 * @return void
+	 * @return array|bool
 	 */
 	private static function send_request() {
-		$data = array(
-			'name'                  => self::$order->billing_first_name . ' ' . self::$order->billing_last_name,
-			'email'                 => self::$order->billing_email,
-			'country'               => strtolower(self::$order->billing_country),
-			'payment_type_code'     => empty(self::$order->payment_method) ? '_all' : WC_EBANX_Constants::$GATEWAY_TO_PAYMENT_TYPE_CODE[self::$order->payment_method],
-			'merchant_payment_code' => substr(self::$order->id . '_' . md5(time()), 0, 40),
-			'currency_code'         => strtoupper(get_woocommerce_currency()),
-			'amount'                => self::$order->get_total(),
-			'instalments'           => self::get_instalments_range(),
-			'user_value_1'          => 'from_woocommerce',
-			'user_value_3'          => 'version=' . WC_EBANX::get_plugin_version(),
-		);
+		$person = new Person([
+			'name' => self::$order->billing_first_name . ' ' . self::$order->billing_last_name,
+			'email' => self::$order->billing_email,
+		]);
 
-		\Ebanx\Config::set(self::$config);
-		\Ebanx\Config::setDirectMode(false);
+		$address = new Address( [ 'country' => Country::fromIso( self::$order->billing_country ) ] );
 
-		$request = false;
+		$data = new Request([
+			'person'              => $person,
+			'address'             => $address,
+			'type'                => empty( self::$order->payment_method ) ? '_all' : WC_EBANX_Constants::$gateway_to_payment_type_code[ self::$order->payment_method ],
+			'merchantPaymentCode' => substr( self::$order->id . '_' . md5( time() ), 0, 40 ),
+			'amount'              => self::$order->get_total(),
+			'maxInstalments'     => get_post_meta( self::$order->id, '_ebanx_instalments', true ),
+			'userValues'          => [
+				1 => 'from_woocommerce',
+				3 => 'version=' . WC_EBANX::get_plugin_version(),
+			],
+		]);
 
+		$response = false;
 		try {
-			$request = \Ebanx\EBANX::doRequest($data);
+			$response = ( new WC_EBANX_Api( self::$configs ) )->ebanx()->hosted()->create( $data );
 		} catch (Exception $e) {
 			self::add_error($e->getMessage());
 			self::send_errors();
 		} finally {
 			WC_EBANX_Payment_By_Link_Logger::persist([
 				'request' => $data,
-				'response' => $request, // Response from EBANX::doRequest.
+				'response' => $response,
 				'errors' => self::$errors,
 			]);
 		}
 
-		return $request;
+		return $response;
 	}
 
 	/**
@@ -133,10 +142,6 @@ class WC_EBANX_Payment_By_Link {
 		if ( ! in_array($error, self::$errors) ) {
 			self::$errors[] = $error;
 		}
-	}
-
-	private static function get_instalments_range() {
-		return '1-'. get_post_meta(self::$order->id, '_ebanx_instalments', true);
 	}
 
 	/**

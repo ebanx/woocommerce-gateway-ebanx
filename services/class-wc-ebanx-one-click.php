@@ -328,6 +328,7 @@ class WC_EBANX_One_Click {
 	 * Render the button "One-Click Purchase" using a template
 	 *
 	 * @return void
+	 * @throws Exception Throws missing parameter message.
 	 */
 	public function print_button() {
 		if ( ! $this->user_country ) {
@@ -359,7 +360,7 @@ class WC_EBANX_One_Click {
 				break;
 		}
 
-		$country = $this->gateway->getTransactionAddress('country');
+		$country = $this->gateway->get_transaction_address( 'country' );
 
 		$cart_total = $product->price;
 
@@ -373,7 +374,7 @@ class WC_EBANX_One_Click {
 
 		$instalments_terms = $this->gateway->get_payment_terms($cart_total, $max_instalments, $tax);
 		$currency = WC_EBANX_Constants::$LOCAL_CURRENCIES[$country];
-		$ebanx = new WC_EBANX_Gateway();
+		$ebanx = new WC_EBANX_New_Gateway();
 
 		$args = apply_filters( 'ebanx_template_args', array(
 				'cards' => $this->cards,

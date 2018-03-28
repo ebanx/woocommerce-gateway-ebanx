@@ -179,7 +179,7 @@ class WC_EBANX_Payment_Validator {
 	 * @return bool Problems found
 	 */
 	private function validate_payment_method_is_ebanx_payment() {
-		if ( ! array_key_exists($this->order->payment_method, WC_EBANX_Constants::$GATEWAY_TO_PAYMENT_TYPE_CODE) ) {
+		if ( ! array_key_exists( $this->order->payment_method, WC_EBANX_Constants::$gateway_to_payment_type_code ) ) {
 			$this->add_error(__('EBANX does not support the selected payment method.', 'woocommerce-gateway-ebanx'));
 			return true;
 		}

@@ -2,12 +2,12 @@
 
 import R from 'ramda';
 import Faker from 'faker';
-import defaults from '../../../defaults';
-import { assertUrlStatus, wrapOrderAssertations } from '../../../utils';
-import Woocommerce from '../../lib/operator';
-import Pay from "../../../pay/lib/operator";
+import defaults from '../../../../defaults';
+import {assertUrlStatus, wrapOrderAssertations} from '../../../../utils';
+import Woocommerce from '../../../lib/operator';
+import Pay from "../../../../pay/lib/operator";
 
-Faker.locale = 'pt_BR';
+Faker.locale = 'es';
 
 const mock = (data) => (R.merge(
   data,
@@ -16,14 +16,12 @@ const mock = (data) => (R.merge(
     lastName: Faker.name.lastName(),
     address: Faker.address.streetName(),
     city: Faker.address.city(),
-    state: 'Bahia',
-    stateId: 'BA',
-    country: 'Brazil',
-    countryId: 'BR',
-    zipcode: '80230180',
+    state: Faker.address.state(),
+    zipcode: Faker.address.zipCode(),
     phone: Faker.phone.phoneNumberFormat(2),
     email: Faker.internet.email(),
-    document: '278.517.215-98',
+    country: 'Colombia',
+    countryId: 'CO',
   }
 ));
 
@@ -38,28 +36,40 @@ describe('Woocommerce', () => {
     woocommerce = new Woocommerce(cy);
   });
 
-  context('Brazil', () => {
-    context('Boleto', () => {
-      it('can buy `wonder womans purse` using boleto to personal', () => {
-        woocommerce.buyWonderWomansPurseWithBoletoToPersonal(mock(
+  context('Colombia', () => {
+    context('Pse', () => {
+      it('can buy `wonder womans purse` using Pse to personal', () => {
+        woocommerce.buyWonderWomansPurseWithPseToPersonal(mock(
           {
-            paymentMethod: defaults.pay.api.DEFAULT_VALUES.paymentMethods.br.boleto.id,
+            paymentMethod: defaults.pay.api.DEFAULT_VALUES.paymentMethods.co.pse.id,
+            paymentType: defaults.pay.api.DEFAULT_VALUES.paymentMethods.co.pse.types.agrario,
+          }
+        ));
+      });
+    });
+
+    context('Baloto', () => {
+      it('can buy `wonder womans purse` using Baloto to personal', () => {
+        woocommerce.buyWonderWomansPurseWithBalotoToPersonal(mock(
+          {
+            paymentMethod: defaults.pay.api.DEFAULT_VALUES.paymentMethods.co.baloto.id,
           }
         ));
       });
     });
 
     context('Credit Card', () => {
-      it('can buy `wonder womans purse`, create account and can one-click', () => {
+      it('can buy `wonder womans purse`, using credit card', () => {
         const mockData = {
-          paymentMethod: defaults.pay.api.DEFAULT_VALUES.paymentMethods.br.creditcard.id,
+          paymentMethod: defaults.pay.api.DEFAULT_VALUES.paymentMethods.co.creditcard.id,
+          document: Faker.random.uuid(),
           instalments: '3',
           card: {
+            name: Faker.name.findName(),
             number: defaults._globals.cardsWhitelist.mastercard,
             expiryDate: '12/22',
             cvv: '123',
           },
-          password: Faker.internet.password(),
         };
 
         woocommerce
@@ -73,21 +83,8 @@ describe('Woocommerce', () => {
               });
 
               wrapOrderAssertations(payment, checkoutPayment);
-
-              woocommerce.buyWonderWomansPurseByOneClick(mockData.card.cvv);
             });
           });
-      });
-    });
-
-    context('Tef', () => {
-      it('can buy `wonder womans purse` using tef (Itaú) to personal', () => {
-        woocommerce.buyWonderWomansPurseWithTefToPersonal(mock(
-          {
-            paymentMethod: defaults.pay.api.DEFAULT_VALUES.paymentMethods.br.tef.id,
-            paymentType: defaults.pay.api.DEFAULT_VALUES.paymentMethods.br.tef.types.itau.label,
-          }
-        ));
       });
     });
   });
