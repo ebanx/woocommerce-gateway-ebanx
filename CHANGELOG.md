@@ -296,4 +296,4 @@ These are the most importante fixes and features, but another fixes and quality 
 * 2016-01-17 - Texts - Chaging the namings and texts from plugin.
 
 ## 1.0.0
-* 2016-12-30 - First Release.
+* 2016-12-30 - First Release. 
