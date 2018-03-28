@@ -34,7 +34,6 @@ script:
 stages:
   - lint
   - unit
-  - admin_tests
   - test
   - release
   - deploy
@@ -51,11 +50,6 @@ jobs:
         - TEST_COUNTRY=
       script:
         - phpunit
-    - stage: admin_tests
-      env:
-        - TEST_COUNTRY=
-      script:
-        - bash ./tests/bin/admin-test.sh
     - stage: release
       script:
         - bash <(curl -s https://codecov.io/bash)
