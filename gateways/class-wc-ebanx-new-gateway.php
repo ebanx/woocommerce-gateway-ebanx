@@ -182,7 +182,7 @@ class WC_EBANX_New_Gateway extends WC_EBANX_Gateway {
 	public function process_payment( $order_id ) {
 		try {
 			$order = wc_get_order( $order_id );
-			do_action( 'ebanx_before_process_payment', $order );
+			apply_filters( 'ebanx_before_process_payment', $order );
 
 			if ( $order->get_total() > 0 ) {
 				$data = $this->transform_payment_data( $order );
@@ -480,7 +480,11 @@ class WC_EBANX_New_Gateway extends WC_EBANX_Gateway {
 
 		$amount = WC()->cart->total;
 
-		$amount = apply_filters( 'ebanx_get_custom_total_amount', $amount, $instalments );
+		try{
+			$amount = apply_filters( 'ebanx_get_custom_total_amount', $amount, $instalments );
+		} catch (Exception $e) {
+			return;
+		}
 
 		$order_id = null;
 

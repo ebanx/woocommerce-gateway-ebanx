@@ -474,7 +474,12 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_New_Gateway
 			}
 		}
 
-		return apply_filters('ebanx_get_payment_terms', $instalments);
+		try {
+			$apply_filters = apply_filters( 'ebanx_get_payment_terms', $instalments );
+		} catch(Exception $e) {
+			return;
+		}
+		return $apply_filters;
 	}
 
 	/**
