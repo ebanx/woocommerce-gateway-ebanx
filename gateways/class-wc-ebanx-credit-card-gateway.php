@@ -444,7 +444,7 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_New_Gateway
 	 * @param int $amount      The total of the user cart
 	 * @param int $max_instalments The max number of instalments based on settings
 	 * @param int $tax The tax applied
-	 * @return filtered array       An array of instalment with price, amount, if it has interests and the number
+	 * @return array               An array of instalment with price, amount, if it has interests and the number
 	 */
 	public function get_payment_terms($amount, $max_instalments, $tax = 0) {
 		$instalments = array();
@@ -474,7 +474,13 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_New_Gateway
 			}
 		}
 
-		return apply_filters('ebanx_get_payment_terms', $instalments);
+		try {
+			$apply_filters = apply_filters( 'ebanx_get_payment_terms', $instalments );
+		} catch(Exception $e) {
+			return [];
+		}
+
+		return $apply_filters;
 	}
 
 	/**
