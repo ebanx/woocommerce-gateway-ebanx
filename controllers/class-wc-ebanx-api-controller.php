@@ -1,10 +1,16 @@
 <?php
 
-if ( ! defined('ABSPATH') ) {
+if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+/**
+ * Class WC_EBANX_Api_Controller
+ */
 class WC_EBANX_Api_Controller {
+	/**
+	 * @var WC_EBANX_Global_Gateway
+	 */
 	private $config;
 
 	/**
@@ -12,7 +18,7 @@ class WC_EBANX_Api_Controller {
 	 *
 	 * @param WC_EBANX_Global_Gateway $config
 	 */
-	public function __construct(WC_EBANX_Global_Gateway $config) {
+	public function __construct( WC_EBANX_Global_Gateway $config ) {
 		$this->config = $config;
 	}
 
@@ -22,10 +28,10 @@ class WC_EBANX_Api_Controller {
 	 * @return void
 	 */
 	public function dashboard_check() {
-		echo json_encode(array(
-			'ebanx' => true,
-			'version' => WC_EBANX::get_plugin_version()
-		));
+		echo json_encode( array(
+			'ebanx'   => true,
+			'version' => WC_EBANX::get_plugin_version(),
+		) );
 	}
 
 	/**
@@ -57,16 +63,18 @@ class WC_EBANX_Api_Controller {
 	 *
 	 * @return void
 	 */
-	public function capture_payment($order_id) {
+	public function capture_payment( $order_id ) {
 		WC_EBANX_Capture_Payment::capture_payment( $order_id );
 
-		wp_redirect($this->get_admin_order_url($order_id));
+		wp_redirect( $this->get_admin_order_url( $order_id ) );
 	}
 
 	/**
+	 * @param int $order_id
+	 *
 	 * @return String
 	 */
-	public function get_admin_order_url($order_id) {
+	public function get_admin_order_url( $order_id ) {
 		return admin_url() . 'post.php?post=' . $order_id . '&action=edit';
 	}
 
@@ -81,7 +89,7 @@ class WC_EBANX_Api_Controller {
 	public function cancel_order( $order_id, $user_id ) {
 		$order = new WC_Order( $order_id );
 		if ( get_current_user_id() != $user_id
-		    || $order->get_status() !== 'on-hold'
+			|| $order->get_status() !== 'on-hold'
 			|| ! in_array( $order->get_payment_method(), WC_EBANX_Constants::$cash_payment_gateways_code )
 			) {
 			wp_redirect( get_site_url() );
@@ -97,20 +105,20 @@ class WC_EBANX_Api_Controller {
 
 			WC_EBANX_Cancel_Logger::persist([
 				'paymentHash' => $hash,
-				'$response' => $response,
+				'$response'   => $response,
 			]);
 
 			if ( 'SUCCESS' === $response['status'] ) {
-				$order->update_status('cancelled', __('EBANX: Cancelled by customer', 'woocommerce-gateway-ebanx'));
+				$order->update_status( 'cancelled', __( 'EBANX: Cancelled by customer', 'woocommerce-gateway-ebanx' ) );
 			}
 
-			wp_redirect($order->get_view_order_url());
+			wp_redirect( $order->get_view_order_url() );
 
-		} catch (Exception $e) {
+		} catch ( Exception $e ) {
 			$message = $e->getMessage();
-			WC_EBANX::log("EBANX Error: $message");
+			WC_EBANX::log( "EBANX Error: $message" );
 
-			wc_add_notice($message, 'error');
+			wc_add_notice( $message, 'error' );
 			wp_redirect( get_site_url() );
 		}
 	}
@@ -118,49 +126,57 @@ class WC_EBANX_Api_Controller {
 	/**
 	 * Gets the banking ticket HTML by cUrl with url fopen fallback
 	 *
+	 * @param string $hash
+	 * @param string $payment_type
+	 *
 	 * @return void
 	 */
-	public function order_received($hash, $payment_type) {
-		$url = $this->get_url($hash, $payment_type);
+	public function order_received( $hash, $payment_type ) {
+		$url = $this->get_url( $hash, $payment_type );
 
-		if (!in_array('curl', get_loaded_extensions())) {
-			echo file_get_contents($url);
+		if ( ! in_array( 'curl', get_loaded_extensions() ) ) {
+			echo file_get_contents( $url ); // phpcs:ignore WordPress.XSS.EscapeOutput
 			return;
 		}
 
-		$curl = curl_init($url);
-		curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-		$html = curl_exec($curl);
+		$curl = curl_init( $url );
+		curl_setopt( $curl, CURLOPT_RETURNTRANSFER, true );
+		$html = curl_exec( $curl );
 
-		if (curl_error($curl)) {
+		if ( curl_error( $curl ) ) {
 			return;
 		}
 
-		curl_close($curl);
-		echo $html;
+		curl_close( $curl );
+		echo $html; // phpcs:ignore WordPress.XSS.EscapeOutput
 	}
 
-	private function get_url($hash, $payment_type) {
-		$is_sandbox = $this->config->get_setting_or_default('sandbox_mode_enabled', 'yes') === 'yes';
+	/**
+	 * @param string $hash
+	 * @param string $payment_type
+	 * @return string
+	 */
+	private function get_url( $hash, $payment_type ) {
+		$is_sandbox = $this->config->get_setting_or_default( 'sandbox_mode_enabled', 'yes' ) === 'yes';
 
 		$subdomain = $is_sandbox ? 'sandbox' : 'print';
-		$url = "https://{$subdomain}.ebanx.com/";
+		$url       = "https://{$subdomain}.ebanx.com/";
 
-		if ($payment_type !== 'cip') {
+		if ( 'cip' !== $payment_type ) {
 			$url .= 'print/';
 		}
 
-		if ($payment_type === 'efectivo') {
+		if ( 'efectivo' === $payment_type ) {
 			$url .= 'voucher/';
 		}
 
-		if ($payment_type !== null && $payment_type !== 'boleto' && $payment_type !== 'efectivo') {
+		if ( null !== $payment_type && 'boleto' !== $payment_type && 'efectivo' !== $payment_type ) {
 			$url .= "{$payment_type}/";
 		}
 
 		$url .= "?hash={$hash}";
 
-		if ($payment_type !== 'baloto') {
+		if ( 'baloto' !== $payment_type ) {
 			$url .= '&format=basic#';
 		}
 
