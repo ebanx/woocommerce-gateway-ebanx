@@ -1,5 +1,11 @@
 # CHANGELOG
 
+# 1.29.0
+* Feature - Logging request data for debugging purposes [#627](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/627)
+* Feature - WC Subscriptions support  [#594](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/594)
+* Feature - Use benjamin EBANX's new SDK to make requests [#652](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/652)
+* Feature - Get possible exceptions on apply_filters calls [#653](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/653)
+
 # 1.28.3
 * Feature - Allow 4 digit cvv only for America Express Credit Card brand [#648](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/648)
 * Fix - Compatibility layer works with php 5.4 [#645](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/645)
