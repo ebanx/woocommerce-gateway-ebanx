@@ -343,7 +343,7 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway {
 			),
 		);
 		$currency_code = strtolower( $this->merchant_currency );
-		if ( in_array( strtoupper( $currency_code ), WC_EBANX_Constants::$CREDIT_CARD_CURRENCIES ) ) {
+		if ( in_array( strtoupper( $currency_code ), WC_EBANX_Constants::$credit_card_currencies ) ) {
 			$fields[ "min_instalment_value_$currency_code" ] = array(
 				'title'             => sprintf( __( 'Minimum Instalment (%s)', 'woocommerce-gateway-ebanx' ), strtoupper( $currency_code ) ),
 				'type'              => 'number',
@@ -416,10 +416,10 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway {
 		);
 
 		$fields['due_date_days']['type'] = (
-			in_array( $this->merchant_currency, WC_EBANX_Constants::$LOCAL_CURRENCIES ) ?
+			in_array( $this->merchant_currency, WC_EBANX_Constants::$local_currencies ) ?
 				'number' : 'select'
 		);
-		if ( ! in_array( $this->merchant_currency, WC_EBANX_Constants::$LOCAL_CURRENCIES ) ) {
+		if ( ! in_array( $this->merchant_currency, WC_EBANX_Constants::$local_currencies ) ) {
 			$fields['due_date_days']['class']  .= ' wc-enhanced-select';
 			$fields['due_date_days']['options'] = array(
 				'1' => '1',
@@ -566,7 +566,7 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway {
 		if ( $currency_code === null ) {
 			$currency_code = strtolower( $this->merchant_currency );
 		}
-		if ( ! in_array( strtoupper( $currency_code ), WC_EBANX_Constants::$CREDIT_CARD_CURRENCIES ) ) {
+		if ( ! in_array( strtoupper( $currency_code ), WC_EBANX_Constants::$credit_card_currencies ) ) {
 			throw new InvalidArgumentException( "The provided currency code doesn't accept Credit Card payment", 1 );
 		}
 

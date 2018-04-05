@@ -19,11 +19,11 @@ class WC_EBANX_My_Account {
 	 * Constructor and initialize the filters and actions
 	 */
 	public function __construct() {
-		// Actions
+		// Actions.
 		add_action( 'woocommerce_order_items_table', array( $this, 'order_details' ) );
 		add_action( 'wp_enqueue_scripts', array( $this, 'assets' ), 100 );
 
-		// Filters
+		// Filters.
 		add_filter( 'woocommerce_my_account_my_orders_actions', array( $this, 'my_orders_banking_ticket_link' ), 10, 2 );
 	}
 
@@ -48,7 +48,7 @@ class WC_EBANX_My_Account {
 	 * @return array
 	 */
 	public function my_orders_banking_ticket_link( $actions, $order ) {
-		if ( $order->payment_method === 'ebanx-banking-ticket' && in_array( $order->get_status(), array( 'pending', 'on-hold' ) ) ) {
+		if ( 'ebanx-banking-ticket' === $order->payment_method && in_array( $order->get_status(), array( 'pending', 'on-hold' ) ) ) {
 			$url = get_post_meta( $order->id, 'Banking Ticket URL', true );
 
 			if ( ! empty( $url ) ) {
@@ -62,21 +62,17 @@ class WC_EBANX_My_Account {
 		return $actions;
 	}
 
-	public function add_payment_hash_input( $text ) {
-		return $text;
-	}
-
 	/**
 	 * Call thankyou pages on order details page on My Account by gateway method
 	 *
-	 * @param  WC_Order $order      The object order
+	 * @param  WC_Order $order      The object order.
 	 * @return void
 	 */
 	public static function order_details( $order ) {
-		// For test purpose
+		// For test purposes.
 		$hash = get_post_meta( $order->id, '_ebanx_payment_hash', true );
 
-		printf( '<input type="hidden" name="ebanx_payment_hash" value="%s" />', $hash );
+		printf( '<input type="hidden" name="ebanx_payment_hash" value="%s" />', $hash ); // phpcs:ignore WordPress.XSS.EscapeOutput
 
 		switch ( $order->payment_method ) {
 			case 'ebanx-credit-card-br':

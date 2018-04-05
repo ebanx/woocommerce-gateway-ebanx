@@ -4,6 +4,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+/**
+ * Class WC_EBANX_Flash
+ */
 class WC_EBANX_Flash {
 	/**
 	 * The key we are using on wp_option
@@ -32,9 +35,9 @@ class WC_EBANX_Flash {
 	/**
 	 * Adds a message to WP_Option
 	 *
-	 * @param  string  $message     The message to enqueue
-	 * @param  string  $type        The notice type
-	 * @param  boolean $dismissible If the notice will be dismissible
+	 * @param  string  $message     The message to enqueue.
+	 * @param  string  $type        The notice type.
+	 * @param  boolean $dismissible If the notice will be dismissible.
 	 * @return void
 	 */
 	public static function add_message( $message, $type = 'error', $dismissible = false ) {
@@ -50,6 +53,8 @@ class WC_EBANX_Flash {
 	/**
 	 * Returns all the unqueued flash messages in an array
 	 *
+	 * @param bool $clear
+	 *
 	 * @return array All the enqueued flash messages
 	 */
 	public static function get_messages( $clear = true ) {
@@ -60,6 +65,9 @@ class WC_EBANX_Flash {
 		return $flash_messages;
 	}
 
+	/**
+	 * Clears WordPress notices.
+	 */
 	public static function clear_messages() {
 		delete_option( self::KEY );
 	}

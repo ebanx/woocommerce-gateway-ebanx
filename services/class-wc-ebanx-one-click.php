@@ -367,7 +367,7 @@ class WC_EBANX_One_Click {
 
 		$cart_total = $product->price;
 
-		$max_instalments = min( $this->gateway->configs->settings['credit_card_instalments'], WC_EBANX_Constants::$MAX_INSTALMENTS[ $country ] );
+		$max_instalments = min( $this->gateway->configs->settings['credit_card_instalments'], WC_EBANX_Constants::$max_instalments[ $country ] );
 
 		$tax = 0;
 		if ( get_woocommerce_currency() === WC_EBANX_Constants::CURRENCY_CODE_BRL
@@ -376,7 +376,7 @@ class WC_EBANX_One_Click {
 		}
 
 		$instalments_terms = $this->gateway->get_payment_terms( $cart_total, $max_instalments, $tax );
-		$currency          = WC_EBANX_Constants::$LOCAL_CURRENCIES[ $country ];
+		$currency          = WC_EBANX_Constants::$local_currencies[ $country ];
 		$ebanx             = new WC_EBANX_New_Gateway();
 
 		$args = apply_filters(
