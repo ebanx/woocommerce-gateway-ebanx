@@ -503,7 +503,7 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_New_Gateway {
 
 		$max_instalments = min(
 			$this->configs->settings['credit_card_instalments'],
-			WC_EBANX_Constants::$MAX_INSTALMENTS[ $country ]
+			WC_EBANX_Constants::$max_instalments[ $country ]
 		);
 
 		$tax = 0;
@@ -514,7 +514,7 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_New_Gateway {
 
 		$instalments_terms = $this->get_payment_terms( $cart_total, $max_instalments, $tax );
 
-		$currency = WC_EBANX_Constants::$LOCAL_CURRENCIES[ $country ];
+		$currency = WC_EBANX_Constants::$local_currencies[ $country ];
 
 		$message = $this->get_sandbox_form_message( $country );
 		wc_get_template(

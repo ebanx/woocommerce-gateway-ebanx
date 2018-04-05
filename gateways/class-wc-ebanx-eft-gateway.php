@@ -68,7 +68,7 @@ class WC_EBANX_Eft_Gateway extends WC_EBANX_Redirect_Gateway {
 			array(
 				'title'       => $this->title,
 				'description' => $this->description,
-				'banks'       => WC_EBANX_Constants::$BANKS_EFT_ALLOWED[ WC_EBANX_Constants::COUNTRY_COLOMBIA ],
+				'banks'       => WC_EBANX_Constants::$banks_eft_allowed[ WC_EBANX_Constants::COUNTRY_COLOMBIA ],
 				'id'          => $this->id,
 			),
 			'woocommerce/ebanx/',
@@ -102,7 +102,7 @@ class WC_EBANX_Eft_Gateway extends WC_EBANX_Redirect_Gateway {
 	 */
 	protected function transform_payment_data( $order ) {
 		if ( ! WC_EBANX_Request::has( 'eft' )
-			|| ! array_key_exists( WC_EBANX_Request::read( 'eft' ), WC_EBANX_Constants::$BANKS_EFT_ALLOWED[ WC_EBANX_Constants::COUNTRY_COLOMBIA ] ) ) {
+			|| ! array_key_exists( WC_EBANX_Request::read( 'eft' ), WC_EBANX_Constants::$banks_eft_allowed[ WC_EBANX_Constants::COUNTRY_COLOMBIA ] ) ) {
 			throw new Exception( 'MISSING-BANK-NAME' );
 		}
 

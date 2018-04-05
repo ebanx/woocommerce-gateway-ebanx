@@ -4,6 +4,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+/**
+ * Class WC_EBANX_Constants
+ */
 abstract class WC_EBANX_Constants {
 
 	/**
@@ -25,14 +28,14 @@ abstract class WC_EBANX_Constants {
 	/**
 	 * Currencies that EBANX processes
 	 */
-	const CURRENCY_CODE_BRL = 'BRL'; // Brazil
-	const CURRENCY_CODE_USD = 'USD'; // USA & ECUADOR
-	const CURRENCY_CODE_EUR = 'EUR'; // European Union
-	const CURRENCY_CODE_PEN = 'PEN'; // Peru
-	const CURRENCY_CODE_MXN = 'MXN'; // Mexico
-	const CURRENCY_CODE_COP = 'COP'; // Colombia
-	const CURRENCY_CODE_CLP = 'CLP'; // Chile
-	const CURRENCY_CODE_ARS = 'ARS'; // Argentina
+	const CURRENCY_CODE_BRL = 'BRL'; // Brazil.
+	const CURRENCY_CODE_USD = 'USD'; // USA & ECUADOR.
+	const CURRENCY_CODE_EUR = 'EUR'; // European Union.
+	const CURRENCY_CODE_PEN = 'PEN'; // Peru.
+	const CURRENCY_CODE_MXN = 'MXN'; // Mexico.
+	const CURRENCY_CODE_COP = 'COP'; // Colombia.
+	const CURRENCY_CODE_CLP = 'CLP'; // Chile.
+	const CURRENCY_CODE_ARS = 'ARS'; // Argentina.
 
 	/**
 	 * Only the currencies allowed and processed by EBANX
@@ -52,8 +55,10 @@ abstract class WC_EBANX_Constants {
 
 	/**
 	 *  Local currencies that EBANX processes
+	 *
+	 * @var array
 	 */
-	public static $LOCAL_CURRENCIES = array(
+	public static $local_currencies = array(
 		self::COUNTRY_BRAZIL    => self::CURRENCY_CODE_BRL,
 		self::COUNTRY_CHILE     => self::CURRENCY_CODE_CLP,
 		self::COUNTRY_COLOMBIA  => self::CURRENCY_CODE_COP,
@@ -72,8 +77,10 @@ abstract class WC_EBANX_Constants {
 
 	/**
 	 * Max supported credit-card instalments
+	 *
+	 * @var array
 	 */
-	public static $MAX_INSTALMENTS = array(
+	public static $max_instalments = array(
 		self::COUNTRY_BRAZIL    => 12,
 		self::COUNTRY_MEXICO    => 12,
 		self::COUNTRY_COLOMBIA  => 36,
@@ -90,7 +97,7 @@ abstract class WC_EBANX_Constants {
 	 *
 	 * @var array
 	 */
-	public static $ALL_COUNTRIES = array(
+	public static $all_countries = array(
 		self::COUNTRY_BRAZIL,
 		self::COUNTRY_COLOMBIA,
 		self::COUNTRY_MEXICO,
@@ -116,7 +123,7 @@ abstract class WC_EBANX_Constants {
 	 *
 	 * @var array
 	 */
-	public static $CREDIT_CARD_CURRENCIES = array(
+	public static $credit_card_currencies = array(
 		self::CURRENCY_CODE_BRL,
 		self::CURRENCY_CODE_MXN,
 		self::CURRENCY_CODE_USD,
@@ -146,7 +153,7 @@ abstract class WC_EBANX_Constants {
 	 *
 	 * @var array
 	 */
-	public static $BANKS_TEF_ALLOWED = array(
+	public static $banks_tef_allowed = array(
 		self::COUNTRY_BRAZIL => array( 'bancodobrasil', 'itau', 'bradesco', 'banrisul' ),
 	);
 
@@ -155,7 +162,7 @@ abstract class WC_EBANX_Constants {
 	 *
 	 * @var array
 	 */
-	public static $BANKS_EFT_ALLOWED = array(
+	public static $banks_eft_allowed = array(
 		self::COUNTRY_COLOMBIA => array(
 			'banco_agrario'                 => 'Banco Agrario',
 			'banco_av_villas'               => 'Banco AV Villas',
@@ -179,7 +186,10 @@ abstract class WC_EBANX_Constants {
 		),
 	);
 
-	public static $VOUCHERS_EFECTIVO_ALLOWED = array(
+	/**
+	 * @var array
+	 */
+	public static $vouchers_efectivo_allowed = array(
 		'rapipago',
 		'pagofacil',
 		'cupon',
@@ -211,14 +221,14 @@ abstract class WC_EBANX_Constants {
 	 *
 	 * @var array
 	 */
-	public static $BRAZIL_TAXES_ALLOWED = array( 'cpf', 'cnpj' );
+	public static $brazil_taxes_allowed = array( 'cpf', 'cnpj' );
 
 	/**
 	 * The gateways that plugin uses as identification
 	 *
 	 * @var array
 	 */
-	public static $EBANX_GATEWAYS_BY_COUNTRY = array(
+	public static $ebanx_gateways_by_country = array(
 		self::COUNTRY_BRAZIL    => array(
 			'ebanx-banking-ticket',
 			'ebanx-credit-card-br',

@@ -121,7 +121,7 @@ class WC_EBANX_Tef_Gateway extends WC_EBANX_Redirect_Gateway {
 	 */
 	protected function transform_payment_data( $order ) {
 		if ( ! WC_EBANX_Request::has( 'tef' )
-			|| ! in_array( WC_EBANX_Request::read( 'tef' ), WC_EBANX_Constants::$BANKS_TEF_ALLOWED[ WC_EBANX_Constants::COUNTRY_BRAZIL ] ) ) {
+			|| ! in_array( WC_EBANX_Request::read( 'tef' ), WC_EBANX_Constants::$banks_tef_allowed[ WC_EBANX_Constants::COUNTRY_BRAZIL ] ) ) {
 			throw new Exception( 'MISSING-BANK-NAME' );
 		}
 

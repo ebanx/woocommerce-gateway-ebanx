@@ -130,7 +130,7 @@ class WC_EBANX_Efectivo_Gateway extends WC_EBANX_New_Gateway {
 	 */
 	protected function transform_payment_data( $order ) {
 		if ( ! WC_EBANX_Request::has( 'efectivo' )
-			 || ! in_array( WC_EBANX_Request::read( 'efectivo' ), WC_EBANX_Constants::$VOUCHERS_EFECTIVO_ALLOWED ) ) {
+			 || ! in_array( WC_EBANX_Request::read( 'efectivo' ), WC_EBANX_Constants::$vouchers_efectivo_allowed ) ) {
 			throw new Exception( 'MISSING-VOUCHER' );
 		}
 
