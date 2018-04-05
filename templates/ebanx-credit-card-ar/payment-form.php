@@ -27,14 +27,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 ?>
 checked="checked"<?php endif; ?> class="input-radio <?php echo esc_attr( ( $card->brand . '-' . $card->masked_number ) ); ?>" value="<?php echo esc_attr( $card->token ); ?>" name="ebanx-credit-card-use" />
 						<span class="ebanx-credit-card-brand">
-							<img src="<?php echo esc_url( WC_EBANX_PLUGIN_DIR_URL . "assets/images/icons/$card->brand.png" ); ?>" height="20" style="height: 20px; margin-left: 0; margin-right: 7px; float: none;" alt="<?php echo $card->brand; ?>">
+							<img src="<?php echo esc_url( WC_EBANX_PLUGIN_DIR_URL . "assets/images/icons/$card->brand.png" ); ?>" height="20" style="height: 20px; margin-left: 0; margin-right: 7px; float: none;" alt="<?php echo esc_attr( $card->brand ); ?>">
 						</span>
-						<span class="ebanx-credit-card-bin">&bull;&bull;&bull;&bull; <?php echo esc_html_e( substr( $card->masked_number, -4 ) ); ?></span>
+						<span class="ebanx-credit-card-bin">&bull;&bull;&bull;&bull; <?php echo esc_html_e( substr( $card->masked_number, -4 ), 'woocommerce-gateway-ebanx' ); ?></span>
 					</label>
 					<div class="clear"></div>
 					<div class="ebanx-container-credit-card" style="
 					<?php
-					if ( 0 !== $k) :
+					if ( 0 !== $k ) :
 ?>
 display: none;<?php endif; ?>">
 						<section class="ebanx-form-row">
