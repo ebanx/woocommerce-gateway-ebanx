@@ -1,6 +1,6 @@
 <?php
 
-if (!defined('ABSPATH')) {
+if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
@@ -17,12 +17,12 @@ class WC_EBANX_Flash {
 	 */
 	public static function enqueue_admin_messages() {
 		$flash_messages = self::get_messages();
-		$notices = new WC_EBANX_Notice();
-		foreach ($flash_messages as $flash_message) {
+		$notices        = new WC_EBANX_Notice();
+		foreach ( $flash_messages as $flash_message ) {
 			$notices
-				->with_message($flash_message['message'])
-				->with_type($flash_message['type']);
-			if ($flash_message['dismissible']) {
+				->with_message( $flash_message['message'] )
+				->with_type( $flash_message['type'] );
+			if ( $flash_message['dismissible'] ) {
 				$notices->dismissible();
 			}
 			$notices->enqueue();
@@ -37,14 +37,14 @@ class WC_EBANX_Flash {
 	 * @param  boolean $dismissible If the notice will be dismissible
 	 * @return void
 	 */
-	public static function add_message($message, $type = 'error', $dismissible = false) {
-		$flash_messages = self::get_messages(false);
+	public static function add_message( $message, $type = 'error', $dismissible = false ) {
+		$flash_messages   = self::get_messages( false );
 		$flash_messages[] = array(
-			'message' => $message,
-			'type' => $type,
-			'dismissible' => $dismissible
+			'message'     => $message,
+			'type'        => $type,
+			'dismissible' => $dismissible,
 		);
-		update_option(self::KEY, $flash_messages);
+		update_option( self::KEY, $flash_messages );
 	}
 
 	/**
@@ -52,15 +52,15 @@ class WC_EBANX_Flash {
 	 *
 	 * @return array All the enqueued flash messages
 	 */
-	public static function get_messages($clear = true){
-		$flash_messages = maybe_unserialize(get_option(self::KEY, array()));
-		if ($clear) {
+	public static function get_messages( $clear = true ) {
+		$flash_messages = maybe_unserialize( get_option( self::KEY, array() ) );
+		if ( $clear ) {
 			self::clear_messages();
 		}
 		return $flash_messages;
 	}
 
-	public static function clear_messages(){
-		delete_option(self::KEY);
+	public static function clear_messages() {
+		delete_option( self::KEY );
 	}
 }

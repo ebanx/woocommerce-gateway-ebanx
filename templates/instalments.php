@@ -1,14 +1,14 @@
 <!-- Installments -->
 <?php
-$currency = $currency ?: get_woocommerce_currency();
+$currency      = $currency ?: get_woocommerce_currency();
 $currency_rate = $currency_rate ?: 1;
 
 if ( WC_EBANX_Constants::CURRENCY_CODE_BRL === $currency && $add_tax ) {
 	$currency_rate *= 1 + WC_EBANX_Constants::BRAZIL_TAX;
-	$add_tax = false;
+	$add_tax        = false;
 }
 
-if ( count($instalments_terms) > 1 ) : ?>
+if ( count( $instalments_terms ) > 1 ) : ?>
 	<section class="ebanx-form-row">
 		<?php if ( WC_EBANX_Helper::checkout_contains_subscription() ) : ?>
 			<input type="hidden" name="ebanx-credit-card-installments" value="1" />

@@ -11,11 +11,13 @@ abstract class WC_EBANX_Logger {
 	 * @param array  $log_data data to be logged.
 	 */
 	final protected static function save( $event, array $log_data ) {
-		WC_EBANX_Database::insert( 'logs', array(
-			'time' => current_time( 'mysql' ),
-			'event' => $event,
-			'log' => json_encode( $log_data ),
-		));
+		WC_EBANX_Database::insert(
+			'logs', array(
+				'time'  => current_time( 'mysql' ),
+				'event' => $event,
+				'log'   => json_encode( $log_data ),
+			)
+		);
 	}
 
 	/**

@@ -1,6 +1,6 @@
 <?php
 
-require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
+require_once ABSPATH . 'wp-admin/includes/upgrade.php';
 
 /**
  * Class WC_EBANX_Database
@@ -32,7 +32,7 @@ class WC_EBANX_Database {
 	private static function create_log_table() {
 		global $wpdb;
 
-		$table_name = self::tables()['logs'];
+		$table_name      = self::tables()['logs'];
 		$charset_collate = $wpdb->get_charset_collate();
 
 		if ( $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', $table_name ) ) ) {

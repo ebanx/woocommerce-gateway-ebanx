@@ -5,7 +5,7 @@ use Ebanx\Benjamin\Models\Country;
 use Ebanx\Benjamin\Models\Person;
 use Ebanx\Benjamin\Models\Request;
 
-if ( !defined( 'ABSPATH' ) ) {
+if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
@@ -30,14 +30,14 @@ class WC_EBANX_Payment_By_Link {
 		self::$post_id   = $post_id;
 		self::$order     = wc_get_order( $post_id );
 		self::$configs   = new WC_EBANX_Global_Gateway();
-		self::$validator = new WC_EBANX_Payment_Validator(self::$order);
+		self::$validator = new WC_EBANX_Payment_Validator( self::$order );
 
 		if ( ! self::can_create_payment() ) {
 			return;
 		}
 
 		if ( self::$validator->validate() ) {
-			self::$errors = array_merge(self::$errors, self::$validator->get_errors());
+			self::$errors = array_merge( self::$errors, self::$validator->get_errors() );
 			self::send_errors();
 			return;
 		}
@@ -72,8 +72,8 @@ class WC_EBANX_Payment_By_Link {
 	 */
 	private static function send_errors() {
 		WC_EBANX_Flash::clear_messages();
-		foreach (array_unique(self::$errors) as $error) {
-			WC_EBANX_Flash::add_message($error);
+		foreach ( array_unique( self::$errors ) as $error ) {
+			WC_EBANX_Flash::add_message( $error );
 		}
 	}
 
@@ -82,38 +82,44 @@ class WC_EBANX_Payment_By_Link {
 	 * @return array|bool
 	 */
 	private static function send_request() {
-		$person = new Person([
-			'name' => self::$order->billing_first_name . ' ' . self::$order->billing_last_name,
-			'email' => self::$order->billing_email,
-		]);
+		$person = new Person(
+			[
+				'name'  => self::$order->billing_first_name . ' ' . self::$order->billing_last_name,
+				'email' => self::$order->billing_email,
+			]
+		);
 
 		$address = new Address( [ 'country' => Country::fromIso( self::$order->billing_country ) ] );
 
-		$data = new Request([
-			'person'              => $person,
-			'address'             => $address,
-			'type'                => empty( self::$order->payment_method ) ? '_all' : WC_EBANX_Constants::$gateway_to_payment_type_code[ self::$order->payment_method ],
-			'merchantPaymentCode' => substr( self::$order->id . '_' . md5( time() ), 0, 40 ),
-			'amount'              => self::$order->get_total(),
-			'maxInstalments'     => get_post_meta( self::$order->id, '_ebanx_instalments', true ),
-			'userValues'          => [
-				1 => 'from_woocommerce',
-				3 => 'version=' . WC_EBANX::get_plugin_version(),
-			],
-		]);
+		$data = new Request(
+			[
+				'person'              => $person,
+				'address'             => $address,
+				'type'                => empty( self::$order->payment_method ) ? '_all' : WC_EBANX_Constants::$gateway_to_payment_type_code[ self::$order->payment_method ],
+				'merchantPaymentCode' => substr( self::$order->id . '_' . md5( time() ), 0, 40 ),
+				'amount'              => self::$order->get_total(),
+				'maxInstalments'      => get_post_meta( self::$order->id, '_ebanx_instalments', true ),
+				'userValues'          => [
+					1 => 'from_woocommerce',
+					3 => 'version=' . WC_EBANX::get_plugin_version(),
+				],
+			]
+		);
 
 		$response = false;
 		try {
 			$response = ( new WC_EBANX_Api( self::$configs ) )->ebanx()->hosted()->create( $data );
-		} catch (Exception $e) {
-			self::add_error($e->getMessage());
+		} catch ( Exception $e ) {
+			self::add_error( $e->getMessage() );
 			self::send_errors();
 		} finally {
-			WC_EBANX_Payment_By_Link_Logger::persist([
-				'request' => $data,
-				'response' => $response,
-				'errors' => self::$errors,
-			]);
+			WC_EBANX_Payment_By_Link_Logger::persist(
+				[
+					'request'  => $data,
+					'response' => $response,
+					'errors'   => self::$errors,
+				]
+			);
 		}
 
 		return $response;
@@ -126,10 +132,10 @@ class WC_EBANX_Payment_By_Link {
 	 * @param  string $url  The payment url
 	 * @return void
 	 */
-	private static function post_request($hash, $url) {
-		self::$order->add_order_note(__('EBANX: Your order was created via EBANX.', 'woocommerce-gateway-ebanx'));
-		update_post_meta(self::$post_id, '_ebanx_payment_hash', $hash);
-		update_post_meta(self::$post_id, '_ebanx_checkout_url', $url);
+	private static function post_request( $hash, $url ) {
+		self::$order->add_order_note( __( 'EBANX: Your order was created via EBANX.', 'woocommerce-gateway-ebanx' ) );
+		update_post_meta( self::$post_id, '_ebanx_payment_hash', $hash );
+		update_post_meta( self::$post_id, '_ebanx_checkout_url', $url );
 	}
 
 	/**
@@ -138,8 +144,8 @@ class WC_EBANX_Payment_By_Link {
 	 *
 	 * @param string $error The error message
 	 */
-	private static function add_error($error) {
-		if ( ! in_array($error, self::$errors) ) {
+	private static function add_error( $error ) {
+		if ( ! in_array( $error, self::$errors ) ) {
 			self::$errors[] = $error;
 		}
 	}
@@ -148,20 +154,19 @@ class WC_EBANX_Payment_By_Link {
 	 * @param $request
 	 * @return string
 	 */
-	private static function getErrorMessage($request)
-	{
+	private static function getErrorMessage( $request ) {
 		if ( WP_DEBUG ) {
 			return $request->status_code . ': ' . $request->status_message;
 		}
 
-		switch ($request->status_code) {
+		switch ( $request->status_code ) {
 			case 'BP-R-32':
 				// Amount must be less than {currencyCode} {amount}
-				$value = explode(' ', substr($request->status_message, 25));
+				$value        = explode( ' ', substr( $request->status_message, 25 ) );
 				$currencyCode = $value[0];
-				$amount = number_format( $value[1], 0, wc_get_price_decimal_separator(), wc_get_price_thousand_separator() );
+				$amount       = number_format( $value[1], 0, wc_get_price_decimal_separator(), wc_get_price_thousand_separator() );
 
-				return sprintf(__("Your transaction's value must be lower than %s %s. Please, set a lower one."), $currencyCode, $amount);
+				return sprintf( __( "Your transaction's value must be lower than %1\$s %2\$s. Please, set a lower one." ), $currencyCode, $amount );
 			default:
 				return __( 'We couldn\'t create your EBANX order. Could you review your fields and try again?' );
 		}

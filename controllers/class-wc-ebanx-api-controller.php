@@ -28,10 +28,12 @@ class WC_EBANX_Api_Controller {
 	 * @return void
 	 */
 	public function dashboard_check() {
-		echo json_encode( array(
-			'ebanx'   => true,
-			'version' => WC_EBANX::get_plugin_version(),
-		) );
+		echo json_encode(
+			array(
+				'ebanx'   => true,
+				'version' => WC_EBANX::get_plugin_version(),
+			)
+		);
 	}
 
 	/**
@@ -103,10 +105,12 @@ class WC_EBANX_Api_Controller {
 		try {
 			$response = $ebanx->cancelPayment()->request( $hash );
 
-			WC_EBANX_Cancel_Logger::persist([
-				'paymentHash' => $hash,
-				'$response'   => $response,
-			]);
+			WC_EBANX_Cancel_Logger::persist(
+				[
+					'paymentHash' => $hash,
+					'$response'   => $response,
+				]
+			);
 
 			if ( 'SUCCESS' === $response['status'] ) {
 				$order->update_status( 'cancelled', __( 'EBANX: Cancelled by customer', 'woocommerce-gateway-ebanx' ) );

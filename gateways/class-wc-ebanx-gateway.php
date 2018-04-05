@@ -1,12 +1,12 @@
 <?php
 
-if (!defined('ABSPATH')) {
+if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
 // Update converted value via ajax
-add_action('wp_ajax_nopriv_ebanx_update_converted_value', 'ebanx_update_converted_value');
-add_action('wp_ajax_ebanx_update_converted_value', 'ebanx_update_converted_value');
+add_action( 'wp_ajax_nopriv_ebanx_update_converted_value', 'ebanx_update_converted_value' );
+add_action( 'wp_ajax_ebanx_update_converted_value', 'ebanx_update_converted_value' );
 
 /**
  * It's a just a method to call `ebanx_update_converted_value`
@@ -14,21 +14,21 @@ add_action('wp_ajax_ebanx_update_converted_value', 'ebanx_update_converted_value
  *
  * @return void
  */
-function ebanx_update_converted_value () {
+function ebanx_update_converted_value() {
 	$gateway = new WC_EBANX_Gateway();
 
 	echo $gateway->checkout_rate_conversion(
-		WC_EBANX_Request::read('currency'),
+		WC_EBANX_Request::read( 'currency' ),
 		false,
-		WC_EBANX_Request::read('country'),
-		WC_EBANX_Request::read('instalments')
+		WC_EBANX_Request::read( 'country' ),
+		WC_EBANX_Request::read( 'instalments' )
 	);
 
 	wp_die();
 }
 
-class WC_EBANX_Gateway extends WC_Payment_Gateway
-{
+class WC_EBANX_Gateway extends WC_Payment_Gateway {
+
 	/** @var $ebanx_params */
 	protected static $ebanx_params = array();
 
@@ -49,32 +49,31 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway
 	 */
 	public $user_id;
 
-	const REQUIRED_MARK = " <abbr class=\"required\" title=\"required\">*</abbr>";
+	const REQUIRED_MARK = ' <abbr class="required" title="required">*</abbr>';
 
 	/**
 	 * Constructor
 	 */
-	public function __construct()
-	{
+	public function __construct() {
 		self::$total_gateways++;
 
 		$this->user_id = get_current_user_id();
 
 		$this->configs = new WC_EBANX_Global_Gateway();
 
-		$this->is_sandbox_mode = ($this->configs->settings['sandbox_mode_enabled'] === 'yes');
+		$this->is_sandbox_mode = ( $this->configs->settings['sandbox_mode_enabled'] === 'yes' );
 
 		$this->private_key = $this->is_sandbox_mode ? $this->configs->settings['sandbox_private_key'] : $this->configs->settings['live_private_key'];
 
 		$this->public_key = $this->is_sandbox_mode ? $this->configs->settings['sandbox_public_key'] : $this->configs->settings['live_public_key'];
 
-		if ($this->configs->settings['debug_enabled'] === 'yes') {
+		if ( $this->configs->settings['debug_enabled'] === 'yes' ) {
 			$this->log = new WC_Logger();
 		}
 
-		add_action('wp_enqueue_scripts', array($this, 'checkout_assets'), 100);
+		add_action( 'wp_enqueue_scripts', array( $this, 'checkout_assets' ), 100 );
 
-		add_filter('woocommerce_checkout_fields', array($this, 'checkout_fields'));
+		add_filter( 'woocommerce_checkout_fields', array( $this, 'checkout_fields' ) );
 
 		$this->supports = array( 'refunds' );
 
@@ -82,7 +81,7 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway
 
 		$this->names = $this->get_billing_field_names();
 
-		$this->merchant_currency = strtoupper(get_woocommerce_currency());
+		$this->merchant_currency = strtoupper( get_woocommerce_currency() );
 	}
 
 	/**
@@ -90,8 +89,7 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway
 	 *
 	 * @return boolean
 	 */
-	public function is_available()
-	{
+	public function is_available() {
 		$currency = $this->merchant_currency;
 
 		$this->language = trim( strtolower( WC()->customer->get_country() ) );
@@ -99,22 +97,21 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway
 		return parent::is_available()
 			&& $this->enabled === 'yes'
 			&& $this->is_current_order_gateway()
-			&& !empty($this->public_key)
-			&& !empty($this->private_key)
-			&& ($this->currency_is_usd_eur($currency)
-			|| $this->ebanx_process_merchant_currency($currency)
+			&& ! empty( $this->public_key )
+			&& ! empty( $this->private_key )
+			&& ( $this->currency_is_usd_eur( $currency )
+			|| $this->ebanx_process_merchant_currency( $currency )
 			);
 	}
 
 	/**
-	* Detects if the page only accepts the selected gateways.
-	*
-	* @return boolean
-	*/
-	public function is_current_order_gateway()
-	{
-		$order_id = get_query_var('order-pay');
-		$order = wc_get_order( $order_id );
+	 * Detects if the page only accepts the selected gateways.
+	 *
+	 * @return boolean
+	 */
+	public function is_current_order_gateway() {
+		$order_id = get_query_var( 'order-pay' );
+		$order    = wc_get_order( $order_id );
 
 		if ( $order && ! empty( $order->get_payment_method() ) ) {
 			return $order->get_payment_method() === $this->id;
@@ -129,7 +126,7 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway
 	 * @param  string $currency Possible currencies: BRL, USD, EUR, PEN, CLP, COP, MXN.
 	 * @return boolean          Return true if EBANX process the currency.
 	 */
-	public function ebanx_process_merchant_currency($currency) {
+	public function ebanx_process_merchant_currency( $currency ) {
 		return $currency;
 	}
 
@@ -139,8 +136,8 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway
 	 * @param  string $currency Possible currencies: USD, EUR.
 	 * @return boolean          Return true if EBANX process the currency.
 	 */
-	public function currency_is_usd_eur($currency) {
-		return in_array($currency, array(WC_EBANX_Constants::CURRENCY_CODE_USD, WC_EBANX_Constants::CURRENCY_CODE_EUR));
+	public function currency_is_usd_eur( $currency ) {
+		return in_array( $currency, array( WC_EBANX_Constants::CURRENCY_CODE_USD, WC_EBANX_Constants::CURRENCY_CODE_EUR ) );
 	}
 
 	/**
@@ -149,13 +146,13 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway
 	 * @param  array $fields WooCommerce's fields.
 	 * @return array         The new fields.
 	 */
-	public function checkout_fields($fields) {
+	public function checkout_fields( $fields ) {
 		$fields_options = array();
-		if (isset($this->configs->settings['brazil_taxes_options']) && is_array($this->configs->settings['brazil_taxes_options'])) {
+		if ( isset( $this->configs->settings['brazil_taxes_options'] ) && is_array( $this->configs->settings['brazil_taxes_options'] ) ) {
 			$fields_options = $this->configs->settings['brazil_taxes_options'];
 		}
 
-		$disable_own_fields = isset($this->configs->settings['checkout_manager_enabled']) && $this->configs->settings['checkout_manager_enabled'] === 'yes';
+		$disable_own_fields = isset( $this->configs->settings['checkout_manager_enabled'] ) && $this->configs->settings['checkout_manager_enabled'] === 'yes';
 
 		$cpf = get_user_meta( $this->user_id, '_ebanx_billing_brazil_document', true );
 
@@ -170,68 +167,68 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway
 		$cdi = get_user_meta( $this->user_id, '_ebanx_billing_argentina_document', true );
 
 		$ebanx_billing_brazil_person_type = array(
-			'type' => 'select',
-			'label' => __('Select an option', 'woocommerce-gateway-ebanx'),
+			'type'    => 'select',
+			'label'   => __( 'Select an option', 'woocommerce-gateway-ebanx' ),
 			'default' => 'cpf',
-			'class' => array('ebanx_billing_brazil_selector', 'ebanx-select-field'),
+			'class'   => array( 'ebanx_billing_brazil_selector', 'ebanx-select-field' ),
 			'options' => array(
-				'cpf' => __('CPF - Individuals', 'woocommerce-gateway-ebanx'),
-				'cnpj' => __('CNPJ - Companies', 'woocommerce-gateway-ebanx')
-			)
+				'cpf'  => __( 'CPF - Individuals', 'woocommerce-gateway-ebanx' ),
+				'cnpj' => __( 'CNPJ - Companies', 'woocommerce-gateway-ebanx' ),
+			),
 		);
 
 		$ebanx_billing_argentina_document_type = array(
-			'type' => 'select',
-			'label' => __( 'Select a document type', 'woocommerce-gateway-ebanx' ),
+			'type'    => 'select',
+			'label'   => __( 'Select a document type', 'woocommerce-gateway-ebanx' ),
 			'default' => 'ARG_CUIT',
-			'class' => array( 'ebanx_billing_argentina_selector', 'ebanx-select-field' ),
+			'class'   => array( 'ebanx_billing_argentina_selector', 'ebanx-select-field' ),
 			'options' => array(
 				'ARG_CUIT' => __( 'CUIT', 'woocommerce-gateway-ebanx' ),
 				'ARG_CUIL' => __( 'CUIL', 'woocommerce-gateway-ebanx' ),
-				'ARG_CDI' => __( 'CDI', 'woocommerce-gateway-ebanx' ),
+				'ARG_CDI'  => __( 'CDI', 'woocommerce-gateway-ebanx' ),
 			),
 		);
 
 		$ebanx_billing_brazil_document = array(
-			'type'     => 'text',
-			'label'    => 'CPF' . self::REQUIRED_MARK,
-			'class' => array('ebanx_billing_brazil_document', 'ebanx_billing_brazil_cpf', 'ebanx_billing_brazil_selector_option', 'form-row-wide'),
-			'default' => isset($cpf) ? $cpf : ''
+			'type'    => 'text',
+			'label'   => 'CPF' . self::REQUIRED_MARK,
+			'class'   => array( 'ebanx_billing_brazil_document', 'ebanx_billing_brazil_cpf', 'ebanx_billing_brazil_selector_option', 'form-row-wide' ),
+			'default' => isset( $cpf ) ? $cpf : '',
 		);
 
 		$ebanx_billing_brazil_cnpj = array(
-			'type'     => 'text',
-			'label'    => 'CNPJ' . self::REQUIRED_MARK,
-			'class' => array('ebanx_billing_brazil_cnpj', 'ebanx_billing_brazil_cnpj', 'ebanx_billing_brazil_selector_option', 'form-row-wide'),
-			'default' => isset($cnpj) ? $cnpj : ''
+			'type'    => 'text',
+			'label'   => 'CNPJ' . self::REQUIRED_MARK,
+			'class'   => array( 'ebanx_billing_brazil_cnpj', 'ebanx_billing_brazil_cnpj', 'ebanx_billing_brazil_selector_option', 'form-row-wide' ),
+			'default' => isset( $cnpj ) ? $cnpj : '',
 		);
 
-		$ebanx_billing_chile_document = array(
-			'type'     => 'text',
-			'label'    => 'RUT' . self::REQUIRED_MARK,
-			'class' => array('ebanx_billing_chile_document', 'form-row-wide'),
-			'default' => isset($rut) ? $rut : ''
+		$ebanx_billing_chile_document     = array(
+			'type'    => 'text',
+			'label'   => 'RUT' . self::REQUIRED_MARK,
+			'class'   => array( 'ebanx_billing_chile_document', 'form-row-wide' ),
+			'default' => isset( $rut ) ? $rut : '',
 		);
-		$ebanx_billing_colombia_document = array(
-			'type'     => 'text',
-			'label'    => 'DNI' . self::REQUIRED_MARK,
-			'class' => array('ebanx_billing_colombia_document', 'form-row-wide'),
+		$ebanx_billing_colombia_document  = array(
+			'type'    => 'text',
+			'label'   => 'DNI' . self::REQUIRED_MARK,
+			'class'   => array( 'ebanx_billing_colombia_document', 'form-row-wide' ),
 			'default' => isset( $dni ) ? $dni : '',
 		);
-		$ebanx_billing_peru_document = array(
+		$ebanx_billing_peru_document      = array(
 			'type'    => 'text',
 			'label'   => 'DNI' . self::REQUIRED_MARK,
 			'class'   => array( 'ebanx_billing_peru_document', 'form-row-wide' ),
 			'default' => isset( $dni_pe ) ? $dni_pe : '',
 		);
 		$ebanx_billing_argentina_document = array(
-			'type'     => 'text',
-			'label'    => __( 'Document', 'woocommerce-gateway-ebanx' ) . self::REQUIRED_MARK,
-			'class' => array( 'ebanx_billing_argentina_document', 'form-row-wide' ),
+			'type'    => 'text',
+			'label'   => __( 'Document', 'woocommerce-gateway-ebanx' ) . self::REQUIRED_MARK,
+			'class'   => array( 'ebanx_billing_argentina_document', 'form-row-wide' ),
 			'default' => isset( $cdi ) ? $cdi : '',
 		);
 
-		if (!$disable_own_fields) {
+		if ( ! $disable_own_fields ) {
 			// CPF and CNPJ are enabled
 			if ( in_array( 'cpf', $fields_options ) && in_array( 'cnpj', $fields_options ) ) {
 				$fields['billing']['ebanx_billing_brazil_person_type'] = $ebanx_billing_brazil_person_type;
@@ -255,7 +252,7 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway
 
 			// For Argentina.
 			$fields['billing']['ebanx_billing_argentina_document_type'] = $ebanx_billing_argentina_document_type;
-			$fields['billing']['ebanx_billing_argentina_document'] = $ebanx_billing_argentina_document;
+			$fields['billing']['ebanx_billing_argentina_document']      = $ebanx_billing_argentina_document;
 
 			// For Peru.
 			$fields['billing']['ebanx_billing_peru_document'] = $ebanx_billing_peru_document;
@@ -273,26 +270,26 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway
 	public function get_billing_field_names() {
 		return array(
 			// Brazil General
-			'ebanx_billing_brazil_person_type' => $this->get_checkout_manager_settings_or_default('checkout_manager_brazil_person_type', 'ebanx_billing_brazil_person_type'),
+			'ebanx_billing_brazil_person_type'      => $this->get_checkout_manager_settings_or_default( 'checkout_manager_brazil_person_type', 'ebanx_billing_brazil_person_type' ),
 
 			// Brazil CPF
-			'ebanx_billing_brazil_document' => $this->get_checkout_manager_settings_or_default('checkout_manager_cpf_brazil', 'ebanx_billing_brazil_document'),
+			'ebanx_billing_brazil_document'         => $this->get_checkout_manager_settings_or_default( 'checkout_manager_cpf_brazil', 'ebanx_billing_brazil_document' ),
 
 			// Brazil CNPJ
-			'ebanx_billing_brazil_cnpj' => $this->get_checkout_manager_settings_or_default('checkout_manager_cnpj_brazil', 'ebanx_billing_brazil_cnpj'),
+			'ebanx_billing_brazil_cnpj'             => $this->get_checkout_manager_settings_or_default( 'checkout_manager_cnpj_brazil', 'ebanx_billing_brazil_cnpj' ),
 
 			// Chile Fields
-			'ebanx_billing_chile_document' => $this->get_checkout_manager_settings_or_default('checkout_manager_chile_document', 'ebanx_billing_chile_document'),
+			'ebanx_billing_chile_document'          => $this->get_checkout_manager_settings_or_default( 'checkout_manager_chile_document', 'ebanx_billing_chile_document' ),
 
 			// Colombia Fields
-			'ebanx_billing_colombia_document' => $this->get_checkout_manager_settings_or_default('checkout_manager_colombia_document', 'ebanx_billing_colombia_document'),
+			'ebanx_billing_colombia_document'       => $this->get_checkout_manager_settings_or_default( 'checkout_manager_colombia_document', 'ebanx_billing_colombia_document' ),
 
 			// Argentina Fields.
 			'ebanx_billing_argentina_document_type' => $this->get_checkout_manager_settings_or_default( 'checkout_manager_argentina_document_type', 'ebanx_billing_argentina_document_type' ),
-			'ebanx_billing_argentina_document' => $this->get_checkout_manager_settings_or_default( 'checkout_manager_argentina_document', 'ebanx_billing_argentina_document' ),
+			'ebanx_billing_argentina_document'      => $this->get_checkout_manager_settings_or_default( 'checkout_manager_argentina_document', 'ebanx_billing_argentina_document' ),
 
 			// Peru Fields.
-			'ebanx_billing_peru_document'      => $this->get_checkout_manager_settings_or_default( 'checkout_manager_peru_document', 'ebanx_billing_peru_document' ),
+			'ebanx_billing_peru_document'           => $this->get_checkout_manager_settings_or_default( 'checkout_manager_peru_document', 'ebanx_billing_peru_document' ),
 		);
 	}
 
@@ -303,12 +300,12 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway
 	 * @param  mixed  $default The default value in case setting is not present.
 	 * @return mixed
 	 */
-	private function get_checkout_manager_settings_or_default($name, $default=null) {
-		if (!isset($this->configs->settings['checkout_manager_enabled']) || $this->configs->settings['checkout_manager_enabled'] !== 'yes') {
+	private function get_checkout_manager_settings_or_default( $name, $default = null ) {
+		if ( ! isset( $this->configs->settings['checkout_manager_enabled'] ) || $this->configs->settings['checkout_manager_enabled'] !== 'yes' ) {
 			return $default;
 		}
 
-		return $this->get_setting_or_default($name, $default);
+		return $this->get_setting_or_default( $name, $default );
 	}
 
 	/**
@@ -318,8 +315,8 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway
 	 * @param  mixed  $default The default value in case setting is not present
 	 * @return mixed
 	 */
-	public function get_setting_or_default($name, $default=null) {
-		return $this->configs->get_setting_or_default($name, $default);
+	public function get_setting_or_default( $name, $default = null ) {
+		return $this->configs->get_setting_or_default( $name, $default );
 	}
 
 	/**
@@ -327,9 +324,8 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway
 	 *
 	 * @return string The URI of the icon
 	 */
-	public function show_icon()
-	{
-		return plugins_url('/assets/images/' . $this->id . '.png', plugin_basename(dirname(__FILE__)));
+	public function show_icon() {
+		return plugins_url( '/assets/images/' . $this->id . '.png', plugin_basename( dirname( __FILE__ ) ) );
 	}
 
 	/**
@@ -337,8 +333,7 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway
 	 *
 	 * @return void
 	 */
-	public function admin_options()
-	{
+	public function admin_options() {
 		include WC_EBANX_TEMPLATES_DIR . 'views/html-admin-page.php';
 	}
 
@@ -348,11 +343,10 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway
 	 * @param  WC_Order $order The order created
 	 * @return void
 	 */
-	public static function thankyou_page($data)
-	{
+	public static function thankyou_page( $data ) {
 		$file_name = "{$data['method']}/payment-{$data['order_status']}.php";
 
-		if (file_exists(WC_EBANX::get_templates_path() . $file_name)) {
+		if ( file_exists( WC_EBANX::get_templates_path() . $file_name ) ) {
 			wc_get_template(
 				$file_name,
 				$data['data'],
@@ -368,8 +362,7 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway
 	 * @param  array $data  The checkout's data
 	 * @return array
 	 */
-	protected function dispatch($data)
-	{
+	protected function dispatch( $data ) {
 		WC()->cart->empty_cart();
 
 		return $data;
@@ -379,58 +372,57 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway
 	 * Save order's meta fields for future use
 	 *
 	 * @param  WC_Order $order The order created
-	 * @param  Object $request The request from EBANX success response
+	 * @param  Object   $request The request from EBANX success response
 	 * @return void
 	 */
-	protected function save_order_meta_fields($order, $request)
-	{
+	protected function save_order_meta_fields( $order, $request ) {
 		// To save only on DB to internal use
-		update_post_meta($order->id, '_ebanx_payment_hash', $request->payment->hash);
-		update_post_meta($order->id, '_ebanx_payment_open_date', $request->payment->open_date);
+		update_post_meta( $order->id, '_ebanx_payment_hash', $request->payment->hash );
+		update_post_meta( $order->id, '_ebanx_payment_open_date', $request->payment->open_date );
 
-		if (WC_EBANX_Request::has('billing_email')) {
-			update_post_meta($order->id, '_ebanx_payment_customer_email', sanitize_email(WC_EBANX_Request::read('billing_email')));
+		if ( WC_EBANX_Request::has( 'billing_email' ) ) {
+			update_post_meta( $order->id, '_ebanx_payment_customer_email', sanitize_email( WC_EBANX_Request::read( 'billing_email' ) ) );
 		}
 
-		if (WC_EBANX_Request::has('billing_phone')) {
-			update_post_meta($order->id, '_ebanx_payment_customer_phone', sanitize_text_field(WC_EBANX_Request::read('billing_phone')));
+		if ( WC_EBANX_Request::has( 'billing_phone' ) ) {
+			update_post_meta( $order->id, '_ebanx_payment_customer_phone', sanitize_text_field( WC_EBANX_Request::read( 'billing_phone' ) ) );
 		}
 
-		if (WC_EBANX_Request::has('billing_address_1')) {
-			update_post_meta($order->id, '_ebanx_payment_customer_address', sanitize_text_field(WC_EBANX_Request::read('billing_address_1')));
+		if ( WC_EBANX_Request::has( 'billing_address_1' ) ) {
+			update_post_meta( $order->id, '_ebanx_payment_customer_address', sanitize_text_field( WC_EBANX_Request::read( 'billing_address_1' ) ) );
 		}
 	}
 
 	/**
 	 * Generates the checkout message
 	 *
-	 * @param int $amount The total price of the order
+	 * @param int    $amount The total price of the order
 	 * @param  string $currency Possible currencies: BRL, USD, EUR, PEN, CLP, COP, MXN
 	 * @param string $country The country code
 	 * @return string
 	 */
-	public function get_checkout_message($amount, $currency, $country) {
-		$price = wc_price($amount, array('currency' => $currency));
-		$language = $this->get_language_by_country($country);
+	public function get_checkout_message( $amount, $currency, $country ) {
+		$price    = wc_price( $amount, array( 'currency' => $currency ) );
+		$language = $this->get_language_by_country( $country );
 
 		$texts = array(
 			'pt-br' => array(
-				'INTRO'                                  => 'Total a pagar ',
-				WC_EBANX_Constants::CURRENCY_CODE_BRL    => $this->configs->get_setting_or_default('add_iof_to_local_amount_enabled', 'yes') === 'yes' ? 'com IOF (0.38%)' : 'em Reais'
+				'INTRO'                               => 'Total a pagar ',
+				WC_EBANX_Constants::CURRENCY_CODE_BRL => $this->configs->get_setting_or_default( 'add_iof_to_local_amount_enabled', 'yes' ) === 'yes' ? 'com IOF (0.38%)' : 'em Reais',
 			),
 			'es'    => array(
-				'INTRO'                                      => 'Total a pagar en ',
-				WC_EBANX_Constants::CURRENCY_CODE_MXN    => 'Peso mexicano',
-				WC_EBANX_Constants::CURRENCY_CODE_CLP    => 'Peso chileno',
-				WC_EBANX_Constants::CURRENCY_CODE_PEN    => 'Sol peruano',
-				WC_EBANX_Constants::CURRENCY_CODE_COP    => 'Peso colombiano',
-				WC_EBANX_Constants::CURRENCY_CODE_ARS    => 'Peso argentino',
-				WC_EBANX_Constants::CURRENCY_CODE_BRL    => 'Real brasileño'
+				'INTRO'                               => 'Total a pagar en ',
+				WC_EBANX_Constants::CURRENCY_CODE_MXN => 'Peso mexicano',
+				WC_EBANX_Constants::CURRENCY_CODE_CLP => 'Peso chileno',
+				WC_EBANX_Constants::CURRENCY_CODE_PEN => 'Sol peruano',
+				WC_EBANX_Constants::CURRENCY_CODE_COP => 'Peso colombiano',
+				WC_EBANX_Constants::CURRENCY_CODE_ARS => 'Peso argentino',
+				WC_EBANX_Constants::CURRENCY_CODE_BRL => 'Real brasileño',
 			),
 		);
 
-		$message = $texts[$language]['INTRO'];
-		$message .= !empty($texts[$language][$currency]) ? $texts[$language][$currency] : $currency;
+		$message  = $texts[ $language ]['INTRO'];
+		$message .= ! empty( $texts[ $language ][ $currency ] ) ? $texts[ $language ][ $currency ] : $currency;
 		$message .= ': <strong class="ebanx-amount-total">' . $price . '</strong>';
 
 		return $message;
@@ -451,10 +443,10 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway
 			'ec' => 'es',
 			'br' => 'pt-br',
 		);
-		if (!array_key_exists($country, $languages)) {
+		if ( ! array_key_exists( $country, $languages ) ) {
 			return 'pt-br';
 		}
-		return $languages[$country];
+		return $languages[ $country ];
 	}
 
 	/**
@@ -465,22 +457,22 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway
 	 * @return string
 	 */
 	protected function get_exchange_rate_message( $rate, $currency, $country ) {
-		if ($this->configs->get_setting_or_default('show_exchange_rate', 'no') === 'no') {
+		if ( $this->configs->get_setting_or_default( 'show_exchange_rate', 'no' ) === 'no' ) {
 			return '';
 		}
 
-		if ($rate === 1) {
+		if ( $rate === 1 ) {
 			return '';
 		}
 
-		$price = wc_price($rate, array('currency' => $currency));
-		$language = $this->get_language_by_country($country);
-		$texts = array(
+		$price    = wc_price( $rate, array( 'currency' => $currency ) );
+		$language = $this->get_language_by_country( $country );
+		$texts    = array(
 			'pt-br' => 'Taxa de câmbio: ',
-			'es' => 'Tipo de cambio: ',
+			'es'    => 'Tipo de cambio: ',
 		);
 
-		$message = $texts[$language];
+		$message  = $texts[ $language ];
 		$message .= '<strong class="ebanx-exchange-rate">' . $price . '</strong>';
 
 		return $message;
@@ -494,7 +486,7 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway
 	protected function get_sandbox_form_message( $country ) {
 		$messages = array(
 			'pt-br' => 'Ainda estamos testando esse tipo de pagamento. Por isso, a sua compra não será cobrada nem enviada.',
-			'es' => 'Todavia estamos probando este método de pago. Por eso su compra no sera cobrada ni enviada.',
+			'es'    => 'Todavia estamos probando este método de pago. Por eso su compra no sera cobrada ni enviada.',
 		);
 
 		return $messages[ $this->get_language_by_country( $country ) ];
