@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * Class WC_EBANX_Hooks
+ */
 class WC_EBANX_Hooks {
 	/**
 	 * Initiliazer
@@ -16,15 +19,15 @@ class WC_EBANX_Hooks {
 	 * @return boolean
 	 */
 	private static function is_url_response() {
-		$urlResponse = ( WC_EBANX_Request::has( 'hash' )
+		$url_response = ( WC_EBANX_Request::has( 'hash' )
 			&& WC_EBANX_Request::has( 'merchant_payment_code' )
 			&& WC_EBANX_Request::has( 'payment_type_code' ) );
 
-		if ( $urlResponse ) {
+		if ( $url_response ) {
 			WC_EBANX_Request::set( 'notification_type', 'UPDATE' );
 		}
 
-		return $urlResponse;
+		return $url_response;
 	}
 
 	/**

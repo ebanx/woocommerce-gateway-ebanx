@@ -1,15 +1,20 @@
 <?php
 
+use RuntimeException;
+
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+/**
+ * Class WC_EBANX_Helper
+ */
 abstract class WC_EBANX_Helper {
 
 	/**
 	 * Flatten an array
 	 *
-	 * @param  array $array The array to flatten
+	 * @param  array $array The array to flatten.
 	 * @return array        The new array flatted
 	 */
 	public static function flatten( array $array ) {
@@ -26,17 +31,19 @@ abstract class WC_EBANX_Helper {
 	/**
 	 * Splits address in street name, house number and addition
 	 *
-	 * @param  string $address Address to be split
+	 * @param  string $address  Address to be split.
+	 * @throws RuntimeException When it is impossible to split the address by regex matching.
+	 *
 	 * @return array
 	 */
 	public static function split_street( $address ) {
 		$result = preg_match( '/^([^,\-\/\#0-9]*)\s*[,\-\/\#]?\s*([0-9]+)\s*[,\-\/]?\s*([^,\-\/]*)(\s*[,\-\/]?\s*)([^,\-\/]*)$/', $address, $matches );
 
-		if ( $result === false ) {
-			throw new \RuntimeException( sprintf( 'Problems trying to parse address: \'%s\'', $address ) );
+		if ( false === $result ) {
+			throw new RuntimeException( sprintf( 'Problems trying to parse address: \'%s\'', $address ) );
 		}
 
-		if ( $result === 0 ) {
+		if ( 0 === $result ) {
 			return array(
 				'streetName'        => $address,
 				'houseNumber'       => '',
