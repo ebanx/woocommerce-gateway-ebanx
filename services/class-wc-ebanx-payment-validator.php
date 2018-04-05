@@ -4,14 +4,25 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+/**
+ * Class WC_EBANX_Payment_Validator
+ */
 class WC_EBANX_Payment_Validator {
 
+	/**
+	 * @var array
+	 */
 	private $errors = array();
 
+	/**
+	 * @var null|boolean|WC_Order|WC_Refund
+	 */
 	private $order = null;
 
 	/**
 	 * Construct
+	 *
+	 * @param boolean|WC_Order|WC_Refund $order
 	 */
 	public function __construct( $order ) {
 		$this->set_order( $order );
@@ -20,7 +31,7 @@ class WC_EBANX_Payment_Validator {
 	/**
 	 * Order setter
 	 *
-	 * @param WC_Order $order The order to validate
+	 * @param WC_Order $order The order to validate.
 	 */
 	public function set_order( $order ) {
 		$this->order = $order;
@@ -30,7 +41,7 @@ class WC_EBANX_Payment_Validator {
 	 * Check if the error is not already in the array and add it.
 	 * To make sure it will show no duplicates.
 	 *
-	 * @param string $error The error message
+	 * @param string $error The error message.
 	 */
 	private function add_error( $error ) {
 		$this->errors[] = $error;
@@ -84,7 +95,7 @@ class WC_EBANX_Payment_Validator {
 	 * @return bool Problems found
 	 */
 	private function validate_status() {
-		if ( ! $this->order->status === 'pending' ) {
+		if ( ! 'pending' === $this->order->status ) {
 			$this->add_error( __( 'Payment links can only be created when the order status is selected as Pending Payments.', 'woocommerce-gateway-ebanx' ) );
 			return true;
 		}
@@ -158,7 +169,7 @@ class WC_EBANX_Payment_Validator {
 			return false;
 		}
 
-		// true: Leave and stop validating other fields
+		// true: Leave and stop validating other fields.
 		if ( $this->validate_payment_method_is_ebanx_account() ) {
 			return true;
 		}
@@ -179,7 +190,7 @@ class WC_EBANX_Payment_Validator {
 	 * @return bool Problems found
 	 */
 	private function validate_payment_method_is_ebanx_account() {
-		if ( $this->order->payment_method === 'ebanx-account' ) {
+		if ( 'ebanx-account' === $this->order->payment_method ) {
 			$this->add_error( __( 'The EBANX account is not available yet as payment method, you will hear about that soon!', 'woocommerce-gateway-ebanx' ) );
 			return true;
 		}
@@ -216,16 +227,19 @@ class WC_EBANX_Payment_Validator {
 		return false;
 	}
 
+	/**
+	 * @return bool
+	 */
 	private function validate_instalments() {
 		$instalments = get_post_meta( $this->order->id, '_ebanx_instalments', true );
 
 		if ( $instalments < 1 ) {
-			$this->add_error( __( 'Select at least 1 instalment' ) );
+			$this->add_error( __( 'Select at least 1 instalment', 'woocommerce-gateway-ebanx' ) );
 			return true;
 		}
 
 		if ( $instalments > 12 ) {
-			$this->add_error( __( 'Select less than 12 instalments' ) );
+			$this->add_error( __( 'Select less than 12 instalments', 'woocommerce-gateway-ebanx' ) );
 			return true;
 		}
 

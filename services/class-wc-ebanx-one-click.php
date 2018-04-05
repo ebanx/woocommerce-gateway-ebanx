@@ -4,22 +4,34 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+/**
+ * Class WC_EBANX_One_Click
+ */
 class WC_EBANX_One_Click {
 	const CREATE_ORDER_ACTION = 'ebanx_create_order';
 
+	/**
+	 * @var array
+	 */
 	private $cards;
 
 	/**
 	 * @var int
 	 */
 	private $user_id;
+
+	/**
+	 * @var bool|WC_EBANX_Credit_Card_Gateway
+	 */
 	private $gateway;
 
 	/**
 	 * @var string
 	 */
 	private $user_country;
-
+	/**
+	 * @var array
+	 */
 	protected $instalment_rates = array();
 
 	/**
@@ -74,6 +86,8 @@ class WC_EBANX_One_Click {
 
 	/**
 	 * Process the one click request
+	 *
+	 * @throws Exception When reading with 'ebanx-action'.
 	 *
 	 * @return void
 	 */
@@ -166,7 +180,7 @@ class WC_EBANX_One_Click {
 
 			$response = $this->gateway->process_payment( $order->id );
 
-			if ( $response['result'] !== 'success' ) {
+			if ( 'success' !== $response['result'] ) {
 				$message = __( 'EBANX: Unable to create the payment via one click.', 'woocommerce-gateway-ebanx' );
 
 				$order->add_order_note( $message );
@@ -184,7 +198,8 @@ class WC_EBANX_One_Click {
 			wp_safe_redirect( $response['redirect'] );
 			exit;
 		} catch ( Exception $e ) {
-			// TODO: Make a caught exception
+			// TODO: Make a caught exception.
+			WC_EBANX_Log::wp_write_log( 'Exception in one_click_handler.' );
 		}
 
 		$this->restore_cart();
@@ -198,13 +213,13 @@ class WC_EBANX_One_Click {
 	 * @return void
 	 */
 	public function restore_cart() {
-		// delete current cart
+		// delete current cart.
 		WC()->cart->empty_cart( true );
 
-		// update user meta with saved persistent
+		// update user meta with saved persistent.
 		$saved_cart = get_user_meta( $this->user_id, '_ebanx_persistent_cart', true );
 
-		// then reload cart
+		// then reload cart.
 		WC()->session->set( 'cart', $saved_cart );
 		WC()->cart->get_cart_from_session();
 	}
@@ -215,7 +230,7 @@ class WC_EBANX_One_Click {
 	 * @return array
 	 */
 	public function get_user_billing_address() {
-		// Formatted Addresses
+		// Formatted Addresses.
 		$billing = array(
 			'first_name' => get_user_meta( $this->user_id, 'billing_first_name', true ),
 			'last_name'  => get_user_meta( $this->user_id, 'billing_last_name', true ),
@@ -272,7 +287,7 @@ class WC_EBANX_One_Click {
 		$card = current(
 			array_filter(
 				(array) array_filter( get_user_meta( $this->user_id, '_ebanx_credit_card_token', true ) ), function ( $card ) {
-					return $card->token == WC_EBANX_Request::read( 'ebanx-one-click-token' );
+					return WC_EBANX_Request::read( 'ebanx-one-click-token' ) == $card->token;
 				}
 			)
 		);
@@ -319,6 +334,9 @@ class WC_EBANX_One_Click {
 		return ! is_user_logged_in() || ! get_user_meta( $this->user_id, '_billing_email', true ) && ! empty( $this->cards );
 	}
 
+	/**
+	 * @return bool
+	 */
 	public function should_show_button() {
 		return $this->cards
 			&& ( ! empty( get_user_meta( $this->user_id, '_ebanx_billing_brazil_document', true ) )

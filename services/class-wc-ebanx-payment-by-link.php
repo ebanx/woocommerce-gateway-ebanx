@@ -9,21 +9,36 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+/**
+ * Class WC_EBANX_Payment_By_Link
+ */
 class WC_EBANX_Payment_By_Link {
 
+	/**
+	 * @var array
+	 */
 	private static $errors = array();
+	/**
+	 * @var int
+	 */
 	private static $post_id;
+	/**
+	 * @var boolean|WC_Order|WC_Refund
+	 */
 	private static $order;
 	/**
 	 * @var WC_EBANX_Global_Gateway
 	 */
 	private static $configs;
+	/**
+	 * @var WC_EBANX_Payment_Validator
+	 */
 	private static $validator;
 
 	/**
 	 * The core method. It uses the other methods to create a payment link
 	 *
-	 * @param  int $post_id The post id
+	 * @param  int $post_id The post id.
 	 * @return void
 	 */
 	public static function create( $post_id ) {
@@ -44,7 +59,7 @@ class WC_EBANX_Payment_By_Link {
 
 		$response = self::send_request();
 		if ( $response && 'SUCCESS' !== $response['status'] ) {
-			self::add_error( self::getErrorMessage( $response ) );
+			self::add_error( self::get_error_message( $response ) );
 			self::send_errors();
 			return;
 		}
@@ -79,7 +94,7 @@ class WC_EBANX_Payment_By_Link {
 
 
 	/**
-	 * @return array|bool
+	 * @return object
 	 */
 	private static function send_request() {
 		$person = new Person(
@@ -128,8 +143,8 @@ class WC_EBANX_Payment_By_Link {
 	/**
 	 * If the request was successful, this method is called before ending the proccess
 	 *
-	 * @param  string $hash The payment hash
-	 * @param  string $url  The payment url
+	 * @param  string $hash The payment hash.
+	 * @param  string $url  The payment url.
 	 * @return void
 	 */
 	private static function post_request( $hash, $url ) {
@@ -142,7 +157,7 @@ class WC_EBANX_Payment_By_Link {
 	 * Check if the error is not already in the array and add it.
 	 * To make sure it will show no duplicates.
 	 *
-	 * @param string $error The error message
+	 * @param string $error The error message.
 	 */
 	private static function add_error( $error ) {
 		if ( ! in_array( $error, self::$errors ) ) {
@@ -151,24 +166,25 @@ class WC_EBANX_Payment_By_Link {
 	}
 
 	/**
-	 * @param $request
+	 * @param object $request
+	 *
 	 * @return string
 	 */
-	private static function getErrorMessage( $request ) {
+	private static function get_error_message( $request ) {
 		if ( WP_DEBUG ) {
 			return $request->status_code . ': ' . $request->status_message;
 		}
 
 		switch ( $request->status_code ) {
 			case 'BP-R-32':
-				// Amount must be less than {currencyCode} {amount}
+				// Amount must be less than {currency_code} {amount}.
 				$value        = explode( ' ', substr( $request->status_message, 25 ) );
-				$currencyCode = $value[0];
+				$currency_code = $value[0];
 				$amount       = number_format( $value[1], 0, wc_get_price_decimal_separator(), wc_get_price_thousand_separator() );
 
-				return sprintf( __( "Your transaction's value must be lower than %1\$s %2\$s. Please, set a lower one." ), $currencyCode, $amount );
+				return sprintf( __( "Your transaction's value must be lower than %1\$s %2\$s. Please, set a lower one.", 'woocommerce-gateway-ebanx' ), $currency_code, $amount );
 			default:
-				return __( 'We couldn\'t create your EBANX order. Could you review your fields and try again?' );
+				return __( 'We couldn\'t create your EBANX order. Could you review your fields and try again?', 'woocommerce-gateway-ebanx' );
 		}
 	}
 }

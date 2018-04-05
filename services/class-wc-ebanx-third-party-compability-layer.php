@@ -4,6 +4,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+/**
+ * Class WC_EBANX_Third_Party_Compability_Layer
+ */
 class WC_EBANX_Third_Party_Compability_Layer {
 	/**
 	 * Check and solve third party incompabilities

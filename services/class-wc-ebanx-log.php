@@ -32,6 +32,21 @@ class WC_EBANX_Log {
 	}
 
 	/**
+	 * Logs to WP if WP_DEBUG is active.
+	 *
+	 * @param string $log
+	 */
+	public static function wp_write_log( $log ) {
+		if ( true === WP_DEBUG ) {
+			if ( is_array( $log ) || is_object( $log ) ) {
+				error_log( print_r( $log, true ) );
+			} else {
+				error_log( $log );
+			}
+		}
+	}
+
+	/**
 	 * This method is responsible to get some active plugins public data to be logged
 	 */
 	private static function get_plugins_data() {

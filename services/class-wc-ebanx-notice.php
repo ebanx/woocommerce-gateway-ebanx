@@ -4,6 +4,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+/**
+ * Class WC_EBANX_Notice
+ */
 class WC_EBANX_Notice {
 
 	/**
@@ -54,8 +57,10 @@ class WC_EBANX_Notice {
 		switch ( count( $args ) ) {
 			case 3:
 				$this->is_dismissible = $args[2];
+				// FALLTHROUGH.
 			case 2:
 				$this->with_type( $args[1] );
+				// FALLTHROUGH.
 			case 1:
 				$this->message = $args[0];
 				break;
@@ -88,6 +93,9 @@ class WC_EBANX_Notice {
 	 * Sets the type of the notice
 	 *
 	 * @param  string $type
+	 *
+	 * @throws InvalidArgumentException When Unknown notice type received.
+	 *
 	 * @return WC_EBANX_Notices_Notice
 	 */
 	public function with_type( $type ) {
@@ -121,8 +129,9 @@ class WC_EBANX_Notice {
 	/**
 	 * Enqueues the notice to the WordPress hook
 	 *
+	 * @throws Exception When no message is specified.
+	 *
 	 * @return WC_EBANX_Notices_Notice
-	 * @throws Exception
 	 */
 	public function enqueue() {
 		if ( isset( $this->view ) ) {
@@ -148,7 +157,7 @@ class WC_EBANX_Notice {
 					$classes .= ' is-dismissible';
 				}
 				$notice = "<div class='$classes'><p>{$message}</p></div>";
-				echo $notice;
+				echo $notice; // phpcs:ignore WordPress.XSS.EscapeOutput
 			}
 		);
 		return $this;
@@ -157,8 +166,9 @@ class WC_EBANX_Notice {
 	/**
 	 * Prints the notice when using hook won't work
 	 *
+	 * @throws Exception When no message is specified.
+	 *
 	 * @return WC_EBANX_Notices_Notice
-	 * @throws Exception
 	 */
 	public function display() {
 		if ( isset( $this->view ) ) {
@@ -178,7 +188,7 @@ class WC_EBANX_Notice {
 			$classes .= ' is-dismissible';
 		}
 		$notice = "<div class='$classes'><p>{$message}</p></div>";
-		echo $notice;
+		echo $notice; // phpcs:ignore WordPress.XSS.EscapeOutput
 		return $this;
 	}
 }
