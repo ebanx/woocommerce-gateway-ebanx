@@ -7,6 +7,7 @@
  * @version 2.0.0
  */
 
+
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
@@ -22,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 					<label class="ebanx-credit-card-label">
 						<input type="radio" 
 						<?php
-						if ( $k === 0 ) :
+						if ( 0 === $k ) :
 ?>
 checked="checked"<?php endif; ?> class="input-radio <?php echo trim( $card->brand . '-' . $card->masked_number ); ?>" value="<?php echo $card->token; ?>" name="ebanx-credit-card-use" />
 						<span class="ebanx-credit-card-brand">
