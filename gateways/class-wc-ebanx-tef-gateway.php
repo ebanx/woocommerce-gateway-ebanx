@@ -4,6 +4,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+/**
+ * Class WC_EBANX_Tef_Gateway
+ */
 class WC_EBANX_Tef_Gateway extends WC_EBANX_Redirect_Gateway {
 
 	/**
@@ -37,11 +40,11 @@ class WC_EBANX_Tef_Gateway extends WC_EBANX_Redirect_Gateway {
 	/**
 	 * Check if the currency is processed by EBANX
 	 *
-	 * @param  string $currency Possible currencies: BRL
+	 * @param  string $currency Possible currencies: BRL.
 	 * @return boolean          Return true if EBANX process the currency
 	 */
 	public function ebanx_process_merchant_currency( $currency ) {
-		return $currency === WC_EBANX_Constants::CURRENCY_CODE_BRL;
+		return WC_EBANX_Constants::CURRENCY_CODE_BRL === $currency;
 	}
 
 	/**
@@ -59,7 +62,8 @@ class WC_EBANX_Tef_Gateway extends WC_EBANX_Redirect_Gateway {
 			WC_EBANX::get_templates_path()
 		);
 
-		if ( $description = $this->get_description() ) {
+		$description = $this->get_description();
+		if ( isset( $description ) ) {
 			echo wp_kses_post( wpautop( wptexturize( $description ) ) );
 		}
 
@@ -80,7 +84,7 @@ class WC_EBANX_Tef_Gateway extends WC_EBANX_Redirect_Gateway {
 	/**
 	 * The page of order received, we call them as "Thank you pages"
 	 *
-	 * @param  WC_Order $order The order created
+	 * @param  WC_Order $order The order created.
 	 * @return void
 	 */
 	public static function thankyou_page( $order ) {
@@ -99,8 +103,8 @@ class WC_EBANX_Tef_Gateway extends WC_EBANX_Redirect_Gateway {
 	/**
 	 * Save order's meta fields for future use
 	 *
-	 * @param  WC_Order $order The order created
-	 * @param  Object   $request The request from EBANX success response
+	 * @param  WC_Order $order The order created.
+	 * @param  Object   $request The request from EBANX success response.
 	 *
 	 * @return void
 	 * @throws Exception Throw parameter missing exception.

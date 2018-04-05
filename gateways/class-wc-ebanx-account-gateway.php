@@ -78,7 +78,7 @@ class WC_EBANX_Account_Gateway extends WC_EBANX_Redirect_Gateway {
 		);
 
 		$description = $this->get_description();
-		if ( isset($description) ) {
+		if ( isset( $description ) ) {
 			echo wp_kses_post( wpautop( wptexturize( $description ) ) );
 		}
 

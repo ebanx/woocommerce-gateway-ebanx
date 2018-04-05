@@ -6,6 +6,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 require_once WC_EBANX_SERVICES_DIR . 'class-wc-ebanx-notice.php';
 
+/**
+ * Class WC_EBANX_Global_Gateway
+ */
 final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway {
 
 	/**
@@ -366,7 +369,7 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway {
 					'type'        => 'checkbox',
 					'title'       => __( 'Interest Rates', 'woocommerce-gateway-ebanx' ),
 					'label'       => __( 'Enable interest rates', 'woocommerce-gateway-ebanx' ),
-					'description' => __( 'Enable and set a custom interest rate for your customers according to the number of Instalments you allow the payment.' ),
+					'description' => __( 'Enable and set a custom interest rate for your customers according to the number of Instalments you allow the payment.', 'woocommerce-gateway-ebanx' ),
 					'desc_tip'    => true,
 					'class'       => 'ebanx-payments-option',
 				),
@@ -386,7 +389,7 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway {
 
 		for ( $i = 2; $i <= 12; $i++ ) {
 			$interest_rates_array[ 'interest_rates_' . sprintf( '%02d', $i ) ] = array(
-				'title'             => __( $i . 'x Interest Rate', 'woocommerce-gateway-ebanx' ),
+				'title'             => sprintf( __( '%sx Interest Rate', 'woocommerce-gateway-ebanx' ), $i ),
 				'type'              => 'number',
 				'custom_attributes' => array(
 					'min'  => '0',
@@ -444,7 +447,7 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway {
 						'cnpj' => __( 'CNPJ - Companies', 'woocommerce-gateway-ebanx' ),
 					),
 					'default'     => array( 'cpf' ),
-					'description' => __( 'In order to process with the EBANX Plugin in Brazil there a few mandatory fields such as CPF identification for individuals and CNPJ for companies.' ),
+					'description' => __( 'In order to process with the EBANX Plugin in Brazil there a few mandatory fields such as CPF identification for individuals and CNPJ for companies.', 'woocommerce-gateway-ebanx' ),
 					'desc_tip'    => true,
 				),
 				'checkout_manager_enabled'                 => array(
@@ -522,7 +525,7 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway {
 					'title'       => __( 'Exchange Rate', 'woocommerce-gateway-ebanx' ),
 					'label'       => __( 'Show your customer the currency exchange rate of the day', 'woocommerce-gateway-ebanx' ),
 					'type'        => 'checkbox',
-					'description' => __( 'Selecting this box, you will inform your customer about the currency exchange rate of the day because it may interfere with the final amount.' ),
+					'description' => __( 'Selecting this box, you will inform your customer about the currency exchange rate of the day because it may interfere with the final amount.', 'woocommerce-gateway-ebanx' ),
 					'desc_tip'    => true,
 				),
 				'add_iof_to_local_amount_enabled' => array(
@@ -559,11 +562,12 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway {
 	/**
 	 * Gets the min instalment value for the provided currency
 	 *
-	 * @param  $currency_code string The lower-cased currency code
+	 * @param  string $currency_code The lower-cased currency code.
 	 * @return double
+	 * @throws InvalidArgumentException When currency code does not accepts Credit Card payment.
 	 */
 	private function get_min_instalment_value_for_currency( $currency_code = null ) {
-		if ( $currency_code === null ) {
+		if ( null === $currency_code ) {
 			$currency_code = strtolower( $this->merchant_currency );
 		}
 		if ( ! in_array( strtoupper( $currency_code ), WC_EBANX_Constants::$credit_card_currencies ) ) {
@@ -583,8 +587,8 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway {
 	/**
 	 * Fetches a single setting from the gateway settings if found, otherwise it returns an optional default value
 	 *
-	 * @param  string $name    The setting name to fetch
-	 * @param  mixed  $default The default value in case setting is not present
+	 * @param  string $name    The setting name to fetch.
+	 * @param  mixed  $default The default value in case setting is not present.
 	 * @return mixed
 	 */
 	public function get_setting_or_default( $name, $default = null ) {

@@ -4,6 +4,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+/**
+ * Class WC_EBANX_Multicaja_Gateway
+ */
 class WC_EBANX_Multicaja_Gateway extends WC_EBANX_Flow_Gateway {
 
 	/**

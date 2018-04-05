@@ -40,11 +40,11 @@ class WC_EBANX_Oxxo_Gateway extends WC_EBANX_New_Gateway {
 	/**
 	 * Check if the currency is processed by EBANX
 	 *
-	 * @param  string $currency Possible currencies: MXN
+	 * @param  string $currency Possible currencies: MXN.
 	 * @return boolean          Return true if EBANX process the currency
 	 */
 	public function ebanx_process_merchant_currency( $currency ) {
-		return $currency === WC_EBANX_Constants::CURRENCY_CODE_MXN;
+		return WC_EBANX_Constants::CURRENCY_CODE_MXN === $currency;
 	}
 
 	/**
@@ -62,7 +62,8 @@ class WC_EBANX_Oxxo_Gateway extends WC_EBANX_New_Gateway {
 			WC_EBANX::get_templates_path()
 		);
 
-		if ( $description = $this->get_description() ) {
+		$description = $this->get_description();
+		if ( isset( $description ) ) {
 			echo wp_kses_post( wpautop( wptexturize( $description ) ) );
 		}
 
@@ -81,8 +82,8 @@ class WC_EBANX_Oxxo_Gateway extends WC_EBANX_New_Gateway {
 	/**
 	 * Save order's meta fields for future use
 	 *
-	 * @param  WC_Order $order The order created
-	 * @param  Object   $request The request from EBANX success response
+	 * @param  WC_Order $order The order created.
+	 * @param  Object   $request The request from EBANX success response.
 	 * @return void
 	 */
 	protected function save_order_meta_fields( $order, $request ) {
@@ -95,7 +96,7 @@ class WC_EBANX_Oxxo_Gateway extends WC_EBANX_New_Gateway {
 	/**
 	 * The page of order received, we call them as "Thank you pages"
 	 *
-	 * @param  WC_Order $order The order created
+	 * @param  WC_Order $order The order created.
 	 * @return void
 	 */
 	public static function thankyou_page( $order ) {
@@ -150,7 +151,8 @@ class WC_EBANX_Oxxo_Gateway extends WC_EBANX_New_Gateway {
 		/*
 		TODO: ? if (empty($_POST['ebanx_oxxo_rfc'])) {
 		throw new Exception("Missing rfc.");
-		}*/
+		}
+		*/
 
 		$data                                 = parent::request_data( $order );
 		$data['payment']['payment_type_code'] = $this->api_name;
