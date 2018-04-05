@@ -30,10 +30,31 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<p>Dica: Pagar seu boleto até às 21h de dias úteis, faz com que o pagamento tenha a chance de ser confirmado mais rápido :)</p>
 
 	<div class="ebanx-button--group ebanx-button--group-two">
-        <a href="<?php echo $url_pdf ?>" target="_blank" class="button banking-ticket__action">Salvar em PDF</a><a href="<?php echo $url_print ?>" target="_blank" class="button banking-ticket__action">Imprimir boleto</a>
-    </div>
+		<a href="<?php echo $url_pdf ?>" target="_blank" class="button banking-ticket__action">Salvar em PDF</a>
+		<?php if ( wp_is_mobile() ) : ?>
+			<a href="<?php echo $url_mobile ?>" target="_blank" class="button banking-ticket__action">Ver boleto</a>
+		<?php else: ?>
+			<a href="<?php echo $url_print ?>" target="_blank" class="button banking-ticket__action">Imprimir boleto</a>
+		<?php endif; ?>
+	</div>
 
-	<iframe id="ebanx-boleto-frame" src="<?php echo $url_iframe; ?>" style="width: 100%; border: 0px; height: 1000px"></iframe>
+	<?php if ( ! wp_is_mobile() ) : ?>
+		<iframe id="ebanx-boleto-frame" src="<?php echo $url_iframe; ?>" style="width: 100%; border: 0px; height: 1000px"></iframe>
+	<?php endif; ?>
+
+	<script type="text/javascript" src="https://print.ebanx.com/assets/sources/fingerprint/fingerprint2.min.js"></script>
+	<script type="text/javascript" src="https://print.ebanx.com/assets/sources/fingerprint/browserdetect.js"></script>
+	<script type="text/javascript" src="https://print.ebanx.com/assets/sources/fingerprint/mystiquefingerprint.js"></script>
+	<script type="text/javascript">
+		(function() {
+			var done = null;
+			var options = {
+				justPrint: false,
+				paymentHash: '<?php echo esc_attr( $boleto_hash ); ?>'
+			};
+			Mystique.registerFingerprint(done, options, '<?php echo esc_attr( wp_is_mobile() ? 'boleto-responsive' : 'boleto-default' ); ?>' );
+		})();
+	</script>
 
 	<?php include WC_EBANX::get_templates_path() . 'apps_br.php' ?>
 </div>
