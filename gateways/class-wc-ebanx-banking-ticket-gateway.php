@@ -143,25 +143,27 @@ class WC_EBANX_Banking_Ticket_Gateway extends WC_EBANX_New_Gateway {
 		$boleto_basic    = $boleto_url . '&format=basic';
 		$boleto_pdf      = $boleto_url . '&format=pdf';
 		$boleto_print    = $boleto_url . '&format=print';
+    $boleto_mobile = $boleto_url . "&device_target=mobile";
 		$barcode         = get_post_meta( $order->id, '_boleto_barcode', true );
 		$customer_email  = get_post_meta( $order->id, '_billing_email', true );
 		$customer_name   = get_post_meta( $order->id, '_billing_first_name', true );
 		$boleto_due_date = get_post_meta( $order->id, '_payment_due_date', true );
 		$boleto_hash     = get_post_meta( $order->id, '_ebanx_payment_hash', true );
-
 		$barcode_anti_fraud = WC_EBANX_Banking_Ticket_Gateway::barcode_anti_fraud( $barcode );
 
 		$data = array(
-			'data'         => array(
-				'barcode'        => $barcode,
-				'barcode_fraud'  => $barcode_anti_fraud,
-				'url_basic'      => $boleto_basic,
-				'url_pdf'        => $boleto_pdf,
-				'url_print'      => $boleto_print,
-				'url_iframe'     => get_site_url() . '/?ebanx=order-received&hash=' . $boleto_hash . '&payment_type=boleto',
-				'customer_email' => $customer_email,
-				'customer_name'  => $customer_name,
-				'due_date'       => $boleto_due_date,
+			'data' => array(
+				'boleto_hash'     => $boleto_hash,
+				'barcode'         => $barcode,
+				'barcode_fraud'   => $barcode_anti_fraud,
+				'url_basic'       => $boleto_basic,
+				'url_pdf'         => $boleto_pdf,
+				'url_print'       => $boleto_print,
+				'url_mobile'      => $boleto_mobile,
+				'url_iframe'      => get_site_url() . '/?ebanx=order-received&hash=' . $boleto_hash . '&payment_type=boleto',
+				'customer_email'  => $customer_email,
+				'customer_name'   => $customer_name,
+				'due_date'        => $boleto_due_date,
 			),
 			'order_status' => $order->get_status(),
 			'method'       => 'banking-ticket',
