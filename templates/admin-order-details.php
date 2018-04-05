@@ -8,7 +8,7 @@
 	<p>
 		<?php esc_html_e( 'Payment Hash', 'woocommerce-gateway-ebanx' ); ?>
 		<br>
-		<input type="text" value="<?php echo esc_url( $payment_hash ); ?>" onfocus="this.select();" onmouseup="return false;" readonly>
+		<input type="text" value="<?php echo esc_attr( $payment_hash ); ?>" onfocus="this.select();" onmouseup="return false;" readonly>
 	</p>
 	<?php if ( 'pending' === $order->status && $payment_checkout_url ) : ?>
 		<p>
