@@ -147,7 +147,7 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_New_Gateway {
 	 */
 	public function auto_capture( $actions ) {
 		if ( is_array( $actions ) ) {
-			$actions['custom_action'] = __( 'Capture by EBANX' );
+			$actions['custom_action'] = __( 'Capture by EBANX', 'woocommerce-gateway-ebanx' );
 		}
 
 		return $actions;
@@ -165,8 +165,8 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_New_Gateway {
 		$order  = wc_get_order( $order_id );
 
 		if ( $order->payment_method !== $this->id
-			|| $status !== 'processing'
-			|| $action !== 'woocommerce_mark_order_status' ) {
+			|| 'processing' !== $status
+			|| 'woocommerce_mark_order_status' !== $action ) {
 			return;
 		}
 
@@ -181,7 +181,7 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_New_Gateway {
 	public function checkout_assets() {
 		if ( is_checkout() ) {
 			wp_enqueue_script( 'wc-credit-card-form' );
-			// Using // to avoid conflicts between http and https protocols
+			// Using // to avoid conflicts between http and https protocols.
 			wp_enqueue_script( 'ebanx', '//js.ebanx.com/ebanx-1.5.min.js', '', null, true );
 			wp_enqueue_script( 'woocommerce_ebanx_jquery_mask', plugins_url( 'assets/js/jquery-mask.js', WC_EBANX::DIR ), array( 'jquery' ), WC_EBANX::get_plugin_version(), true );
 			wp_enqueue_script( 'woocommerce_ebanx_credit_card', plugins_url( 'assets/js/credit-card.js', WC_EBANX::DIR ), array( 'jquery-payment', 'ebanx' ), WC_EBANX::get_plugin_version(), true );
@@ -213,7 +213,7 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_New_Gateway {
 	 *
 	 * @param WC_Order $order
 	 * @return \Ebanx\Benjamin\Models\Payment
-	 * @throws Exception
+	 * @throws Exception When missing card params or when missing device fingerprint.
 	 */
 	protected function transform_payment_data( $order ) {
 
@@ -251,8 +251,8 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_New_Gateway {
 	/**
 	 * Save order's meta fields for future use
 	 *
-	 * @param  WC_Order $order The order created
-	 * @param  Object   $request The request from EBANX success response
+	 * @param  WC_Order $order The order created.
+	 * @param  Object   $request The request from EBANX success response.
 	 * @return void
 	 */
 	protected function save_order_meta_fields( $order, $request ) {
@@ -266,7 +266,7 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_New_Gateway {
 	/**
 	 * Save user's meta fields for future use
 	 *
-	 * @param  WC_Order $order The order created
+	 * @param  WC_Order $order The order created.
 	 * @return void
 	 */
 	protected function save_user_meta_fields( $order ) {
@@ -344,12 +344,12 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_New_Gateway {
 	 * Checks if the payment term is allowed based on price, country and minimal instalment value
 	 *
 	 * @param double $price Product price used as base.
-	 * @param int    $instalment_number Number of instalments
-	 * @param string $country Costumer country
+	 * @param int    $instalment_number Number of instalments.
+	 * @param string $country Costumer country.
 	 * @return integer
 	 */
 	public function is_valid_instalment_amount( $price, $instalment_number, $country = null ) {
-		if ( $instalment_number === 1 ) {
+		if ( 1 === $instalment_number ) {
 			return true;
 		}
 
@@ -403,7 +403,7 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_New_Gateway {
 	/**
 	 * The page of order received, we call them as "Thank you pages"
 	 *
-	 * @param  WC_Order $order The order created
+	 * @param  WC_Order $order The order created.
 	 * @return void
 	 */
 	public static function thankyou_page( $order ) {
@@ -412,7 +412,7 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_New_Gateway {
 		$country            = trim( strtolower( get_post_meta( $order->id, '_billing_country', true ) ) );
 		$currency           = $order->get_order_currency();
 
-		if ( $country === WC_EBANX_Constants::COUNTRY_BRAZIL ) {
+		if ( WC_EBANX_Constants::COUNTRY_BRAZIL === $country ) {
 			$order_amount += round( ( $order_amount * WC_EBANX_Constants::BRAZIL_TAX ), 2 );
 		}
 
@@ -437,9 +437,9 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_New_Gateway {
 	/**
 	 * Calculates the interests and values of items based on interest rates settings
 	 *
-	 * @param int $amount      The total of the user cart
-	 * @param int $max_instalments The max number of instalments based on settings
-	 * @param int $tax The tax applied
+	 * @param int $amount      The total of the user cart.
+	 * @param int $max_instalments The max number of instalments based on settings.
+	 * @param int $tax The tax applied.
 	 * @return array               An array of instalment with price, amount, if it has interests and the number
 	 */
 	public function get_payment_terms( $amount, $max_instalments, $tax = 0 ) {
@@ -538,7 +538,7 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_New_Gateway {
 				'cards'               => (array) $cards,
 				'cart_total'          => $cart_total,
 				'place_order_enabled' => $save_card,
-				'instalments'         => $country === WC_EBANX_Constants::COUNTRY_BRAZIL ? 'Número de parcelas' : 'Meses sin intereses',
+				'instalments'         => WC_EBANX_Constants::COUNTRY_BRAZIL === $country ? 'Número de parcelas' : 'Meses sin intereses',
 				'id'                  => $this->id,
 				'add_tax'             => $this->configs->get_setting_or_default( 'add_iof_to_local_amount_enabled', 'yes' ) === 'yes',
 			),

@@ -4,6 +4,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+/**
+ * Class WC_EBANX_Credit_Card_MX_Gateway
+ */
 class WC_EBANX_Credit_Card_MX_Gateway extends WC_EBANX_Credit_Card_Gateway {
 
 	/**
@@ -35,11 +38,11 @@ class WC_EBANX_Credit_Card_MX_Gateway extends WC_EBANX_Credit_Card_Gateway {
 	/**
 	 * Check if the currency is processed by EBANX
 	 *
-	 * @param  string $currency Possible currencies: MXN
+	 * @param  string $currency Possible currencies: MXN.
 	 * @return boolean          Return true if EBANX process the currency
 	 */
 	public function ebanx_process_merchant_currency( $currency ) {
-		return $currency === WC_EBANX_Constants::CURRENCY_CODE_MXN;
+		return WC_EBANX_Constants::CURRENCY_CODE_MXN === $currency;
 	}
 
 	/**
