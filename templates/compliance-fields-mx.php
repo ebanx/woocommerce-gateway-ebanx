@@ -11,15 +11,15 @@ if ( $order_id ) {
 				'value' => $address['postcode'],
 			),
 			'billing_address_1' => array(
-				'label' => __( 'Street address', 'woocommerce' ),
+				'label' => __( 'Street address', 'woocommerce-gateway-ebanx' ),
 				'value' => $address['address_1'],
 			),
 			'billing_city'      => array(
-				'label' => __( 'Town / City', 'woocommerce' ),
+				'label' => __( 'Town / City', 'woocommerce-gateway-ebanx' ),
 				'value' => $address['city'],
 			),
 			'billing_state'     => array(
-				'label' => __( 'State / County', 'woocommerce' ),
+				'label' => __( 'State / County', 'woocommerce-gateway-ebanx' ),
 				'value' => $address['state'],
 			),
 			'billing_country'   => array(
@@ -55,7 +55,7 @@ if ( $order_id ) {
 			<?php endif ?>
 		<?php endforeach ?>
 		<div class="ebanx-form-row ebanx-form-row-wide">
-			<label for="<?php echo "{$id}[billing_state]"; ?>"><?php _e( 'State / County', 'woocommerce' ); ?></label>
+			<label for="<?php echo "{$id}[billing_state]"; ?>"><?php _e( 'State / County', 'woocommerce-gateway-ebanx' ); ?></label>
 			<select name="<?php echo "{$id}[billing_state]"; ?>" id="<?php echo "{$id}[billing_state]"; ?>" class="ebanx-select-field">
 				<option value="" selected>Select...</option>
 				<?php foreach ( $states as $abbr => $name ) : ?>
