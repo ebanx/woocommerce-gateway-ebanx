@@ -16,17 +16,17 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 	<div class="ebanx-form-row">
 		<label class="ebanx-label">
-			<input type="radio" name="efectivo" value="rapipago" checked> <img src="<?php echo WC_EBANX_PLUGIN_DIR_URL; ?>assets/images/ebanx-rapipago.png" style="height: 20px" /> Rapipago
+			<input type="radio" name="efectivo" value="rapipago" checked> <img src="<?php echo esc_url( WC_EBANX_PLUGIN_DIR_URL ); ?>assets/images/ebanx-rapipago.png" style="height: 20px" /> Rapipago
 		</label>
 	</div>
 	<div class="ebanx-form-row">
 		<label class="ebanx-label">
-			<input type="radio" name="efectivo" value="pagofacil"> <img src="<?php echo WC_EBANX_PLUGIN_DIR_URL; ?>assets/images/ebanx-pagofacil.png" style="height: 20px" /> Pagofacil
+			<input type="radio" name="efectivo" value="pagofacil"> <img src="<?php echo esc_url( WC_EBANX_PLUGIN_DIR_URL ); ?>assets/images/ebanx-pagofacil.png" style="height: 20px" /> Pagofacil
 		</label>
 	</div>
 	<div class="ebanx-form-row">
 		<label class="ebanx-label">
-			<input type="radio" name="efectivo" value="cupon"> <img src="<?php echo WC_EBANX_PLUGIN_DIR_URL; ?>assets/images/ebanx-cupon.png" style="height: 20px" /> Otros Cupones
+			<input type="radio" name="efectivo" value="cupon"> <img src="<?php echo esc_url( WC_EBANX_PLUGIN_DIR_URL ); ?>assets/images/ebanx-cupon.png" style="height: 20px" /> Otros Cupones
 		</label>
 	</div>
 </div>
