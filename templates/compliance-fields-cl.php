@@ -16,15 +16,15 @@ if ( $order_id ) {
 				'value' => $address['postcode'],
 			),
 			'billing_address_1'            => array(
-				'label' => __( 'Street address', 'woocommerce' ),
+				'label' => __( 'Street address', 'woocommerce-gateway-ebanx' ),
 				'value' => $address['address_1'],
 			),
 			'billing_city'                 => array(
-				'label' => __( 'Town / City', 'woocommerce' ),
+				'label' => __( 'Town / City', 'woocommerce-gateway-ebanx' ),
 				'value' => $address['city'],
 			),
 			'billing_state'                => array(
-				'label' => __( 'State / County', 'woocommerce' ),
+				'label' => __( 'State / County', 'woocommerce-gateway-ebanx' ),
 				'value' => $address['state'],
 			),
 			'billing_country'              => array(
