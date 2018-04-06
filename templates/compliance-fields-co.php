@@ -42,18 +42,18 @@ if ( $order_id ) {
 			<?php if ( isset( $field['type'] ) && 'hidden' === $field['type'] ) : ?>
 				<input
 					type="hidden"
-					name="<?php echo "{$id}[{$name}]"; ?>"
-					value="<?php echo isset( $field['value'] ) ? $field['value'] : null; ?>"
+					name="<?php echo esc_attr( "{$id}[{$name}]" ); ?>"
+					value="<?php echo esc_attr( isset( $field['value'] ) ? $field['value'] : null ); ?>"
 					class="input-text"
 				/>
 			<?php else : ?>
 				<div class="ebanx-form-row ebanx-form-row-wide">
-					<label for="<?php echo "{$id}[{$name}]"; ?>"><?php echo $field['label']; ?></label>
+					<label for="<?php echo esc_attr( "{$id}[{$name}]" ); ?>"><?php echo esc_html( $field['label'] ); ?></label>
 					<input
-						type="<?php echo isset( $field['type'] ) ? $field['type'] : 'text'; ?>"
-						name="<?php echo "{$id}[{$name}]"; ?>"
-						id="<?php echo "{$id}[{$name}]"; ?>"
-						value="<?php echo isset( $field['value'] ) ? $field['value'] : null; ?>"
+						type="<?php echo esc_attr( isset( $field['type'] ) ? $field['type'] : 'text' ); ?>"
+						name="<?php echo esc_attr( "{$id}[{$name}]"); ?>"
+						id="<?php echo esc_attr( "{$id}[{$name}]" ); ?>"
+						value="<?php echo esc_attr( isset( $field['value'] ) ? $field['value'] : null ); ?>"
 						class="input-text"
 					/>
 				</div>
