@@ -48,7 +48,7 @@ if ( $order_id ) {
 				/>
 			<?php else : ?>
 				<div class="ebanx-form-row ebanx-form-row-wide">
-					<label for="<?php echo esc_attr( "{$id}[{$name}]" ); ?>"><?php echo esc_attr( $field['label'] ); ?></label>
+					<label for="<?php echo esc_attr( "{$id}[{$name}]" ); ?>"><?php echo esc_html( $field['label'] ); ?></label>
 					<input
 						type="<?php echo esc_attr( isset( $field['type'] ) ? $field['type'] : 'text' ); ?>"
 						name="<?php echo esc_attr( "{$id}[{$name}]" ); ?>"
