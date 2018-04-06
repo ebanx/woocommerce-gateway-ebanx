@@ -29,7 +29,7 @@ checked="checked"<?php endif; ?> class="input-radio <?php echo esc_attr( ( $card
 						<span class="ebanx-credit-card-brand">
 							<img src="<?php echo esc_url( WC_EBANX_PLUGIN_DIR_URL . "assets/images/icons/$card->brand.png" ); ?>" height="20" style="height: 20px; margin-left: 0; margin-right: 7px; float: none;" alt="<?php echo esc_attr( $card->brand ); ?>">
 						</span>
-						<span class="ebanx-credit-card-bin">&bull;&bull;&bull;&bull; <?php echo esc_html( substr( $card->masked_number, -4 )); ?></span>
+						<span class="ebanx-credit-card-bin">&bull;&bull;&bull;&bull; <?php echo esc_html( substr( $card->masked_number, -4 ) ); ?></span>
 					</label>
 					<div class="clear"></div>
 					<div class="ebanx-container-credit-card" style="
