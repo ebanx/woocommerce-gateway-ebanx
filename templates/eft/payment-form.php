@@ -19,7 +19,7 @@ asort( $banks );
 
 	<select name="eft" class="ebanx-select-field">
 		<?php foreach ( $banks as $key => $bank ) : ?>
-			<option value="<?php echo $key; ?>"><?php echo $bank; ?></option>
+			<option value="<?php echo esc_attr( $key ); ?>"><?php echo esc_html( $bank ); ?></option>
 		<?php endforeach ?>
 	</select>
 
