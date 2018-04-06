@@ -42,29 +42,29 @@ if ( $order_id ) {
 			<?php if ( isset( $field['type'] ) && 'hidden' === $field['type'] ) : ?>
 				<input
 					type="hidden"
-					name="<?php echo "{$id}[{$name}]"; ?>"
-					value="<?php echo isset( $field['value'] ) ? $field['value'] : null; ?>"
+					name="<?php echo esc_attr( "{$id}[{$name}]" ); ?>"
+					value="<?php echo esc_attr( isset( $field['value'] ) ? $field['value'] : null ); ?>"
 					class="input-text"
 				/>
 			<?php else : ?>
 				<div class="ebanx-form-row ebanx-form-row-wide">
-					<label for="<?php echo "{$id}[{$name}]"; ?>"><?php echo $field['label']; ?></label>
+					<label for="<?php echo esc_attr( "{$id}[{$name}]" ); ?>"><?php echo esc_attr( $field['label'] ); ?></label>
 					<input
-						type="<?php echo isset( $field['type'] ) ? $field['type'] : 'text'; ?>"
-						name="<?php echo "{$id}[{$name}]"; ?>"
-						id="<?php echo "{$id}[{$name}]"; ?>"
-						value="<?php echo isset( $field['value'] ) ? $field['value'] : null; ?>"
+						type="<?php echo esc_attr( isset( $field['type'] ) ? $field['type'] : 'text' ); ?>"
+						name="<?php echo esc_attr( "{$id}[{$name}]" ); ?>"
+						id="<?php echo esc_attr( "{$id}[{$name}]" ); ?>"
+						value="<?php echo esc_attr( isset( $field['value'] ) ? $field['value'] : null ); ?>"
 						class="input-text"
 					/>
 				</div>
 			<?php endif ?>
 		<?php endforeach ?>
 		<div class="ebanx-form-row ebanx-form-row-wide">
-			<label for="<?php echo "{$id}[billing_state]"; ?>"><?php _e( 'State / County', 'woocommerce-gateway-ebanx' ); ?></label>
-			<select name="<?php echo "{$id}[billing_state]"; ?>" id="<?php echo "{$id}[billing_state]"; ?>" class="ebanx-select-field">
+			<label for="<?php echo esc_attr( "{$id}[billing_state]" ); ?>"><?php esc_html_e( 'State / County', 'woocommerce-gateway-ebanx' ); ?></label>
+			<select name="<?php echo esc_attr( "{$id}[billing_state]" ); ?>" id="<?php echo esc_attr( "{$id}[billing_state]" ); ?>" class="ebanx-select-field">
 				<option value="" selected>Select...</option>
 				<?php foreach ( $states as $abbr => $name ) : ?>
-					<option value="<?php echo $abbr; ?>"><?php echo $name; ?></option>
+					<option value="<?php echo esc_attr( $abbr ); ?>"><?php echo esc_html( $name ); ?></option>
 				<?php endforeach; ?>
 			</select>
 		</div>
