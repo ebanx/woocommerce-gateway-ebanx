@@ -15,7 +15,6 @@ $i = 0;
 		<input type="hidden" name="ebanx-nonce" value="<?php echo esc_attr( $nonce ); ?>">
 		<input type="hidden" name="ebanx-cart-total" value="<?php echo esc_attr( $cart_total ); ?>">
 		<input type="hidden" name="ebanx-product-id" value="<?php echo esc_attr( $product_id ); ?>">
-	
 		<div class="clear"></div>
 		<div class="ebanx-one-click-container">
 			<div class="ebanx-one-click-button-container">
