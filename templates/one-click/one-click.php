@@ -11,10 +11,10 @@ $i = 0;
 
 <?php if ( $should_show_button ) : ?>
 	<form class="ebanx-one-click-form" id="ebanx-one-click-form" method="post" action="<?php echo esc_html( $permalink ); ?>">
-		<input type="hidden" name="ebanx-action" value="<?php echo esc_html( $action ); ?>">
-		<input type="hidden" name="ebanx-nonce" value="<?php echo esc_html( $nonce ); ?>">
-		<input type="hidden" name="ebanx-cart-total" value="<?php echo esc_html( $cart_total ); ?>">
-		<input type="hidden" name="ebanx-product-id" value="<?php echo esc_html( $product_id ); ?>">
+		<input type="hidden" name="ebanx-action" value="<?php echo esc_attr( $action ); ?>">
+		<input type="hidden" name="ebanx-nonce" value="<?php echo esc_attr( $nonce ); ?>">
+		<input type="hidden" name="ebanx-cart-total" value="<?php echo esc_attr( $cart_total ); ?>">
+		<input type="hidden" name="ebanx-product-id" value="<?php echo esc_attr( $product_id ); ?>">
 	
 		<div class="clear"></div>
 		<div class="ebanx-one-click-container">
@@ -28,7 +28,7 @@ $i = 0;
 					<div class="ebanx-one-click-cards">
 						<?php foreach ( $cards as $key => $card ) : ?>
 							<label class="ebanx-one-click-card">
-								<input type="radio" class="ebanx-one-click-card-radio" name="ebanx-one-click-token" value="<?php echo esc_html( $card->token ); ?>" <?php echo esc_html( 0 === $i ? 'checked="checked"' : '' ); ?> />
+								<input type="radio" class="ebanx-one-click-card-radio" name="ebanx-one-click-token" value="<?php echo esc_attr( $card->token ); ?>" <?php echo esc_html( 0 === $i ? 'checked="checked"' : '' ); ?> />
 								<img src="<?php echo esc_url( WC_EBANX_PLUGIN_DIR_URL . "assets/images/icons/$card->brand.png" ); ?>" height="20" />
 								<span>&bull;&bull;&bull;&bull; <?php echo esc_html( substr( $card->masked_number, -4 ) ); ?></span>
 							</label>
