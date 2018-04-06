@@ -39,7 +39,7 @@ if ( $order_id ) {
 <?php if ( $order_id ) : ?>
 	<div class="ebanx-compliance-fields ebanx-compliance-fiels-co">
 		<?php foreach ( $fields as $name => $field ) : ?>
-			<?php if ( isset( $field['type'] ) && $field['type'] === 'hidden' ) : ?>
+			<?php if ( isset( $field['type'] ) && 'hidden' === $field['type'] ) : ?>
 				<input
 					type="hidden"
 					name="<?php echo "{$id}[{$name}]"; ?>"

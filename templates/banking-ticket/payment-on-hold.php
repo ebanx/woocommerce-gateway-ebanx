@@ -56,5 +56,5 @@ if ( ! defined( 'ABSPATH' ) ) {
 		})();
 	</script>
 
-	<?php require WC_EBANX::get_templates_path() . 'apps_br.php'; ?>
+	<?php require WC_EBANX::get_templates_path() . 'apps-br.php'; ?>
 </div>
