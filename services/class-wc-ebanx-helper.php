@@ -6,13 +6,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-include_once WC_EBANX_GATEWAYS_DIR . 'class-wc-ebanx-global-gateway.php';
+require_once WC_EBANX_GATEWAYS_DIR . 'class-wc-ebanx-global-gateway.php';
 
 /**
  * Class WC_EBANX_Helper
  */
-abstract class WC_EBANX_Helper
-{
+abstract class WC_EBANX_Helper {
+
 	/**
 	 * Flatten an array
 	 *

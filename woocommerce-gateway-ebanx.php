@@ -341,19 +341,19 @@ if ( ! class_exists( 'WC_EBANX' ) ) {
 			$args = array(
 				'body' => array(
 					'lead' => array(
-						'user_email' => $user->user_email,
-						'user_display_name' => $user->display_name,
-						'user_last_name' => $user->last_name,
-						'user_first_name' => $user->first_name,
-						'site_email' => get_bloginfo('admin_email'),
-						'site_url' => get_bloginfo('url'),
-						'site_name' => get_bloginfo('name'),
-						'site_language' => get_bloginfo('language'),
-						'wordpress_version' => get_bloginfo('version'),
+						'user_email'          => $user->user_email,
+						'user_display_name'   => $user->display_name,
+						'user_last_name'      => $user->last_name,
+						'user_first_name'     => $user->first_name,
+						'site_email'          => get_bloginfo( 'admin_email' ),
+						'site_url'            => get_bloginfo( 'url' ),
+						'site_name'           => get_bloginfo( 'name' ),
+						'site_language'       => get_bloginfo( 'language' ),
+						'wordpress_version'   => get_bloginfo( 'version' ),
 						'woocommerce_version' => WC()->version,
-						'type' => 'Woocommerce',
-					)
-				)
+						'type'                => 'Woocommerce',
+					),
+				),
 			);
 
 			// Call EBANX API to save a lead.
@@ -405,12 +405,12 @@ if ( ! class_exists( 'WC_EBANX' ) ) {
 			$args = array(
 				'body' => array(
 					'lead' => array(
-						'id' => $lead_id,
+						'id'              => $lead_id,
 						'integration_key' => $this->private_key,
-						'site_url' => get_bloginfo('url'),
-						'type' => 'Woocommerce',
-					)
-				)
+						'site_url'        => get_bloginfo( 'url' ),
+						'type'            => 'Woocommerce',
+					),
+				),
 			);
 
 			// Call EBANX API to save a lead.
