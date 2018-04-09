@@ -1,14 +1,17 @@
 <?php
 
-if (!defined('ABSPATH')) {
+if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
 /**
  * Class WC_EBANX_Redirect_Gateway
  */
-abstract class WC_EBANX_Redirect_Gateway extends WC_EBANX_New_Gateway
-{
+abstract class WC_EBANX_Redirect_Gateway extends WC_EBANX_New_Gateway {
+
+	/**
+	 * @var string
+	 */
 	protected $redirect_url;
 
 	/**
@@ -42,11 +45,12 @@ abstract class WC_EBANX_Redirect_Gateway extends WC_EBANX_New_Gateway
 	 *
 	 * @return array
 	 */
-	final protected function dispatch($data)
-	{
-		return parent::dispatch(array(
-			'result'   => 'success',
-			'redirect' => $this->redirect_url,
-		));
+	final protected function dispatch( $data ) {
+		return parent::dispatch(
+			array(
+				'result'   => 'success',
+				'redirect' => $this->redirect_url,
+			)
+		);
 	}
 }

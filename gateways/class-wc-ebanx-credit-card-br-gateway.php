@@ -1,25 +1,28 @@
 <?php
 
-if (!defined('ABSPATH')) {
+if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+/**
+ * Class WC_EBANX_Credit_Card_BR_Gateway
+ */
 class WC_EBANX_Credit_Card_BR_Gateway extends WC_EBANX_Credit_Card_Gateway {
 	/**
 	 * Constructor
 	 */
 	public function __construct() {
-		$this->id = 'ebanx-credit-card-br';
-		$this->method_title = __('EBANX - Credit Card Brazil', 'woocommerce-gateway-ebanx');
+		$this->id            = 'ebanx-credit-card-br';
+		$this->method_title  = __( 'EBANX - Credit Card Brazil', 'woocommerce-gateway-ebanx' );
 		$this->currency_code = WC_EBANX_Constants::CURRENCY_CODE_BRL;
 
-		$this->title = 'Cartão de Crédito';
+		$this->title       = 'Cartão de Crédito';
 		$this->description = 'Pague com cartão de crédito.';
 
 		parent::__construct();
 
-		$this->enabled = is_array($this->configs->settings['brazil_payment_methods'])
-			&& in_array($this->id, $this->configs->settings['brazil_payment_methods'])
+		$this->enabled = is_array( $this->configs->settings['brazil_payment_methods'] )
+			&& in_array( $this->id, $this->configs->settings['brazil_payment_methods'] )
 			? 'yes'
 			: false;
 	}
@@ -37,11 +40,11 @@ class WC_EBANX_Credit_Card_BR_Gateway extends WC_EBANX_Credit_Card_Gateway {
 	/**
 	 * Check if the currency is processed by EBANX
 	 *
-	 * @param  string $currency Possible currencies: BRL
+	 * @param  string $currency Possible currencies: BRL.
 	 * @return boolean          Return true if EBANX process the currency
 	 */
-	public function ebanx_process_merchant_currency($currency) {
-		return $currency === WC_EBANX_Constants::CURRENCY_CODE_BRL;
+	public function ebanx_process_merchant_currency( $currency ) {
+		return WC_EBANX_Constants::CURRENCY_CODE_BRL === $currency;
 	}
 
 	/**

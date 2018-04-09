@@ -9,51 +9,51 @@ if ( $order_id ) {
 		$fields = array(
 			'ebanx_billing_colombia_document' => array(
 				'label' => 'DNI',
-				'value' => $document
+				'value' => $document,
 			),
-			'billing_postcode' => array(
+			'billing_postcode'                => array(
 				'label' => 'Postcode / ZIP',
-				'value' => $address['postcode']
+				'value' => $address['postcode'],
 			),
-			'billing_address_1' => array(
-				'label' => __('Street address', 'woocommerce'),
-				'value' => $address['address_1']
+			'billing_address_1'               => array(
+				'label' => __( 'Street address', 'woocommerce-gateway-ebanx' ),
+				'value' => $address['address_1'],
 			),
-			'billing_city' => array(
-				'label' => __('Town / City', 'woocommerce'),
-				'value' => $address['city']
+			'billing_city'                    => array(
+				'label' => __( 'Town / City', 'woocommerce-gateway-ebanx' ),
+				'value' => $address['city'],
 			),
-			'billing_state' => array(
-				'label' => __('State / County', 'woocommerce'),
-				'value' => $address['state']
+			'billing_state'                   => array(
+				'label' => __( 'State / County', 'woocommerce-gateway-ebanx' ),
+				'value' => $address['state'],
 			),
-			'billing_country' => array(
+			'billing_country'                 => array(
 				'label' => 'Country',
 				'value' => $address['country'],
-				'type' => 'hidden'
-			)
+				'type'  => 'hidden',
+			),
 		);
-	}
+}
 ?>
 
-<?php if ( $order_id ): ?>
+<?php if ( $order_id ) : ?>
 	<div class="ebanx-compliance-fields ebanx-compliance-fiels-co">
-		<?php foreach ( $fields as $name => $field ): ?>
-			<?php if ( isset( $field['type'] ) && $field['type'] === 'hidden' ): ?>
+		<?php foreach ( $fields as $name => $field ) : ?>
+			<?php if ( isset( $field['type'] ) && 'hidden' === $field['type'] ) : ?>
 				<input
 					type="hidden"
-					name="<?php echo "{$id}[{$name}]" ?>"
-					value="<?php echo isset( $field['value'] ) ? $field['value'] : null ?>"
+					name="<?php echo esc_attr( "{$id}[{$name}]" ); ?>"
+					value="<?php echo esc_attr( isset( $field['value'] ) ? $field['value'] : null ); ?>"
 					class="input-text"
 				/>
-			<?php else: ?>
+			<?php else : ?>
 				<div class="ebanx-form-row ebanx-form-row-wide">
-					<label for="<?php echo "{$id}[{$name}]" ?>"><?php echo $field['label'] ?></label>
+					<label for="<?php echo esc_attr( "{$id}[{$name}]" ); ?>"><?php echo esc_html( $field['label'] ); ?></label>
 					<input
-						type="<?php echo isset( $field['type'] ) ? $field['type'] : 'text' ?>"
-						name="<?php echo "{$id}[{$name}]" ?>"
-						id="<?php echo "{$id}[{$name}]" ?>"
-						value="<?php echo isset( $field['value'] ) ? $field['value'] : null ?>"
+						type="<?php echo esc_attr( isset( $field['type'] ) ? $field['type'] : 'text' ); ?>"
+						name="<?php echo esc_attr( "{$id}[{$name}]" ); ?>"
+						id="<?php echo esc_attr( "{$id}[{$name}]" ); ?>"
+						value="<?php echo esc_attr( isset( $field['value'] ) ? $field['value'] : null ); ?>"
 						class="input-text"
 					/>
 				</div>

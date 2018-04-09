@@ -23,6 +23,7 @@
         <exclude name="WordPress.VIP.RestrictedFunctions" />
         <exclude name="WordPress.VIP.RestrictedVariables.user_meta__wpdb__usermeta" />
         <exclude name="WordPress.VIP.PostsPerPage.posts_per_page_posts_per_page" />
+        <exclude name="WordPress.WP.I18n.MissingTranslatorsComment" />
     </rule>
     <rule ref="WordPress.VIP.ValidatedSanitizedInput">
         <properties>

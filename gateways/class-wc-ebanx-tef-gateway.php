@@ -1,20 +1,22 @@
 <?php
 
-if (!defined('ABSPATH')) {
+if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-class WC_EBANX_Tef_Gateway extends WC_EBANX_Redirect_Gateway
-{
+/**
+ * Class WC_EBANX_Tef_Gateway
+ */
+class WC_EBANX_Tef_Gateway extends WC_EBANX_Redirect_Gateway {
+
 	/**
 	 * Constructor
 	 */
-	public function __construct()
-	{
+	public function __construct() {
 		$this->id           = 'ebanx-tef';
-		$this->method_title = __('EBANX - TEF', 'woocommerce-gateway-ebanx');
+		$this->method_title = __( 'EBANX - TEF', 'woocommerce-gateway-ebanx' );
 
-		$this->api_name = 'tef';
+		$this->api_name    = 'tef';
 		$this->title       = 'Débito Online';
 		$this->description = 'Selecione o seu banco. A seguir, você será redirecionado para concluir o pagamento pelo seu internet banking.';
 
@@ -22,7 +24,7 @@ class WC_EBANX_Tef_Gateway extends WC_EBANX_Redirect_Gateway
 
 		$this->ebanx_gateway = $this->ebanx->tef();
 
-		$this->enabled = is_array($this->configs->settings['brazil_payment_methods']) ? in_array($this->id, $this->configs->settings['brazil_payment_methods']) ? 'yes' : false : false;
+		$this->enabled = is_array( $this->configs->settings['brazil_payment_methods'] ) ? in_array( $this->id, $this->configs->settings['brazil_payment_methods'] ) ? 'yes' : false : false;
 	}
 
 	/**
@@ -31,39 +33,38 @@ class WC_EBANX_Tef_Gateway extends WC_EBANX_Redirect_Gateway
 	 * @return boolean
 	 * @throws Exception Throws missing parameter message.
 	 */
-	public function is_available()
-	{
+	public function is_available() {
 		return parent::is_available() && WC_EBANX_Constants::COUNTRY_BRAZIL === $this->get_transaction_address( 'country' );
 	}
 
 	/**
 	 * Check if the currency is processed by EBANX
 	 *
-	 * @param  string $currency Possible currencies: BRL
+	 * @param  string $currency Possible currencies: BRL.
 	 * @return boolean          Return true if EBANX process the currency
 	 */
-	public function ebanx_process_merchant_currency($currency) {
-		return $currency === WC_EBANX_Constants::CURRENCY_CODE_BRL;
+	public function ebanx_process_merchant_currency( $currency ) {
+		return WC_EBANX_Constants::CURRENCY_CODE_BRL === $currency;
 	}
 
 	/**
 	 * The HTML structure on checkout page
 	 */
-	public function payment_fields()
-	{
+	public function payment_fields() {
 		$message = $this->get_sandbox_form_message( $this->get_transaction_address( 'country' ) );
 		wc_get_template(
 			'sandbox-checkout-alert.php',
 			array(
 				'is_sandbox_mode' => $this->is_sandbox_mode,
-				'message' => $message,
+				'message'         => $message,
 			),
 			'woocommerce/ebanx/',
 			WC_EBANX::get_templates_path()
 		);
 
-		if ($description = $this->get_description()) {
-			echo wp_kses_post(wpautop(wptexturize($description)));
+		$description = $this->get_description();
+		if ( isset( $description ) ) {
+			echo wp_kses_post( wpautop( wptexturize( $description ) ) );
 		}
 
 		wc_get_template(
@@ -71,49 +72,47 @@ class WC_EBANX_Tef_Gateway extends WC_EBANX_Redirect_Gateway
 			array(
 				'title'       => $this->title,
 				'description' => $this->description,
-				'id' => $this->id
+				'id'          => $this->id,
 			),
 			'woocommerce/ebanx/',
 			WC_EBANX::get_templates_path()
 		);
 
-		parent::checkout_rate_conversion(WC_EBANX_Constants::CURRENCY_CODE_BRL);
+		parent::checkout_rate_conversion( WC_EBANX_Constants::CURRENCY_CODE_BRL );
 	}
 
 	/**
 	 * The page of order received, we call them as "Thank you pages"
 	 *
-	 * @param  WC_Order $order The order created
+	 * @param  WC_Order $order The order created.
 	 * @return void
 	 */
-	public static function thankyou_page($order)
-	{
+	public static function thankyou_page( $order ) {
 		$data = array(
-			'data' => array(
-				'bank_name' => get_post_meta($order->id, '_ebanx_tef_bank', true),
-				'customer_name' => get_post_meta($order->id, '_billing_first_name', true)
+			'data'         => array(
+				'bank_name'     => get_post_meta( $order->id, '_ebanx_tef_bank', true ),
+				'customer_name' => get_post_meta( $order->id, '_billing_first_name', true ),
 			),
 			'order_status' => $order->get_status(),
-			'method' => 'tef'
+			'method'       => 'tef',
 		);
 
-		parent::thankyou_page($data);
+		parent::thankyou_page( $data );
 	}
 
 	/**
 	 * Save order's meta fields for future use
 	 *
-	 * @param  WC_Order $order The order created
-	 * @param  Object $request The request from EBANX success response
+	 * @param  WC_Order $order The order created.
+	 * @param  Object   $request The request from EBANX success response.
 	 *
 	 * @return void
 	 * @throws Exception Throw parameter missing exception.
 	 */
-	protected function save_order_meta_fields($order, $request)
-	{
-		update_post_meta($order->id, '_ebanx_tef_bank', sanitize_text_field(WC_EBANX_Request::read('tef')));
+	protected function save_order_meta_fields( $order, $request ) {
+		update_post_meta( $order->id, '_ebanx_tef_bank', sanitize_text_field( WC_EBANX_Request::read( 'tef' ) ) );
 
-		parent::save_order_meta_fields($order, $request);
+		parent::save_order_meta_fields( $order, $request );
 	}
 
 	/**
@@ -125,9 +124,9 @@ class WC_EBANX_Tef_Gateway extends WC_EBANX_Redirect_Gateway
 	 * @throws Exception Throw parameter missing exception.
 	 */
 	protected function transform_payment_data( $order ) {
-		if ( ! WC_EBANX_Request::has('tef')
-			|| ! in_array(WC_EBANX_Request::read('tef'), WC_EBANX_Constants::$BANKS_TEF_ALLOWED[WC_EBANX_Constants::COUNTRY_BRAZIL])) {
-			throw new Exception('MISSING-BANK-NAME');
+		if ( ! WC_EBANX_Request::has( 'tef' )
+			|| ! in_array( WC_EBANX_Request::read( 'tef' ), WC_EBANX_Constants::$banks_tef_allowed[ WC_EBANX_Constants::COUNTRY_BRAZIL ] ) ) {
+			throw new Exception( 'MISSING-BANK-NAME' );
 		}
 
 		$data = parent::transform_payment_data( $order );

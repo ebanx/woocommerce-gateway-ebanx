@@ -91,12 +91,12 @@ class WC_EBANX_New_Gateway extends WC_EBANX_Gateway {
 	public function __construct() {
 		self::$total_gateways++;
 
-		$this->user_id = get_current_user_id();
-		$this->configs = new WC_EBANX_Global_Gateway();
+		$this->user_id         = get_current_user_id();
+		$this->configs         = new WC_EBANX_Global_Gateway();
 		$this->is_sandbox_mode = ( 'yes' === $this->configs->settings['sandbox_mode_enabled'] );
-		$this->private_key = $this->is_sandbox_mode ? $this->configs->settings['sandbox_private_key'] : $this->configs->settings['live_private_key'];
-		$this->public_key = $this->is_sandbox_mode ? $this->configs->settings['sandbox_public_key'] : $this->configs->settings['live_public_key'];
-		$this->ebanx = ( new WC_EBANX_Api( $this->configs ) )->ebanx();
+		$this->private_key     = $this->is_sandbox_mode ? $this->configs->settings['sandbox_private_key'] : $this->configs->settings['live_private_key'];
+		$this->public_key      = $this->is_sandbox_mode ? $this->configs->settings['sandbox_public_key'] : $this->configs->settings['live_public_key'];
+		$this->ebanx           = ( new WC_EBANX_Api( $this->configs ) )->ebanx();
 
 		if ( 'yes' === $this->configs->settings['debug_enabled'] ) {
 			$this->log = new WC_Logger();
@@ -109,8 +109,8 @@ class WC_EBANX_New_Gateway extends WC_EBANX_Gateway {
 			'refunds',
 		];
 
-		$this->icon = $this->show_icon();
-		$this->names = $this->get_billing_field_names();
+		$this->icon              = $this->show_icon();
+		$this->names             = $this->get_billing_field_names();
 		$this->merchant_currency = strtoupper( get_woocommerce_currency() );
 	}
 
@@ -129,10 +129,10 @@ class WC_EBANX_New_Gateway extends WC_EBANX_Gateway {
 				true
 			);
 			$checkout_params = [
-				'is_sandbox' => $this->is_sandbox_mode,
+				'is_sandbox'           => $this->is_sandbox_mode,
 				'sandbox_tag_messages' => [
 					'pt-br' => 'EM TESTE',
-					'es' => 'EN PRUEBA',
+					'es'    => 'EN PRUEBA',
 				],
 			];
 			wp_localize_script( 'woocommerce_ebanx_checkout_fields', 'wc_ebanx_checkout_params', apply_filters( 'wc_ebanx_checkout_params', $checkout_params ) );
@@ -157,8 +157,8 @@ class WC_EBANX_New_Gateway extends WC_EBANX_Gateway {
 			);
 
 			static::$ebanx_params = [
-				'key' => $this->public_key,
-				'mode' => $this->is_sandbox_mode ? 'test' : 'production',
+				'key'     => $this->public_key,
+				'mode'    => $this->is_sandbox_mode ? 'test' : 'production',
 				'ajaxurl' => admin_url( 'admin-ajax.php', null ),
 			];
 
@@ -189,10 +189,12 @@ class WC_EBANX_New_Gateway extends WC_EBANX_Gateway {
 
 				$response = $this->ebanx_gateway->create( $data );
 
-				WC_EBANX_Checkout_Logger::persist([
-					'request' => $data,
-					'response' => $response,
-				]);
+				WC_EBANX_Checkout_Logger::persist(
+					[
+						'request'  => $data,
+						'response' => $response,
+					]
+				);
 
 				$this->process_response( $response, $order );
 			} else {
@@ -201,10 +203,12 @@ class WC_EBANX_New_Gateway extends WC_EBANX_Gateway {
 
 			do_action( 'ebanx_after_process_payment', $order );
 
-			return $this->dispatch([
-				'result'   => 'success',
-				'redirect' => $this->get_return_url( $order ),
-			]);
+			return $this->dispatch(
+				[
+					'result'   => 'success',
+					'redirect' => $this->get_return_url( $order ),
+				]
+			);
 		} catch ( Exception $e ) {
 			$country = $this->get_transaction_address( 'country' );
 
@@ -313,11 +317,11 @@ class WC_EBANX_New_Gateway extends WC_EBANX_Gateway {
 			throw new Exception( 'SANDBOX-INVALID-CC-NUMBER' );
 		}
 
-		$code = array_key_exists( 'status_code', $response ) ? $response['status_code'] : 'GENERAL';
+		$code           = array_key_exists( 'status_code', $response ) ? $response['status_code'] : 'GENERAL';
 		$status_message = array_key_exists( 'status_message', $response ) ? $response['status_message'] : '';
 
 		if ( $this->is_refused_credit_card( $response, $code ) ) {
-			$code = 'REFUSED-CC';
+			$code           = 'REFUSED-CC';
 			$status_message = $response['payment']['transaction_status']['description'];
 		}
 
@@ -379,10 +383,12 @@ class WC_EBANX_New_Gateway extends WC_EBANX_Gateway {
 
 			$response = $this->ebanx->refund()->requestByHash( $hash, $amount, $reason );
 
-			WC_EBANX_Refund_Logger::persist([
-				'request' => [ $hash, $amount, $reason ],
-				'response' => $response, // Response from request to EBANX.
-			]);
+			WC_EBANX_Refund_Logger::persist(
+				[
+					'request'  => [ $hash, $amount, $reason ],
+					'response' => $response, // Response from request to EBANX.
+				]
+			);
 
 			if ( 'SUCCESS' !== $response['status'] ) {
 				do_action( 'ebanx_process_refund_error', $order, $response );
@@ -448,7 +454,7 @@ class WC_EBANX_New_Gateway extends WC_EBANX_Gateway {
 			return 1;
 		}
 
-		$usd_to_site_rate = 1;
+		$usd_to_site_rate     = 1;
 		$converted_currencies = [
 			WC_EBANX_Constants::CURRENCY_CODE_USD,
 			WC_EBANX_Constants::CURRENCY_CODE_EUR,
@@ -480,7 +486,7 @@ class WC_EBANX_New_Gateway extends WC_EBANX_Gateway {
 
 		$amount = WC()->cart->total;
 
-		try{
+		try {
 			$amount = apply_filters( 'ebanx_get_custom_total_amount', $amount, $instalments );
 		} catch ( Exception $e ) {
 			WC_EBANX::log( $e->getMessage() );
@@ -490,7 +496,7 @@ class WC_EBANX_New_Gateway extends WC_EBANX_Gateway {
 
 		if ( ! empty( get_query_var( 'order-pay' ) ) ) {
 			$order_id = get_query_var( 'order-pay' );
-		} else if ( WC_EBANX_Request::has( 'order_id' ) && ! empty( WC_EBANX_Request::read( 'order_id', null ) ) ) {
+		} elseif ( WC_EBANX_Request::has( 'order_id' ) && ! empty( WC_EBANX_Request::read( 'order_id', null ) ) ) {
 			$order_id = WC_EBANX_Request::read( 'order_id', null );
 		}
 
@@ -528,17 +534,17 @@ class WC_EBANX_New_Gateway extends WC_EBANX_Gateway {
 		if ( null !== $instalments ) {
 			$instalment_price = $amount / $instalments;
 			$instalment_price = round( floatval( $instalment_price ), 2 );
-			$amount = $instalment_price * $instalments;
+			$amount           = $instalment_price * $instalments;
 		}
 
-		$message = $this->get_checkout_message( $amount, $currency, $country );
+		$message               = $this->get_checkout_message( $amount, $currency, $country );
 		$exchange_rate_message = $this->get_exchange_rate_message( $rate, $currency, $country );
 
 		if ( $template ) {
 			wc_get_template(
 				'checkout-conversion-rate.php',
 				[
-					'message' => $message,
+					'message'               => $message,
 					'exchange_rate_message' => $exchange_rate_message,
 				],
 				'woocommerce/ebanx/',
@@ -568,10 +574,12 @@ class WC_EBANX_New_Gateway extends WC_EBANX_Gateway {
 
 		$data = $this->ebanx->paymentInfo()->findByHash( $codes['hash'], $this->is_sandbox_mode );
 
-		WC_EBANX_Notification_Query_Logger::persist([
-			'codes' => $codes,
-			'data' => $data,
-		]);
+		WC_EBANX_Notification_Query_Logger::persist(
+			[
+				'codes' => $codes,
+				'data'  => $data,
+			]
+		);
 
 		$order_id = WC_EBANX_Helper::get_post_id_by_meta_key_and_value( '_ebanx_payment_hash', $data['payment']['hash'] );
 
@@ -603,7 +611,7 @@ class WC_EBANX_New_Gateway extends WC_EBANX_Gateway {
 	final public function update_payment( $order, $data ) {
 		$request_status = strtoupper( $data['payment']['status'] );
 
-		$status = [
+		$status     = [
 			'CO' => 'Confirmed',
 			'CA' => 'Canceled',
 			'PE' => 'Pending',
@@ -664,8 +672,8 @@ class WC_EBANX_New_Gateway extends WC_EBANX_Gateway {
 						$order->add_order_note( sprintf( __( 'EBANX: Your Refund was canceled to EBANX - Refund ID: %s', 'woocommerce-gateway-ebanx' ), $refund['id'] ) );
 					}
 
-					$refunds[ $k ]['status'] = $refund['status'];
-					$refunds[ $k ]['cancel_date'] = $refund['cancel_date'];
+					$refunds[ $k ]['status']       = $refund['status'];
+					$refunds[ $k ]['cancel_date']  = $refund['cancel_date'];
 					$refunds[ $k ]['request_date'] = $refund['request_date'];
 					$refunds[ $k ]['pending_date'] = $refund['pending_date'];
 					$refunds[ $k ]['confirm_date'] = $refund['confirm_date'];

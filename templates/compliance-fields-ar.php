@@ -5,35 +5,35 @@
 $order_id = get_query_var( 'order-pay' );
 
 if ( $order_id ) {
-	$order   = wc_get_order( $order_id );
+	$order    = wc_get_order( $order_id );
 	$document = $order ? get_user_meta( $order->get_user_id(), '_ebanx_document', true ) : false;
-	$address = $order->get_address();
+	$address  = $order->get_address();
 
 	$fields = array(
 		'ebanx_billing_argentina_document' => array(
 			'label' => __( 'Document', 'woocommerce-gateway-ebanx' ),
 			'value' => $document,
 		),
-		'billing_postcode' => array(
+		'billing_postcode'                 => array(
 			'label' => 'Postcode / ZIP',
 			'value' => $address['postcode'],
 		),
-		'billing_address_1' => array(
+		'billing_address_1'                => array(
 			'label' => __( 'Street address', 'woocommerce-gateway-ebanx' ),
 			'value' => $address['address_1'],
 		),
-		'billing_city' => array(
+		'billing_city'                     => array(
 			'label' => __( 'Town / City', 'woocommerce-gateway-ebanx' ),
 			'value' => $address['city'],
 		),
-		'billing_state' => array(
+		'billing_state'                    => array(
 			'label' => __( 'State / County', 'woocommerce-gateway-ebanx' ),
 			'value' => $address['state'],
 		),
-		'billing_country' => array(
+		'billing_country'                  => array(
 			'label' => 'Country',
 			'value' => $address['country'],
-			'type' => 'hidden',
+			'type'  => 'hidden',
 		),
 	);
 }

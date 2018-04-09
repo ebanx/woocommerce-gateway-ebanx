@@ -18,16 +18,16 @@
 		<input id="ebanx-card-cvv" class="input-text wc-credit-card-form-card-cvc" type="tel" autocomplete="off" placeholder="CVV" />
 	</section>
 
-	<?php include WC_EBANX::get_templates_path() . 'instalments.php'; ?>
+	<?php require WC_EBANX::get_templates_path() . 'instalments.php'; ?>
 
 	<?php if ( $place_order_enabled ) : ?>
 		<section class="ebanx-form-row">
 			<label for="ebanx-save-credit-card">
 				<?php
-				$input_type = 'checkbox';
+				$input_type     = 'checkbox';
 				$save_card_text = 'Guarda esta tarjeta para compras futuras.';
 				if ( WC_EBANX_Helper::checkout_contains_subscription() ) {
-					$input_type = 'hidden';
+					$input_type     = 'hidden';
 					$save_card_text = null;
 				}
 				?>

@@ -1,20 +1,20 @@
 <div class="form-field form-field-wide">
-	<h3><?php _e('EBANX Order Details', 'woocommerce-gateway-ebanx') ?></h3>
+	<h3><?php esc_html_e( 'EBANX Order Details', 'woocommerce-gateway-ebanx' ); ?></h3>
 	<p>
-		<?php _e('Dashboard Payment Link', 'woocommerce-gateway-ebanx') ?>
+		<?php esc_html_e( 'Dashboard Payment Link', 'woocommerce-gateway-ebanx' ); ?>
 		<br>
-		<a href="<?php echo $dashboard_link ?>" class="ebanx-text-overflow" target="_blank"><?php echo $dashboard_link ?></a>
+		<a href="<?php echo esc_url( $dashboard_link ); ?>" class="ebanx-text-overflow" target="_blank"><?php echo esc_url( $dashboard_link ); ?></a>
 	</p>
 	<p>
-		<?php _e('Payment Hash', 'woocommerce-gateway-ebanx') ?>
+		<?php esc_html_e( 'Payment Hash', 'woocommerce-gateway-ebanx' ); ?>
 		<br>
-		<input type="text" value="<?php echo $payment_hash ?>" onfocus="this.select();" onmouseup="return false;" readonly>
+		<input type="text" value="<?php echo esc_attr( $payment_hash ); ?>" onfocus="this.select();" onmouseup="return false;" readonly>
 	</p>
-	<?php if ($order->status === 'pending' && $payment_checkout_url): ?>
+	<?php if ( 'pending' === $order->status && $payment_checkout_url ) : ?>
 		<p>
-			<strong><?php _e('Customer Payment Link', 'woocommerce-gateway-ebanx') ?></strong>
+			<strong><?php esc_html_e( 'Customer Payment Link', 'woocommerce-gateway-ebanx' ); ?></strong>
 			<br>
-			<input type="text" value="<?php echo $payment_checkout_url ?>" onfocus="this.select();" onmouseup="return false;" readonly>
+			<input type="text" value="<?php echo esc_url( $payment_checkout_url ); ?>" onfocus="this.select();" onmouseup="return false;" readonly>
 		</p>
 	<?php endif ?>
 </div>

@@ -13,5 +13,5 @@ if ( ! defined( 'ABSPATH' ) ) {
 ?>
 
 <div id="ebanx-sencillito" class="ebanx-payment-container ebanx-language-es">
-	<?php include WC_EBANX::get_templates_path() . 'compliance-fields-cl.php' ?>
+	<?php require WC_EBANX::get_templates_path() . 'compliance-fields-cl.php'; ?>
 </div>

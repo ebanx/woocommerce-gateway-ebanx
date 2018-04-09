@@ -1,19 +1,22 @@
 <?php
 
-if (!defined('ABSPATH')) {
+if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-abstract class WC_EBANX_Constants
-{
+/**
+ * Class WC_EBANX_Constants
+ */
+abstract class WC_EBANX_Constants {
+
 	/**
 	 * Countries that EBANX processes
 	 */
-	const COUNTRY_PERU     = 'pe';
-	const COUNTRY_CHILE    = 'cl';
-	const COUNTRY_BRAZIL   = 'br';
-	const COUNTRY_MEXICO   = 'mx';
-	const COUNTRY_COLOMBIA = 'co';
+	const COUNTRY_PERU      = 'pe';
+	const COUNTRY_CHILE     = 'cl';
+	const COUNTRY_BRAZIL    = 'br';
+	const COUNTRY_MEXICO    = 'mx';
+	const COUNTRY_COLOMBIA  = 'co';
 	const COUNTRY_ARGENTINA = 'ar';
 	const COUNTRY_ECUADOR   = 'ec';
 
@@ -25,14 +28,14 @@ abstract class WC_EBANX_Constants
 	/**
 	 * Currencies that EBANX processes
 	 */
-	const CURRENCY_CODE_BRL = 'BRL'; // Brazil
-	const CURRENCY_CODE_USD = 'USD'; // USA & ECUADOR
-	const CURRENCY_CODE_EUR = 'EUR'; // European Union
-	const CURRENCY_CODE_PEN = 'PEN'; // Peru
-	const CURRENCY_CODE_MXN = 'MXN'; // Mexico
-	const CURRENCY_CODE_COP = 'COP'; // Colombia
-	const CURRENCY_CODE_CLP = 'CLP'; // Chile
-	const CURRENCY_CODE_ARS = 'ARS'; // Argentina
+	const CURRENCY_CODE_BRL = 'BRL'; // Brazil.
+	const CURRENCY_CODE_USD = 'USD'; // USA & ECUADOR.
+	const CURRENCY_CODE_EUR = 'EUR'; // European Union.
+	const CURRENCY_CODE_PEN = 'PEN'; // Peru.
+	const CURRENCY_CODE_MXN = 'MXN'; // Mexico.
+	const CURRENCY_CODE_COP = 'COP'; // Colombia.
+	const CURRENCY_CODE_CLP = 'CLP'; // Chile.
+	const CURRENCY_CODE_ARS = 'ARS'; // Argentina.
 
 	/**
 	 * Only the currencies allowed and processed by EBANX
@@ -52,13 +55,15 @@ abstract class WC_EBANX_Constants
 
 	/**
 	 *  Local currencies that EBANX processes
+	 *
+	 * @var array
 	 */
-	public static $LOCAL_CURRENCIES = array(
-		self::COUNTRY_BRAZIL => self::CURRENCY_CODE_BRL,
-		self::COUNTRY_CHILE => self::CURRENCY_CODE_CLP,
-		self::COUNTRY_COLOMBIA => self::CURRENCY_CODE_COP,
-		self::COUNTRY_MEXICO => self::CURRENCY_CODE_MXN,
-		self::COUNTRY_PERU => self::CURRENCY_CODE_PEN,
+	public static $local_currencies = array(
+		self::COUNTRY_BRAZIL    => self::CURRENCY_CODE_BRL,
+		self::COUNTRY_CHILE     => self::CURRENCY_CODE_CLP,
+		self::COUNTRY_COLOMBIA  => self::CURRENCY_CODE_COP,
+		self::COUNTRY_MEXICO    => self::CURRENCY_CODE_MXN,
+		self::COUNTRY_PERU      => self::CURRENCY_CODE_PEN,
 		self::COUNTRY_ARGENTINA => self::CURRENCY_CODE_ARS,
 	);
 
@@ -72,11 +77,13 @@ abstract class WC_EBANX_Constants
 
 	/**
 	 * Max supported credit-card instalments
+	 *
+	 * @var array
 	 */
-	public static $MAX_INSTALMENTS = array(
-		self::COUNTRY_BRAZIL => 12,
-		self::COUNTRY_MEXICO => 12,
-		self::COUNTRY_COLOMBIA => 36,
+	public static $max_instalments = array(
+		self::COUNTRY_BRAZIL    => 12,
+		self::COUNTRY_MEXICO    => 12,
+		self::COUNTRY_COLOMBIA  => 36,
 		self::COUNTRY_ARGENTINA => 12,
 	);
 
@@ -90,7 +97,7 @@ abstract class WC_EBANX_Constants
 	 *
 	 * @var array
 	 */
-	public static $ALL_COUNTRIES = array(
+	public static $all_countries = array(
 		self::COUNTRY_BRAZIL,
 		self::COUNTRY_COLOMBIA,
 		self::COUNTRY_MEXICO,
@@ -105,9 +112,9 @@ abstract class WC_EBANX_Constants
 	 * @var array
 	 */
 	public static $credit_card_countries = array(
-		self::COUNTRY_BRAZIL => self::COUNTRY_BRAZIL,
-		self::COUNTRY_MEXICO => self::COUNTRY_MEXICO,
-		self::COUNTRY_COLOMBIA => self::COUNTRY_COLOMBIA,
+		self::COUNTRY_BRAZIL    => self::COUNTRY_BRAZIL,
+		self::COUNTRY_MEXICO    => self::COUNTRY_MEXICO,
+		self::COUNTRY_COLOMBIA  => self::COUNTRY_COLOMBIA,
 		self::COUNTRY_ARGENTINA => self::COUNTRY_ARGENTINA,
 	);
 
@@ -116,7 +123,7 @@ abstract class WC_EBANX_Constants
 	 *
 	 * @var array
 	 */
-	public static $CREDIT_CARD_CURRENCIES = array(
+	public static $credit_card_currencies = array(
 		self::CURRENCY_CODE_BRL,
 		self::CURRENCY_CODE_MXN,
 		self::CURRENCY_CODE_USD,
@@ -146,8 +153,8 @@ abstract class WC_EBANX_Constants
 	 *
 	 * @var array
 	 */
-	public static $BANKS_TEF_ALLOWED = array(
-		self::COUNTRY_BRAZIL => array('bancodobrasil', 'itau', 'bradesco', 'banrisul'),
+	public static $banks_tef_allowed = array(
+		self::COUNTRY_BRAZIL => array( 'bancodobrasil', 'itau', 'bradesco', 'banrisul' ),
 	);
 
 	/**
@@ -155,31 +162,34 @@ abstract class WC_EBANX_Constants
 	 *
 	 * @var array
 	 */
-	public static $BANKS_EFT_ALLOWED = array(
+	public static $banks_eft_allowed = array(
 		self::COUNTRY_COLOMBIA => array(
-			'banco_agrario' => 'Banco Agrario',
-			'banco_av_villas' => 'Banco AV Villas',
-			'banco_bbva_colombia_s.a.' => 'Banco BBVA Colombia',
-			'banco_caja_social' => 'Banco Caja Social',
-			'banco_colpatria' => 'Banco Colpatria',
+			'banco_agrario'                 => 'Banco Agrario',
+			'banco_av_villas'               => 'Banco AV Villas',
+			'banco_bbva_colombia_s.a.'      => 'Banco BBVA Colombia',
+			'banco_caja_social'             => 'Banco Caja Social',
+			'banco_colpatria'               => 'Banco Colpatria',
 			'banco_cooperativo_coopcentral' => 'Banco Cooperativo Coopcentral',
-			'banco_corpbanca_s.a' => 'Banco CorpBanca Colombia',
-			'banco_davivienda' => 'Banco Davivienda',
-			'banco_de_bogota' => 'Banco de Bogotá',
-			'banco_de_occidente' => 'Banco de Occidente',
-			'banco_falabella_' => 'Banco Falabella',
-			'banco_gnb_sudameris' => 'Banco GNB Sudameris',
-			'banco_pichincha_s.a.' => 'Banco Pichincha',
-			'banco_popular' => 'Banco Popular',
-			'banco_procredit' => 'Banco ProCredit',
-			'bancolombia' => 'Bancolombia',
-			'bancoomeva_s.a.' => 'Bancoomeva',
-			'citibank_' => 'Citibank',
-			'helm_bank_s.a.' => 'Helm Bank',
-		)
+			'banco_corpbanca_s.a'           => 'Banco CorpBanca Colombia',
+			'banco_davivienda'              => 'Banco Davivienda',
+			'banco_de_bogota'               => 'Banco de Bogotá',
+			'banco_de_occidente'            => 'Banco de Occidente',
+			'banco_falabella_'              => 'Banco Falabella',
+			'banco_gnb_sudameris'           => 'Banco GNB Sudameris',
+			'banco_pichincha_s.a.'          => 'Banco Pichincha',
+			'banco_popular'                 => 'Banco Popular',
+			'banco_procredit'               => 'Banco ProCredit',
+			'bancolombia'                   => 'Bancolombia',
+			'bancoomeva_s.a.'               => 'Bancoomeva',
+			'citibank_'                     => 'Citibank',
+			'helm_bank_s.a.'                => 'Helm Bank',
+		),
 	);
 
-	public static $VOUCHERS_EFECTIVO_ALLOWED = array(
+	/**
+	 * @var array
+	 */
+	public static $vouchers_efectivo_allowed = array(
 		'rapipago',
 		'pagofacil',
 		'cupon',
@@ -194,16 +204,16 @@ abstract class WC_EBANX_Constants
 		'ebanx-banking-ticket' => '_boleto',
 		'ebanx-credit-card-br' => '_creditcard',
 		'ebanx-credit-card-mx' => '_creditcard',
-		'ebanx-debit-card' => 'debitcard',
-		'ebanx-oxxo' => '_oxxo',
-		'ebanx-sencillito' => '_sencillito',
-		'ebanx-servipag' => 'servipag',
-		'ebanx-tef' => '_tef',
-		'ebanx-pagoefectivo' => '_pagoefectivo',
-		'ebanx-safetypay' => '_safetypay',
-		'ebanx-eft' => 'eft',
-		'ebanx-baloto' => '_baloto'
-		//'ebanx-account' => '_ebanxaccount'
+		'ebanx-debit-card'     => 'debitcard',
+		'ebanx-oxxo'           => '_oxxo',
+		'ebanx-sencillito'     => '_sencillito',
+		'ebanx-servipag'       => 'servipag',
+		'ebanx-tef'            => '_tef',
+		'ebanx-pagoefectivo'   => '_pagoefectivo',
+		'ebanx-safetypay'      => '_safetypay',
+		'ebanx-eft'            => 'eft',
+		'ebanx-baloto'         => '_baloto',
+		// 'ebanx-account' => '_ebanxaccount'
 	);
 
 	/**
@@ -211,43 +221,43 @@ abstract class WC_EBANX_Constants
 	 *
 	 * @var array
 	 */
-	public static $BRAZIL_TAXES_ALLOWED = array('cpf', 'cnpj');
+	public static $brazil_taxes_allowed = array( 'cpf', 'cnpj' );
 
 	/**
 	 * The gateways that plugin uses as identification
 	 *
 	 * @var array
 	 */
-	public static $EBANX_GATEWAYS_BY_COUNTRY = array(
-		self::COUNTRY_BRAZIL => array(
+	public static $ebanx_gateways_by_country = array(
+		self::COUNTRY_BRAZIL    => array(
 			'ebanx-banking-ticket',
 			'ebanx-credit-card-br',
 			'ebanx-tef',
-			'ebanx-account'
+			'ebanx-account',
 		),
-		self::COUNTRY_CHILE => array(
+		self::COUNTRY_CHILE     => array(
 			'ebanx-webpay',
 			'ebanx-multicaja',
 			'ebanx-sencillito',
 			'ebanx-servipag',
 		),
-		self::COUNTRY_COLOMBIA => array(
+		self::COUNTRY_COLOMBIA  => array(
 			'ebanx-credit-card-co',
 			'ebanx-baloto',
 			'ebanx-eft',
 		),
-		self::COUNTRY_PERU => array(
+		self::COUNTRY_PERU      => array(
 			'ebanx-pagoefectivo',
 			'ebanx-safetypay',
 		),
-		self::COUNTRY_MEXICO => array(
+		self::COUNTRY_MEXICO    => array(
 			'ebanx-credit-card-mx',
 			'ebanx-debit-card',
 			'ebanx-oxxo',
 			'ebanx-spei',
 		),
 		self::COUNTRY_ARGENTINA => array(
-			'ebanx-efectivo'
+			'ebanx-efectivo',
 		),
 	);
 
@@ -257,6 +267,7 @@ abstract class WC_EBANX_Constants
 	 * @var array
 	 */
 	public static $safetypay_allowed_types = array(
-		'cash', 'online',
+		'cash',
+		'online',
 	);
 }

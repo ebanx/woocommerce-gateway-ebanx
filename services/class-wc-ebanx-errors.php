@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * Class WC_EBANX_Errors
+ */
 class WC_EBANX_Errors {
 	/**
 	 * The possible errors that EBANX can throw
@@ -75,7 +78,7 @@ class WC_EBANX_Errors {
 				'INVALID-BILLING-COUNTRY'    => 'Por favor, escolha um país.',
 				'INVALID-ADDRESS'            => 'Insira o seu endereço completo com o número da casa, apartamento ou estabelecimento.',
 				'REFUSED-CC'                 => 'Não foi possível concluir a compra. Entre em contato com o banco/emissor do cartão ou tente novamente.',
-				'SANDBOX-INVALID-CC-NUMBER'  => 'Detectamos que você está em modo Sandbox e por isso só permitimos apenas alguns números de cartões. <a href="https://www.ebanx.com/business/en/developers/integrations/testing/credit-card-test-numbers" target="_blank">Você pode utilizar um dos nossos cartões de teste acessando a EBANX Developer\'s Academy.</a>'
+				'SANDBOX-INVALID-CC-NUMBER'  => 'Detectamos que você está em modo Sandbox e por isso só permitimos apenas alguns números de cartões. <a href="https://www.ebanx.com/business/en/developers/integrations/testing/credit-card-test-numbers" target="_blank">Você pode utilizar um dos nossos cartões de teste acessando a EBANX Developer\'s Academy.</a>',
 			),
 			'es'    => array(
 				'GENERAL'                    => 'No pudimos concluir tu compra. Por favor intenta nuevamente o entra en contacto con el sitio web.',
@@ -144,7 +147,7 @@ class WC_EBANX_Errors {
 				'INVALID-BILLING-COUNTRY'    => 'Por favor, escoge un país.',
 				'INVALID-ADDRESS'            => 'Por favor, introduce tu dirección completa. Número de residencia o apartamento.',
 				'REFUSED-CC'                 => 'No pudimos concluir tu compra. Ponte en contacto con el banco/emisor de la tarjeta o vuelve a intentarlo.',
-				'SANDBOX-INVALID-CC-NUMBER'  => 'Detectamos que estás en modo Sandbox y por eso restringimos algunos números de tarjetas. <a href="https://www.ebanx.com/business/en/developers/integrations/testing/credit-card-test-numbers" target="_blank">Puedes utilizar una de nuestras tarjetas de prueba accediendo a EBANX Developer\'s Academy.</a>'
+				'SANDBOX-INVALID-CC-NUMBER'  => 'Detectamos que estás en modo Sandbox y por eso restringimos algunos números de tarjetas. <a href="https://www.ebanx.com/business/en/developers/integrations/testing/credit-card-test-numbers" target="_blank">Puedes utilizar una de nuestras tarjetas de prueba accediendo a EBANX Developer\'s Academy.</a>',
 			),
 		);
 	}
@@ -167,17 +170,18 @@ class WC_EBANX_Errors {
 			'co' => 'es',
 			'br' => 'pt-br',
 		);
-		$language = $languages[ $country ];
+		$language  = $languages[ $country ];
 
 		$errors = static::get_errors();
 
 		if ( 'BP-DR-6' === $code && 'es' === $language ) {
 			$error_info = array();
-			preg_match('/Amount must be greater than (\w{3}) (.+)/',
+			preg_match(
+				'/Amount must be greater than (\w{3}) (.+)/',
 				$exception->getMessage(),
 				$error_info
 			);
-			$amount = $error_info[2];
+			$amount   = $error_info[2];
 			$currency = $error_info[1];
 			return sprintf( $errors[ $language ][ $code ], wc_price( $amount, [ 'currency' => $currency ] ) );
 		}

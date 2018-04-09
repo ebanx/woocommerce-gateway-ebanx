@@ -55,7 +55,7 @@ class WC_EBANX_Environment {
 			$platform->version = $wp_version;
 		} else {
 			$platform->version = 'Unknown';
-			$platform->error   = 'Unable to detect the version number. Make sure you are calling this inside wordpress.';
+			$platform->error   = 'Unable to detect the version number. Make sure you are calling this inside WordPress.';
 		}
 
 		$this->platform                = $platform;
@@ -88,7 +88,7 @@ class WC_EBANX_Environment {
 		} else {
 			$database_server->name    = 'Unconnected';
 			$database_server->version = 'Unknown';
-			$database_server->error   = 'Unable to connect to the database. Make sure you are calling this inside wordpress.';
+			$database_server->error   = 'Unable to connect to the database. Make sure you are calling this inside WordPress.';
 		}
 
 		$this->database_server = $database_server;

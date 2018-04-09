@@ -1,25 +1,37 @@
 <?php
 
-if ( !defined( 'ABSPATH' ) ) {
+if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+/**
+ * Class WC_EBANX_One_Click
+ */
 class WC_EBANX_One_Click {
 	const CREATE_ORDER_ACTION = 'ebanx_create_order';
 
+	/**
+	 * @var array
+	 */
 	private $cards;
 
 	/**
 	 * @var int
 	 */
 	private $user_id;
+
+	/**
+	 * @var bool|WC_EBANX_Credit_Card_Gateway
+	 */
 	private $gateway;
 
 	/**
 	 * @var string
 	 */
 	private $user_country;
-
+	/**
+	 * @var array
+	 */
 	protected $instalment_rates = array();
 
 	/**
@@ -30,9 +42,9 @@ class WC_EBANX_One_Click {
 		$this->user_country = trim( strtolower( get_user_meta( $this->user_id, 'billing_country', true ) ) );
 		$this->gateway      = $this->user_country ? ( WC_EBANX_Constants::COUNTRY_BRAZIL === $this->user_country ? new WC_EBANX_Credit_Card_BR_Gateway() : new WC_EBANX_Credit_Card_MX_Gateway() ) : false;
 
-		if ( !$this->gateway
-			|| $this->gateway->get_setting_or_default('one_click', 'no') !== 'yes'
-			|| $this->gateway->get_setting_or_default('save_card_data', 'no') !== 'yes' ) {
+		if ( ! $this->gateway
+			|| $this->gateway->get_setting_or_default( 'one_click', 'no' ) !== 'yes'
+			|| $this->gateway->get_setting_or_default( 'save_card_data', 'no' ) !== 'yes' ) {
 			return;
 		}
 
@@ -55,19 +67,19 @@ class WC_EBANX_One_Click {
 	 *
 	 * @return void
 	 */
-	public function generate_instalments_rates () {
-		if (!$this->gateway
-			|| $this->gateway->get_setting_or_default('interest_rates_enabled', 'no') !== 'yes') {
+	public function generate_instalments_rates() {
+		if ( ! $this->gateway
+			|| $this->gateway->get_setting_or_default( 'interest_rates_enabled', 'no' ) !== 'yes' ) {
 			return;
 		}
 
 		$max_instalments = $this->gateway->configs->settings['credit_card_instalments'];
 
-		for ($i=1; $i <= $max_instalments; $i++) {
-			$field = 'interest_rates_' . sprintf("%02d", $i);
-			$this->instalment_rates[$i] = 0;
-			if (is_numeric($this->gateway->configs->settings[$field])) {
-				$this->instalment_rates[$i] = $this->gateway->configs->settings[$field] / 100;
+		for ( $i = 1; $i <= $max_instalments; $i++ ) {
+			$field                        = 'interest_rates_' . sprintf( '%02d', $i );
+			$this->instalment_rates[ $i ] = 0;
+			if ( is_numeric( $this->gateway->configs->settings[ $field ] ) ) {
+				$this->instalment_rates[ $i ] = $this->gateway->configs->settings[ $field ] / 100;
 			}
 		}
 	}
@@ -75,18 +87,20 @@ class WC_EBANX_One_Click {
 	/**
 	 * Process the one click request
 	 *
+	 * @throws Exception When reading with 'ebanx-action'.
+	 *
 	 * @return void
 	 */
 	public function one_click_handler() {
 		ob_start();
 
 		if ( is_admin()
-			|| ! WC_EBANX_Request::has('ebanx-action')
-			|| ! WC_EBANX_Request::has('ebanx-nonce')
-			|| ! WC_EBANX_Request::has('ebanx-product-id')
-			|| ! WC_EBANX_Request::has('ebanx-cart-total')
-			|| WC_EBANX_Request::read('ebanx-action') !== self::CREATE_ORDER_ACTION
-			|| ! wp_verify_nonce( WC_EBANX_Request::read('ebanx-nonce'), self::CREATE_ORDER_ACTION )
+			|| ! WC_EBANX_Request::has( 'ebanx-action' )
+			|| ! WC_EBANX_Request::has( 'ebanx-nonce' )
+			|| ! WC_EBANX_Request::has( 'ebanx-product-id' )
+			|| ! WC_EBANX_Request::has( 'ebanx-cart-total' )
+			|| WC_EBANX_Request::read( 'ebanx-action' ) !== self::CREATE_ORDER_ACTION
+			|| ! wp_verify_nonce( WC_EBANX_Request::read( 'ebanx-nonce' ), self::CREATE_ORDER_ACTION )
 			|| ! $this->customer_can()
 			|| ! $this->customer_has_ebanx_required_data()
 		) {
@@ -94,16 +108,16 @@ class WC_EBANX_One_Click {
 		}
 
 		try {
-			$product_id = WC_EBANX_Request::read( 'ebanx-product-id' );
+			$product_id     = WC_EBANX_Request::read( 'ebanx-product-id' );
 			$product_to_add = get_product( $product_id );
 
 			$order_params = array(
-				'status' => 'pending',
+				'status'      => 'pending',
 				'customer_id' => $this->user_id,
 			);
 
 			if ( class_exists( 'WC_Subscription' ) && strpos( get_class( $product_to_add ), 'Subscription' ) !== false ) {
-				$subscription = new WC_Subscription( $order_params );
+				$subscription        = new WC_Subscription( $order_params );
 				$subscription->order = wc_create_order( $order_params );
 				$subscription->save();
 
@@ -117,45 +131,45 @@ class WC_EBANX_One_Click {
 			$order->add_product( $product_to_add, 1 );
 
 			$user = array(
-				'email' => get_user_meta( $this->user_id, 'billing_email', true ),
-				'country' => get_user_meta( $this->user_id, 'billing_country', true ),
+				'email'      => get_user_meta( $this->user_id, 'billing_email', true ),
+				'country'    => get_user_meta( $this->user_id, 'billing_country', true ),
 				'first_name' => get_user_meta( $this->user_id, 'billing_first_name', true ),
-				'last_name' => get_user_meta( $this->user_id, 'billing_last_name', true ),
-				'company' => get_user_meta( $this->user_id, 'billing_company', true ),
-				'address_1' => get_user_meta( $this->user_id, 'billing_address_1', true ),
-				'address_2' => get_user_meta( $this->user_id, 'billing_address_2', true ),
-				'city' => get_user_meta( $this->user_id, 'billing_city', true ),
-				'state' => get_user_meta( $this->user_id, 'billing_state', true ),
-				'postcode' => get_user_meta( $this->user_id, 'billing_postcode', true ),
-				'phone' => get_user_meta( $this->user_id, 'billing_phone', true ),
+				'last_name'  => get_user_meta( $this->user_id, 'billing_last_name', true ),
+				'company'    => get_user_meta( $this->user_id, 'billing_company', true ),
+				'address_1'  => get_user_meta( $this->user_id, 'billing_address_1', true ),
+				'address_2'  => get_user_meta( $this->user_id, 'billing_address_2', true ),
+				'city'       => get_user_meta( $this->user_id, 'billing_city', true ),
+				'state'      => get_user_meta( $this->user_id, 'billing_state', true ),
+				'postcode'   => get_user_meta( $this->user_id, 'billing_postcode', true ),
+				'phone'      => get_user_meta( $this->user_id, 'billing_phone', true ),
 			);
 
-			$order->set_payment_method($this->gateway);
+			$order->set_payment_method( $this->gateway );
 
 			$meta = array(
-				'_billing_email' => $user['email'],
-				'_billing_country' => $user['country'],
+				'_billing_email'      => $user['email'],
+				'_billing_country'    => $user['country'],
 				'_billing_first_name' => $user['first_name'],
-				'_billing_last_name' => $user['last_name'],
-				'_billing_company' => $user['company'],
-				'_billing_address_1' => $user['address_1'],
-				'_billing_address_2' => $user['address_2'],
-				'_billing_city' => $user['city'],
-				'_billing_state' => $user['state'],
-				'_billing_phone' => $user['phone'],
-				'_order_shipping' => WC()->cart->shipping_total,
-				'_cart_discount' => WC()->cart->get_cart_discount_total(),
-				'_cart_discount_tax' => WC()->cart->get_cart_discount_tax_total(),
-				'_order_tax' => WC()->cart->tax_total,
+				'_billing_last_name'  => $user['last_name'],
+				'_billing_company'    => $user['company'],
+				'_billing_address_1'  => $user['address_1'],
+				'_billing_address_2'  => $user['address_2'],
+				'_billing_city'       => $user['city'],
+				'_billing_state'      => $user['state'],
+				'_billing_phone'      => $user['phone'],
+				'_order_shipping'     => WC()->cart->shipping_total,
+				'_cart_discount'      => WC()->cart->get_cart_discount_total(),
+				'_cart_discount_tax'  => WC()->cart->get_cart_discount_tax_total(),
+				'_order_tax'          => WC()->cart->tax_total,
 				'_order_shipping_tax' => WC()->cart->shipping_tax_total,
-				'_order_total' => WC()->cart->total,
+				'_order_total'        => WC()->cart->total,
 			);
 
-			$order->billing_country = $user['country'];
+			$order->billing_country    = $user['country'];
 			$order->billing_first_name = $user['first_name'];
-			$order->billing_last_name = $user['last_name'];
-			$order->billing_email = $user['email'];
-			$order->billing_phone = $user['phone'];
+			$order->billing_last_name  = $user['last_name'];
+			$order->billing_email      = $user['email'];
+			$order->billing_phone      = $user['phone'];
 			$order->save();
 
 			foreach ( $meta as $meta_key => $meta_value ) {
@@ -164,14 +178,14 @@ class WC_EBANX_One_Click {
 
 			$order->calculate_totals();
 
-			$response = $this->gateway->process_payment($order->id);
+			$response = $this->gateway->process_payment( $order->id );
 
-			if ($response['result'] !== 'success') {
-				$message = __('EBANX: Unable to create the payment via one click.', 'woocommerce-gateway-ebanx');
+			if ( 'success' !== $response['result'] ) {
+				$message = __( 'EBANX: Unable to create the payment via one click.', 'woocommerce-gateway-ebanx' );
 
-				$order->add_order_note($message);
+				$order->add_order_note( $message );
 
-				throw new Exception($message);
+				throw new Exception( $message );
 			}
 
 			if ( isset( $subscription ) ) {
@@ -183,9 +197,9 @@ class WC_EBANX_One_Click {
 
 			wp_safe_redirect( $response['redirect'] );
 			exit;
-		}
-		catch (Exception $e) {
-			// TODO: Make a caught exception
+		} catch ( Exception $e ) {
+			// TODO: Make a caught exception.
+			WC_EBANX_Log::wp_write_log( 'Exception in one_click_handler.' );
 		}
 
 		$this->restore_cart();
@@ -199,13 +213,13 @@ class WC_EBANX_One_Click {
 	 * @return void
 	 */
 	public function restore_cart() {
-		// delete current cart
+		// delete current cart.
 		WC()->cart->empty_cart( true );
 
-		// update user meta with saved persistent
+		// update user meta with saved persistent.
 		$saved_cart = get_user_meta( $this->user_id, '_ebanx_persistent_cart', true );
 
-		// then reload cart
+		// then reload cart.
 		WC()->session->set( 'cart', $saved_cart );
 		WC()->cart->get_cart_from_session();
 	}
@@ -216,7 +230,7 @@ class WC_EBANX_One_Click {
 	 * @return array
 	 */
 	public function get_user_billing_address() {
-		// Formatted Addresses
+		// Formatted Addresses.
 		$billing = array(
 			'first_name' => get_user_meta( $this->user_id, 'billing_first_name', true ),
 			'last_name'  => get_user_meta( $this->user_id, 'billing_last_name', true ),
@@ -270,19 +284,23 @@ class WC_EBANX_One_Click {
 	 * @return boolean If the user has all required data, return true
 	 */
 	protected function customer_has_ebanx_required_data() {
-		$card = current( array_filter( (array) array_filter( get_user_meta( $this->user_id, '_ebanx_credit_card_token', true ) ), function ( $card ) {
-			return $card->token == WC_EBANX_Request::read('ebanx-one-click-token');
-		} ) );
+		$card = current(
+			array_filter(
+				(array) array_filter( get_user_meta( $this->user_id, '_ebanx_credit_card_token', true ) ), function ( $card ) {
+					return WC_EBANX_Request::read( 'ebanx-one-click-token' ) == $card->token;
+				}
+			)
+		);
 
 		$names = $this->gateway->names;
 
-		WC_EBANX_Request::set('ebanx_token', $card->token);
-		WC_EBANX_Request::set('ebanx_masked_card_number', $card->masked_number);
-		WC_EBANX_Request::set('ebanx_brand', $card->brand);
-		WC_EBANX_Request::set('ebanx_billing_cvv', WC_EBANX_Request::read('ebanx-one-click-cvv'));
-		WC_EBANX_Request::set('ebanx_is_one_click', true);
-		WC_EBANX_Request::set('ebanx-credit-card-installments', WC_EBANX_Request::read('ebanx-credit-card-installments', 1));
-		WC_EBANX_Request::set('ebanx_billing_instalments', WC_EBANX_Request::read('ebanx-credit-card-installments'));
+		WC_EBANX_Request::set( 'ebanx_token', $card->token );
+		WC_EBANX_Request::set( 'ebanx_masked_card_number', $card->masked_number );
+		WC_EBANX_Request::set( 'ebanx_brand', $card->brand );
+		WC_EBANX_Request::set( 'ebanx_billing_cvv', WC_EBANX_Request::read( 'ebanx-one-click-cvv' ) );
+		WC_EBANX_Request::set( 'ebanx_is_one_click', true );
+		WC_EBANX_Request::set( 'ebanx-credit-card-installments', WC_EBANX_Request::read( 'ebanx-credit-card-installments', 1 ) );
+		WC_EBANX_Request::set( 'ebanx_billing_instalments', WC_EBANX_Request::read( 'ebanx-credit-card-installments' ) );
 
 		WC_EBANX_Request::set( $names['ebanx_billing_brazil_document'], get_user_meta( $this->user_id, '_ebanx_billing_brazil_document', true ) );
 
@@ -290,10 +308,10 @@ class WC_EBANX_One_Click {
 
 		WC_EBANX_Request::set( $names['ebanx_billing_argentina_document'], get_user_meta( $this->user_id, '_ebanx_billing_argentina_document', true ) );
 
-		WC_EBANX_Request::set('billing_postcode', $this->get_user_billing_address()['postcode']);
-		WC_EBANX_Request::set('billing_address_1', $this->get_user_billing_address()['address_1']);
-		WC_EBANX_Request::set('billing_city', $this->get_user_billing_address()['city']);
-		WC_EBANX_Request::set('billing_state', $this->get_user_billing_address()['state']);
+		WC_EBANX_Request::set( 'billing_postcode', $this->get_user_billing_address()['postcode'] );
+		WC_EBANX_Request::set( 'billing_address_1', $this->get_user_billing_address()['address_1'] );
+		WC_EBANX_Request::set( 'billing_city', $this->get_user_billing_address()['city'] );
+		WC_EBANX_Request::set( 'billing_state', $this->get_user_billing_address()['state'] );
 
 		return ! empty( WC_EBANX_Request::read( 'ebanx-one-click-token', null ) )
 			&& ! empty( WC_EBANX_Request::read( 'ebanx-credit-card-installments', null ) )
@@ -316,6 +334,9 @@ class WC_EBANX_One_Click {
 		return ! is_user_logged_in() || ! get_user_meta( $this->user_id, '_billing_email', true ) && ! empty( $this->cards );
 	}
 
+	/**
+	 * @return bool
+	 */
 	public function should_show_button() {
 		return $this->cards
 			&& ( ! empty( get_user_meta( $this->user_id, '_ebanx_billing_brazil_document', true ) )
@@ -350,7 +371,7 @@ class WC_EBANX_One_Click {
 			case 'es_MX':
 			case 'es_AR':
 				$messages = array(
-					'instalments' => 'Meses sin intereses'
+					'instalments' => 'Meses sin intereses',
 				);
 				break;
 			default:
@@ -364,7 +385,7 @@ class WC_EBANX_One_Click {
 
 		$cart_total = $product->price;
 
-		$max_instalments = min($this->gateway->configs->settings['credit_card_instalments'], WC_EBANX_Constants::$MAX_INSTALMENTS[$country]);
+		$max_instalments = min( $this->gateway->configs->settings['credit_card_instalments'], WC_EBANX_Constants::$max_instalments[ $country ] );
 
 		$tax = 0;
 		if ( get_woocommerce_currency() === WC_EBANX_Constants::CURRENCY_CODE_BRL
@@ -372,26 +393,28 @@ class WC_EBANX_One_Click {
 			$tax = WC_EBANX_Constants::CURRENCY_CODE_BRL;
 		}
 
-		$instalments_terms = $this->gateway->get_payment_terms($cart_total, $max_instalments, $tax);
-		$currency = WC_EBANX_Constants::$LOCAL_CURRENCIES[$country];
-		$ebanx = new WC_EBANX_New_Gateway();
+		$instalments_terms = $this->gateway->get_payment_terms( $cart_total, $max_instalments, $tax );
+		$currency          = WC_EBANX_Constants::$local_currencies[ $country ];
+		$ebanx             = new WC_EBANX_New_Gateway();
 
-		$args = apply_filters( 'ebanx_template_args', array(
-				'cards' => $this->cards,
-				'cart_total' => $cart_total,
-				'product_id' => $product->id,
-				'installment_taxes' => $this->instalment_rates,
-				'currency' => $currency,
-				'currency_rate' => round(floatval($ebanx->get_local_currency_rate_for_site($currency)), 2),
-				'label' => __( 'Pay with one click', 'woocommerce-gateway-ebanx' ),
-				'instalments' => $messages['instalments'],
-				'instalments_terms' => $instalments_terms,
-				'nonce' => wp_create_nonce( self::CREATE_ORDER_ACTION ),
-				'action' => self::CREATE_ORDER_ACTION,
-				'permalink' => get_permalink($product->id),
-				'country' => $country,
+		$args = apply_filters(
+			'ebanx_template_args', array(
+				'cards'              => $this->cards,
+				'cart_total'         => $cart_total,
+				'product_id'         => $product->id,
+				'installment_taxes'  => $this->instalment_rates,
+				'currency'           => $currency,
+				'currency_rate'      => round( floatval( $ebanx->get_local_currency_rate_for_site( $currency ) ), 2 ),
+				'label'              => __( 'Pay with one click', 'woocommerce-gateway-ebanx' ),
+				'instalments'        => $messages['instalments'],
+				'instalments_terms'  => $instalments_terms,
+				'nonce'              => wp_create_nonce( self::CREATE_ORDER_ACTION ),
+				'action'             => self::CREATE_ORDER_ACTION,
+				'permalink'          => get_permalink( $product->id ),
+				'country'            => $country,
 				'should_show_button' => $this->should_show_button(),
-			) );
+			)
+		);
 
 		wc_get_template( 'one-click.php', $args, '', WC_EBANX::get_templates_path() . 'one-click/' );
 	}

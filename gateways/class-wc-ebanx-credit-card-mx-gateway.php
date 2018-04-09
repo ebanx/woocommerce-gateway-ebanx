@@ -1,26 +1,28 @@
 <?php
 
-if (!defined('ABSPATH')) {
+if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-class WC_EBANX_Credit_Card_MX_Gateway extends WC_EBANX_Credit_Card_Gateway
-{
+/**
+ * Class WC_EBANX_Credit_Card_MX_Gateway
+ */
+class WC_EBANX_Credit_Card_MX_Gateway extends WC_EBANX_Credit_Card_Gateway {
+
 	/**
 	 * Constructor
 	 */
-	public function __construct()
-	{
-		$this->id = 'ebanx-credit-card-mx';
-		$this->method_title = __('EBANX - Credit Card Mexico', 'woocommerce-gateway-ebanx');
+	public function __construct() {
+		$this->id            = 'ebanx-credit-card-mx';
+		$this->method_title  = __( 'EBANX - Credit Card Mexico', 'woocommerce-gateway-ebanx' );
 		$this->currency_code = WC_EBANX_Constants::CURRENCY_CODE_MXN;
 
-		$this->title = 'Tarjeta de Crédito';
+		$this->title       = 'Tarjeta de Crédito';
 		$this->description = 'Pay with credit card.';
 
 		parent::__construct();
 
-		$this->enabled = is_array($this->configs->settings['mexico_payment_methods']) ? in_array($this->id, $this->configs->settings['mexico_payment_methods']) ? 'yes' : false : false;
+		$this->enabled = is_array( $this->configs->settings['mexico_payment_methods'] ) ? in_array( $this->id, $this->configs->settings['mexico_payment_methods'] ) ? 'yes' : false : false;
 	}
 
 	/**
@@ -29,18 +31,18 @@ class WC_EBANX_Credit_Card_MX_Gateway extends WC_EBANX_Credit_Card_Gateway
 	 * @return boolean
 	 * @throws Exception Throws missing param message.
 	 */
-	public function is_available()
-	{
+	public function is_available() {
 		return parent::is_available() && WC_EBANX_Constants::COUNTRY_MEXICO === $this->get_transaction_address( 'country' );
 	}
 
 	/**
 	 * Check if the currency is processed by EBANX
-	 * @param  string $currency Possible currencies: MXN
+	 *
+	 * @param  string $currency Possible currencies: MXN.
 	 * @return boolean          Return true if EBANX process the currency
 	 */
-	public function ebanx_process_merchant_currency($currency) {
-		return $currency === WC_EBANX_Constants::CURRENCY_CODE_MXN;
+	public function ebanx_process_merchant_currency( $currency ) {
+		return WC_EBANX_Constants::CURRENCY_CODE_MXN === $currency;
 	}
 
 	/**

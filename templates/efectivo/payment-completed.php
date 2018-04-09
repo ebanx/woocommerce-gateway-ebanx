@@ -1,1 +1,1 @@
-<?php include_once 'payment-processing.php';
+<?php require_once 'payment-processing.php';
