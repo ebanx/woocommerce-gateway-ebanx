@@ -4,6 +4,8 @@ if (!defined('ABSPATH')) {
 	exit;
 }
 
+include_once WC_EBANX_GATEWAYS_DIR . 'class-wc-ebanx-global-gateway.php';
+
 abstract class WC_EBANX_Helper
 {
 	/**

@@ -1,5 +1,7 @@
 <?php
 
+include_once WC_EBANX_SERVICES_DIR . 'class-wc-ebanx-helper.php';
+
 /**
  * Abstract logger class, responsible to persist log on database
  */
