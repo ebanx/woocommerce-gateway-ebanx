@@ -43,9 +43,10 @@ class WC_EBANX_Api_Controller {
 			die( json_encode( [] ) );
 		}
 
-		$logs = WC_EBANX_Database::select( 'logs' );
+		$where = "integration_key = '" . WC_EBANX_Request::read( 'integration_key' ) . "'";
+		$logs  = WC_EBANX_Database::select( 'logs', $where );
 
-		WC_EBANX_Database::truncate( 'logs' );
+		WC_EBANX_Database::truncate( 'logs', $where );
 
 		die( json_encode( $logs ) );
 	}

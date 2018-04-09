@@ -344,7 +344,7 @@ if ( ! class_exists('WC_EBANX') ) {
 						'site_language' => get_bloginfo('language'),
 						'wordpress_version' => get_bloginfo('version'),
 						'woocommerce_version' => WC()->version,
-						'type' => 'Woocommerce'
+						'type' => 'Woocommerce',
 					)
 				)
 			);
@@ -394,7 +394,9 @@ if ( ! class_exists('WC_EBANX') ) {
 				'body' => array(
 					'lead' => array(
 						'id' => $lead_id,
-						'integration_key' => $this->private_key
+						'integration_key' => $this->private_key,
+						'site_url' => get_bloginfo('url'),
+						'type' => 'Woocommerce',
 					)
 				)
 			);

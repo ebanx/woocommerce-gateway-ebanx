@@ -4,6 +4,8 @@ if (!defined('ABSPATH')) {
 	exit;
 }
 
+include_once WC_EBANX_GATEWAYS_DIR . 'class-wc-ebanx-global-gateway.php';
+
 abstract class WC_EBANX_Helper
 {
 	/**
@@ -17,6 +19,17 @@ abstract class WC_EBANX_Helper
 		array_walk_recursive($array, function($value) use (&$return) { $return[] = $value; });
 
 		return $return;
+	}
+
+	/**
+	 * Return config integration key by environment.
+	 *
+	 * @return string
+	 */
+	public static function get_integration_key() {
+		$config = new WC_EBANX_Global_Gateway();
+
+		return 'yes' === $config->settings['sandbox_mode_enabled'] ? $config->settings['sandbox_private_key'] : $config->settings['live_private_key'];
 	}
 
 	/**
