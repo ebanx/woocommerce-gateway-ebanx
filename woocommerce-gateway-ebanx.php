@@ -451,8 +451,6 @@ if ( ! class_exists('WC_EBANX') ) {
 					}
 				}
 			}
-
-			flush_rewrite_rules();
 		}
 
 		/**
