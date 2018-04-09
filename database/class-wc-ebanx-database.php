@@ -83,14 +83,15 @@ WHERE table_name = %s AND column_name = 'integration_key'", $table_name ) );
 	 * Truncate table
 	 *
 	 * @param string $table table name.
+	 * @param string $where
 	 */
-	public static function truncate( $table ) {
+	public static function truncate( $table, $where = '1=1' ) {
 		global $wpdb;
 
 		$table_name = self::tables()[ $table ];
 
 		// @codingStandardsIgnoreLine
-		$wpdb->query( $wpdb->prepare( "TRUNCATE TABLE `$table_name`", null ) );
+		$wpdb->query( $wpdb->prepare( "DELETE FROM `$table_name` WHERE $where", null ) );
 	}
 
 	/**
@@ -98,13 +99,16 @@ WHERE table_name = %s AND column_name = 'integration_key'", $table_name ) );
 	 * Commonly used to get all logs before truncate table
 	 *
 	 * @param string $table table name.
+	 * @param string $where
+	 *
+	 * @return array|null|object
 	 */
-	public static function select( $table ) {
+	public static function select( $table, $where = '1=1' ) {
 		global $wpdb;
 
 		$table_name = self::tables()[ $table ];
 
 		// @codingStandardsIgnoreLine
-		return $wpdb->get_results( $wpdb->prepare( "SELECT * FROM `$table_name`", null ) );
+		return $wpdb->get_results( $wpdb->prepare( "SELECT * FROM `$table_name` WHERE $where", null ) );
 	}
 }

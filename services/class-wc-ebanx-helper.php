@@ -20,6 +20,17 @@ abstract class WC_EBANX_Helper
 	}
 
 	/**
+	 * Return config integration key by environment.
+	 *
+	 * @return string
+	 */
+	public static function get_integration_key() {
+		$config = new WC_EBANX_Global_Gateway();
+
+		return 'yes' === $config->settings['sandbox_mode_enabled'] ? $config->settings['sandbox_private_key'] : $config->settings['live_private_key'];
+	}
+
+	/**
 	 * Splits address in street name, house number and addition
 	 *
 	 * @param  string $address Address to be split
