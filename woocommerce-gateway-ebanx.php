@@ -343,7 +343,8 @@ if ( ! class_exists('WC_EBANX') ) {
 						'site_name' => get_bloginfo('name'),
 						'site_language' => get_bloginfo('language'),
 						'wordpress_version' => get_bloginfo('version'),
-						'woocommerce_version' => WC()->version
+						'woocommerce_version' => WC()->version,
+						'type' => 'Woocommerce'
 					)
 				)
 			);
