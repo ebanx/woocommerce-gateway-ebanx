@@ -1,4 +1,4 @@
-<?php
+<?php //phpcs:disable WordPress.Files.FileName
 /**
  * Plugin Name: EBANX Payment Gateway for WooCommerce
  * Plugin URI: https://www.ebanx.com/business/en/developers/integrations/extensions-and-plugins/woocommerce-plugin
@@ -62,10 +62,19 @@ if ( ! class_exists( 'WC_EBANX' ) ) {
 		 */
 		protected static $instance = null;
 
+		/**
+		 * @var $log
+		 */
 		private static $log;
 
+		/**
+		 * @var string $my_account_endpoint
+		 */
 		private static $my_account_endpoint = 'ebanx-saved-cards';
 
+		/**
+		 * @var string $my_account_name
+		 */
 		private static $my_account_menu_name = 'EBANX - Saved Cards';
 
 		/**
@@ -89,14 +98,14 @@ if ( ! class_exists( 'WC_EBANX' ) ) {
 			}
 
 			/**
-			 * Includes
+			 * Includes.
 			 */
 			$this->includes();
 
 			$configs = new WC_EBANX_Global_Gateway();
 
 			/**
-			 * Actions
+			 * Actions.
 			 */
 			add_action( 'plugins_loaded', array( $this, 'plugins_loaded' ) );
 			add_action( 'wp_loaded', array( $this, 'enable_i18n' ) );
@@ -170,16 +179,16 @@ if ( ! class_exists( 'WC_EBANX' ) ) {
 			 * Configs
 			 */
 			$this->configs         = new WC_EBANX_Global_Gateway();
-			$this->is_sandbox_mode = $this->configs->settings['sandbox_mode_enabled'] === 'yes';
+			$this->is_sandbox_mode = 'yes' === $this->configs->settings['sandbox_mode_enabled'];
 			$this->private_key     = $this->is_sandbox_mode ? $this->configs->settings['sandbox_private_key'] : $this->configs->settings['live_private_key'];
 			$this->public_key      = $this->is_sandbox_mode ? $this->configs->settings['sandbox_public_key'] : $this->configs->settings['live_public_key'];
 		}
 
 		/**
-		 * Extract some informations from the plugin
+		 * Extract some informations from the plugi.n
 		 *
-		 * @param  string $info The information that you want to extract, possible values: version, name, description, author, network
-		 * @return string       The value extracted
+		 * @param  string $info The information that you want to extract, possible values: version, name, description, author, network.
+		 * @return string       The value extracted.
 		 */
 		public static function get_plugin_info( $info = 'name' ) {
 			$plugin = get_file_data( __FILE__, array( $info => $info ) );
@@ -188,16 +197,16 @@ if ( ! class_exists( 'WC_EBANX' ) ) {
 		}
 
 		/**
-		 * Extract the plugin version described on plugin's header
+		 * Extract the plugin version described on plugin's header.
 		 *
-		 * @return string The plugin version
+		 * @return string The plugin version.
 		 */
 		public static function get_plugin_version() {
 			return self::get_plugin_info( 'version' );
 		}
 
 		/**
-		 * Performs checks on some system status
+		 * Performs checks on some system status.
 		 *
 		 * @return void
 		 */
@@ -210,9 +219,9 @@ if ( ! class_exists( 'WC_EBANX' ) ) {
 		}
 
 		/**
-		 * Call when the plugins are loaded
+		 * Call when the plugins are loaded.
 		 *
-		 * @return void
+		 * @return mixed
 		 */
 		public function plugins_loaded() {
 			if ( $this->get_environment_warning() ) {
@@ -250,14 +259,14 @@ if ( ! class_exists( 'WC_EBANX' ) ) {
 		}
 
 		/**
-		 * It enables the my account page for logged users
+		 * It enables the my account page for logged users.
 		 *
 		 * @return void
 		 */
 		public function my_account_template() {
 			if ( WC_EBANX_Request::has( 'credit-card-delete' )
 				&& is_account_page() ) {
-				// Find credit cards saved and delete the selected
+				// Find credit cards saved and delete the selected.
 				$cards = get_user_meta( get_current_user_id(), '_ebanx_credit_card_token', true );
 
 				foreach ( $cards as $k => $cd ) {
@@ -271,7 +280,7 @@ if ( ! class_exists( 'WC_EBANX' ) ) {
 
 			$cards = array_filter(
 				(array) get_user_meta( get_current_user_id(), '_ebanx_credit_card_token', true ), function ( $card ) {
-					return ! empty( $card->brand ) && ! empty( $card->token ) && ! empty( $card->masked_number ); // TODO: Implement token due date
+					return ! empty( $card->brand ) && ! empty( $card->token ) && ! empty( $card->masked_number ); // TODO: Implement token due date.
 				}
 			);
 
@@ -289,7 +298,7 @@ if ( ! class_exists( 'WC_EBANX' ) ) {
 		 * Mount query vars on my account for credit cards
 		 *
 		 * @param  array $vars
-		 * @return void
+		 * @return array
 		 */
 		public function my_account_query_vars( $vars ) {
 			$vars[] = self::$my_account_endpoint;
@@ -298,12 +307,12 @@ if ( ! class_exists( 'WC_EBANX' ) ) {
 		}
 
 		/**
-		 * It creates a endpoint to my account
+		 * It creates a endpoint to my account.
 		 *
 		 * @return void
 		 */
 		public function my_account_endpoint() {
-			// My account endpoint
+			// My account endpoint.
 			add_rewrite_endpoint( self::$my_account_endpoint, EP_ROOT | EP_PAGES );
 
 			add_option( 'woocommerce_ebanx-global_settings', WC_EBANX_Global_Gateway::$defaults );
@@ -312,17 +321,17 @@ if ( ! class_exists( 'WC_EBANX' ) ) {
 		}
 
 		/**
-		 * Save some informations from merchant and send to EBANX servers
+		 * Save some informations from merchant and send to EBANX servers.
 		 *
 		 * @return void
 		 */
 		public static function save_merchant_infos() {
-			// Prevent fatal error if WooCommerce isn't installed
+			// Prevent fatal error if WooCommerce isn't installed.
 			if ( ! defined( 'WC_VERSION' ) ) {
 				return;
 			}
 
-			// Save merchant informations
+			// Save merchant informations.
 			$user = get_userdata( get_current_user_id() );
 			if ( ! $user || is_wp_error( $user ) ) {
 				return;
@@ -346,19 +355,19 @@ if ( ! class_exists( 'WC_EBANX' ) ) {
 				),
 			);
 
-			// Call EBANX API to save a lead
+			// Call EBANX API to save a lead.
 			$request = wp_remote_post( $url, $args );
 
 			if ( isset( $request['body'] ) ) {
 				$data = json_decode( $request['body'] );
 
-				// Update merchant
+				// Update merchant.
 				update_option( '_ebanx_lead_id', $data->id, false );
 			}
 		}
 
 		/**
-		 * A method that will be called every time settings are saved
+		 * A method that will be called every time settings are saved.
 		 *
 		 * @return void
 		 */
@@ -366,12 +375,17 @@ if ( ! class_exists( 'WC_EBANX' ) ) {
 			$this->settings['before'] = $this->configs->settings;
 		}
 
+		/**
+		 * Action triggered on save settings
+		 */
 		public function on_save_settings() {
 			$this->settings['after'] = $this->configs->settings;
 
 			delete_option( '_ebanx_api_was_checked' );
 
+			// phpcs:disable
 			do_action( 'ebanx_settings_saved', $_POST );
+			// phpcs:enable
 
 			WC_EBANX_Plugin_Settings_Change_Logger::persist( $this->settings );
 
@@ -379,7 +393,7 @@ if ( ! class_exists( 'WC_EBANX' ) ) {
 		}
 
 		/**
-		 * Update and inegrate the lead to the merchant using the merchant's integration key
+		 * Update and inegrate the lead to the merchant using the merchant's integration key.
 		 *
 		 * @return void
 		 */
@@ -396,12 +410,12 @@ if ( ! class_exists( 'WC_EBANX' ) ) {
 				),
 			);
 
-			// Call EBANX API to save a lead
+			// Call EBANX API to save a lead.
 			wp_remote_post( $url, $args );
 		}
 
 		/**
-		 * Method that will be called when plugin is activated
+		 * Method that will be called when plugin is activated.
 		 *
 		 * @return void
 		 */
@@ -417,7 +431,7 @@ if ( ! class_exists( 'WC_EBANX' ) ) {
 		}
 
 		/**
-		 * Method that will be called when plugin is deactivated
+		 * Method that will be called when plugin is deactivated.
 		 *
 		 * @return void
 		 */
@@ -454,7 +468,7 @@ if ( ! class_exists( 'WC_EBANX' ) ) {
 		}
 
 		/**
-		 * It enables a tab on WooCommerce My Account page
+		 * It enables a tab on WooCommerce My Account page.
 		 *
 		 * @param  string $title
 		 * @return string Return the title to show on tab
@@ -465,7 +479,9 @@ if ( ! class_exists( 'WC_EBANX' ) ) {
 			$is_endpoint = isset( $wp_query->query_vars[ self::$my_account_endpoint ] );
 
 			if ( $is_endpoint && ! is_admin() && is_main_query() && in_the_loop() && is_account_page() ) {
+				// phpcs:disable
 				$title = __( self::$my_account_menu_name, 'woocommerce-gateway-ebanx' );
+				// phpcs:enable
 				remove_filter( 'the_title', array( $this, 'my_account_menus_title' ) );
 			}
 
@@ -473,17 +489,19 @@ if ( ! class_exists( 'WC_EBANX' ) ) {
 		}
 
 		/**
-		 * It enalbes the menu as a tab on My Account page
+		 * It enalbes the menu as a tab on My Account page.
 		 *
-		 * @param  array $menu The all menus supported by WooCoomerce
-		 * @return array       The new menu
+		 * @param  array $menu The all menus supported by WooCoomerce.
+		 * @return array       The new menu.
 		 */
 		public function my_account_menus( $menu ) {
 			// Remove the logout menu item.
 			$logout = $menu['customer-logout'];
 			unset( $menu['customer-logout'] );
 
+			// phpcs:disable
 			$menu[ self::$my_account_endpoint ] = __( self::$my_account_menu_name, 'woocommerce-gateway-ebanx' );
+			// phpcs:enable
 
 			// Insert back the logout item.
 			$menu['customer-logout'] = $logout;
@@ -506,7 +524,7 @@ if ( ! class_exists( 'WC_EBANX' ) ) {
 		}
 
 		/**
-		 * Include log classes
+		 * Include log classes.
 		 */
 		private static function include_log_classes() {
 			include_once WC_EBANX_SERVICES_DIR . 'class-wc-ebanx-environment.php';
@@ -525,10 +543,10 @@ if ( ! class_exists( 'WC_EBANX' ) ) {
 		}
 
 		/**
-		 * Include all plugin classes
+		 * Include all plugin classes.
 		 */
 		private function includes() {
-			// Utils
+			// Utils.
 			include_once WC_EBANX_SERVICES_DIR . 'class-wc-ebanx-constants.php';
 			include_once WC_EBANX_SERVICES_DIR . 'class-wc-ebanx-helper.php';
 			include_once WC_EBANX_SERVICES_DIR . 'class-wc-ebanx-notice.php';
@@ -550,7 +568,7 @@ if ( ! class_exists( 'WC_EBANX' ) ) {
 			// Load plugin log classes.
 			self::include_log_classes();
 
-			// Gateways
+			// Gateways.
 			include_once WC_EBANX_GATEWAYS_DIR . 'class-wc-ebanx-gateway.php';
 			include_once WC_EBANX_GATEWAYS_DIR . 'class-wc-ebanx-new-gateway.php';
 			include_once WC_EBANX_GATEWAYS_DIR . 'class-wc-ebanx-redirect-gateway.php';
@@ -558,47 +576,47 @@ if ( ! class_exists( 'WC_EBANX' ) ) {
 			include_once WC_EBANX_GATEWAYS_DIR . 'class-wc-ebanx-global-gateway.php';
 			include_once WC_EBANX_GATEWAYS_DIR . 'class-wc-ebanx-credit-card-gateway.php';
 
-			// Chile Gateways
+			// Chile Gateways.
 			include_once WC_EBANX_GATEWAYS_DIR . 'class-wc-ebanx-servipag-gateway.php';
 			include_once WC_EBANX_GATEWAYS_DIR . 'class-wc-ebanx-sencillito-gateway.php';
 			include_once WC_EBANX_GATEWAYS_DIR . 'class-wc-ebanx-webpay-gateway.php';
 			include_once WC_EBANX_GATEWAYS_DIR . 'class-wc-ebanx-multicaja-gateway.php';
 
-			// Brazil Gateways
+			// Brazil Gateways.
 			include_once WC_EBANX_GATEWAYS_DIR . 'class-wc-ebanx-banking-ticket-gateway.php';
 			include_once WC_EBANX_GATEWAYS_DIR . 'class-wc-ebanx-credit-card-br-gateway.php';
 			include_once WC_EBANX_GATEWAYS_DIR . 'class-wc-ebanx-account-gateway.php';
 			include_once WC_EBANX_GATEWAYS_DIR . 'class-wc-ebanx-tef-gateway.php';
 
-			// Mexico Gateways
+			// Mexico Gateways.
 			include_once WC_EBANX_GATEWAYS_DIR . 'class-wc-ebanx-credit-card-mx-gateway.php';
 			include_once WC_EBANX_GATEWAYS_DIR . 'class-wc-ebanx-debit-card-gateway.php';
 			include_once WC_EBANX_GATEWAYS_DIR . 'class-wc-ebanx-oxxo-gateway.php';
 			include_once WC_EBANX_GATEWAYS_DIR . 'class-wc-ebanx-spei-gateway.php';
 
-			// Argentina Gateways
+			// Argentina Gateways.
 			include_once WC_EBANX_GATEWAYS_DIR . 'class-wc-ebanx-credit-card-ar-gateway.php';
 			include_once WC_EBANX_GATEWAYS_DIR . 'class-wc-ebanx-efectivo-gateway.php';
 
-			// Colombia Gateways
+			// Colombia Gateways.
 			include_once WC_EBANX_GATEWAYS_DIR . 'class-wc-ebanx-baloto-gateway.php';
 			include_once WC_EBANX_GATEWAYS_DIR . 'class-wc-ebanx-eft-gateway.php';
 			include_once WC_EBANX_GATEWAYS_DIR . 'class-wc-ebanx-credit-card-co-gateway.php';
 
-			// Peru Gateways
+			// Peru Gateways.
 			include_once WC_EBANX_GATEWAYS_DIR . 'class-wc-ebanx-pagoefectivo-gateway.php';
 			include_once WC_EBANX_GATEWAYS_DIR . 'class-wc-ebanx-safetypay-gateway.php';
 
-			// Hooks/Actions
+			// Hooks/Actions.
 			include_once WC_EBANX_SERVICES_DIR . 'class-wc-ebanx-payment-by-link.php';
 			include_once WC_EBANX_SERVICES_DIR . 'class-wc-ebanx-payment-validator.php';
 			include_once WC_EBANX_SERVICES_DIR . 'class-wc-ebanx-my-account.php';
 			include_once WC_EBANX_SERVICES_DIR . 'class-wc-ebanx-one-click.php';
 
-			// Controllers
+			// Controllers.
 			include_once WC_EBANX_CONTROLLERS_DIR . 'class-wc-ebanx-api-controller.php';
 
-			// Exceptions
+			// Exceptions.
 			include_once WC_EBANX_EXCEPTIONS_DIR . 'class-wc-ebanx-payment-exception.php';
 		}
 
@@ -619,37 +637,37 @@ if ( ! class_exists( 'WC_EBANX' ) ) {
 		 * @return array
 		 */
 		public function add_gateway( $methods ) {
-			// Global
+			// Global.
 			$methods[] = 'WC_EBANX_Global_Gateway';
 
-			// Brazil
+			// Brazil.
 			$methods[] = 'WC_EBANX_Banking_Ticket_Gateway';
 			$methods[] = 'WC_EBANX_Credit_Card_BR_Gateway';
 			$methods[] = 'WC_EBANX_Tef_Gateway';
 			$methods[] = 'WC_EBANX_Account_Gateway';
 
-			// Mexico
+			// Mexico.
 			$methods[] = 'WC_EBANX_Credit_Card_MX_Gateway';
 			$methods[] = 'WC_EBANX_Debit_Card_Gateway';
 			$methods[] = 'WC_EBANX_Oxxo_Gateway';
 			$methods[] = 'WC_EBANX_Spei_Gateway';
 
-			// Chile
+			// Chile.
 			$methods[] = 'WC_EBANX_Webpay_Gateway';
 			$methods[] = 'WC_EBANX_Multicaja_Gateway';
 			$methods[] = 'WC_EBANX_Sencillito_Gateway';
 			$methods[] = 'WC_EBANX_Servipag_Gateway';
 
-			// Colombia
+			// Colombia.
 			$methods[] = 'WC_EBANX_Credit_Card_CO_Gateway';
 			$methods[] = 'WC_EBANX_Baloto_Gateway';
 			$methods[] = 'WC_EBANX_Eft_Gateway';
 
-			// Peru
+			// Peru.
 			$methods[] = 'WC_EBANX_Pagoefectivo_Gateway';
 			$methods[] = 'WC_EBANX_Safetypay_Gateway';
 
-			// Argentina
+			// Argentina.
 			$methods[] = 'WC_EBANX_Credit_Card_AR_Gateway';
 			$methods[] = 'WC_EBANX_Efectivo_Gateway';
 
@@ -677,20 +695,20 @@ if ( ! class_exists( 'WC_EBANX' ) ) {
 		 * WooCommerce fallback notice.
 		 */
 		public function woocommerce_missing_notice() {
-			// TODO: Others notice here
+			// TODO: Others notice here.
 			include_once WC_EBANX_TEMPLATES_DIR . 'views/html-notice-missing-woocommerce.php';
 		}
 
 		/**
-		 * Log messages
+		 * Log messages.
 		 *
-		 * @param  string $message The log message
+		 * @param  string $message The log message.
 		 * @return void
 		 */
 		public static function log( $message ) {
 			$configs = new WC_EBANX_Global_Gateway();
 
-			if ( $configs->settings['debug_enabled'] !== 'yes' ) {
+			if ( 'yes' !== $configs->settings['debug_enabled'] ) {
 				return;
 			}
 
@@ -706,7 +724,7 @@ if ( ! class_exists( 'WC_EBANX' ) ) {
 		}
 
 		/**
-		 * It inserts a EBANX Settings shortcut on WordPress sidebar
+		 * It inserts a EBANX Settings shortcut on WordPress sidebar.
 		 *
 		 * @return void
 		 */
@@ -715,7 +733,7 @@ if ( ! class_exists( 'WC_EBANX' ) ) {
 				'EBANX Settings',
 				'EBANX Settings',
 				'administrator',
-				// TODO: Create a dynamic url
+				// TODO: Create a dynamic url.
 				WC_EBANX_Constants::SETTINGS_URL,
 				'',
 				WC_EBANX_Assets::get_logo(),
@@ -724,16 +742,16 @@ if ( ! class_exists( 'WC_EBANX' ) ) {
 		}
 
 		/**
-		 * Checks if this post is an EBANX Order and call WC_EBANX_Payment_By_Link
+		 * Checks if this post is an EBANX Order and call WC_EBANX_Payment_By_Link.
 		 *
-		 * @param  int $post_id The post id
+		 * @param  int $post_id The post id.
 		 * @return void
 		 */
 		public function ebanx_metabox_payment_link_save( $post_id ) {
 			$order        = wc_get_order( $post_id );
 			$checkout_url = get_post_meta( $order->id, '_ebanx_checkout_url', true );
 
-			// Check if is an EBANX request
+			// Check if is an EBANX request.
 			if ( WC_EBANX_Request::has( 'create_ebanx_payment_link' )
 				&& WC_EBANX_Request::read( 'create_ebanx_payment_link' ) === __( 'Create EBANX Payment Link', 'woocommerce-gateway-ebanx' )
 				&& ! $checkout_url ) {
@@ -748,9 +766,9 @@ if ( ! class_exists( 'WC_EBANX' ) ) {
 		}
 
 		/**
-		 * Checks if the button can be renderized and renders it
+		 * Checks if the button can be renderized and renders it.
 		 *
-		 * @param  int $post_id The post id
+		 * @param  int $post_id The post id.
 		 * @return void
 		 */
 		public function ebanx_metabox_save_post_render_button( $post_id ) {
@@ -771,9 +789,9 @@ if ( ! class_exists( 'WC_EBANX' ) ) {
 		}
 
 		/**
-		 * It inserts informations about the order on admin order details
+		 * It inserts informations about the order on admin order details.
 		 *
-		 * @param  WC_Object $order The WC order object
+		 * @param  WC_Object $order The WC order object.
 		 * @return void
 		 */
 		public function ebanx_admin_order_details( $order ) {
@@ -795,10 +813,13 @@ if ( ! class_exists( 'WC_EBANX' ) ) {
 			}
 		}
 
+		/**
+		 * Get instalments select.
+		 */
 		public function get_instalments_admin_html() {
 			echo '<div class="edit_address">
 				<p class="form-field form-field-wide">
-					<label>' . __( 'Instalment for EBANX Credit Card:', 'woocommerce-gateway-ebanx' ) . '</label>
+					<label>' . esc_html( __( 'Instalment for EBANX Credit Card:', 'woocommerce-gateway-ebanx' ) ) . '</label>
 					<select name="ebanx_instalments" id="_payment_method_instalment" class="first">
 						<option value="1" selected>1</option>
 						<option value="2">2</option>

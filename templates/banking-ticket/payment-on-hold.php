@@ -42,9 +42,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<iframe id="ebanx-boleto-frame" src="<?php echo esc_attr( $url_iframe ); ?>" style="width: 100%; border: 0px; height: 1000px"></iframe>
 	<?php endif; ?>
 
+	<?php // phpcs:disable ?>
 	<script type="text/javascript" src="https://print.ebanx.com/assets/sources/fingerprint/fingerprint2.min.js"></script>
 	<script type="text/javascript" src="https://print.ebanx.com/assets/sources/fingerprint/browserdetect.js"></script>
 	<script type="text/javascript" src="https://print.ebanx.com/assets/sources/fingerprint/mystiquefingerprint.js"></script>
+	<?php // phpcs:enable ?>
 	<script type="text/javascript">
 		(function() {
 			var done = null;

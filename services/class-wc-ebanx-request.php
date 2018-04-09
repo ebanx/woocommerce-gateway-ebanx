@@ -21,6 +21,7 @@ class WC_EBANX_Request {
 	public static function read( $param, $default = self::DEFAULT_VALUE ) {
 		if ( self::has( $param ) ) {
 			if ( isset( $_REQUEST[ $param ] ) ) {
+				// @codingStandardsIgnoreLine
 				return $_REQUEST[ $param ];
 			}
 		}
@@ -62,9 +63,10 @@ class WC_EBANX_Request {
 	 *
 	 * @param string $key The key you want to check.
 	 *
-	 * @return boolean        True if $_REQUEST has $key key
+	 * @return boolean        True if $_REQUEST has $key key.
 	 */
 	public static function has( $key ) {
+		// @codingStandardsIgnoreLine
 		return array_key_exists( $key, $_REQUEST );
 	}
 
@@ -75,6 +77,7 @@ class WC_EBANX_Request {
 	 * @return boolean True if $_GET is empty
 	 */
 	public static function is_get_empty() {
+		// @codingStandardsIgnoreLine
 		return empty( $_GET );
 	}
 
@@ -85,6 +88,7 @@ class WC_EBANX_Request {
 	 * @return boolean True if $_POST is empty
 	 */
 	public static function is_post_empty() {
+		// @codingStandardsIgnoreLine
 		return empty( $_POST );
 	}
 }

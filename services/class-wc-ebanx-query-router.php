@@ -11,7 +11,7 @@ class WC_EBANX_Query_Router {
 	/**
 	 * @var null|string
 	 */
-	private $key    = null;
+	private $key = null;
 	/**
 	 * @var array
 	 */

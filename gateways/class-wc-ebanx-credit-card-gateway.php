@@ -188,6 +188,7 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_New_Gateway {
 
 			// If we're on the checkout page we need to pass ebanx.js the address of the order.
 			if ( is_checkout_pay_page() && isset( $_GET['order'] ) && isset( $_GET['order_id'] ) ) {
+				// @codingStandardsIgnoreLine
 				$order_key = urldecode( $_GET['order'] );
 				$order_id  = absint( $_GET['order_id'] );
 				$order     = wc_get_order( $order_id );

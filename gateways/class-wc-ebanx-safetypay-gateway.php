@@ -12,7 +12,7 @@ class WC_EBANX_Safetypay_Gateway extends WC_EBANX_Redirect_Gateway {
 	/**
 	 * @var bool
 	 */
-	private $enabled_in_peru    = false;
+	private $enabled_in_peru = false;
 	/**
 	 * @var bool
 	 */

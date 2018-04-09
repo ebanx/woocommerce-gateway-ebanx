@@ -178,9 +178,9 @@ class WC_EBANX_Payment_By_Link {
 		switch ( $request->status_code ) {
 			case 'BP-R-32':
 				// Amount must be less than {currency_code} {amount}.
-				$value        = explode( ' ', substr( $request->status_message, 25 ) );
+				$value         = explode( ' ', substr( $request->status_message, 25 ) );
 				$currency_code = $value[0];
-				$amount       = number_format( $value[1], 0, wc_get_price_decimal_separator(), wc_get_price_thousand_separator() );
+				$amount        = number_format( $value[1], 0, wc_get_price_decimal_separator(), wc_get_price_thousand_separator() );
 
 				return sprintf( __( "Your transaction's value must be lower than %1\$s %2\$s. Please, set a lower one.", 'woocommerce-gateway-ebanx' ), $currency_code, $amount );
 			default:

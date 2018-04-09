@@ -113,6 +113,7 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway {
 			return;
 		}
 
+		// @codingStandardsIgnoreLine
 		return $_POST['woocommerce_ebanx-global_due_date_days'];
 	}
 
