@@ -52,6 +52,9 @@ class WC_EBANX_Database {
 		dbDelta( $sql );
 	}
 
+	/**
+	 * Updates table.
+	 */
 	private static function update_log_table() {
 		global $wpdb;
 
@@ -59,8 +62,8 @@ class WC_EBANX_Database {
 		$row = $wpdb->get_results(  $wpdb->prepare( "SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS
 WHERE table_name = %s AND column_name = 'integration_key'", $table_name ) );
 
-		if(empty($row)){
-			$wpdb->query("ALTER TABLE $table_name ADD integration_key VARCHAR(255) DEFAULT NULL AFTER time");
+		if( empty( $row ) ){
+			$wpdb->query( "ALTER TABLE $table_name ADD integration_key VARCHAR(255) DEFAULT NULL AFTER time" );
 		}
 	}
 
