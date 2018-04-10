@@ -20,10 +20,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<?php foreach ( $cards as $k => $card ) : ?>
 				<div class="ebanx-credit-card-option">
 					<label class="ebanx-credit-card-label">
-						<input type="radio" 
+						<input type="radio"
 						<?php
 						if ( 0 === $k ) :
-?>
+							?>
 checked="checked"<?php endif; ?> class="input-radio <?php echo esc_attr( trim( $card->brand . '-' . $card->masked_number ) ); ?>" value="<?php echo esc_attr( $card->token ); ?>" name="ebanx-credit-card-use" />
 						<span class="ebanx-credit-card-brand">
 							<img src="<?php echo esc_url( WC_EBANX_PLUGIN_DIR_URL . "assets/images/icons/$card->brand.png" ); ?>" height="20" style="height: 20px; margin-left: 0; margin-right: 7px; float: none;" alt="<?php echo esc_attr( $card->brand ); ?>">
@@ -34,7 +34,7 @@ checked="checked"<?php endif; ?> class="input-radio <?php echo esc_attr( trim( $
 					<div class="ebanx-container-credit-card" style="
 					<?php
 					if ( 0 !== $k ) :
-?>
+						?>
 display: none;<?php endif; ?>">
 						<section class="ebanx-form-row">
 							<section class="ebanx-form-row">
@@ -53,16 +53,16 @@ display: none;<?php endif; ?>">
 
 			<div class="ebanx-credit-card-option">
 				<label class="ebanx-credit-card-label">
-					<input type="radio" class="input-radio" value="new" 
+					<input type="radio" class="input-radio" value="new"
 					<?php
 					if ( empty( $cards ) ) :
-?>
+						?>
 checked="checked"<?php endif; ?> name="ebanx-credit-card-use">Usar um outro cartão
 				</label>
 				<div class="ebanx-container-credit-card" id="ebanx-container-new-credit-card" style="
-				<?php
-				if ( ! empty( $cards ) ) :
-?>
+					<?php
+					if ( ! empty( $cards ) ) :
+						?>
 display: none;<?php endif; ?>">
 					<?php include_once 'card-template.php'; ?>
 				</div>
