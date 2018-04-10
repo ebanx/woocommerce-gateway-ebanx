@@ -1,5 +1,10 @@
 # CHANGELOG
 
+
+# 1.29.1
+* Fix - Removed flush_rewrite from logs persistence step [#660](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/660)
+* Fix - Restructured logs table [#661](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/661)
+
 # 1.29.0
 * Feature - Logging request data for debugging purposes [#627](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/627)
 * Feature - WC Subscriptions support  [#594](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/594)
