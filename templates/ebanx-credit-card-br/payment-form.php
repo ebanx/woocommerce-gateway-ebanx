@@ -20,7 +20,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<?php foreach ( $cards as $k => $card ) : ?>
 				<div class="ebanx-credit-card-option">
 					<label class="ebanx-credit-card-label">
-						<input type="radio" 
+						<input type="radio"
 						<?php
 						if ( 0 === $k ) :
 ?>
@@ -53,16 +53,16 @@ display: none;<?php endif; ?>">
 
 			<div class="ebanx-credit-card-option">
 				<label class="ebanx-credit-card-label">
-					<input type="radio" class="input-radio" value="new" 
+					<input type="radio" class="input-radio" value="new"
 					<?php
 					if ( empty( $cards ) ) :
 ?>
 checked="checked"<?php endif; ?> name="ebanx-credit-card-use">Usar um outro cartão
 				</label>
 				<div class="ebanx-container-credit-card" id="ebanx-container-new-credit-card" style="
-				<?php
-				if ( ! empty( $cards ) ) :
-?>
+					<?php
+					if ( ! empty( $cards ) ) :
+					?>
 display: none;<?php endif; ?>">
 					<?php include_once 'card-template.php'; ?>
 				</div>
