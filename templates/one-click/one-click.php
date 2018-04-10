@@ -31,8 +31,8 @@ $i = 0;
 								<img src="<?php echo esc_url( WC_EBANX_PLUGIN_DIR_URL . "assets/images/icons/$card->brand.png" ); ?>" height="20" />
 								<span>&bull;&bull;&bull;&bull; <?php echo esc_html( substr( $card->masked_number, -4 ) ); ?></span>
 							</label>
-						<?php
-						$i++;
+							<?php
+							$i++;
 endforeach;
 ?>
 					</div>
