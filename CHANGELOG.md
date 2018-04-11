@@ -1,6 +1,9 @@
 # CHANGELOG
 
 
+# 1.29.2
+* Fix - Runtime exception warning [#663](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/663)
+
 # 1.29.1
 * Fix - Removed flush_rewrite from logs persistence step [#660](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/660)
 * Fix - Restructured logs table [#661](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/661)
