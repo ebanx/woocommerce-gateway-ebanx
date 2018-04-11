@@ -1,12 +1,12 @@
 <?php
 
-use RuntimeException;
-
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
 require_once WC_EBANX_GATEWAYS_DIR . 'class-wc-ebanx-global-gateway.php';
+
+use RuntimeException as RuntimeException;
 
 /**
  * Class WC_EBANX_Helper
