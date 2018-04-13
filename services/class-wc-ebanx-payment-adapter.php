@@ -12,6 +12,7 @@ use Ebanx\Benjamin\Models\Person;
  */
 class WC_EBANX_Payment_Adapter {
 	/**
+	 *
 	 * @param WC_Order                $order
 	 * @param WC_EBANX_Global_Gateway $configs
 	 * @param array                   $names
@@ -30,12 +31,13 @@ class WC_EBANX_Payment_Adapter {
 				'responsible'         => static::transform_person( $order, $configs, $names ),
 				'items'               => static::transform_items( $order ),
 				'merchantPaymentCode' => substr( $order->id . '-' . md5( rand( 123123, 9999999 ) ), 0, 40 ),
-				'riskProfileId'       => 'Wx' . preg_replace('/\./', 'x', WC_EBANX::get_plugin_version()),
+				'riskProfileId'       => 'Wx' . preg_replace( '/\./', 'x', WC_EBANX::get_plugin_version() ),
 			]
 		);
 	}
 
 	/**
+	 *
 	 * @param WC_Order                $order
 	 * @param WC_EBANX_Global_Gateway $configs
 	 * @param array                   $names
@@ -78,6 +80,7 @@ class WC_EBANX_Payment_Adapter {
 	}
 
 	/**
+	 *
 	 * @param WC_EBANX_Global_Gateway $configs
 	 *
 	 * @return DateTime|string
@@ -93,6 +96,7 @@ class WC_EBANX_Payment_Adapter {
 	}
 
 	/**
+	 *
 	 * @param WC_Order $order
 	 *
 	 * @return Address
@@ -121,6 +125,7 @@ class WC_EBANX_Payment_Adapter {
 	}
 
 	/**
+	 *
 	 * @param WC_Order                $order
 	 * @param WC_EBANX_Global_Gateway $configs
 	 * @param array                   $names
@@ -144,6 +149,7 @@ class WC_EBANX_Payment_Adapter {
 	}
 
 	/**
+	 *
 	 * @param WC_EBANX_Global_Gateway $configs
 	 * @param array                   $names
 	 * @param WC_Order                $order
@@ -176,6 +182,7 @@ class WC_EBANX_Payment_Adapter {
 	}
 
 	/**
+	 *
 	 * @param array $names
 	 *
 	 * @return string
@@ -191,6 +198,7 @@ class WC_EBANX_Payment_Adapter {
 	}
 
 	/**
+	 *
 	 * @param WC_EBANX_Global_Gateway $configs
 	 * @param array                   $names
 	 *
@@ -225,6 +233,7 @@ class WC_EBANX_Payment_Adapter {
 	}
 
 	/**
+	 *
 	 * @param WC_Order $order
 	 * @param array    $names
 	 *
@@ -241,6 +250,7 @@ class WC_EBANX_Payment_Adapter {
 	}
 
 	/**
+	 *
 	 * @param WC_Order $order
 	 * @param array    $names
 	 *
@@ -257,6 +267,7 @@ class WC_EBANX_Payment_Adapter {
 	}
 
 	/**
+	 *
 	 * @param array $names
 	 *
 	 * @return string
@@ -272,6 +283,7 @@ class WC_EBANX_Payment_Adapter {
 	}
 
 	/**
+	 *
 	 * @param WC_EBANX_Global_Gateway $configs
 	 * @param array                   $names
 	 *
@@ -298,6 +310,7 @@ class WC_EBANX_Payment_Adapter {
 	}
 
 	/**
+	 *
 	 * @param $order WC_Order $order
 	 *
 	 * @return array
