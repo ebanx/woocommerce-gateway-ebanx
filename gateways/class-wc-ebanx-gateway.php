@@ -100,7 +100,9 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway {
 	public function is_available() {
 		$currency = $this->merchant_currency;
 
-		$this->language = trim( strtolower( WC()->customer->get_country() ) );
+		if ( WC()->customer ) {
+			$this->language = trim( strtolower( WC()->customer->get_country() ) );
+		}
 
 		return parent::is_available()
 			&& 'yes' === $this->enabled
