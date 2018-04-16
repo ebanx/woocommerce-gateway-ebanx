@@ -99,6 +99,7 @@ class WC_EBANX_Eft_Gateway extends WC_EBANX_Redirect_Gateway {
 	}
 
 	/**
+	 *
 	 * @param WC_Order $order
 	 *
 	 * @return \Ebanx\Benjamin\Models\Payment

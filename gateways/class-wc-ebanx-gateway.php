@@ -32,15 +32,20 @@ function ebanx_update_converted_value() {
  */
 class WC_EBANX_Gateway extends WC_Payment_Gateway {
 
-	/** @var $ebanx_params */
+	/**
+	 *
+	 * @var $ebanx_params
+	 */
 	protected static $ebanx_params = array();
 
 	/**
+	 *
 	 * @var int
 	 */
 	protected static $initialized_gateways = 0;
 
 	/**
+	 *
 	 * @var int
 	 */
 	protected static $total_gateways = 0;
@@ -432,6 +437,7 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway {
 	}
 
 	/**
+	 *
 	 * @param string $country
 	 *
 	 * @return string
@@ -453,6 +459,7 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway {
 	}
 
 	/**
+	 *
 	 * @param double $rate
 	 * @param string $currency
 	 * @param string $country
@@ -482,6 +489,7 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway {
 	}
 
 	/**
+	 *
 	 * @param string $country
 	 *
 	 * @return string

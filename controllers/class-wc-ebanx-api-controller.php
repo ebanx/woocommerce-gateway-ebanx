@@ -8,7 +8,9 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Class WC_EBANX_Api_Controller
  */
 class WC_EBANX_Api_Controller {
+
 	/**
+	 *
 	 * @var WC_EBANX_Global_Gateway
 	 */
 	private $config;
@@ -73,6 +75,7 @@ class WC_EBANX_Api_Controller {
 	}
 
 	/**
+	 *
 	 * @param int $order_id
 	 *
 	 * @return String
@@ -157,6 +160,7 @@ class WC_EBANX_Api_Controller {
 	}
 
 	/**
+	 *
 	 * @param string $hash
 	 * @param string $payment_type
 	 * @return string

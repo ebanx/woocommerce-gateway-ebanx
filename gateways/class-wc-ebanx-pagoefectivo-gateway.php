@@ -132,6 +132,7 @@ class WC_EBANX_Pagoefectivo_Gateway extends WC_EBANX_New_Gateway {
 
 
 	/**
+	 *
 	 * @param array    $response
 	 * @param WC_Order $order
 	 *

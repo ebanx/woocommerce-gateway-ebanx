@@ -187,6 +187,7 @@ abstract class WC_EBANX_Constants {
 	);
 
 	/**
+	 *
 	 * @var array
 	 */
 	public static $vouchers_efectivo_allowed = array(
