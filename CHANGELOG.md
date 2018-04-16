@@ -1,6 +1,9 @@
 # CHANGELOG
 
 
+# 1.29.3
+* Fix - get_country on null and min_instalment_value_ not defined bug [#669](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/669)
+
 # 1.29.2
 * Fix - Runtime exception warning [#663](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/663)
 
