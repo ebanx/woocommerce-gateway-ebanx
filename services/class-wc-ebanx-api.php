@@ -58,7 +58,7 @@ class WC_EBANX_Api {
 		return new CreditCardConfig(
 			array(
 				'maxInstalments'      => $this->configs->settings['credit_card_instalments'],
-				'minInstalmentAmount' => $this->configs->settings[ "min_instalment_value_$currency_code" ],
+				'minInstalmentAmount' => isset( $this->configs->settings[ "min_instalment_value_$currency_code" ] ) ? $this->configs->settings[ "min_instalment_value_$currency_code" ] : null,
 			)
 		);
 	}

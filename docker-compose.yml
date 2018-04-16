@@ -20,6 +20,8 @@ services:
       - ${WOOCOMMERCE_EXTERNAL_PORT:-80}:80
     volumes:
       - ./:/var/www/html/wp-content/plugins/woocommerce-gateway-ebanx/
+      - ../woocommerce-subscriptions/:/var/www/html/wp-content/plugins/woocommerce-subscriptions/
+      - ../woocommerce/:/var/www/html/wp-content/plugins/woocommerce/
     links:
       - mysql
 
