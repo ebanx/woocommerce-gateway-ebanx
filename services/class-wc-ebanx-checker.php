@@ -178,6 +178,7 @@ class WC_EBANX_Checker {
 	}
 
 	/**
+	 *
 	 * @param WC_EBANX $context
 	 */
 	private static function connection_error( $context ) {

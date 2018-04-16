@@ -10,11 +10,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 abstract class WC_EBANX_Redirect_Gateway extends WC_EBANX_New_Gateway {
 
 	/**
+	 *
 	 * @var string
 	 */
 	protected $redirect_url;
 
 	/**
+	 *
 	 * @param array    $response
 	 * @param WC_Order $order
 	 *

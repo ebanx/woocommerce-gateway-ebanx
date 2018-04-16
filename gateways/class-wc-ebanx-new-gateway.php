@@ -11,76 +11,91 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 class WC_EBANX_New_Gateway extends WC_EBANX_Gateway {
 	/**
+	 *
 	 * @var int
 	 */
 	public $user_id;
 
 	/**
+	 *
 	 * @var WC_EBANX_Global_Gateway
 	 */
 	public $configs;
 
 	/**
+	 *
 	 * @var bool
 	 */
 	protected $is_sandbox_mode;
 
 	/**
+	 *
 	 * @var string
 	 */
 	protected $private_key;
 
 	/**
+	 *
 	 * @var string
 	 */
 	protected $public_key;
 
 	/**
+	 *
 	 * @var \Ebanx\Benjamin\Facade
 	 */
 	protected $ebanx;
 
 	/**
+	 *
 	 * @var \Ebanx\Benjamin\Services\Gateways\DirectGateway
 	 */
 	protected $ebanx_gateway;
 
 	/**
+	 *
 	 * @var WC_Logger
 	 */
 	protected $log;
 
 	/**
+	 *
 	 * @var string
 	 */
 	public $icon;
 
 	/**
+	 *
 	 * @var array
 	 */
 	public $names;
 
 	/**
+	 *
 	 * @var string
 	 */
 	protected $merchant_currency;
 
 	/**
+	 *
 	 * @var string
 	 */
 	protected $api_name;
 
 	/**
+	 *
 	 * @var array
 	 */
 	protected static $ebanx_params = [];
 
 	/**
+	 *
 	 * @var int
 	 */
 	protected static $total_gateways = 0;
 
 	/**
+	 *
 	 * @var int
 	 */
 	protected static $initialized_gateways = 0;
@@ -225,6 +240,7 @@ class WC_EBANX_New_Gateway extends WC_EBANX_Gateway {
 	}
 
 	/**
+	 *
 	 * @param WC_Order $order
 	 *
 	 * @return \Ebanx\Benjamin\Models\Payment
@@ -264,6 +280,7 @@ class WC_EBANX_New_Gateway extends WC_EBANX_Gateway {
 	}
 
 	/**
+	 *
 	 * @param array    $response
 	 * @param WC_Order $order
 	 *
@@ -301,6 +318,7 @@ class WC_EBANX_New_Gateway extends WC_EBANX_Gateway {
 	}
 
 	/**
+	 *
 	 * @param array    $response
 	 * @param WC_Order $order
 	 *
@@ -337,6 +355,7 @@ class WC_EBANX_New_Gateway extends WC_EBANX_Gateway {
 	}
 
 	/**
+	 *
 	 * @param WC_Order $order
 	 *
 	 * @throws Exception Throws parameter missing exception.
@@ -359,6 +378,7 @@ class WC_EBANX_New_Gateway extends WC_EBANX_Gateway {
 	}
 
 	/**
+	 *
 	 * @param int    $order_id
 	 * @param null   $amount
 	 * @param string $reason
@@ -685,6 +705,7 @@ class WC_EBANX_New_Gateway extends WC_EBANX_Gateway {
 	}
 
 	/**
+	 *
 	 * @param string $status
 	 *
 	 * @return string
@@ -701,6 +722,7 @@ class WC_EBANX_New_Gateway extends WC_EBANX_Gateway {
 	}
 
 	/**
+	 *
 	 * @param string $payment_status
 	 *
 	 * @return string
@@ -717,6 +739,7 @@ class WC_EBANX_New_Gateway extends WC_EBANX_Gateway {
 	}
 
 	/**
+	 *
 	 * @param array  $response
 	 * @param string $code
 	 *
@@ -733,6 +756,7 @@ class WC_EBANX_New_Gateway extends WC_EBANX_Gateway {
 	}
 
 	/**
+	 *
 	 * @param string $country
 	 *
 	 * @return string

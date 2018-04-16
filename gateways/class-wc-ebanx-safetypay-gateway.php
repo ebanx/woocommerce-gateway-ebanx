@@ -10,10 +10,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 class WC_EBANX_Safetypay_Gateway extends WC_EBANX_Redirect_Gateway {
 
 	/**
+	 *
 	 * @var bool
 	 */
 	private $enabled_in_peru = false;
+
 	/**
+	 *
 	 * @var bool
 	 */
 	private $enabled_in_ecuador = false;
@@ -133,6 +136,7 @@ class WC_EBANX_Safetypay_Gateway extends WC_EBANX_Redirect_Gateway {
 	}
 
 	/**
+	 *
 	 * @param WC_Order $order
 	 *
 	 * @return \Ebanx\Benjamin\Models\Payment

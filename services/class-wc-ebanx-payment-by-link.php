@@ -15,22 +15,31 @@ if ( ! defined( 'ABSPATH' ) ) {
 class WC_EBANX_Payment_By_Link {
 
 	/**
+	 *
 	 * @var array
 	 */
 	private static $errors = array();
+
 	/**
+	 *
 	 * @var int
 	 */
 	private static $post_id;
+
 	/**
+	 *
 	 * @var boolean|WC_Order|WC_Refund
 	 */
 	private static $order;
+
 	/**
+	 *
 	 * @var WC_EBANX_Global_Gateway
 	 */
 	private static $configs;
+
 	/**
+	 *
 	 * @var WC_EBANX_Payment_Validator
 	 */
 	private static $validator;
@@ -94,6 +103,7 @@ class WC_EBANX_Payment_By_Link {
 
 
 	/**
+	 *
 	 * @return object
 	 */
 	private static function send_request() {
@@ -166,6 +176,7 @@ class WC_EBANX_Payment_By_Link {
 	}
 
 	/**
+	 *
 	 * @param object $request
 	 *
 	 * @return string
