@@ -31,7 +31,7 @@ class WC_EBANX_Payment_Adapter {
 				'responsible'         => static::transform_person( $order, $configs, $names ),
 				'items'               => static::transform_items( $order ),
 				'merchantPaymentCode' => substr( $order->id . '-' . md5( rand( 123123, 9999999 ) ), 0, 40 ),
-				'riskProfileId'       => 'Wx' . preg_replace( '/\./', 'x', WC_EBANX::get_plugin_version() ),
+				'riskProfileId'       => 'Wx' . str_replace( '.', 'x', WC_EBANX::get_plugin_version() ),
 			]
 		);
 	}
