@@ -101,6 +101,7 @@ abstract class WC_EBANX_Helper {
 	}
 
 	/**
+	 *
 	 * @param array $array
 	 *
 	 * @return object
@@ -114,12 +115,10 @@ abstract class WC_EBANX_Helper {
 		return (object) $array;
 	}
 
-	/*
+	/**
+	 *
 	 * Verifies if user cart has any subscription product
 	 *
-	 * @return bool
-	 */
-	/**
 	 * @return bool
 	 */
 	public static function checkout_contains_subscription() {

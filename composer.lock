@@ -8,16 +8,16 @@
     "packages": [
         {
             "name": "ebanx/benjamin",
-            "version": "1.9.0",
+            "version": "1.10.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/ebanx/benjamin.git",
-                "reference": "153512f291d5507d59b136a5f4a877f2b3bff231"
+                "reference": "f234b8beedc7243b23a92bbd3752e85b6c43aa36"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ebanx/benjamin/zipball/153512f291d5507d59b136a5f4a877f2b3bff231",
-                "reference": "153512f291d5507d59b136a5f4a877f2b3bff231",
+                "url": "https://api.github.com/repos/ebanx/benjamin/zipball/f234b8beedc7243b23a92bbd3752e85b6c43aa36",
+                "reference": "f234b8beedc7243b23a92bbd3752e85b6c43aa36",
                 "shasum": ""
             },
             "require": {
@@ -46,7 +46,7 @@
                 "Apache-2.0"
             ],
             "description": "Business rule provider lib for plugin implementations",
-            "time": "2018-03-27T19:49:02+00:00"
+            "time": "2018-04-13T14:10:47+00:00"
         },
         {
             "name": "guzzlehttp/guzzle",
@@ -1381,12 +1381,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/squizlabs/PHP_CodeSniffer.git",
-                "reference": "9421d7c120b357fd823188019d003666c5a2d58d"
+                "reference": "c6a0298d96abcf99e475c1cd0707c4830e0687a3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/squizlabs/PHP_CodeSniffer/zipball/9421d7c120b357fd823188019d003666c5a2d58d",
-                "reference": "9421d7c120b357fd823188019d003666c5a2d58d",
+                "url": "https://api.github.com/repos/squizlabs/PHP_CodeSniffer/zipball/c6a0298d96abcf99e475c1cd0707c4830e0687a3",
+                "reference": "c6a0298d96abcf99e475c1cd0707c4830e0687a3",
                 "shasum": ""
             },
             "require": {
@@ -1424,7 +1424,7 @@
                 "phpcs",
                 "standards"
             ],
-            "time": "2018-03-26T03:04:46+00:00"
+            "time": "2018-04-13T03:26:13+00:00"
         },
         {
             "name": "symfony/yaml",
@@ -1432,12 +1432,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/yaml.git",
-                "reference": "6af42631dcf89e9c616242c900d6c52bd53bd1bb"
+                "reference": "033cfa61ef06ee0847e056e530201842b6e926c3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/yaml/zipball/6af42631dcf89e9c616242c900d6c52bd53bd1bb",
-                "reference": "6af42631dcf89e9c616242c900d6c52bd53bd1bb",
+                "url": "https://api.github.com/repos/symfony/yaml/zipball/033cfa61ef06ee0847e056e530201842b6e926c3",
+                "reference": "033cfa61ef06ee0847e056e530201842b6e926c3",
                 "shasum": ""
             },
             "require": {
@@ -1482,7 +1482,7 @@
             ],
             "description": "Symfony Yaml Component",
             "homepage": "https://symfony.com",
-            "time": "2018-02-16T09:50:28+00:00"
+            "time": "2018-04-08T08:21:29+00:00"
         },
         {
             "name": "webmozart/assert",

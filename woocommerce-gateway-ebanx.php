@@ -63,21 +63,25 @@ if ( ! class_exists( 'WC_EBANX' ) ) {
 		protected static $instance = null;
 
 		/**
+		 *
 		 * @var $log
 		 */
 		private static $log;
 
 		/**
+		 *
 		 * @var string $my_account_endpoint
 		 */
 		private static $my_account_endpoint = 'ebanx-saved-cards';
 
 		/**
+		 *
 		 * @var string $my_account_name
 		 */
 		private static $my_account_menu_name = 'EBANX - Saved Cards';
 
 		/**
+		 *
 		 * @var array $settings
 		 */
 		private $settings = [];

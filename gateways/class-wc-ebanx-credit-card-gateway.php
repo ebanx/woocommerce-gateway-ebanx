@@ -55,6 +55,7 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_New_Gateway {
 	}
 
 	/**
+	 *
 	 * @return array
 	 */
 	public function retryRules() {
@@ -155,6 +156,7 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_New_Gateway {
 
 
 	/**
+	 *
 	 * @param int    $order_id
 	 * @param string $status
 	 *
@@ -235,6 +237,7 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_New_Gateway {
 
 
 	/**
+	 *
 	 * @param array    $request
 	 * @param WC_Order $order
 	 *

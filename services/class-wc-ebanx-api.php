@@ -10,11 +10,13 @@ use Ebanx\Benjamin\Models\Configs\CreditCardConfig;
  */
 class WC_EBANX_Api {
 	/**
+	 *
 	 * @var \Ebanx\Benjamin\Facade
 	 */
 	protected $ebanx;
 
 	/**
+	 *
 	 * @var WC_EBANX_Global_Gateway
 	 */
 	protected $configs;
@@ -30,6 +32,7 @@ class WC_EBANX_Api {
 	}
 
 	/**
+	 *
 	 * @return Config
 	 */
 	private function get_config() {
@@ -50,6 +53,7 @@ class WC_EBANX_Api {
 	}
 
 	/**
+	 *
 	 * @return CreditCardConfig
 	 */
 	private function get_credit_card_config() {
@@ -64,6 +68,7 @@ class WC_EBANX_Api {
 	}
 
 	/**
+	 *
 	 * @return \Ebanx\Benjamin\Facade
 	 */
 	public function ebanx() {

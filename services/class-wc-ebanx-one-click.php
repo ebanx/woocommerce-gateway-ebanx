@@ -11,25 +11,31 @@ class WC_EBANX_One_Click {
 	const CREATE_ORDER_ACTION = 'ebanx_create_order';
 
 	/**
+	 *
 	 * @var array
 	 */
 	private $cards;
 
 	/**
+	 *
 	 * @var int
 	 */
 	private $user_id;
 
 	/**
+	 *
 	 * @var bool|WC_EBANX_Credit_Card_Gateway
 	 */
 	private $gateway;
 
 	/**
+	 *
 	 * @var string
 	 */
 	private $user_country;
+
 	/**
+	 *
 	 * @var array
 	 */
 	protected $instalment_rates = array();
@@ -335,6 +341,7 @@ class WC_EBANX_One_Click {
 	}
 
 	/**
+	 *
 	 * @return bool
 	 */
 	public function should_show_button() {

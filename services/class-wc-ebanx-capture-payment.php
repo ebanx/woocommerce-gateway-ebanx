@@ -10,6 +10,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 class WC_EBANX_Capture_Payment {
 
 	/**
+	 *
 	 * @param array    $actions
 	 * @param WC_Order $order
 	 *
@@ -32,6 +33,7 @@ class WC_EBANX_Capture_Payment {
 	}
 
 	/**
+	 *
 	 * @param WC_Order $order
 	 *
 	 * @return string
@@ -48,6 +50,7 @@ class WC_EBANX_Capture_Payment {
 	}
 
 	/**
+	 *
 	 * @param array $actions
 	 *
 	 * @return array
@@ -65,6 +68,7 @@ class WC_EBANX_Capture_Payment {
 	}
 
 	/**
+	 *
 	 * @param WC_Order $order
 	 */
 	public function capture_from_order_dropdown( $order ) {

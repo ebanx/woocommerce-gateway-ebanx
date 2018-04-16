@@ -9,6 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 class WC_EBANX_Cancel_Order {
 	/**
+	 *
 	 * @param array    $actions
 	 * @param WC_Order $order
 	 *
@@ -27,6 +28,7 @@ class WC_EBANX_Cancel_Order {
 	}
 
 	/**
+	 *
 	 * @param WC_Order $order
 	 *
 	 * @return string

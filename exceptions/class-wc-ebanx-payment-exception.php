@@ -9,10 +9,13 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 class WC_EBANX_Payment_Exception extends Exception {
 	/**
+	 *
 	 * @var string
 	 */
 	protected $code;
+
 	/**
+	 *
 	 * @var string
 	 */
 	protected $message;

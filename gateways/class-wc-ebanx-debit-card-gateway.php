@@ -96,6 +96,7 @@ class WC_EBANX_Debit_Card_Gateway extends WC_EBANX_New_Gateway {
 
 
 	/**
+	 *
 	 * @param WC_Order $order
 	 *
 	 * @return \Ebanx\Benjamin\Models\Payment
@@ -111,6 +112,7 @@ class WC_EBANX_Debit_Card_Gateway extends WC_EBANX_New_Gateway {
 	}
 
 	/**
+	 *
 	 * @param array    $request
 	 * @param WC_Order $order
 	 *

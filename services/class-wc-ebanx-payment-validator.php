@@ -10,11 +10,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 class WC_EBANX_Payment_Validator {
 
 	/**
+	 *
 	 * @var array
 	 */
 	private $errors = array();
 
 	/**
+	 *
 	 * @var null|boolean|WC_Order|WC_Refund
 	 */
 	private $order = null;
@@ -228,6 +230,7 @@ class WC_EBANX_Payment_Validator {
 	}
 
 	/**
+	 *
 	 * @return bool
 	 */
 	private function validate_instalments() {
