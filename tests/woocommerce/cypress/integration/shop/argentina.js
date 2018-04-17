@@ -14,7 +14,7 @@ const mock = (data) => (R.merge(
   {
     firstName: 'MESSI',
     lastName: 'LIONEL ANDRES',
-    document: '23330162449',
+    document: '23-33016244-9',
     documentType: 'CUIT',
     documentTypeId: 'ARG_CUIT',
     address: Faker.address.streetName(),
