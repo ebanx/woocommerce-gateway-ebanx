@@ -283,4 +283,19 @@ class WC_EBANX_Checker {
 				->enqueue();
 		}
 	}
+
+	/**
+	 *
+	 * @throws Exception Param not found exception.
+	 */
+	public function validate_document() {
+		if (
+			WC_EBANX_Request::has( 'billing_country' )
+			&& WC_EBANX_Request::read( 'billing_country' ) === 'AR'
+			&& WC_EBANX_Request::has( 'ebanx_billing_argentina_document' )
+			&& strlen( WC_EBANX_Request::read( 'ebanx_billing_argentina_document' ) ) !== 13
+		) {
+			wc_add_notice( '<strong>Document</strong> must have 11 characters.', 'error' );
+		}
+	}
 }

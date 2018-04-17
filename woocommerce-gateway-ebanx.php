@@ -141,6 +141,8 @@ if ( ! class_exists( 'WC_EBANX' ) ) {
 
 			add_action( 'upgrader_process_complete', array( $this, 'on_update' ), 10, 2 );
 
+			add_action( 'woocommerce_checkout_process', array( 'WC_EBANX_Checker', 'validate_document' ), 10 );
+
 			/**
 			 * Payment by Link
 			 */
