@@ -293,9 +293,9 @@ class WC_EBANX_Checker {
 			WC_EBANX_Request::has( 'billing_country' )
 			&& WC_EBANX_Request::read( 'billing_country' ) === 'AR'
 			&& WC_EBANX_Request::has( 'ebanx_billing_argentina_document' )
-			&& strlen( WC_EBANX_Request::read( 'ebanx_billing_argentina_document' ) ) !== 13
+			&& strlen( preg_replace( '/[^0-9]/', '', WC_EBANX_Request::read( 'ebanx_billing_argentina_document' ) ) ) !== 11
 		) {
-			wc_add_notice( '<strong>Document</strong> must have 11 characters.', 'error' );
+			wc_add_notice( '<strong>Document</strong> must have 11 digits and contain only numbers.', 'error' );
 		}
 	}
 }
