@@ -365,7 +365,7 @@ if ( ! class_exists( 'WC_EBANX' ) ) {
 			// Call EBANX API to save a lead.
 			$request = wp_remote_post( $url, $args );
 
-			if ( isset( $request['body'] ) ) {
+			if ( ! is_wp_error( $request ) && isset( $request['body'] ) ) {
 				$data = json_decode( $request['body'] );
 
 				// Update merchant.
@@ -463,11 +463,10 @@ if ( ! class_exists( 'WC_EBANX' ) ) {
 			$ebanx_path     = plugin_basename( __FILE__ );
 			$ebanx_database = new WC_EBANX_Database();
 
-			self::save_merchant_infos();
-
 			if ( 'update' === $data['action'] && 'plugin' === $data['type'] ) {
 				foreach ( $data['plugins'] as $plugin_path ) {
 					if ( $plugin_path === $ebanx_path ) {
+						self::save_merchant_infos();
 						$ebanx_database->migrate();
 					}
 				}
