@@ -40,7 +40,7 @@ if ( $order_id ) {
 				<input
 					type="hidden"
 					name="<?php echo esc_attr( "{$id}[{$name}]" ); ?>"
-					value="<?php echo esc_attr( isset( $field['value'] ) ? field['value'] : null ); ?>"
+					value="<?php echo esc_attr( isset( $field['value'] ) ? $field['value'] : null ); ?>"
 					class="input-text"
 				/>
 			<?php else : ?>

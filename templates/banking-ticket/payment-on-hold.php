@@ -20,7 +20,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<p>Pague o boleto no Internet Banking de seu banco apenas copiando o código de barras! Você também pode imprimir o boleto e pagar em casas lotéricas e no caixa do seu banco.</p>
 
 	<div>
-		<h3><?php echo esc_html( $barcode_fraud['boleto1'] ); ?>.<?php echo esc_html( $barcode_fraud['boleto2'] ); ?> <?php echo esc_html( $barcode_fraud['boleto3'] ); ?>.<?php echo esc_html( $barcode_fraud['boleto4'] ); ?> <?php echo esc_html( $barcode_fraud['boleto5'] ); ?>.<?php echo esc_html( $barcode_fraud['boleto6'] ); ?> <?php echo esc_html( $barcode_fraud['boleto7'] ); ?> <?php echo esc_html( $barcode_fraud['boleto8'] ); ?></h3>
+		<h3><?php echo $barcode_fraud['boleto1']; ?>.<?php echo $barcode_fraud['boleto2']; ?> <?php echo $barcode_fraud['boleto3']; ?>.<?php echo $barcode_fraud['boleto4']; ?> <?php echo $barcode_fraud['boleto5']; ?>.<?php echo $barcode_fraud['boleto6']; ?> <?php echo $barcode_fraud['boleto7']; ?> <?php echo $barcode_fraud['boleto8']; // phpcs:ignore WordPress.XSS.EscapeOutput ?></h3>
 		<div class="banking-ticket__barcode-copy">
 			<button type="button" class="button ebanx-button--copy" data-clipboard-text="<?php echo esc_attr( $barcode ); ?>">Copiar</button>
 		</div>
