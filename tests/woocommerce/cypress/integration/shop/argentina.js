@@ -97,5 +97,18 @@ describe('Woocommerce', () => {
           });
       });
     });
+
+    context('Errors', () => {
+      it('can`t buy with document that has less than 11 digits', () => {
+        let mockData = mock(
+          {
+            paymentMethod: defaults.pay.api.DEFAULT_VALUES.paymentMethods.ar.efectivo.id,
+            paymentType: defaults.pay.api.DEFAULT_VALUES.paymentMethods.ar.efectivo.types.otrosCupones,
+          }
+        );
+        mockData.document = '23-666';
+        woocommerce.cantBuyJeansWithEfectivo(mockData);
+      });
+    });
   });
 });
