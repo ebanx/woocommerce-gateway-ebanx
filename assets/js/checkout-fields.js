@@ -13,6 +13,7 @@ jQuery (function ($) {
   $(document).find('.ebanx_billing_brazil_document input').mask('000.000.000-00');
   $(document).find('.ebanx_billing_brazil_cnpj input').mask('00.000.000/0000-00');
 
+  $(document).find('input[name*="argentina_document"]').mask('00-00000000-0');
   $(document).find('input[name*="brazil_document"]').mask('000.000.000-00');
   $(document).find('input[name*="brazil_cnpj"]').mask('00.000.000/0000-00');
 

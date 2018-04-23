@@ -14,7 +14,7 @@ const mock = (data) => (R.merge(
   {
     firstName: 'MESSI',
     lastName: 'LIONEL ANDRES',
-    document: '23330162449',
+    document: '23-33016244-9',
     documentType: 'CUIT',
     documentTypeId: 'ARG_CUIT',
     address: Faker.address.streetName(),
@@ -95,6 +95,19 @@ describe('Woocommerce', () => {
               wrapOrderAssertations(payment, checkoutPayment);
             });
           });
+      });
+    });
+
+    context('Errors', () => {
+      it('can`t buy with document that has less than 11 digits', () => {
+        let mockData = mock(
+          {
+            paymentMethod: defaults.pay.api.DEFAULT_VALUES.paymentMethods.ar.efectivo.id,
+            paymentType: defaults.pay.api.DEFAULT_VALUES.paymentMethods.ar.efectivo.types.otrosCupones,
+          }
+        );
+        mockData.document = '23-666';
+        woocommerce.cantBuyJeansWithEfectivo(mockData);
       });
     });
   });

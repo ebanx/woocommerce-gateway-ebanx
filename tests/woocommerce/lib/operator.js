@@ -39,6 +39,13 @@ export default class Woocommerce {
     return this;
   }
 
+  cantBuyJeansWithEfectivo(data) {
+    this[buyWonderWomansPurse]();
+
+    this.pages.checkout
+      .placeWithDocumentError(data);
+  }
+
   buyWonderWomansPurseWithSpeiToPersonal(data) {
     this[buyWonderWomansPurse]();
 

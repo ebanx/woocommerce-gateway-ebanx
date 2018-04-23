@@ -583,4 +583,19 @@ export default class Checkout {
       next();
     });
   }
+
+  placeWithDocumentError(data) {
+    validateSchema(CHECKOUT_SCHEMA.ar.efectivo(), data, () => {
+      this[fillBilling](data);
+      this[selectInCombobox]('#ebanx_billing_argentina_document_type', data.documentType, data.documentTypeId);
+      this[choosePaymentType]('#ebanx-efectivo-payment', data.paymentType);
+      this[placeOrder]();
+
+      this.cy
+        .get('.woocommerce-error > li:nth-child(1)', { timeout: 10000 })
+        .should('be.visible')
+        .contains(' must have 11 digits and contain only numbers.');
+    });
+
+  }
 }
