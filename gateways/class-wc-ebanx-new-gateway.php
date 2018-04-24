@@ -631,6 +631,10 @@ class WC_EBANX_New_Gateway extends WC_EBANX_Gateway {
 	final public function update_payment( $order, $data ) {
 		$request_status = strtoupper( $data['payment']['status'] );
 
+		if ( 'completed' === $order->status && 'CA' !== $request_status ) {
+			return;
+		}
+
 		$status     = [
 			'CO' => 'Confirmed',
 			'CA' => 'Canceled',
@@ -638,6 +642,7 @@ class WC_EBANX_New_Gateway extends WC_EBANX_Gateway {
 			'OP' => 'Opened',
 		];
 		$new_status = null;
+		$old_status = $order->status;
 
 		switch ( $request_status ) {
 			case 'CO':
@@ -645,9 +650,11 @@ class WC_EBANX_New_Gateway extends WC_EBANX_Gateway {
 					&& strpos( $order->get_payment_method(), 'ebanx-credit-card' ) === 0 ) {
 					return;
 				}
+				$order->payment_complete( $data['payment']['hash'] );
 				$new_status = 'processing';
 				break;
 			case 'CA':
+				$order->payment_complete();
 				$new_status = 'failed';
 				break;
 			case 'PE':
@@ -658,13 +665,8 @@ class WC_EBANX_New_Gateway extends WC_EBANX_Gateway {
 				break;
 		}
 
-		if ( 'completed' === $order->status && 'CA' !== $request_status ) {
-			return;
-		}
-
-		if ( $new_status !== $order->status ) {
+		if ( $new_status !== $old_status ) {
 			$payment_status = $status[ $data['payment']['status'] ];
-			// translators: placeholder contains payment status.
 			$order->add_order_note( sprintf( __( 'EBANX: The payment has been updated to: %s.', 'woocommerce-gateway-ebanx' ), $payment_status ) );
 			$order->update_status( $new_status );
 		}
