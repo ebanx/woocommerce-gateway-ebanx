@@ -1,5 +1,10 @@
 # CHANGELOG
 
+# 1.30.0
+* Feature - Force document on Argentina to have 11 digits [#670](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/670)
+* Fix - Corrected bug that made some thank you pages to render html tags as texts [#671](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/671)
+* Fix - Only send leads to EBANX on this plugin update to avoid errors [#672](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/672)
+* Fix - Set payment as complete also on notification arrival [#673](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/673)
 
 # 1.29.3
 * Fix - get_country on null and min_instalment_value_ not defined bug [#669](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/669)

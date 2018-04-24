@@ -3,7 +3,7 @@ Contributors: ebanxwp
 Tags: credit card, boleto, ebanx, woocommerce, payment gateway, latin america, brazil, mexico, argentina, peru, colombia, chile, ecuador, cash payment, local payment, card payment, one-click payment, alternative payments, payment processing
 Requires at least: 4.0
 Tested up to: 4.9
-Stable tag: 1.29.3
+Stable tag: 1.30.0
 License: Apache v2.0
 License URI: http://www.apache.org/licenses/LICENSE-2.0
 
@@ -147,6 +147,12 @@ Yes, you can.
 4. There you go, you’re all set!
 
 == Changelog ==
+
+# 1.30.0
+* Feature - Force document on Argentina to have 11 digits [#670](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/670)
+* Fix - Corrected bug that made some thank you pages to render html tags as texts [#671](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/671)
+* Fix - Only send leads to EBANX on this plugin update to avoid errors [#672](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/672)
+* Fix - Set payment as complete also on notification arrival [#673](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/673)
 
 # 1.29.3
 * Fix - get_country on null and min_instalment_value_ not defined bug [#669](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/669)
