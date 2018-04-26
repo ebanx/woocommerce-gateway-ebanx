@@ -25,16 +25,6 @@ abstract class WC_EBANX_Flow_Gateway extends WC_EBANX_Redirect_Gateway {
 	}
 
 	/**
-	 * Check if the method is available to show to the users
-	 *
-	 * @return boolean
-	 * @throws Exception Throws missing param message.
-	 */
-	public function is_available() {
-		return parent::is_available() && WC_EBANX_Constants::COUNTRY_CHILE === $this->get_transaction_address( 'country' );
-	}
-
-	/**
 	 * Check if the currency is processed by EBANX
 	 *
 	 * @param  string $currency Possible currencies: COP.
@@ -88,7 +78,7 @@ abstract class WC_EBANX_Flow_Gateway extends WC_EBANX_Redirect_Gateway {
 		$data = array(
 			'data'         => array(),
 			'order_status' => $order->get_status(),
-			'method'       => $this->flow_payment_method,
+			'method'       => str_replace( 'ebanx-', '', $order->get_payment_method() ),
 		);
 
 		parent::thankyou_page( $data );
