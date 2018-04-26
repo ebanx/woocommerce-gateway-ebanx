@@ -4,20 +4,20 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "7e3b5fc4409135848eca1aac29564914",
+    "content-hash": "38c19970468039c5b119b91624b29742",
     "packages": [
         {
             "name": "ebanx/benjamin",
-            "version": "1.10.0",
+            "version": "1.10.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/ebanx/benjamin.git",
-                "reference": "f234b8beedc7243b23a92bbd3752e85b6c43aa36"
+                "reference": "9a18e750c2abf4ce5a4589479d0b0863f4a9f70d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ebanx/benjamin/zipball/f234b8beedc7243b23a92bbd3752e85b6c43aa36",
-                "reference": "f234b8beedc7243b23a92bbd3752e85b6c43aa36",
+                "url": "https://api.github.com/repos/ebanx/benjamin/zipball/9a18e750c2abf4ce5a4589479d0b0863f4a9f70d",
+                "reference": "9a18e750c2abf4ce5a4589479d0b0863f4a9f70d",
                 "shasum": ""
             },
             "require": {
@@ -46,7 +46,7 @@
                 "Apache-2.0"
             ],
             "description": "Business rule provider lib for plugin implementations",
-            "time": "2018-04-13T14:10:47+00:00"
+            "time": "2018-04-26T17:17:57+00:00"
         },
         {
             "name": "guzzlehttp/guzzle",
@@ -208,12 +208,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/reactphp/promise.git",
-                "reference": "179520ec0b25cf4c742d9653be9f4964d64d4a6e"
+                "reference": "da1605010d71dd775858954481ecfafd25ab3f98"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/reactphp/promise/zipball/179520ec0b25cf4c742d9653be9f4964d64d4a6e",
-                "reference": "179520ec0b25cf4c742d9653be9f4964d64d4a6e",
+                "url": "https://api.github.com/repos/reactphp/promise/zipball/da1605010d71dd775858954481ecfafd25ab3f98",
+                "reference": "da1605010d71dd775858954481ecfafd25ab3f98",
                 "shasum": ""
             },
             "require": {
@@ -246,7 +246,7 @@
                 "promise",
                 "promises"
             ],
-            "time": "2017-09-19T13:02:44+00:00"
+            "time": "2018-04-26T10:53:12+00:00"
         }
     ],
     "packages-dev": [
@@ -570,19 +570,19 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpspec/prophecy.git",
-                "reference": "dfd6be44111a7c41c2e884a336cc4f461b3b2401"
+                "reference": "5d4764d0b9beb04d5b36801c868cfc79a12c70a3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpspec/prophecy/zipball/dfd6be44111a7c41c2e884a336cc4f461b3b2401",
-                "reference": "dfd6be44111a7c41c2e884a336cc4f461b3b2401",
+                "url": "https://api.github.com/repos/phpspec/prophecy/zipball/5d4764d0b9beb04d5b36801c868cfc79a12c70a3",
+                "reference": "5d4764d0b9beb04d5b36801c868cfc79a12c70a3",
                 "shasum": ""
             },
             "require": {
                 "doctrine/instantiator": "^1.0.2",
                 "php": "^5.3|^7.0",
                 "phpdocumentor/reflection-docblock": "^2.0|^3.0.2|^4.0",
-                "sebastian/comparator": "^1.1|^2.0",
+                "sebastian/comparator": "^1.1|^2.0|^3.0",
                 "sebastian/recursion-context": "^1.0|^2.0|^3.0"
             },
             "require-dev": {
@@ -625,7 +625,7 @@
                 "spy",
                 "stub"
             ],
-            "time": "2018-02-19T10:16:54+00:00"
+            "time": "2018-04-19T14:17:18+00:00"
         },
         {
             "name": "phpunit/php-code-coverage",
@@ -1381,12 +1381,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/squizlabs/PHP_CodeSniffer.git",
-                "reference": "c6a0298d96abcf99e475c1cd0707c4830e0687a3"
+                "reference": "c10441594362d1683ea9f2e036f4c859e22e0250"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/squizlabs/PHP_CodeSniffer/zipball/c6a0298d96abcf99e475c1cd0707c4830e0687a3",
-                "reference": "c6a0298d96abcf99e475c1cd0707c4830e0687a3",
+                "url": "https://api.github.com/repos/squizlabs/PHP_CodeSniffer/zipball/c10441594362d1683ea9f2e036f4c859e22e0250",
+                "reference": "c10441594362d1683ea9f2e036f4c859e22e0250",
                 "shasum": ""
             },
             "require": {
@@ -1424,7 +1424,7 @@
                 "phpcs",
                 "standards"
             ],
-            "time": "2018-04-13T03:26:13+00:00"
+            "time": "2018-04-23T22:41:09+00:00"
         },
         {
             "name": "symfony/yaml",
@@ -1490,12 +1490,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/webmozart/assert.git",
-                "reference": "0df1908962e7a3071564e857d86874dad1ef204a"
+                "reference": "23bf61bc8a7cc229d7ce8689b1bf818a9e192cac"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/webmozart/assert/zipball/0df1908962e7a3071564e857d86874dad1ef204a",
-                "reference": "0df1908962e7a3071564e857d86874dad1ef204a",
+                "url": "https://api.github.com/repos/webmozart/assert/zipball/23bf61bc8a7cc229d7ce8689b1bf818a9e192cac",
+                "reference": "23bf61bc8a7cc229d7ce8689b1bf818a9e192cac",
                 "shasum": ""
             },
             "require": {
@@ -1532,7 +1532,7 @@
                 "check",
                 "validate"
             ],
-            "time": "2018-01-29T19:49:41+00:00"
+            "time": "2018-04-19T15:46:26+00:00"
         },
         {
             "name": "wp-coding-standards/wpcs",
