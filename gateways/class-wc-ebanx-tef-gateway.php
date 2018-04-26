@@ -1,5 +1,7 @@
 <?php
 
+use Ebanx\Benjamin\Models\Country;
+
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
@@ -34,7 +36,9 @@ class WC_EBANX_Tef_Gateway extends WC_EBANX_Redirect_Gateway {
 	 * @throws Exception Throws missing parameter message.
 	 */
 	public function is_available() {
-		return parent::is_available() && WC_EBANX_Constants::COUNTRY_BRAZIL === $this->get_transaction_address( 'country' );
+		$country = $this->get_transaction_address( 'country' );
+
+		return parent::is_available() && $this->ebanx_gateway->isAvailableForCountry( Country::fromIso( $country ) );
 	}
 
 	/**
