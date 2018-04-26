@@ -1,5 +1,7 @@
 <?php
 
+use Ebanx\Benjamin\Models\Country;
+
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
@@ -34,7 +36,11 @@ class WC_EBANX_Credit_Card_AR_Gateway extends WC_EBANX_Credit_Card_Gateway {
 	 * @throws Exception Throws missing param message.
 	 */
 	public function is_available() {
-		return parent::is_available() && WC_EBANX_Constants::COUNTRY_ARGENTINA === $this->get_transaction_address( 'country' );
+		$country = $this->get_transaction_address( 'country' );
+
+		return parent::is_available()
+			&& Country::fromIso( $country ) === Country::ARGENTINA
+			&& $this->ebanx_gateway->isAvailableForCountry( Country::fromIso( $country ) );
 	}
 
 	/**

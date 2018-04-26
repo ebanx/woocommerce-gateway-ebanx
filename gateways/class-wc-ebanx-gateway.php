@@ -98,20 +98,11 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway {
 	 * @return boolean
 	 */
 	public function is_available() {
-		$currency = $this->merchant_currency;
-
-		if ( WC()->customer ) {
-			$this->language = trim( strtolower( WC()->customer->get_country() ) );
-		}
-
 		return parent::is_available()
 			&& 'yes' === $this->enabled
 			&& $this->is_current_order_gateway()
 			&& ! empty( $this->public_key )
-			&& ! empty( $this->private_key )
-			&& ( $this->currency_is_usd_eur( $currency )
-			|| $this->ebanx_process_merchant_currency( $currency )
-			);
+			&& ! empty( $this->private_key );
 	}
 
 	/**
