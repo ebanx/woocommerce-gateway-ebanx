@@ -561,6 +561,7 @@ if ( ! class_exists( 'WC_EBANX' ) ) {
 			include_once WC_EBANX_SERVICES_DIR . 'class-wc-ebanx-flash.php';
 			include_once WC_EBANX_SERVICES_DIR . 'class-wc-ebanx-request.php';
 			include_once WC_EBANX_SERVICES_DIR . 'class-wc-ebanx-errors.php';
+			include_once WC_EBANX_SERVICES_DIR . 'class-wc-ebanx-exchange-rate.php';
 			include_once WC_EBANX_SERVICES_DIR . 'class-wc-ebanx-assets.php';
 			include_once WC_EBANX_SERVICES_DIR . 'class-wc-ebanx-query-router.php';
 			include_once WC_EBANX_SERVICES_DIR . 'class-wc-ebanx-third-party-compability-layer.php';

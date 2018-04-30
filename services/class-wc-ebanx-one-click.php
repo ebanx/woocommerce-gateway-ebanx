@@ -411,7 +411,7 @@ class WC_EBANX_One_Click {
 				'product_id'         => $product->id,
 				'installment_taxes'  => $this->instalment_rates,
 				'currency'           => $currency,
-				'currency_rate'      => round( floatval( $ebanx->get_local_currency_rate_for_site( $currency ) ), 2 ),
+				'currency_rate'      => round( floatval( WC_EBANX_Exchange_Rate::get_local_currency_rate_for_site( $currency, $this->gateway->configs ) ), 2 ),
 				'label'              => __( 'Pay with one click', 'woocommerce-gateway-ebanx' ),
 				'instalments'        => $messages['instalments'],
 				'instalments_terms'  => $instalments_terms,

@@ -12,12 +12,11 @@ add_action( 'wp_ajax_ebanx_update_converted_value', 'ebanx_update_converted_valu
  * It's a just a method to call `ebanx_update_converted_value`
  * to avoid WordPress hooks problem
  *
+ * @throws Exception Throws missing parameter exception.
  * @return void
  */
 function ebanx_update_converted_value() {
-	$gateway = new WC_EBANX_Gateway();
-
-	echo $gateway->checkout_rate_conversion( // phpcs:ignore WordPress.XSS.EscapeOutput
+	echo WC_EBANX_Exchange_Rate::checkout_rate_conversion( // phpcs:ignore WordPress.XSS.EscapeOutput
 		WC_EBANX_Request::read( 'currency' ),
 		false,
 		WC_EBANX_Request::read( 'country' ), // phpcs:ignore WordPress.XSS.EscapeOutput

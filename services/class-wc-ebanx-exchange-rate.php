@@ -4,20 +4,7 @@ require_once WC_EBANX_DIR . 'woocommerce-gateway-ebanx.php';
 /**
  * Class WC_EBANX_Exchange_Rate Handles exchange rates
  */
-class WC_EBANX_Exchange_Rate {
-
-	/**
-	 *
-	 * @var WC_EBANX_Global_Gateway
-	 */
-	private $configs;
-
-	/**
-	 * WC_EBANX_Exchange_Rate constructor.
-	 */
-	public function __construct() {
-		$this->configs = new WC_EBANX_Global_Gateway();
-	}
+abstract class WC_EBANX_Exchange_Rate {
 
 	/**
 	 * Create the converter amount on checkout page
@@ -30,9 +17,11 @@ class WC_EBANX_Exchange_Rate {
 	 * @return string|null
 	 * @throws Exception Throws missing parameter exception.
 	 */
-	public function checkout_rate_conversion( $currency, $template = true, $country = null, $instalments = null ) {
-		if ( ! in_array( $this->configs->merchant_currency, WC_EBANX_Constants::$allowed_currency_codes )
-			 || 'yes' !== $this->configs->get_setting_or_default( 'show_local_amount', 'yes' ) ) {
+	public static function checkout_rate_conversion( $currency, $template = true, $country = null, $instalments = null ) {
+		$configs = new WC_EBANX_Global_Gateway();
+
+		if ( ! in_array( $configs->merchant_currency, WC_EBANX_Constants::$allowed_currency_codes )
+			 || 'yes' !== $configs->get_setting_or_default( 'show_local_amount', 'yes' ) ) {
 			return null;
 		}
 
@@ -63,8 +52,8 @@ class WC_EBANX_Exchange_Rate {
 		}
 
 		$rate = 1;
-		if ( in_array( $this->configs->merchant_currency, [ WC_EBANX_Constants::CURRENCY_CODE_USD, WC_EBANX_Constants::CURRENCY_CODE_EUR ] ) ) {
-			$rate = round( floatval( $this->get_local_currency_rate_for_site( $currency ) ), 2 );
+		if ( in_array( $configs->merchant_currency, [ WC_EBANX_Constants::CURRENCY_CODE_USD, WC_EBANX_Constants::CURRENCY_CODE_EUR ] ) ) {
+			$rate = round( floatval( static::get_local_currency_rate_for_site( $currency, $configs ) ), 2 );
 
 			if ( WC()->cart->prices_include_tax ) {
 				$amount += WC()->cart->tax_total;
@@ -73,13 +62,13 @@ class WC_EBANX_Exchange_Rate {
 
 		$amount *= $rate;
 
-		if ( 'yes' === $this->configs->get_setting_or_default( 'interest_rates_enabled', 'no' ) && null !== $instalments ) {
-			$interest_rate = floatval( $this->configs->settings[ 'interest_rates_' . sprintf( '%02d', $instalments ) ] );
+		if ( 'yes' === $configs->get_setting_or_default( 'interest_rates_enabled', 'no' ) && null !== $instalments ) {
+			$interest_rate = floatval( $configs->settings[ 'interest_rates_' . sprintf( '%02d', $instalments ) ] );
 
 			$amount += ( $amount * $interest_rate / 100 );
 		}
 
-		if ( WC_EBANX_Constants::COUNTRY_BRAZIL === $country && 'yes' === $this->configs->get_setting_or_default( 'add_iof_to_local_amount_enabled', 'yes' ) ) {
+		if ( WC_EBANX_Constants::COUNTRY_BRAZIL === $country && 'yes' === $configs->get_setting_or_default( 'add_iof_to_local_amount_enabled', 'yes' ) ) {
 			$amount += ( $amount * WC_EBANX_Constants::BRAZIL_TAX );
 		}
 
@@ -89,8 +78,8 @@ class WC_EBANX_Exchange_Rate {
 			$amount           = $instalment_price * $instalments;
 		}
 
-		$message               = WC_EBANX_Constants::get_checkout_message( $amount, $currency, $country, $this->configs );
-		$exchange_rate_message = $this->get_exchange_rate_message( $rate, $currency, $country );
+		$message               = WC_EBANX_Constants::get_checkout_message( $amount, $currency, $country, $configs );
+		$exchange_rate_message = static::get_exchange_rate_message( $rate, $currency, $country, $configs );
 
 		if ( $template ) {
 			wc_get_template(
@@ -109,14 +98,15 @@ class WC_EBANX_Exchange_Rate {
 
 	/**
 	 *
-	 * @param double $rate
-	 * @param string $currency
-	 * @param string $country
+	 * @param double                  $rate
+	 * @param string                  $currency
+	 * @param string                  $country
+	 * @param WC_EBANX_Global_Gateway $configs
 	 *
 	 * @return string
 	 */
-	public function get_exchange_rate_message( $rate, $currency, $country ) {
-		if ( $this->configs->get_setting_or_default( 'show_exchange_rate', 'no' ) === 'no' ) {
+	public static function get_exchange_rate_message( $rate, $currency, $country, $configs ) {
+		if ( $configs->get_setting_or_default( 'show_exchange_rate', 'no' ) === 'no' ) {
 			return '';
 		}
 
@@ -138,12 +128,40 @@ class WC_EBANX_Exchange_Rate {
 	}
 
 	/**
-	 * Queries for a currency exchange rate against USD
+	 * Queries for a currency exchange rate against site currency
 	 *
-	 * @param string $local_currency_code
+	 * @param  string                  $local_currency_code
+	 * @param WC_EBANX_Global_Gateway $configs
+	 *
 	 * @return double
 	 */
-	public function get_currency_rate( $local_currency_code ) {
+	public static function get_local_currency_rate_for_site( $local_currency_code, $configs ) {
+		if ( strtoupper( $local_currency_code ) === $configs->merchant_currency ) {
+			return 1;
+		}
+
+		$usd_to_site_rate     = 1;
+		$converted_currencies = [
+			WC_EBANX_Constants::CURRENCY_CODE_USD,
+			WC_EBANX_Constants::CURRENCY_CODE_EUR,
+		];
+
+		if ( ! in_array( $configs->merchant_currency, $converted_currencies ) ) {
+			$usd_to_site_rate = static::get_currency_rate( $configs->merchant_currency, $configs );
+		}
+
+		return static::get_currency_rate( $local_currency_code, $configs ) / $usd_to_site_rate;
+	}
+
+	/**
+	 * Queries for a currency exchange rate against USD
+	 *
+	 * @param string                  $local_currency_code
+	 * @param WC_EBANX_Global_Gateway $configs
+	 *
+	 * @return double
+	 */
+	public static function get_currency_rate( $local_currency_code, $configs ) {
 		$cache_key = 'EBANX_exchange_' . $local_currency_code;
 
 		$cache_time = date( 'YmdH' ) . floor( date( 'i' ) / 5 );
@@ -155,34 +173,10 @@ class WC_EBANX_Exchange_Rate {
 				return $rate;
 			}
 		}
-		$ebanx = ( new WC_EBANX_Api( $this->configs ) )->ebanx();
+		$ebanx = ( new WC_EBANX_Api( $configs ) )->ebanx();
 
 		$rate = $ebanx->exchange()->siteToLocal( $local_currency_code );
 		update_option( $cache_key, $rate . '|' . $cache_time );
 		return $rate;
-	}
-
-	/**
-	 * Queries for a currency exchange rate against site currency
-	 *
-	 * @param  string $local_currency_code
-	 * @return double
-	 */
-	public function get_local_currency_rate_for_site( $local_currency_code ) {
-		if ( strtoupper( $local_currency_code ) === $this->configs->merchant_currency ) {
-			return 1;
-		}
-
-		$usd_to_site_rate     = 1;
-		$converted_currencies = [
-			WC_EBANX_Constants::CURRENCY_CODE_USD,
-			WC_EBANX_Constants::CURRENCY_CODE_EUR,
-		];
-
-		if ( ! in_array( $this->configs->merchant_currency, $converted_currencies ) ) {
-			$usd_to_site_rate = $this->get_currency_rate( $this->configs->merchant_currency );
-		}
-
-		return $this->get_currency_rate( $local_currency_code ) / $usd_to_site_rate;
 	}
 }

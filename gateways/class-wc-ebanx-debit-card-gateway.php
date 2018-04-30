@@ -63,9 +63,11 @@ class WC_EBANX_Debit_Card_Gateway extends WC_EBANX_New_Gateway {
 
 	/**
 	 * The HTML structure on checkout page
+	 *
+	 * @throws Exception Throws missing parameter exception.
 	 */
 	public function payment_fields() {
-		$message = $this->get_sandbox_form_message( $this->get_transaction_address( 'country' ) );
+		$message = WC_EBANX_Constants::get_sandbox_form_message( $this->get_transaction_address( 'country' ) );
 		wc_get_template(
 			'sandbox-checkout-alert.php',
 			array(
@@ -91,7 +93,7 @@ class WC_EBANX_Debit_Card_Gateway extends WC_EBANX_New_Gateway {
 			WC_EBANX::get_templates_path()
 		);
 
-		parent::checkout_rate_conversion( WC_EBANX_Constants::CURRENCY_CODE_MXN );
+		WC_EBANX_Exchange_Rate::checkout_rate_conversion( WC_EBANX_Constants::CURRENCY_CODE_MXN );
 	}
 
 
