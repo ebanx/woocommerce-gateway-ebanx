@@ -98,46 +98,10 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway {
 	 * @return boolean
 	 */
 	public function is_available() {
-		$currency = $this->merchant_currency;
-
-		if ( WC()->customer ) {
-			$this->language = trim( strtolower( WC()->customer->get_country() ) );
-		}
-
 		return parent::is_available()
 			&& 'yes' === $this->enabled
-			&& $this->is_current_order_gateway()
 			&& ! empty( $this->public_key )
-			&& ! empty( $this->private_key )
-			&& ( $this->currency_is_usd_eur( $currency )
-			|| $this->ebanx_process_merchant_currency( $currency )
-			);
-	}
-
-	/**
-	 * Detects if the page only accepts the selected gateways.
-	 *
-	 * @return boolean
-	 */
-	public function is_current_order_gateway() {
-		$order_id = get_query_var( 'order-pay' );
-		$order    = wc_get_order( $order_id );
-
-		if ( $order && ! empty( $order->get_payment_method() ) ) {
-			return $order->get_payment_method() === $this->id;
-		}
-
-		return true;
-	}
-
-	/**
-	 * Check if the currency is processed by EBANX
-	 *
-	 * @param  string $currency Possible currencies: BRL, USD, EUR, PEN, CLP, COP, MXN.
-	 * @return boolean          Return true if EBANX process the currency.
-	 */
-	public function ebanx_process_merchant_currency( $currency ) {
-		return $currency;
+			&& ! empty( $this->private_key );
 	}
 
 	/**

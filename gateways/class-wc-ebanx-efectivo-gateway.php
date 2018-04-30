@@ -1,5 +1,7 @@
 <?php
 
+use Ebanx\Benjamin\Models\Country;
+
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
@@ -22,6 +24,8 @@ class WC_EBANX_Efectivo_Gateway extends WC_EBANX_New_Gateway {
 
 		parent::__construct();
 
+		$this->ebanx_gateway = $this->ebanx->otrosCupones();
+
 		$this->enabled = is_array( $this->configs->settings['argentina_payment_methods'] ) ? in_array( $this->id, $this->configs->settings['argentina_payment_methods'] ) ? 'yes' : false : false;
 	}
 
@@ -32,17 +36,9 @@ class WC_EBANX_Efectivo_Gateway extends WC_EBANX_New_Gateway {
 	 * @throws Exception Throws missing param message.
 	 */
 	public function is_available() {
-		return parent::is_available() && WC_EBANX_Constants::COUNTRY_ARGENTINA === $this->get_transaction_address( 'country' );
-	}
+		$country = $this->get_transaction_address( 'country' );
 
-	/**
-	 * Check if the currency is processed by EBANX
-	 *
-	 * @param  string $currency Possible currencies: ARS.
-	 * @return boolean          Return true if EBANX process the currency
-	 */
-	public function ebanx_process_merchant_currency( $currency ) {
-		return WC_EBANX_Constants::CURRENCY_CODE_ARS === $currency;
+		return parent::is_available() && $this->ebanx_gateway->isAvailableForCountry( Country::fromIso( $country ) );
 	}
 
 	/**
