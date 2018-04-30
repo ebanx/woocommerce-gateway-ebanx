@@ -402,7 +402,6 @@ class WC_EBANX_One_Click {
 
 		$instalments_terms = $this->gateway->get_payment_terms( $cart_total, $max_instalments, $tax );
 		$currency          = WC_EBANX_Constants::$local_currencies[ $country ];
-		$ebanx             = new WC_EBANX_Gateway();
 
 		$args = apply_filters(
 			'ebanx_template_args', array(

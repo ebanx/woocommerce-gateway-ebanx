@@ -282,7 +282,7 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway {
 	 * Fetches a single checkout manager setting from the gateway settings if found, otherwise it returns an optional default value
 	 *
 	 * @param  string $name    The setting name to fetch.
-	 * @param  string  $default The default value in case setting is not present.
+	 * @param  string $default The default value in case setting is not present.
 	 *
 	 * @return string
 	 */
@@ -298,7 +298,7 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway {
 	 * Save order's meta fields for future use
 	 *
 	 * @param  WC_Order $order The order created.
-	 * @param  Object $request The request from EBANX success response.
+	 * @param  Object   $request The request from EBANX success response.
 	 *
 	 * @return void
 	 * @throws Exception Param missing.
@@ -355,9 +355,9 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway {
 			WC()->cart->empty_cart();
 
 			return [
-					'result'   => 'success',
-					'redirect' => $this->get_return_url( $order ),
-				];
+				'result'   => 'success',
+				'redirect' => $this->get_return_url( $order ),
+			];
 		} catch ( Exception $e ) {
 			$country = $this->get_transaction_address( 'country' );
 

@@ -51,8 +51,8 @@ abstract class WC_EBANX_Redirect_Gateway extends WC_EBANX_Gateway {
 		WC()->cart->empty_cart();
 
 		return array(
-				'result'   => 'success',
-				'redirect' => $this->redirect_url,
-			);
+			'result'   => 'success',
+			'redirect' => $this->redirect_url,
+		);
 	}
 }
