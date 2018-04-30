@@ -111,23 +111,9 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway {
 	protected static $ebanx_params = [];
 
 	/**
-	 *
-	 * @var int
-	 */
-	protected static $total_gateways = 0;
-
-	/**
-	 *
-	 * @var int
-	 */
-	protected static $initialized_gateways = 0;
-
-	/**
 	 * Constructor
 	 */
 	public function __construct() {
-		self::$total_gateways++;
-
 		$this->user_id         = get_current_user_id();
 		$this->configs         = new WC_EBANX_Global_Gateway();
 		$this->is_sandbox_mode = ( 'yes' === $this->configs->settings['sandbox_mode_enabled'] );
@@ -239,11 +225,7 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway {
 				'ajaxurl' => admin_url( 'admin-ajax.php', null ),
 			];
 
-			self::$initialized_gateways++;
-
-			if ( self::$initialized_gateways === self::$total_gateways ) {
-				wp_localize_script( 'woocommerce_ebanx_credit_card', 'wc_ebanx_params', apply_filters( 'wc_ebanx_params', static::$ebanx_params ) );
-			}
+			wp_localize_script( 'woocommerce_ebanx_credit_card', 'wc_ebanx_params', apply_filters( 'wc_ebanx_params', static::$ebanx_params ) );
 		}
 	}
 

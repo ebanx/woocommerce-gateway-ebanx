@@ -14,6 +14,7 @@ let pay;
 describe('Woocommerce', () => {
   before(() => {
     assertUrlStatus(Cypress.env('DEMO_URL'));
+    assertUrlStatus(`${Cypress.env('DEMO_URL')}/wp-admin`);
 
     admin = new Admin(cy);
     pay = new Pay(cy);

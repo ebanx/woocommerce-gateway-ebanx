@@ -35,6 +35,8 @@ class WC_EBANX_Safetypay_Gateway extends WC_EBANX_Redirect_Gateway {
 
 		parent::__construct();
 
+		$this->ebanx_gateway = $this->ebanx->safetyPayOnline();
+
 		$peru_methods    = $this->configs->get_setting_or_default( 'peru_payment_methods', [] );
 		$ecuador_methods = $this->configs->get_setting_or_default( 'ecuador_payment_methods', [] );
 
