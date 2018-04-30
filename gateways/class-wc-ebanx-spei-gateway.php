@@ -7,7 +7,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Class WC_EBANX_Spei_Gateway
  */
-class WC_EBANX_Spei_Gateway extends WC_EBANX_New_Gateway {
+class WC_EBANX_Spei_Gateway extends WC_EBANX_Gateway {
 
 	/**
 	 * Constructor
