@@ -1,5 +1,7 @@
 <?php
 
+use Ebanx\Benjamin\Models\Country;
+
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
@@ -52,33 +54,12 @@ class WC_EBANX_Safetypay_Gateway extends WC_EBANX_Redirect_Gateway {
 	 */
 	public function is_available() {
 		$country    = $this->get_transaction_address( 'country' );
-		$is_peru    = WC_EBANX_Constants::COUNTRY_PERU == $country;
-		$is_ecuador = WC_EBANX_Constants::COUNTRY_ECUADOR == $country;
 
 		return parent::is_available()
-			&& (
-				( $is_peru && $this->enabled_in_peru )
-				|| ( $is_ecuador && $this->enabled_in_ecuador )
+			&& $this->ebanx_gateway->isAvailableForCountry( Country::fromIso( $country ) )
+			&& ( ( Country::fromIso( $country ) === Country::PERU && $this->enabled_in_peru )
+				|| ( Country::fromIso( $country ) === Country::ECUADOR && $this->enabled_in_ecuador )
 			);
-	}
-
-	/**
-	 * Check if the currency is processed by EBANX
-	 *
-	 * @param  string $currency Possible currencies: PEN for PERU and globals for ECUADOR.
-	 *
-	 * @return boolean          Return true if EBANX process the currency.
-	 * @throws Exception        Throws missing param message.
-	 */
-	public function ebanx_process_merchant_currency( $currency ) {
-		$country = $this->get_transaction_address( 'country' );
-
-		switch ( $country ) {
-			case WC_EBANX_Constants::COUNTRY_PERU:
-				return WC_EBANX_Constants::CURRENCY_CODE_PEN;
-			default:
-				return null;
-		}
 	}
 
 	/**
