@@ -334,12 +334,12 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway {
 
 			do_action( 'ebanx_after_process_payment', $order );
 
-			WC()->cart->empty_cart();
-
-			return [
-				'result'   => 'success',
-				'redirect' => $this->get_return_url( $order ),
-			];
+			return $this->dispatch(
+				[
+					'result'   => 'success',
+					'redirect' => $this->get_return_url( $order ),
+				]
+			);
 		} catch ( Exception $e ) {
 			$country = $this->get_transaction_address( 'country' );
 
@@ -364,6 +364,19 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway {
 	 */
 	protected function transform_payment_data( $order ) {
 		return WC_EBANX_Payment_Adapter::transform( $order, $this->configs, $this->names );
+	}
+
+	/**
+	 * Clean the cart and dispatch the data to request
+	 *
+	 * @param  array $data  The checkout's data.
+	 *
+	 * @return array
+	 */
+	protected function dispatch( $data ) {
+		WC()->cart->empty_cart();
+
+		return $data;
 	}
 
 	/**

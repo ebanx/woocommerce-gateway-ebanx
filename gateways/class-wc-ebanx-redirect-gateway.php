@@ -27,17 +27,15 @@ abstract class WC_EBANX_Redirect_Gateway extends WC_EBANX_Gateway {
 		if ( 'ERROR' === $response['status'] ) {
 			$this->process_response_error( $response, $order );
 		}
-		$redirect = $response['redirect_url'];
-		if ( ! $redirect && ! isset( $response['payment']['redirect_url'] ) ) {
+		if ( ! $response['redirect_url'] && ! isset( $response['payment']['redirect_url'] ) ) {
 			$this->process_response_error( $response, $order );
 		}
-		$redirect = $response['payment']['redirect_url'];
 
 		parent::process_response( $response, $order );
 
 		update_post_meta( $order->id, '_ebanx_payment_hash', $response['payment']['hash'] );
 
-		$this->redirect_url = $redirect;
+		$this->redirect_url = $response['payment']['redirect_url'];
 	}
 
 	/**
@@ -48,11 +46,11 @@ abstract class WC_EBANX_Redirect_Gateway extends WC_EBANX_Gateway {
 	 * @return array
 	 */
 	final protected function dispatch( $data ) {
-		WC()->cart->empty_cart();
-
-		return array(
-			'result'   => 'success',
-			'redirect' => $this->redirect_url,
+		return parent::dispatch(
+			array(
+				'result'   => 'success',
+				'redirect' => $this->redirect_url,
+			)
 		);
 	}
 }
