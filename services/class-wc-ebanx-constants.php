@@ -271,4 +271,78 @@ abstract class WC_EBANX_Constants {
 		'cash',
 		'online',
 	);
+
+	/**
+	 * Generates the checkout message
+	 *
+	 * @param int                     $amount The total price of the order.
+	 * @param string                  $currency Possible currencies: BRL, USD, EUR, PEN, CLP, COP, MXN.
+	 * @param string                  $country The country code.
+	 * @param WC_EBANX_Global_Gateway $configs Plugin configs.
+	 *
+	 * @return string
+	 */
+	public static function get_checkout_message( $amount, $currency, $country, $configs ) {
+		$price    = wc_price( $amount, array( 'currency' => $currency ) );
+		$language = static::get_language_by_country( $country );
+
+		$texts = array(
+			'pt-br' => array(
+				'INTRO'                               => 'Total a pagar ',
+				static::CURRENCY_CODE_BRL => $configs->get_setting_or_default( 'add_iof_to_local_amount_enabled', 'yes' ) === 'yes' ? 'com IOF (0.38%)' : 'em Reais',
+			),
+			'es'    => array(
+				'INTRO'                               => 'Total a pagar en ',
+				static::CURRENCY_CODE_MXN => 'Peso mexicano',
+				static::CURRENCY_CODE_CLP => 'Peso chileno',
+				static::CURRENCY_CODE_PEN => 'Sol peruano',
+				static::CURRENCY_CODE_COP => 'Peso colombiano',
+				static::CURRENCY_CODE_ARS => 'Peso argentino',
+				static::CURRENCY_CODE_BRL => 'Real brasileño',
+			),
+		);
+
+		$message  = $texts[ $language ]['INTRO'];
+		$message .= ! empty( $texts[ $language ][ $currency ] ) ? $texts[ $language ][ $currency ] : $currency;
+		$message .= ': <strong class="ebanx-amount-total">' . $price . '</strong>';
+
+		return $message;
+	}
+
+	/**
+	 *
+	 * @param string $country
+	 *
+	 * @return string
+	 */
+	public static function get_language_by_country( $country ) {
+		$languages = array(
+			'ar' => 'es',
+			'mx' => 'es',
+			'cl' => 'es',
+			'pe' => 'es',
+			'co' => 'es',
+			'ec' => 'es',
+			'br' => 'pt-br',
+		);
+		if ( ! array_key_exists( $country, $languages ) ) {
+			return 'pt-br';
+		}
+		return $languages[ $country ];
+	}
+
+	/**
+	 *
+	 * @param string $country
+	 *
+	 * @return string
+	 */
+	public static function get_sandbox_form_message( $country ) {
+		$messages = array(
+			'pt-br' => 'Ainda estamos testando esse tipo de pagamento. Por isso, a sua compra não será cobrada nem enviada.',
+			'es'    => 'Todavia estamos probando este método de pago. Por eso su compra no sera cobrada ni enviada.',
+		);
+
+		return $messages[ static::get_language_by_country( $country ) ];
+	}
 }

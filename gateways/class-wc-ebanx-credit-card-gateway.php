@@ -7,7 +7,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Class WC_EBANX_Credit_Card_Gateway
  */
-abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_New_Gateway {
+abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway {
 
 	/**
 	 * The rates for each instalment
@@ -28,7 +28,7 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_New_Gateway {
 
 		add_action( 'woocommerce_order_edit_status', array( $this, 'capture_payment_action' ), 10, 2 );
 
-		if ( $this->get_setting_or_default( 'interest_rates_enabled', 'no' ) == 'yes' ) {
+		if ( $this->configs->get_setting_or_default( 'interest_rates_enabled', 'no' ) == 'yes' ) {
 			$max_instalments = $this->configs->settings['credit_card_instalments'];
 			for ( $i = 1; $i <= $max_instalments; $i++ ) {
 				$field                        = 'interest_rates_' . sprintf( '%02d', $i );
@@ -281,7 +281,7 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_New_Gateway {
 		}
 
 		if ( ! $this->user_id
-			|| $this->get_setting_or_default( 'save_card_data', 'no' ) !== 'yes'
+			|| $this->configs->get_setting_or_default( 'save_card_data', 'no' ) !== 'yes'
 			|| ! WC_EBANX_Request::has( 'ebanx-save-credit-card' )
 			|| WC_EBANX_Request::read( 'ebanx-save-credit-card' ) !== 'yes' ) {
 			return;
@@ -362,32 +362,32 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_New_Gateway {
 
 		switch ( trim( strtolower( $country ) ) ) {
 			case 'br':
-				$site_to_local_rate            = $this->get_local_currency_rate_for_site( WC_EBANX_Constants::CURRENCY_CODE_BRL );
-				$merchant_min_instalment_value = $this->get_setting_or_default( "min_instalment_value_$currency_code", 0 ) * $site_to_local_rate;
+				$site_to_local_rate            = WC_EBANX_Exchange_Rate::get_local_currency_rate_for_site( WC_EBANX_Constants::CURRENCY_CODE_BRL, $this->configs );
+				$merchant_min_instalment_value = $this->configs->get_setting_or_default( "min_instalment_value_$currency_code", 0 ) * $site_to_local_rate;
 				$min_instalment_value          = max(
 					WC_EBANX_Constants::ACQUIRER_MIN_INSTALMENT_VALUE_BRL,
 					$merchant_min_instalment_value
 				);
 				break;
 			case 'mx':
-				$site_to_local_rate            = $this->get_local_currency_rate_for_site( WC_EBANX_Constants::CURRENCY_CODE_MXN );
-				$merchant_min_instalment_value = $this->get_setting_or_default( "min_instalment_value_$currency_code", 0 ) * $site_to_local_rate;
+				$site_to_local_rate            = WC_EBANX_Exchange_Rate::get_local_currency_rate_for_site( WC_EBANX_Constants::CURRENCY_CODE_MXN, $this->configs );
+				$merchant_min_instalment_value = $this->configs->get_setting_or_default( "min_instalment_value_$currency_code", 0 ) * $site_to_local_rate;
 				$min_instalment_value          = max(
 					WC_EBANX_Constants::ACQUIRER_MIN_INSTALMENT_VALUE_MXN,
 					$merchant_min_instalment_value
 				);
 				break;
 			case 'co':
-				$site_to_local_rate            = $this->get_local_currency_rate_for_site( WC_EBANX_Constants::CURRENCY_CODE_COP );
-				$merchant_min_instalment_value = $this->get_setting_or_default( "min_instalment_value_$currency_code", 0 ) * $site_to_local_rate;
+				$site_to_local_rate            = WC_EBANX_Exchange_Rate::get_local_currency_rate_for_site( WC_EBANX_Constants::CURRENCY_CODE_COP, $this->configs );
+				$merchant_min_instalment_value = $this->configs->get_setting_or_default( "min_instalment_value_$currency_code", 0 ) * $site_to_local_rate;
 				$min_instalment_value          = max(
 					WC_EBANX_Constants::ACQUIRER_MIN_INSTALMENT_VALUE_COP,
 					$merchant_min_instalment_value
 				);
 				break;
 			case 'ar':
-				$site_to_local_rate            = $this->get_local_currency_rate_for_site( WC_EBANX_Constants::CURRENCY_CODE_ARS );
-				$merchant_min_instalment_value = $this->get_setting_or_default( "min_instalment_value_$currency_code", 0 ) * $site_to_local_rate;
+				$site_to_local_rate            = WC_EBANX_Exchange_Rate::get_local_currency_rate_for_site( WC_EBANX_Constants::CURRENCY_CODE_ARS, $this->configs );
+				$merchant_min_instalment_value = $this->configs->get_setting_or_default( "min_instalment_value_$currency_code", 0 ) * $site_to_local_rate;
 				$min_instalment_value          = max(
 					WC_EBANX_Constants::ACQUIRER_MIN_INSTALMENT_VALUE_ARS,
 					$merchant_min_instalment_value
@@ -493,7 +493,7 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_New_Gateway {
 
 		$cards = array();
 
-		$save_card = $this->get_setting_or_default( 'save_card_data', 'no' ) === 'yes';
+		$save_card = $this->configs->get_setting_or_default( 'save_card_data', 'no' ) === 'yes';
 
 		if ( $save_card ) {
 			$cards = array_filter(
@@ -520,7 +520,7 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_New_Gateway {
 
 		$currency = WC_EBANX_Constants::$local_currencies[ $country ];
 
-		$message = $this->get_sandbox_form_message( $country );
+		$message = WC_EBANX_Constants::get_sandbox_form_message( $country );
 		wc_get_template(
 			'sandbox-checkout-alert.php',
 			array(
@@ -538,7 +538,7 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_New_Gateway {
 				'country'             => $country,
 				'instalments_terms'   => $instalments_terms,
 				'currency_code'       => $this->currency_code,
-				'currency_rate'       => round( floatval( $this->get_local_currency_rate_for_site( $this->currency_code ) ), 2 ),
+				'currency_rate'       => round( floatval( WC_EBANX_Exchange_Rate::get_local_currency_rate_for_site( $this->currency_code, $this->configs ) ), 2 ),
 				'cards'               => (array) $cards,
 				'cart_total'          => $cart_total,
 				'place_order_enabled' => $save_card,

@@ -37,8 +37,8 @@ class WC_EBANX_Safetypay_Gateway extends WC_EBANX_Redirect_Gateway {
 
 		$this->ebanx_gateway = $this->ebanx->safetyPayOnline();
 
-		$peru_methods    = $this->get_setting_or_default( 'peru_payment_methods', [] );
-		$ecuador_methods = $this->get_setting_or_default( 'ecuador_payment_methods', [] );
+		$peru_methods    = $this->configs->get_setting_or_default( 'peru_payment_methods', [] );
+		$ecuador_methods = $this->configs->get_setting_or_default( 'ecuador_payment_methods', [] );
 
 		$this->enabled_in_peru    = in_array( $this->id, $peru_methods );
 		$this->enabled_in_ecuador = in_array( $this->id, $ecuador_methods );
@@ -86,7 +86,7 @@ class WC_EBANX_Safetypay_Gateway extends WC_EBANX_Redirect_Gateway {
 	 * @throws Exception Throws missing param message.
 	 */
 	public function payment_fields() {
-		$message = $this->get_sandbox_form_message( $this->get_transaction_address( 'country' ) );
+		$message = WC_EBANX_Constants::get_sandbox_form_message( $this->get_transaction_address( 'country' ) );
 		wc_get_template(
 			'sandbox-checkout-alert.php',
 			array(
@@ -115,7 +115,7 @@ class WC_EBANX_Safetypay_Gateway extends WC_EBANX_Redirect_Gateway {
 
 		$is_peru = WC_EBANX_Constants::COUNTRY_PERU === $this->get_transaction_address( 'country' );
 
-		parent::checkout_rate_conversion( WC_EBANX_Constants::CURRENCY_CODE_PEN, $is_peru );
+		WC_EBANX_Exchange_Rate::checkout_rate_conversion( WC_EBANX_Constants::CURRENCY_CODE_PEN, $is_peru );
 	}
 
 	/**

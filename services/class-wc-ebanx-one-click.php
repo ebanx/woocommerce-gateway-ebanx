@@ -49,8 +49,8 @@ class WC_EBANX_One_Click {
 		$this->gateway      = $this->user_country ? ( WC_EBANX_Constants::COUNTRY_BRAZIL === $this->user_country ? new WC_EBANX_Credit_Card_BR_Gateway() : new WC_EBANX_Credit_Card_MX_Gateway() ) : false;
 
 		if ( ! $this->gateway
-			|| $this->gateway->get_setting_or_default( 'one_click', 'no' ) !== 'yes'
-			|| $this->gateway->get_setting_or_default( 'save_card_data', 'no' ) !== 'yes' ) {
+			|| $this->gateway->configs->get_setting_or_default( 'one_click', 'no' ) !== 'yes'
+			|| $this->gateway->configs->get_setting_or_default( 'save_card_data', 'no' ) !== 'yes' ) {
 			return;
 		}
 
@@ -75,7 +75,7 @@ class WC_EBANX_One_Click {
 	 */
 	public function generate_instalments_rates() {
 		if ( ! $this->gateway
-			|| $this->gateway->get_setting_or_default( 'interest_rates_enabled', 'no' ) !== 'yes' ) {
+			|| $this->gateway->configs->get_setting_or_default( 'interest_rates_enabled', 'no' ) !== 'yes' ) {
 			return;
 		}
 
@@ -396,13 +396,12 @@ class WC_EBANX_One_Click {
 
 		$tax = 0;
 		if ( get_woocommerce_currency() === WC_EBANX_Constants::CURRENCY_CODE_BRL
-			 && 'yes' === $this->gateway->get_setting_or_default( 'add_iof_to_local_amount_enabled', 'yes' ) ) {
+			 && 'yes' === $this->gateway->configs->get_setting_or_default( 'add_iof_to_local_amount_enabled', 'yes' ) ) {
 			$tax = WC_EBANX_Constants::CURRENCY_CODE_BRL;
 		}
 
 		$instalments_terms = $this->gateway->get_payment_terms( $cart_total, $max_instalments, $tax );
 		$currency          = WC_EBANX_Constants::$local_currencies[ $country ];
-		$ebanx             = new WC_EBANX_New_Gateway();
 
 		$args = apply_filters(
 			'ebanx_template_args', array(
@@ -411,7 +410,7 @@ class WC_EBANX_One_Click {
 				'product_id'         => $product->id,
 				'installment_taxes'  => $this->instalment_rates,
 				'currency'           => $currency,
-				'currency_rate'      => round( floatval( $ebanx->get_local_currency_rate_for_site( $currency ) ), 2 ),
+				'currency_rate'      => round( floatval( WC_EBANX_Exchange_Rate::get_local_currency_rate_for_site( $currency, $this->gateway->configs ) ), 2 ),
 				'label'              => __( 'Pay with one click', 'woocommerce-gateway-ebanx' ),
 				'instalments'        => $messages['instalments'],
 				'instalments_terms'  => $instalments_terms,

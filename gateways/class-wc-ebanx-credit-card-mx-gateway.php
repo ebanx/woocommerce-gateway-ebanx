@@ -43,11 +43,13 @@ class WC_EBANX_Credit_Card_MX_Gateway extends WC_EBANX_Credit_Card_Gateway {
 
 	/**
 	 * The HTML structure on checkout page
+	 *
+	 * @throws Exception Throws missing parameter exception.
 	 */
 	public function payment_fields() {
 		parent::payment_fields();
 
-		parent::checkout_rate_conversion(
+		WC_EBANX_Exchange_Rate::checkout_rate_conversion(
 			WC_EBANX_Constants::CURRENCY_CODE_MXN,
 			true,
 			null,

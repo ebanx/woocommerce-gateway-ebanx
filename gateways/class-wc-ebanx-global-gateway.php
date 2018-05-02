@@ -72,6 +72,12 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway {
 	);
 
 	/**
+	 *
+	 * @var string
+	 */
+	public $merchant_currency;
+
+	/**
 	 * Constructor
 	 */
 	public function __construct() {

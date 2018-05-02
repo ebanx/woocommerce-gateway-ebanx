@@ -7,7 +7,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Class WC_EBANX_Redirect_Gateway
  */
-abstract class WC_EBANX_Redirect_Gateway extends WC_EBANX_New_Gateway {
+abstract class WC_EBANX_Redirect_Gateway extends WC_EBANX_Gateway {
 
 	/**
 	 *
@@ -27,17 +27,15 @@ abstract class WC_EBANX_Redirect_Gateway extends WC_EBANX_New_Gateway {
 		if ( 'ERROR' === $response['status'] ) {
 			$this->process_response_error( $response, $order );
 		}
-		$redirect = $response['redirect_url'];
-		if ( ! $redirect && ! isset( $response['payment']['redirect_url'] ) ) {
+		if ( ! $response['redirect_url'] && ! isset( $response['payment']['redirect_url'] ) ) {
 			$this->process_response_error( $response, $order );
 		}
-		$redirect = $response['payment']['redirect_url'];
 
 		parent::process_response( $response, $order );
 
 		update_post_meta( $order->id, '_ebanx_payment_hash', $response['payment']['hash'] );
 
-		$this->redirect_url = $redirect;
+		$this->redirect_url = $response['payment']['redirect_url'];
 	}
 
 	/**
