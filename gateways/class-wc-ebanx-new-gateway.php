@@ -651,7 +651,6 @@ class WC_EBANX_New_Gateway extends WC_EBANX_Gateway {
 					return;
 				}
 				$order->payment_complete( $data['payment']['hash'] );
-				$new_status = 'processing';
 				break;
 			case 'CA':
 				$order->payment_complete();
@@ -665,7 +664,7 @@ class WC_EBANX_New_Gateway extends WC_EBANX_Gateway {
 				break;
 		}
 
-		if ( $new_status !== $old_status ) {
+		if ( isset( $new_status ) && $new_status !== $old_status ) {
 			$payment_status = $status[ $data['payment']['status'] ];
 			$order->add_order_note( sprintf( __( 'EBANX: The payment has been updated to: %s.', 'woocommerce-gateway-ebanx' ), $payment_status ) );
 			$order->update_status( $new_status );
