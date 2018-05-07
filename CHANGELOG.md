@@ -1,5 +1,9 @@
 # CHANGELOG
 
+# 1.31.0
+* Feature - Use Benjamin to decide if a gateway should be visible on checkout [#675](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/675)
+* Fix - Complete payment status of downloadable products no longer overriden [#677](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/677)
+
 # 1.30.0
 * Feature - Force document on Argentina to have 11 digits [#670](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/670)
 * Fix - Corrected bug that made some thank you pages to render html tags as texts [#671](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/671)
