@@ -130,7 +130,7 @@ class WC_EBANX_Safetypay_Gateway extends WC_EBANX_Redirect_Gateway {
 			throw new Exception( 'INVALID-SAFETYPAY-TYPE' );
 		}
 
-		$data = WC_EBANX_Payment_Adapter::transform( $order, $this->configs, $this->names );
+		$data = WC_EBANX_Payment_Adapter::transform( $order, $this->configs, $this->names, $this->id );
 
 		$safetypay_gateway   = 'safetypay' . WC_EBANX_Request::read( 'safetypay' );
 		$this->ebanx_gateway = $this->ebanx->{$safetypay_gateway}();

@@ -232,7 +232,7 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_New_Gateway {
 			throw new Exception( 'MISSING-DEVICE-FINGERPRINT' );
 		}
 
-		return WC_EBANX_Payment_Adapter::transform_card( $order, $this->configs, $this->names );
+		return WC_EBANX_Payment_Adapter::transform_card( $order, $this->configs, $this->names, $this->id );
 	}
 
 
