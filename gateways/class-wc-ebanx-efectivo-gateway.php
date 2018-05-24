@@ -131,7 +131,7 @@ class WC_EBANX_Efectivo_Gateway extends WC_EBANX_New_Gateway {
 			throw new Exception( 'MISSING-VOUCHER' );
 		}
 
-		$data = WC_EBANX_Payment_Adapter::transform( $order, $this->configs, $this->names );
+		$data = WC_EBANX_Payment_Adapter::transform( $order, $this->configs, $this->names, $this->id );
 
 		$data->person->documentType = WC_EBANX_Request::read( $this->names['ebanx_billing_argentina_document_type'], null );
 

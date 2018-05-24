@@ -247,7 +247,7 @@ class WC_EBANX_New_Gateway extends WC_EBANX_Gateway {
 	 * @throws Exception Throws parameter missing exception.
 	 */
 	protected function transform_payment_data( $order ) {
-		return WC_EBANX_Payment_Adapter::transform( $order, $this->configs, $this->names );
+		return WC_EBANX_Payment_Adapter::transform( $order, $this->configs, $this->names, $this->id );
 	}
 
 	/**

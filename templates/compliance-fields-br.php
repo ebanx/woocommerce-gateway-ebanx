@@ -11,6 +11,10 @@ if ( $order_id ) {
 			'label' => 'CPF',
 			'value' => $document,
 		),
+		'billing_phone'                 => array(
+			'label' => 'Telephone',
+			'value' => $address['phone'],
+		),
 		'billing_postcode'              => array(
 			'label' => 'Postcode / ZIP',
 			'value' => $address['postcode'],
