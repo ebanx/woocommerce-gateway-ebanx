@@ -1,5 +1,8 @@
 # CHANGELOG
 
+# 1.31.1
+* Fix - Gather compliance data differently for payment by link [#678](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/678)
+
 # 1.31.0
 * Feature - Use Benjamin to decide if a gateway should be visible on checkout [#675](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/675)
 * Fix - Complete payment status of downloadable products no longer overriden [#677](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/677)
