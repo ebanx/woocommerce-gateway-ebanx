@@ -105,7 +105,7 @@ class WC_EBANX_Efectivo_Gateway extends WC_EBANX_New_Gateway {
 				'url_basic'      => $efectivo_basic,
 				'url_pdf'        => $efectivo_pdf,
 				'url_print'      => $efectivo_print,
-				'url_iframe'     => get_site_url() . '/?ebanx=order-received&hash=' . $efectivo_hash . '&payment_type=efectivo',
+				'url_iframe'     => get_site_url() . '/?ebanx=order-received&hash=' . $efectivo_hash,
 				'customer_email' => $customer_email,
 			),
 			'order_status' => $order->get_status(),

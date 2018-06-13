@@ -108,7 +108,7 @@ class WC_EBANX_Oxxo_Gateway extends WC_EBANX_New_Gateway {
 				'url_basic'      => $oxxo_basic,
 				'url_pdf'        => $oxxo_pdf,
 				'url_print'      => $oxxo_print,
-				'url_iframe'     => get_site_url() . '/?ebanx=order-received&hash=' . $oxxo_hash . '&payment_type=oxxo',
+				'url_iframe'     => get_site_url() . '/?ebanx=order-received&hash=' . $oxxo_hash,
 				'customer_email' => $customer_email,
 				'customer_name'  => $customer_name,
 				'due_date'       => $oxxo_due_date,
