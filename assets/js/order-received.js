@@ -42,7 +42,7 @@ jQuery(document).ready(function ($) {
       resizeIframe();
     });
 
-    iframe.contentWindow.addEventListener('resize', function () {
+    iframe.contents().addEventListener('resize', function () {
       resizeIframe();
     });
   }
