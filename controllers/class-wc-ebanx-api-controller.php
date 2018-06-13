@@ -135,60 +135,12 @@ class WC_EBANX_Api_Controller {
 	 * Gets the banking ticket HTML by cUrl with url fopen fallback
 	 *
 	 * @param string $hash
-	 * @param string $payment_type
 	 *
 	 * @return void
 	 */
-	public function order_received( $hash, $payment_type ) {
-		$url = $this->get_url( $hash, $payment_type );
+	public function order_received( $hash ) {
+		$ebanx = ( new WC_EBANX_Api( $this->config ) )->ebanx();
 
-		if ( ! in_array( 'curl', get_loaded_extensions() ) ) {
-			echo file_get_contents( $url ); // phpcs:ignore WordPress.XSS.EscapeOutput
-			return;
-		}
-
-		$curl = curl_init( $url );
-		curl_setopt( $curl, CURLOPT_RETURNTRANSFER, true );
-		$html = curl_exec( $curl );
-
-		if ( curl_error( $curl ) ) {
-			return;
-		}
-
-		curl_close( $curl );
-		echo $html; // phpcs:ignore WordPress.XSS.EscapeOutput
-	}
-
-	/**
-	 *
-	 * @param string $hash
-	 * @param string $payment_type
-	 * @return string
-	 */
-	private function get_url( $hash, $payment_type ) {
-		$is_sandbox = $this->config->get_setting_or_default( 'sandbox_mode_enabled', 'yes' ) === 'yes';
-
-		$subdomain = $is_sandbox ? 'sandbox' : 'print';
-		$url       = "https://{$subdomain}.ebanx.com/";
-
-		if ( 'cip' !== $payment_type ) {
-			$url .= 'print/';
-		}
-
-		if ( 'efectivo' === $payment_type ) {
-			$url .= 'voucher/';
-		}
-
-		if ( null !== $payment_type && 'boleto' !== $payment_type && 'efectivo' !== $payment_type ) {
-			$url .= "{$payment_type}/";
-		}
-
-		$url .= "?hash={$hash}";
-
-		if ( 'baloto' !== $payment_type ) {
-			$url .= '&format=basic#';
-		}
-
-		return $url;
+		echo $ebanx->getTicketHtml( $hash ); // phpcs:ignore WordPress.XSS.EscapeOutput
 	}
 }

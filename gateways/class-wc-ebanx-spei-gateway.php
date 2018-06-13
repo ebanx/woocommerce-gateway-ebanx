@@ -101,13 +101,14 @@ class WC_EBANX_Spei_Gateway extends WC_EBANX_New_Gateway {
 		$customer_email = get_post_meta( $order->id, '_ebanx_payment_customer_email', true );
 		$customer_name  = $order->billing_first_name;
 		$spei_due_date  = get_post_meta( $order->id, '_payment_due_date', true );
+		$spei_hash = get_post_meta( $order->id, '_ebanx_payment_hash', true );
 
-		$data = array(
+		$data       = array(
 			'data'         => array(
 				'url_basic'      => $spei_basic,
 				'url_pdf'        => $spei_pdf,
 				'url_print'      => $spei_print,
-				'url_iframe'     => $spei_url,
+				'url_iframe'     => get_site_url() . '/?ebanx=order-received&hash=' . $spei_hash,
 				'customer_email' => $customer_email,
 				'customer_name'  => $customer_name,
 				'due_date'       => $spei_due_date,

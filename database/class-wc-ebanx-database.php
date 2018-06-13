@@ -43,7 +43,7 @@ class WC_EBANX_Database {
 		$sql = "CREATE TABLE $table_name (
 			id int NOT NULL AUTO_INCREMENT,
 			time datetime NOT NULL,
-			integration_key DEFAULT NULL, 
+			integration_key varchar(150) DEFAULT NULL,
 			event varchar(150) NOT NULL,
 			log blob NOT NULL,
 			UNIQUE KEY id (id)

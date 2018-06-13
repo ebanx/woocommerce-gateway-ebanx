@@ -105,7 +105,7 @@ class WC_EBANX_Baloto_Gateway extends WC_EBANX_New_Gateway {
 				'url_basic'      => $baloto_basic,
 				'url_pdf'        => $baloto_pdf,
 				'url_print'      => $baloto_print,
-				'url_iframe'     => get_site_url() . '/?ebanx=order-received&hash=' . $baloto_hash . '&payment_type=baloto',
+				'url_iframe'     => get_site_url() . '/?ebanx=order-received&hash=' . $baloto_hash,
 				'customer_email' => $customer_email,
 			),
 			'order_status' => $order->get_status(),

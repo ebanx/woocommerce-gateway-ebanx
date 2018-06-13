@@ -154,7 +154,7 @@ class WC_EBANX_Banking_Ticket_Gateway extends WC_EBANX_New_Gateway {
 				'url_pdf'        => $boleto_pdf,
 				'url_print'      => $boleto_print,
 				'url_mobile'     => $boleto_mobile,
-				'url_iframe'     => get_site_url() . '/?ebanx=order-received&hash=' . $boleto_hash . '&payment_type=boleto',
+				'url_iframe'     => get_site_url() . '/?ebanx=order-received&hash=' . $boleto_hash,
 				'customer_email' => $customer_email,
 				'customer_name'  => $customer_name,
 				'due_date'       => $boleto_due_date,
