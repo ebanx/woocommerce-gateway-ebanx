@@ -1,5 +1,9 @@
 # CHANGELOG
 
+# 1.31.2
+* Fix - Log table creation [#679](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/679)
+* Fix - Fix iframe voucher resize on thank you page [#680](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/680)
+
 # 1.31.1
 * Fix - Gather compliance data differently for payment by link [#678](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/678)
 
