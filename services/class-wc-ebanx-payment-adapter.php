@@ -78,6 +78,8 @@ class WC_EBANX_Payment_Adapter {
 			]
 		);
 
+		$payment->manualReview = 'yes' === $configs->settings['manual_review_enabled']; // phpcs:ignore WordPress.NamingConventions.ValidVariableName
+
 		return $payment;
 	}
 
