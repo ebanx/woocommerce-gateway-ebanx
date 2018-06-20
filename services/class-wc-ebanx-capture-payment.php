@@ -87,8 +87,7 @@ class WC_EBANX_Capture_Payment {
 		$order   = new WC_Order( $order_id );
 		$payment_hash = get_post_meta( $order_id, '_ebanx_payment_hash', true );
 		$ebanx        = ( new WC_EBANX_Api( $configs ) )->ebanx();
-		$payment_data = $ebanx->paymentInfo()->findByHash($payment_hash);
-
+		$payment_data = $ebanx->paymentInfo()->findByHash( $payment_hash );
 
 		if ( ! current_user_can( 'administrator' )
 			|| ! $payment_data['payment']['capture_available']
