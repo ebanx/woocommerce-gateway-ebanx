@@ -303,9 +303,9 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway {
 			),
 			'manual_review_enabled'           => array(
 				'type'        => 'checkbox',
-				'title'       => __( 'Enable Manual Review', 'woocommerce-gateway-ebanx' ),
-				'label'       => __( 'Makes it so every card payment to be manually analised by EBANX ', 'woocommerce-gateway-ebanx' ),
-				'description' => __( 'EBANX will approve or not each payment manually according to our risk policy to try and reduce the number of chargebacks', 'woocommerce-gateway-ebanx' ),
+				'title'       => __( 'Manual Transactions’ Review', 'woocommerce-gateway-ebanx' ),
+				'label'       => __( 'Manual analysis of each credit card transaction by EBANX.', 'woocommerce-gateway-ebanx' ),
+				'description' => __( 'Enabling Manual Review all your transactions will be analyzed manually by EBANX who will approve it or not. The decision will be made according to our risk policy, trying to reduce the number of chargebacks.', 'woocommerce-gateway-ebanx' ),
 				'desc_tip'    => true,
 				'class'       => 'ebanx-payments-option manual-review-checkbox',
 			),

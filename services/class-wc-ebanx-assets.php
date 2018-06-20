@@ -71,7 +71,7 @@ SVG;
 	 */
 	private static function render_manual_review_alert() {
 		self::render_script( 'manual-reviews-options', array( 'jquery' ) );
-		self::localize_script( 'manual-reviews-options', array( 'confirm_message' => __( 'You need to validate this change with EBANX, only deselecting or selecting the box will not set this to your customer. Contact your EBANX Account Manager or Business Development Expert.', 'woocommerce-gateway-ebanx' ) ) );
+		self::localize_script( 'manual-reviews-options', array( 'confirm_message' => __( 'You have to validate the Manual Review with your EBANX’s contact, if you don’t do this an error message (BP-DR-116) will appear to your customer. Just selecting or deselecting this option will not change the approval process of your transactions.', 'woocommerce-gateway-ebanx' ) ) );
 	}
 
 	/**
