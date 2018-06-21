@@ -85,17 +85,17 @@ class WC_EBANX_Capture_Payment {
 	public static function capture_payment( $order_id ) {
 		$configs = new WC_EBANX_Global_Gateway();
 		$order   = new WC_Order( $order_id );
+		$payment_hash = get_post_meta( $order_id, '_ebanx_payment_hash', true );
+		$ebanx        = ( new WC_EBANX_Api( $configs ) )->ebanx();
+		$payment_data = $ebanx->paymentInfo()->findByHash( $payment_hash );
 
 		if ( ! current_user_can( 'administrator' )
-			|| $order->get_status() !== 'on-hold'
-			|| strpos( $order->get_payment_method(), 'ebanx-credit-card' ) !== 0
+			|| ! $payment_data['payment']['capture_available']
 		) {
 			wp_redirect( get_site_url() );
 			return;
 		}
 
-		$payment_hash = get_post_meta( $order_id, '_ebanx_payment_hash', true );
-		$ebanx        = ( new WC_EBANX_Api( $configs ) )->ebanx();
 		$response     = $ebanx->creditCard()->captureByHash( $payment_hash );
 		$error        = static::check_capture_errors( $response );
 

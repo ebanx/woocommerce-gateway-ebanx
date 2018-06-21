@@ -62,6 +62,7 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway {
 		'due_date_days'                   => '3',
 		'brazil_taxes_options'            => 'cpf',
 		'interest_rates_enabled'          => 'no',
+		'manual_review_enabled'           => 'no',
 		'show_local_amount'               => 'yes',
 		'add_iof_to_local_amount_enabled' => 'yes',
 		'show_exchange_rate'              => 'no',
@@ -299,6 +300,14 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway {
 				'description' => __( 'Automatically capture payments from your customers, just for credit card. Otherwise you will need to capture the payment going to: WooCommerce -> Orders. Not captured payments will be cancelled in 4 days.', 'woocommerce-gateway-ebanx' ),
 				'desc_tip'    => true,
 				'class'       => 'ebanx-payments-option',
+			),
+			'manual_review_enabled'           => array(
+				'type'        => 'checkbox',
+				'title'       => __( 'Manual Transactions’ Review', 'woocommerce-gateway-ebanx' ),
+				'label'       => __( 'Manual analysis of each credit card transaction by EBANX.', 'woocommerce-gateway-ebanx' ),
+				'description' => __( 'Enabling Manual Review all your transactions will be analyzed manually by EBANX who will approve it or not. The decision will be made according to our risk policy, trying to reduce the number of chargebacks.', 'woocommerce-gateway-ebanx' ),
+				'desc_tip'    => true,
+				'class'       => 'ebanx-payments-option manual-review-checkbox',
 			),
 			'credit_card_instalments'   => array(
 				'title'       => __( 'Maximum nº of Instalments', 'woocommerce-gateway-ebanx' ),
