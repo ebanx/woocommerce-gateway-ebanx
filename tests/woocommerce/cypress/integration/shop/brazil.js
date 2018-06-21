@@ -5,7 +5,8 @@ import Faker from 'faker';
 import defaults from '../../../../defaults';
 import { assertUrlStatus, wrapOrderAssertations } from '../../../../utils';
 import Woocommerce from '../../../lib/operator';
-import Pay from "../../../../pay/lib/operator";
+import Pay from '../../../../pay/lib/operator';
+import Admin from '../../../lib/admin/operator';
 
 Faker.locale = 'pt_BR';
 
@@ -27,14 +28,16 @@ const mock = (data) => (R.merge(
   }
 ));
 
-let woocommerce;
 let pay;
+let admin;
+let woocommerce;
 
 describe('Woocommerce', () => {
   before(() => {
     assertUrlStatus(Cypress.env('DEMO_URL'));
 
     pay = new Pay(cy);
+    admin = new Admin(cy);
     woocommerce = new Woocommerce(cy);
   });
 
@@ -75,6 +78,56 @@ describe('Woocommerce', () => {
               wrapOrderAssertations(payment, checkoutPayment);
 
               woocommerce.buyWonderWomansPurseByOneClick(mockData.card.cvv);
+            });
+          });
+      });
+
+      it('can buy with manual review option', () => {
+        admin.login();
+
+        cy
+          .visit(`${Cypress.env('DEMO_URL')}/wp-admin/admin.php?page=wc-settings&tab=checkout&section=ebanx-global`)
+          .get('#woocommerce_ebanx-global_payments_options_title', { timeout: 30000 })
+          .should('be.visible')
+          .click()
+          .get('.ebanx-payments-option.manual-review-checkbox', { timeout: 5000 })
+          .should('be.visible')
+          .click()
+          .get('#mainform > p.submit > button', { timeout: 5000 })
+          .should('be.visible')
+          .click();
+
+        const mockData = {
+          paymentMethod: defaults.pay.api.DEFAULT_VALUES.paymentMethods.br.creditcard.id,
+          instalments: '1',
+          card: {
+            number: defaults._globals.cardsWhitelist.mastercard,
+            expiryDate: '12/22',
+            cvv: '123',
+          },
+        };
+
+        woocommerce
+          .buyWonderWomansPurseWithCreditCardToPersonal(mock(mockData), (resp) => {
+            pay.queryPayment(resp.hash, Cypress.env('DEMO_INTEGRATION_KEY'), (payment) => {
+              const checkoutPayment = Pay.paymentData({
+                amount_ext: (Cypress.env('JEANS_PRICE')).toFixed(2),
+                payment_type_code: 'mastercard',
+                instalments: '1',
+                status: 'PE',
+                capture_available: false,
+              });
+
+              wrapOrderAssertations(payment, checkoutPayment);
+
+              cy
+                .visit(`${Cypress.env('DEMO_URL')}/wp-admin/admin.php?page=wc-settings&tab=checkout&section=ebanx-global`)
+                .get('.ebanx-payments-option.manual-review-checkbox', { timeout: 5000 })
+                .should('be.visible')
+                .click()
+                .get('#mainform > p.submit > button', { timeout: 5000 })
+                .should('be.visible')
+                .click();
             });
           });
       });

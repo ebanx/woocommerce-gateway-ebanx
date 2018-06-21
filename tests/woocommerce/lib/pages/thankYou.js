@@ -48,7 +48,7 @@ export default class ThankYou {
   stillOnCreditCard(instalmentNumber, next) {
     this[stillOn](/(Crédito)/);
 
-    if(typeof instalmentNumber !== 'undefined') {
+    if(typeof instalmentNumber !== 'undefined' && instalmentNumber > 1) {
       this.cy
         .get('#ebanx-instalment-number', {timeout: 15000})
         .contains(instalmentNumber);
