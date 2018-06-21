@@ -13,14 +13,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 ?>
 
 <div class="ebanx-thank-you-page ebanx-thank-you-page--br ebanx-thank-you-page--cc-br">
-	<strong>ANALISANDO...</strong>
-	<?php if ( $instalments_number > 1 ) : ?>
-		<p><strong><?php echo esc_html( $customer_name ); ?> seu pagamento de <?php echo $total; // phpcs:ignore WordPress.XSS.EscapeOutput ?>, parcelado em <span id="ebanx-instalment-number"><?php echo esc_html( $instalments_number ); ?></span>x de <?php echo $instalments_amount; // phpcs:ignore WordPress.XSS.EscapeOutput ?>, foi aprovado o/</strong></p>
-	<?php else : ?>
-		<p><strong><?php echo esc_html( $customer_name ); ?> seu pagamento de <?php echo $total; // phpcs:ignore WordPress.XSS.EscapeOutput ?>, à vista, foi aprovado o/</strong></p>
-	<?php endif ?>
+	<p><strong><?php echo esc_html( $customer_name ); ?>, recebemos o seu pedido e estamos analisando a sua solicitação. :) </strong></p>
 
-	<p>Se tiver alguma dúvida em relação ao seu pagamento, acesse a Conta EBANX com o email <strong><?php echo esc_html( $customer_email ); ?></strong>.</p>
+	<p>Você deve receber um e-mail de confirmação em breve e se tiver qualquer dúvida em relação ao pagamento, é só acessar a Conta EBANX com o e-mail <strong><?php echo esc_html( $customer_email ); ?></strong>.</p>
 
 	<?php require WC_EBANX::get_templates_path() . 'apps-br.php'; ?>
 	<input type="hidden" id="ebanx-payment-hash" data-doraemon-hash="<?php echo esc_html( $hash ); ?>">
