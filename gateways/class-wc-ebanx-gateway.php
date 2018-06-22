@@ -13,9 +13,10 @@ add_action( 'wp_ajax_ebanx_update_converted_value', 'ebanx_update_converted_valu
  * to avoid WordPress hooks problem
  *
  * @return void
+ * @throws Exception Param not found.
  */
 function ebanx_update_converted_value() {
-	$gateway = new WC_EBANX_Gateway();
+	$gateway = new WC_EBANX_New_Gateway();
 
 	echo $gateway->checkout_rate_conversion( // phpcs:ignore WordPress.XSS.EscapeOutput
 		WC_EBANX_Request::read( 'currency' ),
