@@ -646,10 +646,6 @@ class WC_EBANX_New_Gateway extends WC_EBANX_Gateway {
 
 		switch ( $request_status ) {
 			case 'CO':
-				if ( method_exists( $order, 'get_payment_method' )
-					&& strpos( $order->get_payment_method(), 'ebanx-credit-card' ) === 0 ) {
-					return;
-				}
 				$order->payment_complete( $data['payment']['hash'] );
 				break;
 			case 'CA':
