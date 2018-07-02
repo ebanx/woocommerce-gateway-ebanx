@@ -649,7 +649,6 @@ class WC_EBANX_New_Gateway extends WC_EBANX_Gateway {
 				$order->payment_complete( $data['payment']['hash'] );
 				break;
 			case 'CA':
-				$order->payment_complete();
 				$new_status = 'failed';
 				break;
 			case 'PE':
