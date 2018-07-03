@@ -31,8 +31,12 @@ export default class Admin {
     this.pages.newOrder.placeWithPaymentByLink(country, next);
   }
 
+  notifyPayment(hash) {
+    this.cy.visit(`${Cypress.env('DEMO_URL')}/?operation=payment_status_change&notification_type=update&hash_codes=${hash}`);
+  }
+
   [visitNewOrderPage] () {
-    cy
+    this.cy
       .visit(`${Cypress.env('DEMO_URL')}/wp-admin/post-new.php?post_type=shop_order`)
       .get('.button.add-line-item', { timeout: 30000 })
       .should('be.visible')
