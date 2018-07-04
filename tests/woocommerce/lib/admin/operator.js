@@ -1,6 +1,8 @@
 /* global Cypress */
-import AddOrder from './pages/addOrder';
 import Order from './pages/Order';
+import AddOrder from './pages/addOrder';
+import EbanxSettings from './pages/ebanxSettings';
+import defaults from "../../../defaults";
 
 const visitNewOrderPage = Symbol('visitNewOrderPage');
 
@@ -8,8 +10,9 @@ export default class Admin {
   constructor(cy) {
     this.cy = cy;
     this.pages = {
-      newOrder: new AddOrder(cy),
       order: new Order(cy),
+      newOrder: new AddOrder(cy),
+      ebanxSettings: new EbanxSettings(cy),
     };
   }
 
@@ -25,6 +28,8 @@ export default class Admin {
       .get('#wp-submit')
       .should('be.visible')
       .click();
+
+    return this;
   }
 
   logout() {
@@ -35,6 +40,8 @@ export default class Admin {
       .get('.message')
       .should('be.visible')
       .contains('You are now logged out.');
+
+    return this;
   }
 
   buyJeans(country, next) {
@@ -45,10 +52,36 @@ export default class Admin {
 
   notifyPayment(hash) {
     this.cy.request('GET', `${Cypress.env('DEMO_URL')}/?operation=payment_status_change&notification_type=update&hash_codes=${hash}`);
+
+    return this;
+  }
+
+  toggleManualReviewOption() {
+    this.pages.ebanxSettings.togglePaymentOption('#woocommerce_ebanx-global_capture_enabled');
+
+    return this;
+  }
+
+  checkPaymentStatusOnPlatform(orderNumber, status) {
+    this.pages.order.paymentHasStatus(orderNumber, status);
+  }
+
+  toggleCaptureOption() {
+    this.pages.ebanxSettings.togglePaymentOption('#woocommerce_ebanx-global_capture_enabled');
+
+    return this;
   }
 
   captureCreditCardPayment(orderNumber) {
     this.pages.order.capturePayment(orderNumber);
+
+    return this;
+  }
+
+  captureCreditCardPaymentThroughAPI(hash) {
+    this.cy.request('GET', `${defaults.pay.api.url}/capture/?integration_key=${Cypress.env('DEMO_INTEGRATION_KEY')}&hash=${hash}`);
+
+    return this;
   }
 
   [visitNewOrderPage] () {

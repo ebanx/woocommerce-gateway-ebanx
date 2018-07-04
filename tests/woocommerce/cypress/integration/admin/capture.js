@@ -45,79 +45,35 @@ describe('Woocommerce', () => {
   context('Admin', () => {
     context('Capture', () => {
       it('can capture payment mannually', () => {
-        admin.login();
-
-        cy
-          .visit(`${Cypress.env('DEMO_URL')}/wp-admin/admin.php?page=wc-settings&tab=checkout&section=ebanx-global`)
-          .get('#woocommerce_ebanx-global_payments_options_title', { timeout: 30000 })
-          .should('be.visible')
-          .click()
-          .get('#woocommerce_ebanx-global_capture_enabled', { timeout: 5000 })
-          .should('be.visible')
-          .click()
-          .get('#mainform > p.submit > button', { timeout: 5000 })
-          .should('be.visible')
-          .click();
-
-        admin.logout();
+        admin
+          .login()
+          .toggleCaptureOption()
+          .logout();
 
         woocommerce.buyWonderWomansPurseWithCreditCardToPersonal(checkoutData, (resp) => {
-          admin.login();
-
-          admin.captureCreditCardPayment(resp.orderNumber);
+          admin
+            .login()
+            .captureCreditCardPayment(resp.orderNumber)
+            .toggleCaptureOption()
+            .logout();
         });
-
-        cy
-          .visit(`${Cypress.env('DEMO_URL')}/wp-admin/admin.php?page=wc-settings&tab=checkout&section=ebanx-global`)
-          .get('#woocommerce_ebanx-global_capture_enabled', { timeout: 5000 })
-          .should('be.visible')
-          .click()
-          .get('#mainform > p.submit > button', { timeout: 5000 })
-          .should('be.visible')
-          .click();
-
-        admin.logout();
       });
 
       it('can capture and notify through API', () => {
-        admin.login();
-
-        cy
-          .visit(`${Cypress.env('DEMO_URL')}/wp-admin/admin.php?page=wc-settings&tab=checkout&section=ebanx-global`)
-          .get('#woocommerce_ebanx-global_payments_options_title', { timeout: 30000 })
-          .should('be.visible')
-          .click()
-          .get('#woocommerce_ebanx-global_capture_enabled', { timeout: 5000 })
-          .should('be.visible')
-          .click()
-          .get('#mainform > p.submit > button', { timeout: 5000 })
-          .should('be.visible')
-          .click();
-
-        admin.logout();
+        admin
+          .login()
+          .toggleManualReviewOption()
+          .logout();
 
         woocommerce.buyWonderWomansPurseWithCreditCardToPersonal(checkoutData, (resp) => {
-          cy.request('GET', `${defaults.pay.api.url}/capture/?integration_key=${Cypress.env('DEMO_INTEGRATION_KEY')}&hash=${resp.hash}`);
-
-          admin.notifyPayment(resp.hash);
-
-          admin.login();
-          cy
-            .visit(`${Cypress.env('DEMO_URL')}/wp-admin/post.php?post=${resp.orderNumber}&action=edit`)
-            .get('#select2-order_status-container')
-            .should('contain', 'Processing');
+          admin
+            .captureCreditCardPaymentThroughAPI(resp.hash)
+            .notifyPayment(resp.hash)
+            .login()
+            .checkPaymentStatusOnPlatform(resp.orderNumber, 'Processing')
+            .toggleManualReviewOption()
+            .logout();
         });
-
-        cy
-          .visit(`${Cypress.env('DEMO_URL')}/wp-admin/admin.php?page=wc-settings&tab=checkout&section=ebanx-global`)
-          .get('#woocommerce_ebanx-global_capture_enabled', { timeout: 5000 })
-          .should('be.visible')
-          .click()
-          .get('#mainform > p.submit > button', { timeout: 5000 })
-          .should('be.visible')
-          .click();
-
-        admin.logout();
       });
     });
   });

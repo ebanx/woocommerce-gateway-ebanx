@@ -5,10 +5,9 @@ export default class Order {
   }
 
   capturePayment(orderNumber) {
+    this.paymentHasStatus(orderNumber, 'On hold');
+
     this.cy
-      .visit(`${Cypress.env('DEMO_URL')}/wp-admin/post.php?post=${orderNumber}&action=edit`)
-      .get('#select2-order_status-container')
-      .should('contain', 'On hold')
       .get('select[name="wc_order_action"]')
       .should('be.visible')
       .select('Capture payment on EBANX')
@@ -20,5 +19,12 @@ export default class Order {
     this.cy
       .get('div.notice:nth-child(4) > p:nth-child(1)', { timeout: 30000 })
       .should('contain', `Payment ${orderNumber} was captured successfully.`);
+  }
+
+  paymentHasStatus(orderNumber, status) {
+    this.cy
+      .visit(`${Cypress.env('DEMO_URL')}/wp-admin/post.php?post=${orderNumber}&action=edit`)
+      .get('#select2-order_status-container')
+      .should('contain', status);
   }
 }
