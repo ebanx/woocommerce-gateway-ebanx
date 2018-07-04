@@ -1,5 +1,5 @@
 /* global Cypress */
-import AddOrder from '../pages/addOrder';
+import AddOrder from './pages/addOrder';
 
 const visitNewOrderPage = Symbol('visitNewOrderPage');
 

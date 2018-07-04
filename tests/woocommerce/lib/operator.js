@@ -1,8 +1,9 @@
 import R from 'ramda';
-import Cart from './pages/cart';
-import Checkout from './pages/checkout';
-import ThankYou from './pages/thankYou';
-import WonderWomansPurse from './pages/wonderWomansPurse';
+import Cart from './shop/pages/cart';
+import OrderList from './shop/pages/orderList';
+import Checkout from './shop/pages/checkout';
+import ThankYou from './shop/pages/thankYou';
+import WonderWomansPurse from './shop/pages/wonderWomansPurse';
 import {tryNext} from '../../utils';
 
 const buyWonderWomansPurse = Symbol('buyWonderWomansPurse');
@@ -14,6 +15,7 @@ export default class Woocommerce {
       cart: new Cart(cy),
       checkout: new Checkout(cy),
       thankYou: new ThankYou(cy),
+      orderList: new OrderList(cy),
       wonderWomansPurse: new WonderWomansPurse(cy),
     };
   }
@@ -164,12 +166,14 @@ export default class Woocommerce {
     });
   }
 
-  buyWonderWomansPurseWithBoletoToPersonal(data) {
+  buyWonderWomansPurseWithBoletoToPersonal(data, next) {
     this[buyWonderWomansPurse]();
 
     this.pages.checkout.placeWithBoleto(data, () => {
       this.pages.thankYou
-        .stillOnBoleto();
+        .stillOnBoleto((resp) => {
+          tryNext(next, resp);
+        });
     });
   }
 
@@ -208,6 +212,12 @@ export default class Woocommerce {
 
     this.pages.thankYou
       .stillOnCreditCard();
+
+    return this;
+  }
+
+  cancelPayment(orderNumber) {
+    this.pages.orderList.cancelPayment(orderNumber);
 
     return this;
   }

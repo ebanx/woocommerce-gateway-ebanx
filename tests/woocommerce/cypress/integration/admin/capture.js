@@ -67,7 +67,7 @@ describe('Woocommerce', () => {
           cy
             .visit(`${Cypress.env('DEMO_URL')}/wp-admin/post.php?post=${resp.orderNumber}&action=edit`)
             .get('#select2-order_status-container')
-            .contains('On hold')
+            .should('contain', 'On hold')
             .get('select[name="wc_order_action"]')
             .should('be.visible')
             .select('Capture payment on EBANX')
@@ -117,7 +117,7 @@ describe('Woocommerce', () => {
           cy
             .visit(`${Cypress.env('DEMO_URL')}/wp-admin/post.php?post=${resp.orderNumber}&action=edit`)
             .get('#select2-order_status-container')
-            .contains('Processing');
+            .should('contain', 'Processing');
         });
 
         cy

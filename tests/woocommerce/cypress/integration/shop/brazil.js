@@ -44,11 +44,22 @@ describe('Woocommerce', () => {
   context('Brazil', () => {
     context('Boleto', () => {
       it('can buy `wonder womans purse` using boleto to personal', () => {
+        admin.login();
         woocommerce.buyWonderWomansPurseWithBoletoToPersonal(mock(
           {
             paymentMethod: defaults.pay.api.DEFAULT_VALUES.paymentMethods.br.boleto.id,
           }
-        ));
+        ), (resp) => {
+          woocommerce.cancelPayment(resp.orderNumber);
+
+          admin.notifyPayment(resp.hash); // @note: This is needed because pay can't notify localhost.
+
+          cy
+            .visit(`${Cypress.env('DEMO_URL')}/wp-admin/post.php?post=${resp.orderNumber}&action=edit`)
+            .get('#select2-order_status-container')
+            .should('contain', 'Cancelled');
+          admin.logout();
+        });
       });
     });
 

@@ -1,6 +1,6 @@
 /* global expect */
 
-import { tryNext } from '../../../utils';
+import { tryNext } from '../../../../utils';
 
 const stillOn = Symbol('stillOn');
 const extractHash = Symbol('extractHash');
@@ -36,13 +36,16 @@ export default class ThankYou {
     ;
   }
 
-  stillOnBoleto() {
+  stillOnBoleto(next) {
     this.cy
       .get('#ebanx-boleto-frame', { timeout: 15000 })
-      .should('be.visible')
-    ;
+      .should('be.visible');
 
-    return this;
+    this[extractHash]((hash) => {
+      this[extractOrderNumber]((orderNumber) => {
+        tryNext(next, { hash, orderNumber });
+      });
+    });
   }
 
   stillOnCreditCard(instalmentNumber, next) {
