@@ -2,7 +2,7 @@
 import Order from './pages/Order';
 import AddOrder from './pages/addOrder';
 import EbanxSettings from './pages/ebanxSettings';
-import defaults from "../../../defaults";
+import defaults from '../../../defaults';
 
 const visitNewOrderPage = Symbol('visitNewOrderPage');
 
@@ -80,6 +80,12 @@ export default class Admin {
 
   captureCreditCardPaymentThroughAPI(hash) {
     this.cy.request('GET', `${defaults.pay.api.url}/capture/?integration_key=${Cypress.env('DEMO_INTEGRATION_KEY')}&hash=${hash}`);
+
+    return this;
+  }
+
+  refundPayment(orderNumber) {
+    this.pages.order.refundOrder(orderNumber);
 
     return this;
   }

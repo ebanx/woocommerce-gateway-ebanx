@@ -1,4 +1,4 @@
-/* global Cypress, it, describe, before, context, cy, expect */
+/* global Cypress, it, describe, before, context, cy */
 
 import Faker from 'faker';
 
@@ -35,7 +35,7 @@ describe('Woocommerce', () => {
               });
 
               wrapOrderAssertations(payment, checkoutPayment);
-              });
+            });
           });
         });
       });

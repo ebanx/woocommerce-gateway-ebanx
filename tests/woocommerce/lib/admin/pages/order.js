@@ -1,4 +1,4 @@
-/* global Cypress */
+/* global Cypress, expect */
 export default class Order {
   constructor(cy) {
     this.cy = cy;
@@ -26,5 +26,26 @@ export default class Order {
       .visit(`${Cypress.env('DEMO_URL')}/wp-admin/post.php?post=${orderNumber}&action=edit`)
       .get('#select2-order_status-container')
       .should('contain', status);
+  }
+
+  refundOrder(orderNumber) {
+    this.cy
+      .visit(`${Cypress.env('DEMO_URL')}/wp-admin/post.php?post=${orderNumber}&action=edit`)
+      .get('.button.refund-items', { timeout: 30000 })
+      .should('be.visible')
+      .click()
+      .get('.refund_order_item_qty')
+      .should('be.visible')
+      .type('1')
+      .get('.button.button-primary.do-api-refund', { timeout: 5000 })
+      .should('be.visible')
+      .click()
+      .get('.blockUI.blockOverlay')
+      .should('be.not.visible', { timeout: 30000 })
+      .get('.order_notes')
+      .should('be.visible')
+      .then(($ul) => {
+        expect($ul.find('li').length).to.equal(3);
+      });
   }
 }
