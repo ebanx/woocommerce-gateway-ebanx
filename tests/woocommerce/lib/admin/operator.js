@@ -1,5 +1,5 @@
 /* global Cypress */
-import Order from './pages/Order';
+import Order from './pages/order';
 import AddOrder from './pages/addOrder';
 import EbanxSettings from './pages/ebanxSettings';
 import defaults from '../../../defaults';

@@ -3,7 +3,7 @@
 import Faker from 'faker';
 
 import Admin from '../../../lib/admin/operator';
-import Pay from "../../../../pay/lib/operator";
+import Pay from '../../../../pay/lib/operator';
 import { assertUrlStatus, wrapOrderAssertations } from '../../../../utils';
 
 Faker.locale = 'pt_BR';
