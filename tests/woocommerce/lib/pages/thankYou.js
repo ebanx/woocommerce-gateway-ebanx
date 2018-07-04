@@ -29,7 +29,7 @@ export default class ThankYou {
 
   [stillOn] (method) {
     this.cy
-      .get('.woocommerce-order-overview.woocommerce-thankyou-order-details.order_details', { timeout: 15000 })
+      .get('.woocommerce-order-overview.woocommerce-thankyou-order-details.order_details', { timeout: 30000 })
       .should('be.visible')
       .contains('.woocommerce-order-overview__payment-method.method', method)
       .should('be.visible')

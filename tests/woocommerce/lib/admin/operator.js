@@ -25,6 +25,16 @@ export default class Admin {
       .click();
   }
 
+  logout() {
+    this.cy
+      .visit(`${Cypress.env('DEMO_URL')}/wp-admin`)
+      .get('#wp-admin-bar-logout > a:nth-child(1)')
+      .click({ force: true })
+      .get('.message')
+      .should('be.visible')
+      .contains('You are now logged out.');
+  }
+
   buyJeans(country, next) {
     this[visitNewOrderPage]();
 
@@ -32,7 +42,7 @@ export default class Admin {
   }
 
   notifyPayment(hash) {
-    this.cy.visit(`${Cypress.env('DEMO_URL')}/?operation=payment_status_change&notification_type=update&hash_codes=${hash}`);
+    this.cy.request('GET', `${Cypress.env('DEMO_URL')}/?operation=payment_status_change&notification_type=update&hash_codes=${hash}`);
   }
 
   [visitNewOrderPage] () {

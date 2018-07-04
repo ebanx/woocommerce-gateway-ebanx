@@ -1,4 +1,3 @@
-/* global Cypress */
 import R from 'ramda';
 import Cart from './pages/cart';
 import Checkout from './pages/checkout';
