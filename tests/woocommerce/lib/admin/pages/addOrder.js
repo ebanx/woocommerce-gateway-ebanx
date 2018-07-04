@@ -5,7 +5,7 @@ const createPaymentByLink = Symbol('createPaymentByLink');
 
 export default class AddOrder {
   constructor(cy) {
-	this.cy = cy;
+    this.cy = cy;
   }
 
   placeWithPaymentByLink(country, next) {

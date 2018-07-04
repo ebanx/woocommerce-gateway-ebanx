@@ -1,5 +1,6 @@
 /* global Cypress */
 import AddOrder from './pages/addOrder';
+import Order from './pages/Order';
 
 const visitNewOrderPage = Symbol('visitNewOrderPage');
 
@@ -8,6 +9,7 @@ export default class Admin {
     this.cy = cy;
     this.pages = {
       newOrder: new AddOrder(cy),
+      order: new Order(cy),
     };
   }
 
@@ -43,6 +45,10 @@ export default class Admin {
 
   notifyPayment(hash) {
     this.cy.request('GET', `${Cypress.env('DEMO_URL')}/?operation=payment_status_change&notification_type=update&hash_codes=${hash}`);
+  }
+
+  captureCreditCardPayment(orderNumber) {
+    this.pages.order.capturePayment(orderNumber);
   }
 
   [visitNewOrderPage] () {
