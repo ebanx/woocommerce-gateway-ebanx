@@ -42,10 +42,8 @@ export default class Order {
       .click()
       .get('.blockUI.blockOverlay')
       .should('be.not.visible', { timeout: 30000 })
-      .get('.order_notes')
+      .get('li.note:nth-child(1) > div:nth-child(1) > p:nth-child(1)')
       .should('be.visible')
-      .then(($ul) => {
-        expect($ul.find('li').length).to.equal(3);
-      });
+      .should('contain', 'Order status changed from Processing to Refunded.');
   }
 }
