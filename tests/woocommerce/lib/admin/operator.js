@@ -64,6 +64,8 @@ export default class Admin {
 
   checkPaymentStatusOnPlatform(orderNumber, status) {
     this.pages.order.paymentHasStatus(orderNumber, status);
+
+    return this;
   }
 
   toggleCaptureOption() {
