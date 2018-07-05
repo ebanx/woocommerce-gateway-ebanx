@@ -38,7 +38,7 @@ describe('Woocommerce', () => {
             email: Faker.internet.email(),
             document: '278.517.215-98',
             paymentMethod: defaults.pay.api.DEFAULT_VALUES.paymentMethods.br.creditcard.id,
-            instalments: '3',
+            instalments: '1',
             card: {
               number: defaults._globals.cardsWhitelist.mastercard,
               expiryDate: '12/22',
