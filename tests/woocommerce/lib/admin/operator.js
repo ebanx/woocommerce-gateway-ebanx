@@ -1,57 +1,44 @@
 /* global Cypress */
 import Order from './pages/order';
+import Login from './pages/login';
+import Capture from './pages/capture';
 import AddOrder from './pages/addOrder';
+import Notification from './pages/notification';
 import EbanxSettings from './pages/ebanxSettings';
-import defaults from '../../../defaults';
-
-const visitNewOrderPage = Symbol('visitNewOrderPage');
 
 export default class Admin {
   constructor(cy) {
     this.cy = cy;
     this.pages = {
       order: new Order(cy),
+      login: new Login(cy),
+      capture: new Capture(cy),
       newOrder: new AddOrder(cy),
+      notification: new Notification(cy),
       ebanxSettings: new EbanxSettings(cy),
     };
   }
 
   login() {
-    this.cy
-      .visit(`${Cypress.env('DEMO_URL')}/wp-admin`)
-      .get('#user_login', { timeout: 30000 })
-      .should('be.visible')
-      .type(Cypress.env('ADMIN_USER'))
-      .get('#user_pass')
-      .should('be.visible')
-      .type(Cypress.env('ADMIN_PASSWORD'))
-      .get('#wp-submit')
-      .should('be.visible')
-      .click();
+    this.pages.login.login();
 
     return this;
   }
 
   logout() {
-    this.cy
-      .visit(`${Cypress.env('DEMO_URL')}/wp-admin`)
-      .get('#wp-admin-bar-logout > a:nth-child(1)')
-      .click({ force: true })
-      .get('.message')
-      .should('be.visible')
-      .contains('You are now logged out.');
+    this.pages.login.logout();
 
     return this;
   }
 
   buyJeans(country, next) {
-    this[visitNewOrderPage]();
+    this.pages.newOrder.visit();
 
     this.pages.newOrder.placeWithPaymentByLink(country, next);
   }
 
   notifyPayment(hash) {
-    this.cy.request('GET', `${Cypress.env('DEMO_URL')}/?operation=payment_status_change&notification_type=update&hash_codes=${hash}`);
+    this.pages.notification.send(hash);
 
     return this;
   }
@@ -81,7 +68,7 @@ export default class Admin {
   }
 
   captureCreditCardPaymentThroughAPI(hash) {
-    this.cy.request('GET', `${defaults.pay.api.url}/capture/?integration_key=${Cypress.env('DEMO_INTEGRATION_KEY')}&hash=${hash}`);
+    this.pages.capture.request(hash);
 
     return this;
   }
@@ -90,13 +77,5 @@ export default class Admin {
     this.pages.order.refundOrder(orderNumber);
 
     return this;
-  }
-
-  [visitNewOrderPage] () {
-    this.cy
-      .visit(`${Cypress.env('DEMO_URL')}/wp-admin/post-new.php?post_type=shop_order`)
-      .get('.button.add-line-item', { timeout: 30000 })
-      .should('be.visible')
-      .click();
   }
 }

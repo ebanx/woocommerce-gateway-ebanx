@@ -1,4 +1,6 @@
-/* global Cypress, expect */
+/* global Cypress */
+const visit = Symbol('visit');
+
 export default class Order {
   constructor(cy) {
     this.cy = cy;
@@ -22,15 +24,17 @@ export default class Order {
   }
 
   paymentHasStatus(orderNumber, status) {
+    this[visit](orderNumber);
+
     this.cy
-      .visit(`${Cypress.env('DEMO_URL')}/wp-admin/post.php?post=${orderNumber}&action=edit`)
       .get('#select2-order_status-container')
       .should('contain', status);
   }
 
   refundOrder(orderNumber) {
+    this[visit](orderNumber);
+
     this.cy
-      .visit(`${Cypress.env('DEMO_URL')}/wp-admin/post.php?post=${orderNumber}&action=edit`)
       .get('.button.refund-items', { timeout: 30000 })
       .should('be.visible')
       .click()
@@ -45,5 +49,10 @@ export default class Order {
       .get('li.note:nth-child(1) > div:nth-child(1) > p:nth-child(1)')
       .should('be.visible')
       .should('contain', 'Order status changed from Processing to Refunded.');
+  }
+
+  [visit](orderNumber) {
+    this.cy
+      .visit(`${Cypress.env('DEMO_URL')}/wp-admin/post.php?post=${orderNumber}&action=edit`);
   }
 }

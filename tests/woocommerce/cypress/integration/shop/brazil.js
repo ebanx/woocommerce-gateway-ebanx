@@ -94,19 +94,9 @@ describe('Woocommerce', () => {
       });
 
       it('can buy with manual review option', () => {
-        admin.login();
-
-        cy
-          .visit(`${Cypress.env('DEMO_URL')}/wp-admin/admin.php?page=wc-settings&tab=checkout&section=ebanx-global`)
-          .get('#woocommerce_ebanx-global_payments_options_title', { timeout: 30000 })
-          .should('be.visible')
-          .click()
-          .get('.ebanx-payments-option.manual-review-checkbox', { timeout: 5000 })
-          .should('be.visible')
-          .click()
-          .get('#mainform > p.submit > button', { timeout: 5000 })
-          .should('be.visible')
-          .click();
+        admin
+          .login()
+          .toggleManualReviewOption();
 
         const mockData = {
           paymentMethod: defaults.pay.api.DEFAULT_VALUES.paymentMethods.br.creditcard.id,
@@ -131,14 +121,9 @@ describe('Woocommerce', () => {
 
               wrapOrderAssertations(payment, checkoutPayment);
 
-              cy
-                .visit(`${Cypress.env('DEMO_URL')}/wp-admin/admin.php?page=wc-settings&tab=checkout&section=ebanx-global`)
-                .get('.ebanx-payments-option.manual-review-checkbox', { timeout: 5000 })
-                .should('be.visible')
-                .click()
-                .get('#mainform > p.submit > button', { timeout: 5000 })
-                .should('be.visible')
-                .click();
+              admin
+                .toggleManualReviewOption()
+                .logout();
             });
           });
       });
