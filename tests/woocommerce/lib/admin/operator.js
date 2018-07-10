@@ -44,7 +44,9 @@ export default class Admin {
   }
 
   toggleManualReviewOption() {
-    this.pages.ebanxSettings.togglePaymentOption('#woocommerce_ebanx-global_capture_enabled');
+    this.pages.ebanxSettings
+      .visit()
+      .toggleManualReviewOption();
 
     return this;
   }
@@ -56,7 +58,9 @@ export default class Admin {
   }
 
   toggleCaptureOption() {
-    this.pages.ebanxSettings.togglePaymentOption('#woocommerce_ebanx-global_capture_enabled');
+    this.pages.ebanxSettings
+      .visit()
+      .toggleCaptureOption();
 
     return this;
   }

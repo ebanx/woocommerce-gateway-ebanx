@@ -43,7 +43,7 @@ describe('Woocommerce', () => {
 
   context('Brazil', () => {
     context('Boleto', () => {
-      it('can buy `wonder womans purse` using boleto to personal', () => {
+      it('can buy `wonder womans purse` using boleto to personal, cancel it and notify', () => {
         admin.login();
         woocommerce.buyWonderWomansPurseWithBoletoToPersonal(mock(
           {
@@ -52,13 +52,9 @@ describe('Woocommerce', () => {
         ), (resp) => {
           woocommerce.cancelPayment(resp.orderNumber);
 
-          admin.notifyPayment(resp.hash); // @note: This is needed because pay can't notify localhost.
-
-          cy
-            .visit(`${Cypress.env('DEMO_URL')}/wp-admin/post.php?post=${resp.orderNumber}&action=edit`)
-            .get('#select2-order_status-container')
-            .should('contain', 'Cancelled');
-          admin.logout();
+          admin.notifyPayment(resp.hash) // @note: This is needed because pay can't notify localhost.
+            .paymentHasStatus(resp.orderNumber, 'Cancelled');
+          cy.clearCookies();
         });
       });
     });
@@ -98,6 +94,8 @@ describe('Woocommerce', () => {
           .login()
           .toggleManualReviewOption();
 
+        cy.clearCookies();
+
         const mockData = {
           paymentMethod: defaults.pay.api.DEFAULT_VALUES.paymentMethods.br.creditcard.id,
           instalments: '1',
@@ -122,8 +120,10 @@ describe('Woocommerce', () => {
               wrapOrderAssertations(payment, checkoutPayment);
 
               admin
-                .toggleManualReviewOption()
-                .logout();
+                .login()
+                .toggleManualReviewOption();
+
+              cy.clearCookies();
             });
           });
       });

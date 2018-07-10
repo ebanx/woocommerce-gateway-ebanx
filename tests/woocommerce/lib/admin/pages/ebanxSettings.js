@@ -1,14 +1,32 @@
 /* global Cypress */
 
+const togglePaymentOption = Symbol('togglePaymentOption');
+
 export default class EbanxSettings {
   constructor(cy) {
     this.cy = cy;
   }
 
-  togglePaymentOption(elm) {
+  toggleManualReviewOption() {
+    this[togglePaymentOption]('#woocommerce_ebanx-global_manual_review_enabled');
+
+    return this;
+  }
+
+  toggleCaptureOption() {
+    this[togglePaymentOption]('#woocommerce_ebanx-global_capture_enabled');
+
+    return this;
+  }
+
+  visit() {
     this.cy
       .visit(`${Cypress.env('DEMO_URL')}/wp-admin/admin.php?page=wc-settings&tab=checkout&section=ebanx-global`);
 
+    return this;
+  }
+
+  [togglePaymentOption](elm) {
     this.cy
       .get('body')
       .then(($body) => {
