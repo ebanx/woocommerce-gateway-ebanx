@@ -53,7 +53,7 @@ describe('Woocommerce', () => {
           woocommerce.cancelPayment(resp.orderNumber);
 
           admin.notifyPayment(resp.hash) // @note: This is needed because pay can't notify localhost.
-            .paymentHasStatus(resp.orderNumber, 'Cancelled');
+            .checkPaymentStatusOnPlatform(resp.orderNumber, 'Cancelled');
           cy.clearCookies();
         });
       });
