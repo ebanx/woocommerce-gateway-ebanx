@@ -62,7 +62,7 @@ describe('Woocommerce', () => {
       it('can capture and notify through API', () => {
         admin
           .login()
-          .toggleManualReviewOption()
+          .toggleCaptureOption()
           .logout();
 
         woocommerce.buyWonderWomansPurseWithCreditCardToPersonal(checkoutData, (resp) => {
@@ -71,7 +71,7 @@ describe('Woocommerce', () => {
             .notifyPayment(resp.hash)
             .login()
             .checkPaymentStatusOnPlatform(resp.orderNumber, 'Processing')
-            .toggleManualReviewOption()
+            .toggleCaptureOption()
             .logout();
         });
       });
