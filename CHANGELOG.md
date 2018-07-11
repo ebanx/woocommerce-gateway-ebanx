@@ -1,5 +1,8 @@
 # CHANGELOG
 
+# 1.31.3
+* Fix - Credit card tokenization compatibility issue with jQuery [#683](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/683)
+
 # 1.31.2
 * Fix - Log table creation [#679](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/679)
 * Fix - Fix iframe voucher resize on thank you page [#680](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/680)
