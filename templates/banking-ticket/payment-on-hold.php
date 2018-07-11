@@ -59,4 +59,5 @@ if ( ! defined( 'ABSPATH' ) ) {
 	</script>
 
 	<?php require WC_EBANX::get_templates_path() . 'apps-br.php'; ?>
+	<input type="hidden" id="ebanx-payment-hash" data-doraemon-hash="<?php echo esc_html( $hash ); ?>">
 </div>

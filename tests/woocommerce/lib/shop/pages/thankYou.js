@@ -1,6 +1,6 @@
 /* global expect */
 
-import { tryNext } from '../../../utils';
+import { tryNext } from '../../../../utils';
 
 const stillOn = Symbol('stillOn');
 const extractHash = Symbol('extractHash');
@@ -29,20 +29,23 @@ export default class ThankYou {
 
   [stillOn] (method) {
     this.cy
-      .get('.woocommerce-order-overview.woocommerce-thankyou-order-details.order_details', { timeout: 15000 })
+      .get('.woocommerce-order-overview.woocommerce-thankyou-order-details.order_details', { timeout: 30000 })
       .should('be.visible')
       .contains('.woocommerce-order-overview__payment-method.method', method)
       .should('be.visible')
     ;
   }
 
-  stillOnBoleto() {
+  stillOnBoleto(next) {
     this.cy
       .get('#ebanx-boleto-frame', { timeout: 15000 })
-      .should('be.visible')
-    ;
+      .should('be.visible');
 
-    return this;
+    this[extractHash]((hash) => {
+      this[extractOrderNumber]((orderNumber) => {
+        tryNext(next, { hash, orderNumber });
+      });
+    });
   }
 
   stillOnCreditCard(instalmentNumber, next) {

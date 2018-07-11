@@ -1,41 +1,85 @@
 /* global Cypress */
-import AddOrder from '../pages/addOrder';
-
-const visitNewOrderPage = Symbol('visitNewOrderPage');
+import Order from './pages/order';
+import Login from './pages/login';
+import Capture from './pages/capture';
+import AddOrder from './pages/addOrder';
+import Notification from './pages/notification';
+import EbanxSettings from './pages/ebanxSettings';
 
 export default class Admin {
   constructor(cy) {
     this.cy = cy;
     this.pages = {
+      order: new Order(cy),
+      login: new Login(cy),
+      capture: new Capture(cy),
       newOrder: new AddOrder(cy),
+      notification: new Notification(cy),
+      ebanxSettings: new EbanxSettings(cy),
     };
   }
 
   login() {
-    this.cy
-      .visit(`${Cypress.env('DEMO_URL')}/wp-admin`)
-      .get('#user_login', { timeout: 30000 })
-      .should('be.visible')
-      .type(Cypress.env('ADMIN_USER'))
-      .get('#user_pass')
-      .should('be.visible')
-      .type(Cypress.env('ADMIN_PASSWORD'))
-      .get('#wp-submit')
-      .should('be.visible')
-      .click();
+    this.pages.login.login();
+
+    return this;
+  }
+
+  logout() {
+    this.pages.login.logout();
+
+    return this;
   }
 
   buyJeans(country, next) {
-    this[visitNewOrderPage]();
+    this.pages.newOrder.visit();
 
     this.pages.newOrder.placeWithPaymentByLink(country, next);
   }
 
-  [visitNewOrderPage] () {
-    cy
-      .visit(`${Cypress.env('DEMO_URL')}/wp-admin/post-new.php?post_type=shop_order`)
-      .get('.button.add-line-item', { timeout: 30000 })
-      .should('be.visible')
-      .click();
+  notifyPayment(hash) {
+    this.pages.notification.send(hash);
+
+    return this;
+  }
+
+  toggleManualReviewOption() {
+    this.pages.ebanxSettings
+      .visit()
+      .toggleManualReviewOption();
+
+    return this;
+  }
+
+  checkPaymentStatusOnPlatform(orderNumber, status) {
+    this.pages.order.paymentHasStatus(orderNumber, status);
+
+    return this;
+  }
+
+  toggleCaptureOption() {
+    this.pages.ebanxSettings
+      .visit()
+      .toggleCaptureOption();
+
+    return this;
+  }
+
+  captureCreditCardPayment(orderNumber) {
+    this.pages.order.capturePayment(orderNumber);
+
+    return this;
+  }
+
+  captureCreditCardPaymentThroughAPI(hash) {
+    this.pages.capture.request(hash);
+
+    return this;
+  }
+
+  refundPayment(orderNumber) {
+    this.pages.order.refundOrder(orderNumber);
+
+    return this;
   }
 }

@@ -1,3 +1,4 @@
+/* global Cypress */
 const fillUser = Symbol('fillUser');
 const fillCountry = Symbol('fillCountry');
 const addItemToOrder = Symbol('addItemToOrder');
@@ -5,7 +6,7 @@ const createPaymentByLink = Symbol('createPaymentByLink');
 
 export default class AddOrder {
   constructor(cy) {
-	this.cy = cy;
+    this.cy = cy;
   }
 
   placeWithPaymentByLink(country, next) {
@@ -15,10 +16,16 @@ export default class AddOrder {
     this[createPaymentByLink](next);
   }
 
-
+  visit() {
+    this.cy
+      .visit(`${Cypress.env('DEMO_URL')}/wp-admin/post-new.php?post_type=shop_order`)
+      .get('.button.add-line-item', { timeout: 30000 })
+      .should('be.visible')
+      .click();
+  }
 
   [addItemToOrder] () {
-    cy
+    this.cy
       .get('.button.add-order-item', { timeout: 30000 })
       .should('be.visible')
       .click()
@@ -32,7 +39,7 @@ export default class AddOrder {
   }
 
   [fillUser] () {
-    cy
+    this.cy
       .get('#select2-customer_user-container')
       .should('be.visible')
       .click()
@@ -43,18 +50,18 @@ export default class AddOrder {
   }
 
   [fillCountry] (country) {
-    cy
+    this.cy
       .get('select#_billing_country')
       .should('be.visible')
       .window().then((win) => {
-      win.jQuery('select#_billing_country').select2('open');
-    })
+        win.jQuery('select#_billing_country').select2('open');
+      })
       .contains('.select2-results__option', country)
       .trigger('mouseup');
   }
 
   [createPaymentByLink] (next) {
-    cy
+    this.cy
       .get('[name="create_ebanx_payment_link"]')
       .should('be.visible')
       .click()

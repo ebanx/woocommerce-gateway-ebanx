@@ -120,6 +120,7 @@ class WC_EBANX_Payment_By_Link {
 			[
 				'person'              => $person,
 				'address'             => $address,
+				'orderNumber'         => self::$order->id,
 				'type'                => empty( self::$order->payment_method ) ? '_all' : WC_EBANX_Constants::$gateway_to_payment_type_code[ self::$order->payment_method ],
 				'merchantPaymentCode' => substr( self::$order->id . '_' . md5( time() ), 0, 40 ),
 				'amount'              => self::$order->get_total(),

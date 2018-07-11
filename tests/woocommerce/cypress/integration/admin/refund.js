@@ -18,8 +18,6 @@ describe('Woocommerce', () => {
 
     woocommerce = new Woocommerce(cy);
     admin = new Admin(cy);
-
-    admin.login();
   });
 
   context('Admin', () => {
@@ -40,7 +38,7 @@ describe('Woocommerce', () => {
             email: Faker.internet.email(),
             document: '278.517.215-98',
             paymentMethod: defaults.pay.api.DEFAULT_VALUES.paymentMethods.br.creditcard.id,
-            instalments: '3',
+            instalments: '1',
             card: {
               number: defaults._globals.cardsWhitelist.mastercard,
               expiryDate: '12/22',
@@ -49,24 +47,10 @@ describe('Woocommerce', () => {
           };
 
           woocommerce.buyWonderWomansPurseWithCreditCardToPersonal(checkoutData, (resp) => {
-            cy
-              .visit(`${Cypress.env('DEMO_URL')}/wp-admin/post.php?post=${resp.orderNumber}&action=edit`)
-              .get('.button.refund-items', { timeout: 30000 })
-              .should('be.visible')
-              .click()
-              .get('.refund_order_item_qty')
-              .should('be.visible')
-              .type('1')
-              .get('.button.button-primary.do-api-refund', { timeout: 5000 })
-              .should('be.visible')
-              .click()
-              .get('.blockUI.blockOverlay')
-              .should('be.not.visible', { timeout: 30000 })
-              .get('.order_notes')
-              .should('be.visible')
-              .then(($ul) => {
-                expect($ul.find('li').length).to.equal(3);
-              });
+            admin
+              .login()
+              .refundPayment(resp.orderNumber)
+              .logout();
           });
         });
       });

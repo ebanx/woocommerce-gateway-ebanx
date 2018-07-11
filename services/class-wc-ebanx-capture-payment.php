@@ -115,7 +115,6 @@ class WC_EBANX_Capture_Payment {
 				WC_EBANX_Flash::add_message( sprintf( __( 'Payment %s was captured successfully.', 'woocommerce-gateway-ebanx' ), $order_id ), 'warning', true );
 			}
 		} elseif ( 'CA' === $response['payment']['status'] ) {
-			$order->payment_complete();
 			$order->update_status( 'failed' );
 			$order->add_order_note( __( 'EBANX: Transaction Failed', 'woocommerce-gateway-ebanx' ) );
 		} elseif ( 'OP' === $response['payment']['status'] ) {

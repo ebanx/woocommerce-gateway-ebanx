@@ -1,7 +1,7 @@
 import R from 'ramda';
-import { pay } from '../../../defaults';
-import { CHECKOUT_SCHEMA } from '../schemas/checkout';
-import { waitUrlHas, validateSchema } from '../../../utils';
+import { pay } from '../../../../defaults';
+import { CHECKOUT_SCHEMA } from '../../schemas/checkout';
+import { waitUrlHas, validateSchema } from '../../../../utils';
 
 const fillCity = Symbol('fillCity');
 const fillInput = Symbol('fillInput');

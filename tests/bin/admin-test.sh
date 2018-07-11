@@ -9,11 +9,20 @@ setup_test() {
 }
 
 run_tests() {
+  EXIT_CODE=0
   echo run_tests
   setup_test
   cd $TRAVIS_BUILD_DIR/tests
-  ./node_modules/.bin/cypress run --config videoRecording=false --project ./woocommerce -s woocommerce/cypress/integration/admin/refund.js
-  ./node_modules/.bin/cypress run --config videoRecording=false --project ./woocommerce -s woocommerce/cypress/integration/admin/paymentByLink.js
+  for i in ./woocommerce/cypress/integration/admin/*.js
+    do
+        ./node_modules/.bin/cypress run --config videoRecording=false --project ./woocommerce -s "$i"
+        CODE=$?
+        echo EXIT_CODE TO $i: $CODE
+        if [ "$CODE" != 0 ]; then
+            EXIT_CODE=$CODE
+        fi
+    done
+    exit $EXIT_CODE
 }
 
 setup_docker() {

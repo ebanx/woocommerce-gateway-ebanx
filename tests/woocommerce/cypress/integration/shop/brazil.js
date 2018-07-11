@@ -43,12 +43,19 @@ describe('Woocommerce', () => {
 
   context('Brazil', () => {
     context('Boleto', () => {
-      it('can buy `wonder womans purse` using boleto to personal', () => {
+      it('can buy `wonder womans purse` using boleto to personal, cancel it and notify', () => {
+        admin.login();
         woocommerce.buyWonderWomansPurseWithBoletoToPersonal(mock(
           {
             paymentMethod: defaults.pay.api.DEFAULT_VALUES.paymentMethods.br.boleto.id,
           }
-        ));
+        ), (resp) => {
+          woocommerce.cancelPayment(resp.orderNumber);
+
+          admin.notifyPayment(resp.hash) // @note: This is needed because pay can't notify localhost.
+            .checkPaymentStatusOnPlatform(resp.orderNumber, 'Cancelled');
+          cy.clearCookies();
+        });
       });
     });
 
@@ -83,19 +90,11 @@ describe('Woocommerce', () => {
       });
 
       it('can buy with manual review option', () => {
-        admin.login();
+        admin
+          .login()
+          .toggleManualReviewOption();
 
-        cy
-          .visit(`${Cypress.env('DEMO_URL')}/wp-admin/admin.php?page=wc-settings&tab=checkout&section=ebanx-global`)
-          .get('#woocommerce_ebanx-global_payments_options_title', { timeout: 30000 })
-          .should('be.visible')
-          .click()
-          .get('.ebanx-payments-option.manual-review-checkbox', { timeout: 5000 })
-          .should('be.visible')
-          .click()
-          .get('#mainform > p.submit > button', { timeout: 5000 })
-          .should('be.visible')
-          .click();
+        cy.clearCookies();
 
         const mockData = {
           paymentMethod: defaults.pay.api.DEFAULT_VALUES.paymentMethods.br.creditcard.id,
@@ -120,14 +119,11 @@ describe('Woocommerce', () => {
 
               wrapOrderAssertations(payment, checkoutPayment);
 
-              cy
-                .visit(`${Cypress.env('DEMO_URL')}/wp-admin/admin.php?page=wc-settings&tab=checkout&section=ebanx-global`)
-                .get('.ebanx-payments-option.manual-review-checkbox', { timeout: 5000 })
-                .should('be.visible')
-                .click()
-                .get('#mainform > p.submit > button', { timeout: 5000 })
-                .should('be.visible')
-                .click();
+              admin
+                .login()
+                .toggleManualReviewOption();
+
+              cy.clearCookies();
             });
           });
       });
