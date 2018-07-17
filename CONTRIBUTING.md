@@ -9,7 +9,7 @@ Please, visit the [official plugin page on WordPress store](https://wordpress.or
 ## Introduction
 We've put together all the information you'll need on this file. Also, we always try to keep this file updated and with as much information as possible. If you want to help us with this file or with any coding issue, we would really appreciate it. :heart:
 
-## Getting Started
+## Getting Started 
 
 If you want to contribute to our repository the best way is to clone it and then create a symbolic link:
 
