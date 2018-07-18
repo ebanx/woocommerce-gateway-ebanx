@@ -1,6 +1,6 @@
 # EBANX Payment Gateway for WooCommerce
 
-[![Build Status](https://travis-ci.org/ebanx/woocommerce-gateway-ebanx.svg?branch=master)](https://travis-ci.org/ebanx/woocommerce-gateway-ebanx)
+[![Build Status](https://travis-ci.com/ebanx/woocommerce-gateway-ebanx.svg?branch=master)](https://travis-ci.com/ebanx/woocommerce-gateway-ebanx)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/09ef5eb63a394dc3b76cb4319129fbf3)](https://www.codacy.com/app/EBANX/woocommerce-gateway-ebanx?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=ebanx/woocommerce-gateway-ebanx&amp;utm_campaign=Badge_Grade)
 
 Integrate your WooCommerce store with the EBANX payment gateway and improve your sales in fastest growing markets in Latin America.
