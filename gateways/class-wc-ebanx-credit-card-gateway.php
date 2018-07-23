@@ -195,7 +195,7 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_New_Gateway {
 				$order_id  = absint( $_GET['order_id'] );
 				$order     = wc_get_order( $order_id );
 
-				if ( $order->get_id() === $order_id && $order->order_key === $order_key ) {
+				if ( $order->get_id() === $order_id && $order->get_order_key() === $order_key ) {
 					static::$ebanx_params['billing_first_name'] = $order->get_billing_first_name();
 					static::$ebanx_params['billing_last_name']  = $order->get_billing_last_name();
 					static::$ebanx_params['billing_address_1']  = $order->get_billing_address_1();
