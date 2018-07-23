@@ -73,7 +73,7 @@ class WC_EBANX_Environment {
 			$web_server->version           = $web_server_parts[1];
 		} else {
 			$web_server                    = new stdClass();
-			$web_server->name              = $_SERVER['SERVER_NAME'];
+			$web_server->name              = sanitize_text_field( wp_unslash( $_SERVER['SERVER_NAME'] ) );
 			$web_server->version           = PHP_SAPI;
 		}
 
