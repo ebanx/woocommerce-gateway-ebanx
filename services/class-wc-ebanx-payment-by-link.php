@@ -109,12 +109,12 @@ class WC_EBANX_Payment_By_Link {
 	private static function send_request() {
 		$person = new Person(
 			[
-				'name'  => self::$order->billing_first_name . ' ' . self::$order->billing_last_name,
-				'email' => self::$order->billing_email,
+				'name'  => self::$order->get_billing_first_name() . ' ' . self::$order->get_billing_last_name(),
+				'email' => self::$order->get_billing_email(),
 			]
 		);
 
-		$address = new Address( [ 'country' => Country::fromIso( self::$order->billing_country ) ] );
+		$address = new Address( [ 'country' => Country::fromIso( self::$order->get_billing_country() ) ] );
 
 		$data = new Request(
 			[

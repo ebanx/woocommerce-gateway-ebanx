@@ -368,7 +368,7 @@ class WC_EBANX_New_Gateway extends WC_EBANX_Gateway {
 		if ( ! isset( $this->user_id ) ) {
 			return;
 		}
-		$country = trim( strtolower( $order->billing_country ) );
+		$country = trim( strtolower( $order->get_billing_country() ) );
 
 		$document = $this->save_document( $country );
 
@@ -631,7 +631,7 @@ class WC_EBANX_New_Gateway extends WC_EBANX_Gateway {
 	final public function update_payment( $order, $data ) {
 		$request_status = strtoupper( $data['payment']['status'] );
 
-		if ( 'completed' === $order->status && 'CA' !== $request_status ) {
+		if ( 'completed' === $order->get_status() && 'CA' !== $request_status ) {
 			return;
 		}
 
@@ -642,7 +642,7 @@ class WC_EBANX_New_Gateway extends WC_EBANX_Gateway {
 			'OP' => 'Opened',
 		];
 		$new_status = null;
-		$old_status = $order->status;
+		$old_status = $order->get_status();
 
 		switch ( $request_status ) {
 			case 'CO':

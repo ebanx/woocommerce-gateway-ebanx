@@ -100,7 +100,7 @@ class WC_EBANX_Pagoefectivo_Gateway extends WC_EBANX_New_Gateway {
 			'data'         => array(
 				'url_basic'      => $pagoefectivo_url,
 				'url_iframe'     => get_site_url() . '/?ebanx=order-received&hash=' . $pagoefectivo_hash,
-				'customer_email' => $order->billing_email,
+				'customer_email' => $order->get_billing_email(),
 			),
 			'order_status' => $order->get_status(),
 			'method'       => 'pagoefectivo',

@@ -783,7 +783,7 @@ if ( ! class_exists( 'WC_EBANX' ) ) {
 			$checkout_url     = get_post_meta( $order->get_id(), '_ebanx_checkout_url', true );
 
 			if ( ! $checkout_url
-				&& in_array( $order->status, array( 'auto-draft', 'pending' ) )
+				&& in_array( $order->get_status(), array( 'auto-draft', 'pending' ) )
 				&& in_array( strtoupper( get_woocommerce_currency() ), $ebanx_currencies ) ) {
 				wc_get_template(
 					'payment-by-link-action.php',

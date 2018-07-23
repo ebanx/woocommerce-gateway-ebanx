@@ -137,7 +137,7 @@ class WC_EBANX_Payment_Adapter {
 				'address'      => $addresses['streetName'],
 				'streetNumber' => $street_number,
 				'city'         => WC_EBANX_Request::read( 'billing_city', null ) ?: WC_EBANX_Request::read( $gateway_id, null )['billing_city'],
-				'country'      => Country::fromIso( $order->billing_country ),
+				'country'      => Country::fromIso( $order->get_billing_country() ),
 				'state'        => WC_EBANX_Request::read( 'billing_state', null ) ?: WC_EBANX_Request::read( $gateway_id, null )['billing_state'],
 				'zipcode'      => WC_EBANX_Request::read( 'billing_postcode', null ) ?: WC_EBANX_Request::read( $gateway_id, null )['billing_postcode'],
 			]
@@ -161,10 +161,10 @@ class WC_EBANX_Payment_Adapter {
 			[
 				'type'        => static::get_person_type( $configs, $names ),
 				'document'    => $document,
-				'email'       => $order->billing_email,
+				'email'       => $order->get_billing_email(),
 				'ip'          => WC_Geolocation::get_ip_address(),
-				'name'        => $order->billing_first_name . ' ' . $order->billing_last_name,
-				'phoneNumber' => '' !== $order->billing_phone ? $order->billing_phone : WC_EBANX_Request::read( $gateway_id, null )['billing_phone'],
+				'name'        => $order->get_billing_first_name() . ' ' . $order->get_billing_last_name(),
+				'phoneNumber' => '' !== $order->get_billing_phone() ? $order->get_billing_phone() : WC_EBANX_Request::read( $gateway_id, null )['billing_phone'],
 			]
 		);
 	}

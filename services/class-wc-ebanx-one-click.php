@@ -171,11 +171,11 @@ class WC_EBANX_One_Click {
 				'_order_total'        => WC()->cart->total,
 			);
 
-			$order->billing_country    = $user['country'];
-			$order->billing_first_name = $user['first_name'];
-			$order->billing_last_name  = $user['last_name'];
-			$order->billing_email      = $user['email'];
-			$order->billing_phone      = $user['phone'];
+			$order->set_billing_country( $user['country'] );
+			$order->set_billing_first_name( $user['first_name'] );
+			$order->set_billing_last_name( $user['last_name'] );
+			$order->set_billing_email( $user['email'] );
+			$order->set_billing_phone( $user['phone'] );
 			$order->save();
 
 			foreach ( $meta as $meta_key => $meta_value ) {
