@@ -64,7 +64,7 @@ class WC_EBANX_Environment {
 		$interpreter->version          = PHP_VERSION;
 		$this->interpreter             = $interpreter;
 
-		if (PHP_SAPI !== 'cgi-fcgi' && PHP_SAPI !== 'cli') {
+		if ( PHP_SAPI !== 'cgi-fcgi' && PHP_SAPI !== 'cli' ) {
 			$web_server_information_string = filter_input( INPUT_SERVER, 'SERVER_SOFTWARE' );
 			$web_server_value_parts_array  = explode( ' ', $web_server_information_string );
 			$web_server_parts              = explode( '/', $web_server_value_parts_array[0] );
