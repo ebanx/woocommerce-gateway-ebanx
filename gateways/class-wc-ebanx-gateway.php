@@ -352,19 +352,19 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway {
 	 */
 	protected function save_order_meta_fields( $order, $request ) {
 		// To save only on DB to internal use.
-		update_post_meta( $order->id, '_ebanx_payment_hash', $request->payment->hash );
-		update_post_meta( $order->id, '_ebanx_payment_open_date', $request->payment->open_date );
+		update_post_meta( $order->get_id(), '_ebanx_payment_hash', $request->payment->hash );
+		update_post_meta( $order->get_id(), '_ebanx_payment_open_date', $request->payment->open_date );
 
 		if ( WC_EBANX_Request::has( 'billing_email' ) ) {
-			update_post_meta( $order->id, '_ebanx_payment_customer_email', sanitize_email( WC_EBANX_Request::read( 'billing_email' ) ) );
+			update_post_meta( $order->get_id(), '_ebanx_payment_customer_email', sanitize_email( WC_EBANX_Request::read( 'billing_email' ) ) );
 		}
 
 		if ( WC_EBANX_Request::has( 'billing_phone' ) ) {
-			update_post_meta( $order->id, '_ebanx_payment_customer_phone', sanitize_text_field( WC_EBANX_Request::read( 'billing_phone' ) ) );
+			update_post_meta( $order->get_id(), '_ebanx_payment_customer_phone', sanitize_text_field( WC_EBANX_Request::read( 'billing_phone' ) ) );
 		}
 
 		if ( WC_EBANX_Request::has( 'billing_address_1' ) ) {
-			update_post_meta( $order->id, '_ebanx_payment_customer_address', sanitize_text_field( WC_EBANX_Request::read( 'billing_address_1' ) ) );
+			update_post_meta( $order->get_id(), '_ebanx_payment_customer_address', sanitize_text_field( WC_EBANX_Request::read( 'billing_address_1' ) ) );
 		}
 	}
 

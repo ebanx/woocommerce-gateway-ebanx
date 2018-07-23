@@ -179,12 +179,12 @@ class WC_EBANX_One_Click {
 			$order->save();
 
 			foreach ( $meta as $meta_key => $meta_value ) {
-				update_post_meta( $order->id, $meta_key, $meta_value );
+				update_post_meta( $order->get_id(), $meta_key, $meta_value );
 			}
 
 			$order->calculate_totals();
 
-			$response = $this->gateway->process_payment( $order->id );
+			$response = $this->gateway->process_payment( $order->get_id() );
 
 			if ( 'success' !== $response['result'] ) {
 				$message = __( 'EBANX: Unable to create the payment via one click.', 'woocommerce-gateway-ebanx' );

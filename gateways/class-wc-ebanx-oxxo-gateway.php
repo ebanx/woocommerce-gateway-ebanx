@@ -83,8 +83,8 @@ class WC_EBANX_Oxxo_Gateway extends WC_EBANX_New_Gateway {
 	protected function save_order_meta_fields( $order, $request ) {
 		parent::save_order_meta_fields( $order, $request );
 
-		update_post_meta( $order->id, '_oxxo_url', $request->payment->oxxo_url );
-		update_post_meta( $order->id, '_payment_due_date', $request->payment->due_date );
+		update_post_meta( $order->get_id(), '_oxxo_url', $request->payment->oxxo_url );
+		update_post_meta( $order->get_id(), '_payment_due_date', $request->payment->due_date );
 	}
 
 	/**
@@ -94,14 +94,14 @@ class WC_EBANX_Oxxo_Gateway extends WC_EBANX_New_Gateway {
 	 * @return void
 	 */
 	public static function thankyou_page( $order ) {
-		$oxxo_url       = get_post_meta( $order->id, '_oxxo_url', true );
+		$oxxo_url       = get_post_meta( $order->get_id(), '_oxxo_url', true );
 		$oxxo_basic     = $oxxo_url . '&format=basic';
 		$oxxo_pdf       = $oxxo_url . '&format=pdf';
 		$oxxo_print     = $oxxo_url . '&format=print';
-		$customer_email = get_post_meta( $order->id, '_ebanx_payment_customer_email', true );
-		$oxxo_hash      = get_post_meta( $order->id, '_ebanx_payment_hash', true );
+		$customer_email = get_post_meta( $order->get_id(), '_ebanx_payment_customer_email', true );
+		$oxxo_hash      = get_post_meta( $order->get_id(), '_ebanx_payment_hash', true );
 		$customer_name  = $order->billing_first_name;
-		$oxxo_due_date  = get_post_meta( $order->id, '_payment_due_date', true );
+		$oxxo_due_date  = get_post_meta( $order->get_id(), '_payment_due_date', true );
 
 		$data = array(
 			'data'         => array(

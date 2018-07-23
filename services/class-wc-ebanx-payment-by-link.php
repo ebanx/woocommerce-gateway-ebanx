@@ -120,11 +120,11 @@ class WC_EBANX_Payment_By_Link {
 			[
 				'person'              => $person,
 				'address'             => $address,
-				'orderNumber'         => self::$order->id,
-				'type'                => empty( self::$order->payment_method ) ? '_all' : WC_EBANX_Constants::$gateway_to_payment_type_code[ self::$order->payment_method ],
-				'merchantPaymentCode' => substr( self::$order->id . '_' . md5( time() ), 0, 40 ),
+				'orderNumber'         => self::$order->get_id(),
+				'type'                => empty( self::$order->get_payment_method() ) ? '_all' : WC_EBANX_Constants::$gateway_to_payment_type_code[ self::$order->get_payment_method() ],
+				'merchantPaymentCode' => substr( self::$order->get_id() . '_' . md5( time() ), 0, 40 ),
 				'amount'              => self::$order->get_total(),
-				'maxInstalments'      => get_post_meta( self::$order->id, '_ebanx_instalments', true ),
+				'maxInstalments'      => get_post_meta( self::$order->get_id(), '_ebanx_instalments', true ),
 				'manualReview'        => 'yes' === self::$configs->settings['manual_review_enabled'],
 				'userValues'          => [
 					1 => 'from_woocommerce',

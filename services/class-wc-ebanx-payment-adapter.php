@@ -25,13 +25,13 @@ class WC_EBANX_Payment_Adapter {
 		return new Payment(
 			[
 				'amountTotal'         => $order->get_total(),
-				'orderNumber'         => $order->id,
+				'orderNumber'         => $order->get_id(),
 				'dueDate'             => static::transform_due_date( $configs ),
 				'address'             => static::transform_address( $order, $gateway_id ),
 				'person'              => static::transform_person( $order, $configs, $names, $gateway_id ),
 				'responsible'         => static::transform_person( $order, $configs, $names, $gateway_id ),
 				'items'               => static::transform_items( $order ),
-				'merchantPaymentCode' => substr( $order->id . '-' . md5( rand( 123123, 9999999 ) ), 0, 40 ),
+				'merchantPaymentCode' => substr( $order->get_id() . '-' . md5( rand( 123123, 9999999 ) ), 0, 40 ),
 				'riskProfileId'       => 'Wx' . str_replace( '.', 'x', WC_EBANX::get_plugin_version() ),
 			]
 		);
