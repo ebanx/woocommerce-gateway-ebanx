@@ -18,6 +18,7 @@ const mock = (data) => (R.merge(
     city: Faker.address.city(),
     state: Faker.address.state(),
     zipcode: Faker.address.zipCode(),
+    document: Faker.random.uuid(),
     phone: Faker.phone.phoneNumberFormat(2),
     email: Faker.internet.email(),
     country: 'Colombia',
@@ -62,7 +63,6 @@ describe('Woocommerce', () => {
       it('can buy `wonder womans purse`, using credit card', () => {
         const mockData = {
           paymentMethod: defaults.pay.api.DEFAULT_VALUES.paymentMethods.co.creditcard.id,
-          document: Faker.random.uuid(),
           instalments: '3',
           card: {
             name: Faker.name.findName(),
