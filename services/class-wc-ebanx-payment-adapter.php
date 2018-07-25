@@ -282,8 +282,8 @@ class WC_EBANX_Payment_Adapter {
 
 	/**
 	 *
-	 * @param array    $names
-	 * @param string   $gateway_id
+	 * @param array  $names
+	 * @param string $gateway_id
 	 *
 	 * @return string
 	 * @throws Exception Throws parameter missing exception.
