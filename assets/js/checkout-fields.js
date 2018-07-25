@@ -92,10 +92,6 @@ jQuery (function ($) {
 		switch ( $( '#billing_country' ).val() ) {
 			case 'CO':
 				var ebanxColombianDocumentField = $( '#ebanx_billing_colombia_document_field' );
-				if ( gatewayId !== 'ebanx-credit-card-co' ) {
-					disableFields( ebanxColombianDocumentField );
-					break;
-				}
 				enableFields( ebanxColombianDocumentField );
 				break;
 			case "CL":
