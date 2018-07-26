@@ -193,7 +193,7 @@ class WC_EBANX_Payment_Adapter {
 				return static::get_chilean_document( $order, $names, $gateway_id );
 				break;
 			case WC_EBANX_Constants::COUNTRY_COLOMBIA:
-				return static::get_colombian_document( $order, $names, $gateway_id );
+				return static::get_colombian_document( $names, $gateway_id );
 				break;
 			case WC_EBANX_Constants::COUNTRY_PERU:
 				return static::get_peruvian_document( $names, $gateway_id );
@@ -282,17 +282,16 @@ class WC_EBANX_Payment_Adapter {
 
 	/**
 	 *
-	 * @param WC_Order $order
-	 * @param array    $names
-	 * @param string   $gateway_id
+	 * @param array  $names
+	 * @param string $gateway_id
 	 *
 	 * @return string
 	 * @throws Exception Throws parameter missing exception.
 	 */
-	private static function get_colombian_document( $order, $names, $gateway_id ) {
+	private static function get_colombian_document( $names, $gateway_id ) {
 		$document = WC_EBANX_Request::read( $names['ebanx_billing_colombia_document'], null )
 		?: WC_EBANX_Request::read( $gateway_id, null )['ebanx_billing_colombia_document'];
-		if ( null === $document && 'ebanx-credit-card-co' === $order->get_payment_method() ) {
+		if ( null === $document ) {
 			throw new Exception( 'BP-DR-22' );
 		}
 
