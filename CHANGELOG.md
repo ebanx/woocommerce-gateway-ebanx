@@ -1,5 +1,8 @@
 # CHANGELOG
 
+# 1.32.0
+* Feature - Add document as mandatory for all colombian gateways [#694](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/694)
+
 # 1.31.3
 * Fix - Credit card tokenization compatibility issue with jQuery [#683](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/683)
 
