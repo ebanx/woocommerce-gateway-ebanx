@@ -67,7 +67,7 @@ jobs:
       deploy:
         - provider: releases
           api_key:
-            secure: EHLRyqTabc0yXKcGk3FHK2xkrmx44CHZL6c8WKF/9LcyoSq4LLAxK98nYpjWNfqNXYAChgaPiUpR1slS/N1s3ExAfpupYqP26c+E/x6vsbQVAGIih/rrOG9trVWKIXqWFBlLAw6O/kp4Dw7/uvfMim0/ti8WRQwUxg2d6q/Y7kSjjbpnuKo7AekYCSgmRdokKupxmo5XBXD0af0HimyJvO+wKoJxvzDq+6Przw+EPE2C19yImbWzI74zepUQuQfxRMUP8Xa5JWwz7V+XQhhxinGb/E66z9kPU/BwNHolz1rEBVR3F/vg9rfKOQxLlg96HNDDsu/cJXIjQpUIjMiYBPoftLVUzAm2fk9ksi4iWc/adRM1nWIxq1OyGp5toJBUgBwogS48EF0TP2OysrTj9qiWvVT5kY3Lk+YeRW4yN8AmeSko8tHCZ6xkE5CcGcFmV07YM+JK9lcgjpEAa7oZr64nDrHCLZz9nnhR/Y81cQWCKFEJITULFZOWxF5qxm4HpwxUnJgdEompH9eeHDh/sCl/86GkN3jQ2q7r6cVfZC7tR3008r8K6fMkoCkiU10ZsIP4URSf2C+GoS45VPPcyrKK5268cjDh1WyCD9qtRHScFsYf2YA7nBOi9JINOjV2btyJ6Ol4X/kBPmxlxGM98pl0kwoEG0gzHH6ADiRpoQs=
+            secure: EpKgBzXXLjndUmMDZEoaDVel0/dqBEHN3btgVGBThFlMD3/gAouufGNmoYEeEkZXmq7i8Ab9dSaXT6UjVmEL69jKlZIpZ+zOFyDce1F0u7hAZywS3O/N5Y+w6JDW44Q0+7APob0DyCWjWRHOhY706VPU3yTv6Tsd+UL9RUCmIjYvFnU7PKvNChDJEV0fAdKnXiORIFkweq4kswUk0age/BdtyTosDZAkAd2uCM0D271f1pJ9ay1vq8gj4YSdAvjnz/i+HjrkIXPOV808QgSqxj+qEMXnBidjFdiNEQFCFdoYYsNJr67LQdvO1LYMsScyuGiQLTSND4NZ4DWIb6m9bmCy/+YC19mDVrq4ne8f6ZQ57Aqr3EMeU67PybjvLSELp9m7dl3E0NirPeBSRnn7OVLpFiFRhGTRi3jc6mfyi9pWOsrJ97iczSV43D7wfVkeibNrClfzIX6h4nLwlfLq0JISN/5wcJS/ZB4d6QTF28AJwQag6G7o/Fs0vmIHUpquMbNcZ6RsU4XoR+c/x6JBrnvAdHl+hoBKJHbKqciLD7HbTtyI8Su0CcxF8o2WIHPJYjYzwbkLZfCXojrtQfAi7clg5OmioJ/IXeu5e3FsUXetvWQulHfdu7k5eatTgbx7UMEt5kkphpzs7BhMnAYXEDrfuAyfrTHUaAYce1ruTvM=
           file: /tmp/ebanx-payment-gateway-for-woocommerce.zip
           skip_cleanup: true
           on:
