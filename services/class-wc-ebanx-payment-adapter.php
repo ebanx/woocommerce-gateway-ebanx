@@ -155,7 +155,7 @@ class WC_EBANX_Payment_Adapter {
 	 * @throws Exception Throws parameter missing exception.
 	 */
 	private static function transform_person( $order, $configs, $names, $gateway_id ) {
-		$document = static::get_document( $configs, $names, $order, $gateway_id );
+		$document = static::get_document( $configs, $names, $gateway_id );
 
 		return new Person(
 			[
@@ -173,13 +173,12 @@ class WC_EBANX_Payment_Adapter {
 	 *
 	 * @param WC_EBANX_Global_Gateway $configs
 	 * @param array                   $names
-	 * @param WC_Order                $order
 	 * @param string                  $gateway_id
 	 *
 	 * @return string
 	 * @throws Exception Throws parameter missing exception.
 	 */
-	private static function get_document( $configs, $names, $order, $gateway_id ) {
+	private static function get_document( $configs, $names, $gateway_id ) {
 		$country = trim( strtolower( WC()->customer->get_country() ) );
 
 		switch ( $country ) {
@@ -190,7 +189,7 @@ class WC_EBANX_Payment_Adapter {
 				return static::get_brazilian_document( $configs, $names, $gateway_id );
 				break;
 			case WC_EBANX_Constants::COUNTRY_CHILE:
-				return static::get_chilean_document( $order, $names, $gateway_id );
+				return static::get_chilean_document( $names, $gateway_id );
 				break;
 			case WC_EBANX_Constants::COUNTRY_COLOMBIA:
 				return static::get_colombian_document( $names, $gateway_id );
@@ -263,17 +262,16 @@ class WC_EBANX_Payment_Adapter {
 
 	/**
 	 *
-	 * @param WC_Order $order
-	 * @param array    $names
-	 * @param string   $gateway_id
+	 * @param array  $names
+	 * @param string $gateway_id
 	 *
 	 * @return string
 	 * @throws Exception Throws parameter missing exception.
 	 */
-	private static function get_chilean_document( $order, $names, $gateway_id ) {
+	private static function get_chilean_document( $names, $gateway_id ) {
 		$document = WC_EBANX_Request::read( $names['ebanx_billing_chile_document'], null )
 			?: WC_EBANX_Request::read( $gateway_id, null )['ebanx_billing_chile_document'];
-		if ( null === $document && 'ebanx-webpay' === $order->get_payment_method() ) {
+		if ( null === $document ) {
 			throw new Exception( 'BP-DR-22' );
 		}
 

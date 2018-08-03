@@ -17,6 +17,7 @@ const mock = (data) => (R.merge(
     city: Faker.address.city(),
     state: Faker.address.state(),
     zipcode: Faker.address.zipCode(),
+    document: Faker.random.uuid(),
     phone: Faker.phone.phoneNumberFormat(2),
     email: Faker.internet.email(),
     country: 'Chile',
@@ -58,7 +59,6 @@ describe('Woocommerce', () => {
       it('can buy `wonder womans purse` using Webpay to personal', () => {
         woocommerce.buyWonderWomansPurseWithWebpayToPersonal(mock(
           {
-            document: Faker.random.uuid(),
             paymentMethod: defaults.pay.api.DEFAULT_VALUES.paymentMethods.cl.webpay.id,
           }
         ));

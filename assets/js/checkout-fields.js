@@ -88,7 +88,7 @@ jQuery (function ($) {
     })
     .change();
 
-	var hideDocument = function ( gatewayId ) {
+	var hideDocument = function () {
 		switch ( $( '#billing_country' ).val() ) {
 			case 'CO':
 				var ebanxColombianDocumentField = $( '#ebanx_billing_colombia_document_field' );
@@ -96,10 +96,6 @@ jQuery (function ($) {
 				break;
 			case "CL":
 				var ebanxChileanDocumentField = $( '#ebanx_billing_chile_document_field' );
-				if ( gatewayId !== 'ebanx-webpay' ) {
-					disableFields( ebanxChileanDocumentField );
-					break;
-				}
 				enableFields( ebanxChileanDocumentField );
 				break;
 			default:
@@ -120,7 +116,7 @@ jQuery (function ($) {
 			$( ebanxMethodsLabels ).find( 'img' ).before( '<span id="sandbox-alert-tag">' + localizedMessage + '</span>' );
 		}
 
-		hideDocument( $( 'input[name=payment_method]:checked' ).val() );
-		paymentMethods.on( 'change', function( e ) { hideDocument( e.target.value ); } );
+		hideDocument();
+		paymentMethods.on( 'change', function( e ) { hideDocument(); } );
 	});
 });
