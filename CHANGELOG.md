@@ -1,5 +1,8 @@
 # CHANGELOG
 
+# 1.32.1
+* Fix - Make chilean document mandatory [#695](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/695)
+
 # 1.32.0
 * Feature - Add document as mandatory for all colombian gateways [#694](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/694)
 

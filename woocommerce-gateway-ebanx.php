@@ -5,7 +5,7 @@
  * Description: Offer Latin American local payment methods & increase your conversion rates with the solution used by AliExpress, AirBnB and Spotify in Brazil.
  * Author: EBANX
  * Author URI: https://www.ebanx.com/business/en
- * Version: 1.32.0
+ * Version: 1.32.1
  * License: MIT
  * Text Domain: woocommerce-gateway-ebanx
  * Domain Path: /languages
