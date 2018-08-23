@@ -10,7 +10,7 @@
 		<br>
 		<input type="text" value="<?php echo esc_attr( $payment_hash ); ?>" onfocus="this.select();" onmouseup="return false;" readonly>
 	</p>
-	<?php if ( 'pending' === $order->status && $payment_checkout_url ) : ?>
+	<?php if ( 'pending' === $order->get_status() && $payment_checkout_url ) : ?>
 		<p>
 			<strong><?php esc_html_e( 'Customer Payment Link', 'woocommerce-gateway-ebanx' ); ?></strong>
 			<br>

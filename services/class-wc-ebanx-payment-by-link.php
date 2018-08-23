@@ -109,22 +109,22 @@ class WC_EBANX_Payment_By_Link {
 	private static function send_request() {
 		$person = new Person(
 			[
-				'name'  => self::$order->billing_first_name . ' ' . self::$order->billing_last_name,
-				'email' => self::$order->billing_email,
+				'name'  => self::$order->get_billing_first_name() . ' ' . self::$order->get_billing_last_name(),
+				'email' => self::$order->get_billing_email(),
 			]
 		);
 
-		$address = new Address( [ 'country' => Country::fromIso( self::$order->billing_country ) ] );
+		$address = new Address( [ 'country' => Country::fromIso( self::$order->get_billing_country() ) ] );
 
 		$data = new Request(
 			[
 				'person'              => $person,
 				'address'             => $address,
-				'orderNumber'         => self::$order->id,
-				'type'                => empty( self::$order->payment_method ) ? '_all' : WC_EBANX_Constants::$gateway_to_payment_type_code[ self::$order->payment_method ],
-				'merchantPaymentCode' => substr( self::$order->id . '_' . md5( time() ), 0, 40 ),
+				'orderNumber'         => self::$order->get_id(),
+				'type'                => empty( self::$order->get_payment_method() ) ? '_all' : WC_EBANX_Constants::$gateway_to_payment_type_code[ self::$order->get_payment_method() ],
+				'merchantPaymentCode' => substr( self::$order->get_id() . '_' . md5( time() ), 0, 40 ),
 				'amount'              => self::$order->get_total(),
-				'maxInstalments'      => get_post_meta( self::$order->id, '_ebanx_instalments', true ),
+				'maxInstalments'      => get_post_meta( self::$order->get_id(), '_ebanx_instalments', true ),
 				'manualReview'        => 'yes' === self::$configs->settings['manual_review_enabled'],
 				'userValues'          => [
 					1 => 'from_woocommerce',
