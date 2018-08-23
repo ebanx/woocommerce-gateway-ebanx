@@ -33,4 +33,4 @@ You can create a new [Issue](https://github.com/ebanx/woocommerce-gateway-ebanx/
 
 ## So you want to code...
 
-If you want to code (and you are not an ebanker [yet](https://ebanx.recruiterbox.com/)) all you have to do is fork our repo create a [well named]branch from develop and make a [pull request](https://github.com/ebanx/woocommerce-gateway-ebanx/compare) to our develop.
+If you want to code (and you are not an ebanker [yet](https://ebanx.recruiterbox.com/)) all you have to do is fork our repo create a [well named] branch from master and make a [pull request](https://github.com/ebanx/woocommerce-gateway-ebanx/compare) to our master.
