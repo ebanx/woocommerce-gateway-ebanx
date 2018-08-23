@@ -63,12 +63,21 @@ class WC_EBANX_Environment {
 		$interpreter->name             = 'PHP';
 		$interpreter->version          = PHP_VERSION;
 		$this->interpreter             = $interpreter;
-		$web_server_information_string = filter_input( INPUT_SERVER, 'SERVER_SOFTWARE' );
-		$web_server_value_parts_array  = explode( ' ', $web_server_information_string );
-		$web_server_parts              = explode( '/', $web_server_value_parts_array[0] );
-		$web_server                    = new stdClass();
-		$web_server->name              = str_replace( '-', ' ', $web_server_parts[0] );
-		$web_server->version           = $web_server_parts[1];
+
+		if ( PHP_SAPI !== 'cgi-fcgi' && PHP_SAPI !== 'cli' ) {
+			$web_server_information_string = filter_input( INPUT_SERVER, 'SERVER_SOFTWARE' );
+			$web_server_value_parts_array  = explode( ' ', $web_server_information_string );
+			$web_server_parts              = explode( '/', $web_server_value_parts_array[0] );
+			$web_server                    = new stdClass();
+			$web_server->name              = str_replace( '-', ' ', $web_server_parts[0] );
+			$web_server->version           = $web_server_parts[1];
+		} else {
+			if ( isset( $_SERVER ) && isset( $_SERVER['SERVER_NAME'] ) ) {
+				$web_server                    = new stdClass();
+				$web_server->name              = sanitize_text_field( wp_unslash( $_SERVER['SERVER_NAME'] ) );
+				$web_server->version           = PHP_SAPI;
+			}
+		}
 
 		$this->web_server = $web_server;
 
