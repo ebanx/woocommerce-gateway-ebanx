@@ -517,7 +517,7 @@ export default class Checkout {
       this[choosePaymentType]('#ebanx-tef-payment', data.paymentType);
       this[placeOrder]();
 
-      waitUrlHas(`${pay.api.url}/directtefredirect`);
+      waitUrlHas(`${pay.api.newUrl}/directtefredirect`);
     });
   }
 
