@@ -40,7 +40,7 @@ describe('Woocommerce', () => {
             paymentMethod: defaults.pay.api.DEFAULT_VALUES.paymentMethods.br.creditcard.id,
             instalments: '1',
             card: {
-              number: defaults._globals.cardsWhitelist.mastercard,
+              number: defaults._globals.cardsWhitelist.visa,
               expiryDate: '12/22',
               cvv: '123',
             },

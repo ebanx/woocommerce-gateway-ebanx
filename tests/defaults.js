@@ -1,7 +1,7 @@
 export default {
   _globals: {
     cardsWhitelist: {
-      mastercard: '5555555555554444',
+      visa: '4111111111111111',
     },
   },
   pay: {
