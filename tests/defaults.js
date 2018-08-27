@@ -1,13 +1,14 @@
 export default {
   _globals: {
     cardsWhitelist: {
-      mastercard: '5555555555554444',
+      visa: '4111111111111111',
     },
   },
   pay: {
     url: 'https://sandbox.ebanx.com',
     api: {
       url: 'https://sandbox.ebanx.com/ws',
+      newUrl: 'https://sandbox.ebanxpay.com/ws',
       DEFAULT_VALUES: {
         paymentMethods: {
           ar: {

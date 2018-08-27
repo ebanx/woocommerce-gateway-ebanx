@@ -54,7 +54,7 @@ describe('Woocommerce', () => {
           paymentMethod: defaults.pay.api.DEFAULT_VALUES.paymentMethods.mx.debitcard.id,
           card: {
             name: Faker.name.findName(),
-            number: defaults._globals.cardsWhitelist.mastercard,
+            number: defaults._globals.cardsWhitelist.visa,
             expiryDate: '12/22',
             cvv: '123',
           },
@@ -72,7 +72,7 @@ describe('Woocommerce', () => {
           instalments: '3',
           card: {
             name: Faker.name.findName(),
-            number: defaults._globals.cardsWhitelist.mastercard,
+            number: defaults._globals.cardsWhitelist.visa,
             expiryDate: '12/22',
             cvv: '123',
           },
@@ -83,7 +83,7 @@ describe('Woocommerce', () => {
             pay.queryPayment(resp.hash, Cypress.env('DEMO_INTEGRATION_KEY'), (payment) => {
               const checkoutPayment = Pay.paymentData({
                 amount_ext: (Cypress.env('JEANS_PRICE') + Cypress.env('DEMO_INTEREST_RATE')).toFixed(2),
-                payment_type_code: 'mastercard',
+                payment_type_code: 'visa',
                 instalments: '3',
                 status: 'CO',
               });
