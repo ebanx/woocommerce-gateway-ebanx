@@ -3,7 +3,7 @@ Contributors: ebanxwp
 Tags: credit card, boleto, ebanx, woocommerce, payment gateway, latin america, brazil, mexico, argentina, peru, colombia, chile, ecuador, cash payment, local payment, card payment, one-click payment, alternative payments, payment processing
 Requires at least: 4.0
 Tested up to: 4.9
-Stable tag: 1.32.1
+Stable tag: 1.33.0
 License: Apache v2.0
 License URI: http://www.apache.org/licenses/LICENSE-2.0
 
@@ -147,6 +147,14 @@ Yes, you can.
 4. There you go, you’re all set!
 
 == Changelog ==
+
+# 1.33.0
+* Fix - PHP Strict Standards issue on WC_EBANX_Logger [687](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/687)
+* Fix - Bugfix undefined offset 1 in class wc ebanx environment [692](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/692)
+* Feature - Change API urls [696](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/696)
+
+# 1.32.1
+* Fix - Make chilean document mandatory [#695](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/695)
 
 # 1.32.0
 * Feature - Add document as mandatory for all colombian gateways [#694](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/694)

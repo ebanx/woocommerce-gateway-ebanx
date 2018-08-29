@@ -1,5 +1,10 @@
 # CHANGELOG
 
+# 1.33.0
+* Fix - PHP Strict Standards issue on WC_EBANX_Logger [687](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/687)
+* Fix - Bugfix undefined offset 1 in class wc ebanx environment [692](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/692)
+* Feature - Change API urls [696](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/696)
+
 # 1.32.1
 * Fix - Make chilean document mandatory [#695](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/695)
 
@@ -338,4 +343,4 @@ These are the most importante fixes and features, but another fixes and quality 
 * 2016-01-17 - Texts - Chaging the namings and texts from plugin.
 
 ## 1.0.0
-* 2016-12-30 - First Release. 
+* 2016-12-30 - First Release.
