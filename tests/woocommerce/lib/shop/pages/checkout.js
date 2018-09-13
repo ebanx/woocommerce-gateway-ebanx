@@ -41,7 +41,7 @@ export default class Checkout {
     R.ifElse(
       R.propSatisfies((x) => (x !== undefined), property), (data) => {
         this.cy
-          .get(input, { timeout: 10000 })
+          .get(input, { timeout: 15000 })
           .should('be.visible')
           .clear()
           .type(data[property])
