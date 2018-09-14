@@ -101,10 +101,8 @@ jQuery (function ($) {
 			$( ebanxMethodsLabels ).find( 'img' ).before( '<span id="sandbox-alert-tag">' + localizedMessage + '</span>' );
 		}
 
-		disableFields(getBillingFields());
 		paymentMethods.on( 'change', function( e ) {
 			disableFields(getBillingFields());
-
 			if ( ( $( 'input[name=payment_method]:checked' ).val().indexOf( 'ebanx' ) !== -1 ) ) {
 				enableFields( getBillingFields( $( '#billing_country' ).val().toLowerCase() ) );
 			}

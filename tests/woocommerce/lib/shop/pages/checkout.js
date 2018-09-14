@@ -391,13 +391,13 @@ export default class Checkout {
     this[selectCountry](data);
     this[fillFirstName](data);
     this[fillLastName](data);
+    this[fillEmail](data);
     this[fillAddress](data);
     this[fillCity](data);
+    this[choosePaymentMethod](data);
     this[fillState](data);
     this[fillPostcode](data);
     this[fillPhone](data);
-    this[fillEmail](data);
-    this[choosePaymentMethod](data);
     this[fillDocument](data);
     this[fillPassword](data);
   }
