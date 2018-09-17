@@ -41,7 +41,7 @@ export default class Checkout {
     R.ifElse(
       R.propSatisfies((x) => (x !== undefined), property), (data) => {
         this.cy
-          .get(input, { timeout: 10000 })
+          .get(input, { timeout: 15000 })
           .should('be.visible')
           .clear()
           .type(data[property])
@@ -391,13 +391,13 @@ export default class Checkout {
     this[selectCountry](data);
     this[fillFirstName](data);
     this[fillLastName](data);
+    this[fillEmail](data);
     this[fillAddress](data);
     this[fillCity](data);
+    this[choosePaymentMethod](data);
     this[fillState](data);
     this[fillPostcode](data);
     this[fillPhone](data);
-    this[fillEmail](data);
-    this[choosePaymentMethod](data);
     this[fillDocument](data);
     this[fillPassword](data);
   }

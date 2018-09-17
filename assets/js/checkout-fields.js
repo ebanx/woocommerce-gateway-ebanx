@@ -88,21 +88,6 @@ jQuery (function ($) {
     })
     .change();
 
-	var hideDocument = function () {
-		switch ( $( '#billing_country' ).val() ) {
-			case 'CO':
-				var ebanxColombianDocumentField = $( '#ebanx_billing_colombia_document_field' );
-				enableFields( ebanxColombianDocumentField );
-				break;
-			case "CL":
-				var ebanxChileanDocumentField = $( '#ebanx_billing_chile_document_field' );
-				enableFields( ebanxChileanDocumentField );
-				break;
-			default:
-				break;
-		}
-	};
-
 	$( 'body' ).on( 'updated_checkout', function () {
 		var paymentMethods = $( '.wc_payment_methods.payment_methods.methods > li > input' );
 
@@ -116,7 +101,11 @@ jQuery (function ($) {
 			$( ebanxMethodsLabels ).find( 'img' ).before( '<span id="sandbox-alert-tag">' + localizedMessage + '</span>' );
 		}
 
-		hideDocument();
-		paymentMethods.on( 'change', function( e ) { hideDocument(); } );
+		paymentMethods.on( 'change', function( e ) {
+			disableFields(getBillingFields());
+			if ( ( $( 'input[name=payment_method]:checked' ).val().indexOf( 'ebanx' ) !== -1 ) ) {
+				enableFields( getBillingFields( $( '#billing_country' ).val().toLowerCase() ) );
+			}
+		} );
 	});
 });
