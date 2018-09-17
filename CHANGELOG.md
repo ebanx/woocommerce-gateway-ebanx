@@ -1,5 +1,8 @@
 # CHANGELOG
 
+# 1.33.1
+* Fix - Document will not be mandatory when a gateway that is not from EBANX is selected [#697](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/697)
+
 # 1.33.0
 * Fix - PHP Strict Standards issue on WC_EBANX_Logger [687](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/687)
 * Fix - Bugfix undefined offset 1 in class wc ebanx environment [692](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/692)
