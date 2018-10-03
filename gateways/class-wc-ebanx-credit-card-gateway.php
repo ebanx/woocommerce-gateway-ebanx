@@ -1,5 +1,7 @@
 <?php
 
+use Ebanx\Benjamin\Models\Country;
+
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
@@ -345,66 +347,6 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_New_Gateway {
 	}
 
 	/**
-	 * Checks if the payment term is allowed based on price, country and minimal instalment value
-	 *
-	 * @param double $price Product price used as base.
-	 * @param int    $instalment_number Number of instalments.
-	 * @param string $country Costumer country.
-	 * @return integer
-	 */
-	public function is_valid_instalment_amount( $price, $instalment_number, $country = null ) {
-		if ( 1 === $instalment_number ) {
-			return true;
-		}
-
-		$country       = $country ?: WC()->customer->get_country();
-		$currency_code = strtolower( $this->merchant_currency );
-
-		switch ( trim( strtolower( $country ) ) ) {
-			case 'br':
-				$site_to_local_rate            = $this->get_local_currency_rate_for_site( WC_EBANX_Constants::CURRENCY_CODE_BRL );
-				$merchant_min_instalment_value = $this->get_setting_or_default( "min_instalment_value_$currency_code", 0 ) * $site_to_local_rate;
-				$min_instalment_value          = max(
-					WC_EBANX_Constants::ACQUIRER_MIN_INSTALMENT_VALUE_BRL,
-					$merchant_min_instalment_value
-				);
-				break;
-			case 'mx':
-				$site_to_local_rate            = $this->get_local_currency_rate_for_site( WC_EBANX_Constants::CURRENCY_CODE_MXN );
-				$merchant_min_instalment_value = $this->get_setting_or_default( "min_instalment_value_$currency_code", 0 ) * $site_to_local_rate;
-				$min_instalment_value          = max(
-					WC_EBANX_Constants::ACQUIRER_MIN_INSTALMENT_VALUE_MXN,
-					$merchant_min_instalment_value
-				);
-				break;
-			case 'co':
-				$site_to_local_rate            = $this->get_local_currency_rate_for_site( WC_EBANX_Constants::CURRENCY_CODE_COP );
-				$merchant_min_instalment_value = $this->get_setting_or_default( "min_instalment_value_$currency_code", 0 ) * $site_to_local_rate;
-				$min_instalment_value          = max(
-					WC_EBANX_Constants::ACQUIRER_MIN_INSTALMENT_VALUE_COP,
-					$merchant_min_instalment_value
-				);
-				break;
-			case 'ar':
-				$site_to_local_rate            = $this->get_local_currency_rate_for_site( WC_EBANX_Constants::CURRENCY_CODE_ARS );
-				$merchant_min_instalment_value = $this->get_setting_or_default( "min_instalment_value_$currency_code", 0 ) * $site_to_local_rate;
-				$min_instalment_value          = max(
-					WC_EBANX_Constants::ACQUIRER_MIN_INSTALMENT_VALUE_ARS,
-					$merchant_min_instalment_value
-				);
-				break;
-		}
-
-		if ( isset( $site_to_local_rate ) && isset( $min_instalment_value ) ) {
-			$local_value      = $price * $site_to_local_rate;
-			$instalment_value = $local_value / $instalment_number;
-			return $instalment_value >= $min_instalment_value;
-		}
-
-		return false;
-	}
-
-	/**
 	 * The page of order received, we call them as "Thank you pages"
 	 *
 	 * @param  WC_Order $order The order created.
@@ -441,38 +383,14 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_New_Gateway {
 	/**
 	 * Calculates the interests and values of items based on interest rates settings
 	 *
-	 * @param int $amount      The total of the user cart.
-	 * @param int $max_instalments The max number of instalments based on settings.
-	 * @param int $tax The tax applied.
-	 * @return array               An array of instalment with price, amount, if it has interests and the number
+	 * @param string $country
+	 * @param int    $amount
+	 *
+	 * @return array   An array of instalment with price, amount, if it has interests and the number
 	 */
-	public function get_payment_terms( $amount, $max_instalments, $tax = 0 ) {
-		$instalments      = array();
-		$instalment_taxes = $this->instalment_rates;
-
-		for ( $number = 1; $number <= $max_instalments; ++$number ) {
-			$has_interest = false;
-			$cart_total   = $amount;
-
-			if ( isset( $instalment_taxes ) && array_key_exists( $number, $instalment_taxes ) ) {
-				$cart_total += $cart_total * $instalment_taxes[ $number ];
-				$cart_total += $cart_total * $tax;
-				if ( $instalment_taxes[ $number ] > 0 ) {
-					$has_interest = true;
-				}
-			}
-
-			if ( $this->is_valid_instalment_amount( $cart_total, $number ) ) {
-				$instalment_price = $cart_total / $number;
-				$instalment_price = round( floatval( $instalment_price ), 2 );
-
-				$instalments[] = array(
-					'price'        => $instalment_price,
-					'has_interest' => $has_interest,
-					'number'       => $number,
-				);
-			}
-		}
+	public function get_payment_terms( $country, $amount ) {
+		$credit_card_gateway = ( new WC_EBANX_Api( $this->configs ) )->ebanx()->creditCard();
+		$instalments = $credit_card_gateway->getPaymentTermsForCountryAndValue( Country::fromIso( $country ), $amount );
 
 		try {
 			$apply_filters = apply_filters( 'ebanx_get_payment_terms', $instalments );
@@ -505,18 +423,7 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_New_Gateway {
 
 		$country = $this->get_transaction_address( 'country' );
 
-		$max_instalments = min(
-			$this->configs->settings['credit_card_instalments'],
-			WC_EBANX_Constants::$max_instalments[ $country ]
-		);
-
-		$tax = 0;
-		if ( get_woocommerce_currency() === WC_EBANX_Constants::CURRENCY_CODE_BRL
-			&& $this->configs->get_setting_or_default( 'add_iof_to_local_amount_enabled', 'yes' ) === 'yes' ) {
-			$tax = WC_EBANX_Constants::CURRENCY_CODE_BRL;
-		}
-
-		$instalments_terms = $this->get_payment_terms( $cart_total, $max_instalments, $tax );
+		$instalments_terms = $this->get_payment_terms( $country, $cart_total );
 
 		$currency = WC_EBANX_Constants::$local_currencies[ $country ];
 

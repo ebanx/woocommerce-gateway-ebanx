@@ -463,6 +463,38 @@ class WC_EBANX_New_Gateway extends WC_EBANX_Gateway {
 		return $rate;
 	}
 
+
+	/**
+	 *
+	 * @param string $currency
+	 * @param string $country
+	 *
+	 * @return string
+	 */
+	protected function get_exchange_rate_message( $currency, $country ) {
+		if ( $this->configs->get_setting_or_default( 'show_exchange_rate', 'no' ) === 'no' ) {
+			return '';
+		}
+
+		$rate = round( floatval( $this->get_local_currency_rate_for_site( $currency ) ), 2 );
+
+		if ( 1 === $rate ) {
+			return '';
+		}
+
+		$price    = wc_price( $rate, array( 'currency' => $currency ) );
+		$language = $this->get_language_by_country( $country );
+		$texts    = array(
+			'pt-br' => 'Taxa de câmbio: ',
+			'es'    => 'Tipo de cambio: ',
+		);
+
+		$message  = $texts[ $language ];
+		$message .= '<strong class="ebanx-exchange-rate">' . $price . '</strong>';
+
+		return $message;
+	}
+
 	/**
 	 * Queries for a currency exchange rate against site currency
 	 *
@@ -504,6 +536,8 @@ class WC_EBANX_New_Gateway extends WC_EBANX_Gateway {
 			return null;
 		}
 
+		$instalments = $instalments > 0 ? intval( $instalments ) : 1;
+
 		$amount = WC()->cart->total;
 
 		try {
@@ -530,35 +564,13 @@ class WC_EBANX_New_Gateway extends WC_EBANX_Gateway {
 			$country = trim( strtolower( WC()->customer->get_country() ) );
 		}
 
-		$rate = 1;
-		if ( in_array( $this->merchant_currency, [ WC_EBANX_Constants::CURRENCY_CODE_USD, WC_EBANX_Constants::CURRENCY_CODE_EUR ] ) ) {
-			$rate = round( floatval( $this->get_local_currency_rate_for_site( $currency ) ), 2 );
+		$instalment_terms = $this->ebanx->creditCard()->getPaymentTermsForCountryAndValue( Country::fromIso( $country ), $amount )[ $instalments - 1 ];
 
-			if ( WC()->cart->prices_include_tax ) {
-				$amount += WC()->cart->tax_total;
-			}
-		}
-
-		$amount *= $rate;
-
-		if ( 'yes' === $this->get_setting_or_default( 'interest_rates_enabled', 'no' ) && null !== $instalments ) {
-			$interest_rate = floatval( $this->configs->settings[ 'interest_rates_' . sprintf( '%02d', $instalments ) ] );
-
-			$amount += ( $amount * $interest_rate / 100 );
-		}
-
-		if ( WC_EBANX_Constants::COUNTRY_BRAZIL === $country && 'yes' === $this->configs->get_setting_or_default( 'add_iof_to_local_amount_enabled', 'yes' ) ) {
-			$amount += ( $amount * WC_EBANX_Constants::BRAZIL_TAX );
-		}
-
-		if ( null !== $instalments ) {
-			$instalment_price = $amount / $instalments;
-			$instalment_price = round( floatval( $instalment_price ), 2 );
-			$amount           = $instalment_price * $instalments;
-		}
+		// phpcs:ignore WordPress.NamingConventions.ValidVariableName
+		$amount = round( $instalment_terms->instalmentNumber * $instalment_terms->localAmountWithTax, 2 );
 
 		$message               = $this->get_checkout_message( $amount, $currency, $country );
-		$exchange_rate_message = $this->get_exchange_rate_message( $rate, $currency, $country );
+		$exchange_rate_message = $this->get_exchange_rate_message( $currency, $country );
 
 		if ( $template ) {
 			wc_get_template(

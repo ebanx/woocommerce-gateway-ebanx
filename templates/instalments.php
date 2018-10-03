@@ -23,12 +23,18 @@ if ( count( $instalments_terms ) > 1 ) : ?>
 				name="ebanx-credit-card-installments"
 			>
 				<?php foreach ( $instalments_terms as $instalment ) : ?>
-					<option value="<?php echo esc_attr( $instalment['number'] ); ?>">
+					<option value="
+					<?php
+							// phpcs:ignore WordPress.NamingConventions.ValidVariableName
+							echo esc_attr( $instalment->instalmentNumber );
+					?>
+					">
 						<?php
 							// @codingStandardsIgnoreLine
-							printf( __( '%1$dx of %2$s', 'woocommerce-gateway-ebanx' ), absint( $instalment['number'] ), esc_html( strip_tags( wc_price( $instalment['price'] * $currency_rate, array( 'currency' => $currency ) ) ) ) );
+							printf( __( '%1$dx of %2$s', 'woocommerce-gateway-ebanx' ), absint( $instalment->instalmentNumber ), esc_html( strip_tags( wc_price( $instalment->localAmountWithTax, array( 'currency' => $currency ) ) ) ) );
 
-							echo esc_html( $instalment['has_interest'] ? __( 'with interest', 'woocommerce-gateway-ebanx' ) : '' );
+							// phpcs:ignore WordPress.NamingConventions.ValidVariableName
+							echo esc_html( $instalment->hasInterests ? __( ' with interest', 'woocommerce-gateway-ebanx' ) : '' );
 						?>
 					</option>
 				<?php endforeach; ?>

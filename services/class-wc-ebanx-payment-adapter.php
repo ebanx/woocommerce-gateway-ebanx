@@ -3,6 +3,7 @@
 use Ebanx\Benjamin\Models\Address;
 use Ebanx\Benjamin\Models\Card;
 use Ebanx\Benjamin\Models\Country;
+use Ebanx\Benjamin\Models\Currency;
 use Ebanx\Benjamin\Models\Item;
 use Ebanx\Benjamin\Models\Payment;
 use Ebanx\Benjamin\Models\Person;
@@ -57,6 +58,9 @@ class WC_EBANX_Payment_Adapter {
 			if ( $configs->settings['credit_card_instalments'] > 1 && WC_EBANX_Request::has( 'ebanx_billing_instalments' ) ) {
 				$payment->instalments = WC_EBANX_Request::read( 'ebanx_billing_instalments' );
 			}
+
+			// phpcs:ignore WordPress.NamingConventions.ValidVariableName
+			$payment->amountTotal = self::get_amount_with_fees( $configs, $payment );
 		}
 
 		if ( ! empty( WC_EBANX_Request::read( 'ebanx_device_fingerprint', null ) ) ) {
@@ -361,4 +365,24 @@ class WC_EBANX_Payment_Adapter {
 			}, $order->get_items()
 		);
 	}
+
+	/**
+	 * @param WC_EBANX_Global_Gateway $configs
+	 * @param Payment                 $payment
+	 *
+	 * @return float
+	 */
+	private static function get_amount_with_fees( $configs, $payment ) { // phpcs:disable
+		$creditcard_gateway = ( new WC_EBANX_Api( $configs ) )->ebanx()->creditCard();
+		$payment_terms      = $creditcard_gateway->getPaymentTermsForCountryAndValue( $payment->address->country, $payment->amountTotal );
+		$payment_term       = $payment_terms[ intval( $payment->instalments ) - 1 ];
+
+		$amountTotal        = $payment_term->baseAmount;
+
+		if ( ! in_array( strtoupper( get_woocommerce_currency() ), Currency::globalCurrencies() ) ) {
+			$amountTotal = $payment_term->localAmountWithTax;
+		}
+
+		return round( $payment_term->instalmentNumber * $amountTotal, 2 );
+	} // phpcs:enable
 }
