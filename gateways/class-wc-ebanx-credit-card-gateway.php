@@ -1,6 +1,7 @@
 <?php
 
 use Ebanx\Benjamin\Models\Country;
+use Ebanx\Benjamin\Models\Currency;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -26,20 +27,10 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_New_Gateway {
 
 		parent::__construct();
 
+		$this->ebanx         = ( new WC_EBANX_Api( $this->configs ) )->ebanx();
 		$this->ebanx_gateway = $this->ebanx->creditCard();
 
 		add_action( 'woocommerce_order_edit_status', array( $this, 'capture_payment_action' ), 10, 2 );
-
-		if ( $this->get_setting_or_default( 'interest_rates_enabled', 'no' ) == 'yes' ) {
-			$max_instalments = $this->configs->settings['credit_card_instalments'];
-			for ( $i = 1; $i <= $max_instalments; $i++ ) {
-				$field                        = 'interest_rates_' . sprintf( '%02d', $i );
-				$this->instalment_rates[ $i ] = 0;
-				if ( is_numeric( $this->configs->settings[ $field ] ) ) {
-					$this->instalment_rates[ $i ] = $this->configs->settings[ $field ] / 100;
-				}
-			}
-		}
 
 		$this->supports = array(
 			'refunds',
@@ -326,25 +317,29 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_New_Gateway {
 	 * @return array
 	 * @throws Exception Shows param missing message.
 	 */
-	public function process_payment( $order_id ) {
+	public function process_payment( $order_id ) {// phpcs:disable
 		$has_instalments = ( WC_EBANX_Request::has( 'ebanx_billing_instalments' ) || WC_EBANX_Request::has( 'ebanx-credit-card-installments' ) );
+		$order = wc_get_order($order_id);
+		$currency = strtoupper( $order->get_order_currency() );
 
 		if ( $has_instalments ) {
 
+			$country = Country::fromIso( trim( strtolower( get_post_meta( $order_id, '_billing_country', true ) ) ) );
 			$total_price = get_post_meta( $order_id, '_order_total', true );
-			$tax_rate    = 0;
 			$instalments = WC_EBANX_Request::has( 'ebanx_billing_instalments' ) ? WC_EBANX_Request::read( 'ebanx_billing_instalments' ) : WC_EBANX_Request::read( 'ebanx-credit-card-installments' );
+			$instalment_term = $this->ebanx_gateway->getPaymentTermsForCountryAndValue( $country, $total_price )[ $instalments ];
 
-			if ( array_key_exists( $instalments, $this->instalment_rates ) ) {
-				$tax_rate = $this->instalment_rates[ $instalments ];
+			$total_price = $instalment_term->baseAmount;
+			if ( ! in_array( $currency, Currency::globalCurrencies() ) ) {
+				$total_price = $instalment_term->localAmountWithTax;
 			}
 
-			$total_price += $total_price * $tax_rate;
+			$total_price *= $instalment_term->instalmentNumber;
 			update_post_meta( $order_id, '_order_total', $total_price );
 		}
 
 		return parent::process_payment( $order_id );
-	}
+	}// phpcs:enable
 
 	/**
 	 * The page of order received, we call them as "Thank you pages"
