@@ -1,8 +1,8 @@
 ;(function($){
   // Interest rates fields
-  var maxInstalmentsField = $('#woocommerce_ebanx-global_credit_card_instalments');
-  var fields = $('.interest-rates-fields');
-  var fieldsToggler = $('#woocommerce_ebanx-global_interest_rates_enabled');
+  var maxInstalmentsField = $('#woocommerce_ebanx-global_br_credit_card_instalments');
+  var fields = $('.interest-rates-fields.interest-br');
+  var fieldsToggler = $('#woocommerce_ebanx-global_br_interest_rates_enabled');
   var fieldsDueDate = $('#woocommerce_ebanx-global_due_date_days');
 
   var disableFields = function(jqElementList){

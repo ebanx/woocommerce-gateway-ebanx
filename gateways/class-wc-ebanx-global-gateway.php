@@ -400,31 +400,19 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway {
 						),
 					);
 				}
-					// $interest_rates_array[] = array(
-					// "{$country_abbr}_interest_rates_01" => array(
-					// 'title'             => __( '1x Interest Rate in %', 'woocommerce-gateway-ebanx' ),
-					// 'type'              => 'number',
-					// 'custom_attributes' => array(
-					// 'min'  => '0',
-					// 'step' => 'any',
-					// ),
-					// 'class'             => 'interest-rates-fields ebanx-payments-option',
-					// 'placeholder'       => __( 'eg: 15.7%', 'woocommerce-gateway-ebanx' ),
-					// ),
-					// );
 				for ( $i = 1; $i <= 12; $i++ ) {
-					  $interest_rates_array[] = array(
-						  "{$country_abbr}_interest_rates_" . sprintf( '%02d', $i ) => array(
-							  'title'             => sprintf( __( '%1$sx Interest Rate in %2$s', 'woocommerce-gateway-ebanx' ), $i, '%' ),
-							  'type'              => 'number',
-							  'custom_attributes' => array(
-								  'min'  => '0',
-								  'step' => 'any',
-							  ),
-							  'class'             => 'interest-rates-fields ebanx-payments-option',
-							  'placeholder'       => __( 'eg: 15.7%', 'woocommerce-gateway-ebanx' ),
-						  ),
-					  );
+					$interest_rates_array[] = array(
+						"{$country_abbr}_interest_rates_" . sprintf( '%02d', $i ) => array(
+							'title'             => sprintf( __( '%1$sx Interest Rate in %2$s', 'woocommerce-gateway-ebanx' ), $i, '%' ),
+							'type'              => 'number',
+							'custom_attributes' => array(
+								'min'  => '0',
+								'step' => 'any',
+							),
+							'class'             => "interest-rates-fields interest-$country_abbr ebanx-payments-option",
+							'placeholder'       => __( 'eg: 15.7%', 'woocommerce-gateway-ebanx' ),
+						),
+					);
 				}
 
 					return $interest_rates_array;
