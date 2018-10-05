@@ -1,5 +1,7 @@
 <?php
 
+use Ebanx\Benjamin\Models\Country;
+
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
@@ -309,108 +311,132 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway {
 				'desc_tip'    => true,
 				'class'       => 'ebanx-payments-option manual-review-checkbox',
 			),
-			'credit_card_instalments'   => array(
-				'title'       => __( 'Maximum nº of Instalments', 'woocommerce-gateway-ebanx' ),
-				'type'        => 'select',
-				'class'       => 'wc-enhanced-select ebanx-payments-option',
-				'options'     => array(
-					'1'  => '1',
-					'2'  => '2',
-					'3'  => '3',
-					'4'  => '4',
-					'5'  => '5',
-					'6'  => '6',
-					'7'  => '7',
-					'8'  => '8',
-					'9'  => '9',
-					'10' => '10',
-					'11' => '11',
-					'12' => '12',
-					// '13' => '13',
-					// '14' => '14',
-					// '15' => '15',
-					// '16' => '16',
-					// '17' => '17',
-					// '18' => '18',
-					// '19' => '19',
-					// '20' => '20',
-					// '21' => '21',
-					// '22' => '22',
-					// '23' => '23',
-					// '24' => '24',
-					// '25' => '25',
-					// '26' => '26',
-					// '27' => '27',
-					// '28' => '28',
-					// '29' => '29',
-					// '30' => '30',
-					// '31' => '31',
-					// '32' => '32',
-					// '33' => '33',
-					// '34' => '34',
-					// '35' => '35',
-					// '36' => '36',
-				),
-				'description' => __( 'Establish the maximum number of instalments in which your customer can pay, as consented on your contract. Only Colombia supports more than 12.', 'woocommerce-gateway-ebanx' ),
-				'desc_tip'    => true,
-			),
 		);
-		$currency_code = strtolower( $this->merchant_currency );
-		if ( in_array( strtoupper( $currency_code ), WC_EBANX_Constants::$credit_card_currencies ) ) {
-			$fields[ "min_instalment_value_$currency_code" ] = array(
-				'title'             => sprintf( __( 'Minimum Instalment (%s)', 'woocommerce-gateway-ebanx' ), strtoupper( $currency_code ) ),
-				'type'              => 'number',
-				'class'             => 'ebanx-payments-option',
-				'placeholder'       => sprintf(
-					__( 'The default is %d', 'woocommerce-gateway-ebanx' ),
-					$this->get_min_instalment_value_for_currency( $currency_code )
-				),
-				'custom_attributes' => array(
-					'min'  => $this->get_min_instalment_value_for_currency( $currency_code ),
-					'step' => '0.01',
-				),
-				'desc_tip'          => true,
-				'description'       => __( 'Set the minimum installment value to show to the options for your customer on the checkout page. The default values are Brazil: BRL 5, Mexico: MXN 100, Colombia: COL 1, Argentina: ARS 1. Any amount under these will not be considered.', 'woocommerce-gateway-ebanx' ),
-			);
-		}
-		$fields                                    = array_merge(
-			$fields, array(
-				'interest_rates_enabled' => array(
-					'type'        => 'checkbox',
-					'title'       => __( 'Interest Rates', 'woocommerce-gateway-ebanx' ),
-					'label'       => __( 'Enable interest rates', 'woocommerce-gateway-ebanx' ),
-					'description' => __( 'Enable and set a custom interest rate for your customers according to the number of Instalments you allow the payment.', 'woocommerce-gateway-ebanx' ),
-					'desc_tip'    => true,
-					'class'       => 'ebanx-payments-option',
-				),
-			)
-		);
-		$interest_rates_array                      = array();
-		$interest_rates_array['interest_rates_01'] = array(
-			'title'             => __( '1x Interest Rate in %', 'woocommerce-gateway-ebanx' ),
-			'type'              => 'number',
-			'custom_attributes' => array(
-				'min'  => '0',
-				'step' => 'any',
-			),
-			'class'             => 'interest-rates-fields ebanx-payments-option',
-			'placeholder'       => __( 'eg: 15.7%', 'woocommerce-gateway-ebanx' ),
+		$interest_rates_array = array_map(
+			function ( $country_abbr ) {
+					$currency_code          = strtolower( $this->merchant_currency );
+					$country                = Country::fromIso( $country_abbr );
+					$interest_rates_array   = array();
+					$interest_rates_array[] = array(
+						"{$country_abbr}_payments_options_title" => array(
+							'title' => sprintf( __( 'Interest Options for %s', 'woocommerce-gateway-ebanx' ), $country ),
+							'type'  => 'title',
+						),
+					);
+					$interest_rates_array[] = array(
+						"{$country_abbr}_interest_rates_enabled" => array(
+							'type'        => 'checkbox',
+							'title'       => __( 'Interest Rates', 'woocommerce-gateway-ebanx' ),
+							'label'       => sprintf( __( 'Enable interest rates for %s', 'woocommerce-gateway-ebanx' ), $country ),
+							'description' => __( 'Enable and set a custom interest rate for your customers according to the number of Instalments you allow the payment.', 'woocommerce-gateway-ebanx' ),
+							'desc_tip'    => true,
+							'class'       => 'ebanx-payments-option',
+						),
+					);
+					$interest_rates_array[] = array(
+						"{$country_abbr}_credit_card_instalments" => array(
+							'title'       => sprintf( __( 'Maximum nº of Instalments for %s', 'woocommerce-gateway-ebanx' ), $country ),
+							'type'        => 'select',
+							'class'       => 'wc-enhanced-select ebanx-payments-option',
+							'options'     => array(
+								'1'  => '1',
+								'2'  => '2',
+								'3'  => '3',
+								'4'  => '4',
+								'5'  => '5',
+								'6'  => '6',
+								'7'  => '7',
+								'8'  => '8',
+								'9'  => '9',
+								'10' => '10',
+								'11' => '11',
+								'12' => '12',
+							 // '13' => '13',
+							 // '14' => '14',
+							 // '15' => '15',
+							 // '16' => '16',
+							 // '17' => '17',
+							 // '18' => '18',
+							 // '19' => '19',
+							 // '20' => '20',
+							 // '21' => '21',
+							 // '22' => '22',
+							 // '23' => '23',
+							 // '24' => '24',
+							 // '25' => '25',
+							 // '26' => '26',
+							 // '27' => '27',
+							 // '28' => '28',
+							 // '29' => '29',
+							 // '30' => '30',
+							 // '31' => '31',
+							 // '32' => '32',
+							 // '33' => '33',
+							 // '34' => '34',
+							 // '35' => '35',
+							 // '36' => '36',
+							),
+							'description' => __( 'Establish the maximum number of instalments in which your customer can pay, as consented on your contract. Only Colombia supports more than 12.', 'woocommerce-gateway-ebanx' ),
+							'desc_tip'    => true,
+						),
+					);
+
+				if ( in_array( strtoupper( $currency_code ), WC_EBANX_Constants::$credit_card_currencies ) ) {
+					$interest_rates_array[] = array(
+						"{$country_abbr}_min_instalment_value_$currency_code" => array(
+							'title'             => sprintf( __( 'Minimum Instalment for %1$s (%2$s)', 'woocommerce-gateway-ebanx' ), $country, strtoupper( $currency_code ) ),
+							'type'              => 'number',
+							'class'             => 'ebanx-payments-option',
+							'placeholder'       => sprintf(
+								__( 'The default is %d', 'woocommerce-gateway-ebanx' ),
+								$this->get_min_instalment_value_for_currency( $currency_code )
+							),
+							'custom_attributes' => array(
+								'min'  => $this->get_min_instalment_value_for_currency( $currency_code ),
+								'step' => '0.01',
+							),
+							'desc_tip'          => true,
+							'description'       => __( 'Set the minimum installment value to show to the options for your customer on the checkout page. The default values are Brazil: BRL 5, Mexico: MXN 100, Colombia: COL 1, Argentina: ARS 1. Any amount under these will not be considered.', 'woocommerce-gateway-ebanx' ),
+						),
+					);
+				}
+					// $interest_rates_array[] = array(
+					// "{$country_abbr}_interest_rates_01" => array(
+					// 'title'             => __( '1x Interest Rate in %', 'woocommerce-gateway-ebanx' ),
+					// 'type'              => 'number',
+					// 'custom_attributes' => array(
+					// 'min'  => '0',
+					// 'step' => 'any',
+					// ),
+					// 'class'             => 'interest-rates-fields ebanx-payments-option',
+					// 'placeholder'       => __( 'eg: 15.7%', 'woocommerce-gateway-ebanx' ),
+					// ),
+					// );
+				for ( $i = 1; $i <= 12; $i++ ) {
+					  $interest_rates_array[] = array(
+						  "{$country_abbr}_interest_rates_" . sprintf( '%02d', $i ) => array(
+							  'title'             => sprintf( __( '%1$sx Interest Rate in %2$s', 'woocommerce-gateway-ebanx' ), $i, '%' ),
+							  'type'              => 'number',
+							  'custom_attributes' => array(
+								  'min'  => '0',
+								  'step' => 'any',
+							  ),
+							  'class'             => 'interest-rates-fields ebanx-payments-option',
+							  'placeholder'       => __( 'eg: 15.7%', 'woocommerce-gateway-ebanx' ),
+						  ),
+					  );
+				}
+
+					return $interest_rates_array;
+			}, array_keys( WC_EBANX_Constants::$credit_card_countries )
 		);
 
-		for ( $i = 2; $i <= 12; $i++ ) {
-			$interest_rates_array[ 'interest_rates_' . sprintf( '%02d', $i ) ] = array(
-				'title'             => sprintf( __( '%sx Interest Rate', 'woocommerce-gateway-ebanx' ), $i ),
-				'type'              => 'number',
-				'custom_attributes' => array(
-					'min'  => '0',
-					'step' => 'any',
-				),
-				'class'             => 'interest-rates-fields ebanx-payments-option',
-				'placeholder'       => __( 'eg: 15.7%', 'woocommerce-gateway-ebanx' ),
-			);
+		for ( $i = 0; $i < 4; $i++ ) {
+			$array_length = count( $interest_rates_array[ $i ] );
+			for ( $j = 0; $j < $array_length; $j++ ) {
+				$fields = array_merge( $fields, $interest_rates_array[ $i ] [ $j ] );
+			}
 		}
-
-		$fields = array_merge( $fields, $interest_rates_array );
 
 		$fields = array_merge(
 			$fields, array(
