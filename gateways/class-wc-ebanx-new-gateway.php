@@ -536,8 +536,6 @@ class WC_EBANX_New_Gateway extends WC_EBANX_Gateway {
 			return null;
 		}
 
-		$instalments = $instalments > 0 ? intval( $instalments ) : 1;
-
 		$amount = WC()->cart->total;
 
 		try {
@@ -564,10 +562,14 @@ class WC_EBANX_New_Gateway extends WC_EBANX_Gateway {
 			$country = trim( strtolower( WC()->customer->get_country() ) );
 		}
 
-		$instalment_terms = $this->ebanx->creditCard()->getPaymentTermsForCountryAndValue( Country::fromIso( $country ), $amount )[ $instalments - 1 ];
+		$credit_card_gateway = $this->ebanx->creditCard();
+		if ( $credit_card_gateway->isAvailableForCountry( $country ) ) {
+			$instalments      = $instalments > 0 ? intval( $instalments ) : 1;
+			$instalment_terms = $credit_card_gateway->getPaymentTermsForCountryAndValue( Country::fromIso( $country ), $amount )[ $instalments - 1 ];
 
-		// phpcs:ignore WordPress.NamingConventions.ValidVariableName
-		$amount = round( $instalment_terms->instalmentNumber * $instalment_terms->localAmountWithTax, 2 );
+			// phpcs:ignore WordPress.NamingConventions.ValidVariableName
+			$amount = round( $instalment_terms->instalmentNumber * $instalment_terms->localAmountWithTax, 2 );
+		}
 
 		$message               = $this->get_checkout_message( $amount, $currency, $country );
 		$exchange_rate_message = $this->get_exchange_rate_message( $currency, $country );

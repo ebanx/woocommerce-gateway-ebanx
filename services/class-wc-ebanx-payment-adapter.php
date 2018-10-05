@@ -3,7 +3,6 @@
 use Ebanx\Benjamin\Models\Address;
 use Ebanx\Benjamin\Models\Card;
 use Ebanx\Benjamin\Models\Country;
-use Ebanx\Benjamin\Models\Currency;
 use Ebanx\Benjamin\Models\Item;
 use Ebanx\Benjamin\Models\Payment;
 use Ebanx\Benjamin\Models\Person;
