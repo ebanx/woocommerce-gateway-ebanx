@@ -1,6 +1,8 @@
 <?php
 
+use Ebanx\Benjamin\Models\Configs\CreditCardConfig;
 use Ebanx\Benjamin\Models\Country;
+use Ebanx\Benjamin\Models\Currency;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -562,16 +564,18 @@ class WC_EBANX_New_Gateway extends WC_EBANX_Gateway {
 			$country = trim( strtolower( WC()->customer->get_country() ) );
 		}
 
-		$credit_card_gateway = $this->ebanx->creditCard();
-		if ( $credit_card_gateway->isAvailableForCountry( $country ) ) {
+		$local_amount = $this->ebanx->exchange()->siteToLocalWithTax( strtoupper( $currency ), $amount );
+
+		$credit_card_gateway = $this->ebanx->creditCard( $this->get_credit_card_config( $country ) );
+		if ( strpos( $this->id, 'ebanx-credit-card' ) !== false && $credit_card_gateway->isAvailableForCountry( Country::fromIso( $country ) ) ) {
 			$instalments      = $instalments > 0 ? intval( $instalments ) : 1;
 			$instalment_terms = $credit_card_gateway->getPaymentTermsForCountryAndValue( Country::fromIso( $country ), $amount )[ $instalments - 1 ];
 
 			// phpcs:ignore WordPress.NamingConventions.ValidVariableName
-			$amount = round( $instalment_terms->instalmentNumber * $instalment_terms->localAmountWithTax, 2 );
+			$local_amount = round( $instalment_terms->instalmentNumber * $instalment_terms->localAmountWithTax, 2 );
 		}
 
-		$message               = $this->get_checkout_message( $amount, $currency, $country );
+		$message               = $this->get_checkout_message( $local_amount, $currency, $country );
 		$exchange_rate_message = $this->get_exchange_rate_message( $currency, $country );
 
 		if ( $template ) {
@@ -795,5 +799,28 @@ class WC_EBANX_New_Gateway extends WC_EBANX_Gateway {
 		update_user_meta( $this->user_id, '_ebanx_billing_' . $country . '_' . $field_name, $document );
 
 		return $document;
+	}
+
+	/**
+	 *
+	 * @param string $country_abbr
+	 *
+	 * @return CreditCardConfig
+	 */
+	private function get_credit_card_config( $country_abbr ) {
+		$currency_code = strtolower( get_woocommerce_currency() );
+
+		$credit_card_config = new CreditCardConfig(
+			array(
+				'maxInstalments'      => $this->configs->settings[ "{$country_abbr}_credit_card_instalments" ],
+				'minInstalmentAmount' => isset( $this->configs->settings[ "{$country_abbr}_min_instalment_value_$currency_code" ] ) ? $this->configs->settings[ "{$country_abbr}_min_instalment_value_$currency_code" ] : null,
+			)
+		);
+
+		for ( $i = 1; $i <= $this->configs->settings[ "{$country_abbr}_credit_card_instalments" ]; $i++ ) {
+			$credit_card_config->addInterest( $i, floatval( $this->configs->settings[ "{$country_abbr}_interest_rates_" . sprintf( '%02d', $i ) ] ) );
+		}
+
+		return $credit_card_config;
 	}
 }

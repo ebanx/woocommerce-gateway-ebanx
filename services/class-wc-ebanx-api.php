@@ -28,7 +28,7 @@ class WC_EBANX_Api {
 	 */
 	public function __construct( WC_EBANX_Global_Gateway $configs ) {
 		$this->configs = $configs;
-		$this->ebanx   = EBANX( $this->get_config(), $this->get_credit_card_config() );
+		$this->ebanx   = EBANX( $this->get_config() );
 	}
 
 	/**
@@ -50,27 +50,6 @@ class WC_EBANX_Api {
 				],
 			)
 		);
-	}
-
-	/**
-	 *
-	 * @return CreditCardConfig
-	 */
-	private function get_credit_card_config() {
-		$currency_code = strtolower( get_woocommerce_currency() );
-
-		$credit_card_config = new CreditCardConfig(
-			array(
-				'maxInstalments'      => $this->configs->settings['credit_card_instalments'],
-				'minInstalmentAmount' => isset( $this->configs->settings[ "min_instalment_value_$currency_code" ] ) ? $this->configs->settings[ "min_instalment_value_$currency_code" ] : null,
-			)
-		);
-
-		for ( $i = 1; $i <= $this->configs->settings['credit_card_instalments']; $i++ ) {
-			$credit_card_config->addInterest( $i, floatval( $this->configs->settings[ 'interest_rates_' . sprintf( '%02d', $i ) ] ) );
-		}
-
-		return $credit_card_config;
 	}
 
 	/**

@@ -1,8 +1,17 @@
 ;(function($){
   // Interest rates fields
-  var maxInstalmentsField = $('#woocommerce_ebanx-global_br_credit_card_instalments');
-  var fields = $('.interest-rates-fields.interest-br');
-  var fieldsToggler = $('#woocommerce_ebanx-global_br_interest_rates_enabled');
+  var maxInstalmentsFieldAr = $('#woocommerce_ebanx-global_ar_credit_card_instalments');
+  var maxInstalmentsFieldBr = $('#woocommerce_ebanx-global_br_credit_card_instalments');
+  var maxInstalmentsFieldCo = $('#woocommerce_ebanx-global_co_credit_card_instalments');
+  var maxInstalmentsFieldMx = $('#woocommerce_ebanx-global_mx_credit_card_instalments');
+  var fieldsAr = $('.interest-rates-fields.interest-ar');
+  var fieldsBr = $('.interest-rates-fields.interest-br');
+  var fieldsCo = $('.interest-rates-fields.interest-co');
+  var fieldsMx = $('.interest-rates-fields.interest-mx');
+  var fieldsTogglerAr = $('#woocommerce_ebanx-global_ar_interest_rates_enabled');
+  var fieldsTogglerBr = $('#woocommerce_ebanx-global_br_interest_rates_enabled');
+  var fieldsTogglerCo = $('#woocommerce_ebanx-global_co_interest_rates_enabled');
+  var fieldsTogglerMx = $('#woocommerce_ebanx-global_mx_interest_rates_enabled');
   var fieldsDueDate = $('#woocommerce_ebanx-global_due_date_days');
 
   var disableFields = function(jqElementList){
@@ -13,12 +22,12 @@
     jqElementList.closest('tr').show();
   };
 
-  var updateFields = function () {
-    var maxInstalments = maxInstalmentsField.val();
-    disableFields(fields);
+  var updateFieldsAr = function () {
+    var maxInstalments = maxInstalmentsFieldAr.val();
+    disableFields(fieldsAr);
 
-    if (fieldsToggler.length == 1 && fieldsToggler[0].checked) {
-      fields.each(function() {
+    if (fieldsTogglerAr.length == 1 && fieldsTogglerAr[0].checked) {
+      fieldsAr.each(function() {
         var $this = $(this);
         var idnum = parseInt($this.attr('id').substr(-2));
         if (idnum <= maxInstalments) {
@@ -28,13 +37,85 @@
     }
   };
 
-  fieldsToggler
+  var updateFieldsBr = function () {
+    var maxInstalments = maxInstalmentsFieldBr.val();
+    disableFields(fieldsBr);
+
+    if (fieldsTogglerBr.length == 1 && fieldsTogglerBr[0].checked) {
+      fieldsBr.each(function() {
+        var $this = $(this);
+        var idnum = parseInt($this.attr('id').substr(-2));
+        if (idnum <= maxInstalments) {
+          enableFields($this);
+        }
+      });
+    }
+  };
+
+  var updateFieldsCo = function () {
+    var maxInstalments = maxInstalmentsFieldCo.val();
+    disableFields(fieldsCo);
+
+    if (fieldsTogglerCo.length == 1 && fieldsTogglerCo[0].checked) {
+      fieldsCo.each(function() {
+        var $this = $(this);
+        var idnum = parseInt($this.attr('id').substr(-2));
+        if (idnum <= maxInstalments) {
+          enableFields($this);
+        }
+      });
+    }
+  };
+
+  var updateFieldsMx = function () {
+    var maxInstalments = maxInstalmentsFieldMx.val();
+    disableFields(fieldsMx);
+
+    if (fieldsTogglerMx.length == 1 && fieldsTogglerMx[0].checked) {
+      fieldsMx.each(function() {
+        var $this = $(this);
+        var idnum = parseInt($this.attr('id').substr(-2));
+        if (idnum <= maxInstalments) {
+          enableFields($this);
+        }
+      });
+    }
+  };
+
+  fieldsTogglerAr
     .click(function () {
-      updateFields();
+      updateFieldsAr();
     });
 
-  maxInstalmentsField.change(function () {
-    updateFields();
+  maxInstalmentsFieldAr.change(function () {
+    updateFieldsAr();
+  });
+
+  fieldsTogglerBr
+    .click(function () {
+      updateFieldsBr();
+    });
+
+  maxInstalmentsFieldBr.change(function () {
+    updateFieldsBr();
+  });
+
+  fieldsTogglerCo
+    .click(function () {
+      updateFieldsCo();
+    });
+
+  maxInstalmentsFieldCo.change(function () {
+    updateFieldsCo();
+  });
+
+  fieldsTogglerMx
+    .click(function () {
+      updateFieldsMx();
+    });
+
+  maxInstalmentsFieldMx.change(function () {
+    updateFieldsMx();
   });
 
   // Fields due date
@@ -52,7 +133,10 @@
 
     //Extra call to update checkout manager stuff on open
     if (wasClosed) {
-      updateFields();
+      updateFieldsAr();
+      updateFieldsBr();
+      updateFieldsCo();
+      updateFieldsMx();
     }
 
     localStorage.setItem('ebanx_payments_options_toggle', wasClosed ? 'open' : 'closed');
@@ -66,6 +150,9 @@
     toggleElements();
   } else {
     //Extra call to update checkout manager stuff if it's already open
-    updateFields();
+    updateFieldsAr();
+    updateFieldsBr();
+    updateFieldsCo();
+    updateFieldsMx();
   }
 })(jQuery);

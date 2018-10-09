@@ -321,6 +321,7 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway {
 						"{$country_abbr}_payments_options_title" => array(
 							'title' => sprintf( __( 'Interest Options for %s', 'woocommerce-gateway-ebanx' ), $country ),
 							'type'  => 'title',
+							'class' => 'ebanx-payments-option',
 						),
 					);
 					$interest_rates_array[] = array(
@@ -337,7 +338,7 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway {
 						"{$country_abbr}_credit_card_instalments" => array(
 							'title'       => sprintf( __( 'Maximum nº of Instalments for %s', 'woocommerce-gateway-ebanx' ), $country ),
 							'type'        => 'select',
-							'class'       => 'wc-enhanced-select ebanx-payments-option',
+							'class'       => 'wc-enhanced-select ebanx-payments-option ebanx-credit-card-instalments',
 							'options'     => array(
 								'1'  => '1',
 								'2'  => '2',

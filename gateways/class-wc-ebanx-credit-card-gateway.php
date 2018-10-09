@@ -1,5 +1,6 @@
 <?php
 
+use Ebanx\Benjamin\Models\Configs\CreditCardConfig;
 use Ebanx\Benjamin\Models\Country;
 use Ebanx\Benjamin\Models\Currency;
 
@@ -28,7 +29,7 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_New_Gateway {
 		parent::__construct();
 
 		$this->ebanx         = ( new WC_EBANX_Api( $this->configs ) )->ebanx();
-		$this->ebanx_gateway = $this->ebanx->creditCard();
+		$this->ebanx_gateway = $this->ebanx->creditCard( new CreditCardConfig() );
 
 		add_action( 'woocommerce_order_edit_status', array( $this, 'capture_payment_action' ), 10, 2 );
 
@@ -88,14 +89,14 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_New_Gateway {
 
 		$order = wcs_get_subscription( $subscription_id );
 
+		$country = $this->get_transaction_address( 'country' );
+
 		$user_cc = get_user_meta( $order->data['customer_id'], '_ebanx_credit_card_token', true );
 
 		if ( count( $user_cc ) ) {
 			$data = $this->transform_payment_data( $order );
 
-			$ebanx = ( new WC_EBANX_Api( $this->configs ) )->ebanx();
-
-			$response = $ebanx->creditCard()->create( $data );
+			$response = $this->ebanx->creditCard( $this->get_credit_card_config( $country ) )->create( $data );
 
 			WC_EBANX_Subscription_Renewal_Logger::persist(
 				array(
@@ -321,12 +322,13 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_New_Gateway {
 		$has_instalments = ( WC_EBANX_Request::has( 'ebanx_billing_instalments' ) || WC_EBANX_Request::has( 'ebanx-credit-card-installments' ) );
 		$order = wc_get_order($order_id);
 		$currency = strtoupper( $order->get_order_currency() );
+		$country_abbr = trim(strtolower(get_post_meta($order_id, '_billing_country', true)));
+		$this->ebanx_gateway = $this->ebanx->creditCard( $this->get_credit_card_config( $country_abbr ) );
 
 		if ( $has_instalments ) {
-
-			$country = Country::fromIso( trim( strtolower( get_post_meta( $order_id, '_billing_country', true ) ) ) );
-			$total_price = get_post_meta( $order_id, '_order_total', true );
-			$instalments = WC_EBANX_Request::has( 'ebanx_billing_instalments' ) ? WC_EBANX_Request::read( 'ebanx_billing_instalments' ) : WC_EBANX_Request::read( 'ebanx-credit-card-installments' );
+			$country         = Country::fromIso($country_abbr);
+			$total_price     = get_post_meta( $order_id, '_order_total', true );
+			$instalments     = WC_EBANX_Request::has( 'ebanx_billing_instalments' ) ? WC_EBANX_Request::read( 'ebanx_billing_instalments' ) : WC_EBANX_Request::read( 'ebanx-credit-card-installments' );
 			$instalment_term = $this->ebanx_gateway->getPaymentTermsForCountryAndValue( $country, $total_price )[ $instalments - 1 ];
 
 			$total_price = $instalment_term->baseAmount;
@@ -384,8 +386,18 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_New_Gateway {
 	 * @return array   An array of instalment with price, amount, if it has interests and the number
 	 */
 	public function get_payment_terms( $country, $amount ) {
-		$credit_card_gateway = ( new WC_EBANX_Api( $this->configs ) )->ebanx()->creditCard();
-		$instalments = $credit_card_gateway->getPaymentTermsForCountryAndValue( Country::fromIso( $country ), $amount );
+		$credit_card_gateway = $this->ebanx->creditCard( $this->get_credit_card_config( $country ) );
+		$instalments_terms = $credit_card_gateway->getPaymentTermsForCountryAndValue( Country::fromIso( $country ), $amount );
+
+		foreach ( $instalments_terms as $term ) {
+			$instalments[] = array(
+				// phpcs:disable
+				'price'        => $term->localAmountWithTax,
+				'has_interest' => $term->hasInterests,
+				'number'       => $term->instalmentNumber,
+				// phpcs:enable
+			);
+		}
 
 		try {
 			$apply_filters = apply_filters( 'ebanx_get_payment_terms', $instalments );
@@ -451,5 +463,28 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_New_Gateway {
 			'woocommerce/ebanx/',
 			WC_EBANX::get_templates_path()
 		);
+	}
+
+	/**
+	 *
+	 * @param string $country_abbr
+	 *
+	 * @return CreditCardConfig
+	 */
+	private function get_credit_card_config( $country_abbr ) {
+		$currency_code = strtolower( get_woocommerce_currency() );
+
+		$credit_card_config = new CreditCardConfig(
+			array(
+				'maxInstalments'      => $this->configs->settings[ "{$country_abbr}_credit_card_instalments" ],
+				'minInstalmentAmount' => isset( $this->configs->settings[ "{$country_abbr}_min_instalment_value_$currency_code" ] ) ? $this->configs->settings[ "{$country_abbr}_min_instalment_value_$currency_code" ] : null,
+			)
+		);
+
+		for ( $i = 1; $i <= $this->configs->settings[ "{$country_abbr}_credit_card_instalments" ]; $i++ ) {
+			$credit_card_config->addInterest( $i, floatval( $this->configs->settings[ "{$country_abbr}_interest_rates_" . sprintf( '%02d', $i ) ] ) );
+		}
+
+		return $credit_card_config;
 	}
 }
