@@ -392,15 +392,7 @@ class WC_EBANX_One_Click {
 
 		$cart_total = $product->price;
 
-		$max_instalments = min( $this->gateway->configs->settings['credit_card_instalments'], WC_EBANX_Constants::$max_instalments[ $country ] );
-
-		$tax = 0;
-		if ( get_woocommerce_currency() === WC_EBANX_Constants::CURRENCY_CODE_BRL
-			 && 'yes' === $this->gateway->get_setting_or_default( 'add_iof_to_local_amount_enabled', 'yes' ) ) {
-			$tax = WC_EBANX_Constants::CURRENCY_CODE_BRL;
-		}
-
-		$instalments_terms = $this->gateway->get_payment_terms( $cart_total, $max_instalments, $tax );
+		$instalments_terms = $this->gateway->get_payment_terms( $country, $cart_total );
 		$currency          = WC_EBANX_Constants::$local_currencies[ $country ];
 		$ebanx             = new WC_EBANX_New_Gateway();
 

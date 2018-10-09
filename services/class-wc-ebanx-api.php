@@ -59,12 +59,18 @@ class WC_EBANX_Api {
 	private function get_credit_card_config() {
 		$currency_code = strtolower( get_woocommerce_currency() );
 
-		return new CreditCardConfig(
+		$credit_card_config = new CreditCardConfig(
 			array(
 				'maxInstalments'      => $this->configs->settings['credit_card_instalments'],
 				'minInstalmentAmount' => isset( $this->configs->settings[ "min_instalment_value_$currency_code" ] ) ? $this->configs->settings[ "min_instalment_value_$currency_code" ] : null,
 			)
 		);
+
+		for ( $i = 1; $i <= $this->configs->settings['credit_card_instalments']; $i++ ) {
+			$credit_card_config->addInterest( $i, floatval( $this->configs->settings[ 'interest_rates_' . sprintf( '%02d', $i ) ] ) );
+		}
+
+		return $credit_card_config;
 	}
 
 	/**

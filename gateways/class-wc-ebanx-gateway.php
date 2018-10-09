@@ -427,36 +427,6 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway {
 
 	/**
 	 *
-	 * @param double $rate
-	 * @param string $currency
-	 * @param string $country
-	 *
-	 * @return string
-	 */
-	protected function get_exchange_rate_message( $rate, $currency, $country ) {
-		if ( $this->configs->get_setting_or_default( 'show_exchange_rate', 'no' ) === 'no' ) {
-			return '';
-		}
-
-		if ( 1 === $rate ) {
-			return '';
-		}
-
-		$price    = wc_price( $rate, array( 'currency' => $currency ) );
-		$language = $this->get_language_by_country( $country );
-		$texts    = array(
-			'pt-br' => 'Taxa de câmbio: ',
-			'es'    => 'Tipo de cambio: ',
-		);
-
-		$message  = $texts[ $language ];
-		$message .= '<strong class="ebanx-exchange-rate">' . $price . '</strong>';
-
-		return $message;
-	}
-
-	/**
-	 *
 	 * @param string $country
 	 *
 	 * @return string

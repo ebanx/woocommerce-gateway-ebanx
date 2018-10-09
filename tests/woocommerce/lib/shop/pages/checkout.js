@@ -131,6 +131,7 @@ export default class Checkout {
 
   [fillPhone] (data) {
     this[fillInput](data, 'phone', '#billing_phone');
+    this[waitOverlay]();
   }
 
   [fillEmail] (data) {
