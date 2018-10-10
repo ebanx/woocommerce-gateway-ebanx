@@ -1,7 +1,5 @@
 <?php
 
-use Ebanx\Benjamin\Models\Country;
-
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
@@ -315,7 +313,7 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway {
 		$interest_rates_array = array_map(
 			function ( $country_abbr ) {
 					$currency_code          = strtolower( $this->merchant_currency );
-					$country                = Country::fromIso( $country_abbr );
+					$country                = 'brazil';
 					$interest_rates_array   = array();
 					$interest_rates_array[] = array(
 						"{$country_abbr}_payments_options_title" => array(
