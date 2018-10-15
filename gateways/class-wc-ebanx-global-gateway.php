@@ -11,6 +11,13 @@ require_once WC_EBANX_SERVICES_DIR . 'class-wc-ebanx-constants.php';
  * Class WC_EBANX_Global_Gateway
  */
 final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway {
+	const CC_COUNTRIES_FROM_ISO = [
+		WC_EBANX_Constants::COUNTRY_ARGENTINA => 'Argentina',
+		WC_EBANX_Constants::COUNTRY_BRAZIL    => 'Brazil',
+		WC_EBANX_Constants::COUNTRY_COLOMBIA  => 'Colombia',
+		WC_EBANX_Constants::COUNTRY_MEXICO    => 'Mexico',
+	];
+
 	/**
 	 * Mock to insert when plugin is installed
 	 *
@@ -319,7 +326,7 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway {
 		$interest_rates_array = array_map(
 			function ( $country_abbr ) {
 					$currency_code          = strtolower( $this->merchant_currency );
-					$country                = 'brazil';
+					$country                = self::CC_COUNTRIES_FROM_ISO[ $country_abbr ];
 					$interest_rates_array   = array();
 					$interest_rates_array[] = array(
 						"{$country_abbr}_payments_options_title" => array(
@@ -420,7 +427,7 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway {
 					);
 				}
 
-					return $interest_rates_array;
+				return $interest_rates_array;
 			}, array_keys( WC_EBANX_Constants::$credit_card_countries )
 		);
 
