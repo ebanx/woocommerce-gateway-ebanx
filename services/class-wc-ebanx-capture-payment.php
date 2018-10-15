@@ -1,5 +1,7 @@
 <?php
 
+use Ebanx\Benjamin\Models\Configs\CreditCardConfig;
+
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
@@ -96,8 +98,8 @@ class WC_EBANX_Capture_Payment {
 			return;
 		}
 
-		$response     = $ebanx->creditCard()->captureByHash( $payment_hash );
-		$error        = static::check_capture_errors( $response );
+		$response = $ebanx->creditCard( static::get_credit_card_config( $payment_data->country ) )->captureByHash( $payment_hash );
+		$error    = static::check_capture_errors( $response );
 
 		$is_recapture = false;
 		if ( $error ) {
@@ -161,5 +163,29 @@ class WC_EBANX_Capture_Payment {
 			'message' => $message,
 			'status'  => $status,
 		);
+	}
+
+	/**
+	 *
+	 * @param string $country_abbr
+	 *
+	 * @return CreditCardConfig
+	 */
+	private static function get_credit_card_config( $country_abbr ) {
+		$currency_code = strtolower( get_woocommerce_currency() );
+		$configs = new WC_EBANX_Global_Gateway();
+
+		$credit_card_config = new CreditCardConfig(
+			array(
+				'maxInstalments'      => $configs->settings[ "{$country_abbr}_credit_card_instalments" ],
+				'minInstalmentAmount' => isset( $configs->settings[ "{$country_abbr}_min_instalment_value_$currency_code" ] ) ? $configs->settings[ "{$country_abbr}_min_instalment_value_$currency_code" ] : null,
+			)
+		);
+
+		for ( $i = 1; $i <= $configs->settings[ "{$country_abbr}_credit_card_instalments" ]; $i++ ) {
+			$credit_card_config->addInterest( $i, floatval( $configs->settings[ "{$country_abbr}_interest_rates_" . sprintf( '%02d', $i ) ] ) );
+		}
+
+		return $credit_card_config;
 	}
 }
