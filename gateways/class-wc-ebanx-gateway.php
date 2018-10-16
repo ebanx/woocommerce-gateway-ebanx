@@ -16,12 +16,14 @@ add_action( 'wp_ajax_ebanx_update_converted_value', 'ebanx_update_converted_valu
  * @throws Exception Param not found.
  */
 function ebanx_update_converted_value() {
-	$gateway = new WC_EBANX_New_Gateway();
+	$country = WC_EBANX_Request::read( 'country' );
+	$gateway_class_name = 'WC_EBANX_Credit_Card_' . strtoupper( $country ) . '_Gateway';
+	$gateway = new $gateway_class_name();
 
 	echo $gateway->checkout_rate_conversion( // phpcs:ignore WordPress.XSS.EscapeOutput
 		WC_EBANX_Request::read( 'currency' ),
 		false,
-		WC_EBANX_Request::read( 'country' ), // phpcs:ignore WordPress.XSS.EscapeOutput
+		$country, // phpcs:ignore WordPress.XSS.EscapeOutput
 		WC_EBANX_Request::read( 'instalments' ) // phpcs:ignore WordPress.XSS.EscapeOutput
 	);
 
