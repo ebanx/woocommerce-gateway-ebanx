@@ -1,5 +1,9 @@
 # CHANGELOG
 
+# 1.34.0
+* Feature - Use Benjamin to calculate instalments values [#699](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/699)
+* Feature - It is now possible to configure different interest rates fees for each country that accepts credit card [#700](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/700)
+
 # 1.33.1
 * Fix - Document will not be mandatory when a gateway that is not from EBANX is selected [#697](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/697)
 
