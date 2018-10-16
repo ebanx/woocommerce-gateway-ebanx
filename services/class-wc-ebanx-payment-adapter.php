@@ -54,7 +54,7 @@ class WC_EBANX_Payment_Adapter {
 		if ( in_array( $country, WC_EBANX_Constants::$credit_card_countries ) ) {
 			$payment->instalments = '1';
 
-			if ( $configs->settings['credit_card_instalments'] > 1 && WC_EBANX_Request::has( 'ebanx_billing_instalments' ) ) {
+			if ( $configs->settings[ "{$country}_credit_card_instalments" ] > 1 && WC_EBANX_Request::has( 'ebanx_billing_instalments' ) ) {
 				$payment->instalments = WC_EBANX_Request::read( 'ebanx_billing_instalments' );
 			}
 		}

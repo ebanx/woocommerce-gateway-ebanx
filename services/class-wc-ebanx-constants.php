@@ -112,10 +112,10 @@ abstract class WC_EBANX_Constants {
 	 * @var array
 	 */
 	public static $credit_card_countries = array(
-		self::COUNTRY_BRAZIL    => self::COUNTRY_BRAZIL,
-		self::COUNTRY_MEXICO    => self::COUNTRY_MEXICO,
-		self::COUNTRY_COLOMBIA  => self::COUNTRY_COLOMBIA,
 		self::COUNTRY_ARGENTINA => self::COUNTRY_ARGENTINA,
+		self::COUNTRY_BRAZIL    => self::COUNTRY_BRAZIL,
+		self::COUNTRY_COLOMBIA  => self::COUNTRY_COLOMBIA,
+		self::COUNTRY_MEXICO    => self::COUNTRY_MEXICO,
 	);
 
 	/**

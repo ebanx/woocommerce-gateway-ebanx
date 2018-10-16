@@ -26,7 +26,10 @@ env:
     - TEST_COUNTRY=mexico
     - TEST_COUNTRY=peru
 
-install: composer update
+install:
+  - composer update
+  - cd $TRAVIS_BUILD_DIR/tests & npm install
+  - cd $TRAVIS_BUILD_DIR
 
 script:
   - bash ./tests/bin/test.sh

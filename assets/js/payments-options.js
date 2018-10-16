@@ -1,8 +1,18 @@
 ;(function($){
-  // Interest rates fields
-  var maxInstalmentsField = $('#woocommerce_ebanx-global_credit_card_instalments');
-  var fields = $('.interest-rates-fields');
-  var fieldsToggler = $('#woocommerce_ebanx-global_interest_rates_enabled');
+  var availableCountries = ['ar', 'br', 'co', 'mx'];
+
+  var getMaxInstalmentsFields = function (country) {
+    return $('#woocommerce_ebanx-global_' + country + '_credit_card_instalments');
+  };
+
+  var getInterestRateInputs = function (country) {
+    return $('.interest-rates-fields.interest-' + country);
+  };
+
+  var getInterestInputsToggler = function (country) {
+    return $('#woocommerce_ebanx-global_'+ country + '_interest_rates_enabled');
+  };
+
   var fieldsDueDate = $('#woocommerce_ebanx-global_due_date_days');
 
   var disableFields = function(jqElementList){
@@ -13,12 +23,15 @@
     jqElementList.closest('tr').show();
   };
 
-  var updateFields = function () {
-    var maxInstalments = maxInstalmentsField.val();
-    disableFields(fields);
+  var updateFields = function (country) {
+    var maxInstalments = getMaxInstalmentsFields(country).val();
+    var interestRateInputs = getInterestRateInputs(country);
+    var interestInputsToggler = getInterestInputsToggler(country);
 
-    if (fieldsToggler.length == 1 && fieldsToggler[0].checked) {
-      fields.each(function() {
+    disableFields(interestRateInputs);
+
+    if (interestInputsToggler.length == 1 && interestInputsToggler[0].checked) {
+      interestRateInputs.each(function() {
         var $this = $(this);
         var idnum = parseInt($this.attr('id').substr(-2));
         if (idnum <= maxInstalments) {
@@ -28,13 +41,9 @@
     }
   };
 
-  fieldsToggler
-    .click(function () {
-      updateFields();
-    });
-
-  maxInstalmentsField.change(function () {
-    updateFields();
+  availableCountries.forEach(function (country) {
+    getInterestInputsToggler(country).on('click', function () { updateFields(country) });
+    getMaxInstalmentsFields(country).on('change', function () { updateFields(country) });
   });
 
   // Fields due date
@@ -52,7 +61,7 @@
 
     //Extra call to update checkout manager stuff on open
     if (wasClosed) {
-      updateFields();
+      availableCountries.forEach(updateFields);
     }
 
     localStorage.setItem('ebanx_payments_options_toggle', wasClosed ? 'open' : 'closed');
@@ -66,6 +75,6 @@
     toggleElements();
   } else {
     //Extra call to update checkout manager stuff if it's already open
-    updateFields();
+    availableCountries.forEach(updateFields);
   }
 })(jQuery);
