@@ -440,10 +440,6 @@ export default class Checkout {
       // TODO: Move to another place (something like: `pay/pages/simulator`)
 
       waitUrlHas(simulatorUrl);
-
-      this.cy
-        .get(`.safetypay-${data.paymentType.toLowerCase()}`, { timeout: 15000 })
-        .should('be.visible');
     });
   }
 
@@ -456,10 +452,6 @@ export default class Checkout {
       // TODO: Move to another place (something like: `pay/pages/simulator`)
 
       waitUrlHas(simulatorUrl);
-
-      this.cy
-        .get('.via.eft', { timeout: 15000 })
-        .should('be.visible');
     });
   }
 
@@ -529,10 +521,6 @@ export default class Checkout {
       this[placeOrder]();
 
       waitUrlHas(simulatorUrl);
-
-      this.cy
-        .get('.via.sencillito img.logoPT', { timeout: 15000 })
-        .should('be.visible');
     });
   }
 
@@ -542,10 +530,6 @@ export default class Checkout {
       this[placeOrder]();
 
       waitUrlHas(simulatorUrl);
-
-      this.cy
-        .get('.via.servipag img.logoPT', { timeout: 15000 })
-        .should('be.visible');
     });
   }
 
@@ -555,10 +539,6 @@ export default class Checkout {
       this[placeOrder]();
 
       waitUrlHas(simulatorUrl);
-
-      this.cy
-        .get('.via.webpay img.logoPT', { timeout: 15000 })
-        .should('be.visible');
     });
   }
 
@@ -568,10 +548,6 @@ export default class Checkout {
       this[placeOrder]();
 
       waitUrlHas(simulatorUrl);
-
-      this.cy
-        .get('.via.multicaja img.logoPT', { timeout: 15000 })
-        .should('be.visible');
     });
   }
 
