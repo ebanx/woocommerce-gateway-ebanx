@@ -31,6 +31,7 @@ const fillDebitCardNumber = Symbol('fillDebitCardNumber');
 const fillCreditCardNumber = Symbol('fillCreditCardNumber');
 const fillCreditCardExpiryDate = Symbol('fillCreditCardExpiryDate');
 const fillDebitCardExpiryDate = Symbol('fillDebitCardExpiryDate');
+const simulatorUrl = `${pay.api.url}/directtefredirect/execute`;
 
 export default class Checkout {
   constructor(cy) {
@@ -438,7 +439,7 @@ export default class Checkout {
 
       // TODO: Move to another place (something like: `pay/pages/simulator`)
 
-      waitUrlHas(`${pay.api.url}/simulator/confirm`);
+      waitUrlHas(simulatorUrl);
 
       this.cy
         .get(`.safetypay-${data.paymentType.toLowerCase()}`, { timeout: 15000 })
@@ -454,7 +455,7 @@ export default class Checkout {
 
       // TODO: Move to another place (something like: `pay/pages/simulator`)
 
-      waitUrlHas(`${pay.api.url}/simulator/confirm`);
+      waitUrlHas(simulatorUrl);
 
       this.cy
         .get('.via.eft', { timeout: 15000 })
@@ -527,7 +528,7 @@ export default class Checkout {
       this[fillBilling](data);
       this[placeOrder]();
 
-      waitUrlHas(`${pay.api.url}/simulator/confirm`);
+      waitUrlHas(simulatorUrl);
 
       this.cy
         .get('.via.sencillito img.logoPT', { timeout: 15000 })
@@ -540,7 +541,7 @@ export default class Checkout {
       this[fillBilling](data);
       this[placeOrder]();
 
-      waitUrlHas(`${pay.api.url}/simulator/confirm`);
+      waitUrlHas(simulatorUrl);
 
       this.cy
         .get('.via.servipag img.logoPT', { timeout: 15000 })
@@ -553,7 +554,7 @@ export default class Checkout {
       this[fillBilling](data);
       this[placeOrder]();
 
-      waitUrlHas(`${pay.api.url}/simulator/confirm`);
+      waitUrlHas(simulatorUrl);
 
       this.cy
         .get('.via.webpay img.logoPT', { timeout: 15000 })
@@ -566,7 +567,7 @@ export default class Checkout {
       this[fillBilling](data);
       this[placeOrder]();
 
-      waitUrlHas(`${pay.api.url}/simulator/confirm`);
+      waitUrlHas(simulatorUrl);
 
       this.cy
         .get('.via.multicaja img.logoPT', { timeout: 15000 })
