@@ -46,7 +46,6 @@ class WC_EBANX_One_Click {
 	public function __construct() {
 		$this->user_id      = get_current_user_id();
 		$this->user_country = trim( strtolower( get_user_meta( $this->user_id, 'billing_country', true ) ) );
-		$this->gateway      = $this->user_country ? ( WC_EBANX_Constants::COUNTRY_BRAZIL === $this->user_country ? new WC_EBANX_Credit_Card_BR_Gateway() : new WC_EBANX_Credit_Card_MX_Gateway() ) : false;
 
 		switch ( $this->user_country ) {
 			case WC_EBANX_Constants::COUNTRY_ARGENTINA:
@@ -61,6 +60,8 @@ class WC_EBANX_One_Click {
 			case WC_EBANX_Constants::COUNTRY_MEXICO:
 				$this->gateway = new WC_EBANX_Credit_Card_MX_Gateway();
 				break;
+			default:
+				$this->gateway = false;
 		}
 
 		if ( ! $this->gateway

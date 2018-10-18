@@ -31,7 +31,7 @@ const fillDebitCardNumber = Symbol('fillDebitCardNumber');
 const fillCreditCardNumber = Symbol('fillCreditCardNumber');
 const fillCreditCardExpiryDate = Symbol('fillCreditCardExpiryDate');
 const fillDebitCardExpiryDate = Symbol('fillDebitCardExpiryDate');
-const simulatorUrl = `${pay.api.url}/directtefredirect/execute`;
+const simulatorUrl = `${pay.api.url}/simulator/confirm`;
 
 export default class Checkout {
   constructor(cy) {

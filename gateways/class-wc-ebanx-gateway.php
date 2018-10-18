@@ -382,7 +382,6 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway {
 		$price    = wc_price( $amount, array( 'currency' => $currency ) );
 		$language = $this->get_language_by_country( $country );
 
-
 		$texts = array(
 			'pt-br' => array(
 				'INTRO'                               => 'Total a pagar ',
