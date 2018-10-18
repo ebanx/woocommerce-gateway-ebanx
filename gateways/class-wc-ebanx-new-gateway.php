@@ -564,7 +564,9 @@ class WC_EBANX_New_Gateway extends WC_EBANX_Gateway {
 			$country = trim( strtolower( WC()->customer->get_country() ) );
 		}
 
-		$local_amount = $this->ebanx->exchange()->siteToLocalWithTax( strtoupper( $currency ), $amount );
+		$exchange              = $this->ebanx->exchange();
+		$local_amount          = $exchange->siteToLocal( strtoupper( $currency ), $amount );
+		$local_amount_with_tax = $exchange->siteToLocalWithTax( strtoupper( $currency ), $amount );
 
 		$credit_card_gateway = $this->ebanx->creditCard( $this->get_credit_card_config( $country ) );
 		if ( strpos( $this->id, 'ebanx-credit-card' ) !== false && $credit_card_gateway->isAvailableForCountry( Country::fromIso( $country ) ) ) {
@@ -572,10 +574,15 @@ class WC_EBANX_New_Gateway extends WC_EBANX_Gateway {
 			$instalment_terms = $credit_card_gateway->getPaymentTermsForCountryAndValue( Country::fromIso( $country ), $amount )[ $instalments - 1 ];
 
 			// phpcs:ignore WordPress.NamingConventions.ValidVariableName
-			$local_amount = round( $instalment_terms->instalmentNumber * $instalment_terms->localAmountWithTax, 2 );
+			$local_amount = round( $instalment_terms->instalmentNumber * $exchange->siteToLocal( $instalment_terms->baseAmount ), 2 );
+			// phpcs:ignore WordPress.NamingConventions.ValidVariableName
+			$local_amount_with_tax = round( $instalment_terms->instalmentNumber * $instalment_terms->localAmountWithTax, 2 );
 		}
 
-		$message               = $this->get_checkout_message( $local_amount, $currency, $country );
+		$has_taxes_with_local_amount = $this->configs->get_setting_or_default( 'add_iof_to_local_amount_enabled', 'yes' ) === 'yes' ? true : false;
+		$total_local_amount = $has_taxes_with_local_amount ? $local_amount_with_tax : $local_amount;
+
+		$message               = $this->get_checkout_message( $total_local_amount, $currency, $country );
 		$exchange_rate_message = $this->get_exchange_rate_message( $currency, $country );
 
 		if ( $template ) {
