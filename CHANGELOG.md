@@ -1,5 +1,9 @@
 # CHANGELOG
 
+# 1.34.1
+* Fix - Show value without taxes correctly when flag is disabled
+* FIx - Resolved error message on product page for countries without creditcard [#701](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/701)
+
 # 1.34.0
 * Feature - Use Benjamin to calculate instalments values [#699](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/699)
 * Feature - It is now possible to configure different interest rates fees for each country that accepts credit card [#700](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/700)
