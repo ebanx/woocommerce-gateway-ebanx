@@ -1,5 +1,8 @@
 # CHANGELOG
 
+# 1.34.2
+* Fix - Show correct value without taxes correctly on Credit Card gateways when flag is disabled [#703](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/703)
+
 # 1.34.1
 * Fix - Show value without taxes correctly when flag is disabled
 * FIx - Resolved error message on product page for countries without creditcard [#701](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/701)
