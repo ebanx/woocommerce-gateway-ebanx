@@ -569,12 +569,13 @@ class WC_EBANX_New_Gateway extends WC_EBANX_Gateway {
 		$local_amount_with_tax = $exchange->siteToLocalWithTax( strtoupper( $currency ), $amount );
 
 		$credit_card_gateway = $this->ebanx->creditCard( $this->get_credit_card_config( $country ) );
-		if ( strpos( $this->id, 'ebanx-credit-card' ) !== false && $credit_card_gateway->isAvailableForCountry( Country::fromIso( $country ) ) ) {
+		$country_full_name   = Country::fromIso( $country );
+		if ( strpos( $this->id, 'ebanx-credit-card' ) !== false && $credit_card_gateway->isAvailableForCountry( $country_full_name ) ) {
 			$instalments      = $instalments > 0 ? intval( $instalments ) : 1;
-			$instalment_terms = $credit_card_gateway->getPaymentTermsForCountryAndValue( Country::fromIso( $country ), $amount )[ $instalments - 1 ];
+			$instalment_terms = $credit_card_gateway->getPaymentTermsForCountryAndValue( $country_full_name, $amount )[ $instalments - 1 ];
 
 			// phpcs:ignore WordPress.NamingConventions.ValidVariableName
-			$local_amount = round( $instalment_terms->instalmentNumber * $exchange->siteToLocal( $instalment_terms->baseAmount ), 2 );
+			$local_amount = round( $instalment_terms->instalmentNumber * $exchange->siteToLocal( Currency::localForCountry( $country_full_name ), $instalment_terms->baseAmount ), 2 );
 			// phpcs:ignore WordPress.NamingConventions.ValidVariableName
 			$local_amount_with_tax = round( $instalment_terms->instalmentNumber * $instalment_terms->localAmountWithTax, 2 );
 		}
