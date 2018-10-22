@@ -386,13 +386,16 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_New_Gateway {
 	 * @return array   An array of instalment with price, amount, if it has interests and the number
 	 */
 	public function get_payment_terms( $country, $amount ) {
-		$credit_card_gateway = $this->ebanx->creditCard( $this->get_credit_card_config( $country ) );
-		$instalments_terms = $credit_card_gateway->getPaymentTermsForCountryAndValue( Country::fromIso( $country ), $amount );
+		$credit_card_gateway        = $this->ebanx->creditCard( $this->get_credit_card_config( $country ) );
+		$country_full_name          = Country::fromIso( $country );
+		$instalments_terms          = $credit_card_gateway->getPaymentTermsForCountryAndValue( $country_full_name, $amount );
+		$has_taxes_for_local_amount = $this->configs->get_setting_or_default( 'add_iof_to_local_amount_enabled', 'yes' ) === 'yes' ? true : false;
 
 		foreach ( $instalments_terms as $term ) {
+			// phpcs:disable
+			$local_amount_without_taxes = round( $this->ebanx->exchange()->siteToLocal( Currency::localForCountry($country_full_name), $term->baseAmount ), 2 );
 			$instalments[] = array(
-				// phpcs:disable
-				'price'        => $term->localAmountWithTax,
+				'price'        => $has_taxes_for_local_amount ? $term->localAmountWithTax : $local_amount_without_taxes,
 				'has_interest' => $term->hasInterests,
 				'number'       => $term->instalmentNumber,
 				// phpcs:enable
