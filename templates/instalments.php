@@ -26,7 +26,7 @@ if ( count( $instalments_terms ) > 1 ) : ?>
 					<option value="<?php echo esc_attr( $instalment['number'] ); ?>">
 						<?php
 							// @codingStandardsIgnoreLine
-							printf( __( '%1$dx of %2$s', 'woocommerce-gateway-ebanx' ), absint( $instalment['number'] ), esc_html( strip_tags( wc_price( $instalment['price'] , array( 'currency' => $currency ) ) ) ) );
+							printf( __( '%1$dx of %2$s', 'woocommerce-gateway-ebanx' ), absint( $instalment['number'] ), esc_html( strip_tags( wc_price( $instalment['price'] * $currency_rate , array( 'currency' => $currency ) ) ) ) );
 
 							echo esc_html( $instalment['has_interest'] ? __( ' with interest', 'woocommerce-gateway-ebanx' ) : '' );
 						?>
