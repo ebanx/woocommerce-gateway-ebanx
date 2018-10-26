@@ -7,11 +7,25 @@ if ( ! defined( 'ABSPATH' ) ) {
 require_once WC_EBANX_GATEWAYS_DIR . 'class-wc-ebanx-global-gateway.php';
 
 use RuntimeException as RuntimeException;
+use Ebanx\Benjamin\Services\Gateways\CreditCard;
+use Ebanx\Benjamin\Models\Country;
 
 /**
  * Class WC_EBANX_Helper
  */
 abstract class WC_EBANX_Helper {
+
+	const COUNTRY_ABBREVIATION_BRAZIL = 'br';
+	const COUNTRY_ABBREVIATION_COLOMBIA = 'co';
+	const COUNTRY_ABBREVIATION_MEXICO = 'mx';
+	const COUNTRY_ABBREVIATION_ARGENTINA = 'ar';
+
+	const COUNTRY_NAME_FROM_ABBREVIATION = [
+		self::COUNTRY_ABBREVIATION_BRAZIL => Country::BRAZIL,
+		self::COUNTRY_ABBREVIATION_MEXICO => Country::MEXICO,
+		self::COUNTRY_ABBREVIATION_COLOMBIA => Country::COLOMBIA,
+		self::COUNTRY_ABBREVIATION_ARGENTINA => Country::ARGENTINA,
+	];
 
 	/**
 	 * Flatten an array
@@ -128,6 +142,16 @@ abstract class WC_EBANX_Helper {
 		}
 
 		return false;
+	}
+
+	/**
+	 *
+	 * @param string $country_abbr
+	 *
+	 * @return mixed
+	 */
+	public static function get_instalments_by_country( $country_abbr ) {
+		return CreditCard::getInstalmentsByCountry( self::COUNTRY_NAME_FROM_ABBREVIATION[ $country_abbr ] );
 	}
 
 }
