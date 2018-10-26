@@ -33,17 +33,17 @@ export default class EbanxSettings {
         const closedOptions = $body.find('#woocommerce_ebanx-global_payments_options_title.closed');
         if (closedOptions && closedOptions.length) {
           this.cy
-            .get('#woocommerce_ebanx-global_payments_options_title', {timeout: 5000})
+            .get('#woocommerce_ebanx-global_payments_options_title', {timeout: 30000})
             .should('be.visible')
             .click();
         }
       });
 
     this.cy
-      .get(elm, { timeout: 5000 })
+      .get(elm, { timeout: 30000 })
       .should('be.visible')
       .click()
-      .get('#mainform > p.submit > button', { timeout: 5000 })
+      .get('#mainform > p.submit > button', { timeout: 30000 })
       .should('be.visible')
       .click();
   }

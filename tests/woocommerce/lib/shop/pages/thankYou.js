@@ -38,7 +38,7 @@ export default class ThankYou {
 
   stillOnBoleto(next) {
     this.cy
-      .get('#ebanx-boleto-frame', { timeout: 15000 })
+      .get('#ebanx-boleto-frame', { timeout: 30000 })
       .should('be.visible');
 
     this[extractHash]((hash) => {
@@ -53,7 +53,7 @@ export default class ThankYou {
 
     if(typeof instalmentNumber !== 'undefined' && instalmentNumber > 1) {
       this.cy
-        .get('#ebanx-instalment-number', {timeout: 15000})
+        .get('#ebanx-instalment-number', {timeout: 30000})
         .contains(instalmentNumber);
     }
 
