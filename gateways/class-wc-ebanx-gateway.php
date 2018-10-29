@@ -441,4 +441,19 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway {
 
 		return $messages[ $this->get_language_by_country( $country ) ];
 	}
+
+	/**
+	 * @param array $instalment_terms
+	 * @param int   $instalment
+	 *
+	 * @return mixed
+	 */
+	public static function get_instalment_term( $instalment_terms, $instalment ) {
+		foreach ( $instalment_terms as $instalment_term ) {
+			// phpcs:ignore WordPress.NamingConventions.ValidVariableName
+			if ( $instalment_term->instalmentNumber == $instalment ) {
+				return $instalment_term;
+			}
+		}
+	}
 }

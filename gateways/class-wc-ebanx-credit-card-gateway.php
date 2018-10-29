@@ -329,7 +329,7 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_New_Gateway {
 			$country         = Country::fromIso($country_abbr);
 			$total_price     = get_post_meta( $order_id, '_order_total', true );
 			$instalments     = WC_EBANX_Request::has( 'ebanx_billing_instalments' ) ? WC_EBANX_Request::read( 'ebanx_billing_instalments' ) : WC_EBANX_Request::read( 'ebanx-credit-card-installments' );
-			$instalment_term = $this->ebanx_gateway->getPaymentTermsForCountryAndValue( $country, $total_price )[ $instalments - 1 ];
+			$instalment_term = self::get_instalment_term( $this->ebanx_gateway->getPaymentTermsForCountryAndValue( $country, $total_price ), $instalments);
 
 			$total_price = $instalment_term->baseAmount;
 			if ( ! in_array( $currency, Currency::globalCurrencies() ) ) {
