@@ -17,7 +17,7 @@ const mock = (data) => (R.merge(
     city: Faker.address.city(),
     state: Faker.address.state(),
     zipcode: Faker.address.zipCode(),
-    document: Faker.random.uuid(),
+    document: Faker.random.alpha({count: 9}),
     phone: Faker.phone.phoneNumberFormat(2),
     email: Faker.internet.email(),
     country: 'Chile',
