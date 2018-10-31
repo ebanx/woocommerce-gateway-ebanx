@@ -408,9 +408,10 @@ class WC_EBANX_One_Click {
 
 		$cart_total = $product->price;
 
-		$instalments_terms = $this->gateway->get_payment_terms( $country, $cart_total );
-		$currency          = WC_EBANX_Constants::$local_currencies[ $country ];
 		$ebanx             = new WC_EBANX_New_Gateway();
+		$currency          = WC_EBANX_Constants::$local_currencies[ $country ];
+		$currency_rate = round( floatval( $ebanx->get_local_currency_rate_for_site( $currency ) ), 2 );
+		$instalments_terms = $this->gateway->get_payment_terms( $country, $cart_total, $currency_rate );
 
 		$args = apply_filters(
 			'ebanx_template_args', array(
@@ -419,7 +420,7 @@ class WC_EBANX_One_Click {
 				'product_id'         => $product->id,
 				'installment_taxes'  => $this->instalment_rates,
 				'currency'           => $currency,
-				'currency_rate'      => round( floatval( $ebanx->get_local_currency_rate_for_site( $currency ) ), 2 ),
+				'currency_rate'      => $currency_rate,
 				'label'              => __( 'Pay with one click', 'woocommerce-gateway-ebanx' ),
 				'instalments'        => $messages['instalments'],
 				'instalments_terms'  => $instalments_terms,
