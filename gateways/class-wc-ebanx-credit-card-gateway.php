@@ -382,10 +382,11 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_New_Gateway {
 	 *
 	 * @param string $country
 	 * @param int    $amount
+	 * @param float  $currency_rate
 	 *
 	 * @return array   An array of instalment with price, amount, if it has interests and the number
 	 */
-	public function get_payment_terms( $country, $amount ) {
+	public function get_payment_terms( $country, $amount, $currency_rate ) {
 		$credit_card_gateway        = $this->ebanx->creditCard( $this->get_credit_card_config( $country ) );
 		$country_full_name          = Country::fromIso( $country );
 		$instalments_terms          = $credit_card_gateway->getPaymentTermsForCountryAndValue( $country_full_name, $amount );
@@ -393,9 +394,8 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_New_Gateway {
 
 		foreach ( $instalments_terms as $term ) {
 			// phpcs:disable
-			$local_amount_without_taxes = round( $this->ebanx->exchange()->siteToLocal( Currency::localForCountry($country_full_name), $term->baseAmount ), 2 );
 			$instalments[] = array(
-				'price'        => $has_taxes_for_local_amount ? $term->localAmountWithTax : $local_amount_without_taxes,
+				'price'        => $has_taxes_for_local_amount ? ( $term->localAmountWithTax / $currency_rate ) : $term->baseAmount,
 				'has_interest' => $term->hasInterests,
 				'number'       => $term->instalmentNumber,
 				// phpcs:enable
@@ -418,6 +418,7 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_New_Gateway {
 	 */
 	public function payment_fields() {
 		$cart_total = $this->get_order_total();
+		$currency_rate = round( floatval( $this->get_local_currency_rate_for_site( $this->currency_code ) ), 2 );
 
 		$cards = array();
 
@@ -433,7 +434,7 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_New_Gateway {
 
 		$country = $this->get_transaction_address( 'country' );
 
-		$instalments_terms = $this->get_payment_terms( $country, $cart_total );
+		$instalments_terms = $this->get_payment_terms( $country, $cart_total, $currency_rate );
 
 		$currency = WC_EBANX_Constants::$local_currencies[ $country ];
 
@@ -455,7 +456,7 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_New_Gateway {
 				'country'             => $country,
 				'instalments_terms'   => $instalments_terms,
 				'currency_code'       => $this->currency_code,
-				'currency_rate'       => round( floatval( $this->get_local_currency_rate_for_site( $this->currency_code ) ), 2 ),
+				'currency_rate'       => $currency_rate,
 				'cards'               => (array) $cards,
 				'cart_total'          => $cart_total,
 				'place_order_enabled' => $save_card,
