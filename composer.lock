@@ -4,20 +4,20 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "d4bd6a0c7cdc29e3d6a2c9c9f95e952e",
+    "content-hash": "5b1ed38e1fce3f553928da20fd11708d",
     "packages": [
         {
             "name": "ebanx/benjamin",
-            "version": "1.14.0",
+            "version": "1.15.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/ebanx/benjamin.git",
-                "reference": "7029f36f6b1a94cb4992f26fc9d241e6e17856a5"
+                "reference": "1a1078302fa87bd0215733f290ee306ab67df0c6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ebanx/benjamin/zipball/7029f36f6b1a94cb4992f26fc9d241e6e17856a5",
-                "reference": "7029f36f6b1a94cb4992f26fc9d241e6e17856a5",
+                "url": "https://api.github.com/repos/ebanx/benjamin/zipball/1a1078302fa87bd0215733f290ee306ab67df0c6",
+                "reference": "1a1078302fa87bd0215733f290ee306ab67df0c6",
                 "shasum": ""
             },
             "require": {
@@ -46,7 +46,7 @@
                 "Apache-2.0"
             ],
             "description": "Business rule provider lib for plugin implementations",
-            "time": "2018-08-24T15:45:41+00:00"
+            "time": "2018-10-29T16:01:48+00:00"
         }
     ],
     "packages-dev": [

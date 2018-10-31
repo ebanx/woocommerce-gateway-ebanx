@@ -5,14 +5,16 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 require_once WC_EBANX_GATEWAYS_DIR . 'class-wc-ebanx-global-gateway.php';
+require_once WC_EBANX_SERVICES_DIR . 'class-wc-ebanx-constants.php';
+require_once WC_EBANX_VENDOR_DIR . 'autoload.php';
 
 use RuntimeException as RuntimeException;
+use Ebanx\Benjamin\Services\Gateways\CreditCard;
 
 /**
  * Class WC_EBANX_Helper
  */
 abstract class WC_EBANX_Helper {
-
 	/**
 	 * Flatten an array
 	 *
@@ -128,6 +130,16 @@ abstract class WC_EBANX_Helper {
 		}
 
 		return false;
+	}
+
+	/**
+	 *
+	 * @param string $country_abbr
+	 *
+	 * @return mixed
+	 */
+	public static function get_instalments_by_country( $country_abbr ) {
+		return CreditCard::getInstalmentsByCountry( WC_EBANX_Constants::COUNTRY_NAME_FROM_ABBREVIATION[ $country_abbr ] );
 	}
 
 }

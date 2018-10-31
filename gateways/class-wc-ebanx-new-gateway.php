@@ -572,7 +572,7 @@ class WC_EBANX_New_Gateway extends WC_EBANX_Gateway {
 		$country_full_name   = Country::fromIso( $country );
 		if ( strpos( $this->id, 'ebanx-credit-card' ) !== false && $credit_card_gateway->isAvailableForCountry( $country_full_name ) ) {
 			$instalments      = $instalments > 0 ? intval( $instalments ) : 1;
-			$instalment_terms = $credit_card_gateway->getPaymentTermsForCountryAndValue( $country_full_name, $amount )[ $instalments - 1 ];
+			$instalment_terms = self::get_instalment_term( $credit_card_gateway->getPaymentTermsForCountryAndValue( $country_full_name, $amount ), $instalments );
 
 			// phpcs:ignore WordPress.NamingConventions.ValidVariableName
 			$local_amount = round( $instalment_terms->instalmentNumber * $exchange->siteToLocal( Currency::localForCountry( $country_full_name ), $instalment_terms->baseAmount ), 2 );
@@ -585,7 +585,6 @@ class WC_EBANX_New_Gateway extends WC_EBANX_Gateway {
 
 		$message               = $this->get_checkout_message( $total_local_amount, $currency, $country );
 		$exchange_rate_message = $this->get_exchange_rate_message( $currency, $country );
-
 		if ( $template ) {
 			wc_get_template(
 				'checkout-conversion-rate.php',

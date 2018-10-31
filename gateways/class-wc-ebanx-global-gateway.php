@@ -6,6 +6,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 require_once WC_EBANX_SERVICES_DIR . 'class-wc-ebanx-notice.php';
 require_once WC_EBANX_SERVICES_DIR . 'class-wc-ebanx-constants.php';
+require_once WC_EBANX_SERVICES_DIR . 'class-wc-ebanx-helper.php';
 
 /**
  * Class WC_EBANX_Global_Gateway
@@ -350,44 +351,7 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway {
 							'title'       => sprintf( __( 'Maximum nº of Instalments for %s', 'woocommerce-gateway-ebanx' ), $country ),
 							'type'        => 'select',
 							'class'       => 'wc-enhanced-select ebanx-payments-option ebanx-credit-card-instalments',
-							'options'     => array(
-								'1'  => '1',
-								'2'  => '2',
-								'3'  => '3',
-								'4'  => '4',
-								'5'  => '5',
-								'6'  => '6',
-								'7'  => '7',
-								'8'  => '8',
-								'9'  => '9',
-								'10' => '10',
-								'11' => '11',
-								'12' => '12',
-							 // '13' => '13',
-							 // '14' => '14',
-							 // '15' => '15',
-							 // '16' => '16',
-							 // '17' => '17',
-							 // '18' => '18',
-							 // '19' => '19',
-							 // '20' => '20',
-							 // '21' => '21',
-							 // '22' => '22',
-							 // '23' => '23',
-							 // '24' => '24',
-							 // '25' => '25',
-							 // '26' => '26',
-							 // '27' => '27',
-							 // '28' => '28',
-							 // '29' => '29',
-							 // '30' => '30',
-							 // '31' => '31',
-							 // '32' => '32',
-							 // '33' => '33',
-							 // '34' => '34',
-							 // '35' => '35',
-							 // '36' => '36',
-							),
+							'options'     => WC_EBANX_Helper::get_instalments_by_country( $country_abbr ),
 							'description' => __( 'Establish the maximum number of instalments in which your customer can pay, as consented on your contract. Only Colombia supports more than 12.', 'woocommerce-gateway-ebanx' ),
 							'desc_tip'    => true,
 						),
@@ -412,7 +376,7 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway {
 						),
 					);
 				}
-				for ( $i = 1; $i <= 12; $i++ ) {
+				for ( $i = 1; $i <= 36; $i++ ) {
 					$interest_rates_array[] = array(
 						"{$country_abbr}_interest_rates_" . sprintf( '%02d', $i ) => array(
 							'title'             => sprintf( __( '%1$sx Interest Rate in %2$s', 'woocommerce-gateway-ebanx' ), $i, '%' ),

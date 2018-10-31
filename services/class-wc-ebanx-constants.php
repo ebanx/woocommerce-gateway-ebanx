@@ -4,6 +4,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+require_once WC_EBANX_VENDOR_DIR . 'autoload.php';
+
+use Ebanx\Benjamin\Models\Country;
+
 /**
  * Class WC_EBANX_Constants
  */
@@ -36,6 +40,16 @@ abstract class WC_EBANX_Constants {
 	const CURRENCY_CODE_COP = 'COP'; // Colombia.
 	const CURRENCY_CODE_CLP = 'CLP'; // Chile.
 	const CURRENCY_CODE_ARS = 'ARS'; // Argentina.
+
+	/**
+	 * Convert Country abbreviation to Country name
+	 */
+	const COUNTRY_NAME_FROM_ABBREVIATION = [
+		WC_EBANX_Constants::COUNTRY_BRAZIL    => Country::BRAZIL,
+		WC_EBANX_Constants::COUNTRY_MEXICO    => Country::MEXICO,
+		WC_EBANX_Constants::COUNTRY_COLOMBIA  => Country::COLOMBIA,
+		WC_EBANX_Constants::COUNTRY_ARGENTINA => Country::ARGENTINA,
+	];
 
 	/**
 	 * Only the currencies allowed and processed by EBANX
