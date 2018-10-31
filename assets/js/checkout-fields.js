@@ -12,6 +12,38 @@ jQuery (function ($) {
   // Masks
   $(document).find('.ebanx_billing_brazil_document input').mask('000.000.000-00');
   $(document).find('.ebanx_billing_brazil_cnpj input').mask('00.000.000/0000-00');
+  $(document).find('.ebanx_billing_chile_document input').mask('AAAAAAAAB',  {'translation': {
+          A: { pattern: /[a-zA-Z0-9]/},
+          B: { pattern: /[a-zA-Z0-9]/, optional: true}
+      }
+  });
+
+  $(document).find('.ebanx_billing_colombia_document input').mask('99AAAAAAAA', {'translation': {
+        A: { pattern: /[0-9]/, optional: true}
+      }
+  });
+
+  $(document).find('.ebanx_billing_colombia_selector').on('change', function(){
+      colombiaDocument = $(this).find(':selected').val()
+
+      switch (colombiaDocument) {
+          case 'COL_CDI':
+              $(document).find('.ebanx_billing_colombia_document input').mask('99AAAAAAAA', {'translation': {
+                      A: { pattern: /[0-9]/, optional: true}
+                  }
+              });
+              break;
+          case 'COL_NIT':
+              $(document).find('.ebanx_billing_colombia_document input').mask('99999999A', {'translation': {
+                      A: { pattern: /[0-9]/, optional: true}
+                  }
+              });
+              break;
+          case 'COL_CEX':
+              $(document).find('.ebanx_billing_colombia_document input').mask('999999');
+              break;
+      }
+  });
 
   $(document).find('input[name*="argentina_document"]').mask('00-00000000-0');
   $(document).find('input[name*="brazil_document"]').mask('000.000.000-00');

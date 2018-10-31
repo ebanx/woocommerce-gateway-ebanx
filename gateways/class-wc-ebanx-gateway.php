@@ -186,9 +186,22 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway {
 			'class'   => array( 'ebanx_billing_chile_document', 'form-row-wide' ),
 			'default' => isset( $rut ) ? $rut : '',
 		);
+
+		$ebanx_billing_colombia_document_type = array(
+			'type'    => 'select',
+			'label'   => __( 'Select a document type', 'woocommerce-gateway-ebanx' ),
+			'default' => 'COL_CDI',
+			'class'   => array( 'ebanx_billing_colombia_selector', 'ebanx-select-field' ),
+			'options' => array(
+				'COL_CDI' => __( 'Cédula de Ciudadania', 'woocommerce-gateway-ebanx' ),
+				'COL_NIT' => __( 'NIT', 'woocommerce-gateway-ebanx' ),
+				'COL_CEX'  => __( 'Cédula de Extranjeria', 'woocommerce-gateway-ebanx' ),
+			),
+		);
+
 		$ebanx_billing_colombia_document  = array(
 			'type'    => 'text',
-			'label'   => 'DNI' . self::REQUIRED_MARK,
+			'label'   => 'Document' . self::REQUIRED_MARK,
 			'class'   => array( 'ebanx_billing_colombia_document', 'form-row-wide' ),
 			'default' => isset( $dni ) ? $dni : '',
 		);
@@ -225,6 +238,7 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway {
 			$fields['billing']['ebanx_billing_chile_document'] = $ebanx_billing_chile_document;
 
 			// For Colombia.
+			$fields['billing']['ebanx_billing_colombia_document_type'] = $ebanx_billing_colombia_document_type;
 			$fields['billing']['ebanx_billing_colombia_document'] = $ebanx_billing_colombia_document;
 
 			// For Argentina.
@@ -259,6 +273,7 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway {
 			'ebanx_billing_chile_document'          => $this->get_checkout_manager_settings_or_default( 'checkout_manager_chile_document', 'ebanx_billing_chile_document' ),
 
 			// Colombia Fields.
+			'ebanx_billing_colombia_document_type'  => $this->get_checkout_manager_settings_or_default( 'checkout_manager_colombia_document_type', 'ebanx_billing_colombia_document_type' ),
 			'ebanx_billing_colombia_document'       => $this->get_checkout_manager_settings_or_default( 'checkout_manager_colombia_document', 'ebanx_billing_colombia_document' ),
 
 			// Argentina Fields.

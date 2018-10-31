@@ -15,6 +15,7 @@ use Ebanx\Benjamin\Services\Gateways\CreditCard;
  * Class WC_EBANX_Helper
  */
 abstract class WC_EBANX_Helper {
+
 	/**
 	 * Flatten an array
 	 *
