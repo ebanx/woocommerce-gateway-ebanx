@@ -10,6 +10,8 @@ require_once WC_EBANX_VENDOR_DIR . 'autoload.php';
 
 use RuntimeException as RuntimeException;
 use Ebanx\Benjamin\Services\Gateways\CreditCard;
+use Ebanx\Benjamin\Models\Configs\Config;
+use Ebanx\Benjamin\Models\Configs\CreditCardConfig;
 
 /**
  * Class WC_EBANX_Helper
@@ -140,7 +142,10 @@ abstract class WC_EBANX_Helper {
 	 * @return mixed
 	 */
 	public static function get_instalments_by_country( $country_abbr ) {
-		return CreditCard::getInstalmentsByCountry( WC_EBANX_Constants::COUNTRY_NAME_FROM_ABBREVIATION[ $country_abbr ] );
+		$config             = new Config();
+		$credit_card_config = new CreditCardConfig();
+		$credit_card        = new CreditCard( $config, $credit_card_config );
+		return $credit_card->getInstalmentsByCountry( WC_EBANX_Constants::COUNTRY_NAME_FROM_ABBREVIATION[ $country_abbr ] );
 	}
 
 }
