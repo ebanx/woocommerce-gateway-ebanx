@@ -1,5 +1,10 @@
 # CHANGELOG
 
+# 1.34.3
+* Improvement - Mask document in Chile and Colombia [#708](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/708)
+* Fix - Resolved wrong amount in checkout page [#709](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/709)
+* Update - Read instalments from benjamin [#710](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/710)
+
 # 1.34.2
 * Fix - Show correct value without taxes correctly on Credit Card gateways when flag is disabled [#703](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/703)
 
