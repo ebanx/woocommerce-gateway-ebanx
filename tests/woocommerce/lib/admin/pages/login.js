@@ -9,7 +9,9 @@ export default class Login {
       .visit(`${Cypress.env('DEMO_URL')}/wp-admin`)
       .get('#user_login', { timeout: 30000 })
       .should('be.visible')
-      .type(Cypress.env('ADMIN_USER'))
+      .then($loginInput => {
+          $loginInput[0].value = Cypress.env('ADMIN_USER');
+      })
       .get('#user_pass')
       .should('be.visible')
       .type(Cypress.env('ADMIN_PASSWORD'))
