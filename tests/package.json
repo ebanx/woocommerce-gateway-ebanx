@@ -8,15 +8,15 @@
     "url": "git://github.com/ebanx/woocommerce-gateway-ebanx.git"
   },
   "engines": {
-    "npm": ">=3",
-    "node": ">=7"
+    "npm": ">=6",
+    "node": ">=10"
   },
   "license": "Apache-2.0",
   "scripts": {
     "test": "bash bin/test.sh",
     "test:woocommerce": "cypress run  --project ./woocommerce",
     "cypress:open": "cypress open --project ./woocommerce",
-    "test:woocommerce:no-video": "cypress run --config videoRecording=false --project ./woocommerce",
+    "test:woocommerce:no-video": "cypress run --config video=false --project ./woocommerce",
     "lint": "npm run lint:js",
     "lint:eslint": "eslint --ignore-path .gitignore",
     "lint:js": "npm run lint:eslint -- . ",
@@ -27,12 +27,13 @@
   },
   "pre-commit": "lint:staged",
   "dependencies": {
-    "cypress": "^2.0.2",
+    "cypress": "^3.1.1",
     "eslint": "^4.17.0",
     "faker": "git://github.com/marak/Faker.js",
     "joi": "^13.1.2",
     "lint-staged": "^6.1.0",
     "pre-commit": "^1.2.2",
-    "ramda": "^0.25.0"
+    "ramda": "^0.25.0",
+    "npm": "^6.4.1"
   }
 }

@@ -5,5 +5,5 @@
   "viewportHeight": 1440,
   "chromeWebSecurity": false,
   "watchForFileChanges": false,
-  "trashAssetsBeforeHeadlessRuns": false
+  "trashAssetsBeforeRuns": false
 }
