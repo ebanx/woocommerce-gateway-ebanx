@@ -355,7 +355,10 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_New_Gateway {
 		$country            = trim( strtolower( get_post_meta( $order->id, '_billing_country', true ) ) );
 		$currency           = $order->get_order_currency();
 
-		if ( WC_EBANX_Constants::COUNTRY_BRAZIL === $country ) {
+		$configs            = new WC_EBANX_Global_Gateway();
+		$should_apply_taxes = $configs->get_setting_or_default( 'add_iof_to_local_amount_enabled', 'yes' ) === 'yes' ? true : false;
+
+		if ( WC_EBANX_Constants::COUNTRY_BRAZIL === $country && $should_apply_taxes ) {
 			$order_amount += round( ( $order_amount * WC_EBANX_Constants::BRAZIL_TAX ), 2 );
 		}
 
