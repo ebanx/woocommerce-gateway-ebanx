@@ -29,45 +29,35 @@ class PaymentAdapterTest extends TestCase {
 		];
 	}
 
-	public function testGetPersonType_WithCnpj_ShouldReturnBusiness() {
-		$configs = $this->global_config_builder
-			->with_brazil_taxes_options(['cnpj'])
-			->build();
-
-		$person_type = WC_EBANX_Payment_Adapter::get_person_type($configs, $this->names);
-
-		$this->assertEquals(Person::TYPE_BUSINESS, $person_type);
+	public function getPersonTypeCasesData() {
+		return [
+			[[], NULL, Person::TYPE_PERSONAL],
+			[['cnpj'], NULL, Person::TYPE_BUSINESS],
+			[['cpf', 'cnpj'], NULL, Person::TYPE_PERSONAL],
+			[['cpf', 'cnpj'], 'cnpj', Person::TYPE_BUSINESS],
+		];
 	}
 
-	public function testGetPersonType_WithEmptyConfigs_ShouldReturnPersonal() {
-		$configs = $this->global_config_builder->build();
-
-		$person_type = WC_EBANX_Payment_Adapter::get_person_type($configs, $this->names);
-
-		$this->assertEquals(Person::TYPE_PERSONAL, $person_type);
-	}
-
-	public function testGetPersonType_WithCpfAndCnpjAndNoRequest_ShouldReturnCpf() {
+	/**
+	 * @dataProvider getPersonTypeCasesData()
+	 *
+	 * @param array $possible_document_types
+	 * @param string $used_document_type
+	 * @param string $expected_person_type
+	 *
+	 * @throws Exception Shouldn't be thrown.
+	 */
+	public function testGetPersonType($possible_document_types, $used_document_type, $expected_person_type) {
 		$configs = $this->global_config_builder
-			->with_brazil_taxes_options(['cpf', 'cnpj'])
-			->build();
-
-		$person_type = WC_EBANX_Payment_Adapter::get_person_type($configs, $this->names);
-
-		$this->assertEquals(Person::TYPE_PERSONAL, $person_type);
-	}
-
-	public function testGetPersonType_WithCpfAndCnpjAndCnpjOnRequest_ShouldReturnCnpj() {
-		$configs = $this->global_config_builder
-			->with_brazil_taxes_options(['cpf', 'cnpj'])
+			->with_brazil_taxes_options($possible_document_types)
 			->build();
 
 		$this->checkout_request_builder
-			->with_ebanx_billing_brazil_person_type('cnpj')
+			->with_ebanx_billing_brazil_person_type($used_document_type)
 			->build();
 
 		$person_type = WC_EBANX_Payment_Adapter::get_person_type($configs, $this->names);
 
-		$this->assertEquals(Person::TYPE_BUSINESS, $person_type);
+		$this->assertEquals($expected_person_type, $person_type);
 	}
 }
