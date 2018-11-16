@@ -26,7 +26,10 @@ class PaymentAdapterTest extends TestCase {
 			'ebanx_billing_brazil_cnpj' => 'ebanx_billing_brazil_cnpj',
 			'ebanx_billing_brazil_document' => 'ebanx_billing_brazil_document',
 			'ebanx_billing_brazil_person_type' => 'ebanx_billing_brazil_person_type',
+			'ebanx_billing_argentina_document' => 'ebanx_billing_argentina_document',
 		];
+
+		// define('ABSPATH', __DIR__);
 	}
 
 	public function getPersonTypeCasesData() {
@@ -35,6 +38,12 @@ class PaymentAdapterTest extends TestCase {
 			[['cnpj'], NULL, Person::TYPE_BUSINESS],
 			[['cpf', 'cnpj'], NULL, Person::TYPE_PERSONAL],
 			[['cpf', 'cnpj'], 'cnpj', Person::TYPE_BUSINESS],
+		];
+	}
+
+	public function getDocumentByCountryCasesData() {
+		return [
+			['12-34567890-1','with_ebanx_billing_argentina_document'],
 		];
 	}
 
@@ -59,5 +68,38 @@ class PaymentAdapterTest extends TestCase {
 		$person_type = WC_EBANX_Payment_Adapter::get_person_type($configs, $this->names);
 
 		$this->assertEquals($expected_person_type, $person_type);
+	}
+
+	public function testGetBrazilianDocument() {
+		$expected_document = '123.456.789-90';
+		$configs = $this->global_config_builder
+			->with_brazil_taxes_options(['cpf'])
+			->build();
+
+		$this->checkout_request_builder
+			->with_ebanx_billing_brazil_document($expected_document)
+			->build();
+
+		$document = WC_EBANX_Payment_Adapter::get_brazilian_document($configs, $this->names, NULL);
+
+		$this->assertEquals($expected_document, $document);
+	}
+
+	/**
+	 * @dataProvider getDocumentByCountryCasesData()
+	 *
+	 * @param string $expected_document
+	 * @param string $country_function
+	 *
+	 * @throws Exception Shouldn't be thrown.
+	 */
+	public function testGetDocument($expected_document, $country_function) {
+		$this->checkout_request_builder
+			->$country_function($expected_document)
+			->build();
+
+		$return_document = WC_EBANX_Payment_Adapter::get_argentinian_document($this->names, NULL);
+
+		$this->assertEquals($expected_document, $return_document);
 	}
 }

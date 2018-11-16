@@ -210,7 +210,7 @@ class WC_EBANX_Payment_Adapter {
 	 * @return string
 	 * @throws Exception Throws parameter missing exception.
 	 */
-	private static function get_argentinian_document( $names, $gateway_id ) {
+	public static function get_argentinian_document( $names, $gateway_id ) {
 		$document = WC_EBANX_Request::read( $names['ebanx_billing_argentina_document'], null );
 
 		if ( null === $document
@@ -235,7 +235,7 @@ class WC_EBANX_Payment_Adapter {
 	 * @return string
 	 * @throws Exception Throws parameter missing exception.
 	 */
-	private static function get_brazilian_document( $configs, $names, $gateway_id ) {
+	public static function get_brazilian_document( $configs, $names, $gateway_id ) {
 		$cpf  = WC_EBANX_Request::read( $names['ebanx_billing_brazil_document'], null ) ?: WC_EBANX_Request::read( $gateway_id, null )['ebanx_billing_brazil_document'];
 		$cnpj = WC_EBANX_Request::read( $names['ebanx_billing_brazil_cnpj'], null ) ?: WC_EBANX_Request::read( $gateway_id, null )['ebanx_billing_brazil_cnpj'];
 
