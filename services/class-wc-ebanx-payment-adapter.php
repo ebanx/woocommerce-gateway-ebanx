@@ -322,7 +322,7 @@ class WC_EBANX_Payment_Adapter {
 	 * @return string
 	 * @throws Exception Throws parameter missing exception.
 	 */
-	private static function get_person_type( $configs, $names ) {
+	public static function get_person_type( $configs, $names ) {
 		$fields_options = array();
 		$person_type    = Person::TYPE_PERSONAL;
 

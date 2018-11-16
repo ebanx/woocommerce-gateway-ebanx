@@ -8,6 +8,7 @@
 
     <!-- Exclude paths -->
     <exclude-pattern>*/vendor/*</exclude-pattern>
+    <exclude-pattern>*/tests/unity/*</exclude-pattern>
     <exclude-pattern>*/tests/woocommerce/*</exclude-pattern>
 
     <!-- Configs -->
