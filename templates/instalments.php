@@ -8,7 +8,13 @@ if ( count( $instalments_terms ) > 1 ) : ?>
 		<?php if ( WC_EBANX_Helper::checkout_contains_subscription() ) : ?>
 			<input type="hidden" name="ebanx-credit-card-installments" value="1" />
 		<?php else : ?>
-			<label for="ebanx-card-installments"><?php echo esc_html( $instalments ); ?> <span class="required">*</span></label>
+			<label for="ebanx-card-installments">
+				<?php
+					// @codingStandardsIgnoreLine
+					echo esc_html( $instalments );
+				?>
+				<span class="required">*</span>
+			</label>
 			<select
 				data-country="<?php echo esc_attr( $country ); ?>"
 				data-amount="<?php echo esc_attr( $cart_total ); ?>"
@@ -21,9 +27,9 @@ if ( count( $instalments_terms ) > 1 ) : ?>
 					<option value="<?php echo esc_attr( $instalment['number'] ); ?>">
 						<?php
 							// @codingStandardsIgnoreLine
-							printf( __( '%1$dx of %2$s', 'woocommerce-gateway-ebanx' ), absint( $instalment['number'] ), esc_html( strip_tags( wc_price( $instalment['price'] * $currency_rate , array( 'currency' => $currency ) ) ) ) );
-
-							echo esc_html( $instalment['has_interest'] ? __( ' with interest', 'woocommerce-gateway-ebanx' ) : '' );
+							printf( __( '%1$dx %2$s', 'woocommerce-gateway-ebanx' ), absint( $instalment['number'] ), esc_html( strip_tags( wc_price( $instalment['price'] * $currency_rate , array( 'currency' => $currency ) ) ) ) );
+							// @codingStandardsIgnoreLine
+							echo esc_html( $instalment['has_interest'] ? __( $with_interest, 'woocommerce-gateway-ebanx' ) : '' );
 						?>
 					</option>
 				<?php endforeach; ?>
