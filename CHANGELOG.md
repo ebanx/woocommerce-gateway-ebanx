@@ -1,5 +1,8 @@
 # CHANGELOG
 
+# 1.34.4
+* Improvement - Add instalments and interest translation [#714](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/714)
+
 # 1.34.3
 * Improvement - Mask document in Chile and Colombia [#708](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/708)
 * Fix - Resolved wrong amount in checkout page [#709](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/709)

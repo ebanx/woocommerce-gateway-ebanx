@@ -411,6 +411,29 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_New_Gateway {
 	}
 
 	/**
+	 *
+	 * @param string $country
+	 *
+	 * @return string
+	 */
+	public static function get_instalment_title_by_country( $country ) {
+		switch ( $country ) {
+			case WC_EBANX_Constants::COUNTRY_BRAZIL:
+				return 'Número de parcelas';
+				break;
+			case WC_EBANX_Constants::COUNTRY_COLOMBIA:
+				return 'Cuota';
+				break;
+			case WC_EBANX_Constants::COUNTRY_CHILE:
+				return 'Cuota';
+				break;
+			default:
+				return 'Mensualidades';
+				break;
+		}
+	}
+
+	/**
 	 * The HTML structure on checkout page
 	 *
 	 * @throws Exception Throws missing param message.
@@ -459,9 +482,10 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_New_Gateway {
 				'cards'               => (array) $cards,
 				'cart_total'          => $cart_total,
 				'place_order_enabled' => $save_card,
-				'instalments'         => WC_EBANX_Constants::COUNTRY_BRAZIL === $country ? 'Número de parcelas' : 'Meses sin intereses',
+				'instalments'         => self::get_instalment_title_by_country( $country ),
 				'id'                  => $this->id,
 				'add_tax'             => WC_EBANX_Helper::should_apply_taxes(),
+				'with_interest'       => WC_EBANX_Constants::COUNTRY_BRAZIL === $country ? ' com taxas' : '',
 			),
 			'woocommerce/ebanx/',
 			WC_EBANX::get_templates_path()
