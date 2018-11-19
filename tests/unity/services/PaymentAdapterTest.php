@@ -27,6 +27,9 @@ class PaymentAdapterTest extends TestCase {
 			'ebanx_billing_brazil_document' => 'ebanx_billing_brazil_document',
 			'ebanx_billing_brazil_person_type' => 'ebanx_billing_brazil_person_type',
 			'ebanx_billing_argentina_document' => 'ebanx_billing_argentina_document',
+			'ebanx_billing_chile_document' => 'ebanx_billing_chile_document',
+			'ebanx_billing_colombia_document' => 'ebanx_billing_colombia_document',
+			'ebanx_billing_peru_document' => 'ebanx_billing_peru_document'
 		];
 
 		// define('ABSPATH', __DIR__);
@@ -43,7 +46,10 @@ class PaymentAdapterTest extends TestCase {
 
 	public function getDocumentByCountryCasesData() {
 		return [
-			['12-34567890-1','with_ebanx_billing_argentina_document'],
+			['12-34567890-1', 'get_argentinian_document', 'ebanx_billing_argentina_document'],
+			['1234567890', 'get_chilean_document', 'ebanx_billing_chile_document'],
+			['1245678901', 'get_colombian_document', 'ebanx_billing_colombia_document'],
+			['1234678901', 'get_peruvian_document', 'ebanx_billing_peru_document'],
 		];
 	}
 
@@ -77,7 +83,7 @@ class PaymentAdapterTest extends TestCase {
 			->build();
 
 		$this->checkout_request_builder
-			->with_ebanx_billing_brazil_document($expected_document)
+			->with_ebanx_billing_document('ebanx_billing_brazil_document', $expected_document)
 			->build();
 
 		$document = WC_EBANX_Payment_Adapter::get_brazilian_document($configs, $this->names, NULL);
@@ -89,16 +95,17 @@ class PaymentAdapterTest extends TestCase {
 	 * @dataProvider getDocumentByCountryCasesData()
 	 *
 	 * @param string $expected_document
-	 * @param string $country_function
+	 * @param string $adapter_country_function
+	 * @param string $document_type
 	 *
 	 * @throws Exception Shouldn't be thrown.
 	 */
-	public function testGetDocument($expected_document, $country_function) {
+	public function testGetDocument($expected_document, $adapter_country_function, $document_type) {
 		$this->checkout_request_builder
-			->$country_function($expected_document)
+			->with_ebanx_billing_document($document_type, $expected_document)
 			->build();
 
-		$return_document = WC_EBANX_Payment_Adapter::get_argentinian_document($this->names, NULL);
+		$return_document = WC_EBANX_Payment_Adapter::$adapter_country_function($this->names, NULL);
 
 		$this->assertEquals($expected_document, $return_document);
 	}

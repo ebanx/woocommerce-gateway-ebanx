@@ -268,7 +268,7 @@ class WC_EBANX_Payment_Adapter {
 	 * @return string
 	 * @throws Exception Throws parameter missing exception.
 	 */
-	private static function get_chilean_document( $names, $gateway_id ) {
+	public static function get_chilean_document( $names, $gateway_id ) {
 		$document = WC_EBANX_Request::read( $names['ebanx_billing_chile_document'], null )
 			?: WC_EBANX_Request::read( $gateway_id, null )['ebanx_billing_chile_document'];
 		if ( null === $document ) {
@@ -286,7 +286,7 @@ class WC_EBANX_Payment_Adapter {
 	 * @return string
 	 * @throws Exception Throws parameter missing exception.
 	 */
-	private static function get_colombian_document( $names, $gateway_id ) {
+	public static function get_colombian_document( $names, $gateway_id ) {
 		$document = WC_EBANX_Request::read( $names['ebanx_billing_colombia_document'], null )
 		?: WC_EBANX_Request::read( $gateway_id, null )['ebanx_billing_colombia_document'];
 		if ( null === $document ) {
@@ -304,7 +304,7 @@ class WC_EBANX_Payment_Adapter {
 	 * @return string
 	 * @throws Exception Throws parameter missing exception.
 	 */
-	private static function get_peruvian_document( $names, $gateway_id ) {
+	public static function get_peruvian_document( $names, $gateway_id ) {
 		$document = WC_EBANX_Request::read( $names['ebanx_billing_peru_document'], null )
 			?: WC_EBANX_Request::read( $gateway_id, null )['ebanx_billing_peru_document'];
 		if ( null === $document ) {

@@ -6,6 +6,9 @@ class CheckoutRequestBuilder {
 	private $ebanx_billing_brazil_person_type;
 	private $ebanx_billing_brazil_document;
 	private $ebanx_billing_argentina_document;
+	private $ebanx_billing_chile_document;
+	private $ebanx_billing_colombia_document;
+	private $ebanx_billing_peru_document;
 
 	public function __construct() {
 		$_REQUEST = array();
@@ -16,13 +19,8 @@ class CheckoutRequestBuilder {
 		return $this;
 	}
 
-	public function with_ebanx_billing_brazil_document($document) {
-		$this->ebanx_billing_brazil_document = $document;
-		return $this;
-	}
-
-	public function with_ebanx_billing_argentina_document($document) {
-		$this->ebanx_billing_argentina_document = $document;
+	public function with_ebanx_billing_document($document_type, $document) {
+		$this->$document_type = $document;
 		return $this;
 	}
 
