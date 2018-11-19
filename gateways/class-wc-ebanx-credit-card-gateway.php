@@ -355,7 +355,7 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_New_Gateway {
 		$country            = trim( strtolower( get_post_meta( $order->id, '_billing_country', true ) ) );
 		$currency           = $order->get_order_currency();
 
-		if ( WC_EBANX_Constants::COUNTRY_BRAZIL === $country ) {
+		if ( WC_EBANX_Constants::COUNTRY_BRAZIL === $country && WC_EBANX_Helper::should_apply_taxes() ) {
 			$order_amount += round( ( $order_amount * WC_EBANX_Constants::BRAZIL_TAX ), 2 );
 		}
 
@@ -387,15 +387,14 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_New_Gateway {
 	 * @return array   An array of instalment with price, amount, if it has interests and the number
 	 */
 	public function get_payment_terms( $country, $amount, $currency_rate ) {
-		$credit_card_gateway        = $this->ebanx->creditCard( $this->get_credit_card_config( $country ) );
-		$country_full_name          = Country::fromIso( $country );
-		$instalments_terms          = $credit_card_gateway->getPaymentTermsForCountryAndValue( $country_full_name, $amount );
-		$has_taxes_for_local_amount = $this->configs->get_setting_or_default( 'add_iof_to_local_amount_enabled', 'yes' ) === 'yes' ? true : false;
+		$credit_card_gateway = $this->ebanx->creditCard( $this->get_credit_card_config( $country ) );
+		$country_full_name   = Country::fromIso( $country );
+		$instalments_terms   = $credit_card_gateway->getPaymentTermsForCountryAndValue( $country_full_name, $amount );
 
 		foreach ( $instalments_terms as $term ) {
 			// phpcs:disable
 			$instalments[] = array(
-				'price'        => $has_taxes_for_local_amount ? ( $term->localAmountWithTax / $currency_rate ) : $term->baseAmount,
+				'price'        => WC_EBANX_Helper::should_apply_taxes() ? ( $term->localAmountWithTax / $currency_rate ) : $term->baseAmount,
 				'has_interest' => $term->hasInterests,
 				'number'       => $term->instalmentNumber,
 				// phpcs:enable
@@ -485,7 +484,7 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_New_Gateway {
 				'place_order_enabled' => $save_card,
 				'instalments'         => self::get_instalment_title_by_country( $country ),
 				'id'                  => $this->id,
-				'add_tax'             => $this->configs->get_setting_or_default( 'add_iof_to_local_amount_enabled', 'yes' ) === 'yes',
+				'add_tax'             => WC_EBANX_Helper::should_apply_taxes(),
 				'with_interest'       => WC_EBANX_Constants::COUNTRY_BRAZIL === $country ? ' com taxas' : '',
 			),
 			'woocommerce/ebanx/',
