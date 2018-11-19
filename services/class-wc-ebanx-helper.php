@@ -148,4 +148,16 @@ abstract class WC_EBANX_Helper {
 		return $credit_card->getInstalmentsByCountry( WC_EBANX_Constants::COUNTRY_NAME_FROM_ABBREVIATION[ $country_abbr ] );
 	}
 
+	/**
+	 *
+	 * Verifies if IOF like taxes should be applied.
+	 *
+	 * @return bool
+	 */
+	public static function should_apply_taxes() {
+		$configs = new WC_EBANX_Global_Gateway();
+
+		return $configs->get_setting_or_default( 'add_iof_to_local_amount_enabled', 'yes' ) === 'yes';
+	}
+
 }

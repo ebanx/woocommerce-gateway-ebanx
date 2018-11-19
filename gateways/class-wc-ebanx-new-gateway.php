@@ -580,8 +580,7 @@ class WC_EBANX_New_Gateway extends WC_EBANX_Gateway {
 			$local_amount_with_tax = round( $instalment_terms->instalmentNumber * $instalment_terms->localAmountWithTax, 2 );
 		}
 
-		$has_taxes_with_local_amount = $this->configs->get_setting_or_default( 'add_iof_to_local_amount_enabled', 'yes' ) === 'yes' ? true : false;
-		$total_local_amount = $has_taxes_with_local_amount ? $local_amount_with_tax : $local_amount;
+		$total_local_amount = WC_EBANX_Helper::should_apply_taxes() ? $local_amount_with_tax : $local_amount;
 
 		$message               = $this->get_checkout_message( $total_local_amount, $currency, $country );
 		$exchange_rate_message = $this->get_exchange_rate_message( $currency, $country );
