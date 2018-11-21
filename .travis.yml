@@ -59,7 +59,7 @@ jobs:
       env:
         - TEST_COUNTRY=
       script:
-        - phpunit
+        - ./vendor/bin/phpunit
     - stage: admin_tests
       env:
         - TEST_COUNTRY=
