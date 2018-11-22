@@ -3,7 +3,7 @@ Contributors: ebanxwp
 Tags: credit card, boleto, ebanx, woocommerce, payment gateway, latin america, brazil, mexico, argentina, peru, colombia, chile, ecuador, cash payment, local payment, card payment, one-click payment, alternative payments, payment processing
 Requires at least: 4.0
 Tested up to: 4.9
-Stable tag: 1.34.4
+Stable tag: 1.34.5
 License: Apache v2.0
 License URI: http://www.apache.org/licenses/LICENSE-2.0
 
@@ -147,6 +147,9 @@ Yes, you can.
 4. There you go, you’re all set!
 
 == Changelog ==
+
+= 1.34.5 =
+* Improvement - Add tests for payment adapter service [#716](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/716)
 
 = 1.34.4 =
 * Improvement - Add instalments and interest translation [#714](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/714)

@@ -1,5 +1,8 @@
 # CHANGELOG
 
+# 1.34.5
+* Improvement - Add tests for payment adapter service [#716](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/716)
+
 # 1.34.4
 * Improvement - Add instalments and interest translation [#714](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/714)
 
