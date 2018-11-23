@@ -22,26 +22,36 @@ class WC_EBANX_Api {
 	protected $configs;
 
 	/**
+	 *
+	 * @var string
+	 */
+	protected $currency;
+
+	/**
 	 * EBANX_Api constructor.
 	 *
 	 * @param WC_EBANX_Global_Gateway $configs
+	 * @param string                  $currency
 	 */
-	public function __construct( WC_EBANX_Global_Gateway $configs ) {
+	public function __construct( WC_EBANX_Global_Gateway $configs, $currency = null ) {
 		$this->configs = $configs;
-		$this->ebanx   = EBANX( $this->get_config(), $this->get_credit_card_config( 'br' ) );
+		$this->currency = is_null( $currency ) ? strtoupper( get_woocommerce_currency() ) : $currency;
+		$this->ebanx   = EBANX( $this->get_config( $currency ), $this->get_credit_card_config( 'br' ) );
 	}
 
 	/**
 	 *
+	 * @param string $currency
+	 *
 	 * @return Config
 	 */
-	private function get_config() {
+	private function get_config( $currency ) {
 		return new Config(
 			array(
 				'integrationKey'        => $this->configs->settings['live_private_key'],
 				'sandboxIntegrationKey' => $this->configs->settings['sandbox_private_key'],
 				'isSandbox'             => 'yes' === $this->configs->settings['sandbox_mode_enabled'],
-				'baseCurrency'          => strtoupper( get_woocommerce_currency() ),
+				'baseCurrency'          => $this->currency,
 				'notificationUrl'       => esc_url( home_url( '/' ) ),
 				'redirectUrl'           => esc_url( home_url( '/' ) ),
 				'userValues'            => [
