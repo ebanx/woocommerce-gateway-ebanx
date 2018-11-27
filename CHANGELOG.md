@@ -1,5 +1,8 @@
 # CHANGELOG
 
+# 1.34.6
+* Fix - Resolved wrong currency in payment by link [#720](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/720)
+
 # 1.34.5
 * Improvement - Add tests for payment adapter service [#716](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/716)
 
