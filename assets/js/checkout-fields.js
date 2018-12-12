@@ -83,6 +83,11 @@ jQuery (function ($) {
     });
   };
 
+  var isEbanxMethodSelected = function() {
+    var selectedMethod = $( 'input[name=payment_method]:checked' ).val();
+    return ( typeof selectedMethod !== 'undefined' && selectedMethod.indexOf( 'ebanx' ) !== -1 );
+  };
+
   var disableFields = function (billingFields) {
     billingFields.each(function() {
       $(this).hide().removeAttr('required');
@@ -110,7 +115,7 @@ jQuery (function ($) {
 
       disableFields(getBillingFields());
 
-      if (country) {
+      if (country && isEbanxMethodSelected()) {
         enableFields(getBillingFields(country));
       }
 
@@ -133,9 +138,15 @@ jQuery (function ($) {
 			$( ebanxMethodsLabels ).find( 'img' ).before( '<span id="sandbox-alert-tag">' + localizedMessage + '</span>' );
 		}
 
+        if (isEbanxMethodSelected()) {
+          setTimeout(() => (
+            $('.wc_payment_methods.payment_methods.methods > li > input:checked').trigger('change')
+          ), 0);
+        }
+
 		paymentMethods.on( 'change', function( e ) {
 			disableFields(getBillingFields());
-			if ( ( $( 'input[name=payment_method]:checked' ).val().indexOf( 'ebanx' ) !== -1 ) ) {
+			if (isEbanxMethodSelected()) {
 				enableFields( getBillingFields( $( '#billing_country' ).val().toLowerCase() ) );
 			}
 		} );
