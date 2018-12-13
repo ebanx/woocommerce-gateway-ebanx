@@ -160,4 +160,12 @@ abstract class WC_EBANX_Helper {
 		return $configs->get_setting_or_default( 'add_iof_to_local_amount_enabled', 'yes' ) === 'yes';
 	}
 
+	/**
+	 * @param string $barcode
+	 *
+	 * @return bool
+	 */
+	public static function should_show_boleto_details( $barcode ) {
+		return intval( $barcode ) === 0 ? false : true;
+	}
 }
