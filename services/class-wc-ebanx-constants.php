@@ -160,6 +160,7 @@ abstract class WC_EBANX_Constants {
 		'ebanx-safetypay-cash',
 		'ebanx-baloto',
 		'ebanx-efectivo',
+		'ebanx-banktransfer',
 	);
 
 	/**
@@ -216,6 +217,7 @@ abstract class WC_EBANX_Constants {
 	 * @var array
 	 */
 	public static $gateway_to_payment_type_code = array(
+		'ebanx-bank_transfer'  => '_bank_transfer',
 		'ebanx-banking-ticket' => '_boleto',
 		'ebanx-credit-card-br' => '_creditcard',
 		'ebanx-credit-card-mx' => '_creditcard',
@@ -249,6 +251,7 @@ abstract class WC_EBANX_Constants {
 			'ebanx-credit-card-br',
 			'ebanx-tef',
 			'ebanx-account',
+			'ebanx-banktransfer',
 		),
 		self::COUNTRY_CHILE     => array(
 			'ebanx-webpay',

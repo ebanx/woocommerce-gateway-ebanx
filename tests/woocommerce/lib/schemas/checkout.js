@@ -425,5 +425,14 @@ export const CHECKOUT_SCHEMA = {
         )
       ).without('schema', R.keys(this.compliance()));
     },
+    banktransfer() {
+      return Joi.object().keys(
+        Object.assign(
+          {},
+          this.compliance(),
+          { schema: 'BrazilBankTransfer' }
+        )
+      ).without('schema', R.keys(this.compliance()));
+    },
   },
 };

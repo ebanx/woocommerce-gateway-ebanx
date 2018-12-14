@@ -177,6 +177,17 @@ export default class Woocommerce {
     });
   }
 
+  buyWonderWomansPurseWithBankTransferToPersonal(data, next) {
+    this[buyWonderWomansPurse]();
+
+    this.pages.checkout.placeWithBankTransfer(data, () => {
+      this.pages.thankYou
+        .stillOnBankTransfer((resp) => {
+          tryNext(next, resp);
+        });
+    });
+  }
+
   buyWonderWomansPurseWithCreditCardToPersonal(data, next) {
     this[buyWonderWomansPurse]();
 

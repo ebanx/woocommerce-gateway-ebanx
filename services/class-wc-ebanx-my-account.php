@@ -126,6 +126,9 @@ class WC_EBANX_My_Account {
 			case 'ebanx-efectivo':
 				WC_EBANX_Efectivo_Gateway::thankyou_page( $order );
 				break;
+			case 'ebanx-banktransfer':
+				WC_EBANX_Bank_Transfer_Gateway::thankyou_page( $order );
+				break;
 		}
 	}
 }

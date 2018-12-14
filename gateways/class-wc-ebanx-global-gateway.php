@@ -34,6 +34,7 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway {
 			'ebanx-banking-ticket',
 			'ebanx-tef',
 			'ebanx-account',
+			'ebanx-banktransfer',
 		),
 		'mexico_payment_methods'          => array(
 			'ebanx-credit-card-mx',
@@ -188,12 +189,14 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway {
 					'ebanx-banking-ticket' => 'Boleto EBANX',
 					'ebanx-tef'            => 'Online Banking (TEF)',
 					'ebanx-account'        => 'EBANX Wallet',
+					'ebanx-banktransfer'   => 'EBANX Bank Transfer',
 				),
 				'default' => array(
 					'ebanx-credit-card-br',
 					'ebanx-banking-ticket',
 					'ebanx-tef',
 					'ebanx-account',
+					'ebanx-banktransfer',
 				),
 			),
 			'mexico_payment_methods'    => array(

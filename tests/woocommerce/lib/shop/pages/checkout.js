@@ -473,6 +473,15 @@ export default class Checkout {
     });
   }
 
+  placeWithBankTransfer(data, next) {
+    validateSchema(CHECKOUT_SCHEMA.br.banktransfer(), data, () => {
+      this[fillBilling](data);
+      this[placeOrder]();
+
+      next();
+    });
+  }
+
   placeWithDebitCard(data, next) {
     validateSchema(CHECKOUT_SCHEMA[data.countryId.toLowerCase()].debitcard(), data, () => {
       this[fillBilling](data);

@@ -94,6 +94,9 @@ export default {
             boleto: {
               id: 'boleto',
             },
+            banktransfer: {
+              id: 'banktransfer',
+            },
             creditcard: {
               id: 'creditcard',
             },

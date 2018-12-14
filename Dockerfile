@@ -1,9 +1,9 @@
 FROM php:5-apache
 
-ARG WORDPRESS_DB_USER
-ARG WORDPRESS_DB_PASSWORD
-ARG WORDPRESS_DB_NAME
-ARG WORDPRESS_DB_HOST
+ARG WORDPRESS_DB_USER=root
+ARG WORDPRESS_DB_PASSWORD=root
+ARG WORDPRESS_DB_NAME=wordpress
+ARG WORDPRESS_DB_HOST=mysql
 
 # install the PHP extensions we need
 RUN set -ex; \
@@ -11,7 +11,7 @@ RUN set -ex; \
     apt-get update; \
     apt-get install -y --force-yes --no-install-recommends \
       libjpeg-dev \
-      libpng12-dev \
+      libpng-dev \
       mysql-client \
     ; \
     rm -rf /var/lib/apt/lists/*; \
