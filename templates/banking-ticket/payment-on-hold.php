@@ -38,6 +38,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 				<a href="<?php echo esc_attr( $url_print ); ?>" target="_blank" class="button banking-ticket__action">Imprimir boleto</a>
 			<?php endif; ?>
 		</div>
+	<? else : ?>
+		<div id="hide_boleto_details">
+		</div>
 	<? endif; ?>
 	<?php // phpcs:enable ?>
 
