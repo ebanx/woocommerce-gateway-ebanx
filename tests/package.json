@@ -27,13 +27,13 @@
   },
   "pre-commit": "lint:staged",
   "dependencies": {
-    "cypress": "^3.1.1",
-    "eslint": "^4.17.0",
+    "cypress": "^3.1.2",
+    "eslint": "^5.9.0",
     "faker": "git://github.com/marak/Faker.js",
-    "joi": "^13.1.2",
-    "lint-staged": "^6.1.0",
+    "joi": "^14.0.6",
+    "lint-staged": "^8.0.5",
+    "npm": "^6.4.1",
     "pre-commit": "^1.2.2",
-    "ramda": "^0.25.0",
-    "npm": "^6.4.1"
+    "ramda": "^0.26.0"
   }
 }
