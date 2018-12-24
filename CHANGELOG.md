@@ -1,5 +1,8 @@
 # CHANGELOG
 
+# 1.34.7
+* Fix - Hide document field if not required [#722](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/722)
+
 # 1.34.6
 * Fix - Resolved wrong currency in payment by link [#720](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/720)
 
