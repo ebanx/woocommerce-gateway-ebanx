@@ -149,6 +149,10 @@ jQuery (function ($) {
 			if (isEbanxMethodSelected()) {
 				enableFields( getBillingFields( $( '#billing_country' ).val().toLowerCase() ) );
 			}
+			// Hack to avoid showing CPF and CNPJ at the same time.
+			// if ($('#billing_country').val() === 'BR') {
+			// 	taxes.change();
+			// }
 		} );
 	});
 });
