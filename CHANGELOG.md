@@ -1,5 +1,8 @@
 # CHANGELOG
 
+#1.35.0
+* Feature - BankTransfer payment method [#728](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/728)
+
 # 1.34.7
 * Fix - Hide document field if not required [#722](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/722)
 
