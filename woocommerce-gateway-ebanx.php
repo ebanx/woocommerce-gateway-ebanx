@@ -593,6 +593,7 @@ if ( ! class_exists( 'WC_EBANX' ) ) {
 			include_once WC_EBANX_GATEWAYS_DIR . 'class-wc-ebanx-credit-card-br-gateway.php';
 			include_once WC_EBANX_GATEWAYS_DIR . 'class-wc-ebanx-account-gateway.php';
 			include_once WC_EBANX_GATEWAYS_DIR . 'class-wc-ebanx-tef-gateway.php';
+			include_once WC_EBANX_GATEWAYS_DIR . 'class-wc-ebanx-bank-transfer-gateway.php';
 
 			// Mexico Gateways.
 			include_once WC_EBANX_GATEWAYS_DIR . 'class-wc-ebanx-credit-card-mx-gateway.php';
@@ -651,6 +652,7 @@ if ( ! class_exists( 'WC_EBANX' ) ) {
 			$methods[] = 'WC_EBANX_Credit_Card_BR_Gateway';
 			$methods[] = 'WC_EBANX_Tef_Gateway';
 			$methods[] = 'WC_EBANX_Account_Gateway';
+			$methods[] = 'WC_EBANX_Bank_Transfer_Gateway';
 
 			// Mexico.
 			$methods[] = 'WC_EBANX_Credit_Card_MX_Gateway';

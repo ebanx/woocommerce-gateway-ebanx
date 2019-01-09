@@ -59,6 +59,23 @@ describe('Woocommerce', () => {
       });
     });
 
+    context('BankTransfer', () => {
+      it('can buy `wonder womans purse` using banktransfer to personal, cancel it and notify', () => {
+        admin.login();
+        woocommerce.buyWonderWomansPurseWithBankTransferToPersonal(mock(
+          {
+            paymentMethod: defaults.pay.api.DEFAULT_VALUES.paymentMethods.br.banktransfer.id,
+          }
+        ), (resp) => {
+          woocommerce.cancelPayment(resp.orderNumber);
+
+          admin.notifyPayment(resp.hash) // @note: This is needed because pay can't notify localhost.
+            .checkPaymentStatusOnPlatform(resp.orderNumber, 'Failed');
+          cy.clearCookies();
+        });
+      });
+    });
+
     context('Credit Card', () => {
       it('can buy `wonder womans purse`, create account and can one-click', () => {
         const mockData = {

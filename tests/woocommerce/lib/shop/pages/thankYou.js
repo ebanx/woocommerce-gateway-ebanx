@@ -21,7 +21,7 @@ export default class ThankYou {
 
   [extractOrderNumber](next) {
     this.cy
-      .get('#post-5 > div > div > div > ul > li.woocommerce-order-overview__order.order > strong')
+      .get('#post-6 > div > div > div > ul > li.woocommerce-order-overview__order.order > strong')
       .then(($elm) => {
         next($elm.text());
       });
@@ -39,6 +39,18 @@ export default class ThankYou {
   stillOnBoleto(next) {
     this.cy
       .get('#ebanx-boleto-frame', { timeout: 15000 })
+      .should('be.visible');
+
+    this[extractHash]((hash) => {
+      this[extractOrderNumber]((orderNumber) => {
+        tryNext(next, { hash, orderNumber });
+      });
+    });
+  }
+
+  stillOnBankTransfer(next) {
+    this.cy
+      .get('#ebanx-banktransfer-frame', { timeout: 15000 })
       .should('be.visible');
 
     this[extractHash]((hash) => {
@@ -74,7 +86,7 @@ export default class ThankYou {
     this[stillOn]('SPEI');
 
     this.cy
-      .get('#post-5 > div > div > div > section.woocommerce-order-details > div:nth-child(7) > iframe')
+      .get('#post-6 > div > div > div > section.woocommerce-order-details > div:nth-child(7) > iframe')
       .then(($oxxoIframe) => {
         expect($oxxoIframe.contents().find('table.spei-table.non-responsive .amount').length).to.equal(2);
       });
@@ -86,7 +98,7 @@ export default class ThankYou {
     this[stillOn]('Baloto');
 
     this.cy
-      .get('#post-5 > div > div > div > section.woocommerce-order-details > div:nth-child(7) > iframe')
+      .get('#post-6 > div > div > div > section.woocommerce-order-details > div:nth-child(7) > iframe')
       .then(($oxxoIframe) => {
         expect($oxxoIframe.contents().find('.baloto-details__item .affiliation_code').length).to.equal(1);
       });
@@ -98,7 +110,7 @@ export default class ThankYou {
     this[stillOn]('OXXO');
 
     this.cy
-      .get('#post-5 > div > div > div > section.woocommerce-order-details > div:nth-child(7) > iframe')
+      .get('#post-6 > div > div > div > section.woocommerce-order-details > div:nth-child(7) > iframe')
       .then(($oxxoIframe) => {
         expect($oxxoIframe.contents().find('div.oxxo-barcode > div.oxxo-barcode-img').length).to.equal(1);
       });
@@ -110,7 +122,7 @@ export default class ThankYou {
     this[stillOn]('PagoEfectivo');
 
     this.cy
-      .get('#post-5 > div > div > div > section > div:nth-child(6) > iframe')
+      .get('#post-6 > div > div > div > section > div:nth-child(6) > iframe')
       .then(($pagoEfectivoIframe) => {
         expect($pagoEfectivoIframe.contents().find('.cip-code').length).to.equal(1);
       });
@@ -122,7 +134,7 @@ export default class ThankYou {
     this[stillOn]('Efectivo');
 
     this.cy
-      .get('#post-5 > div > div > div > section.woocommerce-order-details > div:nth-child(7) > iframe')
+      .get('#post-6 > div > div > div > section.woocommerce-order-details > div:nth-child(7) > iframe')
       .then(($efectivoIframe) => {
         expect($efectivoIframe.contents().find('.barcode.img-responsive').length).to.equal(1);
       });
