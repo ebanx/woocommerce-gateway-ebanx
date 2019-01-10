@@ -149,6 +149,9 @@ jQuery (function ($) {
 			if (isEbanxMethodSelected()) {
 				enableFields( getBillingFields( $( '#billing_country' ).val().toLowerCase() ) );
 			}
+			if ($('#billing_country').val() === 'BR') {
+				taxes.change();
+			}
 		} );
 	});
 });
