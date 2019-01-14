@@ -259,4 +259,64 @@ jQuery( function($) {
 			cvvTextField.val( '' );
 		}
 	} );
+
+	CardNumberValidation($);
 } );
+
+function CardNumberValidation($) {
+	var $msg = $('<p class="woocommerce-error"></p>');
+	var cardNumberElementId = "#ebanx-card-number";
+	var touched = false;
+
+	$(document).on("blur", cardNumberElementId, function() {
+		touched = true;
+		validate();
+	});
+
+	$(document).on("input", cardNumberElementId, function() {
+		if (touched) validate(); 
+	});
+
+	function validate() {
+		var $cardNumber = $(cardNumberElementId);
+
+		if (!validateCardNumber($cardNumber.val())) {
+			var text = getInvalidCardNumberMessage($("#billing_country").val())
+			$msg.text(text);
+			$msg.insertAfter($cardNumber.parent());
+		} else {
+			$msg.remove();
+		}
+	}
+}
+
+function getInvalidCardNumberMessage(country) {
+	switch (country) {
+		case 'BR': return "Número de cartão inválido"
+		case 'AR':
+		case 'BO':
+		case 'CL':
+		case 'CO':
+		case 'MX':
+		case 'PE': return 'Número de tarjeta no válida'
+		default: return "Invalid card number";
+	}
+}
+
+function validateCardNumber(cardNumber) {
+	if (!cardNumber || cardNumber.length == 0) return false;
+	return luhnCheck(cardNumber.replace(/[\s]/g, ""));
+}
+
+function luhnCheck(cardNumber) {
+	let b;
+	let c;
+	let d;
+	let e;
+
+	for (d = +cardNumber[b = cardNumber.length - 1], e = 0; b--;) {// eslint-disable-line
+		c = +cardNumber[b], d += ++e % 2 ? 2 * c % 10 + (c > 4) : c;// eslint-disable-line
+	}
+
+	return (d % 10) === 0;
+}
