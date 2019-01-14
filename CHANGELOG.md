@@ -1,5 +1,9 @@
 # CHANGELOG
 
+# 1.36.0
+* Fix - Resolved wrong behavior with CPF and CPNJ inputs exhibition [#729](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/729)
+* Feature - Add credit card validation to front-end layer [#731](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/731)
+
 #1.35.0
 * Feature - BankTransfer payment method [#728](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/728)
 
