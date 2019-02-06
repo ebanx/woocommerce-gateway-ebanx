@@ -251,6 +251,7 @@ if ( ! class_exists( 'WC_EBANX' ) ) {
 			$ebanx_router->map( 'cancel-order', array( $api_controller, 'cancel_order' ) );
 			$ebanx_router->map( 'capture-payment', array( $api_controller, 'capture_payment' ) );
 			$ebanx_router->map( 'retrieve-logs', array( $api_controller, 'retrieve_logs' ) );
+			$ebanx_router->map( 'plugin-check', array( $api_controller, 'plugin_check' ) );
 
 			$ebanx_router->serve();
 		}
