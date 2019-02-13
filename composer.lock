@@ -4,15 +4,21 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "e81f4422ad5d79dae5ac655f6c91ea15",
+    "content-hash": "b30205d17edce06405f21b2931b20083",
     "packages": [
         {
             "name": "ebanx/benjamin",
-            "version": "1.16.0",
+            "version": "1.17.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/ebanx/benjamin.git",
-                "reference": "e3c90b5ba922323fef485e7db64254f1419cb867"
+                "reference": "1a796a5065463180eb0c84661a1e41efa034ea2a"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/ebanx/benjamin/zipball/1a796a5065463180eb0c84661a1e41efa034ea2a",
+                "reference": "1a796a5065463180eb0c84661a1e41efa034ea2a",
+                "shasum": ""
             },
             "require": {
                 "ext-curl": "*",
@@ -35,36 +41,12 @@
                     "main.php"
                 ]
             },
-            "autoload-dev": {
-                "psr-4": {
-                    "Tests\\": "tests/"
-                }
-            },
-            "scripts": {
-                "test": [
-                    "phpunit"
-                ],
-                "test-only": [
-                    "phpunit --filter"
-                ],
-                "dup-check": [
-                    "phpcpd src && phpcpd tests"
-                ],
-                "test-all": [
-                    "composer test && composer style-check && composer dup-check"
-                ],
-                "style-check": [
-                    "php-cs-fixer fix --dry-run --verbose --diff ./"
-                ],
-                "style-fix": [
-                    "php-cs-fixer fix --verbose ./"
-                ]
-            },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "Apache-2.0"
             ],
             "description": "Business rule provider lib for plugin implementations",
-            "time": "2019-01-02T18:23:05+00:00"
+            "time": "2019-02-04T12:03:43+00:00"
         }
     ],
     "packages-dev": [
@@ -1205,12 +1187,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/squizlabs/PHP_CodeSniffer.git",
-                "reference": "de06375da8870ce399d019472fbe8302f6cf19b2"
+                "reference": "2a92a46ed65bac6b21b12c7530adc25c0555379d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/squizlabs/PHP_CodeSniffer/zipball/de06375da8870ce399d019472fbe8302f6cf19b2",
-                "reference": "de06375da8870ce399d019472fbe8302f6cf19b2",
+                "url": "https://api.github.com/repos/squizlabs/PHP_CodeSniffer/zipball/2a92a46ed65bac6b21b12c7530adc25c0555379d",
+                "reference": "2a92a46ed65bac6b21b12c7530adc25c0555379d",
                 "shasum": ""
             },
             "require": {
@@ -1248,7 +1230,7 @@
                 "phpcs",
                 "standards"
             ],
-            "time": "2019-01-08T02:38:00+00:00"
+            "time": "2019-01-30T22:04:44+00:00"
         },
         {
             "name": "symfony/polyfill-ctype",
@@ -1314,12 +1296,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/yaml.git",
-                "reference": "554a59a1ccbaac238a89b19c8e551a556fd0e2ea"
+                "reference": "ba11776e9e6c15ad5759a07bffb15899bac75c2d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/yaml/zipball/554a59a1ccbaac238a89b19c8e551a556fd0e2ea",
-                "reference": "554a59a1ccbaac238a89b19c8e551a556fd0e2ea",
+                "url": "https://api.github.com/repos/symfony/yaml/zipball/ba11776e9e6c15ad5759a07bffb15899bac75c2d",
+                "reference": "ba11776e9e6c15ad5759a07bffb15899bac75c2d",
                 "shasum": ""
             },
             "require": {
@@ -1365,7 +1347,7 @@
             ],
             "description": "Symfony Yaml Component",
             "homepage": "https://symfony.com",
-            "time": "2019-01-01T13:45:19+00:00"
+            "time": "2019-01-16T10:59:17+00:00"
         },
         {
             "name": "webmozart/assert",
