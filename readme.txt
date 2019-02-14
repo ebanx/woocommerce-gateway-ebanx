@@ -3,7 +3,7 @@ Contributors: ebanxwp
 Tags: credit card, boleto, ebanx, woocommerce, payment gateway, latin america, brazil, mexico, argentina, peru, colombia, chile, ecuador, cash payment, local payment, card payment, one-click payment, alternative payments, payment processing
 Requires at least: 4.0
 Tested up to: 4.9
-Stable tag: 1.36.0
+Stable tag: 1.37.0
 License: Apache v2.0
 License URI: http://www.apache.org/licenses/LICENSE-2.0
 
@@ -147,6 +147,11 @@ Yes, you can.
 4. There you go, you’re all set!
 
 == Changelog ==
+
+= 1.37.0 =
+* Feature - Add User Agent header usage to send plugin-version data [#734](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/734)
+* Feature - Add plugin check page [#735](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/735)
+* Improvement - Remove PDF button and embed voucher in mobile for Banktransfer [#733](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/733)
 
 = 1.36.0 =
 * Fix - Resolved wrong behavior with CPF and CPNJ inputs exhibition [#729](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/729)
