@@ -1,4 +1,6 @@
 # CHANGELOG
+#  1.37.1
+* Improvement - Hide optional fields tag from checkout [#740](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/740)
 
 # 1.37.0
 * Feature - Add User Agent header usage to send plugin-version data [#734](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/734)
