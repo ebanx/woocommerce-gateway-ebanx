@@ -1,6 +1,7 @@
 {
   "projectId": "w3m7iu",
   "pageLoadTimeout": 300000,
+  "defaultCommandTimeout": 30000,
   "viewportWidth": 1440,
   "viewportHeight": 1440,
   "chromeWebSecurity": false,
