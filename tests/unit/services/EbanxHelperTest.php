@@ -3,7 +3,17 @@
 use PHPUnit\Framework\TestCase;
 
 class EbanxHelperTest extends TestCase {
+	public function setUp() {
+		\WP_Mock::setUp();
+	}
 	public function testPluginCheckArray() {
+		\WP_Mock::userFunction( 'get_woocommerce_currency', [
+			'return_in_order' => ['BRL']
+		]);
+		\WP_Mock::userFunction( 'get_plugins', array(
+			'return_in_order' => array([['Version' => '0.0.1', 'Name' => 'Mock']])
+		));
+
 		$config = new WC_EBANX_Global_Gateway();
 		$plugin_check = WC_EBANX_Helper::plugin_check($config);
 		$this->assertPluginCheck($plugin_check);
