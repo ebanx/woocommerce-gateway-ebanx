@@ -1,4 +1,8 @@
 # CHANGELOG
+
+# 1.37.2
+* Improvement - Remove iof when request a payment using benjamin [#738](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/738)
+
 #  1.37.1
 * Improvement - Hide optional fields tag from checkout [#740](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/740)
 
