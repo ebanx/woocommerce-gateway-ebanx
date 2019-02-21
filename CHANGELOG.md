@@ -1,5 +1,8 @@
 # CHANGELOG
 
+# 1.37.3
+* Improvement - Using WP_Mock in unit test and remove wc_function for mock [#746](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/746)
+
 # 1.37.2
 * Improvement - Remove iof when request a payment using benjamin [#738](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/738)
 
