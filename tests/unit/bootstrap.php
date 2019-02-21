@@ -4,8 +4,10 @@ define('ABSPATH', realpath('.'));
 define('WC_EBANX_VENDOR_DIR', realpath('.') . '/vendor/');
 define('IS_TEST', true);
 
+
 require __DIR__ . '/includes/wc_class.php';
-require __DIR__ . '/includes/wc_function.php';
+//require __DIR__ . '/includes/wc_function.php';
+require WC_EBANX_VENDOR_DIR . '/autoload.php';
 
 require_once realpath('.') . '/gateways/class-wc-ebanx-global-gateway.php';
 
