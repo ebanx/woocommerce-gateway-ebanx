@@ -68,6 +68,18 @@ describe('Woocommerce', () => {
           }
         ));
       });
+
+      it('can buy `wonder womans purse` using DNI as document', () => {
+          woocommerce.buyWonderWomansPurseWithEfectivoToPersonal(mock(
+              {
+                  paymentMethod: defaults.pay.api.DEFAULT_VALUES.paymentMethods.ar.efectivo.id,
+                  paymentType: defaults.pay.api.DEFAULT_VALUES.paymentMethods.ar.efectivo.types.otrosCupones,
+                  document: '1234567',
+                  documentType: 'DNI',
+                  documentTypeId: 'ARG_DNi',
+              }
+          ));
+      });
     });
 
     context('Credit Card', () => {
@@ -99,7 +111,7 @@ describe('Woocommerce', () => {
     });
 
     context('Errors', () => {
-      it('can`t buy with document that has less than 11 digits', () => {
+      it('can`t buy with CUIT document that has less than 11 digits', () => {
         let mockData = mock(
           {
             paymentMethod: defaults.pay.api.DEFAULT_VALUES.paymentMethods.ar.efectivo.id,
@@ -108,6 +120,19 @@ describe('Woocommerce', () => {
         );
         mockData.document = '23-666';
         woocommerce.cantBuyJeansWithEfectivo(mockData);
+      });
+
+      it('can`t buy with DNI document that has less than 7 digits', () => {
+          let mockData = mock(
+              {
+                  paymentMethod: defaults.pay.api.DEFAULT_VALUES.paymentMethods.ar.efectivo.id,
+                  paymentType: defaults.pay.api.DEFAULT_VALUES.paymentMethods.ar.efectivo.types.otrosCupones,
+                  documentType: 'DNI',
+                  documentTypeId: 'ARG_DNI',
+              }
+          );
+          mockData.document = '1234';
+          woocommerce.cantBuyJeansWithEfectivo(mockData);
       });
     });
   });
