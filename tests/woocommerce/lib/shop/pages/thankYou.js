@@ -21,7 +21,7 @@ export default class ThankYou {
 
   [extractOrderNumber](next) {
     this.cy
-      .get('#post-6 > div > div > div > ul > li.woocommerce-order-overview__order.order > strong')
+      .get('.woocommerce-thankyou-order-details .woocommerce-order-overview__order.order > strong')
       .then(($elm) => {
         next($elm.text());
       });
