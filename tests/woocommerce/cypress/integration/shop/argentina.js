@@ -1,139 +1,140 @@
 /* global Cypress, it, describe, before, context, cy */
 
-import R from 'ramda';
 import Faker from 'faker';
 import defaults from '../../../../defaults';
-import {assertUrlStatus, wrapOrderAssertations} from '../../../../utils';
 import Woocommerce from '../../../lib/operator';
-import Pay from '../../../../pay/lib/operator';
-
-Faker.locale = 'es';
-
-const mock = (data) => (R.merge(
-  data,
-  {
-    firstName: 'MESSI',
-    lastName: 'LIONEL ANDRES',
-    document: '23-33016244-9',
-    documentType: 'CUIT',
-    documentTypeId: 'ARG_CUIT',
-    address: Faker.address.streetName(),
-    city: Faker.address.city(),
-    state: 'Catamarca',
-    stateId: 'K',
-    zipcode: Faker.address.zipCode(),
-    phone: Faker.phone.phoneNumberFormat(2),
-    email: Faker.internet.email(),
-    country: 'Argentina',
-    countryId: 'AR',
-  }
-));
-
-let woocommerce;
-let pay;
 
 describe('Woocommerce', () => {
-  before(() => {
-    assertUrlStatus(Cypress.env('DEMO_URL'));
-
-    pay = new Pay(cy);
-    woocommerce = new Woocommerce(cy);
-  });
-
   context('Argentina', () => {
-    context('Efectivo', () => {
-      it('can buy `wonder womans purse` using Rapipago to personal', () => {
-        woocommerce.buyWonderWomansPurseWithEfectivoToPersonal(mock(
-          {
-            paymentMethod: defaults.pay.api.DEFAULT_VALUES.paymentMethods.ar.efectivo.id,
-            paymentType: defaults.pay.api.DEFAULT_VALUES.paymentMethods.ar.efectivo.types.rapipago,
-          }
-        ));
-      });
-
-      it('can buy `wonder womans purse` using Pagofacil to personal', () => {
-        woocommerce.buyWonderWomansPurseWithEfectivoToPersonal(mock(
-          {
-            paymentMethod: defaults.pay.api.DEFAULT_VALUES.paymentMethods.ar.efectivo.id,
-            paymentType: defaults.pay.api.DEFAULT_VALUES.paymentMethods.ar.efectivo.types.pagofacil,
-          }
-        ));
-      });
-
-      it('can buy `wonder womans purse` using OtrosCupones to personal', () => {
-        woocommerce.buyWonderWomansPurseWithEfectivoToPersonal(mock(
-          {
-            paymentMethod: defaults.pay.api.DEFAULT_VALUES.paymentMethods.ar.efectivo.id,
-            paymentType: defaults.pay.api.DEFAULT_VALUES.paymentMethods.ar.efectivo.types.otrosCupones,
-          }
-        ));
-      });
-
-      it('can buy `wonder womans purse` using DNI as document', () => {
-          woocommerce.buyWonderWomansPurseWithEfectivoToPersonal(mock(
-              {
-                  paymentMethod: defaults.pay.api.DEFAULT_VALUES.paymentMethods.ar.efectivo.id,
-                  paymentType: defaults.pay.api.DEFAULT_VALUES.paymentMethods.ar.efectivo.types.otrosCupones,
-                  document: '1234567',
-                  documentType: 'DNI',
-                  documentTypeId: 'ARG_DNi',
-              }
-          ));
-      });
-    });
-
     context('Credit Card', () => {
       it('can buy `wonder womans purse` using credit card', () => {
-        const mockData = {
-          paymentMethod: defaults.pay.api.DEFAULT_VALUES.paymentMethods.ar.creditcard.id,
-          instalments: '3',
-          card: {
-            number: defaults._globals.cardsWhitelist.visa,
-            expiryDate: '12/27',
-            cvv: '123',
-          },
-        };
+        cy.visit(Cypress.env('DEMO_URL') + '/jeans');
 
-        woocommerce
-          .buyWonderWomansPurseWithCreditCardToPersonal(mock(mockData), (resp) => {
-            pay.queryPayment(resp.hash, Cypress.env('DEMO_INTEGRATION_KEY'), (payment) => {
-              const checkoutPayment = Pay.paymentData({
-                amount_ext: (Cypress.env('JEANS_PRICE') + Cypress.env('DEMO_INTEREST_RATE')).toFixed(2),
-                payment_type_code: 'visa',
-                instalments: '3',
-                status: 'CO',
-              });
+        cy.get('#primary form.cart button.single_add_to_cart_button').should('be.visible');
+        cy.get('#primary form.cart button.single_add_to_cart_button').click();
 
-              wrapOrderAssertations(payment, checkoutPayment);
-            });
-          });
+        cy.get('#content div.woocommerce-message a.button').should('be.visible');
+        cy.get('#content div.woocommerce-message a.button').click();
+
+        cy.get('#main div.cart-collaterals a.checkout-button').should('be.visible');
+        cy.get('#main div.cart-collaterals a.checkout-button').click();
+
+        cy.get('#billing_first_name').type('MESSI');
+        cy.get('#billing_last_name').type('LIONEL ANDRES');
+        cy.get('#billing_country').should('be.visible').window().then((win) => {
+          win.jQuery('#billing_country').select2('open');
+        }).contains('.select2-results__option', 'Argentina').trigger('mouseup');
+        cy.get('#billing_address_1').type(Faker.address.streetName());
+        cy.get('#billing_city').type(Faker.address.city());
+        cy.get('#billing_state').should('be.visible').window().then((win) => {
+          win.jQuery('#billing_state').select2('open');
+        }).contains('.select2-results__option', 'Catamarca').trigger('mouseup');
+        cy.get('#billing_postcode').type(Faker.address.zipCode());
+        cy.get('#billing_phone').type(Faker.phone.phoneNumberFormat(2));
+        cy.get('#billing_email').type(Faker.internet.email());
+
+        cy.get('#payment li.payment_method_ebanx-credit-card-ar').should('be.visible');
+        cy.get('#payment_method_ebanx-credit-card-ar').check({force: true});
+        cy.get('#ebanx-card-number').type(defaults._globals.cardsWhitelist.visa);
+        cy.get('#ebanx-card-expiry').type('12/99');
+        cy.get('#ebanx-card-cvv').type('123');
+
+        cy.get('#ebanx_billing_argentina_document_type').should('be.visible').window().then((win) => {
+          win.jQuery('#ebanx_billing_argentina_document_type').select2('open');
+        }).contains('.select2-results__option', 'CUIT').trigger('mouseup');
+        cy.get('#ebanx_billing_argentina_document').type('23-33016244-9');
+
+        cy.get('#place_order').click();
+
+        cy.get('#primary div.woocommerce-order')
+          .should('be.visible');
       });
     });
 
     context('Errors', () => {
-      it('can`t buy with CUIT document that has less than 11 digits', () => {
-        let mockData = mock(
-          {
-            paymentMethod: defaults.pay.api.DEFAULT_VALUES.paymentMethods.ar.efectivo.id,
-            paymentType: defaults.pay.api.DEFAULT_VALUES.paymentMethods.ar.efectivo.types.otrosCupones,
-          }
-        );
-        mockData.document = '23-666';
-        woocommerce.cantBuyJeansWithEfectivo(mockData);
-      });
+      it('Must have show error when using a CUIT invalid', () => {
+        cy.visit(Cypress.env('DEMO_URL') + '/jeans');
 
-      it('can`t buy with DNI document that has less than 7 digits', () => {
-          let mockData = mock(
-              {
-                  paymentMethod: defaults.pay.api.DEFAULT_VALUES.paymentMethods.ar.efectivo.id,
-                  paymentType: defaults.pay.api.DEFAULT_VALUES.paymentMethods.ar.efectivo.types.otrosCupones,
-                  documentType: 'DNI',
-                  documentTypeId: 'ARG_DNI',
-              }
-          );
-          mockData.document = '1234';
-          woocommerce.cantBuyJeansWithEfectivo(mockData);
-      });
+        cy.get('#primary form.cart button.single_add_to_cart_button').should('be.visible');
+        cy.get('#primary form.cart button.single_add_to_cart_button').click();
+
+        cy.get('#content div.woocommerce-message a.button').should('be.visible');
+        cy.get('#content div.woocommerce-message a.button').click();
+
+        cy.get('#main div.cart-collaterals a.checkout-button').should('be.visible');
+        cy.get('#main div.cart-collaterals a.checkout-button').click();
+
+        cy.get('#billing_first_name').type('MESSI');
+        cy.get('#billing_last_name').type('LIONEL ANDRES');
+        cy.get('#billing_country').should('be.visible').window().then((win) => {
+          win.jQuery('#billing_country').select2('open');
+        }).contains('.select2-results__option', 'Argentina').trigger('mouseup');
+        cy.get('#billing_address_1').type(Faker.address.streetName());
+        cy.get('#billing_city').type(Faker.address.city());
+        cy.get('#billing_state').should('be.visible').window().then((win) => {
+          win.jQuery('#billing_state').select2('open');
+        }).contains('.select2-results__option', 'Catamarca').trigger('mouseup');
+        cy.get('#billing_postcode').type(Faker.address.zipCode());
+        cy.get('#billing_phone').type(Faker.phone.phoneNumberFormat(2));
+        cy.get('#billing_email').type(Faker.internet.email());
+
+        cy.get('#payment li.payment_method_ebanx-credit-card-ar').should('be.visible');
+        cy.get('#payment_method_ebanx-credit-card-ar').check({force: true});
+        cy.get('#ebanx-card-number').type(defaults._globals.cardsWhitelist.visa);
+        cy.get('#ebanx-card-expiry').type('12/99');
+        cy.get('#ebanx-card-cvv').type('123');
+
+        cy.get('#ebanx_billing_argentina_document_type').should('be.visible').window().then((win) => {
+          win.jQuery('#ebanx_billing_argentina_document_type').select2('open');
+        }).contains('.select2-results__option', 'CUIT').trigger('mouseup');
+        cy.get('#ebanx_billing_argentina_document').type('23-666');
+
+        cy.get('#place_order').click();
+
+        cy.get('#primary div.entry-content div.woocommerce-NoticeGroup').should('be.visible');
+      })
+
+      it('Must have show error when using a DNI invalid', () => {
+        cy.visit(Cypress.env('DEMO_URL') + '/jeans');
+
+        cy.get('#primary form.cart button.single_add_to_cart_button').should('be.visible');
+        cy.get('#primary form.cart button.single_add_to_cart_button').click();
+
+        cy.get('#content div.woocommerce-message a.button').should('be.visible');
+        cy.get('#content div.woocommerce-message a.button').click();
+
+        cy.get('#main div.cart-collaterals a.checkout-button').should('be.visible');
+        cy.get('#main div.cart-collaterals a.checkout-button').click();
+
+        cy.get('#billing_first_name').type('MESSI');
+        cy.get('#billing_last_name').type('LIONEL ANDRES');
+        cy.get('#billing_country').should('be.visible').window().then((win) => {
+          win.jQuery('#billing_country').select2('open');
+        }).contains('.select2-results__option', 'Argentina').trigger('mouseup');
+        cy.get('#billing_address_1').type(Faker.address.streetName());
+        cy.get('#billing_city').type(Faker.address.city());
+        cy.get('#billing_state').should('be.visible').window().then((win) => {
+          win.jQuery('#billing_state').select2('open');
+        }).contains('.select2-results__option', 'Catamarca').trigger('mouseup');
+        cy.get('#billing_postcode').type(Faker.address.zipCode());
+        cy.get('#billing_phone').type(Faker.phone.phoneNumberFormat(2));
+        cy.get('#billing_email').type(Faker.internet.email());
+
+        cy.get('#payment li.payment_method_ebanx-credit-card-ar').should('be.visible');
+        cy.get('#payment_method_ebanx-credit-card-ar').check({force: true});
+        cy.get('#ebanx-card-number').type(defaults._globals.cardsWhitelist.visa);
+        cy.get('#ebanx-card-expiry').type('12/99');
+        cy.get('#ebanx-card-cvv').type('123');
+
+        cy.get('#ebanx_billing_argentina_document_type').should('be.visible').window().then((win) => {
+          win.jQuery('#ebanx_billing_argentina_document_type').select2('open');
+        }).contains('.select2-results__option', 'DNI').trigger('mouseup');
+        cy.get('#ebanx_billing_argentina_document').type('1234');
+
+        cy.get('#place_order').click();
+
+        cy.get('#primary div.entry-content div.woocommerce-NoticeGroup').should('be.visible');
+      })
     });
   });
 });

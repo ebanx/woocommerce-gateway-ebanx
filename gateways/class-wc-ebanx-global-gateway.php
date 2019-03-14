@@ -61,7 +61,6 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway {
 		),
 		'argentina_payment_methods'       => array(
 			'ebanx-credit-card-ar',
-			'ebanx-efectivo',
 		),
 		'ecuador_payment_methods'         => array(
 			'ebanx-safetypay',
@@ -269,11 +268,9 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway {
 				'class'   => 'wc-enhanced-select',
 				'options' => array(
 					'ebanx-credit-card-ar' => 'Credit Card',
-					'ebanx-efectivo'       => 'Efectivo',
 				),
 				'default' => array(
 					'ebanx-credit-card-ar',
-					'ebanx-efectivo',
 				),
 			),
 			'ecuador_payment_methods'   => array(
