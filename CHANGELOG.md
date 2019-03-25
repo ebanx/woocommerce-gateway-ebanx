@@ -1,4 +1,7 @@
 # CHANGELOG
+# 1.38.1
+* Improvement  - Set fallback person type at method get_person_type_from_order [#758](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/758)
+
 # 1.38.0
 * Fix          - Fix WooCommerce Subscription [#756](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/756)
 * Improvement  - Update lib js version [#755](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/755)
