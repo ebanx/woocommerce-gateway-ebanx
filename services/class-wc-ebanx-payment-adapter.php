@@ -480,7 +480,7 @@ class WC_EBANX_Payment_Adapter {
 		}
 		$brazil_person_type = get_post_meta( $order->id, '_billing_persontype', true );
 		if ( empty( $brazil_person_type ) ) {
-			throw new Exception( 'INVALID-BRL-PERSON-TYPE' );
+			return Person::TYPE_PERSONAL;
 		}
 		if ( 'cpf' === $brazil_person_type || 1 == $brazil_person_type || 'pessoa física' === strtolower( $brazil_person_type ) ) {
 			return Person::TYPE_PERSONAL;
