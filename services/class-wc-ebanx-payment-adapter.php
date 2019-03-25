@@ -468,7 +468,6 @@ class WC_EBANX_Payment_Adapter {
 	 * @param WC_EBANX_Global_Gateway $configs
 	 *
 	 * @return string
-	 * @throws Exception Throws parameter missing exception.
 	 */
 	private static function get_person_type_from_order( $order, $configs ) {
 		$fields_options = array();
@@ -480,7 +479,7 @@ class WC_EBANX_Payment_Adapter {
 		}
 		$brazil_person_type = get_post_meta( $order->id, '_billing_persontype', true );
 		if ( empty( $brazil_person_type ) ) {
-			throw new Exception( 'INVALID-BRL-PERSON-TYPE' );
+			return Person::TYPE_PERSONAL;
 		}
 		if ( 'cpf' === $brazil_person_type || 1 == $brazil_person_type || 'pessoa física' === strtolower( $brazil_person_type ) ) {
 			return Person::TYPE_PERSONAL;
