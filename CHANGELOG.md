@@ -1,4 +1,7 @@
 # CHANGELOG
+# 1.38.2
+* Fix - Fix Argentine State/County selector on order-payment checkout [#760](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/760)
+
 # 1.38.1
 * Improvement  - Set fallback person type at method get_person_type_from_order [#758](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/758)
 
