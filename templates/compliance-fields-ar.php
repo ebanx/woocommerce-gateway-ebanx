@@ -10,6 +10,9 @@ if ( $order_id ) {
 	$document = $order ? get_user_meta( $order->get_user_id(), '_ebanx_document', true ) : false;
 	$address  = $order->get_address();
 
+	$countries_obj = new WC_Countries();
+	$states        = $countries_obj->get_states( 'AR' );
+
 	$fields = array(
 		'ebanx_billing_argentina_document' => array(
 			'label' => __( 'Document', 'woocommerce-gateway-ebanx' ),
@@ -26,10 +29,6 @@ if ( $order_id ) {
 		'billing_city'                     => array(
 			'label' => __( 'Town / City', 'woocommerce-gateway-ebanx' ),
 			'value' => $address['city'],
-		),
-		'billing_state'                    => array(
-			'label' => __( 'State / County', 'woocommerce-gateway-ebanx' ),
-			'value' => $address['state'],
 		),
 		'billing_country'                  => array(
 			'label' => 'Country',
