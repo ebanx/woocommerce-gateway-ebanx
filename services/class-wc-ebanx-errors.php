@@ -100,7 +100,7 @@ class WC_EBANX_Errors {
 				'BP-DR-31'                   => '¡Ojo! Es obligatorio informar un número de teléfono.',
 				'BP-DR-32'                   => 'El número de teléfono que informaste no es válido.',
 				'BP-DR-34'                   => 'México: El número de mensualidades seleccionado no está disponible. Inténtelo de nuevo con otro número de mensualides.',
-				'BP-DR-39'                   => '-',
+				'BP-DR-39'                   => '¡Ups! No fue posible completar tu transacción. Entra en contacto con EBANX, envía un correo a soporte@ebanx.com para entender lo que pasó.',
 				'BP-DR-40'                   => '¡Ups!, la transacción que deseas realizar ultrapasa el valor límite permitido por EBANX. Intenta realizar una transacción de menor valor.',
 				'BP-DR-42'                   => 'Como tu transacción es con (Documento de cada país), es necesario señalas al responsable.',
 				'BP-DR-43'                   => '¡Ey!, olvidaste ingresar tu nombre.',
