@@ -121,46 +121,6 @@ class WC_EBANX_Bank_Transfer_Gateway extends WC_EBANX_New_Gateway {
 	 */
 	public static function thankyou_page( $order ) {
 		$bank_transfer_url            = get_post_meta( $order->id, '_voucher_url', true );
-		$bank_transfer_basic          = $bank_transfer_url . '&format=basic';
-		$bank_transfer_pdf            = $bank_transfer_url . '&format=pdf';
-		$bank_transfer_print          = $bank_transfer_url . '&format=print';
-		$bank_transfer_mobile         = $bank_transfer_url . '&device_target=mobile';
-		$customer_email     = get_post_meta( $order->id, '_billing_email', true );
-		$customer_name      = get_post_meta( $order->id, '_billing_first_name', true );
-		$bank_transfer_due_date       = get_post_meta( $order->id, '_payment_due_date', true );
-		$bank_transfer_hash           = get_post_meta( $order->id, '_ebanx_payment_hash', true );
-
-		$data = array(
-			'data'         => array(
-				'payment_hash'    => $bank_transfer_hash,
-				'url_basic'      => $bank_transfer_basic,
-				'url_pdf'        => $bank_transfer_pdf,
-				'url_print'      => $bank_transfer_print,
-				'url_mobile'     => $bank_transfer_mobile,
-				'url_iframe'     => get_site_url() . '/?ebanx=order-received&hash=' . $bank_transfer_hash,
-				'customer_email' => $customer_email,
-				'customer_name'  => $customer_name,
-				'due_date'       => $bank_transfer_due_date,
-			),
-			'order_status' => $order->get_status(),
-			'method'       => 'banktransfer',
-		);
-
-		parent::thankyou_page( $data );
-
-		wp_enqueue_script(
-			'woocommerce_ebanx_clipboard',
-			plugins_url( 'assets/js/vendor/clipboard.min.js', WC_EBANX::DIR ),
-			array(),
-			WC_EBANX::get_plugin_version(),
-			true
-		);
-		wp_enqueue_script(
-			'woocommerce_ebanx_order_received',
-			plugins_url( 'assets/js/order-received.js', WC_EBANX::DIR ),
-			array( 'jquery' ),
-			WC_EBANX::get_plugin_version(),
-			true
-		);
+		wp_redirect( $bank_transfer_url );
 	}
 }
