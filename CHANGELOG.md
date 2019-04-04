@@ -1,4 +1,8 @@
 # CHANGELOG
+# 1.38.3
+* Improvement - Redirect to EBANX page when payment is Banktransfer in Brazil [#763](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/763)
+* Fix         - Include error message BP-DR-39 in spanish [#762](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/762)
+
 # 1.38.2
 * Fix - Fix Argentine State/County selector on order-payment checkout [#760](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/760)
 
