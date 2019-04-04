@@ -3,7 +3,7 @@ Contributors: ebanxwp
 Tags: credit card, boleto, ebanx, woocommerce, payment gateway, latin america, brazil, mexico, argentina, peru, colombia, chile, ecuador, cash payment, local payment, card payment, one-click payment, alternative payments, payment processing
 Requires at least: 4.0
 Tested up to: 4.9
-Stable tag: 1.38.2
+Stable tag: 1.38.3
 License: Apache v2.0
 License URI: http://www.apache.org/licenses/LICENSE-2.0
 
@@ -147,6 +147,10 @@ Yes, you can.
 4. There you go, you’re all set!
 
 == Changelog ==
+= 1.38.3 =
+* Improvement - Redirect to EBANX page when payment is Banktransfer in Brazil [#763](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/763)
+* Fix         - Include error message BP-DR-39 in spanish [#762](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/762)
+
 = 1.38.2 =
 * Fix - Fix Argentine State/County selector on order-payment checkout [#760](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/760)
 
