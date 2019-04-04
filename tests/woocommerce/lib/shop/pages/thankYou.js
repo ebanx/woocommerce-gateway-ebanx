@@ -48,16 +48,10 @@ export default class ThankYou {
     });
   }
 
-  stillOnBankTransfer(next) {
+  stillOnBankTransfer() {
     this.cy
-      .get('#ebanx-banktransfer-frame', { timeout: 15000 })
+      .get('#js-form', { timeout: 15000 })
       .should('be.visible');
-
-    this[extractHash]((hash) => {
-      this[extractOrderNumber]((orderNumber) => {
-        tryNext(next, { hash, orderNumber });
-      });
-    });
   }
 
   stillOnCreditCard(instalmentNumber, next) {

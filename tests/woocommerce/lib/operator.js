@@ -182,9 +182,7 @@ export default class Woocommerce {
 
     this.pages.checkout.placeWithBankTransfer(data, () => {
       this.pages.thankYou
-        .stillOnBankTransfer((resp) => {
-          tryNext(next, resp);
-        });
+        .stillOnBankTransfer();
     });
   }
 
