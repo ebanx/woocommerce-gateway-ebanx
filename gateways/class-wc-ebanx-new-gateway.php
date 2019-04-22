@@ -265,12 +265,12 @@ class WC_EBANX_New_Gateway extends WC_EBANX_Gateway {
 			! isset( WC()->customer )
 			|| is_admin()
 			|| empty( WC_EBANX_Request::read( 'billing_country', null ) )
-			&& empty( WC()->customer->get_country() )
+			&& empty( WC()->customer->get_billing_country() )
 		) {
 			return false;
 		}
 
-		$address['country'] = trim( strtolower( WC()->customer->get_country() ) );
+		$address['country'] = trim( strtolower( WC()->customer->get_billing_country() ) );
 		if ( ! empty( WC_EBANX_Request::read( 'billing_country', null ) ) ) {
 			$address['country'] = trim( strtolower( WC_EBANX_Request::read( 'billing_country' ) ) );
 		}
@@ -561,7 +561,7 @@ class WC_EBANX_New_Gateway extends WC_EBANX_Gateway {
 		}
 
 		if ( null === $country ) {
-			$country = trim( strtolower( WC()->customer->get_country() ) );
+			$country = trim( strtolower( WC()->customer->get_billing_country() ) );
 		}
 
 		$exchange              = $this->ebanx->exchange();

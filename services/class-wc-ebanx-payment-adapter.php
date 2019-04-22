@@ -49,7 +49,7 @@ class WC_EBANX_Payment_Adapter {
 	 */
 	public static function transform_card( $order, $configs, $names, $gateway_id ) {
 		$payment = self::transform( $order, $configs, $names, $gateway_id );
-		$country = trim( strtolower( WC()->customer->get_country() ) );
+		$country = trim( strtolower( WC()->customer->get_billing_country() ) );
 
 		if ( in_array( $country, WC_EBANX_Constants::$credit_card_countries ) ) {
 			$payment->instalments = '1';
@@ -179,7 +179,7 @@ class WC_EBANX_Payment_Adapter {
 	 * @throws Exception Throws parameter missing exception.
 	 */
 	private static function get_document( $configs, $names, $gateway_id ) {
-		$country = trim( strtolower( WC()->customer->get_country() ) );
+		$country = trim( strtolower( WC()->customer->get_billing_country() ) );
 
 		switch ( $country ) {
 			case WC_EBANX_Constants::COUNTRY_ARGENTINA:
