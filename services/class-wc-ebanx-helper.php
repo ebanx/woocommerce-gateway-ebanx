@@ -129,12 +129,24 @@ abstract class WC_EBANX_Helper {
 	 * @return bool
 	 */
 	public static function checkout_contains_subscription() {
-		global $product;
 		if ( class_exists( 'WC_Subscription' ) ) {
-			return WC_Subscriptions_Cart::cart_contains_subscription() || strpos( get_class( $product ), 'Subscription' ) !== false;
+			return WC_Subscriptions_Cart::cart_contains_subscription() || self::product_contains_subscription();
 		}
 
 		return false;
+	}
+
+	/**
+	 *
+	 *
+	 * @return boolean
+	 */
+	private static function product_contains_subscription() {
+		global $product;
+		if ( is_null( $product ) ) {
+			return false;
+		}
+		return strpos( get_class( $product ), 'Subscription' ) !== false;
 	}
 
 	/**
