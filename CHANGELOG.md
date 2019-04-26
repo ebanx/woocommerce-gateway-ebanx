@@ -1,5 +1,8 @@
 # CHANGELOG
 
+# 1.38.5
+* Fix - Remove warning messages [#767](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/767)
+
 # 1.38.4
 * Fix         - fix fatal error when EBANX Gateway was active and Woocommerce was not [#761](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/761)
 
