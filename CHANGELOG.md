@@ -1,4 +1,6 @@
 # CHANGELOG
+# 1.38.6
+* Fix - Remove Exchange Exception [#770](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/770)
 
 # 1.38.5
 * Fix - Remove warning messages [#767](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/767)
