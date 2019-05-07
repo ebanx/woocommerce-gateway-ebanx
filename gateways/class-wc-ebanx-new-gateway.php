@@ -305,10 +305,11 @@ class WC_EBANX_New_Gateway extends WC_EBANX_Gateway {
 		$payment_status = $response['payment']['status'];
 		if ( $response['payment']['pre_approved'] && 'CO' === $payment_status ) {
 			$order->payment_complete( $response['payment']['hash'] );
+		} else {
+			$order->update_status( $this->get_order_status_from_payment_status( $payment_status ) );
 		}
 
 		$order->add_order_note( $this->get_order_note_from_payment_status( $payment_status ) );
-		$order->update_status( $this->get_order_status_from_payment_status( $payment_status ) );
 
 		// Save post's meta fields.
 		$this->save_order_meta_fields( $order, WC_EBANX_Helper::array_to_object( $response ) );
