@@ -10,6 +10,7 @@
     <exclude-pattern>*/vendor/*</exclude-pattern>
     <exclude-pattern>*/tests/unit/*</exclude-pattern>
     <exclude-pattern>*/tests/woocommerce/*</exclude-pattern>
+    <exclude-pattern>*/lib/Plugin/*</exclude-pattern>
 
     <!-- Configs -->
     <config name="minimum_supported_wp_version" value="4.7" />

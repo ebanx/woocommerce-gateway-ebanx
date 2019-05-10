@@ -4,6 +4,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+use EBANX\Plugin\Services\WC_EBANX_Constants;
+
 /**
  * Class WC_EBANX_Api_Controller
  */

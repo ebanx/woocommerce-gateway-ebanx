@@ -20,5 +20,10 @@
         "test": "phpunit",
         "test-all": "composer test && composer style-check",
         "style-check" : "phpcs -p ./"
+    },
+    "autoload": {
+        "psr-4": {
+            "EBANX\\Plugin\\": "lib/plugin"
+        }
     }
 }
