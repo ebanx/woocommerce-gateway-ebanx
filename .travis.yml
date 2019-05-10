@@ -9,6 +9,15 @@ php:
 services:
   - docker
 
+cache:
+  apt: true
+  directories:
+    - $TRAVIS_BUILD_DIR/vendor
+    - $TRAVIS_BUILD_DIR/tests/node_modules
+    - $HOME/.composer/cache
+    - ~/.npm
+    - ~/.cache
+
 env:
   matrix:
     - TEST_COUNTRY=argentina
@@ -24,7 +33,7 @@ before_install:
   - nvm use stable
 
 install:
-  - composer install
+  - composer update
   - cd $TRAVIS_BUILD_DIR/tests && npm ci
   - cd $TRAVIS_BUILD_DIR
 

@@ -23,7 +23,7 @@
     },
     "autoload": {
         "psr-4": {
-            "EBANX\\Plugin\\": "lib/plugin"
+            "EBANX\\Plugin\\": "lib/Plugin"
         }
     }
 }
