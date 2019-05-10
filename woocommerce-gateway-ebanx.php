@@ -176,6 +176,74 @@ if ( ! class_exists( 'WC_EBANX' ) ) {
 		}
 
 		/**
+		 * @param array $methods
+		 * @return array
+		 */
+		private static function argentina_gateway( $methods ) {
+			$methods[] = 'WC_EBANX_Credit_Card_AR_Gateway';
+			$methods[] = 'WC_EBANX_Efectivo_Gateway';
+			return $methods;
+		}
+
+		/**
+		 * @param array $methods
+		 * @return array
+		 */
+		private function peru_gateway( $methods ) {
+			$methods[] = 'WC_EBANX_Pagoefectivo_Gateway';
+			$methods[] = 'WC_EBANX_Safetypay_Gateway';
+			return $methods;
+		}
+
+		/**
+		 * @param array $methods
+		 * @return array
+		 */
+		private static function colombia_gateway( $methods ) {
+			$methods[] = 'WC_EBANX_Credit_Card_CO_Gateway';
+			$methods[] = 'WC_EBANX_Baloto_Gateway';
+			$methods[] = 'WC_EBANX_Eft_Gateway';
+			return $methods;
+		}
+
+		/**
+		 * @param array $methods
+		 * @return array
+		 */
+		private static function chile_gateway( $methods ) {
+			$methods[] = 'WC_EBANX_Webpay_Gateway';
+			$methods[] = 'WC_EBANX_Multicaja_Gateway';
+			$methods[] = 'WC_EBANX_Sencillito_Gateway';
+			$methods[] = 'WC_EBANX_Servipag_Gateway';
+			return $methods;
+		}
+
+		/**
+		 * @param array $methods
+		 * @return array
+		 */
+		private static function mexico_gateway( $methods ) {
+			$methods[] = 'WC_EBANX_Credit_Card_MX_Gateway';
+			$methods[] = 'WC_EBANX_Debit_Card_Gateway';
+			$methods[] = 'WC_EBANX_Oxxo_Gateway';
+			$methods[] = 'WC_EBANX_Spei_Gateway';
+			return $methods;
+		}
+
+		/**
+		 * @param array $methods
+		 * @return array
+		 */
+		private static function brazil_gateway( $methods ) {
+			$methods[] = 'WC_EBANX_Banking_Ticket_Gateway';
+			$methods[] = 'WC_EBANX_Credit_Card_BR_Gateway';
+			$methods[] = 'WC_EBANX_Tef_Gateway';
+			$methods[] = 'WC_EBANX_Account_Gateway';
+			$methods[] = 'WC_EBANX_Bank_Transfer_Gateway';
+			return $methods;
+		}
+
+		/**
 		 * Sets up the configuration object
 		 *
 		 * @return void
@@ -648,37 +716,12 @@ if ( ! class_exists( 'WC_EBANX' ) ) {
 			// Global.
 			$methods[] = 'WC_EBANX_Global_Gateway';
 
-			// Brazil.
-			$methods[] = 'WC_EBANX_Banking_Ticket_Gateway';
-			$methods[] = 'WC_EBANX_Credit_Card_BR_Gateway';
-			$methods[] = 'WC_EBANX_Tef_Gateway';
-			$methods[] = 'WC_EBANX_Account_Gateway';
-			$methods[] = 'WC_EBANX_Bank_Transfer_Gateway';
-
-			// Mexico.
-			$methods[] = 'WC_EBANX_Credit_Card_MX_Gateway';
-			$methods[] = 'WC_EBANX_Debit_Card_Gateway';
-			$methods[] = 'WC_EBANX_Oxxo_Gateway';
-			$methods[] = 'WC_EBANX_Spei_Gateway';
-
-			// Chile.
-			$methods[] = 'WC_EBANX_Webpay_Gateway';
-			$methods[] = 'WC_EBANX_Multicaja_Gateway';
-			$methods[] = 'WC_EBANX_Sencillito_Gateway';
-			$methods[] = 'WC_EBANX_Servipag_Gateway';
-
-			// Colombia.
-			$methods[] = 'WC_EBANX_Credit_Card_CO_Gateway';
-			$methods[] = 'WC_EBANX_Baloto_Gateway';
-			$methods[] = 'WC_EBANX_Eft_Gateway';
-
-			// Peru.
-			$methods[] = 'WC_EBANX_Pagoefectivo_Gateway';
-			$methods[] = 'WC_EBANX_Safetypay_Gateway';
-
-			// Argentina.
-			$methods[] = 'WC_EBANX_Credit_Card_AR_Gateway';
-			$methods[] = 'WC_EBANX_Efectivo_Gateway';
+			$methods = self::brazil_gateway( $methods );
+			$methods = self::mexico_gateway( $methods );
+			$methods = self::chile_gateway( $methods );
+			$methods = self::colombia_gateway( $methods );
+			$methods = self::peru_gateway( $methods );
+			$methods = self::argentina_gateway( $methods );
 
 			return $methods;
 		}
