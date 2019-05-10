@@ -4,6 +4,7 @@ use Ebanx\Benjamin\Models\Address;
 use Ebanx\Benjamin\Models\Country;
 use Ebanx\Benjamin\Models\Person;
 use Ebanx\Benjamin\Models\Request;
+use EBANX\Plugin\Services\WC_EBANX_Constants;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;

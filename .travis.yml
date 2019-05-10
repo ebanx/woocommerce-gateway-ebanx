@@ -33,7 +33,7 @@ before_install:
   - nvm use stable
 
 install:
-  - composer update
+  - composer install
   - cd $TRAVIS_BUILD_DIR/tests && npm ci
   - cd $TRAVIS_BUILD_DIR
 

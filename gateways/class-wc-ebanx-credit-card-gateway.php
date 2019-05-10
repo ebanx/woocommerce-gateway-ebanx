@@ -2,7 +2,7 @@
 
 use Ebanx\Benjamin\Models\Configs\CreditCardConfig;
 use Ebanx\Benjamin\Models\Country;
-use Ebanx\Benjamin\Models\Currency;
+use EBANX\Plugin\Services\WC_EBANX_Constants;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;

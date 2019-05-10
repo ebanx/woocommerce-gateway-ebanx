@@ -6,6 +6,7 @@ use Ebanx\Benjamin\Models\Country;
 use Ebanx\Benjamin\Models\Item;
 use Ebanx\Benjamin\Models\Payment;
 use Ebanx\Benjamin\Models\Person;
+use EBANX\Plugin\Services\WC_EBANX_Constants;
 
 /**
  * Class WC_EBANX_Payment_Adapter
