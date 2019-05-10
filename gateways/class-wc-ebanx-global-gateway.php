@@ -1,7 +1,5 @@
 <?php
 
-use EBANX\Plugin\Services\WC_EBANX_Constants;
-
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
