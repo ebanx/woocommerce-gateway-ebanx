@@ -14,6 +14,7 @@ use RuntimeException as RuntimeException;
 use Ebanx\Benjamin\Services\Gateways\CreditCard;
 use Ebanx\Benjamin\Models\Configs\Config;
 use Ebanx\Benjamin\Models\Configs\CreditCardConfig;
+use EBANX\Plugin\Services\WC_EBANX_Constants;
 
 /**
  * Class WC_EBANX_Helper

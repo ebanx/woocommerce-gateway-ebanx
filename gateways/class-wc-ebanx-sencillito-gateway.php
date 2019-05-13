@@ -1,6 +1,7 @@
 <?php
 
 use Ebanx\Benjamin\Models\Country;
+use EBANX\Plugin\Services\WC_EBANX_Constants;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;

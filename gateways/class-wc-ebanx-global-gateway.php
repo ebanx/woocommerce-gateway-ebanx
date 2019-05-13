@@ -14,6 +14,8 @@ if ( ! defined( 'IS_TEST' ) ) {
 	require_once WC_EBANX_SERVICES_DIR . 'class-wc-ebanx-helper.php';
 }
 
+use EBANX\Plugin\Services\WC_EBANX_Constants;
+
 /**
  * Class WC_EBANX_Global_Gateway
  */
