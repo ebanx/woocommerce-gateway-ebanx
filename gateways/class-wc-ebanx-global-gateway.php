@@ -6,7 +6,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 if ( ! defined( 'IS_TEST' ) ) {
 	require_once WC_EBANX_SERVICES_DIR . 'class-wc-ebanx-notice.php';
-	require_once WC_EBANX_SERVICES_DIR . 'class-wc-ebanx-constants.php';
 	require_once WC_EBANX_SERVICES_DIR . 'class-wc-ebanx-helper.php';
 }
 

@@ -1,17 +1,10 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace EBANX\Plugin\Services;
 
-/**
- * This class is responsible to get some data about platform, plugins, theme and some options
- * to register on log
- */
+use WC_EBANX_Environment;
+
 class WC_EBANX_Log {
-	/**
-	 * This method is responsible to get platform info to be logged
-	 */
 	public static function get_platform_info() {
 		$environment = new WC_EBANX_Environment();
 		return array(
@@ -31,11 +24,6 @@ class WC_EBANX_Log {
 		);
 	}
 
-	/**
-	 * Logs to WP if WP_DEBUG is active.
-	 *
-	 * @param string $log
-	 */
 	public static function wp_write_log( $log ) {
 		if ( true === WP_DEBUG ) {
 			if ( is_array( $log ) || is_object( $log ) ) {
@@ -46,31 +34,25 @@ class WC_EBANX_Log {
 		}
 	}
 
-	/**
-	 * This method is responsible to get some active plugins public data to be logged
-	 */
 	private static function get_plugins_data() {
 		return array_map(
 			function ( $plugin ) {
-					return get_file_data(
-						WC_EBANX_DIR . '../' . $plugin,
-						array(
-							'version'     => 'version',
-							'Plugin Name' => 'Plugin Name',
-							'Description' => 'Description',
-							'Plugin URI'  => 'Plugin URI',
-							'Author'      => 'Author',
-							'License'     => 'License',
-							'Author URI'  => 'Author URI',
-						)
-					);
+				return get_file_data(
+					WC_EBANX_DIR . '../' . $plugin,
+					array(
+						'version'     => 'version',
+						'Plugin Name' => 'Plugin Name',
+						'Description' => 'Description',
+						'Plugin URI'  => 'Plugin URI',
+						'Author'      => 'Author',
+						'License'     => 'License',
+						'Author URI'  => 'Author URI',
+					)
+				);
 			}, get_option( 'active_plugins' )
 		);
 	}
 
-	/**
-	 * Gets some data from active theme to be logged
-	 */
 	private static function get_theme_data() {
 		$wp_theme = wp_get_theme();
 
@@ -89,12 +71,7 @@ class WC_EBANX_Log {
 		];
 	}
 
-	/**
-	 * Retrieve some options to be logged
-	 */
 	private static function get_options() {
-		$wp_theme = wp_get_theme();
-
 		return array(
 			'admin_email'     => get_option( 'admin_email' ),
 			'blogname'        => get_option( 'blogname' ),
