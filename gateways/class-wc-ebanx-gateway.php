@@ -154,6 +154,7 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway {
 				'cpf'  => __( 'CPF - Individuals', 'woocommerce-gateway-ebanx' ),
 				'cnpj' => __( 'CNPJ - Companies', 'woocommerce-gateway-ebanx' ),
 			),
+			'priority' => 120,
 		);
 
 		$ebanx_billing_argentina_document_type = array(
@@ -167,6 +168,7 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway {
 				'ARG_CDI'  => __( 'CDI', 'woocommerce-gateway-ebanx' ),
 				'ARG_DNI'  => __( 'DNI', 'woocommerce-gateway-ebanx' ),
 			),
+			'priority' => 120,
 		);
 
 		$ebanx_billing_brazil_document = array(
@@ -174,6 +176,7 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway {
 			'label'   => 'CPF' . self::REQUIRED_MARK,
 			'class'   => array( 'ebanx_billing_brazil_document', 'ebanx_billing_brazil_cpf', 'ebanx_billing_brazil_selector_option', 'form-row-wide' ),
 			'default' => isset( $cpf ) ? $cpf : '',
+			'priority' => 121,
 		);
 
 		$ebanx_billing_brazil_cnpj = array(
@@ -181,6 +184,7 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway {
 			'label'   => 'CNPJ' . self::REQUIRED_MARK,
 			'class'   => array( 'ebanx_billing_brazil_cnpj', 'ebanx_billing_brazil_cnpj', 'ebanx_billing_brazil_selector_option', 'form-row-wide' ),
 			'default' => isset( $cnpj ) ? $cnpj : '',
+			'priority' => 120,
 		);
 
 		$ebanx_billing_chile_document     = array(
@@ -188,6 +192,7 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway {
 			'label'   => 'RUT' . self::REQUIRED_MARK,
 			'class'   => array( 'ebanx_billing_chile_document', 'form-row-wide' ),
 			'default' => isset( $rut ) ? $rut : '',
+			'priority' => 120,
 		);
 
 		$ebanx_billing_colombia_document_type = array(
@@ -200,12 +205,14 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway {
 				'COL_NIT' => __( 'NIT', 'woocommerce-gateway-ebanx' ),
 				'COL_CEX'  => __( 'Cédula de Extranjeria', 'woocommerce-gateway-ebanx' ),
 			),
+			'priority' => 120,
 		);
 
 		$ebanx_billing_colombia_document  = array(
 			'type'    => 'text',
 			'label'   => 'Document' . self::REQUIRED_MARK,
 			'class'   => array( 'ebanx_billing_colombia_document', 'form-row-wide' ),
+			'priority' => 121,
 			'default' => isset( $dni ) ? $dni : '',
 		);
 		$ebanx_billing_peru_document      = array(
@@ -213,12 +220,14 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway {
 			'label'   => 'DNI' . self::REQUIRED_MARK,
 			'class'   => array( 'ebanx_billing_peru_document', 'form-row-wide' ),
 			'default' => isset( $dni_pe ) ? $dni_pe : '',
+			'priority' => 120,
 		);
 		$ebanx_billing_argentina_document = array(
 			'type'    => 'text',
 			'label'   => __( 'Document', 'woocommerce-gateway-ebanx' ) . self::REQUIRED_MARK,
 			'class'   => array( 'ebanx_billing_argentina_document', 'form-row-wide' ),
 			'default' => isset( $cdi ) ? $cdi : '',
+			'priority' => 121,
 		);
 
 		if ( ! $disable_own_fields ) {
