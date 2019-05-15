@@ -1,5 +1,7 @@
 <?php
 
+use EBANX\Plugin\Services\WC_EBANX_Log;
+
 /**
  * Log PLugin Settings Change event data
  */

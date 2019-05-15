@@ -10,7 +10,6 @@ if ( ! defined( 'IS_TEST' ) ) {
 		wp_die( 'Sorry, but this plugin requires the Woocommerce plugin to be installed and active.', null, array( 'back_link' => true ) );
 	}
 	require_once WC_EBANX_SERVICES_DIR . 'class-wc-ebanx-notice.php';
-	require_once WC_EBANX_SERVICES_DIR . 'class-wc-ebanx-constants.php';
 	require_once WC_EBANX_SERVICES_DIR . 'class-wc-ebanx-helper.php';
 }
 
