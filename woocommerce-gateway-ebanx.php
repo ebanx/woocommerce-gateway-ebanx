@@ -37,6 +37,7 @@ require_once WC_EBANX_VENDOR_DIR . '/autoload.php';
 
 use EBANX\Plugin\Services\WC_EBANX_Constants;
 use EBANX\Plugin\Services\WC_EBANX_Notice;
+use EBANX\Plugin\Services\WC_EBANX_Query_Router;
 
 if ( ! class_exists( 'WC_EBANX' ) ) {
 	/**
@@ -631,7 +632,6 @@ if ( ! class_exists( 'WC_EBANX' ) ) {
 			include_once WC_EBANX_SERVICES_DIR . 'class-wc-ebanx-request.php';
 			include_once WC_EBANX_SERVICES_DIR . 'class-wc-ebanx-errors.php';
 			include_once WC_EBANX_SERVICES_DIR . 'class-wc-ebanx-assets.php';
-			include_once WC_EBANX_SERVICES_DIR . 'class-wc-ebanx-query-router.php';
 			include_once WC_EBANX_SERVICES_DIR . 'class-wc-ebanx-third-party-compability-layer.php';
 			include_once WC_EBANX_SERVICES_DIR . 'class-wc-ebanx-cancel-order.php';
 			include_once WC_EBANX_SERVICES_DIR . 'class-wc-ebanx-capture-payment.php';
