@@ -4,6 +4,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+use EBANX\Plugin\Services\WC_EBANX_Notice;
+
 /**
  * Class WC_EBANX_Flash
  */

@@ -13,8 +13,6 @@
  * @package WooCommerce_EBANX
  */
 
-use EBANX\Plugin\Services\WC_EBANX_Constants;
-
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
@@ -34,6 +32,12 @@ define( 'WC_EBANX_VENDOR_DIR', __DIR__ . DIRECTORY_SEPARATOR . 'vendor' . DIRECT
 define( 'WC_EBANX_ASSETS_DIR', __DIR__ . DIRECTORY_SEPARATOR . 'assets' . DIRECTORY_SEPARATOR );
 define( 'WC_EBANX_CONTROLLERS_DIR', __DIR__ . DIRECTORY_SEPARATOR . 'controllers' . DIRECTORY_SEPARATOR );
 define( 'WC_EBANX_DATABASE_DIR', __DIR__ . DIRECTORY_SEPARATOR . 'database' . DIRECTORY_SEPARATOR );
+
+require_once WC_EBANX_VENDOR_DIR . '/autoload.php';
+
+use EBANX\Plugin\Services\WC_EBANX_Constants;
+use EBANX\Plugin\Services\WC_EBANX_Notice;
+use EBANX\Plugin\Services\WC_EBANX_Query_Router;
 
 if ( ! class_exists( 'WC_EBANX' ) ) {
 	/**
@@ -92,8 +96,6 @@ if ( ! class_exists( 'WC_EBANX' ) ) {
 		 * Initialize the plugin public actions.
 		 */
 		private function __construct() {
-			include_once WC_EBANX_SERVICES_DIR . 'class-wc-ebanx-notice.php';
-
 			$this->notices = new WC_EBANX_Notice();
 
 			if ( ! class_exists( 'WC_Payment_Gateway' ) ) {
@@ -624,14 +626,12 @@ if ( ! class_exists( 'WC_EBANX' ) ) {
 		private function includes() {
 			// Utils.
 			include_once WC_EBANX_SERVICES_DIR . 'class-wc-ebanx-helper.php';
-			include_once WC_EBANX_SERVICES_DIR . 'class-wc-ebanx-notice.php';
 			include_once WC_EBANX_SERVICES_DIR . 'class-wc-ebanx-hooks.php';
 			include_once WC_EBANX_SERVICES_DIR . 'class-wc-ebanx-checker.php';
 			include_once WC_EBANX_SERVICES_DIR . 'class-wc-ebanx-flash.php';
 			include_once WC_EBANX_SERVICES_DIR . 'class-wc-ebanx-request.php';
 			include_once WC_EBANX_SERVICES_DIR . 'class-wc-ebanx-errors.php';
 			include_once WC_EBANX_SERVICES_DIR . 'class-wc-ebanx-assets.php';
-			include_once WC_EBANX_SERVICES_DIR . 'class-wc-ebanx-query-router.php';
 			include_once WC_EBANX_SERVICES_DIR . 'class-wc-ebanx-third-party-compability-layer.php';
 			include_once WC_EBANX_SERVICES_DIR . 'class-wc-ebanx-cancel-order.php';
 			include_once WC_EBANX_SERVICES_DIR . 'class-wc-ebanx-capture-payment.php';
