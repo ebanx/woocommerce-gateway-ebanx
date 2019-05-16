@@ -685,7 +685,6 @@ if ( ! class_exists( 'WC_EBANX' ) ) {
 
 			// Hooks/Actions.
 			include_once WC_EBANX_SERVICES_DIR . 'class-wc-ebanx-payment-by-link.php';
-			include_once WC_EBANX_SERVICES_DIR . 'class-wc-ebanx-payment-validator.php';
 			include_once WC_EBANX_SERVICES_DIR . 'class-wc-ebanx-my-account.php';
 			include_once WC_EBANX_SERVICES_DIR . 'class-wc-ebanx-one-click.php';
 
