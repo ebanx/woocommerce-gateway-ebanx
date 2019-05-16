@@ -3,6 +3,7 @@
 use Ebanx\Benjamin\Models\Configs\CreditCardConfig;
 use Ebanx\Benjamin\Models\Country;
 use EBANX\Plugin\Services\WC_EBANX_Constants;
+use EBANX\Plugin\Services\WC_EBANX_Helper;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;

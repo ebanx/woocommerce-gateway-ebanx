@@ -7,6 +7,7 @@ use Ebanx\Benjamin\Models\Item;
 use Ebanx\Benjamin\Models\Payment;
 use Ebanx\Benjamin\Models\Person;
 use EBANX\Plugin\Services\WC_EBANX_Constants;
+use EBANX\Plugin\Services\WC_EBANX_Helper;
 
 /**
  * Class WC_EBANX_Payment_Adapter

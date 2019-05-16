@@ -5,6 +5,7 @@ use Ebanx\Benjamin\Models\Country;
 use Ebanx\Benjamin\Models\Currency;
 use EBANX\Plugin\Services\WC_EBANX_Constants;
 use EBANX\Plugin\Services\WC_EBANX_Errors;
+use EBANX\Plugin\Services\WC_EBANX_Helper;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;

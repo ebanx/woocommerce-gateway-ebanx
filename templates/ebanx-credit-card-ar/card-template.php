@@ -21,7 +21,7 @@
 				<?php
 				$input_type     = 'checkbox';
 				$save_card_text = 'Guarda esta tarjeta para compras futuras.';
-				if ( WC_EBANX_Helper::checkout_contains_subscription() ) {
+				if ( EBANX\Plugin\Services\WC_EBANX_Helper::checkout_contains_subscription() ) {
 					$input_type     = 'hidden';
 					$save_card_text = null;
 				}
