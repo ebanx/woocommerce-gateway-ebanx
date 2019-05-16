@@ -1,14 +1,7 @@
 <?php
 
-use EBANX\Plugin\Services\WC_EBANX_Constants;
+namespace EBANX\Plugin\Services;
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
-
-/**
- * Class WC_EBANX_Payment_Validator
- */
 class WC_EBANX_Payment_Validator {
 
 	/**
