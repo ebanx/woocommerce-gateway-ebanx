@@ -1,4 +1,8 @@
 # CHANGELOG
+# 1.39.0
+* Fix - Refactor Payment Gateway [#783](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/783)
+* Fix - Fix Virtual Product Status [#772](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/772)
+
 # 1.38.6
 * Fix - Remove Exchange Exception [#770](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/770)
 
