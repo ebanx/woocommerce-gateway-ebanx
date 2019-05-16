@@ -1,8 +1,7 @@
 <?php
 
-/**
- * Class WC_EBANX_Errors
- */
+namespace EBANX\Plugin\Services;
+
 class WC_EBANX_Errors {
 	/**
 	 * The possible errors that EBANX can throw
