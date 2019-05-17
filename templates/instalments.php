@@ -5,7 +5,7 @@ $currency_rate = $currency_rate ?: 1;
 
 if ( count( $instalments_terms ) > 1 ) : ?>
 	<section class="ebanx-form-row">
-		<?php if ( WC_EBANX_Helper::checkout_contains_subscription() ) : ?>
+		<?php if ( EBANX\Plugin\Services\WC_EBANX_Helper::checkout_contains_subscription() ) : ?>
 			<input type="hidden" name="ebanx-credit-card-installments" value="1" />
 		<?php else : ?>
 			<label for="ebanx-card-installments">

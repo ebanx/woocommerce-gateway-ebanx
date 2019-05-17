@@ -1,6 +1,6 @@
 <?php
 
-require_once WC_EBANX_SERVICES_DIR . 'class-wc-ebanx-helper.php';
+use EBANX\Plugin\Services\WC_EBANX_Helper;
 
 /**
  * Abstract logger class, responsible to persist log on database

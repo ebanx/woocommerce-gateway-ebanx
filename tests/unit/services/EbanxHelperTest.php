@@ -1,6 +1,7 @@
 <?php
 
 use PHPUnit\Framework\TestCase;
+use EBANX\Plugin\Services\WC_EBANX_Helper;
 
 class EbanxHelperTest extends TestCase {
 	public function setUp() {

@@ -1,23 +1,20 @@
 <?php
 
+namespace EBANX\Plugin\Services;
+
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
 if ( ! defined( 'IS_TEST' ) ) {
 	require_once WC_EBANX_GATEWAYS_DIR . 'class-wc-ebanx-global-gateway.php';
-	require_once WC_EBANX_VENDOR_DIR . 'autoload.php';
 }
 
 use RuntimeException as RuntimeException;
 use Ebanx\Benjamin\Services\Gateways\CreditCard;
 use Ebanx\Benjamin\Models\Configs\Config;
 use Ebanx\Benjamin\Models\Configs\CreditCardConfig;
-use EBANX\Plugin\Services\WC_EBANX_Constants;
 
-/**
- * Class WC_EBANX_Helper
- */
 abstract class WC_EBANX_Helper {
 
 	/**
@@ -30,8 +27,8 @@ abstract class WC_EBANX_Helper {
 		$return = array();
 		array_walk_recursive(
 			$array, function( $value ) use ( &$return ) {
-				$return[] = $value;
-			}
+			$return[] = $value;
+		}
 		);
 
 		return $return;
@@ -43,7 +40,7 @@ abstract class WC_EBANX_Helper {
 	 * @return string
 	 */
 	public static function get_integration_key() {
-		$config = new WC_EBANX_Global_Gateway();
+		$config = new \WC_EBANX_Global_Gateway();
 
 		return 'yes' === $config->settings['sandbox_mode_enabled'] ? $config->settings['sandbox_private_key'] : $config->settings['live_private_key'];
 	}
@@ -169,7 +166,7 @@ abstract class WC_EBANX_Helper {
 	 * @return bool
 	 */
 	public static function should_apply_taxes() {
-		$configs = new WC_EBANX_Global_Gateway();
+		$configs = new \WC_EBANX_Global_Gateway();
 
 		return $configs->get_setting_or_default( 'add_iof_to_local_amount_enabled', 'yes' ) === 'yes';
 	}
@@ -179,7 +176,7 @@ abstract class WC_EBANX_Helper {
 	 *
 	 * @return array
 	 */
-	public static function plugin_check( WC_EBANX_Global_Gateway $configs ) {
+	public static function plugin_check( \WC_EBANX_Global_Gateway $configs ) {
 		global $wpdb;
 
 		$all_plugins   = get_plugins();
