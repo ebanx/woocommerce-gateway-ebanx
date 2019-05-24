@@ -1,4 +1,8 @@
 # CHANGELOG
+# 1.39.1
+* Fix - Update Benjamin Version [#786](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/786)
+* Improvement - Remove require command and use Namespaces [#785](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/785)
+
 # 1.39.0
 * Fix - Refactor Payment Gateway [#783](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/783)
 * Fix - Fix Virtual Product Status [#772](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/772)
