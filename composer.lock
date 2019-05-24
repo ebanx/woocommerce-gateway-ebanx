@@ -4,20 +4,20 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "052509021780fbc03c8813148e1b5d19",
+    "content-hash": "c52b19c08c760d8268469bdf2b437a7a",
     "packages": [
         {
             "name": "ebanx/benjamin",
-            "version": "1.18.2",
+            "version": "1.18.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/ebanx/benjamin.git",
-                "reference": "e497f250d3abe95f58f138d0169ee78ecf3dbfd7"
+                "reference": "2fc88d7064ad8955b4b7fd5ea26ff07fee7243ba"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ebanx/benjamin/zipball/e497f250d3abe95f58f138d0169ee78ecf3dbfd7",
-                "reference": "e497f250d3abe95f58f138d0169ee78ecf3dbfd7",
+                "url": "https://api.github.com/repos/ebanx/benjamin/zipball/2fc88d7064ad8955b4b7fd5ea26ff07fee7243ba",
+                "reference": "2fc88d7064ad8955b4b7fd5ea26ff07fee7243ba",
                 "shasum": ""
             },
             "require": {
@@ -46,7 +46,7 @@
                 "Apache-2.0"
             ],
             "description": "Business rule provider lib for plugin implementations",
-            "time": "2019-04-11T14:12:58+00:00"
+            "time": "2019-05-21T18:13:09+00:00"
         }
     ],
     "packages-dev": [
@@ -1470,7 +1470,7 @@
                 },
                 {
                     "name": "Gert de Pagter",
-                    "email": "BackEndTea@gmail.com"
+                    "email": "backendtea@gmail.com"
                 }
             ],
             "description": "Symfony polyfill for ctype functions",
