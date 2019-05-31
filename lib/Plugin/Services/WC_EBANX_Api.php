@@ -1,9 +1,11 @@
 <?php
-require_once WC_EBANX_VENDOR_DIR . '/autoload.php';
-require_once WC_EBANX_DIR . 'woocommerce-gateway-ebanx.php';
+
+namespace EBANX\Plugin\Services;
 
 use Ebanx\Benjamin\Models\Configs\Config;
 use Ebanx\Benjamin\Models\Configs\CreditCardConfig;
+use WC_EBANX;
+use WC_EBANX_Global_Gateway;
 
 /**
  * Class WC_EBANX_Api

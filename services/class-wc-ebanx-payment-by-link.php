@@ -1,15 +1,16 @@
 <?php
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 use Ebanx\Benjamin\Models\Address;
 use Ebanx\Benjamin\Models\Country;
 use Ebanx\Benjamin\Models\Person;
 use Ebanx\Benjamin\Models\Request;
 use EBANX\Plugin\Services\WC_EBANX_Constants;
 use EBANX\Plugin\Services\WC_EBANX_Payment_Validator;
-
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+use EBANX\Plugin\Services\WC_EBANX_Api;
 
 /**
  * Class WC_EBANX_Payment_By_Link

@@ -635,7 +635,6 @@ if ( ! class_exists( 'WC_EBANX' ) ) {
 			include_once WC_EBANX_SERVICES_DIR . 'class-wc-ebanx-capture-payment.php';
 
 			// Benjamin.
-			include_once WC_EBANX_SERVICES_DIR . 'class-wc-ebanx-api.php';
 			include_once WC_EBANX_SERVICES_DIR . 'class-wc-ebanx-payment-adapter.php';
 
 			// Load plugin log classes.
