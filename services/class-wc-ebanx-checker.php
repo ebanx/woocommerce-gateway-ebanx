@@ -1,10 +1,11 @@
 <?php
 
-use EBANX\Plugin\Services\WC_EBANX_Constants;
-
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
+
+use EBANX\Plugin\Services\WC_EBANX_Constants;
+use EBANX\Plugin\Services\WC_EBANX_Api;
 
 /**
  * Class WC_EBANX_Checker

@@ -1,10 +1,11 @@
 <?php
 
-use Ebanx\Benjamin\Models\Configs\CreditCardConfig;
-
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
+
+use Ebanx\Benjamin\Models\Configs\CreditCardConfig;
+use EBANX\Plugin\Services\WC_EBANX_Api;
 
 /**
  * Class WC_EBANX_Capture_Payment
