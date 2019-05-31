@@ -9,6 +9,7 @@ use Ebanx\Benjamin\Models\Country;
 use EBANX\Plugin\Services\WC_EBANX_Constants;
 use EBANX\Plugin\Services\WC_EBANX_Helper;
 use EBANX\Plugin\Services\WC_EBANX_Api;
+use EBANX\Plugin\Services\WC_EBANX_Payment_Adapter;
 
 /**
  * Class WC_EBANX_Credit_Card_Gateway

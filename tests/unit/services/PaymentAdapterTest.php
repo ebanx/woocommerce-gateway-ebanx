@@ -3,6 +3,7 @@
 use Ebanx\Benjamin\Models\Person;
 use EBANX\Tests\Helpers\Builders\CheckoutRequestBuilder;
 use EBANX\Tests\Helpers\Builders\GlobalConfigBuilder;
+use EBANX\Plugin\Services\WC_EBANX_Payment_Adapter;
 use PHPUnit\Framework\TestCase;
 
 class PaymentAdapterTest extends TestCase {

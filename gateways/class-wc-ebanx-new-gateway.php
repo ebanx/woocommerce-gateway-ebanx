@@ -11,6 +11,7 @@ use EBANX\Plugin\Services\WC_EBANX_Constants;
 use EBANX\Plugin\Services\WC_EBANX_Errors;
 use EBANX\Plugin\Services\WC_EBANX_Helper;
 use EBANX\Plugin\Services\WC_EBANX_Api;
+use EBANX\Plugin\Services\WC_EBANX_Payment_Adapter;
 
 /**
  * Class WC_EBANX_New_Gateway
@@ -230,7 +231,7 @@ class WC_EBANX_New_Gateway extends WC_EBANX_Gateway {
 					'redirect' => $this->get_return_url( $order ),
 				]
 			);
-		} catch ( Exception $e ) {
+		} catch ( \Exception $e ) {
 			$country = $this->get_transaction_address( 'country' );
 
 			$message = WC_EBANX_Errors::get_error_message( $e, $country );

@@ -2,6 +2,7 @@
 
 use Ebanx\Benjamin\Models\Country;
 use EBANX\Plugin\Services\WC_EBANX_Constants;
+use EBANX\Plugin\Services\WC_EBANX_Payment_Adapter;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
