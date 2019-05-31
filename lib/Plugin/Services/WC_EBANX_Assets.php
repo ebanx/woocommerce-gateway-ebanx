@@ -1,5 +1,7 @@
 <?php
 
+namespace EBANX\Plugin\Services;
+
 /**
  * Class WC_EBANX_Assets
  */
@@ -91,8 +93,8 @@ SVG;
 	 * @throws Exception Shows missing param message.
 	 */
 	private static function is_in_ebanx_settings() {
-		return WC_EBANX_Request::has( 'section' )
-			&& WC_EBANX_Request::read( 'section' ) === 'ebanx-global';
+		return \WC_EBANX_Request::has( 'section' )
+			&& \WC_EBANX_Request::read( 'section' ) === 'ebanx-global';
 	}
 
 	/**
@@ -105,13 +107,13 @@ SVG;
 	 */
 	private static function render_script( $filename, $dependencies = array() ) {
 		$script_name = 'woocommerce_ebanx_' . str_replace( '-', '_', $filename );
-		$file_path   = plugins_url( 'assets/js/' . $filename . '.js', WC_EBANX::DIR );
+		$file_path   = plugins_url( 'assets/js/' . $filename . '.js', \WC_EBANX::DIR );
 
 		wp_enqueue_script(
 			$script_name,
 			$file_path,
 			$dependencies,
-			WC_EBANX::get_plugin_version(),
+			\WC_EBANX::get_plugin_version(),
 			true
 		);
 	}
@@ -138,7 +140,7 @@ SVG;
 	 */
 	private static function render_style( $filename ) {
 		$style_name = 'woocommerce_ebanx_' . str_replace( '-', '_', $filename );
-		$file_path  = plugins_url( 'assets/css/' . $filename . '.css', WC_EBANX::DIR );
+		$file_path  = plugins_url( 'assets/css/' . $filename . '.css', \WC_EBANX::DIR );
 
 		wp_enqueue_style(
 			$style_name,
