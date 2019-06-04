@@ -38,6 +38,7 @@ require_once WC_EBANX_VENDOR_DIR . '/autoload.php';
 use EBANX\Plugin\Services\WC_EBANX_Constants;
 use EBANX\Plugin\Services\WC_EBANX_Notice;
 use EBANX\Plugin\Services\WC_EBANX_Query_Router;
+use EBANX\Plugin\Services\WC_EBANX_Assets;
 
 if ( ! class_exists( 'WC_EBANX' ) ) {
 	/**
@@ -133,7 +134,7 @@ if ( ! class_exists( 'WC_EBANX' ) ) {
 			add_action( 'woocommerce_order_actions', array( 'WC_EBANX_Capture_Payment', 'add_auto_capture_dropdown' ) );
 			add_action( 'woocommerce_order_action_ebanx_capture_order', array( 'WC_EBANX_Capture_Payment', 'capture_from_order_dropdown' ) );
 
-			add_action( 'admin_footer', array( 'WC_EBANX_Assets', 'render' ), 0 );
+			add_action( 'admin_footer', array( '\EBANX\Plugin\Services\WC_EBANX_Assets', 'render' ), 0 );
 
 			add_action( 'woocommerce_settings_save_checkout', array( $this, 'on_before_save_settings' ), 10 );
 			add_action( 'woocommerce_settings_saved', array( $this, 'setup_configs' ), 10 );
@@ -629,7 +630,6 @@ if ( ! class_exists( 'WC_EBANX' ) ) {
 			include_once WC_EBANX_SERVICES_DIR . 'class-wc-ebanx-checker.php';
 			include_once WC_EBANX_SERVICES_DIR . 'class-wc-ebanx-flash.php';
 			include_once WC_EBANX_SERVICES_DIR . 'class-wc-ebanx-request.php';
-			include_once WC_EBANX_SERVICES_DIR . 'class-wc-ebanx-assets.php';
 			include_once WC_EBANX_SERVICES_DIR . 'class-wc-ebanx-third-party-compability-layer.php';
 			include_once WC_EBANX_SERVICES_DIR . 'class-wc-ebanx-cancel-order.php';
 			include_once WC_EBANX_SERVICES_DIR . 'class-wc-ebanx-capture-payment.php';
