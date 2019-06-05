@@ -1,10 +1,6 @@
 <?php
 
-use EBANX\Plugin\Services\WC_EBANX_Constants;
-
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace EBANX\Plugin\Services;
 
 /**
  * Class WC_EBANX_Cancel_Order
