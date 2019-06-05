@@ -1,11 +1,8 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace EBANX\Plugin\Services;
 
 use Ebanx\Benjamin\Models\Configs\CreditCardConfig;
-use EBANX\Plugin\Services\WC_EBANX_Api;
 
 /**
  * Class WC_EBANX_Capture_Payment
@@ -86,8 +83,8 @@ class WC_EBANX_Capture_Payment {
 	 * @return void
 	 */
 	public static function capture_payment( $order_id ) {
-		$configs = new WC_EBANX_Global_Gateway();
-		$order   = new WC_Order( $order_id );
+		$configs = new \WC_EBANX_Global_Gateway();
+		$order   = new \WC_Order( $order_id );
 		$payment_hash = get_post_meta( $order_id, '_ebanx_payment_hash', true );
 		$ebanx        = ( new WC_EBANX_Api( $configs ) )->ebanx();
 		$payment_data = $ebanx->paymentInfo()->findByHash( $payment_hash );
@@ -107,15 +104,15 @@ class WC_EBANX_Capture_Payment {
 			$is_recapture                  = 'BP-CAP-4' === $error->code;
 			$response['payment']['status'] = $error->status;
 
-			WC_EBANX::log( $error->message );
-			WC_EBANX_Flash::add_message( $error->message, 'warning', true );
+			\WC_EBANX::log( $error->message );
+			\WC_EBANX_Flash::add_message( $error->message, 'warning', true );
 		}
 		if ( 'CO' === $response['payment']['status'] ) {
 			$order->payment_complete();
 
 			if ( ! $is_recapture ) {
 				$order->add_order_note( sprintf( __( 'EBANX: The transaction was captured with the following: %s', 'woocommerce-gateway-ebanx' ), wp_get_current_user()->data->user_email ) );
-				WC_EBANX_Flash::add_message( sprintf( __( 'Payment %s was captured successfully.', 'woocommerce-gateway-ebanx' ), $order_id ), 'warning', true );
+				\WC_EBANX_Flash::add_message( sprintf( __( 'Payment %s was captured successfully.', 'woocommerce-gateway-ebanx' ), $order_id ), 'warning', true );
 			}
 		} elseif ( 'CA' === $response['payment']['status'] ) {
 			$order->update_status( 'failed' );
@@ -174,7 +171,7 @@ class WC_EBANX_Capture_Payment {
 	 */
 	private static function get_credit_card_config( $country_abbr ) {
 		$currency_code = strtolower( get_woocommerce_currency() );
-		$configs = new WC_EBANX_Global_Gateway();
+		$configs = new \WC_EBANX_Global_Gateway();
 
 		$credit_card_config = new CreditCardConfig(
 			array(

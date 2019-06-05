@@ -129,10 +129,10 @@ if ( ! class_exists( 'WC_EBANX' ) ) {
 				add_action( 'admin_init', array( $this, 'checker' ), 30 );
 			}
 
-			add_action( 'admin_head', array( 'WC_EBANX_Capture_Payment', 'add_order_capture_button_css' ) );
+			add_action( 'admin_head', array( '\EBANX\Plugin\Services\WC_EBANX_Capture_Payment', 'add_order_capture_button_css' ) );
 
-			add_action( 'woocommerce_order_actions', array( 'WC_EBANX_Capture_Payment', 'add_auto_capture_dropdown' ) );
-			add_action( 'woocommerce_order_action_ebanx_capture_order', array( 'WC_EBANX_Capture_Payment', 'capture_from_order_dropdown' ) );
+			add_action( 'woocommerce_order_actions', array( '\EBANX\Plugin\Services\WC_EBANX_Capture_Payment', 'add_auto_capture_dropdown' ) );
+			add_action( 'woocommerce_order_action_ebanx_capture_order', array( '\EBANX\Plugin\Services\WC_EBANX_Capture_Payment', 'capture_from_order_dropdown' ) );
 
 			add_action( 'admin_footer', array( '\EBANX\Plugin\Services\WC_EBANX_Assets', 'render' ), 0 );
 
@@ -173,8 +173,8 @@ if ( ! class_exists( 'WC_EBANX' ) ) {
 			 */
 			add_filter( 'woocommerce_payment_gateways', array( $this, 'add_gateway' ) );
 			add_filter( 'plugin_action_links_' . plugin_basename( __FILE__ ), array( $this, 'plugin_action_links' ) );
-			add_filter( 'woocommerce_my_account_my_orders_actions', array( 'WC_EBANX_Cancel_Order', 'add_my_account_cancel_order_action' ), 10, 2 );
-			add_filter( 'woocommerce_admin_order_actions', array( 'WC_EBANX_Capture_Payment', 'add_order_capture_button' ), 10, 2 );
+			add_filter( 'woocommerce_my_account_my_orders_actions', array( '\EBANX\Plugin\Services\WC_EBANX_Cancel_Order', 'add_my_account_cancel_order_action' ), 10, 2 );
+			add_filter( 'woocommerce_admin_order_actions', array( '\EBANX\Plugin\Services\WC_EBANX_Capture_Payment', 'add_order_capture_button' ), 10, 2 );
 
 			add_action( 'woocommerce_admin_order_data_after_billing_address', array( $this, 'get_instalments_admin_html' ) );
 
@@ -631,8 +631,6 @@ if ( ! class_exists( 'WC_EBANX' ) ) {
 			include_once WC_EBANX_SERVICES_DIR . 'class-wc-ebanx-flash.php';
 			include_once WC_EBANX_SERVICES_DIR . 'class-wc-ebanx-request.php';
 			include_once WC_EBANX_SERVICES_DIR . 'class-wc-ebanx-third-party-compability-layer.php';
-			include_once WC_EBANX_SERVICES_DIR . 'class-wc-ebanx-cancel-order.php';
-			include_once WC_EBANX_SERVICES_DIR . 'class-wc-ebanx-capture-payment.php';
 
 			// Load plugin log classes.
 			self::include_log_classes();
