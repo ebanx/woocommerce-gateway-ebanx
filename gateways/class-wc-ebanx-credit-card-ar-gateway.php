@@ -1,11 +1,12 @@
 <?php
 
-use Ebanx\Benjamin\Models\Country;
-use EBANX\Plugin\Services\WC_EBANX_Constants;
-
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
+
+use Ebanx\Benjamin\Models\Country;
+use EBANX\Plugin\Services\WC_EBANX_Constants;
+use EBANX\Plugin\Services\WC_EBANX_Request;
 
 /**
  * Class WC_EBANX_Credit_Card_AR_Gateway

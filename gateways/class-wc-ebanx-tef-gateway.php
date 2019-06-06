@@ -2,6 +2,7 @@
 
 use Ebanx\Benjamin\Models\Country;
 use EBANX\Plugin\Services\WC_EBANX_Constants;
+use EBANX\Plugin\Services\WC_EBANX_Request;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;

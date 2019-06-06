@@ -93,8 +93,8 @@ SVG;
 	 * @throws Exception Shows missing param message.
 	 */
 	private static function is_in_ebanx_settings() {
-		return \WC_EBANX_Request::has( 'section' )
-			&& \WC_EBANX_Request::read( 'section' ) === 'ebanx-global';
+		return WC_EBANX_Request::has( 'section' )
+			&& WC_EBANX_Request::read( 'section' ) === 'ebanx-global';
 	}
 
 	/**

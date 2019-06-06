@@ -21,12 +21,12 @@ class WC_EBANX_Hooks {
 	 * @return boolean
 	 */
 	private static function is_url_response() {
-		$url_response = ( \WC_EBANX_Request::has( 'hash' )
-			&& \WC_EBANX_Request::has( 'merchant_payment_code' )
-			&& \WC_EBANX_Request::has( 'payment_type_code' ) );
+		$url_response = ( WC_EBANX_Request::has( 'hash' )
+			&& WC_EBANX_Request::has( 'merchant_payment_code' )
+			&& WC_EBANX_Request::has( 'payment_type_code' ) );
 
 		if ( $url_response ) {
-			\WC_EBANX_Request::set( 'notification_type', 'UPDATE' );
+			WC_EBANX_Request::set( 'notification_type', 'UPDATE' );
 		}
 
 		return $url_response;
@@ -40,33 +40,33 @@ class WC_EBANX_Hooks {
 	public static function payment_status_hook_action() {
 		ob_start();
 
-		if ( ( \WC_EBANX_Request::has( 'operation' )
-				&& \WC_EBANX_Request::read( 'operation' ) == 'payment_status_change'
-				&& \WC_EBANX_Request::has( 'notification_type' )
-				&& ( \WC_EBANX_Request::has( 'hash_codes' )
-					|| \WC_EBANX_Request::has( 'codes' ) ) )
+		if ( ( WC_EBANX_Request::has( 'operation' )
+				&& WC_EBANX_Request::read( 'operation' ) == 'payment_status_change'
+				&& WC_EBANX_Request::has( 'notification_type' )
+				&& ( WC_EBANX_Request::has( 'hash_codes' )
+					|| WC_EBANX_Request::has( 'codes' ) ) )
 			|| self::is_url_response()
 		) {
 			$codes = array();
 
-			if ( \WC_EBANX_Request::has( 'hash_codes' ) ) {
-				$codes['hash'] = \WC_EBANX_Request::read( 'hash_codes' );
+			if ( WC_EBANX_Request::has( 'hash_codes' ) ) {
+				$codes['hash'] = WC_EBANX_Request::read( 'hash_codes' );
 			}
 
-			if ( \WC_EBANX_Request::has( 'hash' ) ) {
-				$codes['hash'] = \WC_EBANX_Request::read( 'hash' );
+			if ( WC_EBANX_Request::has( 'hash' ) ) {
+				$codes['hash'] = WC_EBANX_Request::read( 'hash' );
 			}
 
-			if ( \WC_EBANX_Request::has( 'codes' ) ) {
-				$codes['merchant_payment_code'] = \WC_EBANX_Request::read( 'codes' );
+			if ( WC_EBANX_Request::has( 'codes' ) ) {
+				$codes['merchant_payment_code'] = WC_EBANX_Request::read( 'codes' );
 			}
 
-			if ( \WC_EBANX_Request::has( 'merchant_payment_code' ) ) {
-				$codes['merchant_payment_code'] = \WC_EBANX_Request::read( 'merchant_payment_code' );
+			if ( WC_EBANX_Request::has( 'merchant_payment_code' ) ) {
+				$codes['merchant_payment_code'] = WC_EBANX_Request::read( 'merchant_payment_code' );
 			}
 
 			$ebanx = new \WC_EBANX_New_Gateway();
-			$order = $ebanx->process_hook( $codes, \WC_EBANX_Request::read( 'notification_type' ) );
+			$order = $ebanx->process_hook( $codes, WC_EBANX_Request::read( 'notification_type' ) );
 
 			if ( self::is_url_response() ) {
 				wp_redirect( $order->get_checkout_order_received_url() );

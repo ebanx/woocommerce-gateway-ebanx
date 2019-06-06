@@ -1,8 +1,6 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace EBANX\Plugin\Services;
 
 /**
  * Class WC_EBANX_Request
@@ -26,7 +24,7 @@ class WC_EBANX_Request {
 			}
 		}
 		if ( self::DEFAULT_VALUE == $default ) {
-			throw new Exception( 'Missing argument "' . $param . '".' );
+			throw new \Exception( 'Missing argument "' . $param . '".' );
 		}
 		return $default;
 	}

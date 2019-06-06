@@ -2,6 +2,7 @@
 
 use EBANX\Plugin\Services\WC_EBANX_Constants;
 use EBANX\Plugin\Services\WC_EBANX_Helper;
+use EBANX\Plugin\Services\WC_EBANX_Request;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;

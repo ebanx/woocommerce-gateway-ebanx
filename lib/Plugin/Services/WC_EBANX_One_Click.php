@@ -115,12 +115,12 @@ class WC_EBANX_One_Click {
 		ob_start();
 
 		if ( is_admin()
-			|| ! \WC_EBANX_Request::has( 'ebanx-action' )
-			|| ! \WC_EBANX_Request::has( 'ebanx-nonce' )
-			|| ! \WC_EBANX_Request::has( 'ebanx-product-id' )
-			|| ! \WC_EBANX_Request::has( 'ebanx-cart-total' )
-			|| \WC_EBANX_Request::read( 'ebanx-action' ) !== self::CREATE_ORDER_ACTION
-			|| ! wp_verify_nonce( \WC_EBANX_Request::read( 'ebanx-nonce' ), self::CREATE_ORDER_ACTION )
+			|| ! WC_EBANX_Request::has( 'ebanx-action' )
+			|| ! WC_EBANX_Request::has( 'ebanx-nonce' )
+			|| ! WC_EBANX_Request::has( 'ebanx-product-id' )
+			|| ! WC_EBANX_Request::has( 'ebanx-cart-total' )
+			|| WC_EBANX_Request::read( 'ebanx-action' ) !== self::CREATE_ORDER_ACTION
+			|| ! wp_verify_nonce( WC_EBANX_Request::read( 'ebanx-nonce' ), self::CREATE_ORDER_ACTION )
 			|| ! $this->customer_can()
 			|| ! $this->customer_has_ebanx_required_data()
 		) {
@@ -128,7 +128,7 @@ class WC_EBANX_One_Click {
 		}
 
 		try {
-			$product_id     = \WC_EBANX_Request::read( 'ebanx-product-id' );
+			$product_id     = WC_EBANX_Request::read( 'ebanx-product-id' );
 			$product_to_add = get_product( $product_id );
 
 			$order_params = array(
@@ -307,41 +307,41 @@ class WC_EBANX_One_Click {
 		$card = current(
 			array_filter(
 				(array) array_filter( get_user_meta( $this->user_id, '_ebanx_credit_card_token', true ) ), function ( $card ) {
-				return \WC_EBANX_Request::read( 'ebanx-one-click-token' ) == $card->token;
+				return WC_EBANX_Request::read( 'ebanx-one-click-token' ) == $card->token;
 			}
 			)
 		);
 
 		$names = $this->gateway->names;
 
-		\WC_EBANX_Request::set( 'ebanx_token', $card->token );
-		\WC_EBANX_Request::set( 'ebanx_masked_card_number', $card->masked_number );
-		\WC_EBANX_Request::set( 'ebanx_brand', $card->brand );
-		\WC_EBANX_Request::set( 'ebanx_billing_cvv', \WC_EBANX_Request::read( 'ebanx-one-click-cvv' ) );
-		\WC_EBANX_Request::set( 'ebanx_is_one_click', true );
-		\WC_EBANX_Request::set( 'ebanx-credit-card-installments', \WC_EBANX_Request::read( 'ebanx-credit-card-installments', 1 ) );
-		\WC_EBANX_Request::set( 'ebanx_billing_instalments', \WC_EBANX_Request::read( 'ebanx-credit-card-installments' ) );
+		WC_EBANX_Request::set( 'ebanx_token', $card->token );
+		WC_EBANX_Request::set( 'ebanx_masked_card_number', $card->masked_number );
+		WC_EBANX_Request::set( 'ebanx_brand', $card->brand );
+		WC_EBANX_Request::set( 'ebanx_billing_cvv', WC_EBANX_Request::read( 'ebanx-one-click-cvv' ) );
+		WC_EBANX_Request::set( 'ebanx_is_one_click', true );
+		WC_EBANX_Request::set( 'ebanx-credit-card-installments', WC_EBANX_Request::read( 'ebanx-credit-card-installments', 1 ) );
+		WC_EBANX_Request::set( 'ebanx_billing_instalments', WC_EBANX_Request::read( 'ebanx-credit-card-installments' ) );
 
-		\WC_EBANX_Request::set( $names['ebanx_billing_brazil_document'], get_user_meta( $this->user_id, '_ebanx_billing_brazil_document', true ) );
+		WC_EBANX_Request::set( $names['ebanx_billing_brazil_document'], get_user_meta( $this->user_id, '_ebanx_billing_brazil_document', true ) );
 
-		\WC_EBANX_Request::set( $names['ebanx_billing_colombia_document'], get_user_meta( $this->user_id, '_ebanx_billing_colombia_document', true ) );
+		WC_EBANX_Request::set( $names['ebanx_billing_colombia_document'], get_user_meta( $this->user_id, '_ebanx_billing_colombia_document', true ) );
 
-		\WC_EBANX_Request::set( $names['ebanx_billing_argentina_document'], get_user_meta( $this->user_id, '_ebanx_billing_argentina_document', true ) );
+		WC_EBANX_Request::set( $names['ebanx_billing_argentina_document'], get_user_meta( $this->user_id, '_ebanx_billing_argentina_document', true ) );
 
-		\WC_EBANX_Request::set( 'billing_postcode', $this->get_user_billing_address()['postcode'] );
-		\WC_EBANX_Request::set( 'billing_address_1', $this->get_user_billing_address()['address_1'] );
-		\WC_EBANX_Request::set( 'billing_city', $this->get_user_billing_address()['city'] );
-		\WC_EBANX_Request::set( 'billing_state', $this->get_user_billing_address()['state'] );
+		WC_EBANX_Request::set( 'billing_postcode', $this->get_user_billing_address()['postcode'] );
+		WC_EBANX_Request::set( 'billing_address_1', $this->get_user_billing_address()['address_1'] );
+		WC_EBANX_Request::set( 'billing_city', $this->get_user_billing_address()['city'] );
+		WC_EBANX_Request::set( 'billing_state', $this->get_user_billing_address()['state'] );
 
-		return ! empty( \WC_EBANX_Request::read( 'ebanx-one-click-token', null ) )
-			&& ! empty( \WC_EBANX_Request::read( 'ebanx-credit-card-installments', null ) )
-			&& ! empty( \WC_EBANX_Request::read( 'ebanx-one-click-cvv', null ) )
-			&& ( ( \WC_EBANX_Request::has( $names['ebanx_billing_brazil_document'] )
-					|| \WC_EBANX_Request::has( $names['ebanx_billing_colombia_document'] )
-					|| \WC_EBANX_Request::has( $names['ebanx_billing_argentina_document'] ) )
-				&& ( ! empty( \WC_EBANX_Request::read( $names['ebanx_billing_brazil_document'], null ) )
-					|| ! empty( \WC_EBANX_Request::read( $names['ebanx_billing_colombia_document'], null ) )
-					|| ! empty( \WC_EBANX_Request::read( $names['ebanx_billing_argentina_document'], null ) ) )
+		return ! empty( WC_EBANX_Request::read( 'ebanx-one-click-token', null ) )
+			&& ! empty( WC_EBANX_Request::read( 'ebanx-credit-card-installments', null ) )
+			&& ! empty( WC_EBANX_Request::read( 'ebanx-one-click-cvv', null ) )
+			&& ( ( WC_EBANX_Request::has( $names['ebanx_billing_brazil_document'] )
+					|| WC_EBANX_Request::has( $names['ebanx_billing_colombia_document'] )
+					|| WC_EBANX_Request::has( $names['ebanx_billing_argentina_document'] ) )
+				&& ( ! empty( WC_EBANX_Request::read( $names['ebanx_billing_brazil_document'], null ) )
+					|| ! empty( WC_EBANX_Request::read( $names['ebanx_billing_colombia_document'], null ) )
+					|| ! empty( WC_EBANX_Request::read( $names['ebanx_billing_argentina_document'], null ) ) )
 				|| 'mx' === $this->user_country );
 	}
 

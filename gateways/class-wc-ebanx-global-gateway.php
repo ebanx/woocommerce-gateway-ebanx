@@ -14,6 +14,7 @@ if ( ! defined( 'IS_TEST' ) ) {
 use EBANX\Plugin\Services\WC_EBANX_Constants;
 use EBANX\Plugin\Services\WC_EBANX_Notice;
 use EBANX\Plugin\Services\WC_EBANX_Helper;
+use EBANX\Plugin\Services\WC_EBANX_Request;
 
 /**
  * Class WC_EBANX_Global_Gateway

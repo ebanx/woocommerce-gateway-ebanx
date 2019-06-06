@@ -40,11 +40,11 @@ class WC_EBANX_Query_Router {
 
 		self::validate_key( $key );
 
-		if ( ! \WC_EBANX_Request::has( $key ) ) {
+		if ( ! WC_EBANX_Request::has( $key ) ) {
 			return null;
 		}
 
-		$value = \WC_EBANX_Request::read( $key );
+		$value = WC_EBANX_Request::read( $key );
 
 		self::validate_key_value( $value );
 
@@ -64,12 +64,12 @@ class WC_EBANX_Query_Router {
 		$params = array();
 		foreach ( $list as $arg ) {
 			$name = $arg->name;
-			if ( ! \WC_EBANX_Request::has( $name ) ) {
+			if ( ! WC_EBANX_Request::has( $name ) ) {
 				$params[ $name ] = null;
 				continue;
 			}
 
-			$params[ $name ] = \WC_EBANX_Request::read( $name );
+			$params[ $name ] = WC_EBANX_Request::read( $name );
 		}
 
 		return $params;

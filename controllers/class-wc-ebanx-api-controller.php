@@ -8,6 +8,7 @@ use EBANX\Plugin\Services\WC_EBANX_Constants;
 use EBANX\Plugin\Services\WC_EBANX_Helper;
 use EBANX\Plugin\Services\WC_EBANX_Api;
 use EBANX\Plugin\Services\WC_EBANX_Capture_Payment;
+use EBANX\Plugin\Services\WC_EBANX_Request;
 
 /**
  * Class WC_EBANX_Api_Controller
