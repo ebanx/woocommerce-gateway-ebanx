@@ -626,7 +626,6 @@ if ( ! class_exists( 'WC_EBANX' ) ) {
 		 */
 		private function includes() {
 			// Utils.
-			include_once WC_EBANX_SERVICES_DIR . 'class-wc-ebanx-hooks.php';
 			include_once WC_EBANX_SERVICES_DIR . 'class-wc-ebanx-request.php';
 			include_once WC_EBANX_SERVICES_DIR . 'class-wc-ebanx-third-party-compability-layer.php';
 
