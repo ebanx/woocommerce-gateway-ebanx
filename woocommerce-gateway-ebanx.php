@@ -608,7 +608,6 @@ if ( ! class_exists( 'WC_EBANX' ) ) {
 		 * Include log classes.
 		 */
 		private static function include_log_classes() {
-			include_once WC_EBANX_SERVICES_DIR . 'class-wc-ebanx-environment.php';
 			include_once WC_EBANX_SERVICES_DIR . 'loggers/class-wc-ebanx-logger.php';
 			include_once WC_EBANX_SERVICES_DIR . 'loggers/class-wc-ebanx-plugin-activate-logger.php';
 			include_once WC_EBANX_SERVICES_DIR . 'loggers/class-wc-ebanx-plugin-deactivate-logger.php';

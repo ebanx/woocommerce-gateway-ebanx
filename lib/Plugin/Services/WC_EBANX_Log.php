@@ -2,8 +2,6 @@
 
 namespace EBANX\Plugin\Services;
 
-use WC_EBANX_Environment;
-
 class WC_EBANX_Log {
 	public static function get_platform_info() {
 		$environment = new WC_EBANX_Environment();
