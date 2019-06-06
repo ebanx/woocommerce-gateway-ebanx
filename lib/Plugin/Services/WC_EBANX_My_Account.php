@@ -1,13 +1,6 @@
 <?php
-/**
- * EBANX.com My Account actions
- *
- * @package WooCommerce_EBANX/Frontend
- */
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace EBANX\Plugin\Services;
 
 /**
  * WC_EBANX_My_Account enables the thank you pages
@@ -35,7 +28,7 @@ class WC_EBANX_My_Account {
 	public function assets() {
 		wp_enqueue_style(
 			'woocommerce_my_account_style',
-			plugins_url( 'assets/css/my-account.css', WC_EBANX::DIR )
+			plugins_url( 'assets/css/my-account.css', \WC_EBANX::DIR )
 		);
 	}
 
@@ -76,64 +69,59 @@ class WC_EBANX_My_Account {
 
 		switch ( $order->payment_method ) {
 			case 'ebanx-credit-card-br':
-				WC_EBANX_Credit_Card_BR_Gateway::thankyou_page( $order );
+				\WC_EBANX_Credit_Card_BR_Gateway::thankyou_page( $order );
 				break;
 			case 'ebanx-credit-card-mx':
-				WC_EBANX_Credit_Card_MX_Gateway::thankyou_page( $order );
+				\WC_EBANX_Credit_Card_MX_Gateway::thankyou_page( $order );
 				break;
 			case 'ebanx-credit-card-ar':
-				WC_EBANX_Credit_Card_AR_Gateway::thankyou_page( $order );
+				\WC_EBANX_Credit_Card_AR_Gateway::thankyou_page( $order );
 				break;
 			case 'ebanx-credit-card-co':
-				WC_EBANX_Credit_Card_CO_Gateway::thankyou_page( $order );
+				\WC_EBANX_Credit_Card_CO_Gateway::thankyou_page( $order );
 				break;
 			case 'ebanx-banking-ticket':
-				WC_EBANX_Banking_Ticket_Gateway::thankyou_page( $order );
+				\WC_EBANX_Banking_Ticket_Gateway::thankyou_page( $order );
 				break;
 			case 'ebanx-eft':
-				WC_EBANX_Eft_Gateway::thankyou_page( $order );
+				\WC_EBANX_Eft_Gateway::thankyou_page( $order );
 				break;
 			case 'ebanx-oxxo':
-				WC_EBANX_Oxxo_Gateway::thankyou_page( $order );
+				\WC_EBANX_Oxxo_Gateway::thankyou_page( $order );
 				break;
 			case 'ebanx-spei':
-				WC_EBANX_Spei_Gateway::thankyou_page( $order );
+				\WC_EBANX_Spei_Gateway::thankyou_page( $order );
 				break;
 			case 'ebanx-pagoefectivo':
-				WC_EBANX_Pagoefectivo_Gateway::thankyou_page( $order );
+				\WC_EBANX_Pagoefectivo_Gateway::thankyou_page( $order );
 				break;
 			case 'ebanx-safetypay':
-				WC_EBANX_Safetypay_Gateway::thankyou_page( $order );
+				\WC_EBANX_Safetypay_Gateway::thankyou_page( $order );
 				break;
 			case 'ebanx-servipag':
-				WC_EBANX_Servipag_Gateway::thankyou_page( $order );
+				\WC_EBANX_Servipag_Gateway::thankyou_page( $order );
 				break;
 			case 'ebanx-tef':
-				WC_EBANX_Tef_Gateway::thankyou_page( $order );
+				\WC_EBANX_Tef_Gateway::thankyou_page( $order );
 				break;
 			case 'ebanx-account':
-				WC_EBANX_Account_Gateway::thankyou_page( $order );
+				\WC_EBANX_Account_Gateway::thankyou_page( $order );
 				break;
 			case 'ebanx-debit-card':
-				WC_EBANX_Debit_Card_Gateway::thankyou_page( $order );
+				\WC_EBANX_Debit_Card_Gateway::thankyou_page( $order );
 				break;
 			case 'ebanx-sencillito':
-				WC_EBANX_Sencillito_Gateway::thankyou_page( $order );
+				\WC_EBANX_Sencillito_Gateway::thankyou_page( $order );
 				break;
 			case 'ebanx-baloto':
-				WC_EBANX_Baloto_Gateway::thankyou_page( $order );
+				\WC_EBANX_Baloto_Gateway::thankyou_page( $order );
 				break;
 			case 'ebanx-efectivo':
-				WC_EBANX_Efectivo_Gateway::thankyou_page( $order );
+				\WC_EBANX_Efectivo_Gateway::thankyou_page( $order );
 				break;
 			case 'ebanx-banktransfer':
-				WC_EBANX_Bank_Transfer_Gateway::thankyou_page( $order );
+				\WC_EBANX_Bank_Transfer_Gateway::thankyou_page( $order );
 				break;
 		}
 	}
 }
-
-/**
- * Initialize the thank you pages
- */
-new WC_EBANX_My_Account();
