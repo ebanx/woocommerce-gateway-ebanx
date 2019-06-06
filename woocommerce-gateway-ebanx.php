@@ -123,7 +123,7 @@ if ( ! class_exists( 'WC_EBANX' ) ) {
 			add_action( 'wp_loaded', array( $this, 'enable_i18n' ) );
 
 			add_action( 'init', array( $this, 'ebanx_router' ) );
-			add_action( 'init', array( 'WC_EBANX_Third_Party_Compability_Layer', 'check_and_solve' ) );
+			add_action( 'init', array( '\EBANX\Plugin\Services\WC_EBANX_Third_Party_Compability_Layer', 'check_and_solve' ) );
 			add_action( 'admin_init', array( $this, 'ebanx_sidebar_shortcut' ) );
 			add_action( 'admin_init', array( '\EBANX\Plugin\Services\WC_EBANX_Flash', 'enqueue_admin_messages' ) );
 
@@ -627,9 +627,6 @@ if ( ! class_exists( 'WC_EBANX' ) ) {
 		 * Include all plugin classes.
 		 */
 		private function includes() {
-			// Utils.
-			include_once WC_EBANX_SERVICES_DIR . 'class-wc-ebanx-third-party-compability-layer.php';
-
 			// Load plugin log classes.
 			self::include_log_classes();
 
