@@ -40,6 +40,7 @@ use EBANX\Plugin\Services\WC_EBANX_Notice;
 use EBANX\Plugin\Services\WC_EBANX_Query_Router;
 use EBANX\Plugin\Services\WC_EBANX_Assets;
 use EBANX\Plugin\Services\WC_EBANX_Checker;
+use EBANX\Plugin\Services\WC_EBANX_Payment_By_Link;
 
 if ( ! class_exists( 'WC_EBANX' ) ) {
 	/**
@@ -671,9 +672,6 @@ if ( ! class_exists( 'WC_EBANX' ) ) {
 			// Peru Gateways.
 			include_once WC_EBANX_GATEWAYS_DIR . 'class-wc-ebanx-pagoefectivo-gateway.php';
 			include_once WC_EBANX_GATEWAYS_DIR . 'class-wc-ebanx-safetypay-gateway.php';
-
-			// Hooks/Actions.
-			include_once WC_EBANX_SERVICES_DIR . 'class-wc-ebanx-payment-by-link.php';
 
 			// Controllers.
 			include_once WC_EBANX_CONTROLLERS_DIR . 'class-wc-ebanx-api-controller.php';

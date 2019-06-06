@@ -1,17 +1,11 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace EBANX\Plugin\Services;
 
 use Ebanx\Benjamin\Models\Address;
 use Ebanx\Benjamin\Models\Country;
 use Ebanx\Benjamin\Models\Person;
 use Ebanx\Benjamin\Models\Request;
-use EBANX\Plugin\Services\WC_EBANX_Constants;
-use EBANX\Plugin\Services\WC_EBANX_Payment_Validator;
-use EBANX\Plugin\Services\WC_EBANX_Api;
-use EBANX\Plugin\Services\WC_EBANX_Flash;
 
 /**
  * Class WC_EBANX_Payment_By_Link
@@ -57,7 +51,7 @@ class WC_EBANX_Payment_By_Link {
 	public static function create( $post_id ) {
 		self::$post_id   = $post_id;
 		self::$order     = wc_get_order( $post_id );
-		self::$configs   = new WC_EBANX_Global_Gateway();
+		self::$configs   = new \WC_EBANX_Global_Gateway();
 		self::$validator = new WC_EBANX_Payment_Validator( self::$order );
 
 		if ( ! self::can_create_payment() ) {
@@ -89,8 +83,8 @@ class WC_EBANX_Payment_By_Link {
 	 */
 	private static function can_create_payment() {
 		return current_user_can( 'edit_post', self::$post_id )
-				&& ! wp_is_post_autosave( self::$post_id )
-				&& ! wp_is_post_revision( self::$post_id );
+			&& ! wp_is_post_autosave( self::$post_id )
+			&& ! wp_is_post_revision( self::$post_id );
 	}
 
 	/**
@@ -140,7 +134,7 @@ class WC_EBANX_Payment_By_Link {
 			self::add_error( $e->getMessage() );
 			self::send_errors();
 		} finally {
-			WC_EBANX_Payment_By_Link_Logger::persist(
+			\WC_EBANX_Payment_By_Link_Logger::persist(
 				[
 					'request'  => $data,
 					'response' => $response,
