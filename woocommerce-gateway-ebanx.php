@@ -39,6 +39,7 @@ use EBANX\Plugin\Services\WC_EBANX_Constants;
 use EBANX\Plugin\Services\WC_EBANX_Notice;
 use EBANX\Plugin\Services\WC_EBANX_Query_Router;
 use EBANX\Plugin\Services\WC_EBANX_Assets;
+use EBANX\Plugin\Services\WC_EBANX_Checker;
 
 if ( ! class_exists( 'WC_EBANX' ) ) {
 	/**
@@ -146,7 +147,7 @@ if ( ! class_exists( 'WC_EBANX' ) ) {
 
 			add_action( 'upgrader_process_complete', array( $this, 'on_update' ), 10, 2 );
 
-			add_action( 'woocommerce_checkout_process', array( 'WC_EBANX_Checker', 'validate_document' ), 10 );
+			add_action( 'woocommerce_checkout_process', array( '\EBANX\Plugin\Services\WC_EBANX_Checker', 'validate_document' ), 10 );
 
 			/**
 			 * Payment by Link
@@ -627,7 +628,6 @@ if ( ! class_exists( 'WC_EBANX' ) ) {
 		private function includes() {
 			// Utils.
 			include_once WC_EBANX_SERVICES_DIR . 'class-wc-ebanx-hooks.php';
-			include_once WC_EBANX_SERVICES_DIR . 'class-wc-ebanx-checker.php';
 			include_once WC_EBANX_SERVICES_DIR . 'class-wc-ebanx-flash.php';
 			include_once WC_EBANX_SERVICES_DIR . 'class-wc-ebanx-request.php';
 			include_once WC_EBANX_SERVICES_DIR . 'class-wc-ebanx-third-party-compability-layer.php';
