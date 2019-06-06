@@ -1,10 +1,6 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
-
-use EBANX\Plugin\Services\WC_EBANX_Notice;
+namespace EBANX\Plugin\Services;
 
 /**
  * Class WC_EBANX_Flash
