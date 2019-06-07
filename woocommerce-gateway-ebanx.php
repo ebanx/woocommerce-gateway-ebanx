@@ -40,6 +40,9 @@ use EBANX\Plugin\Services\WC_EBANX_Notice;
 use EBANX\Plugin\Services\WC_EBANX_Query_Router;
 use EBANX\Plugin\Services\WC_EBANX_Assets;
 use EBANX\Plugin\Services\WC_EBANX_Checker;
+use EBANX\Plugin\Services\WC_EBANX_Hooks;
+
+WC_EBANX_Hooks::init();
 
 if ( ! class_exists( 'WC_EBANX' ) ) {
 	/**
@@ -626,7 +629,6 @@ if ( ! class_exists( 'WC_EBANX' ) ) {
 		 */
 		private function includes() {
 			// Utils.
-			include_once WC_EBANX_SERVICES_DIR . 'class-wc-ebanx-hooks.php';
 			include_once WC_EBANX_SERVICES_DIR . 'class-wc-ebanx-request.php';
 			include_once WC_EBANX_SERVICES_DIR . 'class-wc-ebanx-third-party-compability-layer.php';
 
