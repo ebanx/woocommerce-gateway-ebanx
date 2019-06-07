@@ -1,11 +1,6 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
-
-use EBANX\Plugin\Services\WC_EBANX_Constants;
-use EBANX\Plugin\Services\WC_EBANX_Api;
+namespace EBANX\Plugin\Services;
 
 /**
  * Class WC_EBANX_Checker
@@ -21,7 +16,7 @@ class WC_EBANX_Checker {
 	 */
 	public static function check_sandbox_mode( $context ) {
 
-		if ( ! $context->is_sandbox_mode || WC_EBANX_Request::has( 'action' ) ) {
+		if ( ! $context->is_sandbox_mode || \WC_EBANX_Request::has( 'action' ) ) {
 			return;
 		}
 
@@ -97,7 +92,7 @@ class WC_EBANX_Checker {
 			->with_type( 'warning' )
 			->persistent();
 
-		if ( WC_EBANX_Request::is_post_empty() ) {
+		if ( \WC_EBANX_Request::is_post_empty() ) {
 			$context->notices->enqueue();
 			return false;
 		}
@@ -131,13 +126,13 @@ class WC_EBANX_Checker {
 				->with_type( 'error' )
 				->persistent();
 
-			if ( WC_EBANX_Request::is_post_empty() ) {
+			if ( \WC_EBANX_Request::is_post_empty() ) {
 				$context->notices->enqueue();
 				return false;
 			}
 
 			$context->notices->display();
-		} catch ( RuntimeException $e ) {
+		} catch ( \RuntimeException $e ) {
 			self::connection_error( $context );
 		}
 		return null;
@@ -168,13 +163,13 @@ class WC_EBANX_Checker {
 				->with_type( 'error' )
 				->persistent();
 
-			if ( WC_EBANX_Request::is_post_empty() ) {
+			if ( \WC_EBANX_Request::is_post_empty() ) {
 				$context->notices->enqueue();
 				return false;
 			}
 
 			$context->notices->display();
-		} catch ( RuntimeException $e ) {
+		} catch ( \RuntimeException $e ) {
 			self::connection_error( $context );
 		}
 		return null;
@@ -196,7 +191,7 @@ class WC_EBANX_Checker {
 			->with_type( 'error' )
 			->persistent();
 
-		if ( WC_EBANX_Request::is_post_empty() ) {
+		if ( \WC_EBANX_Request::is_post_empty() ) {
 			$context->notices->enqueue();
 			return;
 		}
@@ -293,13 +288,13 @@ class WC_EBANX_Checker {
 	 */
 	public function validate_document() {
 		if (
-			WC_EBANX_Request::has( 'billing_country' )
-			&& WC_EBANX_Request::read( 'billing_country' ) === 'AR'
-			&& WC_EBANX_Request::has( 'ebanx_billing_argentina_document' )
+			\WC_EBANX_Request::has( 'billing_country' )
+			&& \WC_EBANX_Request::read( 'billing_country' ) === 'AR'
+			&& \WC_EBANX_Request::has( 'ebanx_billing_argentina_document' )
 			&& ! self::validate_argentine_document()
 			&& self::is_ebanx_method_selected()
 		) {
-			if ( WC_EBANX_Request::read( 'ebanx_billing_argentina_document_type', null ) === 'ARG_DNI' ) {
+			if ( \WC_EBANX_Request::read( 'ebanx_billing_argentina_document_type', null ) === 'ARG_DNI' ) {
 				wc_add_notice( '<strong>Document</strong> must have 7 or 8 digits and contain only numbers.', 'error' );
 			} else {
 				wc_add_notice( '<strong>Document</strong> must have 11 digits and contain only numbers.', 'error' );
@@ -311,17 +306,17 @@ class WC_EBANX_Checker {
 	 * @@return boolean valiadting lenght of document.
 	 */
 	private static function validate_argentine_document() {
-		if ( WC_EBANX_Request::read( 'ebanx_billing_argentina_document_type', null ) === 'ARG_DNI' ) {
-			return strlen( preg_replace( '/[^0-9]/', '', WC_EBANX_Request::read( 'ebanx_billing_argentina_document' ) ) ) === 7
-				|| strlen( preg_replace( '/[^0-9]/', '', WC_EBANX_Request::read( 'ebanx_billing_argentina_document' ) ) ) === 8;
+		if ( \WC_EBANX_Request::read( 'ebanx_billing_argentina_document_type', null ) === 'ARG_DNI' ) {
+			return strlen( preg_replace( '/[^0-9]/', '', \WC_EBANX_Request::read( 'ebanx_billing_argentina_document' ) ) ) === 7
+				|| strlen( preg_replace( '/[^0-9]/', '', \WC_EBANX_Request::read( 'ebanx_billing_argentina_document' ) ) ) === 8;
 		}
-		return strlen( preg_replace( '/[^0-9]/', '', WC_EBANX_Request::read( 'ebanx_billing_argentina_document' ) ) ) === 11;
+		return strlen( preg_replace( '/[^0-9]/', '', \WC_EBANX_Request::read( 'ebanx_billing_argentina_document' ) ) ) === 11;
 	}
 	/**
 	 *
 	 * @@return boolean valiadting selected payment method.
 	 */
 	private static function is_ebanx_method_selected() {
-		return ( strpos( WC()->session->get( 'chosen_payment_method' ), 'ebanx' ) !== false );
+		return ( strpos( \WC()->session->get( 'chosen_payment_method' ), 'ebanx' ) !== false );
 	}
 }
