@@ -1,8 +1,6 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace EBANX\Plugin\Services;
 
 /**
  * Enviroment data to be logged
@@ -48,7 +46,7 @@ class WC_EBANX_Environment {
 	 */
 	public function __construct() {
 		global $wp_version;
-		$platform       = new stdClass();
+		$platform       = new \stdClass();
 		$platform->name = 'WordPress';
 
 		if ( isset( $wp_version ) ) {
@@ -59,7 +57,7 @@ class WC_EBANX_Environment {
 		}
 
 		$this->platform                = $platform;
-		$interpreter                   = new stdClass();
+		$interpreter                   = new \stdClass();
 		$interpreter->name             = 'PHP';
 		$interpreter->version          = PHP_VERSION;
 		$this->interpreter             = $interpreter;
@@ -68,12 +66,12 @@ class WC_EBANX_Environment {
 			$web_server_information_string = filter_input( INPUT_SERVER, 'SERVER_SOFTWARE' );
 			$web_server_value_parts_array  = explode( ' ', $web_server_information_string );
 			$web_server_parts              = explode( '/', $web_server_value_parts_array[0] );
-			$web_server                    = new stdClass();
+			$web_server                    = new \stdClass();
 			$web_server->name              = str_replace( '-', ' ', $web_server_parts[0] );
 			$web_server->version           = $web_server_parts[1];
 		} else {
 			if ( isset( $_SERVER ) && isset( $_SERVER['SERVER_NAME'] ) ) {
-				$web_server                    = new stdClass();
+				$web_server                    = new \stdClass();
 				$web_server->name              = sanitize_text_field( wp_unslash( $_SERVER['SERVER_NAME'] ) );
 				$web_server->version           = PHP_SAPI;
 			}
@@ -81,9 +79,9 @@ class WC_EBANX_Environment {
 
 		$this->web_server = $web_server;
 
-		$database_server = new stdClass();
+		$database_server = new \stdClass();
 		// @codingStandardsIgnoreStart
-		$database        = new mysqli( DB_HOST, DB_USER, DB_PASSWORD );
+		$database        = new \mysqli( DB_HOST, DB_USER, DB_PASSWORD );
 		if ( ! mysqli_connect_errno() ) {
 			// @codingStandardsIgnoreEnd
 			if ( strpos( $database->server_info, 'MariaDB' ) !== false ) {
@@ -102,7 +100,7 @@ class WC_EBANX_Environment {
 
 		$this->database_server = $database_server;
 
-		$operating_system          = new stdClass();
+		$operating_system          = new \stdClass();
 		$operating_system->name    = PHP_OS;
 		$operating_system->version = $this->extract_version_number_from( php_uname( 'v' ) );
 		$this->operating_system    = $operating_system;

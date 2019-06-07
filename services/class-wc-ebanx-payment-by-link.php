@@ -11,6 +11,7 @@ use Ebanx\Benjamin\Models\Request;
 use EBANX\Plugin\Services\WC_EBANX_Constants;
 use EBANX\Plugin\Services\WC_EBANX_Payment_Validator;
 use EBANX\Plugin\Services\WC_EBANX_Api;
+use EBANX\Plugin\Services\WC_EBANX_Flash;
 
 /**
  * Class WC_EBANX_Payment_By_Link

@@ -123,7 +123,7 @@ if ( ! class_exists( 'WC_EBANX' ) ) {
 			add_action( 'init', array( $this, 'ebanx_router' ) );
 			add_action( 'init', array( 'WC_EBANX_Third_Party_Compability_Layer', 'check_and_solve' ) );
 			add_action( 'admin_init', array( $this, 'ebanx_sidebar_shortcut' ) );
-			add_action( 'admin_init', array( 'WC_EBANX_Flash', 'enqueue_admin_messages' ) );
+			add_action( 'admin_init', array( '\EBANX\Plugin\Services\WC_EBANX_Flash', 'enqueue_admin_messages' ) );
 
 			if ( WC_EBANX_Request::is_post_empty() ) {
 				add_action( 'admin_init', array( $this, 'setup_configs' ), 10 );
@@ -608,7 +608,6 @@ if ( ! class_exists( 'WC_EBANX' ) ) {
 		 * Include log classes.
 		 */
 		private static function include_log_classes() {
-			include_once WC_EBANX_SERVICES_DIR . 'class-wc-ebanx-environment.php';
 			include_once WC_EBANX_SERVICES_DIR . 'loggers/class-wc-ebanx-logger.php';
 			include_once WC_EBANX_SERVICES_DIR . 'loggers/class-wc-ebanx-plugin-activate-logger.php';
 			include_once WC_EBANX_SERVICES_DIR . 'loggers/class-wc-ebanx-plugin-deactivate-logger.php';
@@ -628,7 +627,6 @@ if ( ! class_exists( 'WC_EBANX' ) ) {
 		private function includes() {
 			// Utils.
 			include_once WC_EBANX_SERVICES_DIR . 'class-wc-ebanx-hooks.php';
-			include_once WC_EBANX_SERVICES_DIR . 'class-wc-ebanx-flash.php';
 			include_once WC_EBANX_SERVICES_DIR . 'class-wc-ebanx-request.php';
 			include_once WC_EBANX_SERVICES_DIR . 'class-wc-ebanx-third-party-compability-layer.php';
 
