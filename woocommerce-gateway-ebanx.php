@@ -41,8 +41,10 @@ use EBANX\Plugin\Services\WC_EBANX_Query_Router;
 use EBANX\Plugin\Services\WC_EBANX_Assets;
 use EBANX\Plugin\Services\WC_EBANX_Checker;
 use EBANX\Plugin\Services\WC_EBANX_Hooks;
+use EBANX\Plugin\Services\WC_EBANX_My_Account;
 
 WC_EBANX_Hooks::init();
+new WC_EBANX_My_Account();
 
 if ( ! class_exists( 'WC_EBANX' ) ) {
 	/**
@@ -677,7 +679,6 @@ if ( ! class_exists( 'WC_EBANX' ) ) {
 
 			// Hooks/Actions.
 			include_once WC_EBANX_SERVICES_DIR . 'class-wc-ebanx-payment-by-link.php';
-			include_once WC_EBANX_SERVICES_DIR . 'class-wc-ebanx-my-account.php';
 			include_once WC_EBANX_SERVICES_DIR . 'class-wc-ebanx-one-click.php';
 
 			// Controllers.

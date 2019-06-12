@@ -80,5 +80,3 @@ class WC_EBANX_Hooks {
 		return true;
 	}
 }
-
-WC_EBANX_Hooks::init();
