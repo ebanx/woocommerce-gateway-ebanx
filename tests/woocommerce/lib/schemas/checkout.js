@@ -193,6 +193,38 @@ export const CHECKOUT_SCHEMA = {
       ).without('schema', [...R.keys(this.compliance()), ...['card']]);
     },
   },
+  bo: {
+        compliance: () => ({
+            city: Joi.string().required(),
+            phone: Joi.string().required(),
+            email: Joi.string().required(),
+            state: Joi.string().required(),
+            stateId: Joi.string().required(),
+            country: Joi.string().required(),
+            countryId: Joi.string().required(),
+            address: Joi.string().required(),
+            lastName: Joi.string().required(),
+            firstName: Joi.string().required(),
+            paymentMethod: Joi.any().allow(
+                R.pluck('id')(
+                    R.values(
+                        defaults.pay.api.DEFAULT_VALUES.paymentMethods.bo
+                    )
+                )
+            ).required(),
+        }),
+        pagosnet() {
+            return Joi.object().keys(
+                Object.assign(
+                    {},
+                    this.compliance(),
+                    {
+                        schema: 'BoliviaPagosnet',
+                    }
+                )
+            ).without('schema', R.keys(this.compliance()));
+        },
+    },
   ec: {
     compliance: () => ({
       city: Joi.string().required(),

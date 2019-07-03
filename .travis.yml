@@ -27,6 +27,7 @@ env:
     - TEST_COUNTRY=ecuador
     - TEST_COUNTRY=mexico
     - TEST_COUNTRY=peru
+    - TEST_COUNTRY=bolivia
 
 before_install:
   - nvm install stable

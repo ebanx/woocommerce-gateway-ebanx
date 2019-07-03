@@ -48,6 +48,9 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway {
 			'ebanx-oxxo',
 			'ebanx-spei',
 		),
+		'bolivia_payment_methods'         => array(
+			'ebanx-pagosnet',
+		),
 		'chile_payment_methods'           => array(
 			'ebanx-sencillito',
 			'ebanx-servipag',
@@ -218,6 +221,17 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway {
 					'ebanx-debit-card',
 					'ebanx-oxxo',
 					'ebanx-spei',
+				),
+			),
+			'bolivia_payment_methods'   => array(
+				'title'   => __( 'Bolivia', 'woocommerce-gateway-ebanx' ),
+				'type'    => 'multiselect',
+				'class'   => 'wc-enhanced-select',
+				'options' => array(
+					'ebanx-pagosnet' => 'Pagosnet',
+				),
+				'default' => array(
+					'ebanx-pagosnet',
 				),
 			),
 			'chile_payment_methods'     => array(

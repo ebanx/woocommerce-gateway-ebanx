@@ -100,6 +100,12 @@ export default class ThankYou {
     return this;
   }
 
+  stillOnPagosnet() {
+    this.cy
+        .get('#pagosnet_pending', { timeout: 15000 })
+        .should('be.visible');
+  }
+
   stillOnOxxo() {
     this[stillOn]('OXXO');
 

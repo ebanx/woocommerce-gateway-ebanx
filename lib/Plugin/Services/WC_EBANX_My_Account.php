@@ -119,6 +119,9 @@ class WC_EBANX_My_Account {
 			case 'ebanx-banktransfer':
 				\WC_EBANX_Bank_Transfer_Gateway::thankyou_page( $order );
 				break;
+			case 'ebanx-pagosnet':
+				\WC_EBANX_Pagosnet_Gateway::thankyou_page( $order );
+				break;
 		}
 	}
 }
