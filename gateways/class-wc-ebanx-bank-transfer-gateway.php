@@ -110,8 +110,8 @@ class WC_EBANX_Bank_Transfer_Gateway extends WC_EBANX_New_Gateway {
 	protected function save_order_meta_fields( $order, $request ) {
 		parent::save_order_meta_fields( $order, $request );
 
-		update_post_meta( $order->id, '_payment_due_date', $request->payment->due_date );
-		update_post_meta( $order->id, '_voucher_url', $request->payment->voucher_url );
+		update_post_meta( $order->get_id(), '_payment_due_date', $request->payment->due_date );
+		update_post_meta( $order->get_id(), '_voucher_url', $request->payment->voucher_url );
 	}
 
 	/**
@@ -121,7 +121,7 @@ class WC_EBANX_Bank_Transfer_Gateway extends WC_EBANX_New_Gateway {
 	 * @return void
 	 */
 	public static function thankyou_page( $order ) {
-		$bank_transfer_url            = get_post_meta( $order->id, '_voucher_url', true );
+		$bank_transfer_url            = get_post_meta( $order->get_id(), '_voucher_url', true );
 		wp_redirect( $bank_transfer_url );
 	}
 }
