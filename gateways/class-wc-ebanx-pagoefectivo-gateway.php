@@ -84,7 +84,7 @@ class WC_EBANX_Pagoefectivo_Gateway extends WC_EBANX_New_Gateway {
 	protected function save_order_meta_fields( $order, $request ) {
 		parent::save_order_meta_fields( $order, $request );
 
-		update_post_meta( $order->id, '_pagoefectivo_url', $request->redirect_url );
+		update_post_meta( $order->get_id(), '_pagoefectivo_url', $request->redirect_url );
 	}
 
 	/**
@@ -94,8 +94,8 @@ class WC_EBANX_Pagoefectivo_Gateway extends WC_EBANX_New_Gateway {
 	 * @return void
 	 */
 	public static function thankyou_page( $order ) {
-		$pagoefectivo_url  = get_post_meta( $order->id, '_pagoefectivo_url', true );
-		$pagoefectivo_hash = get_post_meta( $order->id, '_ebanx_payment_hash', true );
+		$pagoefectivo_url  = get_post_meta( $order->get_id(), '_pagoefectivo_url', true );
+		$pagoefectivo_hash = get_post_meta( $order->get_id(), '_ebanx_payment_hash', true );
 
 		$data = array(
 			'data'         => array(

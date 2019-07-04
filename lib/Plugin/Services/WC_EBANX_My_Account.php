@@ -42,7 +42,7 @@ class WC_EBANX_My_Account {
 	 */
 	public function my_orders_banking_ticket_link( $actions, $order ) {
 		if ( 'ebanx-banking-ticket' === $order->payment_method && in_array( $order->get_status(), array( 'pending', 'on-hold' ) ) ) {
-			$url = get_post_meta( $order->id, 'Banking Ticket URL', true );
+			$url = get_post_meta( $order->get_id(), 'Banking Ticket URL', true );
 
 			if ( ! empty( $url ) ) {
 				$actions[] = array(
@@ -63,7 +63,7 @@ class WC_EBANX_My_Account {
 	 */
 	public static function order_details( $order ) {
 		// For test purposes.
-		$hash = get_post_meta( $order->id, '_ebanx_payment_hash', true );
+		$hash = get_post_meta( $order->get_id(), '_ebanx_payment_hash', true );
 
 		printf( '<input type="hidden" name="ebanx_payment_hash" value="%s" />', $hash ); // phpcs:ignore WordPress.XSS.EscapeOutput
 

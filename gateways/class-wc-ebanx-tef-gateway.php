@@ -85,8 +85,8 @@ class WC_EBANX_Tef_Gateway extends WC_EBANX_Redirect_Gateway {
 	public static function thankyou_page( $order ) {
 		$data = array(
 			'data'         => array(
-				'bank_name'     => get_post_meta( $order->id, '_ebanx_tef_bank', true ),
-				'customer_name' => get_post_meta( $order->id, '_billing_first_name', true ),
+				'bank_name'     => get_post_meta( $order->get_id(), '_ebanx_tef_bank', true ),
+				'customer_name' => get_post_meta( $order->get_id(), '_billing_first_name', true ),
 			),
 			'order_status' => $order->get_status(),
 			'method'       => 'tef',
@@ -105,7 +105,7 @@ class WC_EBANX_Tef_Gateway extends WC_EBANX_Redirect_Gateway {
 	 * @throws Exception Throw parameter missing exception.
 	 */
 	protected function save_order_meta_fields( $order, $request ) {
-		update_post_meta( $order->id, '_ebanx_tef_bank', sanitize_text_field( WC_EBANX_Request::read( 'tef' ) ) );
+		update_post_meta( $order->get_id(), '_ebanx_tef_bank', sanitize_text_field( WC_EBANX_Request::read( 'tef' ) ) );
 
 		parent::save_order_meta_fields( $order, $request );
 	}

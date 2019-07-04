@@ -27,13 +27,13 @@ class WC_EBANX_Payment_Adapter {
 		return new Payment(
 			[
 				'amountTotal'         => $order->get_total(),
-				'orderNumber'         => $order->id,
+				'orderNumber'         => $order->get_id(),
 				'dueDate'             => static::transform_due_date( $configs ),
 				'address'             => static::transform_address( $order, $gateway_id ),
 				'person'              => static::transform_person( $order, $configs, $names, $gateway_id ),
 				'responsible'         => static::transform_person( $order, $configs, $names, $gateway_id ),
 				'items'               => static::transform_items( $order ),
-				'merchantPaymentCode' => substr( $order->id . '-' . md5( rand( 123123, 9999999 ) ), 0, 40 ),
+				'merchantPaymentCode' => substr( $order->get_id() . '-' . md5( rand( 123123, 9999999 ) ), 0, 40 ),
 				'riskProfileId'       => 'Wx' . str_replace( '.', 'x', \WC_EBANX::get_plugin_version() ),
 			]
 		);
@@ -417,14 +417,14 @@ class WC_EBANX_Payment_Adapter {
 		return new Payment(
 			[
 				'amountTotal'         => $order->get_total(),
-				'orderNumber'         => $order->id,
+				'orderNumber'         => $order->get_id(),
 				'dueDate'             => static::transform_due_date( $configs ),
 				'address'             => static::transform_address_from_post_data( $order ),
 				'person'              => static::transform_person_from_post_data( $order, $configs ),
 				'responsible'         => static::transform_person_from_post_data( $order, $configs ),
 				'instalments'         => '1',
 				'items'               => static::transform_items( $order ),
-				'merchantPaymentCode' => substr( $order->id . '-' . md5( rand( 123123, 9999999 ) ), 0, 40 ),
+				'merchantPaymentCode' => substr( $order->get_id() . '-' . md5( rand( 123123, 9999999 ) ), 0, 40 ),
 				'riskProfileId'       => 'Wx' . str_replace( '.', 'x', WC_EBANX::get_plugin_version() ),
 			]
 		);
@@ -479,7 +479,7 @@ class WC_EBANX_Payment_Adapter {
 		if ( count( $fields_options ) === 1 && 'cnpj' === $fields_options[0] ) {
 			return Person::TYPE_BUSINESS;
 		}
-		$brazil_person_type = get_post_meta( $order->id, '_billing_persontype', true );
+		$brazil_person_type = get_post_meta( $order->get_id(), '_billing_persontype', true );
 		if ( empty( $brazil_person_type ) ) {
 			return Person::TYPE_PERSONAL;
 		}
@@ -498,8 +498,8 @@ class WC_EBANX_Payment_Adapter {
 	 * @throws Exception Throws parameter missing exception.
 	 */
 	private static function get_document_from_order( $order, $person_type ) {
-		$cpf  = get_post_meta( $order->id, '_billing_cpf', true );
-		$cnpj = get_post_meta( $order->id, '_billing_cnpj', true );
+		$cpf  = get_post_meta( $order->get_id(), '_billing_cpf', true );
+		$cnpj = get_post_meta( $order->get_id(), '_billing_cnpj', true );
 		$has_cpf  = ! empty( $cpf );
 		$has_cnpj = ! empty( $cnpj );
 		if ( Person::TYPE_PERSONAL === $person_type && $has_cpf ) {

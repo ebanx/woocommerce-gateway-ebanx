@@ -710,7 +710,7 @@ class WC_EBANX_New_Gateway extends WC_EBANX_Gateway {
 	 * @return void
 	 */
 	final public function process_refund_hook( $order, $data ) {
-		$refunds = current( get_post_meta( $order->id, '_ebanx_payment_refunds' ) );
+		$refunds = current( get_post_meta( $order->get_id(), '_ebanx_payment_refunds' ) );
 
 		foreach ( $refunds as $k => $ref ) {
 			foreach ( $data['payment']['refunds'] as $refund ) {
@@ -733,7 +733,7 @@ class WC_EBANX_New_Gateway extends WC_EBANX_Gateway {
 			}
 		}
 
-		update_post_meta( $order->id, '_ebanx_payment_refunds', $refunds );
+		update_post_meta( $order->get_id(), '_ebanx_payment_refunds', $refunds );
 	}
 
 	/**
