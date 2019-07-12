@@ -160,7 +160,6 @@ abstract class WC_EBANX_Constants {
 			'ebanx-banking-ticket',
 			'ebanx-credit-card-br',
 			'ebanx-tef',
-			'ebanx-account',
 			'ebanx-banktransfer',
 		],
 		self::COUNTRY_CHILE     => [

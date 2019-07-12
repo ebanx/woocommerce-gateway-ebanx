@@ -21,18 +21,6 @@ msgstr ""
 "X-Poedit-SearchPathExcluded-3: languages\n"
 "X-Poedit-SearchPathExcluded-4: includes/ebanx-php\n"
 
-#: gateways/class-wc-ebanx-account-gateway.php:15
-msgid "EBANX - ACCOUNT"
-msgstr ""
-
-#: gateways/class-wc-ebanx-account-gateway.php:18
-msgid "Saldo EBANX"
-msgstr ""
-
-#: gateways/class-wc-ebanx-account-gateway.php:19
-msgid "Pague usando o saldo da sua conta do EBANX."
-msgstr ""
-
 #: gateways/class-wc-ebanx-baloto-gateway.php:15
 msgid "EBANX - Baloto"
 msgstr ""
@@ -707,12 +695,6 @@ msgstr ""
 msgid ""
 "The customer email is a required field. Please provide a valid customer e-"
 "mail."
-msgstr ""
-
-#: services/class-wc-ebanx-payment-validator.php:168
-msgid ""
-"The EBANX account is not available yet as payment method, you will hear "
-"about that soon!"
 msgstr ""
 
 #: services/class-wc-ebanx-payment-validator.php:182

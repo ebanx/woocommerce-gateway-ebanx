@@ -78,10 +78,6 @@ msgstr "EBANX - O pagamento não pôde ser capturado, mudando para Pendente."
 msgid "EBANX: Cancelled by customer"
 msgstr "EBANX: Cancelado pelo cliente"
 
-#: gateways/class-wc-ebanx-account-gateway.php:15
-msgid "EBANX - ACCOUNT"
-msgstr "EBANX - CONTA"
-
 #: gateways/class-wc-ebanx-baloto-gateway.php:15
 msgid "EBANX - Baloto"
 msgstr "EBANX - Baloto"
