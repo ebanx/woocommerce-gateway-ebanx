@@ -181,21 +181,6 @@ class WC_EBANX_Payment_Validator {
 	}
 
 	/**
-	 * Validates the payment method not to be ebanx-account
-	 * As it's not available yet
-	 *
-	 * @return bool Problems found
-	 */
-	private function validate_payment_method_is_ebanx_account() {
-		if ( 'ebanx-account' === $this->order->payment_method ) {
-			$this->add_error( __( 'The EBANX account is not available yet as payment method, you will hear about that soon!', 'woocommerce-gateway-ebanx' ) );
-			return true;
-		}
-
-		return false;
-	}
-
-	/**
 	 * Validates the payment method to be on of ours
 	 *
 	 * @return bool Problems found

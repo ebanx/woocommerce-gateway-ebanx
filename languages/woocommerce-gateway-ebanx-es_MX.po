@@ -18,18 +18,6 @@ msgstr ""
 msgid "Currency %s is not supported. Works only with Brazilian Real."
 msgstr ""
 
-#: includes/class-wc-ebanx-account-gateway.php:13
-msgid "EBANX - ACCOUNT"
-msgstr ""
-
-#: includes/class-wc-ebanx-account-gateway.php:16
-msgid "Saldo EBANX"
-msgstr ""
-
-#: includes/class-wc-ebanx-account-gateway.php:17
-msgid "Pague usando o saldo da sua conta do EBANX."
-msgstr ""
-
 #: includes/class-wc-ebanx-banking-ticket-gateway.php:13
 msgid "EBANX - Banking Ticket"
 msgstr ""

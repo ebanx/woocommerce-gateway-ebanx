@@ -104,9 +104,6 @@ class WC_EBANX_My_Account {
 			case 'ebanx-tef':
 				\WC_EBANX_Tef_Gateway::thankyou_page( $order );
 				break;
-			case 'ebanx-account':
-				\WC_EBANX_Account_Gateway::thankyou_page( $order );
-				break;
 			case 'ebanx-debit-card':
 				\WC_EBANX_Debit_Card_Gateway::thankyou_page( $order );
 				break;
