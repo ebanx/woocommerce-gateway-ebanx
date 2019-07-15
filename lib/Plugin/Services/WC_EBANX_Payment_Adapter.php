@@ -139,7 +139,7 @@ class WC_EBANX_Payment_Adapter {
 				'address'      => $addresses['streetName'],
 				'streetNumber' => $street_number,
 				'city'         => \WC_EBANX_Request::read( 'billing_city', null ) ?: \WC_EBANX_Request::read( $gateway_id, null )['billing_city'],
-				'country'      => Country::fromIso( $order->billing_country ),
+				'country'      => Country::fromIso( $order->get_billing_country() ),
 				'state'        => \WC_EBANX_Request::read( 'billing_state', null ) ?: \WC_EBANX_Request::read( $gateway_id, null )['billing_state'],
 				'zipcode'      => \WC_EBANX_Request::read( 'billing_postcode', null ) ?: \WC_EBANX_Request::read( $gateway_id, null )['billing_postcode'],
 			]
@@ -163,10 +163,10 @@ class WC_EBANX_Payment_Adapter {
 			[
 				'type'        => static::get_person_type( $configs, $names ),
 				'document'    => $document,
-				'email'       => $order->billing_email,
+				'email'       => $order->get_billing_email(),
 				'ip'          => \WC_Geolocation::get_ip_address(),
-				'name'        => $order->billing_first_name . ' ' . $order->billing_last_name,
-				'phoneNumber' => '' !== $order->billing_phone ? $order->billing_phone : \WC_EBANX_Request::read( $gateway_id, null )['billing_phone'],
+				'name'        => $order->get_billing_first_name() . ' ' . $order->get_billing_last_name(),
+				'phoneNumber' => '' !== $order->get_billing_phone() ? $order->get_billing_phone() : \WC_EBANX_Request::read( $gateway_id, null )['billing_phone'],
 			]
 		);
 	}
@@ -393,7 +393,7 @@ class WC_EBANX_Payment_Adapter {
 			$addresses .= ' - ' . $order_address['address_2'];
 		}
 		$number          = ! empty( $order_address['number'] ) ? trim( $order_address['number'] ) : 'S/N';
-		$address_country = empty( $order->billing_country ) ? WC_EBANX_Constants::DEFAULT_COUNTRY : $order->billing_country;
+		$address_country = empty( $order->get_billing_country() ) ? WC_EBANX_Constants::DEFAULT_COUNTRY : $order->get_billing_country();
 		return new Address(
 			[
 				'address'      => $addresses,
@@ -437,7 +437,7 @@ class WC_EBANX_Payment_Adapter {
 	 * @return array
 	 */
 	private static function get_order_meta_data( $order ) {
-		$data        = get_post_meta( $order->data['id'] );
+		$data        = get_post_meta( $order->get_data()['id'] );
 		$data_values = array();
 		foreach ( $data as $key => $value ) {
 			$data_values[ $key ] = reset( $value );
@@ -525,10 +525,10 @@ class WC_EBANX_Payment_Adapter {
 			[
 				'type'        => $person_type,
 				'document'    => $document,
-				'email'       => $order->billing_email,
+				'email'       => $order->get_billing_email(),
 				'ip'          => WC_Geolocation::get_ip_address(),
-				'name'        => $order->billing_first_name . ' ' . $order->billing_last_name,
-				'phoneNumber' => $order->billing_phone,
+				'name'        => $order->get_billing_first_name() . ' ' . $order->get_billing_last_name(),
+				'phoneNumber' => $order->get_billing_phone(),
 			]
 		);
 	}
