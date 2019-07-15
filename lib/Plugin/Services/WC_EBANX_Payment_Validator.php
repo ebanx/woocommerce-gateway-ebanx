@@ -166,11 +166,6 @@ class WC_EBANX_Payment_Validator {
 			return false;
 		}
 
-		// true: Leave and stop validating other fields.
-		if ( $this->validate_payment_method_is_ebanx_account() ) {
-			return true;
-		}
-
 		if ( $this->validate_payment_method_is_ebanx_payment() ) {
 			return false;
 		}
