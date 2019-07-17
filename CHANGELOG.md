@@ -1,4 +1,9 @@
 # CHANGELOG
+# 1.40.0
+* Feature - Add Bolivia support [#810](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/810)
+* Fix - Remove direct access to order object [#711](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/711)
+* Fix - WC_Subscription class not found [#804](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/804)
+
 # 1.39.1
 * Fix - Update Benjamin Version [#786](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/786)
 * Improvement - Remove require command and use Namespaces [#785](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/785)
