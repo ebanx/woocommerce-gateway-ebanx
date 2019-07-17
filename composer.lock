@@ -4,20 +4,20 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c52b19c08c760d8268469bdf2b437a7a",
+    "content-hash": "4dd4aeb530c12d1a434c974573291f07",
     "packages": [
         {
             "name": "ebanx/benjamin",
-            "version": "1.18.3",
+            "version": "1.19.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/ebanx/benjamin.git",
-                "reference": "2fc88d7064ad8955b4b7fd5ea26ff07fee7243ba"
+                "reference": "d30887026c4fcfe3ce0288d686d061d74261ecf8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ebanx/benjamin/zipball/2fc88d7064ad8955b4b7fd5ea26ff07fee7243ba",
-                "reference": "2fc88d7064ad8955b4b7fd5ea26ff07fee7243ba",
+                "url": "https://api.github.com/repos/ebanx/benjamin/zipball/d30887026c4fcfe3ce0288d686d061d74261ecf8",
+                "reference": "d30887026c4fcfe3ce0288d686d061d74261ecf8",
                 "shasum": ""
             },
             "require": {
@@ -46,7 +46,7 @@
                 "Apache-2.0"
             ],
             "description": "Business rule provider lib for plugin implementations",
-            "time": "2019-05-21T18:13:09+00:00"
+            "time": "2019-07-03T12:45:29+00:00"
         }
     ],
     "packages-dev": [
@@ -1598,12 +1598,12 @@
             "version": "0.14.1",
             "source": {
                 "type": "git",
-                "url": "https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards.git",
+                "url": "https://github.com/WordPress/WordPress-Coding-Standards.git",
                 "reference": "cf6b310caad735816caef7573295f8a534374706"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/WordPress-Coding-Standards/WordPress-Coding-Standards/zipball/cf6b310caad735816caef7573295f8a534374706",
+                "url": "https://api.github.com/repos/WordPress/WordPress-Coding-Standards/zipball/cf6b310caad735816caef7573295f8a534374706",
                 "reference": "cf6b310caad735816caef7573295f8a534374706",
                 "shasum": ""
             },

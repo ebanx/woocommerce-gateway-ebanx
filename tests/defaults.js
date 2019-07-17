@@ -55,6 +55,11 @@ export default {
               },
             },
           },
+          bo: {
+            pagosnet: {
+              id: 'pagosnet',
+            },
+          },
           pe: {
             pagoEfectivo: {
               id: 'pagoefectivo',

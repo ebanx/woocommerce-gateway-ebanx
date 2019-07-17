@@ -13,6 +13,7 @@ abstract class WC_EBANX_Constants {
 	const COUNTRY_COLOMBIA  = 'co';
 	const COUNTRY_ARGENTINA = 'ar';
 	const COUNTRY_ECUADOR   = 'ec';
+	const COUNTRY_BOLIVIA   = 'bo';
 
 	const SETTINGS_URL = 'admin.php?page=wc-settings&tab=checkout&section=ebanx-global';
 
@@ -24,12 +25,14 @@ abstract class WC_EBANX_Constants {
 	const CURRENCY_CODE_COP = 'COP'; // Colombia.
 	const CURRENCY_CODE_CLP = 'CLP'; // Chile.
 	const CURRENCY_CODE_ARS = 'ARS'; // Argentina.
+	const CURRENCY_CODE_BOB = 'BOB'; // Bolivia.
 
 	const COUNTRY_NAME_FROM_ABBREVIATION = [
 		self::COUNTRY_BRAZIL    => Country::BRAZIL,
 		self::COUNTRY_MEXICO    => Country::MEXICO,
 		self::COUNTRY_COLOMBIA  => Country::COLOMBIA,
 		self::COUNTRY_ARGENTINA => Country::ARGENTINA,
+		self::COUNTRY_BOLIVIA   => Country::BOLIVIA,
 	];
 
 	public static $allowed_currency_codes = [
@@ -41,6 +44,7 @@ abstract class WC_EBANX_Constants {
 		self::CURRENCY_CODE_COP,
 		self::CURRENCY_CODE_CLP,
 		self::CURRENCY_CODE_ARS,
+		self::CURRENCY_CODE_BOB,
 	];
 
 	public static $local_currencies = [
@@ -50,6 +54,7 @@ abstract class WC_EBANX_Constants {
 		self::COUNTRY_MEXICO    => self::CURRENCY_CODE_MXN,
 		self::COUNTRY_PERU      => self::CURRENCY_CODE_PEN,
 		self::COUNTRY_ARGENTINA => self::CURRENCY_CODE_ARS,
+		self::COUNTRY_BOLIVIA   => self::CURRENCY_CODE_BOB,
 	];
 
 	const ACQUIRER_MIN_INSTALMENT_VALUE_MXN = 100;
@@ -73,6 +78,7 @@ abstract class WC_EBANX_Constants {
 		self::COUNTRY_PERU,
 		self::COUNTRY_CHILE,
 		self::COUNTRY_ARGENTINA,
+		self::COUNTRY_BOLIVIA,
 	];
 
 	public static $credit_card_countries = [
@@ -101,6 +107,7 @@ abstract class WC_EBANX_Constants {
 		'ebanx-baloto',
 		'ebanx-efectivo',
 		'ebanx-banktransfer',
+		'ebanx-pagosnet',
 	];
 
 	public static $banks_tef_allowed = [
@@ -151,6 +158,7 @@ abstract class WC_EBANX_Constants {
 		'ebanx-safetypay'      => '_safetypay',
 		'ebanx-eft'            => 'eft',
 		'ebanx-baloto'         => '_baloto',
+		'ebanx-pagosnet'       => 'pagosnet',
 	];
 
 	public static $brazil_taxes_allowed = ['cpf', 'cnpj'];
@@ -186,6 +194,9 @@ abstract class WC_EBANX_Constants {
 		self::COUNTRY_ARGENTINA => [
 			'ebanx-efectivo',
 		],
+		self::COUNTRY_BOLIVIA   => [
+			'ebanx-pagosnet',
+		]
 	];
 
 	public static $safetypay_allowed_types = [

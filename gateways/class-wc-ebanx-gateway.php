@@ -423,6 +423,7 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway {
 				WC_EBANX_Constants::CURRENCY_CODE_COP => 'Peso colombiano',
 				WC_EBANX_Constants::CURRENCY_CODE_ARS => 'Peso argentino',
 				WC_EBANX_Constants::CURRENCY_CODE_BRL => 'Real brasileño',
+				WC_EBANX_Constants::CURRENCY_CODE_BOB => 'Bolivian boliviano',
 			),
 		);
 
@@ -447,6 +448,7 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway {
 			'pe' => 'es',
 			'co' => 'es',
 			'ec' => 'es',
+			'bo' => 'es',
 			'br' => 'pt-br',
 		);
 		if ( ! array_key_exists( $country, $languages ) ) {

@@ -8,6 +8,7 @@ use Ebanx\Benjamin\Models\Country;
 use Ebanx\Benjamin\Models\Item;
 use Ebanx\Benjamin\Models\Payment;
 use Ebanx\Benjamin\Models\Person;
+use Exception;
 
 /**
  * Class WC_EBANX_Payment_Adapter
@@ -114,7 +115,9 @@ class WC_EBANX_Payment_Adapter {
 
 		if (
 			( empty( \WC_EBANX_Request::read( 'billing_postcode', null ) )
-				&& empty( \WC_EBANX_Request::read( $gateway_id, null )['billing_postcode'] ) )
+				&& empty( \WC_EBANX_Request::read( $gateway_id, null )['billing_postcode'] )
+				&& $order->get_billing_country() !== 'BO'
+			)
 			|| ( empty( \WC_EBANX_Request::read( 'billing_address_1', null ) )
 				&& empty( \WC_EBANX_Request::read( $gateway_id, null )['billing_address_1'] ) )
 			|| ( empty( \WC_EBANX_Request::read( 'billing_city', null ) )

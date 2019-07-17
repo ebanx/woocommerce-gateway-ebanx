@@ -167,6 +167,7 @@ class WC_EBANX_Errors {
 			'cl' => 'es',
 			'pe' => 'es',
 			'co' => 'es',
+			'bo' => 'es',
 			'br' => 'pt-br',
 		);
 		$language  = $languages[ $country ];

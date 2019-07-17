@@ -75,6 +75,15 @@ export default class Woocommerce {
     });
   }
 
+  buyWonderWomansPurseWithPagosnet(data) {
+    this[buyWonderWomansPurse]();
+
+    this.pages.checkout.placeWithPagosnet(data, () => {
+      this.pages.thankYou
+          .stillOnPagosnet();
+    });
+  }
+
   buyWonderWomansPurseWithServiPagToPersonal(data) {
     this[buyWonderWomansPurse]();
 

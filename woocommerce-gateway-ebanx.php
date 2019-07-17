@@ -240,6 +240,14 @@ if ( ! class_exists( 'WC_EBANX' ) ) {
 			$methods[] = 'WC_EBANX_Spei_Gateway';
 			return $methods;
 		}
+		/**
+		 * @param array $methods
+		 * @return array
+		 */
+		private static function bolivia_gateway( $methods ) {
+			$methods[] = 'WC_EBANX_Pagosnet_Gateway';
+			return $methods;
+		}
 
 		/**
 		 * @param array $methods
@@ -662,6 +670,9 @@ if ( ! class_exists( 'WC_EBANX' ) ) {
 			include_once WC_EBANX_GATEWAYS_DIR . 'class-wc-ebanx-oxxo-gateway.php';
 			include_once WC_EBANX_GATEWAYS_DIR . 'class-wc-ebanx-spei-gateway.php';
 
+			// Bolivian Gateways.
+			include_once WC_EBANX_GATEWAYS_DIR . 'class-wc-ebanx-pagosnet-gateway.php';
+
 			// Argentina Gateways.
 			include_once WC_EBANX_GATEWAYS_DIR . 'class-wc-ebanx-credit-card-ar-gateway.php';
 			include_once WC_EBANX_GATEWAYS_DIR . 'class-wc-ebanx-efectivo-gateway.php';
@@ -708,6 +719,7 @@ if ( ! class_exists( 'WC_EBANX' ) ) {
 
 			$methods = self::brazil_gateway( $methods );
 			$methods = self::mexico_gateway( $methods );
+			$methods = self::bolivia_gateway( $methods );
 			$methods = self::chile_gateway( $methods );
 			$methods = self::colombia_gateway( $methods );
 			$methods = self::peru_gateway( $methods );

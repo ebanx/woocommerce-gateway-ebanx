@@ -367,7 +367,6 @@ export default class Checkout {
       R.propSatisfies((x) => (x !== undefined), pM.property), (data) => {
         this.cy
           .get(pM.elm(data[pM.property], data.countryId.toLowerCase()))
-          .should('be.visible')
           .click({ force: true });
       },
       R.always(null)
@@ -424,6 +423,15 @@ export default class Checkout {
 
   placeWithBaloto(data, next) {
     validateSchema(CHECKOUT_SCHEMA.co.baloto(), data, () => {
+      this[fillBilling](data);
+      this[placeOrder]();
+
+      next();
+    });
+  }
+
+  placeWithPagosnet(data, next) {
+    validateSchema(CHECKOUT_SCHEMA.bo.pagosnet(), data, () => {
       this[fillBilling](data);
       this[placeOrder]();
 
