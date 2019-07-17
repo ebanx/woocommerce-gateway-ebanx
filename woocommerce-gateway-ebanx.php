@@ -800,7 +800,7 @@ if ( ! class_exists( 'WC_EBANX' ) ) {
 
 				$this->setup_configs();
 
-				update_post_meta( $order->id, '_ebanx_instalments', WC_EBANX_Request::read( 'ebanx_instalments', 1 ) );
+				update_post_meta( $order->get_id(), '_ebanx_instalments', WC_EBANX_Request::read( 'ebanx_instalments', 1 ) );
 
 				WC_EBANX_Payment_By_Link::create( $post_id );
 			}
@@ -816,10 +816,10 @@ if ( ! class_exists( 'WC_EBANX' ) ) {
 		public function ebanx_metabox_save_post_render_button( $post_id ) {
 			$ebanx_currencies = array( 'BRL', 'USD', 'EUR', 'PEN', 'CLP', 'MXN', 'COP' );
 			$order            = wc_get_order( $post_id );
-			$checkout_url     = get_post_meta( $order->id, '_ebanx_checkout_url', true );
+			$checkout_url     = get_post_meta( $order->get_id(), '_ebanx_checkout_url', true );
 
 			if ( ! $checkout_url
-				&& in_array( $order->status, array( 'auto-draft', 'pending' ) )
+				&& in_array( $order->get_status(), array( 'auto-draft', 'pending' ) )
 				&& in_array( strtoupper( get_woocommerce_currency() ), $ebanx_currencies ) ) {
 				wc_get_template(
 					'payment-by-link-action.php',
@@ -837,7 +837,7 @@ if ( ! class_exists( 'WC_EBANX' ) ) {
 		 * @return void
 		 */
 		public function ebanx_admin_order_details( $order ) {
-			$payment_hash = get_post_meta( $order->id, '_ebanx_payment_hash', true );
+			$payment_hash = get_post_meta( $order->get_id(), '_ebanx_payment_hash', true );
 			if ( $payment_hash ) {
 
 				wc_get_template(
@@ -845,7 +845,7 @@ if ( ! class_exists( 'WC_EBANX' ) ) {
 					array(
 						'order'                => $order,
 						'payment_hash'         => $payment_hash,
-						'payment_checkout_url' => get_post_meta( $order->id, '_ebanx_checkout_url', true ),
+						'payment_checkout_url' => get_post_meta( $order->get_id(), '_ebanx_checkout_url', true ),
 						'is_sandbox_mode'      => $this->is_sandbox_mode,
 						'dashboard_link'       => 'https://dashboard.ebanx.com/' . ( $this->is_sandbox_mode ? 'test/' : '' ) . "payments/?hash=$payment_hash",
 					),

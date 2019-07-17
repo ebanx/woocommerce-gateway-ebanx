@@ -95,7 +95,7 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_New_Gateway {
 
 		$country = $this->get_transaction_address( 'country' );
 
-		$user_cc = get_user_meta( $order->data['customer_id'], '_ebanx_credit_card_token', true );
+		$user_cc = get_user_meta( $order->get_data()['customer_id'], '_ebanx_credit_card_token', true );
 
 		$user_cc_token = ! empty( $user_cc ) && ! empty( $user_cc[0]->token ) ? $user_cc[0]->token : null;
 		if ( ! is_null( $user_cc_token ) ) {
@@ -165,7 +165,7 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_New_Gateway {
 		$action = WC_EBANX_Request::read( 'action', null );
 		$order  = wc_get_order( $order_id );
 
-		if ( $order->payment_method !== $this->id
+		if ( $order->get_payment_method() !== $this->id
 			|| 'processing' !== $status
 			|| 'woocommerce_mark_order_status' !== $action ) {
 			return;
@@ -194,15 +194,15 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_New_Gateway {
 				$order_id  = absint( $_GET['order_id'] );
 				$order     = wc_get_order( $order_id );
 
-				if ( $order->get_id() === $order_id && $order->order_key === $order_key ) {
-					static::$ebanx_params['billing_first_name'] = $order->billing_first_name;
-					static::$ebanx_params['billing_last_name']  = $order->billing_last_name;
-					static::$ebanx_params['billing_address_1']  = $order->billing_address_1;
-					static::$ebanx_params['billing_address_2']  = $order->billing_address_2;
-					static::$ebanx_params['billing_state']      = $order->billing_state;
-					static::$ebanx_params['billing_city']       = $order->billing_city;
-					static::$ebanx_params['billing_postcode']   = $order->billing_postcode;
-					static::$ebanx_params['billing_country']    = $order->billing_country;
+				if ( $order->get_id() === $order_id && $order->get_order_key() === $order_key ) {
+					static::$ebanx_params['billing_first_name'] = $order->get_billing_first_name();
+					static::$ebanx_params['billing_last_name']  = $order->get_billing_last_name();
+					static::$ebanx_params['billing_address_1']  = $order->get_billing_address_1();
+					static::$ebanx_params['billing_address_2']  = $order->get_billing_address_2();
+					static::$ebanx_params['billing_state']      = $order->get_billing_state();
+					static::$ebanx_params['billing_city']       = $order->get_billing_city();
+					static::$ebanx_params['billing_postcode']   = $order->get_billing_postcode();
+					static::$ebanx_params['billing_country']    = $order->get_billing_country();
 				}
 			}
 		}
@@ -276,7 +276,7 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_New_Gateway {
 		parent::save_user_meta_fields( $order );
 
 		if ( ! $this->user_id ) {
-			$this->user_id = $order->user_id;
+			$this->user_id = $order->get_user_id();
 		}
 
 		if ( ! $this->user_id
@@ -365,13 +365,13 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_New_Gateway {
 				'instalments_number' => $instalments_number,
 				'instalments_amount' => wc_price( round( $order_amount / $instalments_number, 2 ), array( 'currency' => $currency ) ),
 				'masked_card'        => substr( get_post_meta( $order->get_id(), '_masked_card_number', true ), -4 ),
-				'customer_email'     => $order->billing_email,
-				'customer_name'      => $order->billing_first_name,
+				'customer_email'     => $order->get_billing_email(),
+				'customer_name'      => $order->get_billing_first_name(),
 				'total'              => wc_price( $order_amount, array( 'currency' => $currency ) ),
 				'hash'               => get_post_meta( $order->get_id(), '_ebanx_payment_hash', true ),
 			),
 			'order_status' => $order->get_status(),
-			'method'       => $order->payment_method,
+			'method'       => $order->get_payment_method(),
 		);
 
 		parent::thankyou_page( $data );

@@ -101,7 +101,7 @@ class WC_EBANX_Oxxo_Gateway extends WC_EBANX_New_Gateway {
 		$oxxo_print     = $oxxo_url . '&format=print';
 		$customer_email = get_post_meta( $order->get_id(), '_ebanx_payment_customer_email', true );
 		$oxxo_hash      = get_post_meta( $order->get_id(), '_ebanx_payment_hash', true );
-		$customer_name  = $order->billing_first_name;
+		$customer_name  = $order->get_billing_first_name();
 		$oxxo_due_date  = get_post_meta( $order->get_id(), '_payment_due_date', true );
 
 		$data = array(
