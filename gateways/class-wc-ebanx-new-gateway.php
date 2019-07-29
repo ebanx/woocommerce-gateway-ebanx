@@ -236,7 +236,6 @@ class WC_EBANX_New_Gateway extends WC_EBANX_Gateway {
 
 			$message = WC_EBANX_Errors::get_error_message( $e, $country );
 
-			WC()->session->set( 'refresh_totals', true );
 			WC_EBANX::log( "EBANX Error: $message" );
 
 			wc_add_notice( $message, 'error' );
