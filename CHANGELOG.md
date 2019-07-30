@@ -1,4 +1,7 @@
 # CHANGELOG
+# 1.40.1
+* Fix - Fix Customer Data refreshing upon failure [#813](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/813)
+
 # 1.40.0
 * Feature - Add Bolivia support [#810](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/810)
 * Fix - Remove direct access to order object [#711](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/711)
