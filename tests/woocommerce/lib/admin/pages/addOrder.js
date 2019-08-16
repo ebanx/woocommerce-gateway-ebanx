@@ -65,7 +65,7 @@ export default class AddOrder {
       .get('[name="create_ebanx_payment_link"]')
       .should('be.visible')
       .click()
-      .get('#order_data > div.order_data_column_container > div:nth-child(1) > div > p:nth-child(3) > input[type="text"]', { timeout: 30000 })
+      .get('#order_data .order_data_column_container input[name="order_date"]', { timeout: 30000 })
       .then(($elm) => {
         next($elm.val());
       });
