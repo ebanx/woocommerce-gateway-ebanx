@@ -501,29 +501,28 @@ class WC_EBANX_Payment_Adapter {
 	 * @throws Exception Throws parameter missing exception.
 	 */
 	private static function get_document_from_order( $order ) {
-		$country = $order->get_billing_country();
+		$country = trim( $order->get_billing_country() );
 		$user_id = get_post_meta( $order->get_id(), '_customer_user', true );
 
 		switch ( $country ) {
-			case WC_EBANX_Constants::COUNTRY_ARGENTINA:
+			case 'AR':
 				return get_user_meta( $user_id, '_ebanx_billing_argentina_document', true );
 				break;
-			case WC_EBANX_Constants::COUNTRY_BRAZIL:
+			case 'BR':
 				$cpf  = get_user_meta( $user_id, '_ebanx_billing_brazil_document', true );
 				$cnpj = get_user_meta( $user_id, '_ebanx_billing_brazil_cnpj', true );
 				return $cpf || $cnpj;
-				break;
-			case WC_EBANX_Constants::COUNTRY_CHILE:
+			case 'CL':
 				return get_user_meta( $user_id, '_ebanx_billing_chile_document', true );
 				break;
-			case WC_EBANX_Constants::COUNTRY_COLOMBIA:
+			case 'CO':
 				return get_user_meta( $user_id, '_ebanx_billing_colombia_document', true );
 				break;
-			case WC_EBANX_Constants::COUNTRY_PERU:
+			case 'PE':
 				return get_user_meta( $user_id, '_ebanx_billing_peru_document', true );
 				break;
 			default:
-				throw new Exception( 'WC_EBANX_Payment_Adapter: INVALID-DOCUMENT' );
+				throw new Exception( 'WC_EBANX_Payment_Adapter: INVALID-DOCUMENT' );;
 		}
 	}
 
@@ -536,7 +535,7 @@ class WC_EBANX_Payment_Adapter {
 	 */
 	private static function transform_person_from_post_data( $order, $configs ) {
 		$person_type = self::get_person_type_from_order( $order, $configs );
-		$document    = self::get_document_from_order( $order );
+		$document    = self::get_document_from_order( $order, $person_type );
 		return new Person(
 			[
 				'type'        => $person_type,
