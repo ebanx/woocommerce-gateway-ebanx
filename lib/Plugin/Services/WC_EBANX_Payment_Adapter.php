@@ -428,7 +428,7 @@ class WC_EBANX_Payment_Adapter {
 				'instalments'         => '1',
 				'items'               => static::transform_items( $order ),
 				'merchantPaymentCode' => substr( $order->get_id() . '-' . md5( rand( 123123, 9999999 ) ), 0, 40 ),
-				'riskProfileId'       => 'Wx' . str_replace( '.', 'x', WC_EBANX::get_plugin_version() ),
+				'riskProfileId'       => 'Wx' . str_replace( '.', 'x', \WC_EBANX::get_plugin_version() ),
 			]
 		);
 	}
@@ -500,18 +500,31 @@ class WC_EBANX_Payment_Adapter {
 	 * @return string
 	 * @throws Exception Throws parameter missing exception.
 	 */
-	private static function get_document_from_order( $order, $person_type ) {
-		$cpf  = get_post_meta( $order->get_id(), '_billing_cpf', true );
-		$cnpj = get_post_meta( $order->get_id(), '_billing_cnpj', true );
-		$has_cpf  = ! empty( $cpf );
-		$has_cnpj = ! empty( $cnpj );
-		if ( Person::TYPE_PERSONAL === $person_type && $has_cpf ) {
-			return $cpf;
+	private static function get_document_from_order( $order ) {
+		$country = trim( strtolower( WC()->customer->get_billing_country() ) );
+		$user_id = get_post_meta( $order->get_id(), '_customer_user', true );
+
+		switch ( $country ) {
+			case WC_EBANX_Constants::COUNTRY_ARGENTINA:
+				return get_user_meta( $user_id, '_ebanx_billing_argentina_document', true );
+				break;
+			case WC_EBANX_Constants::COUNTRY_BRAZIL:
+				$cpf  = get_user_meta( $user_id, '_ebanx_billing_brazil_document', true );
+				$cnpj = get_user_meta( $user_id, '_ebanx_billing_brazil_cnpj', true );
+				return $cpf || $cnpj;
+				break;
+			case WC_EBANX_Constants::COUNTRY_CHILE:
+				return get_user_meta( $user_id, '_ebanx_billing_chile_document', true );
+				break;
+			case WC_EBANX_Constants::COUNTRY_COLOMBIA:
+				return get_user_meta( $user_id, '_ebanx_billing_colombia_document', true );
+				break;
+			case WC_EBANX_Constants::COUNTRY_PERU:
+				return get_user_meta( $user_id, '_ebanx_billing_peru_document', true );
+				break;
+			default:
+				throw new Exception( 'WC_EBANX_Payment_Adapter: INVALID-DOCUMENT' );
 		}
-		if ( Person::TYPE_BUSINESS === $person_type && $has_cnpj ) {
-			return $cnpj;
-		}
-		throw new Exception( 'INVALID-BRL-DOCUMENT' );
 	}
 
 	/**
@@ -523,13 +536,13 @@ class WC_EBANX_Payment_Adapter {
 	 */
 	private static function transform_person_from_post_data( $order, $configs ) {
 		$person_type = self::get_person_type_from_order( $order, $configs );
-		$document    = self::get_document_from_order( $order, $person_type );
+		$document    = self::get_document_from_order( $order );
 		return new Person(
 			[
 				'type'        => $person_type,
 				'document'    => $document,
 				'email'       => $order->get_billing_email(),
-				'ip'          => WC_Geolocation::get_ip_address(),
+				'ip'          => \WC_Geolocation::get_ip_address(),
 				'name'        => $order->get_billing_first_name() . ' ' . $order->get_billing_last_name(),
 				'phoneNumber' => $order->get_billing_phone(),
 			]
