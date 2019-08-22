@@ -501,7 +501,7 @@ class WC_EBANX_Payment_Adapter {
 	 * @throws Exception Throws parameter missing exception.
 	 */
 	private static function get_document_from_order( $order ) {
-		$country = trim( strtolower( WC()->customer->get_billing_country() ) );
+		$country = $order->get_billing_country();
 		$user_id = get_post_meta( $order->get_id(), '_customer_user', true );
 
 		switch ( $country ) {
