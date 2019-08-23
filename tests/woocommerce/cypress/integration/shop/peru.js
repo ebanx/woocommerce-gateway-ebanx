@@ -13,7 +13,7 @@ const mock = (data) => (R.merge(
   {
     firstName: Faker.name.firstName(),
     lastName: Faker.name.lastName(),
-    document: Faker.random.uuid(),
+    document: '9882884-2',
     address: Faker.address.streetName(),
     city: Faker.address.city(),
     state: 'Amazonas',
