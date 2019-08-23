@@ -1,4 +1,8 @@
 # CHANGELOG
+
+# 1.40.2
+* Fix - Load customer document in WooCommerce Subscription [#817](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/817)
+
 # 1.40.1
 * Fix - Fix Customer Data refreshing upon failure [#813](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/813)
 
