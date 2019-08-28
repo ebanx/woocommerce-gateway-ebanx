@@ -492,6 +492,21 @@ class WC_EBANX_Payment_Adapter {
 		return Person::TYPE_BUSINESS;
 	}
 
+	private static function get_brazilian_document_by_user_id( $user_id ) {
+		$cpf  = get_user_meta( $user_id, '_ebanx_billing_brazil_document', true );
+		$cnpj = get_user_meta( $user_id, '_ebanx_billing_brazil_cnpj', true );
+
+		if (! empty( $cpf )) {
+			return $cpf;
+		}
+
+		if (! empty( $cnpj )) {
+			return $cnpj;
+		}
+
+		throw new Exception( 'WC_EBANX_Payment_Adapter: BRAZILIAN DOCUMENT NOT FOUND' );
+	}
+
 	/**
 	 *
 	 * @param WC_Order $order
@@ -509,9 +524,7 @@ class WC_EBANX_Payment_Adapter {
 				return get_user_meta( $user_id, '_ebanx_billing_argentina_document', true );
 				break;
 			case 'BR':
-				$cpf  = get_user_meta( $user_id, '_ebanx_billing_brazil_document', true );
-				$cnpj = get_user_meta( $user_id, '_ebanx_billing_brazil_cnpj', true );
-				return $cpf || $cnpj;
+				self::get_brazilian_document_by_user_id( $user_id );
 			case 'CL':
 				return get_user_meta( $user_id, '_ebanx_billing_chile_document', true );
 				break;
@@ -522,7 +535,7 @@ class WC_EBANX_Payment_Adapter {
 				return get_user_meta( $user_id, '_ebanx_billing_peru_document', true );
 				break;
 			default:
-				throw new Exception( 'WC_EBANX_Payment_Adapter: INVALID-DOCUMENT' );;
+				throw new Exception( 'WC_EBANX_Payment_Adapter: INVALID-DOCUMENT' );
 		}
 	}
 
