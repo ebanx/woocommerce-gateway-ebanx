@@ -1,5 +1,8 @@
 # CHANGELOG
 
+# 1.40.4
+* Fix - Return brazilian document in WooCommerce Subscription [#822](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/822)
+
 # 1.40.3
 * Fix - Load brazilian document in WooCommerce Subscription [#820](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/820)
 
