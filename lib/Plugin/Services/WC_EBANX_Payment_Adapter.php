@@ -524,7 +524,8 @@ class WC_EBANX_Payment_Adapter {
 				return get_user_meta( $user_id, '_ebanx_billing_argentina_document', true );
 				break;
 			case 'BR':
-				self::get_brazilian_document_by_user_id( $user_id );
+				return self::get_brazilian_document_by_user_id( $user_id );
+				break;
 			case 'CL':
 				return get_user_meta( $user_id, '_ebanx_billing_chile_document', true );
 				break;
