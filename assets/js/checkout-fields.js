@@ -34,7 +34,7 @@ jQuery (function ($) {
               });
               break;
           case 'COL_NIT':
-              $(document).find('.ebanx_billing_colombia_document input').mask('99999999A', {'translation': {
+              $(document).find('.ebanx_billing_colombia_document input').mask('99999999AAAAAAA', {'translation': {
                       A: { pattern: /[0-9]/, optional: true}
                   }
               });
