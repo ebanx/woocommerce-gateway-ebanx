@@ -1,4 +1,6 @@
 # CHANGELOG
+# 1.40.5
+* Fix - Colombian creditcard verification [#825](https://github.com/ebanx/woocommerce-ebanx-gateawy/pull/825)
 
 # 1.40.4
 * Fix - Return brazilian document in WooCommerce Subscription [#822](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/822)
