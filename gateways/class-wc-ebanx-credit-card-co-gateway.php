@@ -25,7 +25,7 @@ class WC_EBANX_Credit_Card_CO_Gateway extends WC_EBANX_Credit_Card_Gateway {
 
 		parent::__construct();
 
-		$this->enabled = is_array( $this->configs->settings['mexico_payment_methods'] ) ? in_array( $this->id, $this->configs->settings['colombia_payment_methods'] ) ? 'yes' : false : false;
+		$this->enabled = is_array( $this->configs->settings['colombia_payment_methods'] ) ? in_array( $this->id, $this->configs->settings['colombia_payment_methods'] ) ? 'yes' : false : false;
 	}
 
 	/**
