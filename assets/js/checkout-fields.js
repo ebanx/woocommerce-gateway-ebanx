@@ -155,9 +155,9 @@ jQuery (function ($) {
 		}
 
         if (isEbanxMethodSelected()) {
-          setTimeout(() => (
-            $('.wc_payment_methods.payment_methods.methods > li > input:checked').trigger('change')
-          ), 0);
+          setTimeout(function() {
+              $('.wc_payment_methods.payment_methods.methods > li > input:checked').trigger('change')
+          }, 0);
         }
 
 		paymentMethods.on( 'change', function( e ) {
