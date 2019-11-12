@@ -148,19 +148,19 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway {
 
 		$ebanx_billing_brazil_person_type = array(
 			'type'    => 'select',
-			'label'   => __( 'Select an option', 'woocommerce-gateway-ebanx' ),
+			'label'   => __( 'Escolha uma opção', 'woocommerce-gateway-ebanx' ),
 			'default' => 'cpf',
 			'class'   => array( 'ebanx_billing_brazil_selector', 'ebanx-select-field' ),
 			'options' => array(
-				'cpf'  => __( 'CPF - Individuals', 'woocommerce-gateway-ebanx' ),
-				'cnpj' => __( 'CNPJ - Companies', 'woocommerce-gateway-ebanx' ),
+				'cpf'  => __( 'CPF', 'woocommerce-gateway-ebanx' ),
+				'cnpj' => __( 'CNPJ', 'woocommerce-gateway-ebanx' ),
 			),
 			'priority' => 120,
 		);
 
 		$ebanx_billing_argentina_document_type = array(
 			'type'    => 'select',
-			'label'   => __( 'Select a document type', 'woocommerce-gateway-ebanx' ),
+			'label'   => __( 'Elije un documento', 'woocommerce-gateway-ebanx' ),
 			'default' => 'ARG_CUIT',
 			'class'   => array( 'ebanx_billing_argentina_selector', 'ebanx-select-field' ),
 			'options' => array(
@@ -198,7 +198,7 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway {
 
 		$ebanx_billing_colombia_document_type = array(
 			'type'    => 'select',
-			'label'   => __( 'Select a document type', 'woocommerce-gateway-ebanx' ),
+			'label'   => __( 'Elije un documento', 'woocommerce-gateway-ebanx' ),
 			'default' => 'COL_CDI',
 			'class'   => array( 'ebanx_billing_colombia_selector', 'ebanx-select-field' ),
 			'options' => array(
@@ -211,7 +211,7 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway {
 
 		$ebanx_billing_colombia_document  = array(
 			'type'    => 'text',
-			'label'   => 'Document' . self::REQUIRED_MARK,
+			'label'   => 'Documento' . self::REQUIRED_MARK,
 			'class'   => array( 'ebanx_billing_colombia_document', 'form-row-wide' ),
 			'priority' => 121,
 			'default' => isset( $dni ) ? $dni : '',
@@ -225,7 +225,7 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway {
 		);
 		$ebanx_billing_argentina_document = array(
 			'type'    => 'text',
-			'label'   => __( 'Document', 'woocommerce-gateway-ebanx' ) . self::REQUIRED_MARK,
+			'label'   => __( 'Documento', 'woocommerce-gateway-ebanx' ) . self::REQUIRED_MARK,
 			'class'   => array( 'ebanx_billing_argentina_document', 'form-row-wide' ),
 			'default' => isset( $cdi ) ? $cdi : '',
 			'priority' => 121,
