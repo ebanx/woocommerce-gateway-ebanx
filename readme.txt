@@ -3,7 +3,7 @@ Contributors: ebanxwp
 Tags: credit card, boleto, ebanx, woocommerce, payment gateway, latin america, brazil, mexico, argentina, peru, colombia, chile, ecuador, cash payment, local payment, card payment, one-click payment, alternative payments, payment processing
 Requires at least: 4.0
 Tested up to: 4.9
-Stable tag: 1.40.5
+Stable tag: 1.40.6
 License: Apache v2.0
 License URI: http://www.apache.org/licenses/LICENSE-2.0
 
@@ -146,7 +146,12 @@ Yes, you can.
 3. Enable the `Use my checkout manager fields` checkbox and fill in the field names as in step 1;
 4. There you go, you’re all set!
 
+
 == Changelog ==
+= 1.40.6 =
+* Fix - IE11 Compatibility [#827](https://github.com/ebanx/woocommerce-ebanx-gateway/pull/827)
+* Fix - Checkout fields language [#825](https://github.com/ebanx/woocommerce-ebanx-gateway/pull/828)
+
 = 1.40.5 =
 * Fix - Colombian creditcard validation [#825](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/825)
 
