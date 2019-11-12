@@ -1,4 +1,8 @@
 # CHANGELOG
+# 1.40.6
+* Fix - IE11 Compatibility [#827](https://github.com/ebanx/woocommerce-ebanx-gateway/pull/827)
+* Fix - Checkout fields language [#825](https://github.com/ebanx/woocommerce-ebanx-gateway/pull/828)
+
 # 1.40.5
 * Fix - Colombian creditcard verification [#825](https://github.com/ebanx/woocommerce-ebanx-gateway/pull/825)
 
