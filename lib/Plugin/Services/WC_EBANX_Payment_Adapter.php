@@ -62,8 +62,8 @@ class WC_EBANX_Payment_Adapter {
 			}
 		}
 
-		if ( ! empty( \WC_EBANX_Request::read( 'ebanx_device_fingerprint', null ) ) ) {
-			$payment->device_id = \WC_EBANX_Request::read( 'ebanx_device_fingerprint' );
+		if ( \WC_EBANX_Request::has( 'ebanx_device_fingerprint' ) ) {
+			$payment->deviceId = \WC_EBANX_Request::read( 'ebanx_device_fingerprint' );
 		}
 
 		$token = \WC_EBANX_Request::has( 'ebanx_debit_token' )
