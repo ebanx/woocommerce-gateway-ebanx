@@ -13,7 +13,7 @@ class WC_EBANX_My_Account {
 	 */
 	public function __construct() {
 		// Actions.
-		add_action( 'woocommerce_order_items_table', array( $this, 'order_details' ) );
+		add_action( 'woocommerce_order_details_after_order_table_items', array( $this, 'order_details' ) );
 		add_action( 'wp_enqueue_scripts', array( $this, 'assets' ), 100 );
 
 		// Filters.
