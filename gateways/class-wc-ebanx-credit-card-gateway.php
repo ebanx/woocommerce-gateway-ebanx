@@ -101,7 +101,9 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_New_Gateway {
 		if ( ! is_null( $user_cc_token ) ) {
 			$data = WC_EBANX_Payment_Adapter::transform_card_subscription_payment( $order, $this->configs, $user_cc_token );
 
-			$response = $this->ebanx->creditCard( $this->get_credit_card_config( $country, $order->get_currency() ) )->create( $data );
+			$ebanx = ( new WC_EBANX_Api( $this->configs, $order->get_currency() ) )->ebanx();
+
+			$response = $ebanx->creditCard( $this->get_credit_card_config( $country ) )->create( $data );
 
 			WC_EBANX_Subscription_Renewal_Logger::persist(
 				array(
@@ -353,7 +355,7 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_New_Gateway {
 		$order_amount       = $order->get_total();
 		$instalments_number = get_post_meta( $order->get_id(), '_instalments_number', true ) ?: 1;
 		$country            = trim( strtolower( get_post_meta( $order->get_id(), '_billing_country', true ) ) );
-		$currency           = $order->get_order_currency();
+		$currency           = $order->get_currency();
 
 		if ( WC_EBANX_Constants::COUNTRY_BRAZIL === $country && WC_EBANX_Helper::should_apply_taxes() ) {
 			$order_amount += round( ( $order_amount * WC_EBANX_Constants::BRAZIL_TAX ), 2 );
@@ -499,8 +501,8 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_New_Gateway {
 	 *
 	 * @return CreditCardConfig
 	 */
-	private function get_credit_card_config( $country_abbr, $currency_code = false ) {
-		$currency_code = strtolower( ( $currency_code ? $currency_code : get_woocommerce_currency() ) );
+	private function get_credit_card_config( $country_abbr ) {
+		$currency_code = strtolower( get_woocommerce_currency() );
 
 		$credit_card_config = new CreditCardConfig(
 			array(
