@@ -1,4 +1,8 @@
 # CHANGELOG
+# 1.41
+* Fix - fix device_id usage [#830](https://github.com/ebanx/woocommerce-ebanx-gateway/pull/830)
+* Feature - Enable custom phone number [#832](https://github.com/ebanx/woocommerce-ebanx-gateway/pull/832)
+
 # 1.40.6
 * Fix - IE11 Compatibility [#827](https://github.com/ebanx/woocommerce-ebanx-gateway/pull/827)
 * Fix - Checkout fields language [#825](https://github.com/ebanx/woocommerce-ebanx-gateway/pull/828)

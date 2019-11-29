@@ -161,6 +161,7 @@ class WC_EBANX_Payment_Adapter {
 	 */
 	private static function transform_person( $order, $configs, $names, $gateway_id ) {
 		$document = static::get_document( $configs, $names, $gateway_id );
+		$phone_number = static::get_phone_number( $order, $configs, $gateway_id );
 
 		return new Person(
 			[
@@ -169,9 +170,17 @@ class WC_EBANX_Payment_Adapter {
 				'email'       => $order->get_billing_email(),
 				'ip'          => \WC_Geolocation::get_ip_address(),
 				'name'        => $order->get_billing_first_name() . ' ' . $order->get_billing_last_name(),
-				'phoneNumber' => '' !== $order->get_billing_phone() ? $order->get_billing_phone() : \WC_EBANX_Request::read( $gateway_id, null )['billing_phone'],
+				'phoneNumber' => $phone_number,
 			]
 		);
+	}
+
+	private static function get_phone_number( $order, $configs, $gateway_id ) {
+		if ( isset( $configs->settings['checkout_custom_phone'] ) && $configs->settings['checkout_custom_phone'] === 'yes' ) {
+			return \WC_EBANX_Request::read( $configs->settings['checkout_custom_phone_field'], null );
+		}
+
+		return '' !== $order->get_billing_phone() ? $order->get_billing_phone() : \WC_EBANX_Request::read( $gateway_id, null )['billing_phone'];
 	}
 
 	/**

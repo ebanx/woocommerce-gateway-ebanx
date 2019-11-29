@@ -3,7 +3,7 @@ Contributors: ebanxwp
 Tags: credit card, boleto, ebanx, woocommerce, payment gateway, latin america, brazil, mexico, argentina, peru, colombia, chile, ecuador, cash payment, local payment, card payment, one-click payment, alternative payments, payment processing
 Requires at least: 4.0
 Tested up to: 4.9
-Stable tag: 1.40.6
+Stable tag: 1.41.0
 License: Apache v2.0
 License URI: http://www.apache.org/licenses/LICENSE-2.0
 
@@ -148,6 +148,10 @@ Yes, you can.
 
 
 == Changelog ==
+= 1.41 =
+* Fix - fix device_id usage [#830](https://github.com/ebanx/woocommerce-ebanx-gateway/pull/830)
+* Feature - Enable custom phone number [#832](https://github.com/ebanx/woocommerce-ebanx-gateway/pull/832)
+
 = 1.40.6 =
 * Fix - IE11 Compatibility [#827](https://github.com/ebanx/woocommerce-ebanx-gateway/pull/827)
 * Fix - Checkout fields language [#825](https://github.com/ebanx/woocommerce-ebanx-gateway/pull/828)
