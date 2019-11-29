@@ -533,8 +533,22 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway {
 					'class'       => 'ebanx-advanced-option ebanx-checkout-manager-field ebanx-argentina-document',
 					'placeholder' => __( 'eg: billing_argentina_document', 'woocommerce-gateway-ebanx' ),
 				),
-			)
-		);
+                'checkout_custom_phone'                 => array(
+                    'title'       => __( 'Checkout Custom Phone Field', 'woocommerce-gateway-ebanx' ),
+                    'label'       => __( 'Use phone custom fields', 'woocommerce-gateway-ebanx' ),
+                    'type'        => 'checkbox',
+                    'class'       => 'ebanx-advanced-phone-option ebanx-custom-phone-option-enable',
+                    'description' => __( 'If you make use of a Checkout Manager, please identify the HTML name attribute of the fields.', 'woocommerce-gateway-ebanx' ),
+                    'desc_tip'    => true,
+                ),
+                'checkout_custom_phone_field'      => array(
+                    'title'       => __( 'Custom Phone Field', 'woocommerce-gateway-ebanx' ),
+                    'type'        => 'text',
+                    'class'       => 'ebanx-custom-phone-option ebanx-custom-field-phone',
+                    'placeholder' => __( 'eg: billing_phone', 'woocommerce-gateway-ebanx' ),
+                ),
+            )
+        );
 
 		$fields = array_merge(
 			$fields, array(

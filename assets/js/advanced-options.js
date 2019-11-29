@@ -13,6 +13,9 @@
 		peru: $( '#woocommerce_ebanx-global_peru_payment_methods' )
   };
 
+  var customPhoneToggler = $('#woocommerce_ebanx-global_checkout_custom_phone');
+  var customPhoneField = $('#woocommerce_ebanx-global_checkout_custom_phone_field');
+
   var disableFields = function(jqElementList) {
     jqElementList.closest('tr').hide();
   };
@@ -83,6 +86,20 @@
     .click(function () {
       updateFields();
     });
+
+  var updatePhoneField = function() {
+    if (customPhoneToggler.length === 1 && customPhoneToggler[0].checked) {
+      enableFields(customPhoneField)
+    } else {
+      disableFields(customPhoneField);
+    }
+  };
+  updatePhoneField(customPhoneField);
+
+  customPhoneToggler
+      .click(function () {
+        updatePhoneField();
+      });
 
   modesField.change(function () {
     updateFields();

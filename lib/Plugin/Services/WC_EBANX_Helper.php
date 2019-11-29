@@ -199,6 +199,7 @@ abstract class WC_EBANX_Helper {
 		$list['configs']['show_local_amount']        = self::get_config_value( 'show_local_amount', $configs->settings );
 		$list['configs']['show_exchange_rate']       = self::get_config_value( 'show_exchange_rate', $configs->settings );
 		$list['configs']['add_iof']                  = self::get_config_value( 'add_iof_to_local_amount_enabled', $configs->settings );
+		$list['configs']['checkout_custom_phone']    = self::get_config_value('checkout_custom_phone', $configs->settings );
 
 		$list = self::create_country_config( 'ar', $configs, $list );
 		$list = self::create_country_config( 'br', $configs, $list );
