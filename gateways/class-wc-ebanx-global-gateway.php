@@ -466,6 +466,7 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway {
 					'options'     => array(
 						'cpf'  => __( 'CPF - Individuals', 'woocommerce-gateway-ebanx' ),
 						'cnpj' => __( 'CNPJ - Companies', 'woocommerce-gateway-ebanx' ),
+						'shipping_document_br' => __( 'Product Recipient CPF/CPNJ', 'woocommerce-gateway-ebanx' ),
 					),
 					'default'     => array( 'cpf' ),
 					'description' => __( 'In order to process with the EBANX Plugin in Brazil there a few mandatory fields such as CPF identification for individuals and CNPJ for companies.', 'woocommerce-gateway-ebanx' ),

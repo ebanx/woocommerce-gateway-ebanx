@@ -180,6 +180,14 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway {
 			'priority' => 121,
 		);
 
+		$ebanx_shipping_brazil_document = array(
+			'type'    => 'text',
+			'label'   => 'Shipping recipient CPF/CNPJ' . self::REQUIRED_MARK,
+			'class'   => array( 'ebanx_billing_brazil_recipient_document', 'form-row-wide' ),
+			'default' => isset( $cpf ) ? $cpf : (isset($cnpj) ? $cnpj : ''),
+			'priority' => 122,
+		);
+
 		$ebanx_billing_brazil_cnpj = array(
 			'type'    => 'text',
 			'label'   => 'CNPJ' . self::REQUIRED_MARK,
@@ -242,6 +250,10 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway {
 				$fields['billing']['ebanx_billing_brazil_document'] = $ebanx_billing_brazil_document;
 			}
 
+			if ( in_array( 'shipping_document_br', $fields_options ) ) {
+				$fields['billing']['ebanx_billing_brazil_recipient_document'] = $ebanx_shipping_brazil_document;
+			}
+
 			// CNPJ is enabled.
 			if ( in_array( 'cnpj', $fields_options ) ) {
 				$fields['billing']['ebanx_billing_brazil_cnpj'] = $ebanx_billing_brazil_cnpj;
@@ -274,27 +286,28 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway {
 	public function get_billing_field_names() {
 		return array(
 			// Brazil General.
-			'ebanx_billing_brazil_person_type'      => $this->get_checkout_manager_settings_or_default( 'checkout_manager_brazil_person_type', 'ebanx_billing_brazil_person_type' ),
+			'ebanx_billing_brazil_person_type'        => $this->get_checkout_manager_settings_or_default( 'checkout_manager_brazil_person_type', 'ebanx_billing_brazil_person_type' ),
+			'ebanx_billing_brazil_recipient_document' => $this->get_checkout_manager_settings_or_default( 'checkout_manager_shipping_document_br', 'ebanx_billing_brazil_recipient_document' ),
 
 			// Brazil CPF.
-			'ebanx_billing_brazil_document'         => $this->get_checkout_manager_settings_or_default( 'checkout_manager_cpf_brazil', 'ebanx_billing_brazil_document' ),
+			'ebanx_billing_brazil_document'           => $this->get_checkout_manager_settings_or_default( 'checkout_manager_cpf_brazil', 'ebanx_billing_brazil_document' ),
 
 			// Brazil CNPJ.
-			'ebanx_billing_brazil_cnpj'             => $this->get_checkout_manager_settings_or_default( 'checkout_manager_cnpj_brazil', 'ebanx_billing_brazil_cnpj' ),
+			'ebanx_billing_brazil_cnpj'               => $this->get_checkout_manager_settings_or_default( 'checkout_manager_cnpj_brazil', 'ebanx_billing_brazil_cnpj' ),
 
 			// Chile Fields.
-			'ebanx_billing_chile_document'          => $this->get_checkout_manager_settings_or_default( 'checkout_manager_chile_document', 'ebanx_billing_chile_document' ),
+			'ebanx_billing_chile_document'            => $this->get_checkout_manager_settings_or_default( 'checkout_manager_chile_document', 'ebanx_billing_chile_document' ),
 
 			// Colombia Fields.
-			'ebanx_billing_colombia_document_type'  => $this->get_checkout_manager_settings_or_default( 'checkout_manager_colombia_document_type', 'ebanx_billing_colombia_document_type' ),
-			'ebanx_billing_colombia_document'       => $this->get_checkout_manager_settings_or_default( 'checkout_manager_colombia_document', 'ebanx_billing_colombia_document' ),
+			'ebanx_billing_colombia_document_type'    => $this->get_checkout_manager_settings_or_default( 'checkout_manager_colombia_document_type', 'ebanx_billing_colombia_document_type' ),
+			'ebanx_billing_colombia_document'         => $this->get_checkout_manager_settings_or_default( 'checkout_manager_colombia_document', 'ebanx_billing_colombia_document' ),
 
 			// Argentina Fields.
-			'ebanx_billing_argentina_document_type' => $this->get_checkout_manager_settings_or_default( 'checkout_manager_argentina_document_type', 'ebanx_billing_argentina_document_type' ),
-			'ebanx_billing_argentina_document'      => $this->get_checkout_manager_settings_or_default( 'checkout_manager_argentina_document', 'ebanx_billing_argentina_document' ),
+			'ebanx_billing_argentina_document_type'   => $this->get_checkout_manager_settings_or_default( 'checkout_manager_argentina_document_type', 'ebanx_billing_argentina_document_type' ),
+			'ebanx_billing_argentina_document'        => $this->get_checkout_manager_settings_or_default( 'checkout_manager_argentina_document', 'ebanx_billing_argentina_document' ),
 
 			// Peru Fields.
-			'ebanx_billing_peru_document'           => $this->get_checkout_manager_settings_or_default( 'checkout_manager_peru_document', 'ebanx_billing_peru_document' ),
+			'ebanx_billing_peru_document'             => $this->get_checkout_manager_settings_or_default( 'checkout_manager_peru_document', 'ebanx_billing_peru_document' ),
 		);
 	}
 
