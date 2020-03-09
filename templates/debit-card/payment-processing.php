@@ -7,6 +7,8 @@
  * @version 2.0.0
  */
 
+use EBANX\Plugin\Services\WC_EBANX_Constants;
+
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
