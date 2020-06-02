@@ -32,7 +32,7 @@
     "faker": "git://github.com/marak/Faker.js",
     "joi": "^14.3.1",
     "lint-staged": "^8.1.4",
-    "npm": "^6.10.3",
+    "npm": "^6.13.4",
     "pre-commit": "^1.2.2",
     "ramda": "^0.26.1"
   }
