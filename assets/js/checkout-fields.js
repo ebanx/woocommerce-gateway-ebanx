@@ -142,12 +142,12 @@ jQuery (function ($) {
     .change();
 
 	$( 'body' ).on( 'updated_checkout', function () {
-		var paymentMethods = $( '.wc_payment_methods.payment_methods.methods > li > input' );
+		var paymentMethods = $( '.wc_payment_methods.payment_methods.methods input[id*=payment_method_ebanx]' );
 
 		if (wc_ebanx_checkout_params.is_sandbox) {
 			var messages = wc_ebanx_checkout_params.sandbox_tag_messages;
 			var localizedMessage = $( '#billing_country' ).val() === 'BR' ? messages['pt-br'] : messages['es'];
-			var methodsLabels = $( '.wc_payment_methods.payment_methods.methods > li > label' );
+			var methodsLabels = $( '.wc_payment_methods.payment_methods.methods label[for*=payment_method_ebanx]' );
 			var ebanxMethodsLabels = methodsLabels.filter(function (index, elm) {
 				return /ebanx/.test( $( elm ).attr( 'for' ) );
 			});
@@ -156,7 +156,7 @@ jQuery (function ($) {
 
         if (isEbanxMethodSelected()) {
           setTimeout(function() {
-              $('.wc_payment_methods.payment_methods.methods > li > input:checked').trigger('change')
+              $('.wc_payment_methods.payment_methods.methods input:checked[id*=payment_method_ebanx]').trigger('change')
           }, 0);
         }
 
