@@ -1,4 +1,7 @@
 # CHANGELOG
+# 1.41.3
+* Fix - Fix compability with some themes [#842](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/842)
+
 # 1.41.2
 * Fix - Fix stable version tag [#838](https://github.com/ebanx/woocommerce-ebanx-gateway/pull/838)
 
