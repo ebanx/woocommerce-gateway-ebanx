@@ -9,6 +9,9 @@
  * License: MIT
  * Text Domain: woocommerce-gateway-ebanx
  * Domain Path: /languages
+ * Requires PHP: 5.6
+ * Requires at least: 4.0.0
+ * Tested up to: 5.5.3
  *
  * @package WooCommerce_EBANX
  */
