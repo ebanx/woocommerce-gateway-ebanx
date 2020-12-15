@@ -34,7 +34,7 @@ before_install:
   - nvm use stable
 
 install:
-  - composer update
+  - composer self-update --1
   - cd $TRAVIS_BUILD_DIR/tests && npm ci
   - cd $TRAVIS_BUILD_DIR
 
@@ -42,7 +42,6 @@ script:
   - bash ./tests/bin/test.sh
 
 stages:
-  - lint
   - unit
   - admin_tests
   - test
@@ -51,11 +50,6 @@ stages:
 
 jobs:
   include:
-    - stage: lint
-      env:
-        - TEST_COUNTRY=
-      script:
-        - travis_wait bash ./.scripts/phpcs.sh
     - stage: unit
       env:
         - TEST_COUNTRY=
