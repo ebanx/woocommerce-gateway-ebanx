@@ -9,17 +9,13 @@
         "ebanx/benjamin": "1.19.0"
     },
     "require-dev": {
-        "dealerdirect/phpcodesniffer-composer-installer": "^0.4.3",
         "phpunit/phpunit": "^4.8",
-        "squizlabs/php_codesniffer": "*",
         "wp-coding-standards/wpcs": "^0.14",
         "exussum12/coverage-checker": "^0.8.0",
         "10up/wp_mock": "0.2.0"
     },
     "scripts": {
-        "test": "phpunit",
-        "test-all": "composer test && composer style-check",
-        "style-check" : "phpcs -p ./"
+        "test": "phpunit"
     },
     "autoload": {
         "psr-4": {

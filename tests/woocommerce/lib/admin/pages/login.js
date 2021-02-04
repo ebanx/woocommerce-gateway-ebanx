@@ -15,7 +15,7 @@ export default class Login {
       .get('#user_pass')
       .should('be.visible')
       .type(Cypress.env('ADMIN_PASSWORD'))
-      .get('#wp-submit')
+      .get('#wp-submit', { timeout: 30000 })
       .should('be.visible')
       .click();
   }
