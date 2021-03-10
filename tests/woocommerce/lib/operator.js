@@ -41,6 +41,18 @@ export default class Woocommerce {
     return this;
   }
 
+  buyWonderWomansPurseWithPagofacilEfectivoToPersonal(data) {
+    this[buyWonderWomansPurse]();
+
+    this.pages.checkout
+      .placeWithEfectivo(data, () => {
+        this.pages.thankYou
+          .stillOnPagofacilEfectivo();
+      });
+
+    return this;
+  }
+
   cantBuyJeansWithEfectivo(data) {
     this[buyWonderWomansPurse]();
 

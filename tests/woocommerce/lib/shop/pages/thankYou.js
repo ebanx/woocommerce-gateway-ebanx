@@ -94,7 +94,7 @@ export default class ThankYou {
     this.cy
       .get('#post-6 > div > div > div > section.woocommerce-order-details > div:nth-child(7) > iframe')
       .then(($oxxoIframe) => {
-        expect($oxxoIframe.contents().find('.baloto-details__item .affiliation_code').length).to.equal(1);
+        expect($oxxoIframe.contents().find('.voucher-generated').length).to.equal(1);
       });
 
     return this;
@@ -124,7 +124,7 @@ export default class ThankYou {
     this.cy
       .get('#post-6 > div > div > div > section > div:nth-child(6) > iframe')
       .then(($pagoEfectivoIframe) => {
-        expect($pagoEfectivoIframe.contents().find('.cip-code').length).to.equal(1);
+        expect($pagoEfectivoIframe.contents().find('#cip_code').length).to.equal(1);
       });
 
     return this;
@@ -137,6 +137,16 @@ export default class ThankYou {
       .get('#post-6 > div > div > div > section.woocommerce-order-details > div:nth-child(7) > iframe')
       .then(($efectivoIframe) => {
         expect($efectivoIframe.contents().find('.barcode.img-responsive').length).to.equal(1);
+      });
+  }
+
+  stillOnPagofacilEfectivo() {
+    this[stillOn]('Efectivo');
+
+    this.cy
+      .get('#post-6 > div > div > div > section.woocommerce-order-details > div:nth-child(7) > iframe')
+      .then(($efectivoIframe) => {
+        expect($efectivoIframe.contents().find('.voucher > .voucher_info').length).to.equal(1);
       });
   }
 }
