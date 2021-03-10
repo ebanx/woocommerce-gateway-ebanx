@@ -94,7 +94,7 @@ export default class ThankYou {
     this.cy
       .get('#post-6 > div > div > div > section.woocommerce-order-details > div:nth-child(7) > iframe')
       .then(($oxxoIframe) => {
-        expect($oxxoIframe.contents().find('.baloto-details__item .affiliation_code').length).to.equal(1);
+        expect($oxxoIframe.contents().find('.voucher-generated').length).to.equal(1);
       });
 
     return this;
