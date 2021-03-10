@@ -139,4 +139,14 @@ export default class ThankYou {
         expect($efectivoIframe.contents().find('.barcode.img-responsive').length).to.equal(1);
       });
   }
+
+  stillOnPagofacilEfectivo() {
+    this[stillOn]('Efectivo');
+
+    this.cy
+      .get('#post-6 > div > div > div > section.woocommerce-order-details > div:nth-child(7) > iframe')
+      .then(($efectivoIframe) => {
+        expect($efectivoIframe.contents().find('.voucher > .voucher_info').length).to.equal(1);
+      });
+  }
 }

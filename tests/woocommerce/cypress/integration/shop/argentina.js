@@ -52,7 +52,7 @@ describe('Woocommerce', () => {
       });
 
       it('can buy `wonder womans purse` using Pagofacil to personal', () => {
-        woocommerce.buyWonderWomansPurseWithEfectivoToPersonal(mock(
+        woocommerce.buyWonderWomansPurseWithPagofacilEfectivoToPersonal(mock(
           {
             paymentMethod: defaults.pay.api.DEFAULT_VALUES.paymentMethods.ar.efectivo.id,
             paymentType: defaults.pay.api.DEFAULT_VALUES.paymentMethods.ar.efectivo.types.pagofacil,
