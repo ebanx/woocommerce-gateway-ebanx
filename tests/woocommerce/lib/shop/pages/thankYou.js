@@ -124,7 +124,7 @@ export default class ThankYou {
     this.cy
       .get('#post-6 > div > div > div > section > div:nth-child(6) > iframe')
       .then(($pagoEfectivoIframe) => {
-        expect($pagoEfectivoIframe.contents().find('.cip-code').length).to.equal(1);
+        expect($pagoEfectivoIframe.contents().find('#cip_code').length).to.equal(1);
       });
 
     return this;
