@@ -802,8 +802,11 @@ if ( ! class_exists( 'WC_EBANX' ) ) {
 		 * @return void
 		 */
 		public function ebanx_metabox_payment_link_save( $post_id ) {
-			$order        = wc_get_order( $post_id );
-			$checkout_url = get_post_meta( $order->id, '_ebanx_checkout_url', true );
+			$order = wc_get_order( $post_id );
+			if ( ! $order ) {
+				return;
+			}
+			$checkout_url = get_post_meta( $order->get_id(), '_ebanx_checkout_url', true );
 
 			// Check if is an EBANX request.
 			if ( WC_EBANX_Request::has( 'create_ebanx_payment_link' )
