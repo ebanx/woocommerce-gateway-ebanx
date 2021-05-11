@@ -5,10 +5,15 @@
  * Description: Offer Latin American local payment methods & increase your conversion rates with the solution used by AliExpress, AirBnB and Spotify in Brazil.
  * Author: EBANX
  * Author URI: https://www.ebanx.com/business/en
- * Version: 1.41.3
+ * Version: 1.41.5
  * License: MIT
  * Text Domain: woocommerce-gateway-ebanx
  * Domain Path: /languages
+ * Requires PHP: 7.3
+ * Requires at least: 5.5.0
+ * Tested up to: 5.6.2
+ * WC requires at least: 4.5.0
+ * WC tested up to: 5.0.0
  *
  * @package WooCommerce_EBANX
  */
@@ -258,6 +263,7 @@ if ( ! class_exists( 'WC_EBANX' ) ) {
 			$methods[] = 'WC_EBANX_Credit_Card_BR_Gateway';
 			$methods[] = 'WC_EBANX_Tef_Gateway';
 			$methods[] = 'WC_EBANX_Bank_Transfer_Gateway';
+			$methods[] = 'WC_EBANX_Pix_Gateway';
 			return $methods;
 		}
 
@@ -663,6 +669,7 @@ if ( ! class_exists( 'WC_EBANX' ) ) {
 			include_once WC_EBANX_GATEWAYS_DIR . 'class-wc-ebanx-credit-card-br-gateway.php';
 			include_once WC_EBANX_GATEWAYS_DIR . 'class-wc-ebanx-tef-gateway.php';
 			include_once WC_EBANX_GATEWAYS_DIR . 'class-wc-ebanx-bank-transfer-gateway.php';
+			include_once WC_EBANX_GATEWAYS_DIR . 'class-wc-ebanx-pix-gateway.php';
 
 			// Mexico Gateways.
 			include_once WC_EBANX_GATEWAYS_DIR . 'class-wc-ebanx-credit-card-mx-gateway.php';
