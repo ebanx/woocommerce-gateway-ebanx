@@ -4,9 +4,19 @@
  * Plugin Name: EBANX Payment Gateway for WooCommerce
  * Plugin URI: https://www.ebanx.com/business/en/developers/integrations/extensions-and-plugins/woocommerce-plugin
  * Description: Offer Latin American local payment methods & increase your conversion rates with the solution used by
- * AliExpress, AirBnB and Spotify in Brazil. Author: EBANX Author URI: https://www.ebanx.com/business/en Version:
- * 1.41.5 License: MIT Text Domain: woocommerce-gateway-ebanx Domain Path: /languages Requires PHP: 7.3 Requires at
- * least: 5.5.0 Tested up to: 5.6.2 WC requires at least: 4.5.0 WC tested up to: 5.0.0
+ * AliExpress, AirBnB and Spotify in Brazil.
+ * Author: EBANX
+ * Author URI: https://www.ebanx.com/business/en
+ * Version: 1.41.5
+ * License: MIT
+ * Text Domain: woocommerce-gateway-ebanx
+ * Domain Path: /languages
+ * Requires PHP: 7.3
+ * Requires at least: 5.5.0
+ * Tested up to: 5.7.1
+ * WC requires at least: 4.5.0
+ * WC tested up to: 5.3.0
+ *
  * @package WooCommerce_EBANX
  */
 
