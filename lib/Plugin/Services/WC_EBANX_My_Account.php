@@ -86,6 +86,9 @@ class WC_EBANX_My_Account {
 			case 'ebanx-eft':
 				\WC_EBANX_Eft_Gateway::thankyou_page( $order );
 				break;
+			case 'ebanx-pix':
+				\WC_EBANX_Pix_Gateway::thankyou_page($order);
+				break;
 			case 'ebanx-oxxo':
 				\WC_EBANX_Oxxo_Gateway::thankyou_page( $order );
 				break;
