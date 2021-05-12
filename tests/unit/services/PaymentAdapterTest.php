@@ -17,7 +17,7 @@ class PaymentAdapterTest extends TestCase {
 	/* @var CheckoutRequestBuilder */
 	private $checkout_request_builder;
 
-	protected function setUp() {
+	protected function setUp(): void {
 		parent::setUp();
 
 		$this->global_config_builder = new GlobalConfigBuilder();
