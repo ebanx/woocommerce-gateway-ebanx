@@ -250,8 +250,8 @@ class WC_EBANX_Payment_Adapter {
 	 * @throws Exception Throws parameter missing exception.
 	 */
 	public static function get_brazilian_document( $configs, $names, $gateway_id ) {
-		$cpf  = \WC_EBANX_Request::read( $names['ebanx_billing_brazil_document'], null ) ?: \WC_EBANX_Request::read( $gateway_id, null )['ebanx_billing_brazil_document'];
-		$cnpj = \WC_EBANX_Request::read( $names['ebanx_billing_brazil_cnpj'], null ) ?: \WC_EBANX_Request::read( $gateway_id, null )['ebanx_billing_brazil_cnpj'];
+		$cpf  = \WC_EBANX_Request::read( $names['ebanx_billing_brazil_document']?? '', null ) ?: \WC_EBANX_Request::read( $gateway_id, null )['ebanx_billing_brazil_document'];
+		$cnpj = \WC_EBANX_Request::read( $names['ebanx_billing_brazil_cnpj']?? '', null ) ?: \WC_EBANX_Request::read( $gateway_id, null )['ebanx_billing_brazil_cnpj'];
 
 		$person_type = static::get_person_type( $configs, $names );
 

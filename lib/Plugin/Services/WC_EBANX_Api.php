@@ -51,9 +51,9 @@ class WC_EBANX_Api {
 	private function get_config( $currency ) {
 		return new Config(
 			array(
-				'integrationKey'        => $this->configs->settings['live_private_key'],
-				'sandboxIntegrationKey' => $this->configs->settings['sandbox_private_key'],
-				'isSandbox'             => 'yes' === $this->configs->settings['sandbox_mode_enabled'],
+				'integrationKey'        => $this->configs->settings['live_private_key'] ?? '',
+				'sandboxIntegrationKey' => $this->configs->settings['sandbox_private_key'] ?? '',
+				'isSandbox'             => ! isset( $this->configs->settings['sandbox_mode_enabled'] ) || 'yes' === $this->configs->settings['sandbox_mode_enabled'],
 				'baseCurrency'          => $this->currency,
 				'notificationUrl'       => esc_url( home_url( '/' ) ),
 				'redirectUrl'           => esc_url( home_url( '/' ) ),
@@ -72,13 +72,20 @@ class WC_EBANX_Api {
 
 		$credit_card_config = new CreditCardConfig(
 			array(
-				'maxInstalments'      => $this->configs->settings[ "{$country_abbr}_credit_card_instalments" ],
-				'minInstalmentAmount' => isset( $this->configs->settings[ "{$country_abbr}_min_instalment_value_$currency_code" ] ) ? $this->configs->settings[ "{$country_abbr}_min_instalment_value_$currency_code" ] : null,
+				'maxInstalments'      => $this->configs->settings[ "{$country_abbr}_credit_card_instalments" ] ?? 1,
+				'minInstalmentAmount' => $this->configs->settings["{$country_abbr}_min_instalment_value_$currency_code"] ?? 1,
 			)
 		);
 
 		for ( $i = 1; $i <= $this->configs->settings[ "{$country_abbr}_credit_card_instalments" ]; $i++ ) {
-			$credit_card_config->addInterest( $i, floatval( $this->configs->settings[ "{$country_abbr}_interest_rates_" . sprintf( '%02d', $i ) ] ) );
+			$key = "{$country_abbr}_interest_rates_" . sprintf( '%02d', $i );
+			$interest = 0;
+
+			if (isset($this->configs->settings[ $key ])) {
+				$interest = $this->configs->settings[ $key ];
+			}
+
+			$credit_card_config->addInterest( $i, floatval( $interest ) );
 		}
 
 		return $credit_card_config;

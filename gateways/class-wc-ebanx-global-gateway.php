@@ -41,13 +41,17 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway {
 			'ebanx-banking-ticket',
 			'ebanx-tef',
 			'ebanx-banktransfer',
-			'ebanx-pix'
+			'ebanx-pix',
+			'ebanx-wallet-paypal',
+			'ebanx-wallet-picpay',
+			'ebanx-wallet-mercadopago',
 		),
 		'mexico_payment_methods'          => array(
 			'ebanx-credit-card-mx',
 			'ebanx-debit-card',
 			'ebanx-oxxo',
 			'ebanx-spei',
+			'ebanx-wallet-mercadopago',
 		),
 		'bolivia_payment_methods'         => array(
 			'ebanx-pagosnet',
@@ -57,11 +61,13 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway {
 			'ebanx-servipag',
 			'ebanx-webpay',
 			'ebanx-multicaja',
+			'ebanx-wallet-machpay',
 		),
 		'colombia_payment_methods'        => array(
 			'ebanx-credit-card-co',
 			'ebanx-eft',
 			'ebanx-baloto',
+			'ebanx-wallet-nequi',
 		),
 		'peru_payment_methods'            => array(
 			'ebanx-safetypay',
@@ -70,6 +76,7 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway {
 		'argentina_payment_methods'       => array(
 			'ebanx-credit-card-ar',
 			'ebanx-efectivo',
+			'ebanx-wallet-mercadopago',
 		),
 		'ecuador_payment_methods'         => array(
 			'ebanx-safetypay',
@@ -200,6 +207,9 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway {
 					'ebanx-tef'            => 'Online Banking (TEF)',
 					'ebanx-banktransfer'   => 'EBANX Bank Transfer',
 					'ebanx-pix'            => 'Pix',
+					'ebanx-wallet-mercadopago'  => 'MercadoPago',
+					'ebanx-wallet-paypal'  => 'PayPal',
+					'ebanx-wallet-picpay'  => 'Picpay',
 				),
 				'default' => array(
 					'ebanx-credit-card-br',
@@ -207,6 +217,9 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway {
 					'ebanx-tef',
 					'ebanx-banktransfer',
 					'ebanx-pix',
+					'ebanx-wallet-mercadopago',
+					'ebanx-wallet-paypal',
+					'ebanx-wallet-picpay',
 				),
 			),
 			'mexico_payment_methods'    => array(
@@ -218,12 +231,14 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway {
 					'ebanx-debit-card'     => 'Debit Card',
 					'ebanx-oxxo'           => 'OXXO',
 					'ebanx-spei'           => 'SPEI',
+					'ebanx-wallet-mercadopago'  => 'MercadoPago',
 				),
 				'default' => array(
 					'ebanx-credit-card-mx',
 					'ebanx-debit-card',
 					'ebanx-oxxo',
 					'ebanx-spei',
+					'ebanx-wallet-mercadopago',
 				),
 			),
 			'bolivia_payment_methods'   => array(
@@ -246,12 +261,14 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway {
 					'ebanx-multicaja'  => 'Multicaja',
 					'ebanx-sencillito' => 'Sencillito',
 					'ebanx-servipag'   => 'Servipag',
+					'ebanx-wallet-machpay'  => 'MACH Pay',
 				),
 				'default' => array(
 					'ebanx-webpay',
 					'ebanx-multicaja',
 					'ebanx-sencillito',
 					'ebanx-servipag',
+					'ebanx-wallet-machpay',
 				),
 			),
 			'colombia_payment_methods'  => array(
@@ -262,11 +279,13 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway {
 					'ebanx-credit-card-co' => 'Credit Card',
 					'ebanx-eft'            => 'PSE - Pago Seguros en Línea (EFT)',
 					'ebanx-baloto'         => 'Baloto',
+					'ebanx-wallet-nequi'  => 'Nequi',
 				),
 				'default' => array(
 					'ebanx-credit-card-co',
 					'ebanx-eft',
 					'ebanx-baloto',
+					'ebanx-wallet-nequi'
 				),
 			),
 			'peru_payment_methods'      => array(
@@ -289,10 +308,12 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway {
 				'options' => array(
 					'ebanx-credit-card-ar' => 'Credit Card',
 					'ebanx-efectivo'       => 'Efectivo',
+					'ebanx-wallet-mercadopago'  => 'MercadoPago',
 				),
 				'default' => array(
 					'ebanx-credit-card-ar',
 					'ebanx-efectivo',
+					'ebanx-wallet-mercadopago',
 				),
 			),
 			'ecuador_payment_methods'   => array(

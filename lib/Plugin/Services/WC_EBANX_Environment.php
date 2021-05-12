@@ -77,7 +77,7 @@ class WC_EBANX_Environment {
 			}
 		}
 
-		$this->web_server = $web_server;
+		$this->web_server = $web_server??null;
 
 		$database_server = new \stdClass();
 		// @codingStandardsIgnoreStart
