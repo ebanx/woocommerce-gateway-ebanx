@@ -2,7 +2,7 @@ version: '3'
 
 services:
   woocommerce:
-    image: ebanx/woocommerce-gateway-ebanx
+    image: ebanx/woocommerce-gateway-ebanx:1.41.3
     environment:
       WORDPRESS_DB_USER: root
       WORDPRESS_DB_PASSWORD: root
