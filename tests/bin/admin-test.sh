@@ -29,6 +29,7 @@ setup_docker() {
 	echo setup_docker
 	sudo service mysql stop
 	cd $TRAVIS_BUILD_DIR
+        echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
 	docker-compose up -d
 }
 
