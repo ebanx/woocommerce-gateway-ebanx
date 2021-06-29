@@ -195,6 +195,12 @@ class WC_EBANX_Payment_Adapter {
 	private static function get_document( $configs, $names, $gateway_id ) {
 		$country = trim( strtolower( WC()->customer->get_billing_country() ) );
 
+		if ('no' === $configs->settings['require_documents']) {
+			return '';
+		}
+
+		error_log(print_r($configs, true));
+
 		switch ( $country ) {
 			case WC_EBANX_Constants::COUNTRY_ARGENTINA:
 				return static::get_argentinian_document( $names, $gateway_id );

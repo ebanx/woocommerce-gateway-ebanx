@@ -88,6 +88,7 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway {
 		'co_interest_rates_enabled'       => 'no',
 		'mx_interest_rates_enabled'       => 'no',
 		'manual_review_enabled'           => 'no',
+		'require_documents'               => 'yes',
 		'show_local_amount'               => 'yes',
 		'add_iof_to_local_amount_enabled' => 'yes',
 		'show_exchange_rate'              => 'no',
@@ -346,6 +347,14 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway {
 				'description' => __( 'Enabling Manual Review all your transactions will be analyzed manually by EBANX who will approve it or not. The decision will be made according to our risk policy, trying to reduce the number of chargebacks.', 'woocommerce-gateway-ebanx' ),
 				'desc_tip'    => true,
 				'class'       => 'ebanx-payments-option manual-review-checkbox',
+			),
+			'require_documents'           => array(
+				'type'        => 'checkbox',
+				'title'       => __( 'Require customer documents?', 'woocommerce-gateway-ebanx' ),
+				'label'       => __( 'Require customer documents?', 'woocommerce-gateway-ebanx' ),
+				'description' => __( 'Require customer documents in countries where they are required?', 'woocommerce-gateway-ebanx' ),
+				'desc_tip'    => true,
+				'class'       => 'ebanx-payments-option require-documents-checkbox',
 			),
 		);
 		$interest_rates_array = array_map(
