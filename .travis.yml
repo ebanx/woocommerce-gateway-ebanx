@@ -44,7 +44,6 @@ script:
 
 stages:
   - unit
-  - admin_tests
   - test
   - release
   - deploy
