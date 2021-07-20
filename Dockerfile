@@ -1,4 +1,4 @@
-FROM php:5-apache
+FROM php:7-apache
 
 ARG WORDPRESS_DB_USER=root
 ARG WORDPRESS_DB_PASSWORD=root
@@ -9,14 +9,14 @@ ARG WORDPRESS_DB_HOST=mysql
 RUN set -ex; \
     \
     apt-get update; \
-    apt-get install -y --force-yes --no-install-recommends \
+    apt-get install -y --no-install-recommends \
       libjpeg-dev \
       libpng-dev \
-      mysql-client \
+      mariadb-client \
     ; \
-    rm -rf /var/lib/apt/lists/*; \
-    \
-    docker-php-ext-configure gd --with-png-dir=/usr --with-jpeg-dir=/usr; \
+    rm -rf /var/lib/apt/lists/*
+
+RUN docker-php-ext-configure gd; \
     docker-php-ext-install gd mysqli opcache pdo pdo_mysql
 
 RUN { \

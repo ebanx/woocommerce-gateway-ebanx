@@ -22,6 +22,6 @@ setup_docker() {
   docker-compose up -d
 }
 
-setup_docker
-
-while ! curl -s http://localhost > /dev/null; do echo waiting for woocommerce-container; sleep 10; done; run_tests
+# setup_docker
+#
+# while ! curl -s http://localhost > /dev/null; do echo waiting for woocommerce-container; sleep 10; done; run_tests
