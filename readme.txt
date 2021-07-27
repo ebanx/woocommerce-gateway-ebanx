@@ -1,9 +1,9 @@
 === EBANX Payment Gateway for WooCommerce ===
 Contributors: ebanxwp
 Tags: credit card, boleto, ebanx, woocommerce, payment gateway, latin america, brazil, mexico, argentina, peru, colombia, chile, ecuador, cash payment, local payment, card payment, one-click payment, alternative payments, payment processing
-Requires at least: 4.0
-Tested up to: 4.9
-Stable tag: 1.41.3
+Requires at least: 5.5
+Tested up to: 5.8
+Stable tag: 2.0.0
 License: Apache v2.0
 License URI: http://www.apache.org/licenses/LICENSE-2.0
 
@@ -103,7 +103,7 @@ On the [EBANX Developer’s Academy](https://developers.ebanx.com/integrations/e
   * EBANX Boleto, Cash Payment
   * Hipercard, Elo, and Aura Domestic Credit Cards
   * Online Debit Transfer
-  * EBANX Account, Debit Transfer
+  * EBANX Account, Debit Transfer, PIX
 * Mexico
   * OXXO, Cash Payment
   * Debit & Credit Cards
@@ -148,6 +148,13 @@ Yes, you can.
 
 
 == Changelog ==
+= 2.0.0 =
+* Add PIX as payment available to Brazil
+* Update dependencies and versions*
+* Add an option to the admin panel to allow the merchant to not require tax ids
+
+> Because of the versions update, we are jumping to the next major version: `2.0.0`. This will break the legacy.
+
 = 1.41.3 =
 * Fix - Fix compability with some themes [#842](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/842)
 

@@ -2,14 +2,14 @@ version: '3'
 
 services:
   woocommerce:
-    image: ebanx/woocommerce-gateway-ebanx:1.41.5
+    image: ebanx/woocommerce-gateway-ebanx:2.0.0
     build: .
     environment:
       WORDPRESS_DB_USER: root
       WORDPRESS_DB_PASSWORD: root
       WORDPRESS_DB_NAME: wordpress
       WORDPRESS_DB_HOST: mysql
-      EBANX_WC_PLUGIN_VERSION: 5.4.1
+      EBANX_WC_PLUGIN_VERSION: 5.8.0
       EBANX_STOREFRONT_THEME_VERSION: 3.7.0
       EBANX_ADMIN_USERNAME: ebanx
       EBANX_ADMIN_PASSWORD: ebanx

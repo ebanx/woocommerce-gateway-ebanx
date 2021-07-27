@@ -1,4 +1,12 @@
 # CHANGELOG
+# 2.0.0
+
+* Add PIX as payment available to Brazil
+* Update dependencies and versions*
+* Add an option to the admin panel to allow the merchant to not require tax ids
+
+> Because of the versions update, we are jumping to the next major version: `2.0.0`. This will break the legacy.
+
 # 1.41.3
 * Fix - Fix compability with some themes [#842](https://github.com/ebanx/woocommerce-gateway-ebanx/pull/842)
 

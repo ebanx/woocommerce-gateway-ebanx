@@ -7,15 +7,15 @@
  * AliExpress, AirBnB and Spotify in Brazil.
  * Author: EBANX
  * Author URI: https://www.ebanx.com/business/en
- * Version: 1.41.5
+ * Version: 2.0.0
  * License: MIT
  * Text Domain: woocommerce-gateway-ebanx
  * Domain Path: /languages
  * Requires PHP: 7.3
  * Requires at least: 5.5.0
- * Tested up to: 5.7.1
+ * Tested up to: 5.8.0
  * WC requires at least: 4.5.0
- * WC tested up to: 5.3.0
+ * WC tested up to: 5.5.2
  *
  * @package WooCommerce_EBANX
  */
@@ -24,9 +24,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'WC_EBANX_MIN_PHP_VER', '5.6.0' );
-define( 'WC_EBANX_MIN_WC_VER', '2.6.0' );
-define( 'WC_EBANX_MIN_WP_VER', '4.0.0' );
+define( 'WC_EBANX_MIN_PHP_VER', '7.3.0' );
+define( 'WC_EBANX_MIN_WC_VER', '4.5.0' );
+define( 'WC_EBANX_MIN_WP_VER', '5.5.0' );
 define( 'WC_EBANX_DIR', __DIR__ . DIRECTORY_SEPARATOR );
 define( 'WC_EBANX_PLUGIN_DIR_URL', plugin_dir_url( __FILE__ ) . DIRECTORY_SEPARATOR );
 define( 'WC_EBANX_PLUGIN_NAME', WC_EBANX_PLUGIN_DIR_URL . basename( __FILE__ ) );
