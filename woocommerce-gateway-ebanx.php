@@ -195,37 +195,46 @@ if ( ! class_exists( 'WC_EBANX' ) ) {
 
 		/**
 		 * @param array $methods
+		 *
 		 * @return array
 		 */
 		private static function argentina_gateway( $methods ) {
 			$methods[] = 'WC_EBANX_Credit_Card_AR_Gateway';
 			$methods[] = 'WC_EBANX_Efectivo_Gateway';
+			$methods[] = 'WC_EBANX_Wallet_MercadoPago_Gateway';
+
 			return $methods;
 		}
 
 		/**
 		 * @param array $methods
+		 *
 		 * @return array
 		 */
 		private function peru_gateway( $methods ) {
 			$methods[] = 'WC_EBANX_Pagoefectivo_Gateway';
 			$methods[] = 'WC_EBANX_Safetypay_Gateway';
+
 			return $methods;
 		}
 
 		/**
 		 * @param array $methods
+		 *
 		 * @return array
 		 */
 		private static function colombia_gateway( $methods ) {
 			$methods[] = 'WC_EBANX_Credit_Card_CO_Gateway';
 			$methods[] = 'WC_EBANX_Baloto_Gateway';
 			$methods[] = 'WC_EBANX_Eft_Gateway';
+			$methods[] = 'WC_EBANX_Wallet_Nequi_Gateway';
+
 			return $methods;
 		}
 
 		/**
 		 * @param array $methods
+		 *
 		 * @return array
 		 */
 		private static function chile_gateway( $methods ) {
@@ -233,11 +242,14 @@ if ( ! class_exists( 'WC_EBANX' ) ) {
 			$methods[] = 'WC_EBANX_Multicaja_Gateway';
 			$methods[] = 'WC_EBANX_Sencillito_Gateway';
 			$methods[] = 'WC_EBANX_Servipag_Gateway';
+			$methods[] = 'WC_EBANX_Wallet_MACHPay_Gateway';
+
 			return $methods;
 		}
 
 		/**
 		 * @param array $methods
+		 *
 		 * @return array
 		 */
 		private static function mexico_gateway( $methods ) {
@@ -245,19 +257,25 @@ if ( ! class_exists( 'WC_EBANX' ) ) {
 			$methods[] = 'WC_EBANX_Debit_Card_Gateway';
 			$methods[] = 'WC_EBANX_Oxxo_Gateway';
 			$methods[] = 'WC_EBANX_Spei_Gateway';
-			return $methods;
-		}
-		/**
-		 * @param array $methods
-		 * @return array
-		 */
-		private static function bolivia_gateway( $methods ) {
-			$methods[] = 'WC_EBANX_Pagosnet_Gateway';
+			$methods[] = 'WC_EBANX_Wallet_MercadoPago_Gateway';
+
 			return $methods;
 		}
 
 		/**
 		 * @param array $methods
+		 *
+		 * @return array
+		 */
+		private static function bolivia_gateway( $methods ) {
+			$methods[] = 'WC_EBANX_Pagosnet_Gateway';
+
+			return $methods;
+		}
+
+		/**
+		 * @param array $methods
+		 *
 		 * @return array
 		 */
 		private static function brazil_gateway( $methods ) {
@@ -266,6 +284,10 @@ if ( ! class_exists( 'WC_EBANX' ) ) {
 			$methods[] = 'WC_EBANX_Tef_Gateway';
 			$methods[] = 'WC_EBANX_Bank_Transfer_Gateway';
 			$methods[] = 'WC_EBANX_Pix_Gateway';
+			$methods[] = 'WC_EBANX_Wallet_MercadoPago_Gateway';
+			$methods[] = 'WC_EBANX_Wallet_Paypal_Gateway';
+			$methods[] = 'WC_EBANX_Wallet_Picpay_Gateway';
+
 			return $methods;
 		}
 
@@ -659,6 +681,14 @@ if ( ! class_exists( 'WC_EBANX' ) ) {
 			include_once WC_EBANX_GATEWAYS_DIR . 'class-wc-ebanx-flow-gateway.php';
 			include_once WC_EBANX_GATEWAYS_DIR . 'class-wc-ebanx-global-gateway.php';
 			include_once WC_EBANX_GATEWAYS_DIR . 'class-wc-ebanx-credit-card-gateway.php';
+			include_once WC_EBANX_GATEWAYS_DIR . 'class-wc-ebanx-wallet-gateway.php';
+
+			// Digital Wallets
+			include_once WC_EBANX_GATEWAYS_DIR . 'class-wc-ebanx-wallet-machpay-gateway.php';
+			include_once WC_EBANX_GATEWAYS_DIR . 'class-wc-ebanx-wallet-mercadopago-gateway.php';
+			include_once WC_EBANX_GATEWAYS_DIR . 'class-wc-ebanx-wallet-nequi-gateway.php';
+			include_once WC_EBANX_GATEWAYS_DIR . 'class-wc-ebanx-wallet-paypal-gateway.php';
+			include_once WC_EBANX_GATEWAYS_DIR . 'class-wc-ebanx-wallet-picpay-gateway.php';
 
 			// Chile Gateways.
 			include_once WC_EBANX_GATEWAYS_DIR . 'class-wc-ebanx-servipag-gateway.php';

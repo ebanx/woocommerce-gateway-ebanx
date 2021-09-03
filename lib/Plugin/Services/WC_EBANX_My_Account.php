@@ -88,6 +88,20 @@ class WC_EBANX_My_Account {
 				break;
 			case 'ebanx-pix':
 				\WC_EBANX_Pix_Gateway::thankyou_page($order);
+			case 'ebanx-wallet-machpay':
+				\WC_EBANX_Wallet_MACHPay_Gateway::thankyou_page( $order );
+				break;
+			case 'ebanx-wallet-mercadopago':
+				\WC_EBANX_Wallet_MercadoPago_Gateway::thankyou_page( $order );
+				break;
+			case 'ebanx-wallet-nequi':
+				\WC_EBANX_Wallet_Nequi_Gateway::thankyou_page( $order );
+				break;
+			case 'ebanx-wallet-paypal':
+				\WC_EBANX_Wallet_Paypal_Gateway::thankyou_page( $order );
+				break;
+			case 'ebanx-wallet-picpay':
+				\WC_EBANX_Wallet_Picpay_Gateway::thankyou_page( $order );
 				break;
 			case 'ebanx-oxxo':
 				\WC_EBANX_Oxxo_Gateway::thankyou_page( $order );
