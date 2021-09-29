@@ -56,5 +56,14 @@ class WC_EBANX_Credit_Card_BR_Gateway extends WC_EBANX_Credit_Card_Gateway {
 			null,
 			1
 		);
+
+		wc_get_template(
+			'bacen-international-alert.php',
+			array(
+				'is_international' => $this->is_international(),
+			),
+			'woocommerce/ebanx/',
+			WC_EBANX::get_templates_path()
+		);
 	}
 }
