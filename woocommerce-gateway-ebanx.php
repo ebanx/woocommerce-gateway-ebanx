@@ -13,9 +13,9 @@
  * Domain Path: /languages
  * Requires PHP: 7.3
  * Requires at least: 5.5.0
- * Tested up to: 5.8.0
+ * Tested up to: 5.8.1
  * WC requires at least: 4.5.0
- * WC tested up to: 5.5.2
+ * WC tested up to: 5.7.1
  *
  * @package WooCommerce_EBANX
  */
