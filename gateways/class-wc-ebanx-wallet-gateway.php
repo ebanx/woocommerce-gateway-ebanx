@@ -56,6 +56,15 @@ class WC_EBANX_Wallet_Gateway extends WC_EBANX_Redirect_Gateway {
 		);
 
 		parent::checkout_rate_conversion( WC_EBANX_Constants::CURRENCY_CODE_BRL );
+
+		wc_get_template(
+			'bacen-international-alert.php',
+			array(
+				'is_international' => $this->is_international(),
+			),
+			'woocommerce/ebanx/',
+			WC_EBANX::get_templates_path()
+		);
 	}
 
 	/**

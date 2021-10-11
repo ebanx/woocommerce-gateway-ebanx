@@ -88,6 +88,15 @@ class WC_EBANX_Debit_Card_Gateway extends WC_EBANX_New_Gateway {
 		);
 
 		parent::checkout_rate_conversion( WC_EBANX_Constants::CURRENCY_CODE_MXN );
+
+		wc_get_template(
+			'bacen-international-alert.php',
+			array(
+				'is_international' => $this->is_international(),
+			),
+			'woocommerce/ebanx/',
+			WC_EBANX::get_templates_path()
+		);
 	}
 
 

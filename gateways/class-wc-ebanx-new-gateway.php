@@ -137,6 +137,16 @@ class WC_EBANX_New_Gateway extends WC_EBANX_Gateway {
 	}
 
 	/**
+	 * Check if this checkout is by a Brazilian customer in an international store
+	 *
+	 * @return bool
+	 */
+	protected function is_international() {
+		return WC()->customer->get_billing_country() === 'BR' &&
+		       WC()->countries->get_base_country() !== 'BR';
+	}
+
+	/**
 	 * Insert the necessary assets on checkout page
 	 *
 	 * @return void
