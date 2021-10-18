@@ -29,6 +29,10 @@ class WC_EBANX_Efectivo_Gateway extends WC_EBANX_New_Gateway {
 		$this->ebanx_gateway = $this->ebanx->otrosCupones();
 
 		$this->enabled = is_array( $this->configs->settings['argentina_payment_methods'] ) ? in_array( $this->id, $this->configs->settings['argentina_payment_methods'] ) ? 'yes' : false : false;
+
+		$this->debug_log_if_available('Constructing ' . $this->id . ' gateway');
+		$this->debug_log_if_available($this->id . ($this->enabled ? ' is ' : ' is not ') . 'enabled');
+		$this->debug_log_if_available($this->id . ' supports ' . implode(', ', $this->supports));
 	}
 
 	/**
@@ -39,8 +43,15 @@ class WC_EBANX_Efectivo_Gateway extends WC_EBANX_New_Gateway {
 	 */
 	public function is_available() {
 		$country = $this->get_transaction_address( 'country' );
+		$parent_available = parent::is_available();
+		$country_iso           = Country::fromIso($country);
+		$available_for_country = $this->ebanx_gateway->isAvailableForCountry( $country_iso );
 
-		return parent::is_available() && $this->ebanx_gateway->isAvailableForCountry( Country::fromIso( $country ) );
+		if (!empty($country_iso)) {
+			$this->debug_log($this->id . ($available_for_country ? ' is ': ' is not ') . 'available to ' . $country_iso);
+		}
+
+		return $parent_available && $available_for_country;
 	}
 
 	/**

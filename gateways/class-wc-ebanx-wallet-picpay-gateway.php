@@ -26,6 +26,10 @@ class WC_EBANX_Wallet_Picpay_Gateway extends WC_EBANX_Wallet_Gateway {
 		$this->enabled = is_array( $this->configs->settings['brazil_payment_methods'] ) && in_array( $this->id, $this->configs->settings['brazil_payment_methods'], true )
 			? 'yes'
 			: false;
+
+		$this->debug_log_if_available('Constructing ' . $this->id . ' gateway');
+		$this->debug_log_if_available($this->id . ($this->enabled ? ' is ' : ' is not ') . 'enabled');
+		$this->debug_log_if_available($this->id . ' supports ' . implode(', ', $this->supports));
 	}
 
 	/**

@@ -50,6 +50,10 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_New_Gateway {
 
 		add_action( 'wcs_default_retry_rules', [ $this, 'retryRules' ] );
 		add_action( 'woocommerce_scheduled_subscription_payment', [ $this, 'scheduled_subscription_payment' ] );
+
+		$this->debug_log_if_available('Constructing ' . $this->id . ' gateway');
+		$this->debug_log_if_available($this->id . ($this->enabled ? ' is ' : ' is not ') . 'enabled');
+		$this->debug_log_if_available($this->id . ' supports ' . implode(', ', $this->supports));
 	}
 
 	/**
@@ -102,6 +106,8 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_New_Gateway {
 			$data = WC_EBANX_Payment_Adapter::transform_card_subscription_payment( $order, $this->configs, $user_cc_token );
 
 			$response = $this->ebanx->creditCard( $this->get_credit_card_config( $country ) )->create( $data );
+
+			$this->debug_log('Renewing a scheduled subscription #' . $subscription_id . ' payment.', __METHOD__, true);
 
 			WC_EBANX_Subscription_Renewal_Logger::persist(
 				array(
