@@ -41,6 +41,7 @@ define( 'WC_EBANX_CONTROLLERS_DIR', __DIR__ . DIRECTORY_SEPARATOR . 'controllers
 define( 'WC_EBANX_DATABASE_DIR', __DIR__ . DIRECTORY_SEPARATOR . 'database' . DIRECTORY_SEPARATOR );
 
 require_once WC_EBANX_VENDOR_DIR . '/autoload.php';
+require_once WC_EBANX_VENDOR_DIR . '../services/class-wc-ebanx-request.php';
 
 use EBANX\Plugin\Services\WC_EBANX_Constants;
 use EBANX\Plugin\Services\WC_EBANX_Notice;

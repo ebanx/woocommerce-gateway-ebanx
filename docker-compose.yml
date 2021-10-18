@@ -32,4 +32,4 @@ services:
     ports:
       - ${MYSQL_EXTERNAL_PORT:-3306}:3306
     volumes:
-      - ./.data:/var/lib/mysql
+      - ../.woocommerce-data:/var/lib/mysql:z
