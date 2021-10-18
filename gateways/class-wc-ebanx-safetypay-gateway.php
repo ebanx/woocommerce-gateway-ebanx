@@ -48,6 +48,10 @@ class WC_EBANX_Safetypay_Gateway extends WC_EBANX_Redirect_Gateway {
 		$this->enabled = $this->enabled_in_peru || $this->enabled_in_ecuador
 			? 'yes'
 			: false;
+
+		$this->debug_log_if_available('Constructing ' . $this->id . ' gateway');
+		$this->debug_log_if_available($this->id . ($this->enabled ? ' is ' : ' is not ') . 'enabled');
+		$this->debug_log_if_available($this->id . ' supports ' . implode(', ', $this->supports));
 	}
 
 	/**
@@ -57,13 +61,29 @@ class WC_EBANX_Safetypay_Gateway extends WC_EBANX_Redirect_Gateway {
 	 * @throws Exception Throws missing param message.
 	 */
 	public function is_available() {
-		$country    = $this->get_transaction_address( 'country' );
+		$transaction_country   = $this->get_transaction_address('country');
+		$parent_available      = parent::is_available();
+		$country               = Country::fromIso($transaction_country);
+		$available_for_country = $this->ebanx_gateway->isAvailableForCountry($country);
 
-		return parent::is_available()
-			&& $this->ebanx_gateway->isAvailableForCountry( Country::fromIso( $country ) )
-			&& ( ( Country::fromIso( $country ) === Country::PERU && $this->enabled_in_peru )
-				|| ( Country::fromIso( $country ) === Country::ECUADOR && $this->enabled_in_ecuador )
-			);
+		if (!empty($country)) {
+			if ($country === Country::PERU && !$this->enabled_in_peru) {
+				$this->debug_log($this->id . ' is not available because it\'s not enabled in Peru.');
+			}
+
+			if ($country === Country::ECUADOR && !$this->enabled_in_ecuador) {
+				$this->debug_log($this->id . ' is not available because it\'s not enabled in Ecuador.');
+			}
+
+			$this->debug_log($this->id . ($available_for_country ? ' is ' : ' is not ') . 'available to ' . $country);
+		}
+
+		return $parent_available
+		       && $available_for_country
+		       && (
+			       ($country === Country::PERU && $this->enabled_in_peru)
+			       || ($country === Country::ECUADOR && $this->enabled_in_ecuador)
+		       );
 	}
 
 	/**

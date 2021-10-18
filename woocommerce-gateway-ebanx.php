@@ -7,7 +7,7 @@
  * AliExpress, AirBnB and Spotify in Brazil.
  * Author: EBANX
  * Author URI: https://www.ebanx.com/business/en
- * Version: 2.0.1
+ * Version: 2.0.2
  * License: MIT
  * Text Domain: woocommerce-gateway-ebanx
  * Domain Path: /languages
@@ -15,7 +15,7 @@
  * Requires at least: 5.5.0
  * Tested up to: 5.8.1
  * WC requires at least: 4.5.0
- * WC tested up to: 5.7.1
+ * WC tested up to: 5.8.1
  *
  * @package WooCommerce_EBANX
  */
@@ -41,6 +41,9 @@ define( 'WC_EBANX_CONTROLLERS_DIR', __DIR__ . DIRECTORY_SEPARATOR . 'controllers
 define( 'WC_EBANX_DATABASE_DIR', __DIR__ . DIRECTORY_SEPARATOR . 'database' . DIRECTORY_SEPARATOR );
 
 require_once WC_EBANX_VENDOR_DIR . '/autoload.php';
+require_once WC_EBANX_SERVICES_DIR . '/class-wc-ebanx-request.php';
+require_once WC_EBANX_SERVICES_DIR . '/loggers/class-wc-ebanx-logger.php';
+require_once WC_EBANX_SERVICES_DIR . '/loggers/class-wc-ebanx-debug-logger.php';
 
 use EBANX\Plugin\Services\WC_EBANX_Constants;
 use EBANX\Plugin\Services\WC_EBANX_Notice;
@@ -171,7 +174,7 @@ if ( ! class_exists( 'WC_EBANX' ) ) {
 			 * My account
 			 */
 			if ( $configs
-				&& $configs->get_setting_or_default( 'save_card_data', 'no' ) === 'yes' ) {
+			     && $configs->get_setting_or_default( 'save_card_data', 'no' ) === 'yes' ) {
 
 				add_action( 'init', array( $this, 'my_account_endpoint' ) );
 				add_action( 'woocommerce_account_' . self::$my_account_endpoint . '_endpoint', array( $this, 'my_account_template' ) );
@@ -388,7 +391,7 @@ if ( ! class_exists( 'WC_EBANX' ) ) {
 		 */
 		public function my_account_template() {
 			if ( WC_EBANX_Request::has( 'credit-card-delete' )
-				&& is_account_page() ) {
+			     && is_account_page() ) {
 				// Find credit cards saved and delete the selected.
 				$cards = get_user_meta( get_current_user_id(), '_ebanx_credit_card_token', true );
 
@@ -403,8 +406,8 @@ if ( ! class_exists( 'WC_EBANX' ) ) {
 
 			$cards = array_filter(
 				(array) get_user_meta( get_current_user_id(), '_ebanx_credit_card_token', true ), function ( $card ) {
-					return ! empty( $card->brand ) && ! empty( $card->token ) && ! empty( $card->masked_number ); // TODO: Implement token due date.
-				}
+				return ! empty( $card->brand ) && ! empty( $card->token ) && ! empty( $card->masked_number );
+			}
 			);
 
 			wc_get_template(
@@ -846,8 +849,8 @@ if ( ! class_exists( 'WC_EBANX' ) ) {
 
 			// Check if is an EBANX request.
 			if ( WC_EBANX_Request::has( 'create_ebanx_payment_link' )
-				&& WC_EBANX_Request::read( 'create_ebanx_payment_link' ) === __( 'Create EBANX Payment Link', 'woocommerce-gateway-ebanx' )
-				&& ! $checkout_url ) {
+			     && WC_EBANX_Request::read( 'create_ebanx_payment_link' ) === __( 'Create EBANX Payment Link', 'woocommerce-gateway-ebanx' )
+			     && ! $checkout_url ) {
 
 				$this->setup_configs();
 
@@ -870,8 +873,8 @@ if ( ! class_exists( 'WC_EBANX' ) ) {
 			$checkout_url     = get_post_meta( $order->get_id(), '_ebanx_checkout_url', true );
 
 			if ( ! $checkout_url
-				&& in_array( $order->get_status(), array( 'auto-draft', 'pending' ) )
-				&& in_array( strtoupper( get_woocommerce_currency() ), $ebanx_currencies ) ) {
+			     && in_array( $order->get_status(), array( 'auto-draft', 'pending' ) )
+			     && in_array( strtoupper( get_woocommerce_currency() ), $ebanx_currencies ) ) {
 				wc_get_template(
 					'payment-by-link-action.php',
 					array(),

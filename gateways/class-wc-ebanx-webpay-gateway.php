@@ -37,8 +37,8 @@ class WC_EBANX_Webpay_Gateway extends WC_EBANX_Flow_Gateway {
 	 * @throws Exception Throws missing param message.
 	 */
 	public function is_available() {
-		$country = $this->get_transaction_address( 'country' );
+		$transaction_country = $this->get_transaction_address('country');
 
-		return parent::is_available() && $this->ebanx_gateway->isAvailableForCountry( Country::fromIso( $country ) );
+		return parent::is_available() && $this->ebanx_gateway->isAvailableForCountry(Country::fromIso($transaction_country));
 	}
 }
