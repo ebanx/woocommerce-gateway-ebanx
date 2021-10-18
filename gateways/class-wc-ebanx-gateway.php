@@ -98,16 +98,63 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway {
 		$this->merchant_currency = strtoupper( get_woocommerce_currency() );
 	}
 
+	protected function debug_log_if_available($message, $event = null, $persist = false) {
+		if (!$this->is_available()) {
+			return;
+		}
+
+		$this->debug_log($message, $event, $persist);
+	}
+
+	protected function debug_log($message, $event = null, $persist = false) {
+		if ($event === null) {
+			$event = 'debug';
+		}
+
+		if ( 'yes' === $this->configs->settings['debug_enabled'] ) {
+			if (is_admin()) {
+				return;
+			}
+
+			$cache_key = md5(print_r(func_get_args(), true));
+
+			if (false === get_transient($cache_key)) {
+				$this->log->debug($message);
+
+				if ($persist) {
+					WC_EBANX_Debug_Logger::persist(
+						[
+							'message' => $message,
+						],
+						$event
+					);
+				}
+
+				set_transient($cache_key, time(), 60);
+			}
+		}
+	}
+
 	/**
 	 * Check if the method is available to show to the users
 	 *
 	 * @return boolean
 	 */
 	public function is_available() {
-		return parent::is_available()
+		$is_available = parent::is_available()
 			&& 'yes' === $this->enabled
 			&& ! empty( $this->public_key )
 			&& ! empty( $this->private_key );
+
+		$message = $this->id . ($is_available ? ' is ': ' is not ') . 'initially available';
+
+		if (!$is_available) {
+			$message .= '; probably it\'s not enabled, or the credentials are empty';
+		}
+
+		$this->debug_log($message . '.');
+
+		return $is_available;
 	}
 
 	/**

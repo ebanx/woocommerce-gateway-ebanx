@@ -29,9 +29,10 @@ abstract class WC_EBANX_Logger {
 	 * This method is responsible for receive log data, manage them and send them to method save
 	 *
 	 * @param array $log_data data to be logged.
+	 * @param string $event event name to be logged.
 	 * @throws Exception In case sub classes do not reimplement an exception is thrown.
 	 */
-	public static function persist( array $log_data = [] ) {
+	public static function persist( array $log_data = [], $event = null) {
 		throw new Exception( 'Logger child classes must reimplemented the persist function. See class-wc-ebanx-logger.php' );
 	}
 }

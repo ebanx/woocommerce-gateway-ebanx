@@ -20,8 +20,15 @@ class WC_EBANX_Wallet_Gateway extends WC_EBANX_Redirect_Gateway {
 	 */
 	public function is_available() {
 		$country = $this->get_transaction_address( 'country' );
+		$parent_available = parent::is_available();
+		$country_iso           = Country::fromIso($country);
+		$available_for_country = $this->ebanx_gateway->isAvailableForCountry( $country_iso );
 
-		return parent::is_available() && $this->ebanx_gateway->isAvailableForCountry( Country::fromIso( $country ) );
+		if (!empty($country_iso)) {
+			$this->debug_log($this->id . ($available_for_country ? ' is ': ' is not ') . 'available to ' . $country_iso);
+		}
+
+		return $parent_available && $available_for_country;
 	}
 
 	/**

@@ -81,6 +81,8 @@ WHERE table_name = %s AND column_name = 'integration_key'", $table_name
 	public static function insert( $table, $data ) {
 		global $wpdb;
 
+		error_log(self::tables()[ $table ]);
+
 		return $wpdb->insert( self::tables()[ $table ], $data );
 	}
 

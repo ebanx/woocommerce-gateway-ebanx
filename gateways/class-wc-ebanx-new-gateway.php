@@ -221,6 +221,8 @@ class WC_EBANX_New_Gateway extends WC_EBANX_Gateway {
 
 				$response = $this->ebanx_gateway->create( $data );
 
+				$this->debug_log('Processing the #' . $order_id . ' payment.', __METHOD__, true);
+
 				WC_EBANX_Checkout_Logger::persist(
 					[
 						'request'  => $data,
@@ -419,6 +421,8 @@ class WC_EBANX_New_Gateway extends WC_EBANX_Gateway {
 			}
 
 			$response = $this->ebanx->refund()->requestByHash( $hash, $amount, $reason );
+
+			$this->debug_log('Processing the #' . $order_id . ' refund.', __METHOD__, true);
 
 			WC_EBANX_Refund_Logger::persist(
 				[
@@ -675,6 +679,8 @@ class WC_EBANX_New_Gateway extends WC_EBANX_Gateway {
 	 */
 	final public function update_payment( $order, $data ) {
 		$request_status = strtoupper( $data['payment']['status'] );
+
+		$this->debug_log('Should we update #' . $order->get_id() . ' payment with ' . $order->get_status() . ' and ' . $request_status . '?');
 
 		if ( 'completed' === $order->get_status() && 'CA' !== $request_status ) {
 			return;

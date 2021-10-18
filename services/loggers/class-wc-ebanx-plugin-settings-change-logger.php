@@ -9,8 +9,9 @@ final class WC_EBANX_Plugin_Settings_Change_Logger extends WC_EBANX_Logger {
 	/**
 	 *
 	 * @param array $log_data data to be logged.
+	 * @param string $event event name to be logged.
 	 */
-	public static function persist( array $log_data = [] ) {
+	public static function persist( array $log_data = [], $event = null) {
 		parent::save(
 			'plugin_settings_change',
 			array_merge(
