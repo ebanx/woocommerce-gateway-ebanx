@@ -286,7 +286,7 @@ class WC_EBANX_Checker {
 	 *
 	 * @throws Exception Param not found exception.
 	 */
-	public function validate_document() {
+	public static function validate_document() {
 		if (
 			\WC_EBANX_Request::has( 'billing_country' )
 			&& \WC_EBANX_Request::read( 'billing_country' ) === 'AR'
