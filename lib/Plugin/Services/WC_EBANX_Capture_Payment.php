@@ -55,7 +55,7 @@ class WC_EBANX_Capture_Payment {
 	 *
 	 * @return array
 	 */
-	public function add_auto_capture_dropdown( $actions ) {
+	public static function add_auto_capture_dropdown( $actions ) {
 		global $theorder;
 
 		if ( is_array( $actions ) && $theorder->get_status() === 'on-hold'
