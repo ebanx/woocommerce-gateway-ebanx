@@ -39,21 +39,21 @@ class WC_EBANX_Credit_Card_CO_Gateway extends WC_EBANX_Credit_Card_Gateway {
 	 * @throws Exception Throws missing param message.
 	 */
 	public function is_available() {
-		$country               = $this->get_transaction_address('country');
+		$transaction_country   = $this->get_transaction_address('country');
 		$parent_available      = parent::is_available();
-		$available_for_country = $this->ebanx_gateway->isAvailableForCountry(Country::fromIso($country));
-		$country_iso           = Country::fromIso($country);
+		$available_for_country = $this->ebanx_gateway->isAvailableForCountry(Country::fromIso($transaction_country));
+		$country               = Country::fromIso($transaction_country);
 
-		if (!empty($country_iso)) {
-			if ($country !== Country::COLOMBIA) {
+		if (!empty($country)) {
+			if ($transaction_country !== Country::COLOMBIA) {
 				$this->debug_log($this->id . ' is not available because the transaction address is not Colombia.');
 			} else {
-				$this->debug_log($this->id . ($available_for_country ? ' is ' : ' is not ') . 'available to ' . $country);
+				$this->debug_log($this->id . ($available_for_country ? ' is ' : ' is not ') . 'available to ' . $transaction_country);
 			}
 		}
 
 		return $parent_available
-		       && $country_iso === Country::COLOMBIA
+		       && $country === Country::COLOMBIA
 		       && $available_for_country;
 	}
 

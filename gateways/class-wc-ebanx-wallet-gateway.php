@@ -19,13 +19,13 @@ class WC_EBANX_Wallet_Gateway extends WC_EBANX_Redirect_Gateway {
 	 * @throws Exception Throws missing parameter message.
 	 */
 	public function is_available() {
-		$country = $this->get_transaction_address( 'country' );
-		$parent_available = parent::is_available();
-		$country_iso           = Country::fromIso($country);
-		$available_for_country = $this->ebanx_gateway->isAvailableForCountry( $country_iso );
+		$transaction_country   = $this->get_transaction_address('country');
+		$parent_available      = parent::is_available();
+		$country               = Country::fromIso($transaction_country);
+		$available_for_country = $this->ebanx_gateway->isAvailableForCountry($country);
 
-		if (!empty($country_iso)) {
-			$this->debug_log($this->id . ($available_for_country ? ' is ': ' is not ') . 'available to ' . $country_iso);
+		if (!empty($country)) {
+			$this->debug_log($this->id . ($available_for_country ? ' is ' : ' is not ') . 'available to ' . $country);
 		}
 
 		return $parent_available && $available_for_country;

@@ -7,10 +7,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 use Ebanx\Benjamin\Models\Configs\CreditCardConfig;
 use Ebanx\Benjamin\Models\Country;
 use Ebanx\Benjamin\Models\Currency;
+use EBANX\Plugin\Services\WC_EBANX_Api;
 use EBANX\Plugin\Services\WC_EBANX_Constants;
 use EBANX\Plugin\Services\WC_EBANX_Errors;
 use EBANX\Plugin\Services\WC_EBANX_Helper;
-use EBANX\Plugin\Services\WC_EBANX_Api;
 use EBANX\Plugin\Services\WC_EBANX_Payment_Adapter;
 
 /**
@@ -244,9 +244,9 @@ class WC_EBANX_New_Gateway extends WC_EBANX_Gateway {
 				]
 			);
 		} catch ( \Exception $e ) {
-			$country = $this->get_transaction_address( 'country' );
+			$transaction_country = $this->get_transaction_address('country');
 
-			$message = WC_EBANX_Errors::get_error_message( $e, $country );
+			$message = WC_EBANX_Errors::get_error_message($e, $transaction_country);
 
 			WC_EBANX::log( "EBANX Error: $message" );
 
@@ -473,7 +473,7 @@ class WC_EBANX_New_Gateway extends WC_EBANX_Gateway {
 
 		$cached = get_option( $cache_key );
 		if ( false !== $cached ) {
-			list( $rate, $time ) = explode( '|', $cached );
+			[ $rate, $time ] = explode( '|', $cached );
 			if ( $time === $cache_time ) {
 				return $rate;
 			}

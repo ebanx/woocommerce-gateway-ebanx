@@ -6,11 +6,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 use Ebanx\Benjamin\Models\Configs\CreditCardConfig;
 use Ebanx\Benjamin\Models\Country;
+use EBANX\Plugin\Services\WC_EBANX_Api;
+use EBANX\Plugin\Services\WC_EBANX_Capture_Payment;
 use EBANX\Plugin\Services\WC_EBANX_Constants;
 use EBANX\Plugin\Services\WC_EBANX_Helper;
-use EBANX\Plugin\Services\WC_EBANX_Api;
 use EBANX\Plugin\Services\WC_EBANX_Payment_Adapter;
-use EBANX\Plugin\Services\WC_EBANX_Capture_Payment;
 
 /**
  * Class WC_EBANX_Credit_Card_Gateway
@@ -97,7 +97,7 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_New_Gateway {
 
 		$order = wcs_get_subscription( $subscription_id );
 
-		$country = $this->get_transaction_address( 'country' );
+		$transaction_country = $this->get_transaction_address('country');
 
 		$user_cc = get_user_meta( $order->get_data()['customer_id'], '_ebanx_credit_card_token', true );
 
@@ -105,7 +105,7 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_New_Gateway {
 		if ( ! is_null( $user_cc_token ) ) {
 			$data = WC_EBANX_Payment_Adapter::transform_card_subscription_payment( $order, $this->configs, $user_cc_token );
 
-			$response = $this->ebanx->creditCard( $this->get_credit_card_config( $country ) )->create( $data );
+			$response = $this->ebanx->creditCard($this->get_credit_card_config($transaction_country))->create($data);
 
 			$this->debug_log('Renewing a scheduled subscription #' . $subscription_id . ' payment.', __METHOD__, true);
 
@@ -460,19 +460,19 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_New_Gateway {
 			);
 		}
 
-		$country = $this->get_transaction_address( 'country' );
+		$transaction_country = $this->get_transaction_address('country');
 
-		$instalments_terms = $this->get_payment_terms( $country, $cart_total, $currency_rate );
+		$instalments_terms = $this->get_payment_terms($transaction_country, $cart_total, $currency_rate);
 
-		$currency = WC_EBANX_Constants::$local_currencies[ $country ];
+		$currency = WC_EBANX_Constants::$local_currencies[$transaction_country];
 
-		$message = $this->get_sandbox_form_message( $country );
+		$message = $this->get_sandbox_form_message($transaction_country);
 		wc_get_template(
 			'sandbox-checkout-alert.php',
-			array(
+			[
 				'is_sandbox_mode' => $this->is_sandbox_mode,
 				'message'         => $message,
-			),
+			],
 			'woocommerce/ebanx/',
 			WC_EBANX::get_templates_path()
 		);
@@ -481,17 +481,17 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_New_Gateway {
 			$this->id . '/payment-form.php',
 			array(
 				'currency'            => $currency,
-				'country'             => $country,
+				'country'             => $transaction_country,
 				'instalments_terms'   => $instalments_terms,
 				'currency_code'       => $this->currency_code,
 				'currency_rate'       => $currency_rate,
-				'cards'               => (array) $cards,
+				'cards'               => (array)$cards,
 				'cart_total'          => $cart_total,
 				'place_order_enabled' => $save_card,
-				'instalments'         => self::get_instalment_title_by_country( $country ),
+				'instalments'         => self::get_instalment_title_by_country($transaction_country),
 				'id'                  => $this->id,
 				'add_tax'             => WC_EBANX_Helper::should_apply_taxes(),
-				'with_interest'       => WC_EBANX_Constants::COUNTRY_BRAZIL === $country ? ' com taxas' : '',
+				'with_interest'       => WC_EBANX_Constants::COUNTRY_BRAZIL === $transaction_country ? ' com taxas' : '',
 			),
 			'woocommerce/ebanx/',
 			WC_EBANX::get_templates_path()
