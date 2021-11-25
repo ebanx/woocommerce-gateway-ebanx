@@ -45,7 +45,7 @@ class WC_EBANX_Credit_Card_CO_Gateway extends WC_EBANX_Credit_Card_Gateway {
 		$country_iso           = Country::fromIso($country);
 
 		if (!empty($country_iso)) {
-			if ($country !== Country::BRAZIL) {
+			if ($country !== Country::COLOMBIA) {
 				$this->debug_log($this->id . ' is not available because the transaction address is not Colombia.');
 			} else {
 				$this->debug_log($this->id . ($available_for_country ? ' is ' : ' is not ') . 'available to ' . $country);
