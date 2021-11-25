@@ -50,10 +50,6 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_New_Gateway {
 
 		add_action( 'wcs_default_retry_rules', [ $this, 'retryRules' ] );
 		add_action( 'woocommerce_scheduled_subscription_payment', [ $this, 'scheduled_subscription_payment' ] );
-
-		$this->debug_log_if_available('Constructing ' . $this->id . ' gateway');
-		$this->debug_log_if_available($this->id . ($this->enabled ? ' is ' : ' is not ') . 'enabled');
-		$this->debug_log_if_available($this->id . ' supports ' . implode(', ', $this->supports));
 	}
 
 	/**

@@ -38,10 +38,6 @@ abstract class WC_EBANX_Redirect_Gateway extends WC_EBANX_New_Gateway {
 		update_post_meta( $order->get_id(), '_ebanx_payment_hash', $response['payment']['hash'] );
 
 		$this->redirect_url = $redirect;
-
-		$this->debug_log_if_available('Constructing ' . $this->id . ' gateway');
-		$this->debug_log_if_available($this->id . ($this->enabled ? ' is ' : ' is not ') . 'enabled');
-		$this->debug_log_if_available($this->id . ' supports ' . implode(', ', $this->supports));
 	}
 
 	/**
