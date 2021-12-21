@@ -458,7 +458,7 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_New_Gateway {
 
 		$transaction_country = $this->get_transaction_address('country');
 
-		$instalments_terms = $this->get_payment_terms($transaction_country, $cart_total, $currency_rate);
+		$installments_terms = $this->get_payment_terms($transaction_country, $cart_total, $currency_rate);
 
 		$currency = WC_EBANX_Constants::$local_currencies[$transaction_country];
 
