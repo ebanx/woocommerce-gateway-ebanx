@@ -98,13 +98,11 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway {
 		$this->merchant_currency = strtoupper( get_woocommerce_currency() );
 	}
 
-	protected function debug_log_if_available($message, $event = null, $persist = false) {
-		if (!$this->is_available()) {
-			return;
-		}
-
-		$this->debug_log($message, $event, $persist);
-	}
+  protected function debug_log_if_available($message, $event = null, $persist = false) {
+        if ($this->is_available()) {
+            $this->debug_log($message, $event, $persist);
+        }
+    }
 
 	protected function debug_log($message, $event = null, $persist = false) {
 		if ($event === null) {
