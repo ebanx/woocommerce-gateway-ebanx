@@ -44,7 +44,6 @@ class WC_EBANX_Bank_Transfer_Gateway extends WC_EBANX_New_Gateway {
 			return in_array( $this->id, $this->configs->settings['brazil_payment_methods'] ) ? 'yes' : false;
 		}
 
-
 		return false;
 	}
 
