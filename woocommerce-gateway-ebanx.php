@@ -406,7 +406,7 @@ if ( ! class_exists( 'WC_EBANX' ) ) {
 
 			$cards = array_filter(
 				(array) get_user_meta( get_current_user_id(), '_ebanx_credit_card_token', true ), function ( $card ) {
-				return ! empty( $card->brand ) && ! empty( $card->token ) && ! empty( $card->masked_number ); // TODO: Implement token due date.
+				return ! empty( $card->brand ) && ! empty( $card->token ) && ! empty( $card->masked_number );
 			}
 			);
 
