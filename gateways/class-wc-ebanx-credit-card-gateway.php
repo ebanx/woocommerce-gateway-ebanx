@@ -465,10 +465,10 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_New_Gateway {
 		$message = $this->get_sandbox_form_message($transaction_country);
 		wc_get_template(
 			'sandbox-checkout-alert.php',
-			[
+			array(
 				'is_sandbox_mode' => $this->is_sandbox_mode,
 				'message'         => $message,
-			],
+			),
 			'woocommerce/ebanx/',
 			WC_EBANX::get_templates_path()
 		);
