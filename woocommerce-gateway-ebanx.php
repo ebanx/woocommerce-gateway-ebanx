@@ -7,15 +7,15 @@
  * AliExpress, AirBnB and Spotify in Brazil.
  * Author: EBANX
  * Author URI: https://www.ebanx.com/business/en
- * Version: 2.0.1
+ * Version: 2.0.2
  * License: MIT
  * Text Domain: woocommerce-gateway-ebanx
  * Domain Path: /languages
  * Requires PHP: 7.3
  * Requires at least: 5.5.0
- * Tested up to: 5.8.1
+ * Tested up to: 5.9.0
  * WC requires at least: 4.5.0
- * WC tested up to: 5.7.1
+ * WC tested up to: 6.1.1
  *
  * @package WooCommerce_EBANX
  */
@@ -842,7 +842,7 @@ if ( ! class_exists( 'WC_EBANX' ) ) {
 		 */
 		public function ebanx_metabox_payment_link_save( $post_id ) {
 			$order        = wc_get_order( $post_id );
-			$checkout_url = get_post_meta( $order->id, '_ebanx_checkout_url', true );
+			$checkout_url = get_post_meta( $order->get_id(), '_ebanx_checkout_url', true );
 
 			// Check if is an EBANX request.
 			if ( WC_EBANX_Request::has( 'create_ebanx_payment_link' )

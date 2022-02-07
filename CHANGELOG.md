@@ -1,4 +1,7 @@
 # CHANGELOG
+# 2.0.2
+* Update versions
+
 # 2.0.1
 * Add Bacen message to buyers from Brazil buying in an international store
 

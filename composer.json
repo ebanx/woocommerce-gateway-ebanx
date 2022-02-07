@@ -4,6 +4,7 @@
   "type": "project",
   "license": "Apache-2.0",
   "minimum-stability": "dev",
+  "version": "2.0.2",
   "require": {
     "php" : ">=7.3",
     "ebanx/benjamin": "dev-master"

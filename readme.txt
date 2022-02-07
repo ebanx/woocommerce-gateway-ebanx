@@ -2,8 +2,8 @@
 Contributors: ebanxwp
 Tags: credit card, boleto, ebanx, woocommerce, payment gateway, latin america, brazil, mexico, argentina, peru, colombia, chile, ecuador, cash payment, local payment, card payment, one-click payment, alternative payments, payment processing
 Requires at least: 5.5
-Tested up to: 5.8.1
-Stable tag: 2.0.1
+Tested up to: 5.9.0
+Stable tag: 2.0.2
 License: Apache v2.0
 License URI: http://www.apache.org/licenses/LICENSE-2.0
 

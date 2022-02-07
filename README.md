@@ -12,6 +12,10 @@ Please, visit the [official plugin page on WordPress store](https://wordpress.or
 * Wordpress 5.5+
 * WooCommerce 4.5+
 
+## Tested up to
+* Wordpress 5.9.0
+* WooCommerce 6.1.1
+
 ## Installation
 
 You can use our docker.
