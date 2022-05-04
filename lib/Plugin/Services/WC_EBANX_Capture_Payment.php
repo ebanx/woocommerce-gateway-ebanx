@@ -115,10 +115,10 @@ class WC_EBANX_Capture_Payment {
 				WC_EBANX_Flash::add_message( sprintf( __( 'Payment %s was captured successfully.', 'woocommerce-gateway-ebanx' ), $order_id ), 'warning', true );
 			}
 		} elseif ( 'CA' === $response['payment']['status'] ) {
-			$order->update_status( 'failed' );
+			$order->update_status( $configs->get_mapped_status( 'failed' ) );
 			$order->add_order_note( __( 'EBANX: Transaction Failed', 'woocommerce-gateway-ebanx' ) );
 		} elseif ( 'OP' === $response['payment']['status'] ) {
-			$order->update_status( 'pending' );
+			$order->update_status( $configs->get_mapped_status( 'pending' ) );
 			$order->add_order_note( __( 'EBANX: Transaction Pending', 'woocommerce-gateway-ebanx' ) );
 		}
 	}

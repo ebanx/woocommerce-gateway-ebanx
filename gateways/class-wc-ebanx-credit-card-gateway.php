@@ -6,11 +6,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 use Ebanx\Benjamin\Models\Configs\CreditCardConfig;
 use Ebanx\Benjamin\Models\Country;
+use EBANX\Plugin\Services\WC_EBANX_Api;
+use EBANX\Plugin\Services\WC_EBANX_Capture_Payment;
 use EBANX\Plugin\Services\WC_EBANX_Constants;
 use EBANX\Plugin\Services\WC_EBANX_Helper;
-use EBANX\Plugin\Services\WC_EBANX_Api;
 use EBANX\Plugin\Services\WC_EBANX_Payment_Adapter;
-use EBANX\Plugin\Services\WC_EBANX_Capture_Payment;
 
 /**
  * Class WC_EBANX_Credit_Card_Gateway
@@ -114,7 +114,7 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_New_Gateway {
 
 			if ( 'ERROR' == $response['status'] ) {
 				$order->payment_complete();
-				$order->update_status( 'failed' );
+				$order->update_status( $this->get_mapped_status( 'failed' ) );
 				WC_EBANX::log( $response['status_message'] );
 			} elseif ( 'SUCCESS' == $response['status'] ) {
 				switch ( $response['payment']['status'] ) {
