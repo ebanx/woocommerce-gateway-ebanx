@@ -548,6 +548,10 @@ class WC_EBANX_Payment_Adapter {
 			case 'PE':
 				return get_user_meta( $user_id, '_ebanx_billing_peru_document', true );
 				break;
+			case 'MX':
+				// No document required.
+				return '';
+				break;
 			default:
 				throw new Exception( 'WC_EBANX_Payment_Adapter: INVALID-DOCUMENT' );
 		}
