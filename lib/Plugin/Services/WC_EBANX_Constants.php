@@ -69,7 +69,7 @@ abstract class WC_EBANX_Constants {
 		self::COUNTRY_ARGENTINA => 12,
 	];
 
-	const BRAZIL_TAX = 0.0038;
+	const BRAZIL_TAX = 0.0350;
 
 	public static $all_countries = [
 		self::COUNTRY_BRAZIL,
