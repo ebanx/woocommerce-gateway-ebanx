@@ -7,7 +7,7 @@
  * AliExpress, AirBnB and Spotify in Brazil.
  * Author: EBANX
  * Author URI: https://www.ebanx.com/business/en
- * Version: 2.0.1
+ * Version: 2.0.2
  * License: MIT
  * Text Domain: woocommerce-gateway-ebanx
  * Domain Path: /languages

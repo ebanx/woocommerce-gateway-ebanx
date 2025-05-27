@@ -1,4 +1,8 @@
 # CHANGELOG
+
+# 2.0.2
+* Update - IOF value: From 0.38% to 3.5%.
+
 # 2.0.1
 * Add Bacen message to buyers from Brazil buying in an international store
 
