@@ -6,7 +6,7 @@
   "minimum-stability": "dev",
   "require": {
     "php" : ">=7.3",
-    "ebanx/benjamin": "dev-master"
+    "ebanx/benjamin": "1.27.0"
   },
   "require-dev": {
     "phpunit/phpunit": ">=9.5",
