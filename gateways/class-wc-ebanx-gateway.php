@@ -99,6 +99,23 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway {
 	}
 
 	/**
+	 * Translate one status to the mapped one.
+	 *
+	 * @param string $status The status that will be mapped.
+	 *
+	 * @return mixed|string
+	 */
+	public function get_mapped_status( $status ) {
+		$mapped_status = sprintf( '%s_status', str_replace( 'wc-', '', $status ) );
+
+		if ( isset( $this->configs->settings[ $mapped_status ] ) ) {
+			$status = $this->configs->settings[ $mapped_status ];
+		}
+
+		return $status;
+	}
+
+	/**
 	 * Check if the method is available to show to the users
 	 *
 	 * @return boolean
