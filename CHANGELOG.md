@@ -1,5 +1,8 @@
 # CHANGELOG
 
+# 2.0.3
+* Update dependencies.
+
 # 2.0.2
 * Update - IOF value: From 0.38% to 3.5%.
 
