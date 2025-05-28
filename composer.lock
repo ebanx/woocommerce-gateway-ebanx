@@ -4,20 +4,20 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "d177bc452f2fe624ed1a798c5990d571",
+    "content-hash": "90d37f034d3f524812d5d449d4c47691",
     "packages": [
         {
             "name": "ebanx/benjamin",
-            "version": "dev-master",
+            "version": "1.27.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/ebanx/benjamin.git",
-                "reference": "eed0ef0c9658cafc905a910b452b8d478d3fd497"
+                "reference": "2432dba8a3ead5cc259e259fb56119b89fcf5005"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ebanx/benjamin/zipball/eed0ef0c9658cafc905a910b452b8d478d3fd497",
-                "reference": "eed0ef0c9658cafc905a910b452b8d478d3fd497",
+                "url": "https://api.github.com/repos/ebanx/benjamin/zipball/2432dba8a3ead5cc259e259fb56119b89fcf5005",
+                "reference": "2432dba8a3ead5cc259e259fb56119b89fcf5005",
                 "shasum": ""
             },
             "require": {
@@ -33,15 +33,14 @@
                 "sebastian/phpcpd": "^2.0.4",
                 "vlucas/phpdotenv": "^2.4@dev"
             },
-            "default-branch": true,
             "type": "library",
             "autoload": {
-                "psr-4": {
-                    "Ebanx\\Benjamin\\": "src/"
-                },
                 "files": [
                     "main.php"
-                ]
+                ],
+                "psr-4": {
+                    "Ebanx\\Benjamin\\": "src/"
+                }
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
@@ -50,9 +49,9 @@
             "description": "Business rule provider lib for plugin implementations",
             "support": {
                 "issues": "https://github.com/ebanx/benjamin/issues",
-                "source": "https://github.com/ebanx/benjamin/tree/master"
+                "source": "https://github.com/ebanx/benjamin/tree/1.27.0"
             },
-            "time": "2021-04-13T19:51:26+00:00"
+            "time": "2025-05-28T13:11:12+00:00"
         }
     ],
     "packages-dev": [
@@ -2757,14 +2756,12 @@
     ],
     "aliases": [],
     "minimum-stability": "dev",
-    "stability-flags": {
-        "ebanx/benjamin": 20
-    },
+    "stability-flags": {},
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
-        "php": ">=7.3"
-    },
-    "platform-dev": [],
-    "plugin-api-version": "2.0.0"
+		"php": ">=7.3"
+	},
+    "platform-dev": {},
+    "plugin-api-version": "2.6.0"
 }
