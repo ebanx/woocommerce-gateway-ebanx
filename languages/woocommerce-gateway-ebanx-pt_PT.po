@@ -802,7 +802,7 @@ msgid "Usar um outro cartão"
 msgstr ""
 
 #: templates/ebanx-credit-card-br/payment-processing.php:16
-msgid "Valor a pagar com IOF (3.5%):"
+msgid "Valor a pagar com IOF (0.38%):"
 msgstr ""
 
 #: templates/ebanx-credit-card-br/payment-processing.php:18
