@@ -1,5 +1,8 @@
 # CHANGELOG
 
+# 2.0.4
+* Revert IOF change: Back to 0.38% and update dependencies.
+
 # 2.0.3
 * Update dependencies.
 
