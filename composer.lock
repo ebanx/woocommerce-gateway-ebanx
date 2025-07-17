@@ -4,20 +4,20 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "b5adb6ad51d1882eef19958f9a548253",
+    "content-hash": "fe1509e787f4b2086d34cd3cae1785d8",
     "packages": [
         {
             "name": "ebanx/benjamin",
-            "version": "1.28.0",
+            "version": "1.29.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/ebanx/benjamin.git",
-                "reference": "3375173a5a5161d503c99f117e644d3ab191dd6a"
+                "reference": "f2f0cd88d945419794ac737cdbb1bf3db93d6efd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ebanx/benjamin/zipball/3375173a5a5161d503c99f117e644d3ab191dd6a",
-                "reference": "3375173a5a5161d503c99f117e644d3ab191dd6a",
+                "url": "https://api.github.com/repos/ebanx/benjamin/zipball/f2f0cd88d945419794ac737cdbb1bf3db93d6efd",
+                "reference": "f2f0cd88d945419794ac737cdbb1bf3db93d6efd",
                 "shasum": ""
             },
             "require": {
@@ -49,9 +49,9 @@
             "description": "Business rule provider lib for plugin implementations",
             "support": {
                 "issues": "https://github.com/ebanx/benjamin/issues",
-                "source": "https://github.com/ebanx/benjamin/tree/1.28.0"
+                "source": "https://github.com/ebanx/benjamin/tree/1.29.0"
             },
-            "time": "2025-06-27T12:21:33+00:00"
+            "time": "2025-07-17T11:49:02+00:00"
         }
     ],
     "packages-dev": [
