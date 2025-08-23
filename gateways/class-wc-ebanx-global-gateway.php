@@ -12,8 +12,8 @@ if ( ! defined( 'IS_TEST' ) ) {
 }
 
 use EBANX\Plugin\Services\WC_EBANX_Constants;
-use EBANX\Plugin\Services\WC_EBANX_Notice;
 use EBANX\Plugin\Services\WC_EBANX_Helper;
+use EBANX\Plugin\Services\WC_EBANX_Notice;
 
 /**
  * Class WC_EBANX_Global_Gateway
@@ -152,6 +152,25 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway {
 	}
 
 	/**
+	 * Translate one status to the mapped one.
+	 *
+	 * @param $status The status that will be mapped.
+	 *
+	 * @return mixed|string
+	 */
+	public function get_mapped_status( $status ) {
+		$mapped_status = $this->get_option(
+			sprintf( '%s_status', str_replace( 'wc-', '', $status ) )
+		);
+
+		if ( ! empty( $mapped_status ) ) {
+			$status = $mapped_status;
+		}
+
+		return $status;
+	}
+
+	/**
 	 * Define the fields on EBANX WooCommerce settings page and set the defaults when the plugin is installed
 	 *
 	 * @return void
@@ -192,6 +211,116 @@ final class WC_EBANX_Global_Gateway extends WC_Payment_Gateway {
 				'description' => __( 'Record all errors that occur when executing a transaction.', 'woocommerce-gateway-ebanx' ),
 				'type'        => 'checkbox',
 				'desc_tip'    => true,
+			),
+			'display_statuses_title'    => array(
+				'title'       => __( 'Status mapping', 'woocommerce-gateway-ebanx' ),
+				'type'        => 'title',
+				'description' => __( 'Map the woocommerce statuses.', 'woocommerce-gateway-ebanx' ),
+			),
+			'pending_status'            => array(
+				'title'   => __( 'Pending payment', 'woocommerce-gateway-ebanx' ),
+				'type'    => 'select',
+				'class'   => 'wc-enhanced-select',
+				'default' => 'wc-pending',
+				'options' => array(
+					'wc-pending'    => _x( 'Pending payment', 'Order status', 'woocommerce' ),
+					'wc-processing' => _x( 'Processing', 'Order status', 'woocommerce' ),
+					'wc-on-hold'    => _x( 'On hold', 'Order status', 'woocommerce' ),
+					'wc-completed'  => _x( 'Completed', 'Order status', 'woocommerce' ),
+					'wc-cancelled'  => _x( 'Cancelled', 'Order status', 'woocommerce' ),
+					'wc-refunded'   => _x( 'Refunded', 'Order status', 'woocommerce' ),
+					'wc-failed'     => _x( 'Failed', 'Order status', 'woocommerce' ),
+				)
+			),
+			'processing_status'            => array(
+				'title'   => __( 'Processing', 'woocommerce-gateway-ebanx' ),
+				'type'    => 'select',
+				'class'   => 'wc-enhanced-select',
+				'default' => 'wc-processing',
+				'options' => array(
+					'wc-pending'    => _x( 'Pending payment', 'Order status', 'woocommerce' ),
+					'wc-processing' => _x( 'Processing', 'Order status', 'woocommerce' ),
+					'wc-on-hold'    => _x( 'On hold', 'Order status', 'woocommerce' ),
+					'wc-completed'  => _x( 'Completed', 'Order status', 'woocommerce' ),
+					'wc-cancelled'  => _x( 'Cancelled', 'Order status', 'woocommerce' ),
+					'wc-refunded'   => _x( 'Refunded', 'Order status', 'woocommerce' ),
+					'wc-failed'     => _x( 'Failed', 'Order status', 'woocommerce' ),
+				)
+			),
+			'on-hold_status'            => array(
+				'title'   => __( 'On hold', 'woocommerce-gateway-ebanx' ),
+				'type'    => 'select',
+				'class'   => 'wc-enhanced-select',
+				'default' => 'wc-on-hold',
+				'options' => array(
+					'wc-pending'    => _x( 'Pending payment', 'Order status', 'woocommerce' ),
+					'wc-processing' => _x( 'Processing', 'Order status', 'woocommerce' ),
+					'wc-on-hold'    => _x( 'On hold', 'Order status', 'woocommerce' ),
+					'wc-completed'  => _x( 'Completed', 'Order status', 'woocommerce' ),
+					'wc-cancelled'  => _x( 'Cancelled', 'Order status', 'woocommerce' ),
+					'wc-refunded'   => _x( 'Refunded', 'Order status', 'woocommerce' ),
+					'wc-failed'     => _x( 'Failed', 'Order status', 'woocommerce' ),
+				)
+			),
+			'completed_status'            => array(
+				'title'   => __( 'Completed', 'woocommerce-gateway-ebanx' ),
+				'type'    => 'select',
+				'class'   => 'wc-enhanced-select',
+				'default' => 'wc-completed',
+				'options' => array(
+					'wc-pending'    => _x( 'Pending payment', 'Order status', 'woocommerce' ),
+					'wc-processing' => _x( 'Processing', 'Order status', 'woocommerce' ),
+					'wc-on-hold'    => _x( 'On hold', 'Order status', 'woocommerce' ),
+					'wc-completed'  => _x( 'Completed', 'Order status', 'woocommerce' ),
+					'wc-cancelled'  => _x( 'Cancelled', 'Order status', 'woocommerce' ),
+					'wc-refunded'   => _x( 'Refunded', 'Order status', 'woocommerce' ),
+					'wc-failed'     => _x( 'Failed', 'Order status', 'woocommerce' ),
+				)
+			),
+			'cancelled_status'            => array(
+				'title'   => __( 'Cancelled', 'woocommerce-gateway-ebanx' ),
+				'type'    => 'select',
+				'class'   => 'wc-enhanced-select',
+				'default' => 'wc-cancelled',
+				'options' => array(
+					'wc-pending'    => _x( 'Pending payment', 'Order status', 'woocommerce' ),
+					'wc-processing' => _x( 'Processing', 'Order status', 'woocommerce' ),
+					'wc-on-hold'    => _x( 'On hold', 'Order status', 'woocommerce' ),
+					'wc-completed'  => _x( 'Completed', 'Order status', 'woocommerce' ),
+					'wc-cancelled'  => _x( 'Cancelled', 'Order status', 'woocommerce' ),
+					'wc-refunded'   => _x( 'Refunded', 'Order status', 'woocommerce' ),
+					'wc-failed'     => _x( 'Failed', 'Order status', 'woocommerce' ),
+				)
+			),
+			'refunded_status'            => array(
+				'title'   => __( 'Refunded', 'woocommerce-gateway-ebanx' ),
+				'type'    => 'select',
+				'class'   => 'wc-enhanced-select',
+				'default' => 'wc-refunded',
+				'options' => array(
+					'wc-pending'    => _x( 'Pending payment', 'Order status', 'woocommerce' ),
+					'wc-processing' => _x( 'Processing', 'Order status', 'woocommerce' ),
+					'wc-on-hold'    => _x( 'On hold', 'Order status', 'woocommerce' ),
+					'wc-completed'  => _x( 'Completed', 'Order status', 'woocommerce' ),
+					'wc-cancelled'  => _x( 'Cancelled', 'Order status', 'woocommerce' ),
+					'wc-refunded'   => _x( 'Refunded', 'Order status', 'woocommerce' ),
+					'wc-failed'     => _x( 'Failed', 'Order status', 'woocommerce' ),
+				)
+			),
+			'failed_status'            => array(
+				'title'   => __( 'Failed', 'woocommerce-gateway-ebanx' ),
+				'type'    => 'select',
+				'class'   => 'wc-enhanced-select',
+				'default' => 'wc-failed',
+				'options' => array(
+					'wc-pending'    => _x( 'Pending payment', 'Order status', 'woocommerce' ),
+					'wc-processing' => _x( 'Processing', 'Order status', 'woocommerce' ),
+					'wc-on-hold'    => _x( 'On hold', 'Order status', 'woocommerce' ),
+					'wc-completed'  => _x( 'Completed', 'Order status', 'woocommerce' ),
+					'wc-cancelled'  => _x( 'Cancelled', 'Order status', 'woocommerce' ),
+					'wc-refunded'   => _x( 'Refunded', 'Order status', 'woocommerce' ),
+					'wc-failed'     => _x( 'Failed', 'Order status', 'woocommerce' ),
+				)
 			),
 			'display_methods_title'     => array(
 				'title'       => __( 'Enable Payment Methods', 'woocommerce-gateway-ebanx' ),

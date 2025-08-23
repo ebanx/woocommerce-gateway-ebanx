@@ -4,10 +4,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-use EBANX\Plugin\Services\WC_EBANX_Constants;
-use EBANX\Plugin\Services\WC_EBANX_Helper;
 use EBANX\Plugin\Services\WC_EBANX_Api;
 use EBANX\Plugin\Services\WC_EBANX_Capture_Payment;
+use EBANX\Plugin\Services\WC_EBANX_Constants;
+use EBANX\Plugin\Services\WC_EBANX_Helper;
 
 /**
  * Class WC_EBANX_Api_Controller
@@ -122,7 +122,10 @@ class WC_EBANX_Api_Controller {
 			);
 
 			if ( 'SUCCESS' === $response['status'] ) {
-				$order->update_status( 'cancelled', __( 'EBANX: Cancelled by customer', 'woocommerce-gateway-ebanx' ) );
+				$order->update_status(
+					$this->config->get_mapped_status( 'cancelled' ),
+					__( 'EBANX: Cancelled by customer', 'woocommerce-gateway-ebanx' )
+				);
 			}
 
 			wp_redirect( $order->get_view_order_url() );

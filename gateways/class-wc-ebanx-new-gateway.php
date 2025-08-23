@@ -7,10 +7,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 use Ebanx\Benjamin\Models\Configs\CreditCardConfig;
 use Ebanx\Benjamin\Models\Country;
 use Ebanx\Benjamin\Models\Currency;
+use EBANX\Plugin\Services\WC_EBANX_Api;
 use EBANX\Plugin\Services\WC_EBANX_Constants;
 use EBANX\Plugin\Services\WC_EBANX_Errors;
 use EBANX\Plugin\Services\WC_EBANX_Helper;
-use EBANX\Plugin\Services\WC_EBANX_Api;
 use EBANX\Plugin\Services\WC_EBANX_Payment_Adapter;
 
 /**
@@ -320,7 +320,11 @@ class WC_EBANX_New_Gateway extends WC_EBANX_Gateway {
 		if ( $response['payment']['pre_approved'] && 'CO' === $payment_status ) {
 			$order->payment_complete( $response['payment']['hash'] );
 		} else {
-			$order->update_status( $this->get_order_status_from_payment_status( $payment_status ) );
+			$order->update_status(
+				$this->get_mapped_status(
+					$this->get_order_status_from_payment_status( $payment_status )
+				)
+			);
 		}
 
 		$order->add_order_note( $this->get_order_note_from_payment_status( $payment_status ) );
@@ -363,7 +367,7 @@ class WC_EBANX_New_Gateway extends WC_EBANX_Gateway {
 		// translators: placeholders contain bp-dr code and corresponding message.
 		$error_message = sprintf( __( 'EBANX: An error occurred: %1$s - %2$s', 'woocommerce-gateway-ebanx' ), $code, $status_message );
 
-		$order->update_status( 'failed', $error_message );
+		$order->update_status( $this->get_mapped_status( 'failed' ), $error_message );
 		$order->add_order_note( $error_message );
 
 		do_action( 'ebanx_process_response_error', $order, $code );
@@ -707,7 +711,7 @@ class WC_EBANX_New_Gateway extends WC_EBANX_Gateway {
 		if ( isset( $new_status ) && $new_status !== $old_status ) {
 			$payment_status = $status[ $data['payment']['status'] ];
 			$order->add_order_note( sprintf( __( 'EBANX: The payment has been updated to: %s.', 'woocommerce-gateway-ebanx' ), $payment_status ) );
-			$order->update_status( $new_status );
+			$order->update_status( $this->get_mapped_status( $new_status ) );
 		}
 	}
 
