@@ -135,7 +135,7 @@ class WC_EBANX_Payment_By_Link {
 
 		$response = false;
 		try {
-			$response = ( new WC_EBANX_Api( self::$configs, self::$order->get_order_currency() ) )->ebanx()->hosted()->create( $data );
+			$response = ( new WC_EBANX_Api( self::$configs, self::$order->get_currency() ) )->ebanx()->hosted()->create( $data );
 		} catch ( Exception $e ) {
 			self::add_error( $e->getMessage() );
 			self::send_errors();
